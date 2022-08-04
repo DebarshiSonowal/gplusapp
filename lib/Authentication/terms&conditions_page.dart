@@ -45,13 +45,13 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
               overflow: TextOverflow.clip,
               style: Theme.of(context).textTheme.headline6?.copyWith(
                 color: Colors.black,
-                fontSize: 1.8.h,
+                fontSize: 1.6.h,
                 // fontWeight: FontWeight.bold,
               ),
             ),
             // Spacer(),
             SizedBox(
-              height: 5.h,
+              height: 1.h,
             ),
             SizedBox(
               width: double.infinity,
@@ -78,7 +78,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
               ),
             ),
             SizedBox(
-              height: 2.h,
+              height: 1.h,
             ),
             SizedBox(
               width: double.infinity,

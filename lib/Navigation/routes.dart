@@ -15,7 +15,9 @@ import '../OnBoarding/on_boarding_page.dart';
 import '../UI/Feed/feed_home.dart';
 import '../UI/Menu/berger_menu_member_page.dart';
 import '../UI/Menu/burger_menu_page.dart';
-import '../UI/big_deal_page.dart';
+import '../UI/deals/big_deal_page.dart';
+import '../UI/deals/filter_page.dart';
+import '../UI/main/home_screen_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -41,9 +43,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/loadingDialog':
       return FadeTransitionPageRouteBuilder(page: LoadingDialog());
 
-
     case '/bigdealpage':
       return FadeTransitionPageRouteBuilder(page: BigDealPage());
+    case '/filterPage':
+      return FadeTransitionPageRouteBuilder(page: FilterPage());
+
     case '/bergerMenuMem':
       return FadeTransitionPageRouteBuilder(page: BergerMenuMemPage());
     // case '/navigate':
@@ -51,7 +55,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     //Main
     case '/main':
-      return FadeTransitionPageRouteBuilder(page: FeedHome());
+      return FadeTransitionPageRouteBuilder(page: HomeScreen());
 
     default:
       return MaterialPageRoute(builder: (_) {
