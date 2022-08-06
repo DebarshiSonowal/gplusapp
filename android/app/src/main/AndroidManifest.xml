@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gplus.app.gplusapp">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="gplusapp"
         android:name="${applicationName}"

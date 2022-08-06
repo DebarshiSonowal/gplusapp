@@ -66,7 +66,7 @@ class _FilterPageState extends State<FilterPage> {
                             '2',
                             style: Theme.of(context).textTheme.headline5?.copyWith(
                               color: Colors.black,
-                              fontSize: 2.h,
+                              // fontSize: 2.h,
                               // fontWeight: FontWeight.bold,
                             ),
                           ),

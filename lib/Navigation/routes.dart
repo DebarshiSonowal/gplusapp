@@ -13,10 +13,17 @@ import '../Components/FadeTransitionBuilder.dart';
 import '../Components/loading_dialog.dart';
 import '../OnBoarding/on_boarding_page.dart';
 import '../UI/Feed/feed_home.dart';
+import '../UI/Member/be_a_membe_page.dart';
 import '../UI/Menu/berger_menu_member_page.dart';
 import '../UI/Menu/burger_menu_page.dart';
+import '../UI/citizen_journalist/submit_story.dart';
+import '../UI/classified/classified_page.dart';
 import '../UI/deals/big_deal_page.dart';
+import '../UI/deals/category_select_page.dart';
 import '../UI/deals/filter_page.dart';
+import '../UI/deals/food_deal_page.dart';
+import '../UI/deals/redeem_offer_page.dart';
+import '../UI/exclusive_page/exclusive_page.dart';
 import '../UI/main/home_screen_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -45,13 +52,27 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '/bigdealpage':
       return FadeTransitionPageRouteBuilder(page: BigDealPage());
+    case '/redeemOfferPage':
+      return FadeTransitionPageRouteBuilder(page: RedeemOfferPage());
+    case '/fooddealpage':
+      return FadeTransitionPageRouteBuilder(page: FoodDealPage());
     case '/filterPage':
       return FadeTransitionPageRouteBuilder(page: FilterPage());
+    case '/categorySelect':
+      return FadeTransitionPageRouteBuilder(page: CategorySelectPage());
 
     case '/bergerMenuMem':
       return FadeTransitionPageRouteBuilder(page: BergerMenuMemPage());
-    // case '/navigate':
-    //   return FadeTransitionPageRouteBuilder(page: NavigationScreen());
+    case '/beamember':
+      return FadeTransitionPageRouteBuilder(page: BeAMember());
+    case '/exclusivePage':
+      return FadeTransitionPageRouteBuilder(page: ExclusivePage());
+
+    case '/submitStory':
+      return FadeTransitionPageRouteBuilder(page: SubmitStoryPage());
+
+    case '/classified':
+      return FadeTransitionPageRouteBuilder(page: ClassifiedPage());
 
     //Main
     case '/main':

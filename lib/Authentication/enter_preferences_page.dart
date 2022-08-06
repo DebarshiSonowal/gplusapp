@@ -30,9 +30,9 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
           children: [
             Text(
               'Tell us your preferences',
-              style: Theme.of(context).textTheme.headline6?.copyWith(
+              style: Theme.of(context).textTheme.headline3?.copyWith(
                     color: Constance.primaryColor,
-                    fontSize: 2.5.h,
+                    // fontSize: 2.5.h,
                     fontWeight: FontWeight.bold,
                   ),
             ),
@@ -41,9 +41,9 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
             ),
             Text(
               'Geographical',
-              style: Theme.of(context).textTheme.headline6?.copyWith(
+              style: Theme.of(context).textTheme.subtitle2?.copyWith(
                     color: Constance.primaryColor,
-                    fontSize: 2.h,
+                    // fontSize: 2.h,
                     fontWeight: FontWeight.bold,
                   ),
             ),
@@ -94,9 +94,9 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                         child: Text(
                           Constance.geo[i],
                           style:
-                              Theme.of(context).textTheme.headline6?.copyWith(
+                              Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Constance.primaryColor,
-                                    fontSize: 2.h,
+                                    // fontSize: 2.h,
                                     // fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -110,9 +110,9 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
             ),
             Text(
               'Topical',
-              style: Theme.of(context).textTheme.headline6?.copyWith(
+              style: Theme.of(context).textTheme.subtitle2?.copyWith(
                     color: Constance.primaryColor,
-                    fontSize: 2.h,
+                    // fontSize: 2.h,
                     fontWeight: FontWeight.bold,
                   ),
             ),
@@ -163,9 +163,9 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                         child: Text(
                           Constance.topical[i],
                           style:
-                              Theme.of(context).textTheme.headline6?.copyWith(
+                              Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Constance.primaryColor,
-                                    fontSize: 2.h,
+                                    // fontSize: 2.h,
                                     // fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -181,7 +181,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
               child: CustomButton(
                 txt: 'Save & Continue',
                 onTap: () {
-                  Navigation.instance.navigate('/bergerMenuMem');
+                  Navigation.instance.navigateAndReplace('/bergerMenuMem');
                 },
               ),
             ),
@@ -196,8 +196,11 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(Constance.logoIcon,
-          fit: BoxFit.fill, height: 10.h, width: 20.w),
+      title: Image.asset(
+        Constance.logoIcon,
+        fit: BoxFit.fill,
+        scale: 2,
+      ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );

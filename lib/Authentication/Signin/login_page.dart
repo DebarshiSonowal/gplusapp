@@ -13,6 +13,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var _mobile = TextEditingController();
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _mobile.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,10 +39,10 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(
                 height: 25.h,
-                width: 50.w,
+                width: 70.w,
                 child: Image.asset(
                   Constance.logoIcon,
-                  fit: BoxFit.fill,
+                  scale: 1,
                 ),
               ),
               SizedBox(
@@ -71,6 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.black,
                           fontSize: 1.5.h,
                         ),
+                    controller: _mobile,
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                       filled: true,

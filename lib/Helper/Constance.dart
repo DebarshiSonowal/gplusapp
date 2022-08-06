@@ -1,16 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gplusapp/Model/bigdeal.dart';
+import 'package:gplusapp/Model/category_discount.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import '../Model/big_discount.dart';
+import '../Model/category.dart';
 import '../Model/top_picks.dart';
 import '../Navigation/Navigate.dart';
 
 class Constance {
-  static const primaryColor = Color(0xff003F70);
+  static const primaryColor = Color(0xff0B4368);
   static const secondaryColor = Color(0xffFCBD14);
   static const thirdColor = Color(0xffD03830);
-  static const logoIcon = 'assets/images/ic_launcher.png';
+  static const forthColor = Color(0xff001f34);
+  static const logoIcon = 'assets/images/logo.png';
   static var listPagesViewModel = [
     PageViewModel(
       title: "GPlus",
@@ -109,7 +116,7 @@ class Constance {
     'https://images.unsplash.com/photo-1453733190371-0a9bedd82893?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8dGVzdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
     'https://images.unsplash.com/photo-1509869175650-a1d97972541a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dGVzdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60'
   ];
-  static final kfc_offer =
+  static const kfc_offer =
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStcrxmNo-nV0Cgn9kMmOo72XfiRxHC69EYgA&usqp=CAU';
 
   static final topList = [
@@ -135,6 +142,59 @@ class Constance {
         '22-12-2022'),
   ];
 
+  static final bigDeals = [
+    BigDeal(
+        'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',
+        'Subway',
+        'Zoo Tiniali',
+        'Flat 50% off on purchase above 299'),
+    BigDeal(
+        'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        'BurgerKing',
+        'GS Road',
+        'Flat 75% off on purchase above 599'),
+    BigDeal(
+        'https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        'Dominos',
+        'Beltola',
+        'Flat 100 Rs off on purchase above 499'),
+  ];
+
+  static final categoryList = [
+    Category(FontAwesomeIcons.scissors, 'Parlour'),
+    Category(FontAwesomeIcons.spoon, 'Food'),
+    Category(FontAwesomeIcons.videoCamera, 'Movies'),
+    Category(FontAwesomeIcons.laptop, 'Electronics'),
+    Category(FontAwesomeIcons.shoppingCart, 'Groceries'),
+    Category(Icons.medical_information, 'Medicines'),
+    Category(FontAwesomeIcons.bicycle, 'Gym'),
+    Category(Icons.car_rental, 'Rental Cars'),
+  ];
+  static const salonImage =
+      'https://images.pexels.com/photos/705255/pexels-photo-705255.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2';
+
   static final pollWeek = ['Roger Federer', 'Rafael Nadal', 'Novak Djokovic'];
-  static final pollValue=[60,25,15];
+  static final pollValue = [60, 25, 15];
+
+  static final categoryDiscount = [
+    CategoryDiscount(
+      'Flat 20% off',
+      'Offer valid on all items',
+    ),
+    CategoryDiscount(
+      'Flat 15% off',
+      'Offer valid on all pedicure and hair spa packages',
+    ),
+  ];
+
+  static final benifits = [
+    'when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,',
+    'when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,',
+    'when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,',
+    'when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,',
+  ];
+
+  static List<File> attachements = [
+
+  ];
 }

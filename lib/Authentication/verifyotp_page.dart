@@ -143,7 +143,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
               child: CustomButton(
                   txt: 'Submit',
                   onTap: () {
-                    Navigation.instance.navigate('/terms&conditions');
+                    Navigation.instance.navigateAndReplace('/terms&conditions');
                   }),
             ),
             SizedBox(
@@ -185,7 +185,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
   AppBar buildAppBar() {
     return AppBar(
       title: Image.asset(Constance.logoIcon,
-          fit: BoxFit.fill, height: 10.h, width: 20.w),
+          fit: BoxFit.fill, scale: 2,),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );

@@ -39,69 +39,69 @@ class AppTheme {
     return base.copyWith(
       headline6: TextStyle(
         color: base.headline6?.color,
-        fontSize: 1.5.h,
+        fontSize: 10.sp,
         fontWeight: FontWeight.w500,
         fontFamily: 'Archivo',
       ),
       subtitle1: TextStyle(
         color: base.subtitle1?.color,
-        fontSize: 4.h,
+        fontSize: 4.sp,
         fontFamily: 'Archivo',
       ),
       subtitle2: TextStyle(
         color: base.subtitle2?.color,
-        fontSize: 12.h,
+        fontSize: 16.sp,
         fontWeight: FontWeight.w500,
         fontFamily: 'Archivo',
       ),
       bodyText2: TextStyle(
         color: base.bodyText2?.color,
-        fontSize: 12.h,
+        fontSize: 12.sp,
         fontFamily: 'Archivo',
       ),
       bodyText1: TextStyle(
         color: base.bodyText1?.color,
-        fontSize: 10.h,
+        fontSize: 10.sp,
         fontFamily: 'Archivo',
       ),
       button: TextStyle(
           color: base.button?.color,
-          fontSize: 2.h,
+          fontSize: 10.sp,
           fontFamily: 'Archivo',
           fontWeight: FontWeight.w600),
       caption: TextStyle(
         color: base.caption?.color,
-        fontSize: 8.h,
+        fontSize: 8.sp,
         fontFamily: 'Archivo',
       ),
       headline4: TextStyle(
         color: base.headline4?.color,
-        fontSize: 2.5.h,
+        fontSize: 13.sp,
         fontFamily: 'Archivo',
       ),
       headline3: TextStyle(
         color: base.headline3?.color,
-        fontSize: 3.h,
+        fontSize: 18.sp,
         fontFamily: 'Archivo',
       ),
       headline2: TextStyle(
         color: base.headline2?.color,
-        fontSize: 3.5.h,
+        fontSize: 20.sp,
         fontFamily: 'Archivo',
       ),
       headline1: TextStyle(
         color: base.headline1?.color,
-        fontSize: 4.h,
+        fontSize: 24.sp,
         fontFamily: 'Archivo',
       ),
       headline5: TextStyle(
         color: base.headline5?.color,
-        fontSize: 2.h,
+        fontSize: 12.sp,
         fontFamily: 'Archivo',
       ),
       overline: TextStyle(
         color: base.overline?.color,
-        fontSize: 6.h,
+        fontSize: 6.sp,
         fontFamily: 'Archivo',
       ),
     );

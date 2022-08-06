@@ -72,9 +72,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
             children: [
               Text(
                 'Enter Personal Details',
-                style: Theme.of(context).textTheme.headline6?.copyWith(
+                style: Theme.of(context).textTheme.headline3?.copyWith(
                       color: Constance.primaryColor,
-                      fontSize: 2.5.h,
+                      // fontSize: 2.5.h,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -84,7 +84,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               TextFormField(
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Colors.black,
-                      fontSize: 1.6.h,
+                      // fontSize: 1.6.h,
                     ),
                 controller: first_name,
                 keyboardType: TextInputType.name,
@@ -94,7 +94,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                   labelText: 'Enter First Name',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
-                        fontSize: 1.5.h,
+                        // fontSize: 1.5.h,
                       ),
                   border: const OutlineInputBorder(),
                   enabledBorder: const OutlineInputBorder(),
@@ -106,7 +106,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               TextFormField(
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Colors.black,
-                      fontSize: 1.6.h,
+                      // fontSize: 1.6.h,
                     ),
                 controller: last_name,
                 keyboardType: TextInputType.name,
@@ -116,7 +116,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                   labelText: 'Enter Last Name',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
-                        fontSize: 1.5.h,
+                        // fontSize: 1.5.h,
                       ),
                   border: const OutlineInputBorder(),
                   enabledBorder: const OutlineInputBorder(),
@@ -128,7 +128,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               TextFormField(
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Colors.black,
-                      fontSize: 1.6.h,
+                      // fontSize: 1.6.h,
                     ),
                 controller: email,
                 keyboardType: TextInputType.emailAddress,
@@ -138,7 +138,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                   labelText: 'Enter Email',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
-                        fontSize: 1.5.h,
+                        // fontSize: 1.5.h,
                       ),
                   border: const OutlineInputBorder(),
                   enabledBorder: const OutlineInputBorder(),
@@ -149,9 +149,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               ),
               Text(
                 'Add your date of birth',
-                style: Theme.of(context).textTheme.headline6?.copyWith(
+                style: Theme.of(context).textTheme.subtitle2?.copyWith(
                       color: Constance.primaryColor,
-                  fontSize: 2.5.h,
+                      // fontSize: 2.5.h,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -169,7 +169,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                     itemTextStyle:
                         Theme.of(context).textTheme.headline6?.copyWith(
                               color: Constance.primaryColor,
-                              fontSize: 1.6.h,
+                              // fontSize: 1.6.h,
                               fontWeight: FontWeight.bold,
                             ),
                     locale: DateTimePickerLocale.en_us,
@@ -196,11 +196,11 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         child: Text(
-                          date.split('-')[0],
+                          date == '' ? '' : date.split('-')[0],
                           style:
-                              Theme.of(context).textTheme.headline6?.copyWith(
+                              Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Colors.black,
-                                    fontSize: 2.h,
+                                    // fontSize: 2.h,
                                     // fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -214,11 +214,11 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         child: Text(
-                          date.split('-')[1] ?? "",
+                          date == '' ? '' : date.split('-')[1],
                           style:
-                              Theme.of(context).textTheme.headline6?.copyWith(
+                              Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Colors.black,
-                                fontSize: 2.h,
+                                    // fontSize: 2.h,
                                     // fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -232,11 +232,11 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         child: Text(
-                          date.split('-')[2],
+                          date == '' ? '' : date.split('-')[2],
                           style:
-                              Theme.of(context).textTheme.headline6?.copyWith(
+                              Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Colors.black,
-                                fontSize: 2.h,
+                                    // fontSize: 2.h,
                                     // fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -250,9 +250,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               ),
               Text(
                 'Gender',
-                style: Theme.of(context).textTheme.headline6?.copyWith(
+                style: Theme.of(context).textTheme.subtitle2?.copyWith(
                       color: Constance.primaryColor,
-                      fontSize: 2.5.h,
+                      // fontSize: 2.5.h,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -279,9 +279,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                         child: Text(
                           items,
                           style:
-                              Theme.of(context).textTheme.headline6?.copyWith(
+                              Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Constance.primaryColor,
-                                    fontSize: 2.h,
+                                    // fontSize: 2.h,
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -304,9 +304,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 children: [
                   Text(
                     'Location',
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
                           color: Constance.primaryColor,
-                          fontSize: 2.5.h,
+                          // fontSize: 2.5.h,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -323,9 +323,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 children: [
                   Text(
                     'Khanapara, Guwahati',
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Constance.primaryColor,
-                          fontSize: 2.h,
+                          // fontSize: 2.h,
                           // fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -342,7 +342,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 'The data can be changed in your profile later',
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Constance.primaryColor,
-                      fontSize: 1.6.h,
+                      // fontSize: 1.6.h,
                       // fontWeight: FontWeight.bold,
                     ),
               ),
@@ -353,7 +353,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 'All the data fields are mandatory for registration',
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Constance.thirdColor,
-                  fontSize: 1.6.h,
+                      // fontSize: 1.6.h,
                       // fontWeight: FontWeight.bold,
                     ),
               ),
@@ -366,7 +366,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 child: CustomButton(
                   txt: 'Save & Continue',
                   onTap: () {
-                    Navigation.instance.navigate('/enterPreferences');
+                    Navigation.instance.navigateAndReplace('/enterPreferences');
                   },
                 ),
               ),
@@ -382,8 +382,11 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(Constance.logoIcon,
-          fit: BoxFit.fill, height: 10.h, width: 20.w),
+      title: Image.asset(
+        Constance.logoIcon,
+        fit: BoxFit.fill,
+        scale: 2,
+      ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );

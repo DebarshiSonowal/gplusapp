@@ -31,9 +31,9 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
           children: [
             Text(
               'User Security Information',
-              style: Theme.of(context).textTheme.headline6?.copyWith(
+              style: Theme.of(context).textTheme.headline3?.copyWith(
                 color: Constance.primaryColor,
-                fontSize: 2.5.h,
+                // fontSize: 2.5.h,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -43,9 +43,9 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
             Text(
               Constance.terms,
               overflow: TextOverflow.clip,
-              style: Theme.of(context).textTheme.headline6?.copyWith(
+              style: Theme.of(context).textTheme.headline5?.copyWith(
                 color: Colors.black,
-                fontSize: 1.6.h,
+                // fontSize: 1.6.h,
                 // fontWeight: FontWeight.bold,
               ),
             ),
@@ -70,7 +70,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                     'I accept all the Terms and Conditions',
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Colors.black,
-                      fontSize: 1.7.h,
+                      // fontSize: 1.7.h,
                       // fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -87,7 +87,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                 txt: 'continue',
                 onTap: (){
                     if (agreed) {
-                      Navigation.instance.navigate('/personaldetails');
+                      Navigation.instance.navigateAndReplace('/personaldetails');
                     } else {
                       showError('You have to agree to our terms and conditions');
                     }
@@ -106,7 +106,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
   AppBar buildAppBar() {
     return AppBar(
       title: Image.asset(Constance.logoIcon,
-          fit: BoxFit.fill, height: 10.h, width: 20.w),
+          fit: BoxFit.fill,scale: 2,),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );

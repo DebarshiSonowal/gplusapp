@@ -19,13 +19,13 @@ class _CustomButtonState extends State<CustomButton> {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Constance.secondaryColor),
       ),
-      onPressed:()=> widget.onTap(),
+      onPressed: () => widget.onTap(),
       child: Text(
         widget.txt,
-        style: Theme.of(context).textTheme.headline6?.copyWith(
-          color: Colors.black,
-          fontSize: 2.h,
-        ),
+        style: Theme.of(context).textTheme.headline5?.copyWith(
+              color: Colors.black,
+              // fontSize: 2.h,
+            ),
       ),
     );
   }

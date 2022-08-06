@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 
+import '../../Components/NavigationBar.dart';
 import '../../Helper/Constance.dart';
 import 'package:sizer/sizer.dart';
 
@@ -19,6 +21,12 @@ class _BigDealPageState extends State<BigDealPage> {
   var current = 1;
 
   @override
+  void initState() {
+    super.initState();
+    // showDialogBox();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
@@ -26,250 +34,216 @@ class _BigDealPageState extends State<BigDealPage> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(7.w),
-              child: Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Constance.secondaryColor),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Icon(
-                      FontAwesomeIcons.spoon,
-                      color: Constance.primaryColor,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 5.w,
-                  ),
-                  Text(
-                    'Food',
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                          color: Constance.primaryColor,
-                          fontSize: 3.h,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ],
+        padding: EdgeInsets.symmetric(vertical: 2.h),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: Text(
+                  'Promoted Deals',
+                  style: Theme.of(context).textTheme.headline3?.copyWith(
+                      color: Constance.primaryColor, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            Container(
-              color: Constance.primaryColor,
-              height: 5.h,
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      showSortByOption();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          FontAwesomeIcons.sort,
-                          color: Colors.white,
-                        ),
-                        SizedBox(
-                          width: 1.w,
-                        ),
-                        Text(
-                          'Sort by',
-                          style:
-                              Theme.of(context).textTheme.headline6?.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 2.h,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 20.w,
-                    child: Center(
-                      child: Container(
-                        height: double.infinity,
-                        width: 0.5.w,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigation.instance.navigate('/filterPage');
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          FontAwesomeIcons.filter,
-                          color: Colors.white,
-                        ),
-                        SizedBox(
-                          width: 1.w,
-                        ),
-                        Text(
-                          'Filter by',
-                          style:
-                              Theme.of(context).textTheme.headline6?.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 2.h,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              SizedBox(
+                height: 2.h,
               ),
-            ),
-            SizedBox(
-              height: 1.h,
-            ),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: Constance.discounts.length,
+              SizedBox(
+                height: 33.h,
+                width: double.infinity,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: Constance.bigDeals.length,
                   itemBuilder: (cont, cout) {
-                    var data = Constance.discounts[cout];
-                    return Container(
-                      margin: EdgeInsets.all(5),
-                      child: ListTile(
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Icon(
-                            data.icon,
-                            size: 6.h,
-                          ),
+                    var data = Constance.bigDeals[cout];
+                    return SizedBox(
+                      height: 30.h,
+                      width: 60.w,
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
                         ),
-                        title: Column(
+                        color: Colors.white,
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              data.title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  ?.copyWith(
-                                    color: Colors.black,
-                                    fontSize: 2.2.h,
-                                    fontWeight: FontWeight.bold,
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(5.0),
+                                    // bottomRight: Radius.circular(40.0),
+                                    topLeft: Radius.circular(5.0),
+                                    // bottomLeft: Radius.circular(40.0),
                                   ),
+                                  image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: CachedNetworkImageProvider(
+                                        data.image ?? "https://source.unsplash.com/user/c_v_r/1900x800",
+                                        maxWidth: 100),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // SizedBox(
+                            //   height: 1.h,
+                            // ),
+                            Expanded(
+                                child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 4.w, vertical: 1.h),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data.title ?? "",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4
+                                        ?.copyWith(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    height: 0.5.h,
+                                  ),
+                                  Text(
+                                    data.address ?? "",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline5
+                                        ?.copyWith(
+                                          color: Colors.black,
+                                          // fontWeight: FontWeight.bold
+                                        ),
+                                  ),
+                                  SizedBox(
+                                    height: 0.5.h,
+                                  ),
+                                  Text(
+                                    data.discount ?? "",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4
+                                        ?.copyWith(
+                                            color: Constance.thirdColor,
+                                            fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            )),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(
+                      width: 2.h,
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: Text(
+                  'Categories',
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
+                      color: Constance.primaryColor, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 1.w),
+                child: Wrap(
+                  alignment: WrapAlignment.spaceEvenly,
+                  children: Constance.categoryList.map((e) {
+                    return GestureDetector(
+                      onTap: () {
+                       selectedCategory(e.title);
+                      },
+                      child: Container(
+                        // height: 10.h,
+                        width: 10.h,
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 1.w, vertical: 0.5.w),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 7.h,
+                              height: 7.h,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 2.w, vertical: 1.h),
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Constance.secondaryColor),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Icon(
+                                e.icon,
+                                color: Constance.primaryColor,
+                              ),
                             ),
                             SizedBox(
                               height: 0.5.h,
                             ),
                             Text(
-                              data.address,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  ?.copyWith(
-                                    color: Colors.grey.shade800,
-                                    fontSize:
-                                        1.5.h, // fontWeight: FontWeight.bold,
-                                  ),
+                              e.title ?? "",
+                              style:
+                                  Theme.of(context).textTheme.headline6?.copyWith(
+                                        color: Constance.primaryColor,
+                                        // fontSize: 1.7.h,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                            ),
+                            SizedBox(
+                              height: 0.5.h,
                             ),
                           ],
                         ),
-                        trailing: CustomButton(
-                          txt: "View",
-                          onTap: () {
-                            Navigation.instance.navigate('/main');
-                          },
-                        ),
                       ),
                     );
-                  }),
-            )
-          ],
+                  }).toList(),
+                ),
+              ),
+              SizedBox(
+                height: 0.5.h,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Center(
+                  child: CustomButton(
+                      txt: 'View More ',
+                      onTap: () {
+                        showDialogBox();
+                      }),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        // type: BottomNavigationBarType.fixed,
-        currentIndex: current,
-        onTap: (val) {
-          setState(() {
-            current = val;
-          });
-          switch (val) {
-            case 0:
-              Navigation.instance.navigate('/main');
-              break;
-            case 1:
-              Navigation.instance.navigate('/bigdealpage');
-              break;
-            default:
-              // Navigation.instance.navigate('/main');
-              break;
-          }
-        },
-
-        showSelectedLabels: true,
-        selectedLabelStyle: TextStyle(
-            fontSize: 1.5.h,
-            color: Constance.secondaryColor,
-            overflow: TextOverflow.clip),
-        showUnselectedLabels: true,
-        unselectedLabelStyle: TextStyle(
-            fontSize: 1.2.h, color: Colors.white, overflow: TextOverflow.clip),
-        backgroundColor: Constance.primaryColor,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: current == 0 ? Constance.secondaryColor : Colors.white,
-            ),
-            label: "Home",
-            backgroundColor: Constance.primaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.local_offer,
-              color: current == 1 ? Constance.secondaryColor : Colors.white,
-            ),
-            label: "Big Deal",
-            backgroundColor: Constance.primaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.radio,
-              color: current == 2 ? Constance.secondaryColor : Colors.white,
-            ),
-            label: "Guwahati\nConnect",
-            backgroundColor: Constance.primaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.mic,
-              color: current == 3 ? Constance.secondaryColor : Colors.white,
-            ),
-            label: "Citizen\nJournalist",
-            backgroundColor: Constance.primaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.newspaper,
-              color: current == 4 ? Constance.secondaryColor : Colors.white,
-            ),
-            label: "Classified",
-            backgroundColor: Constance.primaryColor,
-          ),
-        ],
-      ),
+      bottomNavigationBar: CustomNavigationBar(current),
     );
   }
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(Constance.logoIcon,
-          fit: BoxFit.fill, height: 10.h, width: 20.w),
+      title: Image.asset(
+        Constance.logoIcon,
+        fit: BoxFit.fill,
+        scale: 2,
+      ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );
@@ -376,5 +350,108 @@ class _BigDealPageState extends State<BigDealPage> {
             );
           });
         });
+  }
+
+  void showDialogBox() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          contentPadding: EdgeInsets.zero,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          title: Text(
+            'Hello Jonathan!',
+            style: Theme.of(context).textTheme.headline3?.copyWith(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          content: Container(
+            padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
+            // height: 50.h,
+            width: 80.w,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.local_offer,
+                  color: Constance.secondaryColor,
+                  size: 15.h,
+                ),
+                Text(
+                  'Welcome\nto Big Deal!',
+                  style: Theme.of(context).textTheme.headline1?.copyWith(
+                        color: Constance.secondaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(height: 1.h),
+                Text(
+                  'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
+                  ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+                  ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+                  ' remaining essentially unchanged',
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.black,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(height: 1.h),
+                Text(
+                  'is simply dummy text of the printing and typesetting industry',
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.black,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(height: 1.h),
+                SizedBox(
+                  width: double.infinity,
+                  child: CustomButton(
+                      txt: 'Go Ahead',
+                      onTap: () {
+                        Navigation.instance.goBack();
+                      }),
+                )
+              ],
+            ),
+          ),
+          actions: [
+            // FlatButton(
+            //   textColor: Colors.black,
+            //   onPressed: () {},
+            //   child: Text('CANCEL'),
+            // ),
+            // FlatButton(
+            //   textColor: Colors.black,
+            //   onPressed: () {},
+            //   child: Text('ACCEPT'),
+            // ),
+          ],
+        );
+      },
+    );
+  }
+
+  void selectedCategory(String? title) {
+    switch (title) {
+      case 'Parlour':
+        Navigation.instance.navigate('/categorySelect');
+        break;
+      case 'Food':
+        Navigation.instance.navigate('/fooddealpage');
+        break;
+      default:
+        break;
+    }
   }
 }
