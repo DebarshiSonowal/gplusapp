@@ -9,6 +9,8 @@ import 'package:introduction_screen/introduction_screen.dart';
 
 import '../Model/big_discount.dart';
 import '../Model/category.dart';
+import '../Model/connect_post.dart';
+import '../Model/listing.dart';
 import '../Model/top_picks.dart';
 import '../Navigation/Navigate.dart';
 
@@ -194,7 +196,91 @@ class Constance {
     'when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,',
   ];
 
-  static List<File> attachements = [
+  static List<File> attachements = [];
 
+  static List<Listing> listings = [
+    Listing(
+        'Tutor Wanted',
+        null,
+        'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
+        5999,
+        'Rukmini Nagar, Guwahati',
+        false),
+    Listing(
+        'Selling Bullet',
+        150000,
+        'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
+        5999,
+        'Rukmini Nagar, Guwahati',
+        false),
+    Listing(
+        'Tutor Wanted',
+        null,
+        'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
+        5999,
+        'Rukmini Nagar, Guwahati',
+        false),
+    Listing(
+        'Selling Bullet',
+        150000,
+        'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
+        5999,
+        'Rukmini Nagar, Guwahati',
+        false),
+  ];
+
+  static List<ConnectPost> connects = [
+    ConnectPost(
+      'Rashmi Saikia',
+      'Contrary to popular belief, Lorem Ipsum is not simply random text.'
+          ' It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
+      '#rent #house',
+      null,
+      100,
+      [
+        ConnectPost(
+          'John Doe',
+          'It has roots in a piece of classical Latin literature from 45 BC',
+          '',
+          null,
+          3,
+          [],
+        ),
+        ConnectPost(
+          'John Doe',
+          'It has roots in a piece of classical Latin literature from 45 BC',
+          '',
+          null,
+          3,
+          [],
+        ),
+      ],
+    ),
+    ConnectPost(
+      'Angshuman Sharma',
+      'Contrary to popular belief, Lorem Ipsum is not simply random text.'
+          ' It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
+      '#gym #exercise',
+      'https://image.shutterstock.com/image-photo/handsome-weightlifter-preparing-training-shallow-600w-366605333.jpg',
+      100,
+      [
+        ConnectPost(
+          'John Doe',
+          'It has roots in a piece of classical Latin literature from 45 BC',
+          '',
+          null,
+          3,
+          [],
+        ),
+        ConnectPost(
+          'John Doe',
+          'It has roots in a piece of classical Latin literature from 45 BC',
+          '',
+          null,
+          3,
+          [],
+        ),
+      ],
+    ),
   ];
 }

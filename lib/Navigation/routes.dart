@@ -16,8 +16,11 @@ import '../UI/Feed/feed_home.dart';
 import '../UI/Member/be_a_membe_page.dart';
 import '../UI/Menu/berger_menu_member_page.dart';
 import '../UI/Menu/burger_menu_page.dart';
+import '../UI/citizen_journalist/guwahati_connect.dart';
 import '../UI/citizen_journalist/submit_story.dart';
+import '../UI/classified/classified_details.dart';
 import '../UI/classified/classified_page.dart';
+import '../UI/classified/post_a_listing.dart';
 import '../UI/deals/big_deal_page.dart';
 import '../UI/deals/category_select_page.dart';
 import '../UI/deals/filter_page.dart';
@@ -73,6 +76,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '/classified':
       return FadeTransitionPageRouteBuilder(page: ClassifiedPage());
+    case '/classifiedDetails':
+      return FadeTransitionPageRouteBuilder(page: ClassifiedDetails());
+    case '/postClassified':
+      return FadeTransitionPageRouteBuilder(page: PostAListing());
+      case '/guwahatiConnects':
+      return FadeTransitionPageRouteBuilder(page: GuwahatiConnect());
 
     //Main
     case '/main':

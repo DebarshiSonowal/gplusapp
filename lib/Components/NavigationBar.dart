@@ -23,10 +23,16 @@ class _NavigationBarState extends State<CustomNavigationBar> {
         // type: BottomNavigationBarType.fixed,
         currentIndex: current,
         onTap: (val) {
-          Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext??context,listen: false).setCurrent(val);
+          Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .setCurrent(val);
           switch (val) {
             case 1:
               Navigation.instance.navigate('/bigdealpage');
+              break;
+            case 2:
+              Navigation.instance.navigate('/guwahatiConnects');
               break;
             case 3:
               Navigation.instance.navigate('/submitStory');
