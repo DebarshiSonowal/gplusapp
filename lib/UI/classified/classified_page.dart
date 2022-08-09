@@ -99,14 +99,14 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Icon(
-                            FontAwesomeIcons.filter,
+                            FontAwesomeIcons.heart,
                             color: Colors.white,
                           ),
                           SizedBox(
                             width: 1.w,
                           ),
                           Text(
-                            'Filter by',
+                            'Favourites',
                             style:
                                 Theme.of(context).textTheme.headline6?.copyWith(
                                       color: Colors.white,

@@ -181,7 +181,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
               child: CustomButton(
                 txt: 'Save & Continue',
                 onTap: () {
-                  Navigation.instance.navigateAndReplace('/bergerMenuMem');
+                  Navigation.instance.navigateAndReplace('/main');
                 },
               ),
             ),

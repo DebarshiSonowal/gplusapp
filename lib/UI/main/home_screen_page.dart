@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:search_page/search_page.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/NavigationBar.dart';
 import '../../Components/slider_home.dart';
 import '../../Helper/Constance.dart';
+import '../../Model/listing.dart';
 import '../../Navigation/Navigate.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -617,7 +619,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Container(
                       child: ListView.separated(
-                        shrinkWrap: true,
+                          shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           itemBuilder: (cont, count) {
@@ -882,7 +884,44 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: Icon(Icons.notifications),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            showSearch(
+              context: context,
+              delegate: SearchPage<Listing>(
+                items: Constance.listings,
+                searchLabel: 'Search posts',
+                suggestion: Center(
+                  child: Text(
+                    'Filter posts by name, descr',
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                ),
+                failure: const Center(
+                  child: Text('No posts found :('),
+                ),
+                filter: (current) => [
+                  current.title,
+                  current.descr,
+                  // person.age.toString(),
+                ],
+                builder: (data) => ListTile(
+                  title: Text(
+                    data.title ?? "",
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  subtitle: Text(
+                    data.descr ?? '',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  // trailing: CachedNetworkImage(
+                  //   imageUrl: data.image??'',
+                  //   height: 20,
+                  //   width: 20,
+                  // ),
+                ),
+              ),
+            );
+          },
           icon: Icon(Icons.search),
         ),
       ],

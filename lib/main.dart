@@ -8,8 +8,14 @@ import 'Helper/DataProvider.dart';
 import 'Navigation/Navigate.dart';
 import 'Navigation/routes.dart';
 import 'package:sizer/sizer.dart';
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   Storage.instance.initializeStorage();
   runApp(const MyApp());
 }
@@ -21,20 +27,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context)=>DataProvider(),
-      child: Sizer(
-          builder: (context, orientation, deviceType) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'GPLUS',
-            theme: AppTheme.getTheme(),
-            navigatorKey: Navigation.instance.navigatorKey,
-            onGenerateRoute: generateRoute,
-          );
-        }
-      ),
+      create: (context) => DataProvider(),
+      child: Sizer(builder: (context, orientation, deviceType) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'GPLUS',
+          theme: AppTheme.getTheme(),
+          navigatorKey: Navigation.instance.navigatorKey,
+          onGenerateRoute: generateRoute,
+        );
+      }),
     );
   }
 }
-
-

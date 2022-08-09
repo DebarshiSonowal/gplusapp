@@ -75,17 +75,22 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 SizedBox(
                   width: 5.w,
                 ),
-                Text(
-                  'Change',
-                  style:
-                      Theme.of(Navigation.instance.navigatorKey.currentContext!)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(
-                            color: Constance.secondaryColor,
-                            fontSize: 1.5.h,
-                            fontWeight: FontWeight.bold,
-                          ),
+                GestureDetector(
+                  onTap: (){
+                    Navigation.instance.navigate('/editProfile');
+                  },
+                  child: Text(
+                    'Change',
+                    style:
+                        Theme.of(Navigation.instance.navigatorKey.currentContext!)
+                            .textTheme
+                            .headline6
+                            ?.copyWith(
+                              color: Constance.secondaryColor,
+                              fontSize: 1.5.h,
+                              fontWeight: FontWeight.bold,
+                            ),
+                  ),
                 ),
               ],
             ),
@@ -114,7 +119,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
           children: [
             GestureDetector(
               onTap: () {
-                Navigation.instance.navigate('/main');
+                // Navigation.instance.navigate('/main');
               },
               child: Row(
                 children: [
@@ -481,8 +486,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
               height: 1.5.h,
             ),
             GestureDetector(
-              onTap: (){
-                Navigation.instance.navigate('/exclusivePage');
+              onTap: () {
+                Navigation.instance.navigate('/opinionPage');
               },
               child: Row(
                 children: [
@@ -558,29 +563,35 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   SizedBox(
                     height: 1.5.h,
                   ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 8.w,
-                      ),
-                      Text(
-                        'News',
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Colors.white,
-                              fontSize: 1.5.h,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                      Expanded(child: Container()),
-                      Container(
-                        height: 6,
-                        width: 6,
-                        decoration: const BoxDecoration(
-                          // color: Colors.red,
-                          shape: BoxShape.circle,
+                  GestureDetector(
+                    onTap: () {
+                      Navigation.instance.navigate('/videoReport');
+                    },
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 8.w,
                         ),
-                      ),
-                    ],
+                        Text(
+                          'News',
+                          style:
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 1.5.h,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        Expanded(child: Container()),
+                        Container(
+                          height: 6,
+                          width: 6,
+                          decoration: const BoxDecoration(
+                            // color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 1.5.h,
@@ -867,8 +878,11 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(Constance.logoIcon,
-          fit: BoxFit.fill, scale: 2,),
+      title: Image.asset(
+        Constance.logoIcon,
+        fit: BoxFit.fill,
+        scale: 2,
+      ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );

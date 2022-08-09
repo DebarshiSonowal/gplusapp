@@ -12,10 +12,9 @@ import '../Authentication/verifyotp_page.dart';
 import '../Components/FadeTransitionBuilder.dart';
 import '../Components/loading_dialog.dart';
 import '../OnBoarding/on_boarding_page.dart';
-import '../UI/Feed/feed_home.dart';
 import '../UI/Member/be_a_membe_page.dart';
 import '../UI/Menu/berger_menu_member_page.dart';
-import '../UI/Menu/burger_menu_page.dart';
+import '../UI/VideoReport/video_report.dart';
 import '../UI/citizen_journalist/guwahati_connect.dart';
 import '../UI/citizen_journalist/submit_story.dart';
 import '../UI/classified/classified_details.dart';
@@ -26,8 +25,10 @@ import '../UI/deals/category_select_page.dart';
 import '../UI/deals/filter_page.dart';
 import '../UI/deals/food_deal_page.dart';
 import '../UI/deals/redeem_offer_page.dart';
+import '../UI/edit_profile/edit_profile_page.dart';
 import '../UI/exclusive_page/exclusive_page.dart';
 import '../UI/main/home_screen_page.dart';
+import '../UI/opinion/opinion_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -47,6 +48,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(page: TermsAndConditions());
     case '/personaldetails':
       return FadeTransitionPageRouteBuilder(page: PersonalDetailsPage());
+      case '/editProfile':
+      return FadeTransitionPageRouteBuilder(page: EditProfile());
     case '/enterPreferences':
       return FadeTransitionPageRouteBuilder(page: EnterPreferencesPage());
 
@@ -70,6 +73,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(page: BeAMember());
     case '/exclusivePage':
       return FadeTransitionPageRouteBuilder(page: ExclusivePage());
+    case '/opinionPage':
+      return FadeTransitionPageRouteBuilder(page: OpinionPage());
+    case '/videoReport':
+      return FadeTransitionPageRouteBuilder(page: VideoReport());
 
     case '/submitStory':
       return FadeTransitionPageRouteBuilder(page: SubmitStoryPage());
@@ -80,7 +87,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(page: ClassifiedDetails());
     case '/postClassified':
       return FadeTransitionPageRouteBuilder(page: PostAListing());
-      case '/guwahatiConnects':
+    case '/guwahatiConnects':
       return FadeTransitionPageRouteBuilder(page: GuwahatiConnect());
 
     //Main
