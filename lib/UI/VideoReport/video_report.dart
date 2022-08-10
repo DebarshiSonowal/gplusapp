@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class VideoReport extends StatefulWidget {
   const VideoReport({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class _VideoReportState extends State<VideoReport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
+      // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

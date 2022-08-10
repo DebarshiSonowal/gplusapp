@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -61,6 +62,7 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
+      // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

@@ -6,6 +6,7 @@ import '../../Components/NavigationBar.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class GuwahatiConnect extends StatefulWidget {
   const GuwahatiConnect({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
+      drawer: BergerMenuMemPage(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           // Navigation.instance.navigate('/postClassified');
@@ -478,12 +480,12 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
 
   AppBar buildAppBar() {
     return AppBar(
-      leading: IconButton(
-        onPressed: () {
-          // Navigation.instance.navigate('/bergerMenuMem');
-        },
-        icon: Icon(Icons.menu),
-      ),
+      // leading: IconButton(
+      //   onPressed: () {
+      //     // Navigation.instance.navigate('/bergerMenuMem');
+      //   },
+      //   icon: Icon(Icons.menu),
+      // ),
       title: Image.asset(
         Constance.logoIcon,
         fit: BoxFit.fill,

@@ -20,25 +20,27 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
   Widget build(BuildContext context) {
     return SizedBox(
       // height: 40.h,
-      width: double.infinity,
+      width:MediaQuery.of(context).size.width,
       child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
         Container(
           padding: EdgeInsets.only(top: 1.h),
           color: Colors.grey.shade200,
-          width: double.infinity,
+          width: MediaQuery.of(context).size.width,
           // height: 40.h,
           child: CarouselSlider(
+
             items: Constance.sliderImages
                 .asMap()
                 .entries
                 .map(
                   (e) => CachedNetworkImage(
                     imageUrl: e.value,
+                    width: double.infinity,
                     fit: BoxFit.fill,
                     placeholder: (cont, _) {
-                      return Icon(
+                      return const Icon(
                         Icons.image,
                         color: Colors.black,
                       );
@@ -52,8 +54,9 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
             carouselController: _controller,
             options: CarouselOptions(
                 autoPlay: true,
-                enlargeCenterPage: true,
-                // aspectRatio: 2.0,
+                // enlargeCenterPage: true,
+                // aspectRatio: 16/9,
+                viewportFraction: 1,
                 onPageChanged: (index, reason) {
                   setState(() {
                     _current = index;

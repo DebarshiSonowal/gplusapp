@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 class OpinionPage extends StatefulWidget {
   const OpinionPage({Key? key}) : super(key: key);
 
@@ -16,6 +17,7 @@ class _OpinionPageState extends State<OpinionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
+      // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

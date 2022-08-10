@@ -14,6 +14,7 @@ import '../Components/loading_dialog.dart';
 import '../OnBoarding/on_boarding_page.dart';
 import '../UI/Member/be_a_membe_page.dart';
 import '../UI/Menu/berger_menu_member_page.dart';
+import '../UI/Notification/notification_page.dart';
 import '../UI/VideoReport/video_report.dart';
 import '../UI/citizen_journalist/guwahati_connect.dart';
 import '../UI/citizen_journalist/submit_story.dart';
@@ -48,7 +49,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(page: TermsAndConditions());
     case '/personaldetails':
       return FadeTransitionPageRouteBuilder(page: PersonalDetailsPage());
-      case '/editProfile':
+    case '/editProfile':
       return FadeTransitionPageRouteBuilder(page: EditProfile());
     case '/enterPreferences':
       return FadeTransitionPageRouteBuilder(page: EnterPreferencesPage());
@@ -67,8 +68,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/categorySelect':
       return FadeTransitionPageRouteBuilder(page: CategorySelectPage());
 
-    case '/bergerMenuMem':
-      return FadeTransitionPageRouteBuilder(page: BergerMenuMemPage());
+    case '/notification':
+      return FadeTransitionPageRouteBuilder(page: NotificationPage());
     case '/beamember':
       return FadeTransitionPageRouteBuilder(page: BeAMember());
     case '/exclusivePage':

@@ -7,6 +7,7 @@ import '../../Components/slider_home.dart';
 import '../../Helper/Constance.dart';
 import '../../Model/listing.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
+      drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -865,12 +867,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   AppBar buildAppBar() {
     return AppBar(
-      leading: IconButton(
-        onPressed: () {
-          Navigation.instance.navigate('/bergerMenuMem');
-        },
-        icon: Icon(Icons.menu),
-      ),
+      // leading: IconButton(
+      //   onPressed: () {
+      //     Navigation.instance.navigate('/bergerMenuMem');
+      //   },
+      //   icon: Icon(Icons.menu),
+      // ),
       title: Image.asset(
         Constance.logoIcon,
         fit: BoxFit.fill,
@@ -880,7 +882,9 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Constance.primaryColor,
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
           icon: Icon(Icons.notifications),
         ),
         IconButton(

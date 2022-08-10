@@ -7,6 +7,7 @@ import '../../Components/custom_button.dart';
 import '../../Components/slider_home.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class ClassifiedPage extends StatefulWidget {
   const ClassifiedPage({Key? key}) : super(key: key);
@@ -23,6 +24,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
+      drawer: BergerMenuMemPage(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigation.instance.navigate('/postClassified');
@@ -55,8 +57,8 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                     GestureDetector(
                       onTap: () {
                         // showSortByOption();
-                        setState((){
-                          selected =1;
+                        setState(() {
+                          selected = 1;
                         });
                       },
                       child: Row(
@@ -176,7 +178,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                   itemBuilder: (cont, count) {
                     var data = Constance.listings[count];
                     return GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigation.instance.navigate('/classifiedDetails');
                       },
                       child: Card(
@@ -196,7 +198,8 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                               SizedBox(
                                 width: double.infinity,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       data.title ?? "",
@@ -226,8 +229,8 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                         );
                                       },
                                       likeCount: 665,
-                                      countBuilder:
-                                          (int? count, bool isLiked, String text) {
+                                      countBuilder: (int? count, bool isLiked,
+                                          String text) {
                                         var color = isLiked
                                             ? Colors.deepPurpleAccent
                                             : Colors.grey;
@@ -364,12 +367,12 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      leading: IconButton(
-        onPressed: () {
-          Navigation.instance.navigate('/bergerMenuMem');
-        },
-        icon: Icon(Icons.menu),
-      ),
+      // leading: IconButton(
+      //   onPressed: () {
+      //     Navigation.instance.navigate('/bergerMenuMem');
+      //   },
+      //   icon: Icon(Icons.menu),
+      // ),
       title: Image.asset(
         Constance.logoIcon,
         fit: BoxFit.fill,

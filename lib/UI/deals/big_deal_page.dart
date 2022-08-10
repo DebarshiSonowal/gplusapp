@@ -8,6 +8,8 @@ import '../../Components/NavigationBar.dart';
 import '../../Helper/Constance.dart';
 import 'package:sizer/sizer.dart';
 
+import '../Menu/berger_menu_member_page.dart';
+
 class BigDealPage extends StatefulWidget {
   const BigDealPage({Key? key}) : super(key: key);
 
@@ -30,6 +32,7 @@ class _BigDealPageState extends State<BigDealPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
+      drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -44,7 +47,8 @@ class _BigDealPageState extends State<BigDealPage> {
                 child: Text(
                   'Promoted Deals',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
-                      color: Constance.primaryColor, fontWeight: FontWeight.bold),
+                      color: Constance.primaryColor,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(
@@ -82,7 +86,8 @@ class _BigDealPageState extends State<BigDealPage> {
                                   image: DecorationImage(
                                     fit: BoxFit.fill,
                                     image: CachedNetworkImageProvider(
-                                        data.image ?? "https://source.unsplash.com/user/c_v_r/1900x800",
+                                        data.image ??
+                                            "https://source.unsplash.com/user/c_v_r/1900x800",
                                         maxWidth: 100),
                                   ),
                                 ),
@@ -96,7 +101,8 @@ class _BigDealPageState extends State<BigDealPage> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 4.w, vertical: 1.h),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -156,7 +162,8 @@ class _BigDealPageState extends State<BigDealPage> {
                 child: Text(
                   'Categories',
                   style: Theme.of(context).textTheme.headline4?.copyWith(
-                      color: Constance.primaryColor, fontWeight: FontWeight.bold),
+                      color: Constance.primaryColor,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(
@@ -169,7 +176,7 @@ class _BigDealPageState extends State<BigDealPage> {
                   children: Constance.categoryList.map((e) {
                     return GestureDetector(
                       onTap: () {
-                       selectedCategory(e.title);
+                        selectedCategory(e.title);
                       },
                       child: Container(
                         // height: 10.h,
@@ -199,12 +206,14 @@ class _BigDealPageState extends State<BigDealPage> {
                             ),
                             Text(
                               e.title ?? "",
-                              style:
-                                  Theme.of(context).textTheme.headline6?.copyWith(
-                                        color: Constance.primaryColor,
-                                        // fontSize: 1.7.h,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: Constance.primaryColor,
+                                    // fontSize: 1.7.h,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                             SizedBox(
                               height: 0.5.h,

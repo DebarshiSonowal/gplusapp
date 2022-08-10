@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import '../../Components/NavigationBar.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class SubmitStoryPage extends StatefulWidget {
   const SubmitStoryPage({Key? key}) : super(key: key);
@@ -42,6 +43,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
+      drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -187,12 +189,12 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      leading: IconButton(
-        onPressed: () {
-          Navigation.instance.navigate('/bergerMenuMem');
-        },
-        icon: Icon(Icons.menu),
-      ),
+      // leading: IconButton(
+      //   onPressed: () {
+      //     Navigation.instance.navigate('/bergerMenuMem');
+      //   },
+      //   icon: Icon(Icons.menu),
+      // ),
       title: Image.asset(
         Constance.logoIcon,
         fit: BoxFit.fill,
