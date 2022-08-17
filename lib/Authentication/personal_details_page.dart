@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/date_picker.dart';
 import 'package:flutter_holo_date_picker/i18n/date_picker_i18n.dart';
@@ -72,9 +73,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
             children: [
               Text(
                 'Enter Personal Details',
-                style: Theme.of(context).textTheme.headline3?.copyWith(
+                style: Theme.of(context).textTheme.headline2?.copyWith(
                       color: Constance.primaryColor,
-                      // fontSize: 2.5.h,
+                      fontSize: 21.sp,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -82,9 +83,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 height: 1.5.h,
               ),
               TextFormField(
-                style: Theme.of(context).textTheme.headline6?.copyWith(
+                style: Theme.of(context).textTheme.headline5?.copyWith(
                       color: Colors.black,
-                      // fontSize: 1.6.h,
+                      fontSize: 12.sp,
                     ),
                 controller: first_name,
                 keyboardType: TextInputType.name,
@@ -92,9 +93,10 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                   filled: true,
                   fillColor: Colors.white,
                   labelText: 'Enter First Name',
-                  labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                  labelStyle: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontSize: 1.5.h,
+                        fontSize: 14.sp,
                       ),
                   border: const OutlineInputBorder(),
                   enabledBorder: const OutlineInputBorder(),
@@ -106,7 +108,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               TextFormField(
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Colors.black,
-                      // fontSize: 1.6.h,
+                      fontSize: 12.sp,
                     ),
                 controller: last_name,
                 keyboardType: TextInputType.name,
@@ -116,7 +118,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                   labelText: 'Enter Last Name',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
-                        // fontSize: 1.5.h,
+                        fontSize: 14.sp,
                       ),
                   border: const OutlineInputBorder(),
                   enabledBorder: const OutlineInputBorder(),
@@ -128,7 +130,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               TextFormField(
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Colors.black,
-                      // fontSize: 1.6.h,
+                      fontSize: 12.sp,
                     ),
                 controller: email,
                 keyboardType: TextInputType.emailAddress,
@@ -139,6 +141,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
                         // fontSize: 1.5.h,
+                        fontSize: 14.sp,
                       ),
                   border: const OutlineInputBorder(),
                   enabledBorder: const OutlineInputBorder(),
@@ -152,6 +155,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 style: Theme.of(context).textTheme.subtitle2?.copyWith(
                       color: Constance.primaryColor,
                       // fontSize: 2.5.h,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -188,59 +192,90 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.only(left: 2.w),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.black,
+                            color: Colors.grey.shade700,
                           ),
                           borderRadius: BorderRadius.circular(5.0),
                         ),
-                        child: Text(
-                          date == '' ? '' : date.split('-')[0],
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
+                        child: Row(
+                          children: [
+                            Text(
+                              date == ''
+                                  ? ''
+                                  : '${date.split('-')[0]} - ${date.split('-')[1]} - ${date.split('-')[2]}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5
+                                  ?.copyWith(
                                     color: Colors.black,
                                     // fontSize: 2.h,
+                                    fontSize: 16.sp,
                                     // fontWeight: FontWeight.bold,
                                   ),
+                            ),
+                            SizedBox(
+                              width: 2.w,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  right: 1.w, top: 1.h, bottom: 1.h),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 1.5.w, vertical: 1.h),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey.shade700,
+                                ),
+                                borderRadius: BorderRadius.circular(3.0),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.arrow_downward,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: Text(
-                          date == '' ? '' : date.split('-')[1],
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.black,
-                                    // fontSize: 2.h,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: Text(
-                          date == '' ? '' : date.split('-')[2],
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.black,
-                                    // fontSize: 2.h,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ),
+
+                      // Container(
+                      //   padding: EdgeInsets.all(5),
+                      //   decoration: BoxDecoration(
+                      //     border: Border.all(
+                      //       color: Colors.black,
+                      //     ),
+                      //     borderRadius: BorderRadius.circular(5.0),
+                      //   ),
+                      //   child: Text(
+                      //     date == '' ? '' : date.split('-')[1],
+                      //     style:
+                      //         Theme.of(context).textTheme.headline5?.copyWith(
+                      //               color: Colors.black,
+                      //               // fontSize: 2.h,
+                      //               // fontWeight: FontWeight.bold,
+                      //             ),
+                      //   ),
+                      // ),
+                      // Container(
+                      //   padding: EdgeInsets.all(5),
+                      //   decoration: BoxDecoration(
+                      //     border: Border.all(
+                      //       color: Colors.black,
+                      //     ),
+                      //     borderRadius: BorderRadius.circular(5.0),
+                      //   ),
+                      //   child: Text(
+                      //     date == '' ? '' : date.split('-')[2],
+                      //     style:
+                      //         Theme.of(context).textTheme.headline5?.copyWith(
+                      //               color: Colors.black,
+                      //               // fontSize: 2.h,
+                      //               // fontWeight: FontWeight.bold,
+                      //             ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -253,6 +288,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 style: Theme.of(context).textTheme.subtitle2?.copyWith(
                       color: Constance.primaryColor,
                       // fontSize: 2.5.h,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -262,10 +298,22 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: SizedBox(
-                  width: 150,
-                  child: DropdownButton(
-                    isExpanded: true,
+                  width: 40.w,
+                  // height: 10.h,
+                  child: DropdownButtonFormField2(
+                    decoration: const InputDecoration.collapsed(hintText: ''),
+                    isExpanded: false,
 
+                    buttonHeight: 6.h,
+                    buttonWidth: 40.w,
+                    buttonPadding:
+                        EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.5.h),
+                    buttonDecoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey.shade700,
+                      ),
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
                     // Initial Value
                     value: dropdownvalue,
 
@@ -280,9 +328,10 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                           items,
                           style:
                               Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Constance.primaryColor,
+                                    color: Colors.black,
                                     // fontSize: 2.h,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17.sp,
+                                    // fontWeight: FontWeight.bold,
                                   ),
                         ),
                       );
@@ -307,6 +356,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                     style: Theme.of(context).textTheme.subtitle2?.copyWith(
                           color: Constance.primaryColor,
                           // fontSize: 2.5.h,
+                          fontSize: 20.sp,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -326,6 +376,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Constance.primaryColor,
                           // fontSize: 2.h,
+                          fontSize: 17.sp,
                           // fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -336,33 +387,35 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 ],
               ),
               SizedBox(
-                height: 3.h,
+                height: 2.h,
               ),
               Text(
                 'The data can be changed in your profile later',
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Constance.primaryColor,
                       // fontSize: 1.6.h,
+                  fontSize: 13.sp,
                       // fontWeight: FontWeight.bold,
                     ),
               ),
               SizedBox(
-                height: 1.5.h,
+                height: 1.h,
               ),
               Text(
                 'All the data fields are mandatory for registration',
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Constance.thirdColor,
                       // fontSize: 1.6.h,
+                  fontSize: 13.sp,
                       // fontWeight: FontWeight.bold,
                     ),
               ),
               SizedBox(
-                height: 5.h,
+                height: 2.h,
               ),
               SizedBox(
                 width: double.infinity,
-                height: 5.h,
+                height: 6.h,
                 child: CustomButton(
                   txt: 'Save & Continue',
                   onTap: () {

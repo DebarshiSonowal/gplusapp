@@ -32,7 +32,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     return Drawer(
       backgroundColor: Constance.primaryColor,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 2.w),
+        padding: EdgeInsets.only(left: 2.w),
         child: ListView(
           children: [
             DrawerHeader(
@@ -51,7 +51,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                           .headline6
                           ?.copyWith(
                             color: Colors.white,
-                            fontSize: 2.2.h,
+                            fontSize: 19.sp,
                             fontWeight: FontWeight.bold,
                           ),
                     ),
@@ -68,12 +68,12 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                               .headline6
                               ?.copyWith(
                                 color: Colors.white,
-                                fontSize: 2.h,
+                                fontSize: 15.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
                         SizedBox(
-                          width: 5.w,
+                          width: 1.5.w,
                         ),
                         GestureDetector(
                           onTap: () {
@@ -87,7 +87,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                 .headline6
                                 ?.copyWith(
                                   color: Constance.secondaryColor,
-                                  fontSize: 1.5.h,
+                                  fontSize: 11.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                           ),
@@ -105,7 +105,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                           .headline6
                           ?.copyWith(
                             color: Constance.secondaryColor,
-                            fontSize: 1.7.h,
+                            fontSize: 11.sp,
                             // fontWeight: FontWeight.bold,
                           ),
                     ),
@@ -141,7 +141,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                           style:
                               Theme.of(context).textTheme.headline6?.copyWith(
                                     color: Colors.white,
-                                    fontSize: 2.2.h,
+                                    fontSize: 19.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -160,7 +160,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'Khanapara, Guwahati',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                              fontSize: 1.9.h,
+                              fontSize: 11.sp,
                               // fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -196,7 +196,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       'News from',
                       style: Theme.of(context).textTheme.headline6?.copyWith(
                             color: Colors.white,
-                            fontSize: 2.2.h,
+                            fontSize: 19.sp,
                             fontWeight: FontWeight.bold,
                           ),
                     ),
@@ -228,7 +228,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'Guwahati',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                              fontSize: 1.5.h,
+                          fontSize: 11.sp,
                               // fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -255,7 +255,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'Assam',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                              fontSize: 1.5.h,
+                          fontSize: 11.sp,
                               // fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -282,7 +282,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'Northeast',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                              fontSize: 1.5.h,
+                          fontSize: 11.sp,
                               // fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -309,7 +309,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'India',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                              fontSize: 1.5.h,
+                          fontSize: 11.sp,
                               // fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -336,7 +336,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'International',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                              fontSize: 1.5.h,
+                          fontSize: 11.sp,
+                              // fontSize: 14.sp,
                               // fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -378,7 +379,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'International',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                              fontSize: 2.2.h,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -417,7 +418,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                   .headline6
                                   ?.copyWith(
                                     color: Colors.white,
-                                    fontSize: 2.2.h,
+                                    fontSize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -452,7 +453,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                     .headline6
                                     ?.copyWith(
                                       color: Colors.white,
-                                      fontSize: 1.5.h,
+                                  fontSize: 11.sp,
                                       // fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -482,7 +483,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                     .headline6
                                     ?.copyWith(
                                       color: Colors.white,
-                                      fontSize: 1.5.h,
+                                  fontSize: 11.sp,
                                       // fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -525,7 +526,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                           style:
                               Theme.of(context).textTheme.headline6?.copyWith(
                                     color: Colors.white,
-                                    fontSize: 2.2.h,
+                                    fontSize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -545,7 +546,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     height: 1.5.h,
                   ),
                   ListTileTheme(
-                    contentPadding: EdgeInsets.all(0),
+                    contentPadding: const EdgeInsets.all(0),
                     child: ExpansionTile(
                       title: Row(
                         children: [
@@ -557,11 +558,11 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             width: 2.w,
                           ),
                           Text(
-                            'Video Report',
+                            'Video Reports',
                             style:
                                 Theme.of(context).textTheme.headline6?.copyWith(
                                       color: Colors.white,
-                                      fontSize: 2.2.h,
+                                      fontSize: 14.sp,
                                       fontWeight: FontWeight.bold,
                                     ),
                           ),
@@ -603,7 +604,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                     .headline6
                                     ?.copyWith(
                                       color: Colors.white,
-                                      fontSize: 1.5.h,
+                                  fontSize: 11.sp,
                                       // fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -634,7 +635,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                   .headline6
                                   ?.copyWith(
                                     color: Colors.white,
-                                    fontSize: 1.5.h,
+                                fontSize: 11.sp,
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -677,7 +678,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     'Bookmarks',
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                           color: Colors.white,
-                          fontSize: 2.2.h,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -703,7 +704,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     'Download E-Paper',
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                           color: Colors.white,
-                          fontSize: 2.2.h,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -733,7 +734,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       'Be a member',
                       style: Theme.of(context).textTheme.headline6?.copyWith(
                             color: Constance.secondaryColor,
-                            fontSize: 2.2.h,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
                           ),
                     ),
@@ -760,7 +761,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     'Refer and Earn',
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                           color: Colors.white,
-                          fontSize: 2.2.h,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -790,7 +791,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'About Us',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                              fontSize: 2.2.h,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -813,7 +814,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'Contact Us',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                              fontSize: 2.2.h,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -836,7 +837,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'Privacy Policy',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                              fontSize: 2.2.h,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -847,7 +848,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   ),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.phone_android,
                         color: Constance.secondaryColor,
                         // size: 2.h,
@@ -859,7 +860,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'Grievance Redressal',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                              fontSize: 2.2.h,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -891,7 +892,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'Settings',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                              fontSize: 2.2.h,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -902,7 +903,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   ),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.exit_to_app,
                         color: Constance.secondaryColor,
                         // size: 2.h,
@@ -914,7 +915,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'Logout',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                              fontSize: 2.2.h,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -1049,7 +1050,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   'Khanapara, Guwahati',
                   style: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.white,
-                        fontSize: 1.9.h,
+                        fontSize: 10.sp,
                         // fontWeight: FontWeight.bold,
                       ),
                 ),

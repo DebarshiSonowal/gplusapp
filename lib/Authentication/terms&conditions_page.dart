@@ -14,7 +14,7 @@ class TermsAndConditions extends StatefulWidget {
 }
 
 class _TermsAndConditionsState extends State<TermsAndConditions> {
-  bool agreed=false;
+  bool agreed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,21 +32,27 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
             Text(
               'User Security Information',
               style: Theme.of(context).textTheme.headline3?.copyWith(
-                color: Constance.primaryColor,
-                // fontSize: 2.5.h,
-                fontWeight: FontWeight.bold,
-              ),
+                    color: Constance.primaryColor,
+                    fontSize: 19.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             SizedBox(
               height: 2.h,
             ),
-            Text(
-              Constance.terms,
-              overflow: TextOverflow.clip,
-              style: Theme.of(context).textTheme.headline5?.copyWith(
-                color: Colors.black,
-                // fontSize: 1.6.h,
-                // fontWeight: FontWeight.bold,
+            Expanded(
+              flex: 1,
+              child: new SingleChildScrollView(
+                scrollDirection: Axis.vertical, //.horizontal
+                child: Text(
+                  Constance.terms,
+                  overflow: TextOverflow.clip,
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.black,
+                        fontSize: 15.sp,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                ),
               ),
             ),
             // Spacer(),
@@ -57,22 +63,33 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
               width: double.infinity,
               height: 6.h,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Checkbox(
-                    fillColor: MaterialStateProperty.all(Colors.grey.shade300),
-                      checkColor: Colors.black,
-                      value: agreed, onChanged:(val){
-                    setState((){
-                      agreed = val!;
-                    });
-                  }),
+                  SizedBox(
+                    height: 10.w,
+                    width: 2.h,
+                    child: Checkbox(
+                        fillColor:
+                            MaterialStateProperty.all(Colors.grey.shade300),
+                        checkColor: Colors.black,
+                        value: agreed,
+                        onChanged: (val) {
+                          setState(() {
+                            agreed = val!;
+                          });
+                        }),
+                  ),
+                  SizedBox(
+                    width: 5.w,
+                  ),
                   Text(
                     'I accept all the Terms and Conditions',
+                    overflow: TextOverflow.clip,
                     style: Theme.of(context).textTheme.headline6?.copyWith(
-                      color: Colors.black,
-                      // fontSize: 1.7.h,
-                      // fontWeight: FontWeight.bold,
-                    ),
+                          color: Colors.black,
+                          fontSize: 14.sp,
+                          // fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ],
               ),
@@ -82,15 +99,17 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
             ),
             SizedBox(
               width: double.infinity,
-              height: 5.h,
+              height: 6.h,
               child: CustomButton(
                 txt: 'continue',
-                onTap: (){
-                    if (agreed) {
-                      Navigation.instance.navigateAndReplace('/personaldetails');
-                    } else {
-                      showError('You have to agree to our terms and conditions');
-                    }
+                onTap: () {
+                  if (agreed) {
+                    Navigation.instance
+                        .navigateAndReplace('/personaldetails');
+                  } else {
+                    showError(
+                        'You have to agree to our terms and conditions');
+                  }
                 },
               ),
             ),
@@ -105,12 +124,16 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(Constance.logoIcon,
-          fit: BoxFit.fill,scale: 2,),
+      title: Image.asset(
+        Constance.logoIcon,
+        fit: BoxFit.fill,
+        scale: 2,
+      ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );
   }
+
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",

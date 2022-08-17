@@ -24,7 +24,7 @@ class _CustomButtonState extends State<CustomButton> {
         widget.txt,
         style: Theme.of(context).textTheme.headline5?.copyWith(
               color: Colors.black,
-              // fontSize: 2.h,
+              fontSize: 14.5.sp,
             ),
       ),
     );

@@ -15,7 +15,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   var _mobile = TextEditingController();
 
-
   @override
   void dispose() {
     super.dispose();
@@ -29,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -46,14 +45,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               SizedBox(
-                height: 1.h,
+                height: 15.h,
               ),
               Text(
-                'LOG IN',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline4
-                    ?.copyWith(color: Colors.white),
+                'LOGIN',
+                style: Theme.of(context).textTheme.headline4?.copyWith(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
               // SizedBox(
               //   height: 3.h,
@@ -69,27 +66,27 @@ class _LoginPageState extends State<LoginPage> {
                 height: 4.h,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 26.0),
                 child: Container(
-                  padding: const EdgeInsets.all(2),
+                  padding: const EdgeInsets.all(0.1),
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(3))),
                   child: TextFormField(
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                           color: Colors.black,
-                          fontSize: 1.5.h,
+                          fontSize: 9.sp,
                         ),
                     controller: _mobile,
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      labelText: 'Registered Phone Number',
+                      labelText: 'Enter mobile number',
                       labelStyle:
                           Theme.of(context).textTheme.headline6?.copyWith(
-                                color: Colors.black,
-                                fontSize: 1.5.h,
+                                color: Colors.grey.shade700,
+                                fontSize: 10.sp,
                               ),
                       border: const OutlineInputBorder(),
                     ),
@@ -97,12 +94,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               SizedBox(
-                height: 4.h,
+                height: 2.h,
               ),
               Container(
-                height: 5.h,
+                height: 6.h,
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 26.0),
                 child: CustomButton(
                     txt: 'continue',
                     onTap: () {
@@ -116,5 +113,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-

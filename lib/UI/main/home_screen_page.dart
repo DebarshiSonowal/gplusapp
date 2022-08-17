@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gplusapp/Model/top_picks.dart';
 import 'package:search_page/search_page.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/NavigationBar.dart';
+import '../../Components/news_card.dart';
 import '../../Components/slider_home.dart';
 import '../../Helper/Constance.dart';
 import '../../Model/listing.dart';
@@ -38,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 width: double.infinity,
                 height: 20.h,
-                padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 5.w),
+                padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 8.w),
                 child: Card(
                   color: Constance.thirdColor,
                   shape: RoundedRectangleBorder(
@@ -58,11 +60,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Container(
                             child: Center(
                               child: Text(
-                                'BIG DEALS AND OFFERS',
+                                'Big Deals\nand Offers',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline4
-                                    ?.copyWith(color: Colors.white),
+                                    .headline3
+                                    ?.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -112,10 +116,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.symmetric(horizontal: 5.w),
                       child: Text(
                         'Top picks for you',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline3
-                            ?.copyWith(color: Constance.primaryColor),
+                        style: Theme.of(context).textTheme.headline3?.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.sp,
+                            ),
                       ),
                     ),
                     SizedBox(
@@ -124,104 +129,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     Expanded(
                       child: Container(
                         child: ListView.separated(
+                            shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (cont, count) {
                               var item = Constance.topList[count];
-                              return Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 3.w, vertical: 1.h),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5),
-                                    ),
-                                    color: Colors.white,
-                                  ),
-                                  height: 10.h,
-                                  width:
-                                      MediaQuery.of(context).size.width - 7.w,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: CachedNetworkImage(
-                                                imageUrl: item.image ?? '',
-                                                fit: BoxFit.fill,
-                                                placeholder: (cont, _) {
-                                                  return const Icon(
-                                                    Icons.image,
-                                                    color: Colors.black,
-                                                  );
-                                                },
-                                                errorWidget: (cont, _, e) {
-                                                  // print(e);
-                                                  print(_);
-                                                  return Text(_);
-                                                },
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 0.8.h,
-                                            ),
-                                            Text(
-                                              item.date ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Constance
-                                                          .primaryColor),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                item.name ?? "",
-                                                maxLines: 3,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline3
-                                                    ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        color: Constance
-                                                            .primaryColor),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 0.8.h,
-                                            ),
-                                            Text(
-                                              item.title ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Constance
-                                                          .primaryColor),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
+                              return NewsCard(item: item);
                             },
                             separatorBuilder: (cont, inde) {
                               return SizedBox(
@@ -240,8 +152,9 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 20.h,
                 width: double.infinity,
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.5.h),
                   child: Card(
                     color: Constance.primaryColor,
                     child: Center(
@@ -251,20 +164,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
                 child: Divider(
-                  color: Colors.grey.shade500,
-                  thickness: 0.3.h,
+                  color: Colors.grey.shade800,
+                  thickness: 0.1.h,
                 ),
               ),
-              SizedBox(
-                height: 1.h,
-              ),
+              // SizedBox(
+              //   height: 1.h,
+              // ),
               Container(
-                height: 25.h,
+                height: 30.h,
                 width: double.infinity,
                 // color: Constance.secondaryColor,
-                padding: EdgeInsets.symmetric(vertical: 1.h),
+                padding: EdgeInsets.symmetric(vertical: 0.5.h),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -288,104 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (cont, count) {
                               var item = Constance.topList[count];
-                              return Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  side: BorderSide(
-                                      width: 0.5,
-                                      color: Constance.primaryColor),
-                                ),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 3.w, vertical: 1.h),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5),
-                                    ),
-                                    color: Colors.white,
-                                  ),
-                                  height: 10.h,
-                                  width:
-                                      MediaQuery.of(context).size.width - 7.w,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: CachedNetworkImage(
-                                                imageUrl: item.image ?? '',
-                                                placeholder: (cont, _) {
-                                                  return const Icon(
-                                                    Icons.image,
-                                                    color: Colors.black,
-                                                  );
-                                                },
-                                                errorWidget: (cont, _, e) {
-                                                  // print(e);
-                                                  print(_);
-                                                  return Text(_);
-                                                },
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 0.8.h,
-                                            ),
-                                            Text(
-                                              item.date ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Constance
-                                                          .primaryColor),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                item.name ?? "",
-                                                maxLines: 3,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline3
-                                                    ?.copyWith(
-                                                        // fontSize: 2.2.h,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        color: Constance
-                                                            .primaryColor),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 0.8.h,
-                                            ),
-                                            Text(
-                                              item.title ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Constance
-                                                          .primaryColor),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
+                              return NewsCard(item: item);
                             },
                             separatorBuilder: (cont, inde) {
                               return SizedBox(
@@ -415,20 +231,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 1.h,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
                 child: Divider(
-                  color: Colors.grey.shade500,
-                  thickness: 0.3.h,
+                  color: Colors.grey.shade800,
+                  thickness: 0.1.h,
                 ),
               ),
-              SizedBox(
-                height: 1.h,
-              ),
+              // SizedBox(
+              //   height: 0.5.h,
+              // ),
               Container(
-                height: 30.h,
+                height: 35.h,
                 width: double.infinity,
                 // color: Constance.secondaryColor,
-                padding: EdgeInsets.symmetric(vertical: 2.h),
+                padding: EdgeInsets.symmetric(vertical: 1.h),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -452,104 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (cont, count) {
                               var item = Constance.topList[count];
-                              return Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  side: BorderSide(
-                                      width: 0.5,
-                                      color: Constance.primaryColor),
-                                ),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 3.w, vertical: 2.h),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5),
-                                    ),
-                                    color: Colors.white,
-                                  ),
-                                  height: 10.h,
-                                  width:
-                                      MediaQuery.of(context).size.width - 7.w,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: CachedNetworkImage(
-                                                imageUrl: item.image ?? '',
-                                                placeholder: (cont, _) {
-                                                  return const Icon(
-                                                    Icons.image,
-                                                    color: Colors.black,
-                                                  );
-                                                },
-                                                errorWidget: (cont, _, e) {
-                                                  // print(e);
-                                                  print(_);
-                                                  return Text(_);
-                                                },
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 0.8.h,
-                                            ),
-                                            Text(
-                                              item.date ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Constance
-                                                          .primaryColor),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                item.name ?? "",
-                                                maxLines: 2,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline3
-                                                    ?.copyWith(
-                                                        // fontSize: 2.2.h,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        color: Constance
-                                                            .primaryColor),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 0.8.h,
-                                            ),
-                                            Text(
-                                              item.title ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Constance
-                                                          .primaryColor),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
+                              return NewsCard(item: item);
                             },
                             separatorBuilder: (cont, inde) {
                               return SizedBox(
@@ -575,21 +294,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       height: 1.h,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Divider(
-                        color: Colors.grey.shade500,
-                        thickness: 0.3.h,
-                      ),
-                    ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                child: Divider(
+                  color: Colors.grey.shade800,
+                  thickness: 0.1.h,
                 ),
               ),
               Container(
                 // height: 35.h,
                 width: double.infinity,
                 // color: Constance.secondaryColor,
-                padding: EdgeInsets.symmetric(vertical: 2.h),
+                padding: EdgeInsets.symmetric(vertical: 1.h),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -608,11 +327,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                           ),
                           IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.share,
-                                color: Colors.black,
-                              )),
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.share,
+                              color: Colors.black,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -692,21 +412,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       height: 1.h,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Divider(
-                        color: Colors.grey.shade500,
-                        thickness: 0.3.h,
-                      ),
-                    ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                child: Divider(
+                  color: Colors.grey.shade800,
+                  thickness: 0.1.h,
                 ),
               ),
               Container(
                 // height: 27.h,
                 width: double.infinity,
                 // color: Constance.secondaryColor,
-                padding: EdgeInsets.symmetric(vertical: 2.h),
+                padding: EdgeInsets.symmetric(vertical: 1.h),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,

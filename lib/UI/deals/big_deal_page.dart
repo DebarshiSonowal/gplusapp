@@ -79,9 +79,9 @@ class _BigDealPageState extends State<BigDealPage> {
                                 decoration: BoxDecoration(
                                   borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(5.0),
-                                    // bottomRight: Radius.circular(40.0),
+                                    bottomRight: Radius.circular(5.0),
                                     topLeft: Radius.circular(5.0),
-                                    // bottomLeft: Radius.circular(40.0),
+                                    bottomLeft: Radius.circular(5.0),
                                   ),
                                   image: DecorationImage(
                                     fit: BoxFit.fill,
@@ -187,8 +187,8 @@ class _BigDealPageState extends State<BigDealPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              width: 7.h,
-                              height: 7.h,
+                              width: 8.h,
+                              height: 8.h,
                               padding: EdgeInsets.symmetric(
                                   horizontal: 2.w, vertical: 1.h),
                               decoration: BoxDecoration(
@@ -226,7 +226,7 @@ class _BigDealPageState extends State<BigDealPage> {
                 ),
               ),
               SizedBox(
-                height: 0.5.h,
+                height: 2.5.h,
               ),
               SizedBox(
                 width: double.infinity,

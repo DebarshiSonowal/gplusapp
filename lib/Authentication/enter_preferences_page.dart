@@ -33,6 +33,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
               style: Theme.of(context).textTheme.headline3?.copyWith(
                     color: Constance.primaryColor,
                     // fontSize: 2.5.h,
+                    fontSize: 21.sp,
                     fontWeight: FontWeight.bold,
                   ),
             ),
@@ -80,9 +81,9 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(
                             color: selGeo == null
-                                ? Constance.primaryColor
+                                ? Colors.grey.shade600
                                 : !selGeo.contains(Constance.geo[i])
-                                    ? Constance.primaryColor
+                                    ? Colors.grey.shade600
                                     : Constance.secondaryColor,
                             width: 0.5.w,
                             // left: BorderSide(
@@ -94,8 +95,8 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                         child: Text(
                           Constance.geo[i],
                           style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Constance.primaryColor,
+                              Theme.of(context).textTheme.subtitle2?.copyWith(
+                                    color: Colors.grey.shade800,
                                     // fontSize: 2.h,
                                     // fontWeight: FontWeight.bold,
                                   ),
@@ -149,9 +150,9 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(
                             color: selTop == null
-                                ? Constance.primaryColor
+                                ?  Colors.grey.shade600
                                 : !selTop.contains(Constance.topical[i])
-                                    ? Constance.primaryColor
+                                    ?  Colors.grey.shade600
                                     : Constance.secondaryColor,
                             width: 0.5.w,
                             // left: BorderSide(
@@ -163,8 +164,8 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                         child: Text(
                           Constance.topical[i],
                           style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Constance.primaryColor,
+                              Theme.of(context).textTheme.subtitle2?.copyWith(
+                                color: Colors.grey.shade800,
                                     // fontSize: 2.h,
                                     // fontWeight: FontWeight.bold,
                                   ),
@@ -177,7 +178,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
             const Spacer(),
             SizedBox(
               width: double.infinity,
-              height: 5.h,
+              height: 6.h,
               child: CustomButton(
                 txt: 'Save & Continue',
                 onTap: () {

@@ -42,7 +42,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                   'ENTER OTP',
                   style: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
-                        fontSize: 2.h,
+                        fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
@@ -50,7 +50,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                   ' received in',
                   style: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
-                        fontSize: 2.h,
+                        fontSize: 15.sp,
                         // fontWeight: FontWeight.bold,
                       ),
                 ),
@@ -66,7 +66,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                   'the number ',
                   style: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
-                        fontSize: 2.h,
+                        fontSize: 16.sp,
                         // fontWeight: FontWeight.bold,
                       ),
                 ),
@@ -74,7 +74,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                   '+91 XXXXXXXXXX',
                   style: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
-                        fontSize: 2.h,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
@@ -84,7 +84,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
               height: 2.h,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              padding: EdgeInsets.symmetric(horizontal: 6.w),
               child: PinCodeTextField(
                 length: 6,
                 obscureText: false,
@@ -93,8 +93,8 @@ class _VerifyOTPState extends State<VerifyOTP> {
                   shape: PinCodeFieldShape.box,
                   borderRadius: BorderRadius.circular(5),
                   activeColor: Colors.black,
-                  fieldHeight: 50,
-                  fieldWidth: 40,
+                  fieldHeight: 6.7.h,
+                  fieldWidth: 12.w,
                   activeFillColor: Colors.white,
                   selectedFillColor: Colors.grey.shade100,
                   selectedColor: Colors.black,
@@ -137,9 +137,9 @@ class _VerifyOTPState extends State<VerifyOTP> {
               height: 3.h,
             ),
             Container(
-              height: 5.h,
+              height: 6.h,
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: EdgeInsets.symmetric(horizontal: 6.w),
               child: CustomButton(
                   txt: 'Submit',
                   onTap: () {
@@ -153,7 +153,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
               'Didn\'t receive OTP?',
               style: Theme.of(context).textTheme.headline6?.copyWith(
                     color: Colors.black,
-                    fontSize: 2.h,
+                    fontSize: 15.sp,
                     // fontWeight: FontWeight.bold,
                   ),
             ),
@@ -163,7 +163,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                 'Send Again',
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Colors.black,
-                      fontSize: 2.h,
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -171,10 +171,10 @@ class _VerifyOTPState extends State<VerifyOTP> {
             Text(
               'In 30 seconds',
               style: Theme.of(context).textTheme.headline6?.copyWith(
-                color: Colors.black,
-                fontSize: 2.h,
-                // fontWeight: FontWeight.bold,
-              ),
+                    color: Colors.black,
+                    fontSize: 15.sp,
+                    // fontWeight: FontWeight.bold,
+                  ),
             ),
           ],
         ),
@@ -184,8 +184,11 @@ class _VerifyOTPState extends State<VerifyOTP> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(Constance.logoIcon,
-          fit: BoxFit.fill, scale: 2,),
+      title: Image.asset(
+        Constance.logoIcon,
+        fit: BoxFit.fill,
+        scale: 2,
+      ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );
