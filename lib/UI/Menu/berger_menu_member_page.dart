@@ -32,7 +32,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     return Drawer(
       backgroundColor: Constance.primaryColor,
       child: Padding(
-        padding: EdgeInsets.only(left: 2.w),
+        padding: EdgeInsets.only(left: 2.w,right: 2.w),
         child: ListView(
           children: [
             DrawerHeader(

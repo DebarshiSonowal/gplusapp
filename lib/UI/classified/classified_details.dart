@@ -145,12 +145,12 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
 
   AppBar buildAppBar() {
     return AppBar(
-      leading: IconButton(
-        onPressed: () {
-          Navigation.instance.navigate('/bergerMenuMem');
-        },
-        icon: Icon(Icons.menu),
-      ),
+      // leading: IconButton(
+      //   onPressed: () {
+      //     Navigation.instance.navigate('/bergerMenuMem');
+      //   },
+      //   icon: Icon(Icons.menu),
+      // ),
       title: Image.asset(
         Constance.logoIcon,
         fit: BoxFit.fill,
