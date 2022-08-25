@@ -7,7 +7,10 @@ import '../Components/custom_button.dart';
 import '../Navigation/Navigate.dart';
 
 class VerifyOTP extends StatefulWidget {
-  const VerifyOTP({Key? key}) : super(key: key);
+  final int number;
+
+
+  VerifyOTP(this.number);
 
   @override
   State<VerifyOTP> createState() => _VerifyOTPState();
@@ -71,7 +74,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                       ),
                 ),
                 Text(
-                  '+91 XXXXXXXXXX',
+                  '+91 XXXXXXXX${widget.number.toString().split('')[8]}${widget.number.toString().split('')[9]}',
                   style: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
                         fontSize: 16.sp,

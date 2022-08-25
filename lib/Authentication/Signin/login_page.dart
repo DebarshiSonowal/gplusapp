@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/Constance.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 
 class LoginPage extends StatefulWidget {
@@ -68,14 +71,14 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 26.0),
                 child: Container(
-                  padding: const EdgeInsets.all(0.1),
+                  // padding: const EdgeInsets.all(0.2),
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(3))),
                   child: TextFormField(
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                           color: Colors.black,
-                          fontSize: 9.sp,
+                          fontSize: 12.sp,
                         ),
                     controller: _mobile,
                     keyboardType: TextInputType.phone,
@@ -103,7 +106,11 @@ class _LoginPageState extends State<LoginPage> {
                 child: CustomButton(
                     txt: 'continue',
                     onTap: () {
-                      Navigation.instance.navigate('/verifyOtp');
+                      if (_mobile.text.isNotEmpty&&_mobile.text.length==10) {
+                        sendOTP(_mobile.text);
+                      } else {
+                        showError("Enter correct mobile number");
+                      }
                     }),
               ),
             ],
@@ -111,5 +118,28 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void sendOTP(String text) async {
+    final response = await ApiProvider.instance.login(text);
+    if (response.status ?? false) {
+      Fluttertoast.showToast(
+        msg: 'OTP sent successfully',
+        // fontSize: th
+      );
+      Navigation.instance.navigate('/verifyOtp',args: int.parse(text));
+    } else {
+      showError(response.message ?? "Something went wrong");
+    }
+  }
+
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }

@@ -44,7 +44,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/signup':
       return FadeTransitionPageRouteBuilder(page: SignupPage());
     case '/verifyOtp':
-      return FadeTransitionPageRouteBuilder(page: VerifyOTP());
+      return FadeTransitionPageRouteBuilder(page: VerifyOTP(settings.arguments as int));
     case '/terms&conditions':
       return FadeTransitionPageRouteBuilder(page: TermsAndConditions());
     case '/personaldetails':
