@@ -75,7 +75,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 'Enter Personal Details',
                 style: Theme.of(context).textTheme.headline2?.copyWith(
                       color: Constance.primaryColor,
-                      fontSize: 21.sp,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -85,7 +85,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               TextFormField(
                 style: Theme.of(context).textTheme.headline5?.copyWith(
                       color: Colors.black,
-                      fontSize: 12.sp,
+                      fontSize: 11.sp,
                     ),
                 controller: first_name,
                 keyboardType: TextInputType.name,
@@ -96,7 +96,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                   labelStyle: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontSize: 1.5.h,
-                        fontSize: 14.sp,
+                        fontSize: 11.sp,
                       ),
                   border: const OutlineInputBorder(),
                   enabledBorder: const OutlineInputBorder(),
@@ -108,7 +108,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               TextFormField(
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Colors.black,
-                      fontSize: 12.sp,
+                      fontSize: 11.sp,
                     ),
                 controller: last_name,
                 keyboardType: TextInputType.name,
@@ -118,7 +118,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                   labelText: 'Enter Last Name',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
-                        fontSize: 14.sp,
+                        fontSize: 11.sp,
                       ),
                   border: const OutlineInputBorder(),
                   enabledBorder: const OutlineInputBorder(),
@@ -130,7 +130,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               TextFormField(
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Colors.black,
-                      fontSize: 12.sp,
+                      fontSize: 11.sp,
                     ),
                 controller: email,
                 keyboardType: TextInputType.emailAddress,
@@ -141,7 +141,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
                         // fontSize: 1.5.h,
-                        fontSize: 14.sp,
+                        fontSize: 11.sp,
                       ),
                   border: const OutlineInputBorder(),
                   enabledBorder: const OutlineInputBorder(),
@@ -155,7 +155,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 style: Theme.of(context).textTheme.subtitle2?.copyWith(
                       color: Constance.primaryColor,
                       // fontSize: 2.5.h,
-                      fontSize: 20.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -202,16 +202,14 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                         child: Row(
                           children: [
                             Text(
-                              date == ''
-                                  ? ''
-                                  : '${date.split('-')[0]} - ${date.split('-')[1]} - ${date.split('-')[2]}',
+                              date == '' ? '' : '${date.split('-')[0]}',
                               style: Theme.of(context)
                                   .textTheme
                                   .headline5
                                   ?.copyWith(
                                     color: Colors.black,
                                     // fontSize: 2.h,
-                                    fontSize: 16.sp,
+                                    fontSize: 11.sp,
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -220,9 +218,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                             ),
                             Container(
                               margin: EdgeInsets.only(
-                                  right: 1.w, top: 1.h, bottom: 1.h),
+                                  right: 1.w, top: 0.5.h, bottom: .5.h),
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 1.5.w, vertical: 1.h),
+                                  horizontal: 1.5.w, vertical: 0.5.h),
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: Colors.grey.shade700,
@@ -239,7 +237,98 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                           ],
                         ),
                       ),
-
+                      Container(
+                        padding: EdgeInsets.only(left: 2.w),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade700,
+                          ),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              date == '' ? '' : '${date.split('-')[1]}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5
+                                  ?.copyWith(
+                                    color: Colors.black,
+                                    // fontSize: 2.h,
+                                    fontSize: 11.sp,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            SizedBox(
+                              width: 2.w,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  right: 1.w, top: 0.5.h, bottom: .5.h),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 1.5.w, vertical: 0.5.h),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey.shade700,
+                                ),
+                                borderRadius: BorderRadius.circular(3.0),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.arrow_downward,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 2.w),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade700,
+                          ),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              date == '' ? '' : '${date.split('-')[2]}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5
+                                  ?.copyWith(
+                                    color: Colors.black,
+                                    // fontSize: 2.h,
+                                    fontSize: 11.sp,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            SizedBox(
+                              width: 2.w,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  right: 1.w, top: 0.5.h, bottom: .5.h),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 1.5.w, vertical: 0.5.h),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey.shade700,
+                                ),
+                                borderRadius: BorderRadius.circular(3.0),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.arrow_downward,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       // Container(
                       //   padding: EdgeInsets.all(5),
                       //   decoration: BoxDecoration(
@@ -288,7 +377,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 style: Theme.of(context).textTheme.subtitle2?.copyWith(
                       color: Constance.primaryColor,
                       // fontSize: 2.5.h,
-                      fontSize: 20.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -298,14 +387,14 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: SizedBox(
-                  width: 40.w,
+                  width: 25.w,
                   // height: 10.h,
                   child: DropdownButtonFormField2(
                     decoration: const InputDecoration.collapsed(hintText: ''),
                     isExpanded: false,
 
-                    buttonHeight: 6.h,
-                    buttonWidth: 40.w,
+                    buttonHeight: 5.h,
+                    buttonWidth: 20.w,
                     buttonPadding:
                         EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.5.h),
                     buttonDecoration: BoxDecoration(
@@ -330,7 +419,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                               Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Colors.black,
                                     // fontSize: 2.h,
-                                    fontSize: 17.sp,
+                                    fontSize: 11.sp,
                                     // fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -356,7 +445,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                     style: Theme.of(context).textTheme.subtitle2?.copyWith(
                           color: Constance.primaryColor,
                           // fontSize: 2.5.h,
-                          fontSize: 20.sp,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -376,7 +465,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Constance.primaryColor,
                           // fontSize: 2.h,
-                          fontSize: 17.sp,
+                          fontSize: 11.sp,
                           // fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -387,14 +476,14 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 ],
               ),
               SizedBox(
-                height: 2.h,
+                height: 4.h,
               ),
               Text(
                 'The data can be changed in your profile later',
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Constance.primaryColor,
                       // fontSize: 1.6.h,
-                  fontSize: 13.sp,
+                      fontSize: 9.sp,
                       // fontWeight: FontWeight.bold,
                     ),
               ),
@@ -406,12 +495,12 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Constance.thirdColor,
                       // fontSize: 1.6.h,
-                  fontSize: 13.sp,
+                      fontSize: 9.sp,
                       // fontWeight: FontWeight.bold,
                     ),
               ),
               SizedBox(
-                height: 2.h,
+                height: 4.h,
               ),
               SizedBox(
                 width: double.infinity,

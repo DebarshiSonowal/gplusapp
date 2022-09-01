@@ -1,0 +1,40 @@
+import 'package:gplusapp/Model/video_gallery.dart';
+
+class VideoNews {
+  int? id, video_gallery_id, is_app, status, share_count, view_count;
+  String? title,
+      publish_date,
+      description,
+      image_file_name,
+      as_title,
+      as_description,
+      sequence,
+      video_file_name,
+      youtube_id;
+  VideoGallery? videoGallery;
+
+  VideoNews.fromJson(json) {
+    //int
+    id = json['id'] ?? 0;
+    is_app = json['is_app'] == null ? 0 : int.parse(json['is_app'].toString());
+    status = json['status'] == null ? 1 : int.parse(json['status'].toString());
+    view_count = json['view_count'] == null
+        ? 1
+        : int.parse(json['view_count'].toString());
+    share_count = json['share_count'] == null
+        ? 1
+        : int.parse(json['share_count'].toString());
+
+    videoGallery = VideoGallery.fromJson(json['video_gallery']);
+
+    title = json['title'] ?? "";
+    publish_date = json['publish_date'] ?? "";
+    description = json['description'] ?? "";
+    image_file_name = json['image_file_name'] ?? "";
+    as_title = json['as_title'] ?? "";
+    sequence = json['sequence'] ?? "";
+    as_description = json['as_description'] ?? "";
+    video_file_name = json['video_file_name'] ?? "";
+    youtube_id = json['youtube_id'] ?? "";
+  }
+}

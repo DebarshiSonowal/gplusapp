@@ -69,9 +69,9 @@ class _LoginPageState extends State<LoginPage> {
                 height: 4.h,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 26.0),
+                padding:const EdgeInsets.symmetric(horizontal: 26.0),
                 child: Container(
-                  // padding: const EdgeInsets.all(0.2),
+                  padding: EdgeInsets.symmetric(vertical: 0.5.h,horizontal: 1.w),
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(3))),
@@ -92,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                                 fontSize: 10.sp,
                               ),
                       border: const OutlineInputBorder(),
+                      focusedBorder: InputBorder.none,
                     ),
                   ),
                 ),
@@ -106,8 +107,12 @@ class _LoginPageState extends State<LoginPage> {
                 child: CustomButton(
                     txt: 'continue',
                     onTap: () {
+
+                      // sendOTP(_mobile.text);
+                      // Navigation.instance.navigate('/verifyOtp',args: int.parse('8638372157'));
                       if (_mobile.text.isNotEmpty&&_mobile.text.length==10) {
-                        sendOTP(_mobile.text);
+                        // sendOTP(_mobile.text);
+                        Navigation.instance.navigate('/verifyOtp', args: int.parse(_mobile.text));
                       } else {
                         showError("Enter correct mobile number");
                       }
@@ -127,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
         msg: 'OTP sent successfully',
         // fontSize: th
       );
-      Navigation.instance.navigate('/verifyOtp',args: int.parse(text));
+      Navigation.instance.navigate('/verifyOtp', args: int.parse(text));
     } else {
       showError(response.message ?? "Something went wrong");
     }

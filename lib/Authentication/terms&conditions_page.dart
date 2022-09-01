@@ -33,7 +33,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
               'User Security Information',
               style: Theme.of(context).textTheme.headline3?.copyWith(
                     color: Constance.primaryColor,
-                    fontSize: 19.sp,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                   ),
             ),
@@ -42,14 +42,14 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
             ),
             Expanded(
               flex: 1,
-              child: new SingleChildScrollView(
+              child: SingleChildScrollView(
                 scrollDirection: Axis.vertical, //.horizontal
                 child: Text(
                   Constance.terms,
                   overflow: TextOverflow.clip,
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
-                        fontSize: 15.sp,
+                        fontSize: 11.sp,
                         // fontWeight: FontWeight.bold,
                       ),
                 ),
@@ -87,7 +87,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                     overflow: TextOverflow.clip,
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                           color: Colors.black,
-                          fontSize: 14.sp,
+                          fontSize: 13.sp,
                           // fontWeight: FontWeight.bold,
                         ),
                   ),

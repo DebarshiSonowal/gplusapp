@@ -1,14 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/Constance.dart';
+import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+// import 'package:sms_autofill/sms_autofill.dart';
 
+import '../Components/alert.dart';
 import '../Components/custom_button.dart';
 import '../Navigation/Navigate.dart';
 
 class VerifyOTP extends StatefulWidget {
   final int number;
-
 
   VerifyOTP(this.number);
 
@@ -18,13 +23,28 @@ class VerifyOTP extends StatefulWidget {
 
 class _VerifyOTPState extends State<VerifyOTP> {
   var textEditingController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  String? _verificationId;
+  // final SmsAutoFill _autoFill = SmsAutoFill();
   String currentText = '';
 
   @override
   void dispose() {
     super.dispose();
     textEditingController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    PhoneVerificationCompleted verificationCompleted =
+        (PhoneAuthCredential phoneAuthCredential) async {
+      await _auth.signInWithCredential(phoneAuthCredential);
+
+      // showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
+    };
   }
 
   @override
@@ -146,6 +166,8 @@ class _VerifyOTPState extends State<VerifyOTP> {
               child: CustomButton(
                   txt: 'Submit',
                   onTap: () {
+                    // GetProfile();
+                    // phoneSignIn(phoneNumber: widget.number.toString());
                     Navigation.instance.navigateAndReplace('/terms&conditions');
                   }),
             ),
@@ -195,5 +217,95 @@ class _VerifyOTPState extends State<VerifyOTP> {
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );
+  }
+
+  void GetProfile() async {
+    PhoneCodeSent codeSent =
+        (String verificationId, [int? forceResendingToken]) async {
+      // showSnackbar('Please check your phone for the verification code.');
+      _verificationId = verificationId;
+    };
+  }
+
+  Future<void> phoneSignIn({required String phoneNumber}) async {
+    debugPrint(widget.number.toString());
+    await _auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: _onVerificationCompleted,
+        verificationFailed: _onVerificationFailed,
+        codeSent: _onCodeSent,
+        codeAutoRetrievalTimeout: _onCodeTimeout);
+  }
+
+  _onVerificationCompleted(PhoneAuthCredential authCredential) async {
+    print("verification completed ${authCredential.smsCode}");
+    User? user = FirebaseAuth.instance.currentUser;
+    setState(() {
+      textEditingController.text = authCredential.smsCode!;
+    });
+    if (authCredential.smsCode != null) {
+      try {
+        UserCredential credential =
+            await user!.linkWithCredential(authCredential);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'provider-already-linked') {
+          await _auth.signInWithCredential(authCredential);
+        }
+      }
+      // setState(() {
+      //   isLoading = false;
+      // });
+      // Navigator.pushNamedAndRemoveUntil(
+      //     context, Constants.homeNavigate, (route) => false);
+    }
+  }
+
+  _onVerificationFailed(FirebaseAuthException exception) {
+    if (exception.code == 'invalid-phone-number') {
+      showMessage("The phone number entered is invalid!");
+    }
+  }
+
+  _onCodeSent(String verification, int? forceResendingToken) {
+    _verificationId = verification;
+    print(forceResendingToken);
+    print("code sent");
+  }
+
+  _onCodeTimeout(String timeout) {
+    return null;
+  }
+
+  void showMessage(String errorMessage) {
+    showDialog(
+        context: context,
+        builder: (BuildContext builderContext) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text(errorMessage,style: Theme.of(context).textTheme.headline4,),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () async {
+                  Navigator.of(builderContext).pop();
+                },
+              )
+            ],
+          );
+        }).then((value) {
+      // setState(() {
+      //   isLoading = false;
+      // });
+    });
+  }
+
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }

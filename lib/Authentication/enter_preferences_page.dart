@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import '../Components/alert.dart';
 import '../Components/custom_button.dart';
 import '../Helper/Constance.dart';
 import '../Navigation/Navigate.dart';
@@ -33,7 +34,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
               style: Theme.of(context).textTheme.headline3?.copyWith(
                     color: Constance.primaryColor,
                     // fontSize: 2.5.h,
-                    fontSize: 21.sp,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                   ),
             ),
@@ -95,7 +96,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                         child: Text(
                           Constance.geo[i],
                           style:
-                              Theme.of(context).textTheme.subtitle2?.copyWith(
+                              Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Colors.grey.shade800,
                                     // fontSize: 2.h,
                                     // fontWeight: FontWeight.bold,
@@ -164,7 +165,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                         child: Text(
                           Constance.topical[i],
                           style:
-                              Theme.of(context).textTheme.subtitle2?.copyWith(
+                              Theme.of(context).textTheme.headline5?.copyWith(
                                 color: Colors.grey.shade800,
                                     // fontSize: 2.h,
                                     // fontWeight: FontWeight.bold,
@@ -182,7 +183,11 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
               child: CustomButton(
                 txt: 'Save & Continue',
                 onTap: () {
-                  Navigation.instance.navigateAndReplace('/main');
+                  if (selGeo.isNotEmpty&&selTop.isNotEmpty) {
+                    Navigation.instance.navigateAndReplace('/main');
+                  } else {
+                    showError("Select at least one of each");
+                  }
                 },
               ),
             ),
@@ -194,7 +199,15 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
       ),
     );
   }
-
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
+  }
   AppBar buildAppBar() {
     return AppBar(
       title: Image.asset(
