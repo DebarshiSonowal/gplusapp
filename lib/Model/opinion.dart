@@ -59,7 +59,7 @@ class Opinion {
 
     //String
     title = json['title'] ?? "";
-    author_name = json['author_name'] ?? "";
+    author_name = json['author_name'] ?? "GPlus Admin";
     publish_date = json['publish_date'] ?? "";
     tags = json['tags'] ?? "";
     seo_name = json['seo_name'] ?? "";
@@ -96,6 +96,26 @@ class OpinionResponse {
                 .toList();
   }
   OpinionResponse.withError(msg){
+    success = false;
+    message = msg??"Something went wrong";
+  }
+}
+class LatestOpinionResponse {
+  bool? success;
+  String? message;
+  List<Opinion>? opinion;
+  int? current_page, last_page;
+
+  LatestOpinionResponse.fromJson(json) {
+    success = json['success'] ?? false;
+    message = json['message'] ?? "Something Went Wrong";
+    opinion = json['data'] == null
+        ? []
+            : (json['data'] as List)
+                .map((e) => Opinion.fromJson(e))
+                .toList();
+  }
+  LatestOpinionResponse.withError(msg){
     success = false;
     message = msg??"Something went wrong";
   }

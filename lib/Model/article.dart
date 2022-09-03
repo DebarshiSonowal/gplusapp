@@ -17,8 +17,10 @@ class Article {
   CategoryName? first_cat_name;
 
   Article.fromJson(json) {
+    print(json);
+
     //int
-    id = json['id'] ?? 0;
+    id = json['id'] == null ? 0 : int.parse(json['id'].toString());
     is_app = json['is_app'] == null ? 0 : int.parse(json['is_app'].toString());
     status = json['status'] == null ? 1 : int.parse(json['status'].toString());
     view_count = json['view_count'] == null
@@ -43,23 +45,25 @@ class Article {
     as_author_name = json['as_author_name'] ?? "";
     as_description = json['as_description'] ?? "";
     as_short_description = json['as_short_description'] ?? "";
-    author = json['author'] ?? "";
+    // author = json['author'] ?? "";
   }
 }
 
 class ArticleResponse {
   bool? success;
   String? message;
-  Article? article;
+  List<Article>? articles;
 
-  ArticleResponse.fromJson(json){
-    success = json['success']??false;
-    message = json['message']??"Something Went Wrong";
-    article =Article.fromJson(json['data']);
+  ArticleResponse.fromJson(json) {
+    success = json['success'].toString() == 'true' ? true : false;
+    message = json['message'] ?? "Something Went Wrong";
+    articles = json['data'] == null
+        ? []
+        : (json['data'] as List).map((e) => Article.fromJson(e)).toList();
   }
-  ArticleResponse.withError(msg){
+
+  ArticleResponse.withError(msg) {
     success = false;
-    message = msg??"Something Went Wrong";
+    message = msg ?? "Something Went Wrong";
   }
-
 }

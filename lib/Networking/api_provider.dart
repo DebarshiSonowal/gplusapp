@@ -1,20 +1,26 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Model/profile.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 import '../Model/article.dart';
 import '../Model/article_desc.dart';
+import '../Model/e_paper.dart';
 import '../Model/login_response.dart';
 import '../Model/opinion.dart';
+import '../Model/video_news.dart';
 
 class ApiProvider {
   ApiProvider._();
 
   static final ApiProvider instance = ApiProvider._();
   final String baseUrl = "http://gplus.shecure.co.in/api/v1";
+  final String homeUrl = "https://www.guwahatiplus.com/api/v1";
   final String path = "/books";
 
   Dio? dio;
@@ -82,7 +88,7 @@ class ApiProvider {
     //   // 'mobile': mobile,
     // };
 
-    var url = "${baseUrl}/${categ_name}";
+    var url = "${homeUrl}/${categ_name}";
     dio = Dio(option);
     debugPrint(url.toString());
     // debugPrint(jsonEncode(data));
@@ -104,14 +110,14 @@ class ApiProvider {
     }
   }
 
-  Future<OpinionResponse> getOpinion(category, per_page, page) async {
+  Future<OpinionResponse> getOpinion(per_page, page) async {
     var data = {
-      'category': category,
+      'category': 'opinion',
       'per_page': per_page,
       'page': page,
     };
 
-    var url = "${baseUrl}/opinion-list";
+    var url = "${homeUrl}/opinion-list";
     dio = Dio(option);
     debugPrint(url.toString());
     debugPrint(jsonEncode(data));
@@ -158,6 +164,174 @@ class ApiProvider {
     } on DioError catch (e) {
       debugPrint("Article desc response: ${e.response}");
       return ArticleDescResponse.withError(e.message);
+    }
+  }
+
+  Future<ArticleResponse> getHomeAlbum() async {
+    // var data = {
+    //   // 'mobile': mobile,
+    // };
+
+    var url = "${homeUrl}/app/latest-news";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+      );
+      debugPrint("HomeAlbum response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ArticleResponse.fromJson(response?.data);
+      } else {
+        debugPrint("HomeAlbum error: ${response?.data}");
+        return ArticleResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("HomeAlbum response: ${e.response}");
+      return ArticleResponse.withError(e.message);
+    }
+  }
+
+  Future<VideoNewsResponse> getWeekly() async {
+    // var data = {
+    //   // 'mobile': mobile,
+    // };
+
+    var url = "${homeUrl}/app/weekly-videos";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+      );
+      debugPrint("Weekly response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return VideoNewsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("Weekly error: ${response?.data}");
+        return VideoNewsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("Weekly response: ${e.response}");
+      return VideoNewsResponse.withError(e.message);
+    }
+  }
+
+  Future<LatestOpinionResponse> getLatestOpinion() async {
+    // var data = {
+    //   'category': 'opinion',
+    //   'per_page': per_page,
+    //   'page': page,
+    // };
+
+    var url = "${homeUrl}/app/latest-opinions";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("latest-opinions response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return LatestOpinionResponse.fromJson(response?.data);
+      } else {
+        debugPrint("latest-opinions error: ${response?.data}");
+        return LatestOpinionResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("latest-opinions response: ${e.response}");
+      return LatestOpinionResponse.withError(e.message);
+    }
+  }
+
+  Future<E_paperRepsonse> getEpaper() async {
+    // var data = {
+    //   'category': 'opinion',
+    //   'per_page': per_page,
+    //   'page': page,
+    // };
+
+    var url = "${homeUrl}/get-epaper";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("E_paper response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return E_paperRepsonse.fromJson(response?.data);
+      } else {
+        debugPrint("E_paper error: ${response?.data}");
+        return E_paperRepsonse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("E_paper response: ${e.response}");
+      return E_paperRepsonse.withError(e.message);
+    }
+  }
+
+  Future download2(String url) async {
+    var tempDir = "/storage/emulated/0/Download";
+    String fullPath = tempDir + "/" + url.split("/")[8];
+    print('full path ${fullPath}');
+    try {
+      Response? response = await dio?.get(
+        url,
+        onReceiveProgress: showDownloadProgress,
+        //Received data with List<int>
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            validateStatus: (status) {
+              return status! < 500;
+            }),
+      );
+      print(response?.headers);
+      File file = File(fullPath);
+      var raf = file.openSync(mode: FileMode.write);
+      // response.data is List<int> type
+      raf.writeFromSync(response?.data);
+      await raf.close();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void showDownloadProgress(received, total) async {
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    if (total != -1) {
+      print((received / total * 100).toStringAsFixed(0) + "%");
+      await Future<void>.delayed(const Duration(seconds: 1), () async {
+        final AndroidNotificationDetails androidPlatformChannelSpecifics =
+            AndroidNotificationDetails('progress channel', 'progress channel',
+                channelShowBadge: false,
+                importance: Importance.max,
+                priority: Priority.high,
+                onlyAlertOnce: true,
+                showProgress: true,
+                maxProgress: total,
+                progress: received);
+        final NotificationDetails platformChannelSpecifics =
+            NotificationDetails(android: androidPlatformChannelSpecifics);
+        if (received <= 99) {
+          await flutterLocalNotificationsPlugin.show(
+              0, 'Saving E-paper', 'Downloading', platformChannelSpecifics,
+              payload: 'item x');
+        } else {
+          await flutterLocalNotificationsPlugin.cancelAll();
+        }
+      });
     }
   }
 }

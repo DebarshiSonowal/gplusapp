@@ -15,7 +15,7 @@ class VideoNews {
 
   VideoNews.fromJson(json) {
     //int
-    id = json['id'] ?? 0;
+    id = json['id'] == null ? 0 : int.parse(json['id'].toString());
     is_app = json['is_app'] == null ? 0 : int.parse(json['is_app'].toString());
     status = json['status'] == null ? 1 : int.parse(json['status'].toString());
     view_count = json['view_count'] == null
@@ -37,4 +37,25 @@ class VideoNews {
     video_file_name = json['video_file_name'] ?? "";
     youtube_id = json['youtube_id'] ?? "";
   }
+}
+
+class VideoNewsResponse {
+  bool? success;
+  String? message;
+  List<VideoNews>? videos;
+
+  VideoNewsResponse.fromJson(json) {
+    success = json['success'].toString() == 'true' ? true : false;
+    message = json['message'] ?? "Something Went Wrong";
+    videos = json['data'] == null
+        ? []
+        : (json['data'] as List)
+            .map((e) => VideoNews.fromJson(e))
+            .toList();
+  }
+  VideoNewsResponse.withError(msg){
+    success = false;
+    message = msg??"Something Went Wrong";
+  }
+
 }

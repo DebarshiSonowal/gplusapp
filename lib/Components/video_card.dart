@@ -1,16 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gplusapp/Model/video_news.dart';
 import 'package:sizer/sizer.dart';
 import '../Helper/Constance.dart';
 import '../Model/top_picks.dart';
 
-class NewsCard extends StatelessWidget {
-  const NewsCard({
+class VideoCard extends StatelessWidget {
+  const VideoCard({
     Key? key,
     required this.item,
   }) : super(key: key);
 
-  final TopPicks item;
+  final VideoNews item;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,7 @@ class NewsCard extends StatelessWidget {
                       BorderRadius.circular(5.0),
                       child: CachedNetworkImage(
                         fit: BoxFit.fill,
-                        imageUrl: item.image ?? '',
+                        imageUrl: item.image_file_name ?? '',
                         placeholder: (cont, _) {
                           return const Icon(
                             Icons.image,
@@ -66,7 +67,7 @@ class NewsCard extends StatelessWidget {
                     height: 1.5.h,
                   ),
                   Text(
-                    item.date ?? "",
+                    item.publish_date?.split(" ")[0] ?? "",
                     style: Theme.of(context)
                         .textTheme
                         .headline6
@@ -86,8 +87,8 @@ class NewsCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      item.name ?? "",
-                      maxLines: 3,
+                      item.title??"",
+                      maxLines: 4,
                       style: Theme.of(context)
                           .textTheme
                           .headline3
@@ -105,7 +106,7 @@ class NewsCard extends StatelessWidget {
                     height: 1.5.h,
                   ),
                   Text(
-                    item.title ?? "",
+                     "",
                     style: Theme.of(context)
                         .textTheme
                         .headline6

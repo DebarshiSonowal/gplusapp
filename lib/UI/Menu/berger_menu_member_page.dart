@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
+import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 
 class BergerMenuMemPage extends StatefulWidget {
@@ -32,7 +35,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     return Drawer(
       backgroundColor: Constance.primaryColor,
       child: Padding(
-        padding: EdgeInsets.only(left: 2.w,right: 2.w),
+        padding: EdgeInsets.only(left: 2.w, right: 2.w),
         child: ListView(
           children: [
             DrawerHeader(
@@ -228,7 +231,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'Guwahati',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                          fontSize: 11.sp,
+                              fontSize: 11.sp,
                               // fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -255,7 +258,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'Assam',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                          fontSize: 11.sp,
+                              fontSize: 11.sp,
                               // fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -282,7 +285,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'Northeast',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                          fontSize: 11.sp,
+                              fontSize: 11.sp,
                               // fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -309,7 +312,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'India',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                          fontSize: 11.sp,
+                              fontSize: 11.sp,
                               // fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -336,7 +339,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         'International',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.white,
-                          fontSize: 11.sp,
+                              fontSize: 11.sp,
                               // fontSize: 14.sp,
                               // fontWeight: FontWeight.bold,
                             ),
@@ -453,7 +456,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                     .headline6
                                     ?.copyWith(
                                       color: Colors.white,
-                                  fontSize: 11.sp,
+                                      fontSize: 11.sp,
                                       // fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -483,7 +486,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                     .headline6
                                     ?.copyWith(
                                       color: Colors.white,
-                                  fontSize: 11.sp,
+                                      fontSize: 11.sp,
                                       // fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -604,7 +607,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                     .headline6
                                     ?.copyWith(
                                       color: Colors.white,
-                                  fontSize: 11.sp,
+                                      fontSize: 11.sp,
                                       // fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -635,7 +638,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                   .headline6
                                   ?.copyWith(
                                     color: Colors.white,
-                                fontSize: 11.sp,
+                                    fontSize: 11.sp,
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -689,26 +692,31 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
               color: Colors.white,
               thickness: 0.2,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 1.0.h),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.download,
-                    color: Constance.secondaryColor,
-                  ),
-                  SizedBox(
-                    width: 2.w,
-                  ),
-                  Text(
-                    'Download E-Paper',
-                    style: Theme.of(context).textTheme.headline4?.copyWith(
-                          color: Colors.white,
-                          // fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ],
+            GestureDetector(
+              onTap: () {
+                downloadEpaper();
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 1.0.h),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.download,
+                      color: Constance.secondaryColor,
+                    ),
+                    SizedBox(
+                      width: 2.w,
+                    ),
+                    Text(
+                      'Download E-Paper',
+                      style: Theme.of(context).textTheme.headline4?.copyWith(
+                            color: Colors.white,
+                            // fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const Divider(
@@ -790,10 +798,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       Text(
                         'About Us',
                         style: Theme.of(context).textTheme.headline4?.copyWith(
-                          color: Colors.white,
-                          // fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Colors.white,
+                              // fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -813,10 +821,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       Text(
                         'Contact Us',
                         style: Theme.of(context).textTheme.headline4?.copyWith(
-                          color: Colors.white,
-                          // fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Colors.white,
+                              // fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -836,10 +844,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       Text(
                         'Privacy Policy',
                         style: Theme.of(context).textTheme.headline4?.copyWith(
-                          color: Colors.white,
-                          // fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Colors.white,
+                              // fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -859,10 +867,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       Text(
                         'Grievance Redressal',
                         style: Theme.of(context).textTheme.headline4?.copyWith(
-                          color: Colors.white,
-                          // fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Colors.white,
+                              // fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -891,10 +899,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       Text(
                         'Settings',
                         style: Theme.of(context).textTheme.headline4?.copyWith(
-                          color: Colors.white,
-                          // fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Colors.white,
+                              // fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -914,10 +922,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       Text(
                         'Logout',
                         style: Theme.of(context).textTheme.headline4?.copyWith(
-                          color: Colors.white,
-                          // fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Colors.white,
+                              // fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -1783,5 +1791,35 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );
+  }
+
+  void downloadEpaper() async {
+    final response = await ApiProvider.instance.getEpaper();
+    if (response.success ?? false) {
+      var status = await Permission.storage.status;
+      if (status.isDenied) {
+        if (await Permission.storage.request().isGranted) {
+          await ApiProvider.instance
+              .download2(response.e_paper?.news_pdf ?? "");
+        }else{
+          showError("We require storage permissions");
+        }
+        // We didn't ask for permission yet or the permission has been denied before but not permanently.
+      }else{
+        await ApiProvider.instance.download2(response.e_paper?.news_pdf??"");
+      }
+    } else {
+      showError("Failed to download E-paper");
+    }
+  }
+
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }
