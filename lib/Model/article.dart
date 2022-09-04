@@ -31,7 +31,11 @@ class Article {
         : int.parse(json['share_count'].toString());
 
     //Others
-    first_cat_name = CategoryName.fromJson(json['first_cat_name']);
+    try {
+      first_cat_name = CategoryName.fromJson(json['first_cat_name']);
+    } catch (e) {
+      print(e);
+    }
 
     //String
     title = json['title'] ?? "";

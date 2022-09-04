@@ -403,6 +403,7 @@ class ApiProvider {
   }
 
   Future download2(String url) async {
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var tempDir = "/storage/emulated/0/Download";
     String fullPath = tempDir + "/" + url.split("/")[8];
     print('full path ${fullPath}');
@@ -424,6 +425,7 @@ class ApiProvider {
       // response.data is List<int> type
       raf.writeFromSync(response?.data);
       await raf.close();
+     showCompleteDownload();
     } catch (e) {
       print(e);
     }
@@ -445,14 +447,36 @@ class ApiProvider {
                 progress: received);
         final NotificationDetails platformChannelSpecifics =
             NotificationDetails(android: androidPlatformChannelSpecifics);
-        if (received <= 99) {
+        if ((received / total * 100).toStringAsFixed(0) == 100) {
+          print("cac");
+
+          // await flutterLocalNotificationsPlugin.cancelAll();
+        } else {
           await flutterLocalNotificationsPlugin.show(
               0, 'Saving E-paper', 'Downloading', platformChannelSpecifics,
               payload: 'item x');
-        } else {
-          await flutterLocalNotificationsPlugin.cancelAll();
+
         }
       });
     }
+  }
+
+  void showCompleteDownload() async{
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    await flutterLocalNotificationsPlugin.cancelAll();
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails('progress channel', 'progress channel',
+        channelShowBadge: false,
+        importance: Importance.max,
+        priority: Priority.high,
+        onlyAlertOnce: true,
+        showProgress: false,
+        );
+    final NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'Epaper Downloaded', 'Saved Successfully', platformChannelSpecifics,
+        payload: 'item x');
+
   }
 }
