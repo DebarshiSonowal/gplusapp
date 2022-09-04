@@ -10,6 +10,7 @@ import 'package:search_page/search_page.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/NavigationBar.dart';
 import '../../Components/gplus_execl_card.dart';
+import '../../Components/toppicks_card.dart';
 import '../../Components/video_card.dart';
 import '../../Components/slider_home.dart';
 import '../../Helper/Constance.dart';
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // monitor network fetch
     fetchOpinion();
     fetchGPlusExcl();
+    fetchToppicks();
     final result = await ApiProvider.instance.getHomeAlbum();
     if (result.success ?? false) {
       Provider.of<DataProvider>(context, listen: false)
@@ -205,23 +207,23 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: 1.h,
                             ),
-                            // Expanded(
-                            //   child: Container(
-                            //     child: ListView.separated(
-                            //         shrinkWrap: true,
-                            //         scrollDirection: Axis.horizontal,
-                            //         itemBuilder: (cont, count) {
-                            //           var item = Constance.topList[count];
-                            //           return NewsCard(item: item);
-                            //         },
-                            //         separatorBuilder: (cont, inde) {
-                            //           return SizedBox(
-                            //             width: 10.w,
-                            //           );
-                            //         },
-                            //         itemCount: Constance.topList.length),
-                            //   ),
-                            // ),
+                            Expanded(
+                              child: Container(
+                                child: ListView.separated(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (cont, count) {
+                                      var item = data.home_toppicks[count];
+                                      return ToppicksCard(item: item);
+                                    },
+                                    separatorBuilder: (cont, inde) {
+                                      return SizedBox(
+                                        width: 10.w,
+                                      );
+                                    },
+                                    itemCount: data.home_toppicks.length>4?4:data.home_toppicks.length),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -350,21 +352,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: 1.h,
                             ),
-                            Expanded(
-                              child: Container(
-                                child: ListView.separated(
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (cont, count) {
-                                      var item = data.home_weekly[count];
-                                      return VideoCard(item: item);
-                                    },
-                                    separatorBuilder: (cont, inde) {
-                                      return SizedBox(
-                                        width: 10.w,
-                                      );
-                                    },
-                                    itemCount: Constance.topList.length),
-                              ),
+                            SizedBox(
+                              height: 20.h,
+                              width: double.infinity,
+                              child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (cont, count) {
+                                    var item = data.home_weekly[count];
+                                    return VideoCard(item: item);
+                                  },
+                                  separatorBuilder: (cont, inde) {
+                                    return SizedBox(
+                                      width: 10.w,
+                                    );
+                                  },
+                                  itemCount: data.home_weekly.length>4?4:data.home_weekly.length),
                             ),
                             SizedBox(
                               height: 1.h,
@@ -786,6 +788,15 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setLatestOpinions(response.opinion ?? []);
+    }
+  }
+void fetchToppicks() async {
+    final response = await ApiProvider.instance.getTopPicks();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setHomeTopPicks(response.toppicks ?? []);
     }
   }
 

@@ -29,6 +29,7 @@ import '../UI/deals/redeem_offer_page.dart';
 import '../UI/edit_profile/edit_profile_page.dart';
 import '../UI/exclusive_page/exclusive_page.dart';
 import '../UI/main/home_screen_page.dart';
+import '../UI/news_from/news_from.dart';
 import '../UI/opinion/opinion_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -44,7 +45,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/signup':
       return FadeTransitionPageRouteBuilder(page: SignupPage());
     case '/verifyOtp':
-      return FadeTransitionPageRouteBuilder(page: VerifyOTP(settings.arguments as int));
+      return FadeTransitionPageRouteBuilder(
+          page: VerifyOTP(settings.arguments as int));
     case '/terms&conditions':
       return FadeTransitionPageRouteBuilder(page: TermsAndConditions());
     case '/personaldetails':
@@ -74,6 +76,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(page: BeAMember());
     case '/exclusivePage':
       return FadeTransitionPageRouteBuilder(page: ExclusivePage());
+    case '/newsfrom':
+      return FadeTransitionPageRouteBuilder(
+        page: NewsFrom(
+          settings.arguments as String,
+        ),
+      );
     case '/opinionPage':
       return FadeTransitionPageRouteBuilder(page: OpinionPage());
     case '/videoReport':

@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Model/video_news.dart';
 import 'package:sizer/sizer.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../Helper/Constance.dart';
 import '../Model/top_picks.dart';
+import '../Navigation/Navigate.dart';
 
 class VideoCard extends StatelessWidget {
   const VideoCard({
@@ -42,26 +44,129 @@ class VideoCard extends StatelessWidget {
                 crossAxisAlignment:
                 CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius:
-                      BorderRadius.circular(5.0),
-                      child: CachedNetworkImage(
-                        fit: BoxFit.fill,
-                        imageUrl: item.image_file_name ?? '',
-                        placeholder: (cont, _) {
-                          return const Icon(
-                            Icons.image,
-                            color: Colors.black,
-                          );
-                        },
-                        errorWidget: (cont, _, e) {
-                          // print(e);
-                          print(_);
-                          return Text(_);
-                        },
+                  Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius:
+                          BorderRadius.circular(5.0),
+                          child: CachedNetworkImage(
+                            fit: BoxFit.fill,
+                            imageUrl: item.image_file_name ?? '',
+                            placeholder: (cont, _) {
+                              return const Icon(
+                                Icons.image,
+                                color: Colors.black,
+                              );
+                            },
+                            errorWidget: (cont, _, e) {
+                              // print(e);
+                              print(_);
+                              return Text(_);
+                            },
+                          ),
+                        ),
                       ),
-                    ),
+                      GestureDetector(
+                        onTap: () {
+                          YoutubePlayerController _controller =
+                          YoutubePlayerController(
+                            initialVideoId:
+                            '${item.youtube_id}' ??
+                                'iLnmTe5Q2Qw',
+                            flags: const YoutubePlayerFlags(
+                              autoPlay: true,
+                              mute: true,
+                            ),
+                          );
+
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    item.title
+                                        .toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  content: YoutubePlayer(
+                                    controller: _controller,
+                                    showVideoProgressIndicator:
+                                    true,
+                                    // videoProgressIndicatorColor: Colors.amber,
+                                    progressColors:
+                                    const ProgressBarColors(
+                                      playedColor: Colors.amber,
+                                      handleColor:
+                                      Colors.amberAccent,
+                                    ),
+                                    onReady: () {
+                                      // _controller
+                                      //     .addListener(() {});
+                                      _controller.play();
+                                    },
+                                  ),
+                                  actions: <Widget>[
+                                    // TextButton(
+                                    //     onPressed: () {
+                                    //       //action code for "Yes" button
+                                    //     },
+                                    //     child: Text('Yes')),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(
+                                            context); //close Dialog
+                                      },
+                                      child: Text('Close'),
+                                    )
+                                  ],
+                                );
+                              });
+                        },
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Constance.secondaryColor,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(5.0),
+                              bottomRight: Radius.circular(5.0),
+                            ),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 1.w,
+                              vertical: 0.3.h),
+                          child: Row(
+                            // mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment:
+                            MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.play_arrow,
+                                color: Colors.white,
+                              ),
+                              Text(
+                                'Play Now',
+                                style: Theme.of(Navigation
+                                    .instance
+                                    .navigatorKey
+                                    .currentContext!)
+                                    .textTheme
+                                    .headline5
+                                    ?.copyWith(
+                                  color: Colors.white,
+                                  // fontSize: 2.2.h,
+                                  // fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 1.5.h,
@@ -103,7 +208,7 @@ class VideoCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 1.5.h,
+                    height: 1.h,
                   ),
                   Text(
                      "",

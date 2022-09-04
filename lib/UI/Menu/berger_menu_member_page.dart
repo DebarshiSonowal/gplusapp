@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -227,13 +228,18 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       SizedBox(
                         width: 8.w,
                       ),
-                      Text(
-                        'Guwahati',
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Colors.white,
-                              fontSize: 11.sp,
-                              // fontWeight: FontWeight.bold,
-                            ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigation.instance.navigate('/newsfrom', args: 'guwahati');
+                        },
+                        child: Text(
+                          'Guwahati',
+                          style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Colors.white,
+                            fontSize: 10.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       Expanded(child: Container()),
                       Container(
@@ -254,13 +260,18 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       SizedBox(
                         width: 8.w,
                       ),
-                      Text(
-                        'Assam',
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Colors.white,
-                              fontSize: 11.sp,
-                              // fontWeight: FontWeight.bold,
-                            ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigation.instance.navigate('/newsfrom', args: 'assam');
+                        },
+                        child: Text(
+                          'Assam',
+                          style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Colors.white,
+                            fontSize: 10.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       Expanded(child: Container()),
                       Container(
@@ -281,13 +292,18 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       SizedBox(
                         width: 8.w,
                       ),
-                      Text(
-                        'Northeast',
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Colors.white,
-                              fontSize: 11.sp,
-                              // fontWeight: FontWeight.bold,
-                            ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigation.instance.navigate('/newsfrom', args: 'northeast');
+                        },
+                        child: Text(
+                          'Northeast',
+                          style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Colors.white,
+                            fontSize: 10.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       Expanded(child: Container()),
                       Container(
@@ -308,13 +324,18 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       SizedBox(
                         width: 8.w,
                       ),
-                      Text(
-                        'India',
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Colors.white,
-                              fontSize: 11.sp,
-                              // fontWeight: FontWeight.bold,
-                            ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigation.instance.navigate('/newsfrom', args: 'india');
+                        },
+                        child: Text(
+                          'India',
+                          style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Colors.white,
+                            fontSize: 10.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       Expanded(child: Container()),
                       Container(
@@ -335,14 +356,18 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       SizedBox(
                         width: 8.w,
                       ),
-                      Text(
-                        'International',
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Colors.white,
-                              fontSize: 11.sp,
-                              // fontSize: 14.sp,
-                              // fontWeight: FontWeight.bold,
-                            ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigation.instance.navigate('/newsfrom', args: 'international');
+                        },
+                        child: Text(
+                          'International',
+                          style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Colors.white,
+                            fontSize: 10.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       Expanded(child: Container()),
                       Container(
@@ -378,13 +403,19 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       SizedBox(
                         width: 2.w,
                       ),
-                      Text(
-                        'GPlus Exclusive',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Colors.white,
-                              // fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigation.instance.navigate('/exclusivePage');
+                        },
+                        child: Text(
+                          'GPlus Exclusive',
+                          style:
+                              Theme.of(context).textTheme.headline4?.copyWith(
+                                    color: Colors.white,
+                                    // fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
                       ),
                       Expanded(child: Container()),
                       Container(
@@ -449,16 +480,21 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                               SizedBox(
                                 width: 8.w,
                               ),
-                              Text(
-                                'Entertainment',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 11.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigation.instance.navigate('/newsfrom', args: 'entertainment');
+                                },
+                                child: Text(
+                                  'Entertainment',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                        fontSize: 11.sp,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                ),
                               ),
                               Expanded(child: Container()),
                               Container(
@@ -479,16 +515,21 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                               SizedBox(
                                 width: 8.w,
                               ),
-                              Text(
-                                'Promotional',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 11.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigation.instance.navigate('/newsfrom', args: 'buzz');
+                                },
+                                child: Text(
+                                  'Promotional',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                        fontSize: 11.sp,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                ),
                               ),
                               Expanded(child: Container()),
                               Container(
@@ -909,25 +950,31 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   SizedBox(
                     height: 1.5.h,
                   ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.exit_to_app,
-                        color: Constance.secondaryColor,
-                        // size: 2.h,
-                      ),
-                      SizedBox(
-                        width: 2.w,
-                      ),
-                      Text(
-                        'Logout',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Colors.white,
-                              // fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
+                  GestureDetector(
+                    onTap: (){
+                      Storage.instance.logout();
+                      Navigation.instance.navigateAndRemoveUntil('/login');
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.exit_to_app,
+                          color: Constance.secondaryColor,
+                          // size: 2.h,
+                        ),
+                        SizedBox(
+                          width: 2.w,
+                        ),
+                        Text(
+                          'Logout',
+                          style: Theme.of(context).textTheme.headline4?.copyWith(
+                                color: Colors.white,
+                                // fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 1.5.h,
@@ -1118,13 +1165,18 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 SizedBox(
                   width: 8.w,
                 ),
-                Text(
-                  'Guwahati',
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.white,
-                        fontSize: 1.5.h,
-                        // fontWeight: FontWeight.bold,
-                      ),
+                GestureDetector(
+                  onTap: () {
+                    Navigation.instance.navigate('/newsfrom', args: 'guwahati');
+                  },
+                  child: Text(
+                    'Guwahati',
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.white,
+                          fontSize: 12.sp,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                  ),
                 ),
                 Expanded(child: Container()),
                 Container(
@@ -1145,13 +1197,18 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 SizedBox(
                   width: 8.w,
                 ),
-                Text(
-                  'Assam',
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.white,
-                        fontSize: 1.5.h,
-                        // fontWeight: FontWeight.bold,
-                      ),
+                GestureDetector(
+                  onTap: () {
+                    Navigation.instance.navigate('/newsfrom', args: 'assam');
+                  },
+                  child: Text(
+                    'Assam',
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.white,
+                          fontSize: 1.5.h,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                  ),
                 ),
                 Expanded(child: Container()),
                 Container(
@@ -1172,13 +1229,18 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 SizedBox(
                   width: 8.w,
                 ),
-                Text(
-                  'Northeast',
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.white,
-                        fontSize: 1.5.h,
-                        // fontWeight: FontWeight.bold,
-                      ),
+                GestureDetector(
+                  onTap: () {
+                    Navigation.instance.navigate('/newsfrom', args: 'northeast');
+                  },
+                  child: Text(
+                    'Northeast',
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.white,
+                          fontSize: 1.5.h,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                  ),
                 ),
                 Expanded(child: Container()),
                 Container(
@@ -1199,13 +1261,18 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 SizedBox(
                   width: 8.w,
                 ),
-                Text(
-                  'India',
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.white,
-                        fontSize: 1.5.h,
-                        // fontWeight: FontWeight.bold,
-                      ),
+                GestureDetector(
+                  onTap: () {
+                    Navigation.instance.navigate('/newsfrom', args: 'india');
+                  },
+                  child: Text(
+                    'India',
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.white,
+                          fontSize: 1.5.h,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                  ),
                 ),
                 Expanded(child: Container()),
                 Container(
@@ -1226,13 +1293,18 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 SizedBox(
                   width: 8.w,
                 ),
-                Text(
-                  'International',
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.white,
-                        fontSize: 1.5.h,
-                        // fontWeight: FontWeight.bold,
-                      ),
+                GestureDetector(
+                  onTap: () {
+                    Navigation.instance.navigate('/newsfrom', args: 'international');
+                  },
+                  child: Text(
+                    'International',
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.white,
+                          fontSize: 1.5.h,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                  ),
                 ),
                 Expanded(child: Container()),
                 Container(
@@ -1801,12 +1873,12 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
         if (await Permission.storage.request().isGranted) {
           await ApiProvider.instance
               .download2(response.e_paper?.news_pdf ?? "");
-        }else{
+        } else {
           showError("We require storage permissions");
         }
         // We didn't ask for permission yet or the permission has been denied before but not permanently.
-      }else{
-        await ApiProvider.instance.download2(response.e_paper?.news_pdf??"");
+      } else {
+        await ApiProvider.instance.download2(response.e_paper?.news_pdf ?? "");
       }
     } else {
       showError("Failed to download E-paper");

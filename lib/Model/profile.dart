@@ -1,10 +1,16 @@
 class Profile {
-  String? email, enc_password, name, mobile, city, sign_in_count,image_file_name;
-  int?  super_admin, role_id, status;
-
+  String? email,
+      enc_password,
+      name,
+      mobile,
+      city,
+      sign_in_count,
+      image_file_name;
+  int? super_admin, role_id, status, id;
 
   Profile.fromJson(json) {
     email = json['email'] ?? "";
+    id = json['id'] ?? 0;
     enc_password = json['encrypted_password'] ?? "";
     name = json['name'] ?? "";
     mobile = json['mobile'] ?? "";
@@ -22,14 +28,13 @@ class ProfileResponse {
   String? access_token;
   Profile? profile;
 
-  ProfileResponse.fromJson(json){
+  ProfileResponse.fromJson(json) {
     status = true;
-    access_token = json['access_token']??"";
+    access_token = json['access_token'] ?? "";
     profile = Profile.fromJson(json['data']);
   }
-  ProfileResponse.withError(){
+
+  ProfileResponse.withError() {
     status = false;
   }
-
-
 }

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/Constance.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String? _verificationId;
+
   // final SmsAutoFill _autoFill = SmsAutoFill();
   String currentText = '';
 
@@ -168,7 +170,8 @@ class _VerifyOTPState extends State<VerifyOTP> {
                   onTap: () {
                     // GetProfile();
                     // phoneSignIn(phoneNumber: widget.number.toString());
-                    Navigation.instance.navigateAndReplace('/terms&conditions');
+                    getProfile();
+
                   }),
             ),
             SizedBox(
@@ -282,7 +285,10 @@ class _VerifyOTPState extends State<VerifyOTP> {
         builder: (BuildContext builderContext) {
           return AlertDialog(
             title: Text("Error"),
-            content: Text(errorMessage,style: Theme.of(context).textTheme.headline4,),
+            content: Text(
+              errorMessage,
+              style: Theme.of(context).textTheme.headline4,
+            ),
             actions: [
               TextButton(
                 child: Text("Ok"),
@@ -307,5 +313,18 @@ class _VerifyOTPState extends State<VerifyOTP> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  void getProfile() async {
+    final reponse =
+        await ApiProvider.instance.getprofile(widget.number.toString());
+    if (reponse.status ?? false) {
+      Storage.instance.setUser(reponse.access_token??"");
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setProfile(reponse.profile!);
+      Navigation.instance.navigateAndReplace('/terms&conditions');
+    }
   }
 }

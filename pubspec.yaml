@@ -61,6 +61,7 @@ dependencies:
   pull_to_refresh: ^2.0.0
   path_provider: ^2.0.11
   flutter_local_notifications: ^9.9.1
+  youtube_player_flutter: ^8.1.0
 #  firebase_auth: ^0.18.1+2
 #  sms_autofill: ^1.2.6
 
