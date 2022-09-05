@@ -9,13 +9,17 @@ import 'package:gplusapp/Model/profile.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
+import '../Model/advertise.dart';
 import '../Model/article.dart';
 import '../Model/article_desc.dart';
+import '../Model/deal_details.dart';
 import '../Model/e_paper.dart';
 import '../Model/generic_response.dart';
 import '../Model/login_response.dart';
 import '../Model/membership.dart';
 import '../Model/opinion.dart';
+import '../Model/promoted_deal.dart';
+import '../Model/redeem_details.dart';
 import '../Model/shop_category.dart';
 import '../Model/top_picks.dart';
 import '../Model/video_news.dart';
@@ -378,14 +382,8 @@ class ApiProvider {
     }
   }
 
-  Future<ShopCategoryResponse> getShopCategory() async {
-    // var data = {
-    //   'category': 'opinion',
-    //   'per_page': per_page,
-    //   'page': page,
-    // };
-
-    var url = "${baseUrl}/app/deal-list";
+  Future<PromotedDealResponse> getPromotedDeals() async {
+    var url = "${baseUrl}/app/promoted-deal-list";
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -396,16 +394,129 @@ class ApiProvider {
         url,
         // queryParameters: data,
       );
-      debugPrint("subscriptions response: ${response?.data}");
+      debugPrint("promoted-deal-list response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return PromotedDealResponse.fromJson(response?.data);
+      } else {
+        debugPrint("promoted-deal-list error: ${response?.data}");
+        return PromotedDealResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("promoted-deal-list error: ${e.response}");
+      return PromotedDealResponse.withError(e.message);
+    }
+  }
+
+  Future<DealDetailsResponse> getDealDetails(id) async {
+    var url = "${baseUrl}/app/deal-details/$id";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("DealDetailsResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return DealDetailsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("DealDetailsResponse error: ${response?.data}");
+        return DealDetailsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("DealDetailsResponse error: ${e.response}");
+      return DealDetailsResponse.withError(e.message);
+    }
+  }
+
+  Future<RedeemDetailsResponse> redeemCupon(id, code) async {
+    var url = "${baseUrl}/app/apply-coupon/$id";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'coupon_code': code};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("RedeemDetailsResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return RedeemDetailsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("RedeemDetailsResponse error: ${response?.data}");
+        return RedeemDetailsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("RedeemDetailsResponse error: ${e.response}");
+      return RedeemDetailsResponse.withError(e.message);
+    }
+  }
+
+  Future<ShopCategoryResponse> getShopCategory() async {
+    // var data = {
+    //   'category': 'opinion',
+    //   'per_page': per_page,
+    //   'page': page,
+    // };
+
+    var url = "${baseUrl}/app/shop-categories";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("shop-categories response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ShopCategoryResponse.fromJson(response?.data);
       } else {
-        debugPrint("subscriptions error: ${response?.data}");
+        debugPrint("shop-categories error: ${response?.data}");
         return ShopCategoryResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
-      debugPrint("subscriptions response: ${e.response}");
+      debugPrint("shop-categories response: ${e.response}");
       return ShopCategoryResponse.withError(e.message);
+    }
+  }
+
+  Future<AdvertiseResponse> getAdvertise() async {
+    // var data = {
+    //   'category': 'opinion',
+    //   'per_page': per_page,
+    //   'page': page,
+    // };
+
+    var url = "${homeUrl}/advertise";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("advertise response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return AdvertiseResponse.fromJson(response?.data);
+      } else {
+        debugPrint("advertise error: ${response?.data}");
+        return AdvertiseResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("advertise error: ${e.response}");
+      return AdvertiseResponse.withError(e.message);
     }
   }
 

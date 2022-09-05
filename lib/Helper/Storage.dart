@@ -28,7 +28,7 @@ class Storage {
 
   get isOnBoarding => sharedpreferences.getBool("isOnBoarding") ?? false;
 
-  get token => sharedpreferences.getString("token") ?? "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9ncGx1cy5zaGVjdXJlLmNvLmluXC9hcGlcL3YxXC9sb2dpbiIsImlhdCI6MTY2MjIxMzc3MCwiZXhwIjoxNjYyMjE3MzcwLCJuYmYiOjE2NjIyMTM3NzAsImp0aSI6Ing0aERlNWlRQzFCRTBQbUoiLCJzdWIiOjk3MjAwLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.uYXIiRZW1QylFgqcmNJP-xvGZGkMPcjmgs9xsS_hBNg";
+  get token => sharedpreferences.getString("token") ?? "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9ncGx1cy5zaGVjdXJlLmNvLmluXC9hcGlcL3YxXC9sb2dpbiIsImlhdCI6MTY2MjM4NDY4MywiZXhwIjoxNjYyMzg4MjgzLCJuYmYiOjE2NjIzODQ2ODMsImp0aSI6InBRak1jWGdPeXZxdFJmcEQiLCJzdWIiOjk3MjAwLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.QAbdCGHODCCyg23HEpozDi6BlFQEZiJXl7qbDueaYgU";
 
   // void logout() {}
   Future<void> logout() async {

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:search_page/search_page.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../Components/NavigationBar.dart';
 import '../../Components/gplus_execl_card.dart';
 import '../../Components/toppicks_card.dart';
@@ -38,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchOpinion();
     fetchGPlusExcl();
     fetchToppicks();
+    fetchAds();
     final result = await ApiProvider.instance.getHomeAlbum();
     if (result.success ?? false) {
       Provider.of<DataProvider>(context, listen: false)
@@ -221,7 +223,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width: 10.w,
                                       );
                                     },
-                                    itemCount: data.home_toppicks.length>4?4:data.home_toppicks.length),
+                                    itemCount: data.home_toppicks.length > 4
+                                        ? 4
+                                        : data.home_toppicks.length),
                               ),
                             ),
                           ],
@@ -231,15 +235,29 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 1.h,
                       ),
                       SizedBox(
-                        height: 20.h,
+                        height: 10.h,
                         width: double.infinity,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 8.w, vertical: 2.5.h),
-                          child: Card(
-                            color: Constance.primaryColor,
-                            child: Center(
-                              child: Text('AD'),
+                        child: GestureDetector(
+                          onTap: (){
+                            _launchUrl(Uri.parse(data.ads[0].link.toString()));
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 2.w, vertical: 1.5.h),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.fill,
+                              imageUrl:data.ads[0].image_file_name??'',
+                              placeholder: (cont, _) {
+                                return const Icon(
+                                  Icons.image,
+                                  color: Colors.black,
+                                );
+                              },
+                              errorWidget: (cont, _, e) {
+                                // print(e);
+                                print(_);
+                                return Text(_);
+                              },
                             ),
                           ),
                         ),
@@ -292,7 +310,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width: 10.w,
                                       );
                                     },
-                                    itemCount: (data.home_exclusive.length>4?4:data.home_exclusive.length)),
+                                    itemCount: (data.home_exclusive.length > 4
+                                        ? 4
+                                        : data.home_exclusive.length)),
                               ),
                             ),
                             SizedBox(
@@ -366,7 +386,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       width: 10.w,
                                     );
                                   },
-                                  itemCount: data.home_weekly.length>4?4:data.home_weekly.length),
+                                  itemCount: data.home_weekly.length > 4
+                                      ? 4
+                                      : data.home_weekly.length),
                             ),
                             SizedBox(
                               height: 1.h,
@@ -790,7 +812,8 @@ class _HomeScreenState extends State<HomeScreen> {
           .setLatestOpinions(response.opinion ?? []);
     }
   }
-void fetchToppicks() async {
+
+  void fetchToppicks() async {
     final response = await ApiProvider.instance.getTopPicks();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -807,6 +830,21 @@ void fetchToppicks() async {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setHomeExecl(response.articles ?? []);
+    }
+  }
+
+  void fetchAds() async {
+    final response = await ApiProvider.instance.getAdvertise();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setAds(response.ads ?? []);
+    }
+  }
+  Future<void> _launchUrl(_url) async {
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
     }
   }
 }

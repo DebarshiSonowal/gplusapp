@@ -57,9 +57,9 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
                           ),
                         ),
                         Container(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withOpacity(0.5),
                           padding: EdgeInsets.symmetric(
-                              vertical: 4.h, horizontal: 4.w),
+                              vertical: 2.h, horizontal: 2.w),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
@@ -118,7 +118,7 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
                       shape: BoxShape.circle,
                       color: (Theme.of(context).brightness == Brightness.dark
                               ? Colors.white
-                              : Colors.black)
+                              : Colors.white)
                           .withOpacity(_current == entry.key ? 0.9 : 0.4)),
                 ),
               );

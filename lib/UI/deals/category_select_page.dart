@@ -1,13 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
+import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
+import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
+import '../../Networking/api_provider.dart';
 
 class CategorySelectPage extends StatefulWidget {
-  const CategorySelectPage({Key? key}) : super(key: key);
+  final int id;
+
+  const CategorySelectPage(this.id);
 
   @override
   State<CategorySelectPage> createState() => _CategorySelectPageState();
@@ -23,96 +31,147 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
     '12:00 am - 4:00 pm',
     '9:00 am - 3:00 pm',
   ];
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: true);
+
+  void _onRefresh() async {
+    // monitor network fetch
+    final response = await ApiProvider.instance.getDealDetails(widget.id);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setDealDetails(response.details!);
+
+      _refreshController.refreshCompleted();
+    } else {
+      _refreshController.refreshFailed();
+    }
+    // if failed,use refreshFailed()
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(imageUrl: Constance.salonImage),
-            ),
-            SizedBox(
-              height: 2.h,
-            ),
-            Text(
-              'The Looks Salon',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline2
-                  ?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 2.h,
-            ),
-            Row(
+      backgroundColor: Colors.white,
+      body: SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: false,
+        header: WaterDropHeader(),
+        footer: CustomFooter(
+          builder: (BuildContext context, LoadStatus? mode) {
+            Widget body;
+            if (mode == LoadStatus.idle) {
+              body = const Text("pull up load");
+            } else if (mode == LoadStatus.loading) {
+              body = const CupertinoActivityIndicator();
+            } else if (mode == LoadStatus.failed) {
+              body = const Text("Load Failed!Click retry!");
+            } else if (mode == LoadStatus.canLoading) {
+              body = const Text("release to load more");
+            } else {
+              body = Text("No more Data");
+            }
+            return Container(
+              height: 55.0,
+              child: Center(child: body),
+            );
+          },
+        ),
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          color: Colors.white,
+          padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+          child: Consumer<DataProvider>(builder: (context, current, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selected = 0;
-                      });
-                    },
-                    child: Container(
-                      height: 5.h,
-                      color: selected == 0
-                          ? Colors.black
-                          : Constance.secondaryColor,
-                      child: Center(
-                        child: Text(
-                          'Offer',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline4
-                              ?.copyWith(
-                                  color: selected == 0
-                                      ? Colors.white
-                                      : Colors.black),
+                Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: CachedNetworkImage(
+                        imageUrl: current.details?.image_file_name ??
+                            Constance.salonImage),
+                  ),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Text(
+                  current.details?.shop_name ?? 'The Looks Salon',
+                  style: Theme.of(context).textTheme.headline2?.copyWith(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selected = 0;
+                          });
+                        },
+                        child: Container(
+                          height: 5.h,
+                          color: selected == 0
+                              ? Colors.black
+                              : Constance.secondaryColor,
+                          child: Center(
+                            child: Text(
+                              'Offer',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                      color: selected == 0
+                                          ? Colors.white
+                                          : Colors.black),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selected = 1;
-                      });
-                    },
-                    child: Container(
-                      height: 5.h,
-                      color: selected == 0
-                          ? Constance.secondaryColor
-                          : Colors.black,
-                      child: Center(
-                        child: Text(
-                          'Details',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline4
-                              ?.copyWith(
-                                color:
-                                    selected == 0 ? Colors.black : Colors.white,
-                              ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selected = 1;
+                          });
+                        },
+                        child: Container(
+                          height: 5.h,
+                          color: selected == 0
+                              ? Constance.secondaryColor
+                              : Colors.black,
+                          child: Center(
+                            child: Text(
+                              'Details',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: selected == 0
+                                        ? Colors.black
+                                        : Colors.white,
+                                  ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
+                getBody(current),
               ],
-            ),
-            getBody(),
-          ],
+            );
+          }),
         ),
       ),
     );
@@ -120,14 +179,17 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(Constance.logoIcon,
-          fit: BoxFit.fill,scale: 2,),
+      title: Image.asset(
+        Constance.logoIcon,
+        fit: BoxFit.fill,
+        scale: 2,
+      ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );
   }
 
-  getBody() {
+  getBody(DataProvider current) {
     switch (selected) {
       case 0:
         return Column(children: [
@@ -148,7 +210,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                 child: SizedBox(
                   height: 5.h,
                   child: Text(
-                    'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
+                    current.details?.address ??
+                        'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
                     // overflow: TextOverflow.clip,
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Colors.black,
@@ -173,7 +236,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
               ),
               Expanded(
                 child: Text(
-                  '+917838372617',
+                  '+91${current.details?.mobile.toString() ?? '7838372617'}',
                   // overflow: TextOverflow.clip,
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
@@ -291,9 +354,9 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
           child: ListView.separated(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: Constance.categoryDiscount.length,
+            itemCount: current.details?.coupons?.length??0,
             itemBuilder: (cont, count) {
-              var data = Constance.categoryDiscount[count];
+              var data = current.details?.coupons![count];
               return ListTile(
                 title: SizedBox(
                   width: 45.w,
@@ -301,13 +364,14 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        data.discount ?? "",
+                        data?.title ?? "",
                         style: Theme.of(context).textTheme.headline3?.copyWith(
                             color: Constance.thirdColor,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        data.offer ?? "",
+                        data?.description ?? "",
+                        overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.black,
                             ),
@@ -318,7 +382,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                 trailing: CustomButton(
                   txt: 'Reedem Now',
                   onTap: () {
-                    showDialogBox();
+                    redeem(widget.id,data?.code);
+                    // showDialogBox();
                   },
                 ),
               );
@@ -425,5 +490,26 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
         );
       },
     );
+  }
+
+  void redeem(int id, String? code) async{
+    final response = await ApiProvider.instance.redeemCupon(id, code);
+    if(response.success??false){
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false).setRedeemDetails(response.details!);
+      Navigation.instance.navigate('/redeemOfferPage');
+    }else{
+      showError("Something went wrong");
+    }
+  }
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }
