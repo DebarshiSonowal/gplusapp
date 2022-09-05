@@ -56,7 +56,8 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
                             },
                           ),
                         ),
-                        Padding(
+                        Container(
+                          color: Colors.black.withOpacity(0.2),
                           padding: EdgeInsets.symmetric(
                               vertical: 4.h, horizontal: 4.w),
                           child: Column(

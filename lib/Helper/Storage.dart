@@ -1,11 +1,15 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Model/temp.dart';
+
 class Storage {
   // shared_preferences
   Storage._();
 
   static final Storage instance = Storage._();
   late SharedPreferences sharedpreferences;
+
+  temp? signUpdata;
 
   Future<void> initializeStorage() async {
     sharedpreferences = await SharedPreferences.getInstance();

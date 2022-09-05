@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/Storage.dart';
@@ -952,6 +953,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   ),
                   GestureDetector(
                     onTap: (){
+                      final FirebaseAuth _auth = FirebaseAuth.instance;
+                      _auth.signOut();
                       Storage.instance.logout();
                       Navigation.instance.navigateAndRemoveUntil('/login');
                     },

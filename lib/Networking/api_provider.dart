@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import '../Model/article.dart';
 import '../Model/article_desc.dart';
 import '../Model/e_paper.dart';
+import '../Model/generic_response.dart';
 import '../Model/login_response.dart';
 import '../Model/membership.dart';
 import '../Model/opinion.dart';
@@ -85,6 +86,39 @@ class ApiProvider {
     } on DioError catch (e) {
       debugPrint("Profile response: ${e.response}");
       return ProfileResponse.withError();
+    }
+  }
+
+  Future<GenericResponse> createProfile(
+      mobile, f_name, l_name, email, dob, address, longitude, latitude) async {
+    var data = {
+      'mobile': mobile,
+      'f_name': f_name,
+      'l_name': l_name,
+      'email': email,
+      'dob': dob,
+      'address': address,
+      'longitude': longitude,
+      'latitude': latitude,
+    };
+
+    var url = "${baseUrl}/new-personal-details";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(url, data: jsonEncode(data));
+      debugPrint("create Profile response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("create Profile error: ${response?.data}");
+        return GenericResponse.withError("Something went wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("create Profile error: ${e.response}");
+      return GenericResponse.withError(e.message);
     }
   }
 
@@ -376,8 +410,6 @@ class ApiProvider {
   }
 
   Future<TopPicksResponse> getTopPicks() async {
-
-
     var url = "${homeUrl}/get-topics";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -425,7 +457,7 @@ class ApiProvider {
       // response.data is List<int> type
       raf.writeFromSync(response?.data);
       await raf.close();
-     showCompleteDownload();
+      showCompleteDownload();
     } catch (e) {
       print(e);
     }
@@ -455,28 +487,28 @@ class ApiProvider {
           await flutterLocalNotificationsPlugin.show(
               0, 'Saving E-paper', 'Downloading', platformChannelSpecifics,
               payload: 'item x');
-
         }
       });
     }
   }
 
-  void showCompleteDownload() async{
+  void showCompleteDownload() async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.cancelAll();
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails('progress channel', 'progress channel',
-        channelShowBadge: false,
-        importance: Importance.max,
-        priority: Priority.high,
-        onlyAlertOnce: true,
-        showProgress: false,
-        );
-    final NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
+        AndroidNotificationDetails(
+      'progress channel',
+      'progress channel',
+      channelShowBadge: false,
+      importance: Importance.max,
+      priority: Priority.high,
+      onlyAlertOnce: true,
+      showProgress: false,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
         0, 'Epaper Downloaded', 'Saved Successfully', platformChannelSpecifics,
         payload: 'item x');
-
   }
 }

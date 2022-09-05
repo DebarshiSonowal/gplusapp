@@ -2,10 +2,13 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/date_picker.dart';
 import 'package:flutter_holo_date_picker/i18n/date_picker_i18n.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
 
+import '../Components/alert.dart';
 import '../Helper/Constance.dart';
 import '../Navigation/Navigate.dart';
 
@@ -25,6 +28,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   int max = 2022;
   int currentY = 2022;
   String dropdownvalue = 'Male';
+  double longitude = 0, latitude = 0;
 
   // List of items in our dropdown menu
   var items = [
@@ -54,6 +58,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         year = currentY - 18;
         max = currentY + 18;
       });
+      getLocations();
     });
   }
 
@@ -532,5 +537,69 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+
+  void getLocations() async {
+    var status = await Permission.location.status;
+    if (status.isDenied) {
+      if (await Permission.location.request().isGranted) {
+        final position = await _determinePosition();
+        longitude = position.longitude;
+        latitude = position.latitude;
+        if (mounted) {
+          setState(() {});
+        }
+      } else {
+        showError("We require Location permissions");
+      }
+      // We didn't ask for permission yet or the permission has been denied before but not permanently.
+    } else {}
+  }
+
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }

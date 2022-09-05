@@ -85,17 +85,18 @@ class VideoCard extends StatelessWidget {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: Text(
-                                    item.title
-                                        .toString(),
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  backgroundColor: Colors.white,
+                                  // title: Text(
+                                  //   item.title
+                                  //       .toString(),
+                                  //   overflow: TextOverflow.ellipsis,
+                                  //   style: Theme.of(context).textTheme.headline5?.copyWith(
+                                  //     color: Colors.white,
+                                  //   ),
+                                  // ),
+                                  backgroundColor: Colors.transparent,
                                   content: YoutubePlayer(
                                     controller: _controller,
+                                    aspectRatio: 16/9,
                                     showVideoProgressIndicator:
                                     true,
                                     // videoProgressIndicatorColor: Colors.amber,
@@ -111,20 +112,20 @@ class VideoCard extends StatelessWidget {
                                       _controller.play();
                                     },
                                   ),
-                                  actions: <Widget>[
-                                    // TextButton(
-                                    //     onPressed: () {
-                                    //       //action code for "Yes" button
-                                    //     },
-                                    //     child: Text('Yes')),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(
-                                            context); //close Dialog
-                                      },
-                                      child: Text('Close'),
-                                    )
-                                  ],
+                                  // actions: <Widget>[
+                                  //   // TextButton(
+                                  //   //     onPressed: () {
+                                  //   //       //action code for "Yes" button
+                                  //   //     },
+                                  //   //     child: Text('Yes')),
+                                  //   TextButton(
+                                  //     onPressed: () {
+                                  //       Navigator.pop(
+                                  //           context); //close Dialog
+                                  //     },
+                                  //     child: Text('Close'),
+                                  //   )
+                                  // ],
                                 );
                               });
                         },

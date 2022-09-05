@@ -175,12 +175,14 @@ class _VerifyOTPState extends State<VerifyOTP> {
                     // GetProfile();
                     try {
                       PhoneAuthCredential credential =
-                                              PhoneAuthProvider.credential(
-                                                  verificationId: _verificationId!,
-                                                  smsCode: textEditingController.text);
-                      await _auth.signInWithCredential(credential).then((value) {
-                                            getProfile();
-                                          });
+                          PhoneAuthProvider.credential(
+                              verificationId: _verificationId!,
+                              smsCode: textEditingController.text);
+                      await _auth
+                          .signInWithCredential(credential)
+                          .then((value) {
+                        getProfile();
+                      });
                     } catch (e) {
                       print(e);
                       showError("Something went wrong");
@@ -265,12 +267,21 @@ class _VerifyOTPState extends State<VerifyOTP> {
       // try {
       //   UserCredential credential =
       //       await user!.linkWithCredential(authCredential);
+
       // } on FirebaseAuthException catch (e) {
       //   if (e.code == 'provider-already-linked') {
-      //     await _auth.signInWithCredential(authCredential);
+      UserCredential _authResult =
+          await _auth.signInWithCredential(authCredential);
+
+      if (_authResult.additionalUserInfo?.isNewUser ?? false) {
+        Navigation.instance.navigateAndReplace('/terms&conditions');
+      } else {
+        getProfile();
+      }
+
       //   }
       // }
-      getProfile();
+
       // setState(() {
       //   isLoading = false;
       // });
@@ -343,6 +354,8 @@ class _VerifyOTPState extends State<VerifyOTP> {
               listen: false)
           .setProfile(reponse.profile!);
       // Navigation.instance.goBack();
+      Navigation.instance.navigateAndReplace('/main');
+    } else {
       Navigation.instance.navigateAndReplace('/terms&conditions');
     }
   }

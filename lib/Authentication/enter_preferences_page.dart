@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gplusapp/Helper/Storage.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:sizer/sizer.dart';
 import '../Components/alert.dart';
 import '../Components/custom_button.dart';
@@ -151,9 +153,9 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(
                             color: selTop == null
-                                ?  Colors.grey.shade600
+                                ? Colors.grey.shade600
                                 : !selTop.contains(Constance.topical[i])
-                                    ?  Colors.grey.shade600
+                                    ? Colors.grey.shade600
                                     : Constance.secondaryColor,
                             width: 0.5.w,
                             // left: BorderSide(
@@ -166,7 +168,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                           Constance.topical[i],
                           style:
                               Theme.of(context).textTheme.headline5?.copyWith(
-                                color: Colors.grey.shade800,
+                                    color: Colors.grey.shade800,
                                     // fontSize: 2.h,
                                     // fontWeight: FontWeight.bold,
                                   ),
@@ -183,8 +185,9 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
               child: CustomButton(
                 txt: 'Save & Continue',
                 onTap: () {
-                  if (selGeo.isNotEmpty&&selTop.isNotEmpty) {
-                    Navigation.instance.navigateAndReplace('/main');
+                  if (selGeo.isNotEmpty && selTop.isNotEmpty) {
+                    signUp();
+
                   } else {
                     showError("Select at least one of each");
                   }
@@ -199,6 +202,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
       ),
     );
   }
+
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",
@@ -208,6 +212,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
           Navigation.instance.goBack();
         });
   }
+
   AppBar buildAppBar() {
     return AppBar(
       title: Image.asset(
@@ -218,5 +223,22 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );
+  }
+
+  void signUp() async {
+    final reponse = await ApiProvider.instance.createProfile(
+        Storage.instance.signUpdata?.mobile,
+        Storage.instance.signUpdata?.f_name,
+        Storage.instance.signUpdata?.l_name,
+        Storage.instance.signUpdata?.email,
+        Storage.instance.signUpdata?.dob,
+        Storage.instance.signUpdata?.address,
+        Storage.instance.signUpdata?.longitude,
+        Storage.instance.signUpdata?.latitude);
+    if(reponse.success??false){
+      Navigation.instance.navigateAndReplace('/login');
+    }else{
+      showError(reponse.message??"Something went wrong");
+    }
   }
 }
