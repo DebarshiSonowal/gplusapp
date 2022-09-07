@@ -6,11 +6,13 @@ import '../Authentication/Signin/login_page.dart';
 import '../Authentication/Signup/signup_page.dart';
 
 import '../Authentication/enter_preferences_page.dart';
+import '../Authentication/location_search_page.dart';
 import '../Authentication/personal_details_page.dart';
 import '../Authentication/terms&conditions_page.dart';
 import '../Authentication/verifyotp_page.dart';
 import '../Components/FadeTransitionBuilder.dart';
 import '../Components/loading_dialog.dart';
+import '../Components/video_player_screen.dart';
 import '../OnBoarding/on_boarding_page.dart';
 import '../UI/Member/be_a_membe_page.dart';
 import '../UI/Menu/berger_menu_member_page.dart';
@@ -48,16 +50,20 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(
           page: VerifyOTP(settings.arguments as int));
     case '/terms&conditions':
-      return FadeTransitionPageRouteBuilder(page: TermsAndConditions());
+      return FadeTransitionPageRouteBuilder(page: TermsAndConditions(settings.arguments as int));
     case '/personaldetails':
-      return FadeTransitionPageRouteBuilder(page: PersonalDetailsPage());
+      return FadeTransitionPageRouteBuilder(page: PersonalDetailsPage(settings.arguments as int));
     case '/editProfile':
       return FadeTransitionPageRouteBuilder(page: EditProfile());
     case '/enterPreferences':
       return FadeTransitionPageRouteBuilder(page: EnterPreferencesPage());
+      case '/locationSearchPage':
+      return FadeTransitionPageRouteBuilder(page: LocationSearchPage());
 
     case '/loadingDialog':
       return FadeTransitionPageRouteBuilder(page: LoadingDialog());
+      case '/videoPlayer':
+      return FadeTransitionPageRouteBuilder(page: VideoPlayerScreen(settings.arguments as String));
 
     case '/bigdealpage':
       return FadeTransitionPageRouteBuilder(page: BigDealPage());

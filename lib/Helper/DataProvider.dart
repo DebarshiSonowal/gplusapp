@@ -11,6 +11,7 @@ import 'package:gplusapp/Model/video_news.dart';
 
 import '../Model/membership.dart';
 import '../Model/redeem_details.dart';
+import '../Model/topick.dart';
 
 class DataProvider extends ChangeNotifier {
   int currentIndex = 0;
@@ -27,6 +28,17 @@ class DataProvider extends ChangeNotifier {
   List<Advertise> ads=[];
   DealDetails? details;
   RedeemDetails? redeemDetails;
+  List<Topick> topicks = [];
+  List<GeoTopick> geoTopicks = [];
+
+  setTopicks(List<Topick> list) {
+    topicks = list;
+    notifyListeners();
+  }
+  setGeoTopicks(List<GeoTopick> list) {
+    geoTopicks = list;
+    notifyListeners();
+  }
 
   setMembership(List<Membership> list) {
     memberships = list;

@@ -20,7 +20,14 @@ class NewsFrom extends StatefulWidget {
 
 class _NewsFromState extends State<NewsFrom> {
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+      RefreshController(initialRefresh: false);
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchContent();
+  }
 
   void _onRefresh() async {
     // monitor network fetch
@@ -101,7 +108,7 @@ class _NewsFromState extends State<NewsFrom> {
                               size: 4.h,
                             ),
                             Text(
-                              '${widget.categ}',
+                              capitalize(widget.categ),
                               style: Theme.of(Navigation
                                       .instance.navigatorKey.currentContext!)
                                   .textTheme
@@ -118,12 +125,12 @@ class _NewsFromState extends State<NewsFrom> {
                           height: 1.h,
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5.w),
+                          padding: EdgeInsets.symmetric(horizontal: 2.w),
                           child: Container(
                             height: 30.h,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(10),
                               ),
                               image: DecorationImage(
@@ -270,7 +277,7 @@ class _NewsFromState extends State<NewsFrom> {
                                                 maxLines: 3,
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .headline3
+                                                    .headline4
                                                     ?.copyWith(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -323,10 +330,12 @@ class _NewsFromState extends State<NewsFrom> {
                       ],
                     ),
                   )
-                : SizedBox(
-                    height: 5.h,
-                    width: 5.h,
-                    child: const CircularProgressIndicator()),
+                : Center(
+                  child: SizedBox(
+                      height: 2.h,
+                      width: 2.h,
+                      child: const CircularProgressIndicator()),
+                ),
           );
         }),
       ),
@@ -343,5 +352,22 @@ class _NewsFromState extends State<NewsFrom> {
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );
+  }
+
+  String capitalize(String str) {
+    return "${str[0].toUpperCase()}${str.substring(1).toLowerCase()}";
+  }
+
+  void fetchContent() async{
+    final response = await ApiProvider.instance.getArticle(widget.categ);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setNewsFrom(response.articles ?? []);
+      // _refreshController.refreshCompleted();
+    } else {
+      // _refreshController.refreshFailed();
+    }
   }
 }

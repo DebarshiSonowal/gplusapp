@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:gplusapp/Model/topick.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../Components/alert.dart';
 import '../Components/custom_button.dart';
 import '../Helper/Constance.dart';
+import '../Helper/DataProvider.dart';
 import '../Navigation/Navigate.dart';
 
 class EnterPreferencesPage extends StatefulWidget {
@@ -15,8 +18,14 @@ class EnterPreferencesPage extends StatefulWidget {
 }
 
 class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
-  List<String> selGeo = [];
-  List<String> selTop = [];
+  List<GeoTopick> selGeo = [];
+  List<Topick> selTop = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTopicks();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,178 +36,179 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
         padding: EdgeInsets.all(7.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'Tell us your preferences',
-              style: Theme.of(context).textTheme.headline3?.copyWith(
-                    color: Constance.primaryColor,
-                    // fontSize: 2.5.h,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            Text(
-              'Geographical',
-              style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                    color: Constance.primaryColor,
-                    // fontSize: 2.h,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            SizedBox(
-              height: 3.h,
-            ),
-            SizedBox(
-              height: 15.h,
-              width: double.infinity,
-              child: Wrap(
-                children: [
-                  for (int i = 0; i < Constance.geo.length; i++)
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (!selGeo.contains(Constance.geo[i])) {
-                            selGeo.add(Constance.geo[i]);
-                          } else {
-                            selGeo.remove(Constance.geo[i]);
-                          }
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 6),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: selGeo == null
-                              ? Colors.white
-                              : !selGeo.contains(Constance.geo[i])
-                                  ? Colors.white
-                                  : Constance.secondaryColor,
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: selGeo == null
-                                ? Colors.grey.shade600
-                                : !selGeo.contains(Constance.geo[i])
-                                    ? Colors.grey.shade600
+        child: Consumer<DataProvider>(builder: (context, data, _) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Tell us your preferences',
+                style: Theme.of(context).textTheme.headline3?.copyWith(
+                      color: Constance.primaryColor,
+                      // fontSize: 2.5.h,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Text(
+                'Geographical',
+                style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                      color: Constance.primaryColor,
+                      // fontSize: 2.h,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              SizedBox(
+                height: 3.h,
+              ),
+              SizedBox(
+                height: 15.h,
+                width: double.infinity,
+                child: Wrap(
+                  children: [
+                    for (int i = 0; i < data.geoTopicks.length; i++)
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (!selGeo.contains(data.geoTopicks[i])) {
+                              selGeo.add(data.geoTopicks[i]);
+                            } else {
+                              selGeo.remove(data.geoTopicks[i]);
+                            }
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: selGeo == []
+                                ? Colors.white
+                                : !selGeo.contains(data.geoTopicks[i])
+                                    ? Colors.white
                                     : Constance.secondaryColor,
-                            width: 0.5.w,
-                            // left: BorderSide(
-                            //   color: Colors.green,
-                            //   width: 1,
-                            // ),
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: selGeo == []
+                                  ? Colors.grey.shade600
+                                  : !selGeo.contains(data.geoTopicks[i])
+                                      ? Colors.grey.shade600
+                                      : Constance.secondaryColor,
+                              width: 0.5.w,
+                              // left: BorderSide(
+                              //   color: Colors.green,
+                              //   width: 1,
+                              // ),
+                            ),
+                          ),
+                          child: Text(
+                            data.geoTopicks[i].title ?? "",
+                            style:
+                                Theme.of(context).textTheme.headline5?.copyWith(
+                                      color: Colors.grey.shade800,
+                                      // fontSize: 2.h,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
                           ),
                         ),
-                        child: Text(
-                          Constance.geo[i],
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.grey.shade800,
-                                    // fontSize: 2.h,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                        ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              height: 5.h,
-            ),
-            Text(
-              'Topical',
-              style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                    color: Constance.primaryColor,
-                    // fontSize: 2.h,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            SizedBox(
-              height: 3.h,
-            ),
-            SizedBox(
-              height: 15.h,
-              width: double.infinity,
-              child: Wrap(
-                children: [
-                  for (int i = 0; i < Constance.topical.length; i++)
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (!selTop.contains(Constance.topical[i])) {
-                            selTop.add(Constance.topical[i]);
-                          } else {
-                            selTop.remove(Constance.topical[i]);
-                          }
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 6),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: selTop == null
-                              ? Colors.white
-                              : !selTop.contains(Constance.topical[i])
-                                  ? Colors.white
-                                  : Constance.secondaryColor,
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: selTop == null
-                                ? Colors.grey.shade600
-                                : !selTop.contains(Constance.topical[i])
-                                    ? Colors.grey.shade600
+              SizedBox(
+                height: 5.h,
+              ),
+              Text(
+                'Topical',
+                style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                      color: Constance.primaryColor,
+                      // fontSize: 2.h,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              SizedBox(
+                height: 3.h,
+              ),
+              SizedBox(
+                height: 15.h,
+                width: double.infinity,
+                child: Wrap(
+                  children: [
+                    for (int i = 0; i < data.topicks.length; i++)
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (!selTop.contains(data.topicks[i])) {
+                              selTop.add(data.topicks[i]);
+                            } else {
+                              selTop.remove(data.topicks[i]);
+                            }
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: selTop == []
+                                ? Colors.white
+                                : !selTop.contains(data.topicks[i])
+                                    ? Colors.white
                                     : Constance.secondaryColor,
-                            width: 0.5.w,
-                            // left: BorderSide(
-                            //   color: Colors.green,
-                            //   width: 1,
-                            // ),
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: selTop == []
+                                  ? Colors.grey.shade600
+                                  : !selTop.contains(data.topicks[i])
+                                      ? Colors.grey.shade600
+                                      : Constance.secondaryColor,
+                              width: 0.5.w,
+                              // left: BorderSide(
+                              //   color: Colors.green,
+                              //   width: 1,
+                              // ),
+                            ),
+                          ),
+                          child: Text(
+                            data.topicks[i].title ?? "",
+                            style:
+                                Theme.of(context).textTheme.headline5?.copyWith(
+                                      color: Colors.grey.shade800,
+                                      // fontSize: 2.h,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
                           ),
                         ),
-                        child: Text(
-                          Constance.topical[i],
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.grey.shade800,
-                                    // fontSize: 2.h,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                        ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              height: 6.h,
-              child: CustomButton(
-                txt: 'Save & Continue',
-                onTap: () {
-                  if (selGeo.isNotEmpty && selTop.isNotEmpty) {
-                    signUp();
-
-                  } else {
-                    showError("Select at least one of each");
-                  }
-                },
+              const Spacer(),
+              SizedBox(
+                width: double.infinity,
+                height: 6.h,
+                child: CustomButton(
+                  txt: 'Save & Continue',
+                  onTap: () {
+                    if (selGeo.isNotEmpty && selTop.isNotEmpty) {
+                      signUp();
+                    } else {
+                      showError("Select at least one of each");
+                    }
+                  },
+                ),
               ),
-            ),
-            SizedBox(
-              height: 1.h,
-            ),
-          ],
-        ),
+              SizedBox(
+                height: 1.h,
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
@@ -235,10 +245,100 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
         Storage.instance.signUpdata?.address,
         Storage.instance.signUpdata?.longitude,
         Storage.instance.signUpdata?.latitude);
-    if(reponse.success??false){
-      Navigation.instance.navigateAndReplace('/login');
-    }else{
-      showError(reponse.message??"Something went wrong");
+    if (reponse.success ?? false) {
+      setPreferences();
+    } else {
+      showError(reponse.message ?? "Something went wrong");
+    }
+  }
+
+  String getComaSeparated(List<dynamic> list) {
+    String temp = "";
+    for (int i = 0; i < list.length; i++) {
+      if (i == 0) {
+        temp = '${list[i].id.toString()},';
+      } else {
+        temp += '${list[i].id.toString()},';
+      }
+    }
+    return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
+  }
+
+  void getProfile() async {
+    final reponse = await ApiProvider.instance
+        .getprofile(Storage.instance.signUpdata?.mobile.toString());
+    if (reponse.status ?? false) {
+      Storage.instance.setUser(reponse.access_token ?? "");
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setProfile(reponse.profile!);
+      // Navigation.instance.goBack();
+      Navigation.instance.navigateAndReplace('/main');
+    } else {
+      // Navigation.instance.navigateAndReplace('/terms&conditions');
+      showError("Something went wrong");
+    }
+  }
+
+  void fetchTopicks() async {
+    showLoaderDialog(context);
+    final response = await ApiProvider.instance.getTopicks();
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setTopicks(response.topicks);
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setGeoTopicks(response.geoTopicks);
+    } else {
+      Navigation.instance.goBack();
+      showError("Something went wrong");
+    }
+  }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      backgroundColor: Colors.white,
+      content: Container(
+        color: Colors.white,
+        child: Row(
+          children: [
+            const CircularProgressIndicator(),
+            Container(
+              margin: const EdgeInsets.only(left: 7),
+              child: Text(
+                "Loading...",
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                      color: Colors.black,
+                    ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void setPreferences() async {
+    final response = await ApiProvider.instance.enterPreferences(
+        Storage.instance.signUpdata?.mobile,
+        getComaSeparated(selTop),
+        getComaSeparated(selGeo));
+    if (response.success ?? false) {
+      getProfile();
+    } else {
+      showError("Something went wrong");
     }
   }
 }

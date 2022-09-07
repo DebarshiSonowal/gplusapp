@@ -19,7 +19,13 @@ class BeAMember extends StatefulWidget {
 
 class _BeAMemberState extends State<BeAMember> {
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+      RefreshController(initialRefresh: false);
+
+  @override
+  void initState() {
+    super.initState();
+    fetch();
+  }
 
   void _onRefresh() async {
     // monitor network fetch
@@ -56,7 +62,7 @@ class _BeAMemberState extends State<BeAMember> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      backgroundColor:Colors.white,
+      backgroundColor: Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
         enablePullDown: true,
@@ -357,5 +363,22 @@ class _BeAMemberState extends State<BeAMember> {
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );
+  }
+
+  void fetch() async {
+    final response = await ApiProvider.instance.getMembership();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setMembership(response.membership ?? []);
+      // _refreshController.refreshCompleted();
+    } else {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setMembership(response.membership ?? []);
+      // _refreshController.refreshFailed();
+    }
   }
 }

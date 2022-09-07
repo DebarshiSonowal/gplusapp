@@ -57,9 +57,15 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
                           ),
                         ),
                         Container(
-                          color: Colors.black.withOpacity(0.5),
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [Colors.transparent, Colors.black]),
+                          ),
+                          // color: Colors.black.withOpacity(0.5),
                           padding: EdgeInsets.symmetric(
-                              vertical: 2.h, horizontal: 2.w),
+                              vertical: 3.h, horizontal: 2.w),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
@@ -68,7 +74,7 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
                                 e.value.title ?? 'Big Deals\nand Offers',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline3
+                                    .headline4
                                     ?.copyWith(
                                         color: Colors.grey.shade200,
                                         fontWeight: FontWeight.bold),
@@ -80,7 +86,7 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
                                 "${e.value.author_name?.trim()}, ${e.value.publish_date?.split(" ")[0]}",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline5
+                                    .headline6
                                     ?.copyWith(
                                       color: Colors.white,
                                     ),

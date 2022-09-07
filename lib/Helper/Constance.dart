@@ -20,6 +20,7 @@ class Constance {
   static const thirdColor = Color(0xffD03830);
   static const forthColor = Color(0xff001f34);
   static const logoIcon = 'assets/images/logo.png';
+  static const googleApiKey="";
   static var listPagesViewModel = [
     PageViewModel(
       title: "GPlus",
@@ -283,4 +284,6 @@ class Constance {
       ],
     ),
   ];
+
+
 }

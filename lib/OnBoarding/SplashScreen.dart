@@ -19,17 +19,14 @@ class _SplashScreenState extends State<SplashScreen> {
         height: double.infinity,
         width: double.infinity,
         child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              flex: 3,
-              child: Center(
-                child: Image.asset(
-                  Constance.logoIcon,
-                  scale: 1,
-                ),
-              ),
+            Image.asset(
+              Constance.logoIcon,
+              scale: 1,
             ),
-            Expanded(child: Container()),
+            // Expanded(child: Container()),
           ],
         ),
       ),
@@ -47,7 +44,8 @@ class _SplashScreenState extends State<SplashScreen> {
       } else if (Storage.instance.isOnBoarding) {
         Navigation.instance.navigateAndRemoveUntil('/login');
       } else {
-        Navigation.instance.navigateAndRemoveUntil('/onboarding');
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        // Navigation.instance.navigateAndRemoveUntil('/onboarding');
       }
     });
   }

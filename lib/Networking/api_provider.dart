@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Model/profile.dart';
+import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
@@ -22,6 +23,7 @@ import '../Model/promoted_deal.dart';
 import '../Model/redeem_details.dart';
 import '../Model/shop_category.dart';
 import '../Model/top_picks.dart';
+import '../Model/topick.dart';
 import '../Model/video_news.dart';
 
 class ApiProvider {
@@ -458,6 +460,36 @@ class ApiProvider {
     }
   }
 
+  Future<GenericResponse> enterPreferences(mobile, topicks, geotopicks) async {
+    var url = "${baseUrl}/app/topic-geo";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'mobile': mobile,
+      'topic_ids': topicks,
+      'geo_ids': geotopicks,
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("enterPreferences response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("enterPreferences error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("enterPreferences error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
   Future<ShopCategoryResponse> getShopCategory() async {
     // var data = {
     //   'category': 'opinion',
@@ -521,7 +553,7 @@ class ApiProvider {
   }
 
   Future<TopPicksResponse> getTopPicks() async {
-    var url = "${homeUrl}/get-topics";
+    var url = "${baseUrl}/app/top-picks";
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -532,20 +564,46 @@ class ApiProvider {
         url,
         // queryParameters: data,
       );
-      debugPrint("topics response: ${response?.data}");
+      debugPrint("toppicks response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return TopPicksResponse.fromJson(response?.data);
       } else {
-        debugPrint("topics error: ${response?.data}");
+        debugPrint("toppicks error: ${response?.data}");
         return TopPicksResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
-      debugPrint("topics response: ${e.response}");
+      debugPrint("toppicks response: ${e.response}");
       return TopPicksResponse.withError(e.message);
     }
   }
 
+  Future<TopickResponse> getTopicks() async {
+    var url = "${baseUrl}/app/topic-geo";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("topicks response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return TopickResponse.fromJson(response?.data);
+      } else {
+        debugPrint("topicks error: ${response?.data}");
+        return TopickResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("topicks response: ${e.response}");
+      return TopickResponse.withError(e.message);
+    }
+  }
+
   Future download2(String url) async {
+    Navigation.instance.goBack();
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var tempDir = "/storage/emulated/0/Download";
     String fullPath = tempDir + "/" + url.split("/")[8];
@@ -554,7 +612,7 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
         onReceiveProgress: showDownloadProgress,
-        //Received data with List<int>
+        //Received data with List<int> s
         options: Options(
             responseType: ResponseType.bytes,
             followRedirects: false,
@@ -568,7 +626,9 @@ class ApiProvider {
       // response.data is List<int> type
       raf.writeFromSync(response?.data);
       await raf.close();
-      showCompleteDownload();
+      Future.delayed(Duration(seconds: 2), () {
+        showCompleteDownload(fullPath);
+      });
     } catch (e) {
       print(e);
     }
@@ -590,36 +650,32 @@ class ApiProvider {
                 progress: received);
         final NotificationDetails platformChannelSpecifics =
             NotificationDetails(android: androidPlatformChannelSpecifics);
-        if ((received / total * 100).toStringAsFixed(0) == 100) {
-          print("cac");
-
-          // await flutterLocalNotificationsPlugin.cancelAll();
-        } else {
-          await flutterLocalNotificationsPlugin.show(
-              0, 'Saving E-paper', 'Downloading', platformChannelSpecifics,
-              payload: 'item x');
-        }
+        await flutterLocalNotificationsPlugin.show(
+            0, 'Saving E-paper', 'Downloading', platformChannelSpecifics,
+            payload: 'item x');
       });
     }
   }
 
-  void showCompleteDownload() async {
+  void showCompleteDownload(fullPath) async {
+    debugPrint("Completed");
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    await flutterLocalNotificationsPlugin.cancelAll();
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'progress channel',
-      'progress channel',
-      channelShowBadge: false,
-      importance: Importance.max,
-      priority: Priority.high,
-      onlyAlertOnce: true,
-      showProgress: false,
-    );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'Epaper Downloaded', 'Saved Successfully', platformChannelSpecifics,
-        payload: 'item x');
+    await flutterLocalNotificationsPlugin.cancelAll().then((value) async {
+      const AndroidNotificationDetails androidPlatformChannelSpecifics =
+          AndroidNotificationDetails(
+        'progress channel',
+        'progress channel',
+        channelShowBadge: false,
+        importance: Importance.max,
+        priority: Priority.high,
+        onlyAlertOnce: true,
+        showProgress: false,
+      );
+      const NotificationDetails platformChannelSpecifics =
+          NotificationDetails(android: androidPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.show(1, 'Epaper Downloaded',
+          'Saved Successfully', platformChannelSpecifics,
+          payload: fullPath);
+    });
   }
 }

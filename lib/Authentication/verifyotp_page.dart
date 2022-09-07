@@ -254,7 +254,9 @@ class _VerifyOTPState extends State<VerifyOTP> {
         verificationCompleted: _onVerificationCompleted,
         verificationFailed: _onVerificationFailed,
         codeSent: _onCodeSent,
-        codeAutoRetrievalTimeout: _onCodeTimeout);
+        codeAutoRetrievalTimeout: _onCodeTimeout).onError((error, stackTrace){
+          print(error);
+    });
   }
 
   _onVerificationCompleted(PhoneAuthCredential authCredential) async {
@@ -274,7 +276,8 @@ class _VerifyOTPState extends State<VerifyOTP> {
           await _auth.signInWithCredential(authCredential);
 
       if (_authResult.additionalUserInfo?.isNewUser ?? false) {
-        Navigation.instance.navigateAndReplace('/terms&conditions');
+        Navigation.instance
+            .navigateAndReplace('/terms&conditions', args: widget.number);
       } else {
         getProfile();
       }
@@ -348,7 +351,9 @@ class _VerifyOTPState extends State<VerifyOTP> {
     final reponse =
         await ApiProvider.instance.getprofile(widget.number.toString());
     if (reponse.status ?? false) {
-      Storage.instance.setUser(reponse.access_token ?? "");
+      setState(() {
+        Storage.instance.setUser(reponse.access_token ?? "");
+      });
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)

@@ -21,7 +21,7 @@ class GPlusExecCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(5.0),
         side: BorderSide(
           width: 0.5,
-          color: Colors.black,
+          color: Colors.black26,
         ),
       ),
       child: Container(
@@ -92,7 +92,7 @@ class GPlusExecCard extends StatelessWidget {
                       maxLines: 4,
                       style: Theme.of(context)
                           .textTheme
-                          .headline3
+                          .headline4
                           ?.copyWith(
                         // fontSize: 2.2.h,
                           fontWeight:

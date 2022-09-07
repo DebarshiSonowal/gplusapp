@@ -2,17 +2,18 @@ class ShopCategory {
   //"id": 1,
   //             "name": "Movies",
   //             "status": "1",
-  int? id,status;
-      // mobile,
-      // city_id,
-      // pin_code,
-      // locality_id,
-      // alt_mobile,
-      // shop_type_id,
-      // status;
+  int? id, status;
+
+  // mobile,
+  // city_id,
+  // pin_code,
+  // locality_id,
+  // alt_mobile,
+  // shop_type_id,
+  // status;
   // double? latitude, longitude;
   // String? code, shop_name, contact_name, email, address;
-  String? name;
+  String? name, image_file_name;
 
   ShopCategory.fromJson(json) {
     //int
@@ -44,6 +45,7 @@ class ShopCategory {
 
     //String
     name = json['name'] ?? "";
+    image_file_name = json['image_file_name'] ?? "";
     // shop_name = json['shop_name'] ?? "";
     // contact_name = json['contact_name'] ?? "";
     // email = json['email'] ?? "";

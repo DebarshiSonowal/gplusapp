@@ -32,7 +32,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
     '9:00 am - 3:00 pm',
   ];
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+      RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
     // monitor network fetch
@@ -48,6 +48,12 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
       _refreshController.refreshFailed();
     }
     // if failed,use refreshFailed()
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDetails();
   }
 
   @override
@@ -94,6 +100,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
+                      height: 30.h,
                         imageUrl: current.details?.image_file_name ??
                             Constance.salonImage),
                   ),
@@ -511,5 +518,19 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  void fetchDetails() async{
+    final response = await ApiProvider.instance.getDealDetails(widget.id);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setDealDetails(response.details!);
+
+      // _refreshController.refreshCompleted();
+    } else {
+      // _refreshController.refreshFailed();
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/date_picker.dart';
 import 'package:flutter_holo_date_picker/i18n/date_picker_i18n.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:intl/intl.dart';
@@ -10,10 +11,13 @@ import 'package:sizer/sizer.dart';
 
 import '../Components/alert.dart';
 import '../Helper/Constance.dart';
+import '../Helper/Storage.dart';
 import '../Navigation/Navigate.dart';
 
 class PersonalDetailsPage extends StatefulWidget {
-  const PersonalDetailsPage({Key? key}) : super(key: key);
+  final int mobile;
+
+  const PersonalDetailsPage(this.mobile);
 
   @override
   State<PersonalDetailsPage> createState() => _PersonalDetailsPageState();
@@ -36,6 +40,8 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     'Women',
     'Others',
   ];
+
+  var address = "";
 
   @override
   void dispose() {
@@ -190,11 +196,11 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                           "${datePicked?.day}-${datePicked?.month}-${datePicked?.year}";
                     });
                   }
-                },
+                }, 
                 child: SizedBox(
                   width: double.infinity,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
                         padding: EdgeInsets.only(left: 2.w),
@@ -443,42 +449,64 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               SizedBox(
                 height: 1.5.h,
               ),
-              Row(
-                children: [
-                  Text(
-                    'Location',
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                          color: Constance.primaryColor,
-                          // fontSize: 2.5.h,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const Icon(
-                    Icons.location_on,
-                    color: Constance.secondaryColor,
-                  ),
-                ],
+              GestureDetector(
+                onTap: () async {
+                  final result =
+                      await Navigation.instance.navigate('/locationSearchPage');
+                  if(result!=null&&result!=""){
+                    setState(() {
+                      address = result;
+                    });
+                  }
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      'Location',
+                      style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                            color: Constance.primaryColor,
+                            // fontSize: 2.5.h,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const Icon(
+                      Icons.location_on,
+                      color: Constance.secondaryColor,
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 1.5.h,
               ),
-              Row(
-                children: [
-                  Text(
-                    'Khanapara, Guwahati',
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          // fontSize: 2.h,
-                          fontSize: 11.sp,
-                          // fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    color: Constance.primaryColor,
-                  ),
-                ],
+              GestureDetector(
+                onTap: () async {
+                  final result =
+                  await Navigation.instance.navigate('/locationSearchPage');
+                  if(result!=null&&result!=""){
+                    setState(() {
+                      address = result;
+                    });
+                  }
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      'Khanapara, Guwahati',
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Constance.primaryColor,
+                            // fontSize: 2.h,
+                            fontSize: 11.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Constance.primaryColor,
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 4.h,
@@ -513,7 +541,27 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 child: CustomButton(
                   txt: 'Save & Continue',
                   onTap: () {
-                    Navigation.instance.navigateAndReplace('/enterPreferences');
+                    if (first_name.text.isNotEmpty &&
+                        last_name.text.isNotEmpty) {
+                      if (email.text.isNotEmpty && isValidEmail(email.text)) {
+                        if (date != "") {
+                          if (address != "" &&
+                              latitude != 0 &&
+                              longitude != 0) {
+                            setData(widget.mobile, first_name.text,
+                                last_name.text, email.text, date, address);
+                          } else {
+                            showError("Please select your location");
+                          }
+                        } else {
+                          showError("Enter your birth date");
+                        }
+                      } else {
+                        showError("Enter an actual email address");
+                      }
+                    } else {
+                      showError("Enter the names correctly");
+                    }
                   },
                 ),
               ),
@@ -525,6 +573,12 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         ),
       ),
     );
+  }
+
+  bool isValidEmail(email) {
+    return RegExp(
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(email);
   }
 
   AppBar buildAppBar() {
@@ -586,6 +640,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         if (mounted) {
           setState(() {});
         }
+        getAddress(position.latitude, position.longitude);
       } else {
         showError("We require Location permissions");
       }
@@ -601,5 +656,35 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+  Future<void> getAddress(latitude, longitude) async {
+    List<Placemark> placemarks =
+    await placemarkFromCoordinates(latitude, longitude);
+    Placemark place = placemarks[0];
+    String street = place.street ?? "";
+    String thoroughfare = place.thoroughfare ?? "";
+    String locality = place.locality ?? "";
+    String subLocality = place.subLocality ?? "";
+    String state = place.subAdministrativeArea ?? "";
+    String pincode = place.postalCode ?? "";
+    String address1 =
+        "${(street.isEmpty) ? "" : "$street, "}${(thoroughfare.isEmpty) ? "" : "$thoroughfare, "}${(locality.isEmpty) ? "" : "$locality, "}${(subLocality.isEmpty) ? "" : "$subLocality, "}${(state.isEmpty) ? "" : "$state, "}${(pincode.isEmpty) ? "" : "$pincode."}";
+
+    print('city pincode ${pincode}  ${street}');
+    setState(() {
+      address = address1;
+    });
+  }
+
+  void setData(mobile, fname, lname, email, dob, address) {
+    Storage.instance.signUpdata?.mobile = mobile;
+    Storage.instance.signUpdata?.f_name = fname;
+    Storage.instance.signUpdata?.l_name = lname;
+    Storage.instance.signUpdata?.email = email;
+    Storage.instance.signUpdata?.dob = dob;
+    Storage.instance.signUpdata?.address = address;
+    Storage.instance.signUpdata?.longitude = longitude;
+    Storage.instance.signUpdata?.latitude = latitude;
+    Navigation.instance.navigateAndReplace('/enterPreferences');
   }
 }

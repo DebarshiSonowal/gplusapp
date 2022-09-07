@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +34,18 @@ class _HomeScreenState extends State<HomeScreen> {
   String _poll = Constance.pollWeek[0];
 
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+      RefreshController(initialRefresh: false);
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchHome();
+    fetchOpinion();
+    fetchGPlusExcl();
+    fetchToppicks();
+    fetchAds();
+  }
 
   void _onRefresh() async {
     // monitor network fetch
@@ -105,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onRefresh: _onRefresh,
           onLoading: _onLoading,
           child: Padding(
-            padding: EdgeInsets.only(top: 1.h),
+            padding: EdgeInsets.only(top: 0.3.h),
             child: Consumer<DataProvider>(builder: (context, data, _) {
               return Container(
                 height: MediaQuery.of(context).size.height,
@@ -202,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ?.copyWith(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20.sp,
+                                      fontSize: 18.sp,
                                     ),
                               ),
                             ),
@@ -239,14 +252,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: double.infinity,
                         child: GestureDetector(
                           onTap: (){
-                            _launchUrl(Uri.parse(data.ads[0].link.toString()));
+                            _launchUrl(Uri.parse(data.ads[Random().nextInt(data.ads.length)].link.toString()));
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 2.w, vertical: 1.5.h),
                             child: CachedNetworkImage(
                               fit: BoxFit.fill,
-                              imageUrl:data.ads[0].image_file_name??'',
+                              imageUrl:data.ads[Random().nextInt(data.ads.length)].image_file_name??'',
                               placeholder: (cont, _) {
                                 return const Icon(
                                   Icons.image,
@@ -289,6 +302,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .textTheme
                                     .headline3
                                     ?.copyWith(
+                                  fontSize: 18.sp,
                                       color: Constance.primaryColor,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -562,7 +576,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .textTheme
                                     .headline3
                                     ?.copyWith(
-                                      color: Constance.primaryColor,
+                                      color: Constance.thirdColor,
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -598,6 +612,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       width: MediaQuery.of(context).size.width -
                                           7.w,
                                       child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Expanded(
                                               flex: 4,
@@ -631,19 +646,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   color: Colors.white,
                                                 ),
                                                 child: Center(
-                                                  child: Text(
-                                                    item.title ?? "",
-                                                    maxLines: 3,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .headline5
-                                                        ?.copyWith(
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                  child: Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width:70.w,
+                                                        child: Text(
+                                                          item.title ?? "",
+                                                          maxLines: 3,
+                                                          textAlign: TextAlign.start,
+                                                          overflow:
+                                                              TextOverflow.ellipsis,
+                                                          style: Theme.of(context)
+                                                              .textTheme
+                                                              .headline5
+                                                              ?.copyWith(
+                                                                color: Colors.black,
+                                                                // fontWeight:
+                                                                //     FontWeight.bold,
+                                                              ),
                                                         ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               )),
@@ -672,7 +695,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           ),
                                                     ),
                                                     Text(
-                                                      item.publish_date ?? "",
+                                                      item.publish_date?.split(" ")[0] ?? "",
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       style: Theme.of(context)
@@ -719,7 +742,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             SizedBox(
-                              height: 24.h,
+                              height: 17.h,
                             ),
                           ],
                         ),
@@ -840,6 +863,22 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setAds(response.ads ?? []);
+    }
+  }
+  void fetchHome() async{
+    final result = await ApiProvider.instance.getHomeAlbum();
+    if (result.success ?? false) {
+      Provider.of<DataProvider>(context, listen: false)
+          .setHomeAlbum(result.articles ?? []);
+
+      final response = await ApiProvider.instance.getWeekly();
+      if (response.success ?? false) {
+        Provider.of<DataProvider>(context, listen: false)
+            .setVideoWeekly(response.videos ?? []);
+        // _refreshController.refreshCompleted();
+      }
+    } else {
+      // _refreshController.refreshFailed();
     }
   }
   Future<void> _launchUrl(_url) async {

@@ -1,8 +1,10 @@
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:io';
 import 'Helper/AppTheme.dart';
 import 'Helper/Constance.dart';
 import 'Helper/DataProvider.dart';
@@ -16,6 +18,7 @@ void main() async {
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
+    // name: "GPlusNewApp",
     options: DefaultFirebaseOptions.currentPlatform,
   );
   Storage.instance.initializeStorage();
@@ -28,8 +31,12 @@ void main() async {
       onSelectNotification: (String? payload) async {
         if (payload != null) {
           debugPrint('notification payload: $payload');
+          if(payload != 'downloading'){
+            OpenFile.open(payload);
+          }
         }
       });
+
   runApp(const MyApp());
 }
 

@@ -7,7 +7,10 @@ import '../Components/alert.dart';
 import '../Helper/Constance.dart';
 
 class TermsAndConditions extends StatefulWidget {
-  const TermsAndConditions({Key? key}) : super(key: key);
+  final int mobile;
+
+
+  TermsAndConditions(this.mobile);
 
   @override
   State<TermsAndConditions> createState() => _TermsAndConditionsState();
@@ -105,7 +108,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                 onTap: () {
                   if (agreed) {
                     Navigation.instance
-                        .navigateAndReplace('/personaldetails');
+                        .navigateAndReplace('/personaldetails',args: widget.mobile);
                   } else {
                     showError(
                         'You have to agree to our terms and conditions');

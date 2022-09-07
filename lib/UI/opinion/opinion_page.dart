@@ -21,7 +21,10 @@ class OpinionPage extends StatefulWidget {
 class _OpinionPageState extends State<OpinionPage> {
   int page_no = 1;
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+      RefreshController(initialRefresh: false);
+
+
+
 
   void _onRefresh() async {
     // monitor network fetch
@@ -94,7 +97,7 @@ class _OpinionPageState extends State<OpinionPage> {
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.only(top:1.h,bottom: 4.h),
               // color: Colors.grey.shade200,
-              child: SingleChildScrollView(
+              child:  data.opinions.isNotEmpty?SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +113,7 @@ class _OpinionPageState extends State<OpinionPage> {
                             size: 4.h,
                           ),
                           Text(
-                            'Jonathan Doe',
+                            ' Opinions',
                             style: Theme.of(Navigation
                                     .instance.navigatorKey.currentContext!)
                                 .textTheme
@@ -272,7 +275,7 @@ class _OpinionPageState extends State<OpinionPage> {
                                           maxLines: 3,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .headline3
+                                              .headline4
                                               ?.copyWith(
                                                   fontWeight: FontWeight.bold,
                                                   overflow: TextOverflow.ellipsis,
@@ -320,6 +323,11 @@ class _OpinionPageState extends State<OpinionPage> {
                     // ),
                   ],
                 ),
+              )  : Center(
+                child: SizedBox(
+                    height: 2.h,
+                    width: 2.h,
+                    child: const CircularProgressIndicator()),
               ),
             );
           }
@@ -343,8 +351,19 @@ class _OpinionPageState extends State<OpinionPage> {
   @override
   void initState() {
     super.initState();
-    // fetchOpinions();
+    fetchOpinions();
   }
 
-  void fetchOpinions() async {}
+  void fetchOpinions() async {
+    final response = await ApiProvider.instance.getOpinion(11, page_no);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
+          .setOpinions(response.opinion ?? []);
+      // _refreshController.refreshCompleted();
+    } else {
+      // _refreshController.refreshFailed();
+    }
+  }
 }

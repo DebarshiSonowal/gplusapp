@@ -84,20 +84,22 @@ class ToppicksCard extends StatelessWidget {
                 CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Text(
-                      item.title??"",
-                      maxLines: 4,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline3
-                          ?.copyWith(
-                        // fontSize: 2.2.h,
-                          fontWeight:
-                          FontWeight.bold,
-                          overflow: TextOverflow
-                              .ellipsis,
-                          color: Constance
-                              .primaryColor),
+                    child: Center(
+                      child: Text(
+                        item.title??"",
+                        maxLines: 4,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline4
+                            ?.copyWith(
+                          // fontSize: 2.2.h,
+                            fontWeight:
+                            FontWeight.bold,
+                            overflow: TextOverflow
+                                .ellipsis,
+                            color: Constance
+                                .primaryColor),
+                      ),
                     ),
                   ),
                   SizedBox(
