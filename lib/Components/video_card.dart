@@ -185,7 +185,7 @@ class VideoCard extends StatelessWidget {
                       maxLines: 4,
                       style: Theme.of(context)
                           .textTheme
-                          .headline4
+                          .headline5
                           ?.copyWith(
                         // fontSize: 2.2.h,
                           fontWeight:

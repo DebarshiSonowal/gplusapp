@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Model/opinion.dart';
 import 'package:gplusapp/Model/top_picks.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-
 
   @override
   void initState() {
@@ -215,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ?.copyWith(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 18.sp,
+                                      fontSize: 16.sp,
                                     ),
                               ),
                             ),
@@ -251,15 +251,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 10.h,
                         width: double.infinity,
                         child: GestureDetector(
-                          onTap: (){
-                            _launchUrl(Uri.parse(data.ads[Random().nextInt(data.ads.length)].link.toString()));
+                          onTap: () {
+                            _launchUrl(Uri.parse(data
+                                .ads[Random().nextInt(data.ads.length)].link
+                                .toString()));
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 2.w, vertical: 1.5.h),
                             child: CachedNetworkImage(
                               fit: BoxFit.fill,
-                              imageUrl:data.ads[Random().nextInt(data.ads.length)].image_file_name??'',
+                              imageUrl: data
+                                      .ads[Random().nextInt(data.ads.length)]
+                                      .image_file_name ??
+                                  '',
                               placeholder: (cont, _) {
                                 return const Icon(
                                   Icons.image,
@@ -302,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .textTheme
                                     .headline3
                                     ?.copyWith(
-                                  fontSize: 18.sp,
+                                      fontSize: 16.sp,
                                       color: Constance.primaryColor,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -378,6 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .textTheme
                                     .headline3
                                     ?.copyWith(
+                                      fontSize: 16.sp,
                                       color: Constance.primaryColor,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -454,6 +460,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .textTheme
                                         .headline3
                                         ?.copyWith(
+                                      fontSize: 16.sp,
                                           color: Constance.primaryColor,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -503,7 +510,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           item,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .headline5
+                                              .headline6
                                               ?.copyWith(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold,
@@ -576,6 +583,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .textTheme
                                     .headline3
                                     ?.copyWith(
+                                  fontSize: 16.sp,
                                       color: Constance.thirdColor,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -592,127 +600,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 scrollDirection: Axis.vertical,
                                 itemBuilder: (cont, count) {
                                   var item = data.latestOpinions[count];
-                                  return Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      side: BorderSide(
-                                          width: 0.5,
-                                          color: Constance.primaryColor),
-                                    ),
-                                    child: Container(
-                                      // padding: EdgeInsets.symmetric(
-                                      //     horizontal: 3.w, vertical: 2.h),
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(5),
-                                        ),
-                                        color: Colors.white,
-                                      ),
-                                      height: 12.h,
-                                      width: MediaQuery.of(context).size.width -
-                                          7.w,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                              flex: 4,
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 3.w,
-                                                    vertical: 2.h),
-                                                decoration: const BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(5),
-                                                  ),
-                                                  border: Border(
-                                                    top: BorderSide(
-                                                        width: 0.5,
-                                                        color: Constance
-                                                            .primaryColor),
-                                                    bottom: BorderSide(
-                                                        width: 0.5,
-                                                        color: Constance
-                                                            .primaryColor),
-                                                    right: BorderSide(
-                                                        width: 0.5,
-                                                        color: Constance
-                                                            .primaryColor),
-                                                    left: BorderSide(
-                                                        width: 0.5,
-                                                        color: Constance
-                                                            .primaryColor),
-                                                  ),
-                                                  color: Colors.white,
-                                                ),
-                                                child: Center(
-                                                  child: Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width:70.w,
-                                                        child: Text(
-                                                          item.title ?? "",
-                                                          maxLines: 3,
-                                                          textAlign: TextAlign.start,
-                                                          overflow:
-                                                              TextOverflow.ellipsis,
-                                                          style: Theme.of(context)
-                                                              .textTheme
-                                                              .headline5
-                                                              ?.copyWith(
-                                                                color: Colors.black,
-                                                                // fontWeight:
-                                                                //     FontWeight.bold,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )),
-                                          Expanded(
-                                              flex: 2,
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 3.w),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      item.author_name ?? "",
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .headline6
-                                                          ?.copyWith(
-                                                            color: Constance
-                                                                .thirdColor,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                    ),
-                                                    Text(
-                                                      item.publish_date?.split(" ")[0] ?? "",
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .headline6
-                                                          ?.copyWith(
-                                                            color: Colors.black,
-                                                            // fontWeight: FontWeight.bold,
-                                                          ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )),
-                                        ],
-                                      ),
-                                    ),
-                                  );
+                                  return OpinionCard(item: item);
                                 },
                                 separatorBuilder: (cont, inde) {
                                   return SizedBox(
@@ -865,7 +753,8 @@ class _HomeScreenState extends State<HomeScreen> {
           .setAds(response.ads ?? []);
     }
   }
-  void fetchHome() async{
+
+  void fetchHome() async {
     final result = await ApiProvider.instance.getHomeAlbum();
     if (result.success ?? false) {
       Provider.of<DataProvider>(context, listen: false)
@@ -881,9 +770,150 @@ class _HomeScreenState extends State<HomeScreen> {
       // _refreshController.refreshFailed();
     }
   }
+
   Future<void> _launchUrl(_url) async {
     if (!await launchUrl(_url)) {
       throw 'Could not launch $_url';
     }
+  }
+}
+
+class OpinionCard extends StatelessWidget {
+  const OpinionCard({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
+
+  final Opinion item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+        side: BorderSide(
+            width: 0.5,
+            color: Constance.primaryColor),
+      ),
+      child: Container(
+        // padding: EdgeInsets.symmetric(
+        //     horizontal: 3.w, vertical: 2.h),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(5),
+          ),
+          color: Colors.white,
+        ),
+        height: 12.h,
+        width: MediaQuery.of(context).size.width -
+            7.w,
+        child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
+          children: [
+            Expanded(
+                flex: 4,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 3.w,
+                      vertical: 2.h),
+                  decoration: const BoxDecoration(
+                    borderRadius:
+                        BorderRadius.all(
+                      Radius.circular(5),
+                    ),
+                    border: Border(
+                      top: BorderSide(
+                          width: 0.5,
+                          color: Constance
+                              .primaryColor),
+                      bottom: BorderSide(
+                          width: 0.5,
+                          color: Constance
+                              .primaryColor),
+                      right: BorderSide(
+                          width: 0.5,
+                          color: Constance
+                              .primaryColor),
+                      left: BorderSide(
+                          width: 0.5,
+                          color: Constance
+                              .primaryColor),
+                    ),
+                    color: Colors.white,
+                  ),
+                  child: Center(
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 70.w,
+                          child: Text(
+                            item.title ?? "",
+                            maxLines: 3,
+                            textAlign:
+                                TextAlign.start,
+                            overflow: TextOverflow
+                                .ellipsis,
+                            style:
+                                Theme.of(context)
+                                    .textTheme
+                                    .headline5
+                                    ?.copyWith(
+                                      color: Colors
+                                          .black,
+                                      // fontWeight:
+                                      //     FontWeight.bold,
+                                    ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )),
+            Expanded(
+                flex: 2,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 3.w),
+                  child: Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment
+                            .spaceBetween,
+                    children: [
+                      Text(
+                        item.author_name ?? "",
+                        overflow:
+                            TextOverflow.ellipsis,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            ?.copyWith(
+                              color: Constance
+                                  .thirdColor,
+                              fontWeight:
+                                  FontWeight.bold,
+                            ),
+                      ),
+                      Text(
+                        item.publish_date
+                                ?.split(" ")[0] ??
+                            "",
+                        overflow:
+                            TextOverflow.ellipsis,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            ?.copyWith(
+                              color: Colors.black,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
+                  ),
+                )),
+          ],
+        ),
+      ),
+    );
   }
 }

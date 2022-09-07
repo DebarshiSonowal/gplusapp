@@ -3,12 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Model/top_picks.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/NavigationBar.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
+import '../../Networking/api_provider.dart';
 
 class PostAListing extends StatefulWidget {
   const PostAListing({Key? key}) : super(key: key);
@@ -30,8 +34,8 @@ class _PostAListingState extends State<PostAListing> {
     'Vehicles',
     'House',
   ];
-  var selectedCategory = 'Vehicles';
-  var selectedLocality = 'Rukminigaon';
+  var selectedCategory = '';
+  var selectedLocality = '';
   var locality = ['Rukminigaon', 'Khanapara', 'Beltola', ''];
 
   final ImagePicker _picker = ImagePicker();
@@ -39,6 +43,7 @@ class _PostAListingState extends State<PostAListing> {
   @override
   void initState() {
     super.initState();
+    fetchClassified();
   }
 
   @override
@@ -78,34 +83,39 @@ class _PostAListingState extends State<PostAListing> {
               SizedBox(
                 height: 0.3.h,
               ),
-              DropdownButton(
-                // Initial Value
-                value: selectedCategory,
+              Consumer<DataProvider>(builder: (context, data, _) {
+                return DropdownButton(
+                  // Initial Value
+                  value: selectedCategory,
 
-                // Down Arrow Icon
-                icon: const Icon(Icons.keyboard_arrow_down),
+                  // Down Arrow Icon
+                  icon: const Icon(Icons.keyboard_arrow_down),
 
-                // Array list of items
-                items: category.map((String items) {
-                  return DropdownMenuItem(
-                    value: items,
-                    child: Text(
-                      items,
-                      style: Theme.of(context).textTheme.headline4?.copyWith(
-                            color: Constance.primaryColor,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  );
-                }).toList(),
-                // After selecting the desired option,it will
-                // change button value to selected value
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedCategory = newValue!;
-                  });
-                },
-              ),
+                  // Array list of items
+                  items: data.classified_category
+                      .map((e) => DropdownMenuItem(
+                            value: e.id.toString(),
+                            child: Text(
+                              e.title ?? "",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Constance.primaryColor,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ))
+                      .toList(),
+                  // After selecting the desired option,it will
+                  // change button value to selected value
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedCategory = newValue!;
+                    });
+                  },
+                );
+              }),
               Text(
                 'Add your locality',
                 style: Theme.of(context).textTheme.headline4?.copyWith(
@@ -114,34 +124,39 @@ class _PostAListingState extends State<PostAListing> {
               SizedBox(
                 height: 0.3.h,
               ),
-              DropdownButton(
-                // Initial Value
-                value: selectedLocality,
+              Consumer<DataProvider>(builder: (context, data, _) {
+                return DropdownButton(
+                  // Initial Value
+                  value: selectedLocality,
 
-                // Down Arrow Icon
-                icon: const Icon(Icons.keyboard_arrow_down),
+                  // Down Arrow Icon
+                  icon: const Icon(Icons.keyboard_arrow_down),
 
-                // Array list of items
-                items: locality.map((String items) {
-                  return DropdownMenuItem(
-                    value: items,
-                    child: Text(
-                      items,
-                      style: Theme.of(context).textTheme.headline4?.copyWith(
-                            color: Constance.primaryColor,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  );
-                }).toList(),
-                // After selecting the desired option,it will
-                // change button value to selected value
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedLocality = newValue!;
-                  });
-                },
-              ),
+                  // Array list of items
+                  items: data.locality
+                      .map((e) => DropdownMenuItem(
+                            value: e.id.toString(),
+                            child: Text(
+                              e.name ?? "",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Constance.primaryColor,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ))
+                      .toList(),
+                  // After selecting the desired option,it will
+                  // change button value to selected value
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedLocality = newValue!;
+                    });
+                  },
+                );
+              }),
               SizedBox(
                 height: 2.h,
               ),
@@ -260,9 +275,9 @@ class _PostAListingState extends State<PostAListing> {
               ),
               TextFormField(
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Colors.black,
-                  // fontSize: 1.6.h,
-                ),
+                      color: Colors.black,
+                      // fontSize: 1.6.h,
+                    ),
                 controller: title,
                 maxLines: 1,
                 keyboardType: TextInputType.number,
@@ -271,9 +286,9 @@ class _PostAListingState extends State<PostAListing> {
                   fillColor: Colors.white,
                   labelText: 'Enter the price',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
-                    color: Colors.black,
-                    // fontSize: 1.5.h,
-                  ),
+                        color: Colors.black,
+                        // fontSize: 1.5.h,
+                      ),
                   border: const OutlineInputBorder(),
                   enabledBorder: const OutlineInputBorder(),
                 ),
@@ -285,7 +300,12 @@ class _PostAListingState extends State<PostAListing> {
                 width: double.infinity,
                 child: CustomButton(
                   onTap: () {
-                    showDialogBox();
+                    // showDialogBox();
+                    if (title.text.isNotEmpty &&
+                        desc.text.isNotEmpty &&
+                        price.text.isNotEmpty) {
+                      postClassified();
+                    }
                   },
                   txt: 'Go ahead',
                 ),
@@ -502,5 +522,45 @@ class _PostAListingState extends State<PostAListing> {
         );
       },
     );
+  }
+
+  void fetchClassified() async {
+    // showLoaderDialog(context);
+    final response = await ApiProvider.instance.getClassifiedCategory();
+    if (response.success ?? false) {
+      // Navigation.instance.goBack();
+      print(response.categories);
+      setState(() {
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .setClassifiedCategory(response.categories ?? []);
+        selectedCategory = response.categories![0].id.toString();
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .setLocality(response.localities ?? []);
+        selectedLocality = response.localities![0].id.toString();
+      });
+    } else {
+      setState(() {
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .setClassifiedCategory(response.categories ?? []);
+        selectedCategory = response.categories![0].id.toString();
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .setLocality(response.localities ?? []);
+        selectedLocality = response.localities![0].id.toString();
+      });
+      // Navigation.instance.goBack();
+      // showError("Something went wrong");
+    }
+  }
+
+  void postClassified() {
+
   }
 }

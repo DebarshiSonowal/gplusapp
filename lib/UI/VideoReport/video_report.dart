@@ -64,7 +64,7 @@ class _VideoReportState extends State<VideoReport> {
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
         enablePullDown: true,
-        enablePullUp: true,
+        enablePullUp: false,
         header: const WaterDropHeader(),
         footer: CustomFooter(
           builder: (BuildContext context, LoadStatus? mode) {

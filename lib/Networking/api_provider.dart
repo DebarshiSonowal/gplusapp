@@ -13,6 +13,8 @@ import 'package:path_provider/path_provider.dart';
 import '../Model/advertise.dart';
 import '../Model/article.dart';
 import '../Model/article_desc.dart';
+import '../Model/classified.dart';
+import '../Model/classified_category.dart';
 import '../Model/deal_details.dart';
 import '../Model/e_paper.dart';
 import '../Model/generic_response.dart';
@@ -599,6 +601,56 @@ class ApiProvider {
     } on DioError catch (e) {
       debugPrint("topicks response: ${e.response}");
       return TopickResponse.withError(e.message);
+    }
+  }
+
+  Future<ClassifiedResponse> getClassified() async {
+    var url = "${baseUrl}/app/classified/my-list";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("ClassifiedResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ClassifiedResponse.fromJson(response?.data);
+      } else {
+        debugPrint("ClassifiedResponse error: ${response?.data}");
+        return ClassifiedResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("ClassifiedResponse response: ${e.response}");
+      return ClassifiedResponse.withError(e.message);
+    }
+  }
+
+  Future<ClassifiedCategoryResponse> getClassifiedCategory() async {
+    var url = "${baseUrl}/app/classifies-categories-localities";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("ClassifiedCategoryResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ClassifiedCategoryResponse.fromJson(response?.data);
+      } else {
+        debugPrint("ClassifiedCategoryResponse error: ${response?.data}");
+        return ClassifiedCategoryResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("ClassifiedCategoryResponse response: ${e.response}");
+      return ClassifiedCategoryResponse.withError(e.message);
     }
   }
 

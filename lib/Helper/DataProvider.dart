@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Model/advertise.dart';
 import 'package:gplusapp/Model/article.dart';
+import 'package:gplusapp/Model/classified.dart';
+import 'package:gplusapp/Model/classified_category.dart';
 import 'package:gplusapp/Model/deal_details.dart';
+import 'package:gplusapp/Model/locality.dart';
 import 'package:gplusapp/Model/opinion.dart';
 import 'package:gplusapp/Model/profile.dart';
 import 'package:gplusapp/Model/promoted_deal.dart';
@@ -23,18 +26,37 @@ class DataProvider extends ChangeNotifier {
   List<Opinion> latestOpinions = [];
   List<Membership> memberships = [];
   List<TopPicks> home_toppicks = [];
-  List<PromotedDeal> deals=[];
-  List<ShopCategory> category=[];
-  List<Advertise> ads=[];
+  List<PromotedDeal> deals = [];
+  List<ShopCategory> category = [];
+  List<Advertise> ads = [];
   DealDetails? details;
   RedeemDetails? redeemDetails;
   List<Topick> topicks = [];
   List<GeoTopick> geoTopicks = [];
+  List<Classified> classified = [];
+  List<ClassifiedCategory> classified_category = [];
+  List<Locality> locality = [];
+
+  setClassified(List<Classified> list) {
+    classified = list;
+    notifyListeners();
+  }
+
+  setClassifiedCategory(List<ClassifiedCategory> list) {
+    classified_category = list;
+    notifyListeners();
+  }
+
+  setLocality(List<Locality> list) {
+    locality = list;
+    notifyListeners();
+  }
 
   setTopicks(List<Topick> list) {
     topicks = list;
     notifyListeners();
   }
+
   setGeoTopicks(List<GeoTopick> list) {
     geoTopicks = list;
     notifyListeners();
@@ -45,11 +67,13 @@ class DataProvider extends ChangeNotifier {
     debugPrint(list.toString());
     notifyListeners();
   }
+
   setPromotedDeals(List<PromotedDeal> list) {
     deals = list;
     // debugPrint(list.toString());
     notifyListeners();
   }
+
   setShopCategory(List<ShopCategory> list) {
     category = list;
     // debugPrint(list.toString());
@@ -60,10 +84,12 @@ class DataProvider extends ChangeNotifier {
     home_albums = list;
     notifyListeners();
   }
+
   setAds(List<Advertise> list) {
     ads = list;
     notifyListeners();
   }
+
   setHomeTopPicks(List<TopPicks> list) {
     home_toppicks = list;
     notifyListeners();
@@ -103,10 +129,12 @@ class DataProvider extends ChangeNotifier {
     profile = prof;
     notifyListeners();
   }
+
   setDealDetails(DealDetails data) {
-   details = data;
+    details = data;
     notifyListeners();
   }
+
   setRedeemDetails(RedeemDetails data) {
     redeemDetails = data;
     notifyListeners();

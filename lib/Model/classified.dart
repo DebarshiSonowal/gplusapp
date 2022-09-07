@@ -1,42 +1,62 @@
+import 'package:gplusapp/Model/category_name.dart';
+
+import 'attach_file.dart';
+import 'locality.dart';
+
 class Classified {
-//   {
-//             "id": 2,
-//             "user_id": "97200",
-//             "classified_category_id": "2",
-//             "locality_id": "1",
-//             "title": "Test title",
-//             "description": "Test story",
-//             "price": "100.00",
-//             "status": null,
-//             "created_at": "2022-09-05T18:06:23.000000Z",
-//             "updated_at": "2022-09-05T18:06:23.000000Z",
-//             "category": {
-//                 "id": 2,
-//                 "title": "Culture",
-//                 "seo_name": "culture",
-//                 "status": "0",
-//                 "sequence": null,
-//                 "created_at": "2017-08-25T07:39:29.000000Z",
-//                 "updated_at": "2018-07-19T05:07:27.000000Z"
-//             },
-//             "locality": {
-//                 "id": 1,
-//                 "city_id": "1",
-//                 "name": "Beltola",
-//                 "status": "1",
-//                 "created_at": "2022-08-15 21:25:19",
-//                 "updated_at": "2022-08-15 08:55:38"
-//             },
-//             "attached_files": [
-//                 {
-//                     "id": 1,
-//                     "classified_id": "2",
-//                     "file_name": "http://gplus.shecure.co.in/storage/app/public/classified/2/84bdec3596415701478cb6bbc221b157.png",
-//                     "file_type": "image",
-//                     "status": "0",
-//                     "created_at": "2022-09-05T18:06:23.000000Z",
-//                     "updated_at": "2022-09-05T18:06:23.000000Z"
-//                 }
-//             ]
-//         }
+  int? id, user_id, classified_category_id, locality_id, status;
+  double? price;
+  CategoryName? categoryName;
+  String? title, description;
+  Locality? locality;
+  List<AttachFile>? attach_files;
+
+  Classified.fromJson(json) {
+    id = json['id'] ?? 0;
+    user_id =
+        json['user_id'] == null ? 0 : int.parse(json['user_id'].toString());
+    status = json['status'] == null ? 0 : int.parse(json['status'].toString());
+    locality_id = json['locality_id'] == null
+        ? 0
+        : int.parse(json['locality_id'].toString());
+    classified_category_id = json['classified_category_id'] == null
+        ? 0
+        : int.parse(json['classified_category_id'].toString());
+
+    //double
+    price = json['price'] == null ? 0 : double.parse(json['price'].toString());
+
+    //Category
+    categoryName = CategoryName.fromJson(json['category']);
+
+    locality = Locality.fromJson(json['locality']);
+
+    attach_files = json['attached_files'] == null
+        ? []
+        : (json['attached_files'] as List)
+            .map((e) => AttachFile.fromJson(e))
+            .toList();
+
+    title = json['title']??"";
+    description = json['description']??"";
+  }
+}
+
+class ClassifiedResponse {
+  bool? success;
+  String? message;
+  List<Classified>? classifieds;
+
+  ClassifiedResponse.fromJson(json) {
+    success = json['success'].toString() == 'true' ? true : false;
+    message = json['message'] ?? "Something Went Wrong";
+    classifieds = json['data'] == null
+        ? []
+        : (json['data'] as List).map((e) => Classified.fromJson(e)).toList();
+  }
+
+  ClassifiedResponse.withError(msg) {
+    success = false;
+    message = msg ?? "Something Went Wrong";
+  }
 }

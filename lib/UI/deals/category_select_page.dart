@@ -100,7 +100,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
-                      height: 30.h,
+                        height: 30.h,
                         imageUrl: current.details?.image_file_name ??
                             Constance.salonImage),
                   ),
@@ -361,7 +361,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
           child: ListView.separated(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: current.details?.coupons?.length??0,
+            itemCount: current.details?.coupons?.length ?? 0,
             itemBuilder: (cont, count) {
               var data = current.details?.coupons![count];
               return ListTile(
@@ -387,10 +387,9 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   ),
                 ),
                 trailing: CustomButton(
-                  txt: 'Reedem Now',
+                  txt: 'Redeem Now',
                   onTap: () {
-                    redeem(widget.id,data?.code);
-                    // showDialogBox();
+                    showDialogBox(data?.code);
                   },
                 ),
               );
@@ -411,7 +410,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
     }
   }
 
-  void showDialogBox() {
+  void showDialogBox(code) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -467,7 +466,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                       txt: 'Go Ahead',
                       onTap: () {
                         Navigation.instance.goBack();
-                        Navigation.instance.navigate('/redeemOfferPage');
+                        redeem(widget.id, code);
                       }),
                 ),
                 SizedBox(height: 1.h),
@@ -499,17 +498,19 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
     );
   }
 
-  void redeem(int id, String? code) async{
+  void redeem(int id, String? code) async {
     final response = await ApiProvider.instance.redeemCupon(id, code);
-    if(response.success??false){
+    if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false).setRedeemDetails(response.details!);
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setRedeemDetails(response.details!);
       Navigation.instance.navigate('/redeemOfferPage');
-    }else{
+    } else {
       showError("Something went wrong");
     }
   }
+
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",
@@ -520,12 +521,12 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
         });
   }
 
-  void fetchDetails() async{
+  void fetchDetails() async {
     final response = await ApiProvider.instance.getDealDetails(widget.id);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setDealDetails(response.details!);
 
       // _refreshController.refreshCompleted();
