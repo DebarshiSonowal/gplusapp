@@ -265,14 +265,18 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          current.title ?? "",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline3
-                                              ?.copyWith(
-                                                  color: Constance.primaryColor,
-                                                  fontWeight: FontWeight.bold),
+                                        SizedBox(
+                                          width:70.w,
+                                          child: Text(
+                                            current.title ?? "",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline3
+                                                ?.copyWith(
+                                                    color: Constance.primaryColor,
+                                                    fontWeight: FontWeight.bold),
+                                          ),
                                         ),
                                         LikeButton(
                                           size: 2.5.h,

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Model/top_picks.dart';
@@ -9,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/NavigationBar.dart';
+import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
@@ -39,6 +41,8 @@ class _PostAListingState extends State<PostAListing> {
   var locality = ['Rukminigaon', 'Khanapara', 'Beltola', ''];
 
   final ImagePicker _picker = ImagePicker();
+
+  List<File> attachements = [];
 
   @override
   void initState() {
@@ -229,8 +233,8 @@ class _PostAListingState extends State<PostAListing> {
                 spacing: 8,
                 runSpacing: 8,
                 children: List.generate(
-                  (Constance.attachements.length ?? 0) + 1,
-                  (pos) => (pos == Constance.attachements.length)
+                  (attachements.length ?? 0) + 1,
+                  (pos) => (pos == attachements.length)
                       ? GestureDetector(
                           onTap: () {
                             setState(() {
@@ -255,7 +259,7 @@ class _PostAListingState extends State<PostAListing> {
                           // color: Colors.grey.shade200,
                           child: Center(
                             child: Image.file(
-                              Constance.attachements[pos],
+                              attachements[pos],
                               fit: BoxFit.fill,
                             ),
                           ),
@@ -278,7 +282,7 @@ class _PostAListingState extends State<PostAListing> {
                       color: Colors.black,
                       // fontSize: 1.6.h,
                     ),
-                controller: title,
+                controller: price,
                 maxLines: 1,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
@@ -304,7 +308,8 @@ class _PostAListingState extends State<PostAListing> {
                     if (title.text.isNotEmpty &&
                         desc.text.isNotEmpty &&
                         price.text.isNotEmpty) {
-                      postClassified();
+                      postClassified(selectedCategory, selectedLocality,
+                          title.text, desc.text, price.text, attachements);
                     }
                   },
                   txt: 'Go ahead',
@@ -439,7 +444,7 @@ class _PostAListingState extends State<PostAListing> {
       setState(() {
         // profileImage = File(pickedFile.path);
         print(pickedFile.path);
-        Constance.attachements.add(
+        attachements.add(
           File(pickedFile.path),
         );
       });
@@ -560,7 +565,25 @@ class _PostAListingState extends State<PostAListing> {
     }
   }
 
-  void postClassified() {
+  void postClassified(classified_category_id, locality_id, title, description,
+      price, List<File> files) async {
+    final reponse = await ApiProvider.instance.postClassified(
+        classified_category_id, locality_id, title, description, price, files);
+    if (reponse.success ?? false) {
+      Fluttertoast.showToast(msg: "Posted successfully");
+      Navigation.instance.goBack();
+    } else {
+      showError("Something went wrong");
+    }
+  }
 
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }
