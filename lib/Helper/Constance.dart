@@ -11,6 +11,7 @@ import '../Model/big_discount.dart';
 import '../Model/category.dart';
 import '../Model/connect_post.dart';
 import '../Model/listing.dart';
+import '../Model/notification.dart';
 import '../Model/top_picks.dart';
 import '../Navigation/Navigate.dart';
 
@@ -20,7 +21,7 @@ class Constance {
   static const thirdColor = Color(0xffD03830);
   static const forthColor = Color(0xff001f34);
   static const logoIcon = 'assets/images/logo.png';
-  static const googleApiKey="";
+  static const googleApiKey = "";
   static var listPagesViewModel = [
     PageViewModel(
       title: "GPlus",
@@ -284,6 +285,24 @@ class Constance {
       ],
     ),
   ];
-
-
+  static var notifications = [
+    MyNotification(
+      'This is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout',
+      'GPlus Connect',
+      '26-7-2022',
+      Icons.connect_without_contact,
+    ),
+    MyNotification(
+      'This is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout',
+      'Classified',
+      '26-7-2022',
+      Icons.connect_without_contact,
+    ),
+    MyNotification(
+      'This is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout',
+      'GPlus Connect',
+      '26-7-2022',
+      Icons.connect_without_contact,
+    ),
+  ];
 }

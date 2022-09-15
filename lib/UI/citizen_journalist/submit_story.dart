@@ -43,7 +43,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      drawer: BergerMenuMemPage(),
+      // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -189,12 +189,6 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      // leading: IconButton(
-      //   onPressed: () {
-      //     Navigation.instance.navigate('/bergerMenuMem');
-      //   },
-      //   icon: Icon(Icons.menu),
-      // ),
       title: Image.asset(
         Constance.logoIcon,
         fit: BoxFit.fill,
@@ -202,16 +196,6 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.notifications),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.search),
-        ),
-      ],
     );
   }
 

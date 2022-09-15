@@ -798,24 +798,29 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 1.0.h),
-              child: Row(
-                children: [
-                  const Icon(
-                    FontAwesomeIcons.indianRupeeSign,
-                    color: Constance.secondaryColor,
-                  ),
-                  SizedBox(
-                    width: 2.w,
-                  ),
-                  Text(
-                    'Refer and Earn',
-                    style: Theme.of(context).textTheme.headline4?.copyWith(
-                          color: Colors.white,
-                          // fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ],
+              child: GestureDetector(
+                onTap: (){
+                  Navigation.instance.navigate('/refer&earn');
+                },
+                child: Row(
+                  children: [
+                    const Icon(
+                      FontAwesomeIcons.indianRupeeSign,
+                      color: Constance.secondaryColor,
+                    ),
+                    SizedBox(
+                      width: 2.w,
+                    ),
+                    Text(
+                      'Refer and Earn',
+                      style: Theme.of(context).textTheme.headline4?.copyWith(
+                            color: Colors.white,
+                            // fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const Divider(

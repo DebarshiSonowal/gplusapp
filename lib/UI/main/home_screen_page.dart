@@ -616,17 +616,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: 1.h,
                             ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.w),
-                              child: Text(
-                                'Read More',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            GestureDetector(
+                             onTap: (){
+                               Navigation.instance.navigate('/authorPage',args: 1);
+                             },
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                                child: Text(
+                                  'Read More',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline5
+                                      ?.copyWith(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
                               ),
                             ),
                             SizedBox(

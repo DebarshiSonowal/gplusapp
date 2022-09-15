@@ -35,7 +35,7 @@ class _NavigationBarState extends State<CustomNavigationBar> {
               Navigation.instance.navigate('/guwahatiConnects');
               break;
             case 3:
-              Navigation.instance.navigate('/submitStory');
+              Navigation.instance.navigate('/citizenJournalist');
               break;
             case 4:
               Navigation.instance.navigate('/classified');

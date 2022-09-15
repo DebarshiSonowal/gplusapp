@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import '../../Helper/Constance.dart';
+import '../../Navigation/Navigate.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -19,24 +20,88 @@ class _NotificationPageState extends State<NotificationPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Colors.grey.shade200,
         padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Text(
-                'Notifications',
-                style: Theme.of(context).textTheme.headline2?.copyWith(
-                      color: Constance.primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+        child: ListView.separated(
+          shrinkWrap: true,
+          itemCount: Constance.notifications.length,
+          itemBuilder: (cont, count) {
+            var current = Constance.notifications[count];
+            return Container(
+              decoration: BoxDecoration(
+                  color: count==0?Color(0xffcde3f2):Colors.white,
+                  border: Border.all(
+                    color: Colors.black26,
+                  ),
+                  borderRadius: BorderRadius.circular(5) // use instead of BorderRadius.all(Radius.circular(20))
               ),
-              SizedBox(
-                height: 5.h,
+              padding: EdgeInsets.symmetric(horizontal: 2.5.w, vertical: 1.4.h),
+              width: double.infinity,
+              height: 14.h,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${current.title}',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: Theme.of(
+                            Navigation.instance.navigatorKey.currentContext!)
+                        .textTheme
+                        .headline4
+                        ?.copyWith(
+                          color: Constance.primaryColor,
+                          // fontSize: 11.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  Row(
+                    children: [
+                      Icon(current.icon,color: Constance.primaryColor,),
+                      SizedBox(
+                        width: 2.w,
+                      ),
+                      Text(
+                        '${current.author}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: Theme.of(
+                            Navigation.instance.navigatorKey.currentContext!)
+                            .textTheme
+                            .headline6
+                            ?.copyWith(
+                          color: Constance.primaryColor,
+                          // fontSize: 11.sp,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        '${current.date}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: Theme.of(
+                            Navigation.instance.navigatorKey.currentContext!)
+                            .textTheme
+                            .headline6
+                            ?.copyWith(
+                          color: Constance.primaryColor,
+                          // fontSize: 11.sp,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              Lottie.asset('assets/animation/404.json'),
-            ],
-          ),
+              // color: Colors.red,
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return SizedBox(
+              height: 1.h,
+            );
+          },
         ),
       ),
     );
