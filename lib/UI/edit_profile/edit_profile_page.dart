@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/custom_button.dart';
@@ -169,21 +170,26 @@ class _EditProfileState extends State<EditProfile> {
               SizedBox(
                 height: 1.5.h,
               ),
-              Row(
-                children: [
-                  Text(
-                    'Khanapara, Guwahati',
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          // fontSize: 2.h,
-                          // fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    color: Constance.primaryColor,
-                  ),
-                ],
+              GestureDetector(
+                onTap: (){
+                  Navigation.instance.navigate('/editSavedAddresses');
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      'Khanapara, Guwahati',
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Constance.primaryColor,
+                            // fontSize: 2.h,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Constance.primaryColor,
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 1.5.h,

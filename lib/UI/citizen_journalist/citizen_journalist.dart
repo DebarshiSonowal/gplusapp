@@ -109,6 +109,7 @@ class _CitizenJournalistState extends State<CitizenJournalist> {
                 ),
                 onPressed: () {
                   // Navigation.instance.goBack();
+                  Navigation.instance.navigate('/submitedStory');
                 },
                 child: Text(
                   'Stories submitted',

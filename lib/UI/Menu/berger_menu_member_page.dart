@@ -102,17 +102,22 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     SizedBox(
                       height: 2.h,
                     ),
-                    Text(
-                      'View Profile',
-                      style: Theme.of(
-                              Navigation.instance.navigatorKey.currentContext!)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(
-                            color: Constance.secondaryColor,
-                            fontSize: 11.sp,
-                            // fontWeight: FontWeight.bold,
-                          ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigation.instance.navigate('/profile');
+                      },
+                      child: Text(
+                        'View Profile',
+                        style: Theme.of(
+                                Navigation.instance.navigatorKey.currentContext!)
+                            .textTheme
+                            .headline6
+                            ?.copyWith(
+                              color: Constance.secondaryColor,
+                              fontSize: 11.sp,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                      ),
                     ),
                   ],
                 ),
@@ -832,48 +837,58 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.users,
-                        color: Constance.secondaryColor,
-                        size: 2.5.h,
-                      ),
-                      SizedBox(
-                        width: 3.5.w,
-                      ),
-                      Text(
-                        'About Us',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Colors.white,
-                              // fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
+                  GestureDetector(
+                    onTap: (){
+                      Navigation.instance.navigate('/aboutUs');
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          FontAwesomeIcons.users,
+                          color: Constance.secondaryColor,
+                          size: 2.5.h,
+                        ),
+                        SizedBox(
+                          width: 3.5.w,
+                        ),
+                        Text(
+                          'About Us',
+                          style: Theme.of(context).textTheme.headline4?.copyWith(
+                                color: Colors.white,
+                                // fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 1.5.h,
                   ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.phone,
-                        color: Constance.secondaryColor,
-                        // size: 2.h,
-                      ),
-                      SizedBox(
-                        width: 2.w,
-                      ),
-                      Text(
-                        'Contact Us',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Colors.white,
-                              // fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
+                  GestureDetector(
+                    onTap: (){
+                      Navigation.instance.navigate('/contactUs');
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.phone,
+                          color: Constance.secondaryColor,
+                          // size: 2.h,
+                        ),
+                        SizedBox(
+                          width: 2.w,
+                        ),
+                        Text(
+                          'Contact Us',
+                          style: Theme.of(context).textTheme.headline4?.copyWith(
+                                color: Colors.white,
+                                // fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 1.5.h,
@@ -901,25 +916,30 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   SizedBox(
                     height: 1.5.h,
                   ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.phone_android,
-                        color: Constance.secondaryColor,
-                        // size: 2.h,
-                      ),
-                      SizedBox(
-                        width: 2.w,
-                      ),
-                      Text(
-                        'Grievance Redressal',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Colors.white,
-                              // fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
+                  GestureDetector(
+                    onTap: (){
+                      Navigation.instance.navigate('/grieveanceRedressal');
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.phone_android,
+                          color: Constance.secondaryColor,
+                          // size: 2.h,
+                        ),
+                        SizedBox(
+                          width: 2.w,
+                        ),
+                        Text(
+                          'Grievance Redressal',
+                          style: Theme.of(context).textTheme.headline4?.copyWith(
+                                color: Colors.white,
+                                // fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

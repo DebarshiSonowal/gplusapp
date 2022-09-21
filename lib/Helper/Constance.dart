@@ -305,4 +305,54 @@ class Constance {
       Icons.connect_without_contact,
     ),
   ];
+
+  static const String about = '''We LIVE, BREATHE and SLEEP Guwahati!
+Projected to be a smart city by 2025, Guwahati is a
+major port on the banks of Brahmaputra, the capital
+of Assam and the urban hub of the North East. This
+metropolitan city is growing leaps and bounds, and
+for its unparalleled pace of growth, comes the need
+for an unparalleled publication, that people call their
+'own'.
+G Plus - Guwahati's own English Weekly is a Print
+and Digital media channel that aims to cater to the
+city's exclusive needs.
+We bring forth Guwahati and its distinct aura through
+our insightful stories and features to make reading
+always exciting. G Plus promises its readers the
+'Guwahati perspective'; stories with a local essence
+and a global outlook!
+With a distinct flavour of the city, G Plus provides an
+exciting collection of well researched and creative
+stories, daily updates, opinions, along with analytical
+and incisive insights, besides interesting features,
+vox populi, business, fashion & lifestyle, society,
+events. life, reviews, travel, etc.
+In its four years of publication, G Plus has created
+various landmark ideas that aim to engage with
+Guwahati at various levels. The G Plus Guwahati
+Food Awards aims to recognize the best in the F&B
+sector of the city. The G Plus Guwahati Theatre
+Festival is a landmark event that aims to revolutionize
+the culture of theatre, and brings to the city world
+class plays and workshops for theatre enthusiasts of
+the city.
+G Plus Ward Talks in an award winning initiative that
+aims to connect the residents of a ward with various
+stakeholders of the administration such as the GMC
+(Guwahati Municipal Corporation). GMDA (Guwahati
+Metropolitan Development Authority), Police, PWD
+(Public Works Department) among other
+departments to bring in accountability and to promote
+exchange of ideas.
+G Plus Campus Talks is a youth and campus
+engagement program aimed at creating an open
+platform to reach out to the students and to
+encourage them to voice their opinions about
+trending topics. It aims to educate, interact and draw
+out opinion from the students on relevant issues.
+G Plus is the soul of the city, connecting with its
+people, voicing their aspirations. G Plus is the pulse
+of Guwahati - living, rising and growing with the city.
+              ''';
 }

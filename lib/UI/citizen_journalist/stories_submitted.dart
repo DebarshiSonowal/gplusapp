@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:provider/provider.dart';
@@ -5,14 +6,14 @@ import 'package:sizer/sizer.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 
-class DraftStory extends StatefulWidget {
-  const DraftStory({Key? key}) : super(key: key);
+class StoriesSubmitted extends StatefulWidget {
+  const StoriesSubmitted({Key? key}) : super(key: key);
 
   @override
-  State<DraftStory> createState() => _DraftStoryState();
+  State<StoriesSubmitted> createState() => _StoriesSubmittedState();
 }
 
-class _DraftStoryState extends State<DraftStory> {
+class _StoriesSubmittedState extends State<StoriesSubmitted> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +22,7 @@ class _DraftStoryState extends State<DraftStory> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+        padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
         child: Consumer<DataProvider>(
           builder: (context,data,_) {
             return SingleChildScrollView(
@@ -29,18 +30,19 @@ class _DraftStoryState extends State<DraftStory> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Drafts',
+                    'Stories Submitted',
                     style: Theme.of(context).textTheme.headline1?.copyWith(
-                      color: Constance.primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                        color: Constance.primaryColor, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 2.h,
                   ),
                   SizedBox(
                     height: 1.h,
-                  ),
-                  Divider(
-                    color: Constance.primaryColor,
-                    thickness: 0.2.h,
+                    child: Divider(
+                      color: Colors.black,
+                      thickness: 0.4.sp,
+                    ),
                   ),
                   ListView.separated(
                       shrinkWrap: true,
@@ -94,7 +96,7 @@ class _DraftStoryState extends State<DraftStory> {
                                           ),
                                         ),
                                         Text(
-                                          "Edit",
+                                          "Approved",
                                           style: Theme.of(Navigation.instance
                                               .navigatorKey.currentContext!)
                                               .textTheme
@@ -105,21 +107,7 @@ class _DraftStoryState extends State<DraftStory> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 4.w,
-                                        ),
-                                        Text(
-                                          "Delete",
-                                          style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline5
-                                              ?.copyWith(
-                                            color: Constance.thirdColor,
-                                            // fontSize: 2.2.h,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
+
                                       ],
                                     ),
                                   ],
@@ -160,6 +148,16 @@ class _DraftStoryState extends State<DraftStory> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 }

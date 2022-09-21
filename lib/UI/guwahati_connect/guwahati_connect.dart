@@ -25,8 +25,8 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
       drawer: BergerMenuMemPage(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Navigation.instance.navigate('/postClassified');
-          showDialogBox();
+          Navigation.instance.navigate('/askAQuestion');
+          // showDialogBox();
         },
         icon: Icon(Icons.add),
         label: Text(

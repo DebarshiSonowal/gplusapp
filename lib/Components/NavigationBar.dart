@@ -20,6 +20,7 @@ class _NavigationBarState extends State<CustomNavigationBar> {
     return Consumer<DataProvider>(builder: (context, data, _) {
       var current = data.currentIndex;
       return BottomNavigationBar(
+        enableFeedback: true,
         // type: BottomNavigationBarType.fixed,
         currentIndex: current,
         onTap: (val) {
@@ -45,15 +46,14 @@ class _NavigationBarState extends State<CustomNavigationBar> {
               break;
           }
         },
-
         showSelectedLabels: true,
         selectedLabelStyle: TextStyle(
-            fontSize: 1.5.h,
+            fontSize: 8.sp,
             color: Constance.secondaryColor,
             overflow: TextOverflow.clip),
-        showUnselectedLabels: true,
+        // showUnselectedLabels: true,
         unselectedLabelStyle: TextStyle(
-            fontSize: 1.2.h, color: Colors.white, overflow: TextOverflow.clip),
+            fontSize: 8.sp, color: Colors.white),
         backgroundColor: Constance.primaryColor,
         items: [
           BottomNavigationBarItem(
@@ -77,7 +77,7 @@ class _NavigationBarState extends State<CustomNavigationBar> {
               Icons.radio,
               color: current == 2 ? Constance.secondaryColor : Colors.white,
             ),
-            label: "Guwahati\nConnect",
+            label: "Guwahati Connect",
             backgroundColor: Constance.primaryColor,
           ),
           BottomNavigationBarItem(
@@ -85,7 +85,7 @@ class _NavigationBarState extends State<CustomNavigationBar> {
               Icons.mic,
               color: current == 3 ? Constance.secondaryColor : Colors.white,
             ),
-            label: "Citizen\nJournalist",
+            label: "Citizen Journalist",
             backgroundColor: Constance.primaryColor,
           ),
           BottomNavigationBarItem(
