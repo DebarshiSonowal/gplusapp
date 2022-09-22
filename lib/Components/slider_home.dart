@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/Constance.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -35,66 +36,71 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
                   .asMap()
                   .entries
                   .map(
-                    (e) => Stack(
-                      alignment: Alignment.bottomLeft,
-                      children: [
-                        Opacity(
-                          opacity: 0.85,
-                          child: CachedNetworkImage(
-                            imageUrl: e.value.image_file_name ?? "",
-                            width: double.infinity,
-                            fit: BoxFit.fitWidth,
-                            // filterQuality: FilterQuality.low,
-                            placeholder: (cont, _) {
-                              return const Icon(
-                                Icons.image,
-                                color: Colors.black,
-                              );
-                            },
-                            errorWidget: (cont, _, e) {
-                              return Text(_);
-                            },
+                    (e) => GestureDetector(
+                      onTap: () {
+                        Navigation.instance.navigate('/story', args: e.value.id);
+                      },
+                      child: Stack(
+                        alignment: Alignment.bottomLeft,
+                        children: [
+                          Opacity(
+                            opacity: 0.85,
+                            child: CachedNetworkImage(
+                              imageUrl: e.value.image_file_name ?? "",
+                              width: double.infinity,
+                              fit: BoxFit.fitWidth,
+                              // filterQuality: FilterQuality.low,
+                              placeholder: (cont, _) {
+                                return const Icon(
+                                  Icons.image,
+                                  color: Colors.black,
+                                );
+                              },
+                              errorWidget: (cont, _, e) {
+                                return Text(_);
+                              },
+                            ),
                           ),
-                        ),
-                        Container(
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [Colors.transparent, Colors.black]),
+                          Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [Colors.transparent, Colors.black]),
+                            ),
+                            // color: Colors.black.withOpacity(0.5),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 3.h, horizontal: 2.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  e.value.title ?? 'Big Deals\nand Offers',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4
+                                      ?.copyWith(
+                                          color: Colors.grey.shade200,
+                                          fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 0.5.h,
+                                ),
+                                Text(
+                                  "${e.value.author_name?.trim()}, ${e.value.publish_date?.split(" ")[0]}",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                      ),
+                                ),
+                              ],
+                            ),
                           ),
-                          // color: Colors.black.withOpacity(0.5),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 3.h, horizontal: 2.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                e.value.title ?? 'Big Deals\nand Offers',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline4
-                                    ?.copyWith(
-                                        color: Colors.grey.shade200,
-                                        fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 0.5.h,
-                              ),
-                              Text(
-                                "${e.value.author_name?.trim()}, ${e.value.publish_date?.split(" ")[0]}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   )
                   .toList(),

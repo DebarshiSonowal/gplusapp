@@ -46,6 +46,7 @@ import '../UI/others/grievanceRedressal.dart';
 import '../UI/profile/profile_page.dart';
 import '../UI/refer_earn/redeem_points.dart';
 import '../UI/refer_earn/refer&earn.dart';
+import '../UI/story/story_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -97,6 +98,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/categorySelect':
       return FadeTransitionPageRouteBuilder(
           page: CategorySelectPage(settings.arguments as int));
+      case '/story':
+      return FadeTransitionPageRouteBuilder(
+          page: StoryPage(settings.arguments as int));
 
     case '/notification':
       return FadeTransitionPageRouteBuilder(page: NotificationPage());

@@ -355,4 +355,10 @@ G Plus is the soul of the city, connecting with its
 people, voicing their aspirations. G Plus is the pulse
 of Guwahati - living, rising and growing with the city.
               ''';
+
+
+ final String privacy_policy='''
+ 
+  ''';
+
 }

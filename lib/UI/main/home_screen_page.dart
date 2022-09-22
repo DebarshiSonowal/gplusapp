@@ -31,7 +31,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int current = 0;
-
+  int random = 0;
   String _poll = Constance.pollWeek[0];
 
   final RefreshController _refreshController =
@@ -253,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: GestureDetector(
                           onTap: () {
                             _launchUrl(Uri.parse(data
-                                .ads[Random().nextInt(data.ads.length)].link
+                                .ads[random].link
                                 .toString()));
                           },
                           child: Padding(
@@ -262,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: CachedNetworkImage(
                               fit: BoxFit.fill,
                               imageUrl: data
-                                      .ads[Random().nextInt(data.ads.length)]
+                                      .ads[random]
                                       .image_file_name ??
                                   '',
                               placeholder: (cont, _) {
@@ -757,6 +757,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setAds(response.ads ?? []);
+      random = Random().nextInt(response.ads?.length??0);
     }
   }
 

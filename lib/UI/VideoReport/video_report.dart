@@ -373,9 +373,7 @@ class _VideoReportState extends State<VideoReport> {
                                 ),
                               );
                             },
-                            itemCount: data.video_news.length > 5
-                                ? 4
-                                : data.video_news.length),
+                            itemCount:  data.video_news.length),
                       ],
                     ),
                   )

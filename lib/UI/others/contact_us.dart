@@ -58,11 +58,11 @@ class _ContactUsState extends State<ContactUs> {
                         5.0) //                 <--- border radius here
                     ),
               ),
-              child: const GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(0, 0),
-                ),
-              ),
+              // child: const GoogleMap(
+              //   initialCameraPosition: CameraPosition(
+              //     target: LatLng(0, 0),
+              //   ),
+              // ),
             ),
             SizedBox(
               height: 2.h,
