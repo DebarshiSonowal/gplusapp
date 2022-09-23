@@ -8,6 +8,7 @@ import 'package:gplusapp/Model/locality.dart';
 import 'package:gplusapp/Model/opinion.dart';
 import 'package:gplusapp/Model/profile.dart';
 import 'package:gplusapp/Model/promoted_deal.dart';
+import 'package:gplusapp/Model/refer_earn_response.dart';
 import 'package:gplusapp/Model/shop_category.dart';
 import 'package:gplusapp/Model/top_picks.dart';
 import 'package:gplusapp/Model/video_news.dart';
@@ -36,6 +37,12 @@ class DataProvider extends ChangeNotifier {
   List<Classified> classified = [];
   List<ClassifiedCategory> classified_category = [];
   List<Locality> locality = [];
+  ReferEarn? referEarn;
+
+  setReferEarn(ReferEarn data) {
+    referEarn = data;
+    notifyListeners();
+  }
 
   setClassified(List<Classified> list) {
     classified = list;

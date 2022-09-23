@@ -25,6 +25,7 @@ import '../Model/membership.dart';
 import '../Model/opinion.dart';
 import '../Model/promoted_deal.dart';
 import '../Model/redeem_details.dart';
+import '../Model/refer_earn_response.dart';
 import '../Model/shop_category.dart';
 import '../Model/top_picks.dart';
 import '../Model/topick.dart';
@@ -653,6 +654,31 @@ class ApiProvider {
     } on DioError catch (e) {
       debugPrint("ClassifiedCategoryResponse response: ${e.response}");
       return ClassifiedCategoryResponse.withError(e.message);
+    }
+  }
+
+  Future<ReferEarnResponse> getReferAndEarn() async {
+    var url = "${baseUrl}/app/get-refer-n-earn";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("ReferEarnResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ReferEarnResponse.fromJson(response?.data);
+      } else {
+        debugPrint("ReferEarnResponse error: ${response?.data}");
+        return ReferEarnResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("ReferEarnResponse response: ${e.response}");
+      return ReferEarnResponse.withError(e.message);
     }
   }
 
