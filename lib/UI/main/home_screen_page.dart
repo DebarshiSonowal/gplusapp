@@ -322,7 +322,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     scrollDirection: Axis.horizontal,
                                     itemBuilder: (cont, count) {
                                       var item = data.home_exclusive[count];
-                                      return GPlusExecCard(item: item);
+                                      return GestureDetector(
+                                          onTap: (){
+                                            Navigation.instance.navigate('/story', args: '${'exclusive-news'},${item.seo_name}');
+                                          },
+                                          child: GPlusExecCard(item: item));
                                     },
                                     separatorBuilder: (cont, inde) {
                                       return SizedBox(

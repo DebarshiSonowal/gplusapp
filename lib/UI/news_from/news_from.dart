@@ -170,18 +170,26 @@ class _NewsFromState extends State<NewsFrom> {
                         SizedBox(
                           height: 2.h,
                         ),
-                        Text(
-                          data.news_from[0].title ??
-                              'It is a long established fact that a reader will be distracted by the readable content of a',
-                          style: Theme.of(Navigation
-                                  .instance.navigatorKey.currentContext!)
-                              .textTheme
-                              .headline3
-                              ?.copyWith(
-                                color: Constance.primaryColor,
-                                // fontSize: 2.2.h,
-                                fontWeight: FontWeight.bold,
-                              ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigation.instance.navigate('/story',
+                                args:
+                                '${widget.categ},${data.news_from[0].seo_name}');
+                          },
+
+                          child: Text(
+                            data.news_from[0].title ??
+                                'It is a long established fact that a reader will be distracted by the readable content of a',
+                            style: Theme.of(Navigation
+                                    .instance.navigatorKey.currentContext!)
+                                .textTheme
+                                .headline3
+                                ?.copyWith(
+                                  color: Constance.primaryColor,
+                                  // fontSize: 2.2.h,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
                         ),
                         SizedBox(
                           height: 2.h,
@@ -209,99 +217,106 @@ class _NewsFromState extends State<NewsFrom> {
                             itemBuilder: (cont, count) {
                               var item = data.news_from[count];
                               if (count != 0) {
-                                return Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 3.w, vertical: 2.h),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5),
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigation.instance.navigate('/story',
+                                        args:
+                                        '${widget.categ},${item.seo_name}');
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 3.w, vertical: 2.h),
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(5),
+                                      ),
+                                      color: Colors.white,
                                     ),
-                                    color: Colors.white,
-                                  ),
-                                  height: 20.h,
-                                  width:
-                                      MediaQuery.of(context).size.width - 7.w,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: CachedNetworkImage(
-                                                imageUrl:
-                                                    item.image_file_name ?? '',
-                                                fit: BoxFit.fill,
-                                                placeholder: (cont, _) {
-                                                  return const Icon(
-                                                    Icons.image,
-                                                    color: Colors.black,
-                                                  );
-                                                },
-                                                errorWidget: (cont, _, e) {
-                                                  // print(e);
-                                                  print(_);
-                                                  return Text(_);
-                                                },
+                                    height: 20.h,
+                                    width:
+                                        MediaQuery.of(context).size.width - 7.w,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Expanded(
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      item.image_file_name ?? '',
+                                                  fit: BoxFit.fill,
+                                                  placeholder: (cont, _) {
+                                                    return const Icon(
+                                                      Icons.image,
+                                                      color: Colors.black,
+                                                    );
+                                                  },
+                                                  errorWidget: (cont, _, e) {
+                                                    // print(e);
+                                                    print(_);
+                                                    return Text(_);
+                                                  },
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(
-                                              height: 1.h,
-                                            ),
-                                            Text(
-                                              item.publish_date
-                                                      ?.split(" ")[0] ??
-                                                  "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Colors.black),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 5.w,
-                                      ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                item.title ?? "",
-                                                maxLines: 3,
+                                              SizedBox(
+                                                height: 1.h,
+                                              ),
+                                              Text(
+                                                item.publish_date
+                                                        ?.split(" ")[0] ??
+                                                    "",
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .headline4
+                                                    .headline6
                                                     ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        color: Constance
-                                                            .primaryColor),
+                                                        color: Colors.black),
                                               ),
-                                            ),
-                                            SizedBox(
-                                              height: 1.h,
-                                            ),
-                                            Text(
-                                              item.author_name ?? "GPlus News",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Colors.black),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(
+                                          width: 5.w,
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  item.title ?? "",
+                                                  maxLines: 3,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline4
+                                                      ?.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          color: Constance
+                                                              .primaryColor),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 1.h,
+                                              ),
+                                              Text(
+                                                item.author_name ?? "GPlus News",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6
+                                                    ?.copyWith(
+                                                        color: Colors.black),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
                               } else {

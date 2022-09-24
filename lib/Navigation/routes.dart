@@ -100,7 +100,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           page: CategorySelectPage(settings.arguments as int));
       case '/story':
       return FadeTransitionPageRouteBuilder(
-          page: StoryPage(settings.arguments as int));
+          page: StoryPage(settings.arguments as String));
 
     case '/notification':
       return FadeTransitionPageRouteBuilder(page: NotificationPage());

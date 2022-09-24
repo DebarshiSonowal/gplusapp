@@ -73,6 +73,8 @@ dependencies:
   visibility_detector: ^0.3.3
   google_maps_flutter: ^2.2.0
   scrollable_positioned_list: ^0.3.4
+  webview_flutter: ^3.0.4
+  flutter_html: ^3.0.0-alpha.5
 #  flutter_google_places: ^0.3.0
 #  firebase_auth: ^0.18.1+2
 #  sms_autofill: ^1.2.6

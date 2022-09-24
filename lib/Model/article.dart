@@ -71,3 +71,20 @@ class ArticleResponse {
     message = msg ?? "Something Went Wrong";
   }
 }
+
+class ArticleDetailsResponse {
+  bool? success;
+  String? message;
+  Article ? article;
+
+  ArticleDetailsResponse.fromJson(json) {
+    success = json['success'].toString() == 'true' ? true : false;
+    message = json['message'] ?? "Something Went Wrong";
+    article = Article.fromJson(json['data']);
+  }
+
+  ArticleDetailsResponse.withError(msg) {
+    success = false;
+    message = msg ?? "Something Went Wrong";
+  }
+}

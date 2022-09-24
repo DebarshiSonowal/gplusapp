@@ -22,7 +22,7 @@ class DataProvider extends ChangeNotifier {
   Profile? profile;
 
   List<Opinion> opinions = [];
-  List<Article> home_albums = [], home_exclusive = [], news_from = [];
+  List<Article> home_albums = [], home_exclusive = [], news_from = [],suggestion=[];
   List<VideoNews> home_weekly = [], video_news = [];
   List<Opinion> latestOpinions = [];
   List<Membership> memberships = [];
@@ -38,6 +38,12 @@ class DataProvider extends ChangeNotifier {
   List<ClassifiedCategory> classified_category = [];
   List<Locality> locality = [];
   ReferEarn? referEarn;
+  Article? selectedArticle;
+
+  setArticleDetails(Article data){
+    selectedArticle = data;
+    notifyListeners();
+  }
 
   setReferEarn(ReferEarn data) {
     referEarn = data;
@@ -109,6 +115,10 @@ class DataProvider extends ChangeNotifier {
 
   setNewsFrom(List<Article> list) {
     news_from = list;
+    notifyListeners();
+  }
+  setSuggestion(List<Article> list) {
+    suggestion = list;
     notifyListeners();
   }
 

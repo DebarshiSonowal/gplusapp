@@ -160,6 +160,33 @@ class ApiProvider {
     }
   }
 
+  Future<ArticleDetailsResponse> getArticleDetails(categ_name, slug) async {
+    // var data = {
+    //   // 'mobile': mobile,
+    // };
+
+    var url = "${homeUrl}/${categ_name}/${slug}";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+      );
+      debugPrint("Article Details response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ArticleDetailsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("Article Details error: ${response?.data}");
+        return ArticleDetailsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("Article Details response: ${e.response}");
+      return ArticleDetailsResponse.withError(e.message);
+    }
+  }
+
   Future<OpinionResponse> getOpinion(per_page, page) async {
     var data = {
       'category': 'opinion',

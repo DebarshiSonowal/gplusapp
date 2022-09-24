@@ -38,7 +38,7 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
                   .map(
                     (e) => GestureDetector(
                       onTap: () {
-                        Navigation.instance.navigate('/story', args: e.value.id);
+
                       },
                       child: Stack(
                         alignment: Alignment.bottomLeft,

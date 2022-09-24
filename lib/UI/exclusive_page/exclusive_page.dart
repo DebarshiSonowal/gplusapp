@@ -169,18 +169,25 @@ class _ExclusivePageState extends State<ExclusivePage> {
                         SizedBox(
                           height: 2.h,
                         ),
-                        Text(
-                          data.home_exclusive[0].title ??
-                              'It is a long established fact that a reader will be distracted by the readable content of a',
-                          style: Theme.of(Navigation
-                                  .instance.navigatorKey.currentContext!)
-                              .textTheme
-                              .headline3
-                              ?.copyWith(
-                                color: Constance.primaryColor,
-                                // fontSize: 2.2.h,
-                                fontWeight: FontWeight.bold,
-                              ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigation.instance.navigate('/story',
+                                args:
+                                    '${'exclusive-news'},${data.home_exclusive[0].seo_name}');
+                          },
+                          child: Text(
+                            data.home_exclusive[0].title ??
+                                'It is a long established fact that a reader will be distracted by the readable content of a',
+                            style: Theme.of(Navigation
+                                    .instance.navigatorKey.currentContext!)
+                                .textTheme
+                                .headline3
+                                ?.copyWith(
+                                  color: Constance.primaryColor,
+                                  // fontSize: 2.2.h,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
                         ),
                         SizedBox(
                           height: 2.h,
@@ -202,13 +209,19 @@ class _ExclusivePageState extends State<ExclusivePage> {
                           thickness: 0.5.sp,
                         ),
                         ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (cont, count) {
-                              var item = data.home_exclusive[count];
-                              if (count != 0) {
-                                return Container(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (cont, count) {
+                            var item = data.home_exclusive[count];
+                            if (count != 0) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigation.instance.navigate('/story',
+                                      args:
+                                          '${'exclusive-news'},${item.seo_name}');
+                                },
+                                child: Container(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 3.w, vertical: 2.h),
                                   decoration: const BoxDecoration(
@@ -302,27 +315,27 @@ class _ExclusivePageState extends State<ExclusivePage> {
                                       ),
                                     ],
                                   ),
-                                );
-                              } else {
-                                return Container();
-                              }
-                            },
-                            separatorBuilder: (cont, inde) {
-                              if (inde == 0) {
-                                return Container();
-                              } else {
-                                return SizedBox(
-                                  height: 1.h,
-                                  child: Divider(
-                                    color: Colors.black,
-                                    thickness: 0.3.sp,
-                                  ),
-                                );
-                              }
-                            },
-                            itemCount: data.home_exclusive.length > 5
-                                ? 5
-                                : data.home_exclusive.length),
+                                ),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                          separatorBuilder: (cont, inde) {
+                            if (inde == 0) {
+                              return Container();
+                            } else {
+                              return SizedBox(
+                                height: 1.h,
+                                child: Divider(
+                                  color: Colors.black,
+                                  thickness: 0.3.sp,
+                                ),
+                              );
+                            }
+                          },
+                          itemCount: data.home_exclusive.length,
+                        ),
                         SizedBox(
                           height: 10.h,
                         ),
