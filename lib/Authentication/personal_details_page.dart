@@ -4,6 +4,7 @@ import 'package:flutter_holo_date_picker/date_picker.dart';
 import 'package:flutter_holo_date_picker/i18n/date_picker_i18n.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_geocoding/google_geocoding.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -12,6 +13,7 @@ import 'package:sizer/sizer.dart';
 import '../Components/alert.dart';
 import '../Helper/Constance.dart';
 import '../Helper/Storage.dart';
+import '../Model/temp.dart';
 import '../Navigation/Navigate.dart';
 
 class PersonalDetailsPage extends StatefulWidget {
@@ -196,11 +198,11 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                           "${datePicked?.day}-${datePicked?.month}-${datePicked?.year}";
                     });
                   }
-                }, 
+                },
                 child: SizedBox(
                   width: double.infinity,
                   child: Row(
-                    mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
                         padding: EdgeInsets.only(left: 2.w),
@@ -453,7 +455,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 onTap: () async {
                   final result =
                       await Navigation.instance.navigate('/locationSearchPage');
-                  if(result!=null&&result!=""){
+                  if (result != null && result != "") {
                     setState(() {
                       address = result;
                     });
@@ -482,24 +484,41 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               ),
               GestureDetector(
                 onTap: () async {
+                  // getLocations();
                   final result =
-                  await Navigation.instance.navigate('/locationSearchPage');
-                  if(result!=null&&result!=""){
+                      await Navigation.instance.navigate('/locationSearchPage');
+                  if (result != null && result != "") {
                     setState(() {
                       address = result;
+                      //  s
+                    });
+                    var googleGeocoding =
+                        GoogleGeocoding(Constance.googleApiKey);
+                    var result1 =
+                        await googleGeocoding.geocoding.get(address ?? "", []);
+                    setState(() {
+                      latitude =
+                          result1?.results![0].geometry?.location?.lat ?? 0;
+                      longitude =
+                          result1?.results![0].geometry?.location?.lng ?? 0;
                     });
                   }
                 },
                 child: Row(
                   children: [
-                    Text(
-                      'Khanapara, Guwahati',
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
-                            color: Constance.primaryColor,
-                            // fontSize: 2.h,
-                            fontSize: 11.sp,
-                            // fontWeight: FontWeight.bold,
-                          ),
+                    SizedBox(
+                      // height: 5.h,
+                      width: 40.w,
+                      child: Text(
+                        address == '' ? 'Khanapara, Guwahati' : address,
+                        overflow: TextOverflow.clip,
+                        style: Theme.of(context).textTheme.headline5?.copyWith(
+                              color: Constance.primaryColor,
+                              // fontSize: 2.h,
+                              fontSize: 10.sp,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                      ),
                     ),
                     const Icon(
                       Icons.arrow_forward_ios,
@@ -603,6 +622,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
+      debugPrint('got locations2');
       return Future.error('Location services are disabled.');
     }
 
@@ -631,12 +651,15 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   }
 
   void getLocations() async {
+    debugPrint('got locations1');
     var status = await Permission.location.status;
     if (status.isDenied) {
       if (await Permission.location.request().isGranted) {
+        debugPrint('got1 locations1');
         final position = await _determinePosition();
         longitude = position.longitude;
         latitude = position.latitude;
+        debugPrint('got locations ${longitude} ${latitude}');
         if (mounted) {
           setState(() {});
         }
@@ -645,7 +668,17 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         showError("We require Location permissions");
       }
       // We didn't ask for permission yet or the permission has been denied before but not permanently.
-    } else {}
+    } else {
+      debugPrint('got1 locations1');
+      final position = await _determinePosition();
+      longitude = position.longitude;
+      latitude = position.latitude;
+      debugPrint('got locations ${longitude} ${latitude}');
+      if (mounted) {
+        setState(() {});
+      }
+      getAddress(position.latitude, position.longitude);
+    }
   }
 
   void showError(String msg) {
@@ -657,9 +690,10 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
           Navigation.instance.goBack();
         });
   }
+
   Future<void> getAddress(latitude, longitude) async {
     List<Placemark> placemarks =
-    await placemarkFromCoordinates(latitude, longitude);
+        await placemarkFromCoordinates(latitude, longitude);
     Placemark place = placemarks[0];
     String street = place.street ?? "";
     String thoroughfare = place.thoroughfare ?? "";
@@ -677,14 +711,17 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   }
 
   void setData(mobile, fname, lname, email, dob, address) {
-    Storage.instance.signUpdata?.mobile = mobile;
-    Storage.instance.signUpdata?.f_name = fname;
-    Storage.instance.signUpdata?.l_name = lname;
-    Storage.instance.signUpdata?.email = email;
-    Storage.instance.signUpdata?.dob = dob;
-    Storage.instance.signUpdata?.address = address;
-    Storage.instance.signUpdata?.longitude = longitude;
-    Storage.instance.signUpdata?.latitude = latitude;
-    Navigation.instance.navigateAndReplace('/enterPreferences');
+    Storage.instance.setSignUpData(
+        temp(mobile, fname, lname, email, dob, address, longitude, latitude));
+    // Storage.instance.signUpdata?.f_name = fname;
+    // Storage.instance.signUpdata?.l_name = lname;
+    // Storage.instance.signUpdata?.email = email;
+    // Storage.instance.signUpdata?.dob = dob;
+    // Storage.instance.signUpdata?.address = address;
+    // Storage.instance.signUpdata?.longitude = longitude;
+    // Storage.instance.signUpdata?.latitude = latitude;
+    print(Storage.instance.signUpdata?.mobile);
+    print(Storage.instance.signUpdata?.f_name);
+    Navigation.instance.navigate('/enterPreferences');
   }
 }

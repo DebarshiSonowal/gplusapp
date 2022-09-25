@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
@@ -13,6 +17,9 @@ class ContactUs extends StatefulWidget {
 }
 
 class _ContactUsState extends State<ContactUs> {
+  Completer<GoogleMapController> _controller = Completer();
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,11 +65,16 @@ class _ContactUsState extends State<ContactUs> {
                         5.0) //                 <--- border radius here
                     ),
               ),
-              // child: const GoogleMap(
-              //   initialCameraPosition: CameraPosition(
-              //     target: LatLng(0, 0),
-              //   ),
-              // ),
+              child: WebView(
+                initialUrl: Uri.dataFromString(
+                        '<html><body><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.6220674969863!2d91.75290802615376!3d26.176435144780122!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a598111600481%3A0xb90bf25d769e96f7!2sG%20Plus!5'
+                        'e0!3m2!1sen!2sin!4v1664103997060!5m2!1sen!2sin" '
+                        'width="1000" height="600" style="border:0;" allowfullscreen="true" '
+                        'loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></body></html>',
+                        mimeType: 'text/html')
+                    .toString(),
+                javascriptMode: JavascriptMode.unrestricted,
+              ),
             ),
             SizedBox(
               height: 2.h,
@@ -290,5 +302,33 @@ class _ContactUsState extends State<ContactUs> {
         ),
       ],
     );
+  }
+
+  void setLocation() async {
+    final GoogleMapController controller = await _controller.future;
+    controller
+        .animateCamera(
+          CameraUpdate.newCameraPosition(
+            const CameraPosition(
+              target: LatLng(26.1764316, 91.7568453),
+              zoom: 15,
+            ),
+          ),
+        )
+        .then((value) => print('hello'));
+    final MarkerId markerId = MarkerId('0');
+
+    // creating a new MARKER
+    final Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(26.1764316, 91.7568453),
+      infoWindow: InfoWindow(title: 'GPlus', snippet: '*'),
+      onTap: () {},
+    );
+
+    setState(() {
+      // adding a new marker to map
+      markers[markerId] = marker;
+    });
   }
 }

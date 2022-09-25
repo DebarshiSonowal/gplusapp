@@ -1,45 +1,45 @@
 {
   "project_info": {
-    "project_number": "231070980730",
-    "project_id": "gplusnewapp",
-    "storage_bucket": "gplusnewapp.appspot.com"
+    "project_number": "780614858284",
+    "project_id": "gplus-8c9d2",
+    "storage_bucket": "gplus-8c9d2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:231070980730:android:a9149546c5ba45ce6779c3",
+        "mobilesdk_app_id": "1:780614858284:android:09f0824fb98f6cdddd8389",
         "android_client_info": {
-          "package_name": "com.gplus.app.gplusapp"
+          "package_name": "com.gplus.flutter.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "231070980730-af9vhdv4se0rjbv9lrc9tdp50g6s3rj4.apps.googleusercontent.com",
+          "client_id": "780614858284-hqn76je8hh4e94lbkdl4edidokpqaipe.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.gplus.app.gplusapp",
+            "package_name": "com.gplus.flutter.app",
             "certificate_hash": "8380022215f67f9de75f4dc3f93b7b62247453ac"
           }
         },
         {
-          "client_id": "231070980730-i74omlehri4ulve87lkg8502octkdkev.apps.googleusercontent.com",
+          "client_id": "780614858284-cdnqhscnmq45f90fbkf9cl0a1d44oodn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBMNwhw5jPpHkXHYv6IiPKeQOZdflzxpV8"
+          "current_key": "AIzaSyAOniov-vDxU0pIg--OvkCeEsN7iK2Eozo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "231070980730-i74omlehri4ulve87lkg8502octkdkev.apps.googleusercontent.com",
+              "client_id": "780614858284-cdnqhscnmq45f90fbkf9cl0a1d44oodn.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "231070980730-jb82q203gcbl5ttpvu0v0dbgrho97992.apps.googleusercontent.com",
+              "client_id": "780614858284-58vhs23fk0qqns35i1smmonsgepbcdo2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.gplus.app.gplusapp"

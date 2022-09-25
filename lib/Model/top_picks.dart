@@ -1,3 +1,5 @@
+import 'category_new.dart';
+
 class TopPicks {
   int? id, sequence, status, show_on_slider, author_id, assamese, only_assamese;
   String? title,
@@ -11,7 +13,7 @@ class TopPicks {
       tags,
       author_name,
       image_caption;
-
+  List<CategoryNew>? categories=[];
   List<DailyBanner> banner = [];
 
   TopPicks.fromJson(json) {
@@ -38,7 +40,7 @@ class TopPicks {
     meta_title = json['meta_title'] ?? "";
     meta_description = json['meta_description'] ?? "";
     meta_keywords = json['meta_keywords'] ?? "";
-    date = json['created_at_date'] ?? "";
+    date = json['publish_date'].toString().split(' ')[0] ?? "";
     tags = json['tags'] ?? "";
     author_name = json['author_name'] ?? "";
     image_caption = json['image_caption'] ?? "";
@@ -51,6 +53,12 @@ class TopPicks {
         : (json['daily_banners'] as List)
             .map((e) => DailyBanner.fromJson(e))
             .toList();
+    categories = json['categories'] == null
+        ? []
+        : (json['categories'] as List)
+            .map((e) => CategoryNew.fromJson(e))
+            .toList();
+
   }
 }
 

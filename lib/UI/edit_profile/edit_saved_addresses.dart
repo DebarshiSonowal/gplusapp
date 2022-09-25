@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_place/google_place.dart';
+import 'package:google_places_flutter/google_places_flutter.dart';
+import 'package:google_places_flutter/model/prediction.dart';
 import 'package:sizer/sizer.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/Storage.dart';
+import '../../Navigation/Navigate.dart';
 
 class EditSavedAddresses extends StatefulWidget {
   const EditSavedAddresses({Key? key}) : super(key: key);
@@ -11,11 +17,21 @@ class EditSavedAddresses extends StatefulWidget {
 
 class _EditSavedAddressesState extends State<EditSavedAddresses> {
   final _searchQueryController = TextEditingController();
+  late GooglePlace googlePlace;
+  List<AutocompletePrediction> predictions = [];
+  String locationName = "";
 
   @override
   void dispose() {
     super.dispose();
     _searchQueryController.dispose();
+  }
+
+  @override
+  void initState() {
+    // String apiKey = DotEnv().env['API_KEY'];
+    googlePlace = GooglePlace(Constance.googleApiKey);
+    super.initState();
   }
 
   @override
@@ -56,39 +72,79 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                 height: 1.5.h,
               ),
               Container(
+                // height: 10.h,
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 2.w),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(
-                          5.0) //                 <--- border radius here
-                      ),
-                  border: Border.all(
-                      width: 1, //                   <--- border width here
-                      color: Colors.black26),
-                ),
-                // color: Colors.black,
-                // height: 5.h,
                 child: Center(
                   child: TextField(
-                    controller: _searchQueryController,
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      hintText: "Search for an area",
-                      border: InputBorder.none,
-                      hintStyle: const TextStyle(color: Colors.black26),
-                      suffixIcon: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.search),
-                      ),
-                    ),
                     style: Theme.of(context)
                         .textTheme
-                        .headline4
+                        .headline5
                         ?.copyWith(color: Colors.black),
-                    onChanged: (query) => {},
+                    decoration: InputDecoration(
+                      labelText: "Search",
+                      labelStyle: Theme.of(context)
+                          .textTheme
+                          .headline5
+                          ?.copyWith(color: Colors.black),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                          width: 2.0,
+                        ),
+                      ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black54,
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        autoCompleteSearch(value);
+                      } else {
+                        if (predictions.length > 0 && mounted) {
+                          setState(() {
+                            predictions = [];
+                          });
+                        }
+                      }
+                    },
                   ),
                 ),
               ),
+              predictions.isEmpty
+                  ? Container()
+                  : SizedBox(
+                      height: 10,
+                    ),
+              predictions.isEmpty
+                  ? Container()
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: predictions.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: const CircleAvatar(
+                            backgroundColor: Constance.primaryColor,
+                            child: Icon(
+                              Icons.pin_drop,
+                              color: Constance.secondaryColor,
+                            ),
+                          ),
+                          title: Text(
+                            predictions[index].description ?? "",
+                            style:
+                                Theme.of(context).textTheme.headline6?.copyWith(
+                                      color: Colors.black,
+                                    ),
+                          ),
+                          onTap: () {
+                            debugPrint(predictions[index].placeId);
+                          },
+                        );
+                      },
+                    ),
               SizedBox(
                 height: 1.5.h,
               ),
@@ -102,40 +158,47 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
               SizedBox(
                 height: 1.5.h,
               ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.gps_fixed,
-                    color: Constance.thirdColor,
-                    size: 3.5.h,
-                  ),
-                  SizedBox(
-                    width: 5.w,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        'Current Location',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Text(
-                        'Using GPS',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Colors.black38,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
-                  ),
-                ],
+              GestureDetector(
+                onTap: () {
+                  Navigation.instance.navigate('/locationSearchPage');
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.gps_fixed,
+                      color: Constance.thirdColor,
+                      size: 3.5.h,
+                    ),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          'Current Location',
+                          style:
+                              Theme.of(context).textTheme.headline4?.copyWith(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Text(
+                          'Using GPS',
+                          style:
+                              Theme.of(context).textTheme.headline4?.copyWith(
+                                    color: Colors.black38,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 1.5.h,
@@ -286,9 +349,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                       height: 1.5.h,
                     ),
                     GestureDetector(
-                      onTap: (){
-
-                      },
+                      onTap: () {},
                       child: Text(
                         'See more',
                         style: Theme.of(context).textTheme.headline4?.copyWith(
@@ -317,5 +378,33 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );
+  }
+
+  void autoCompleteSearch(String value) async {
+    var result = await googlePlace.autocomplete.get(value);
+    if (result != null && result.predictions != null && mounted) {
+      setState(() {
+        predictions = result.predictions!;
+      });
+    }
+  }
+
+  Future<void> getAddress(latitude, longitude) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(latitude, longitude);
+    Placemark place = placemarks[0];
+    String street = place.street ?? "";
+    String thoroughfare = place.thoroughfare ?? "";
+    String locality = place.locality ?? "";
+    String subLocality = place.subLocality ?? "";
+    String state = place.subAdministrativeArea ?? "";
+    String pincode = place.postalCode ?? "";
+    String address =
+        "${(street.isEmpty) ? "" : "$street, "}${(thoroughfare.isEmpty) ? "" : "$thoroughfare, "}${(locality.isEmpty) ? "" : "$locality, "}${(subLocality.isEmpty) ? "" : "$subLocality, "}${(state.isEmpty) ? "" : "$state, "}${(pincode.isEmpty) ? "" : "$pincode."}";
+    locationName = address;
+    print('city pincode ${pincode}  ${street}');
+    // setState(() {});
+    // Navigator.pop(Navigation.instance.navigatorKey.currentContext ?? context,
+    //     locationName);
   }
 }

@@ -24,7 +24,9 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
   @override
   void initState() {
     super.initState();
-    fetchTopicks();
+    Future.delayed(Duration.zero,(){
+      fetchTopicks();
+    });
   }
 
   @override

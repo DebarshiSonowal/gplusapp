@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gplus.app.gplusapp">
-
+    package="com.gplus.flutter.app">
+<!--com.gplus.app.gplusapp-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -58,7 +58,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <!--       <meta-data android:name="com.google.android.geo.API_KEY"-->
-        <!--           android:value="YOUR KEY HERE"/>-->
+               <meta-data android:name="com.google.android.geo.API_KEY"
+                   android:value="AIzaSyAOniov-vDxU0pIg--OvkCeEsN7iK2Eozo"/>
     </application>
 </manifest>

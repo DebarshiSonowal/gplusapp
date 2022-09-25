@@ -8,14 +8,14 @@ import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class CarouselWithIndicatorDemo extends StatefulWidget {
+class HomeBannerPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _CarouselWithIndicatorState();
   }
 }
 
-class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
+class _CarouselWithIndicatorState extends State<HomeBannerPage> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
 
@@ -38,7 +38,10 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
                   .map(
                     (e) => GestureDetector(
                       onTap: () {
-
+                        Navigation.instance.navigate(
+                            '/story',
+                            args:
+                            '${e.value.first_cat_name?.seo_name},${e.value.seo_name}');
                       },
                       child: Stack(
                         alignment: Alignment.bottomLeft,

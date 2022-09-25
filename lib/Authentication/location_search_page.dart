@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:google_geocoding/google_geocoding.dart';
+import 'package:google_place/google_place.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
-
+import 'package:sizer/sizer.dart';
 import '../Helper/Constance.dart';
 import '../Helper/Storage.dart';
 import '../Navigation/Navigate.dart';
@@ -17,58 +19,122 @@ class LocationSearchPage extends StatefulWidget {
 class _LocationSearchPageState extends State<LocationSearchPage> {
   TextEditingController searchController = TextEditingController();
   var locationName = '';
+  late GooglePlace googlePlace;
+  List<AutocompletePrediction> predictions = [];
+
+  @override
+  void initState() {
+    // String apiKey = DotEnv().env['API_KEY'];
+    googlePlace = GooglePlace(Constance.googleApiKey);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
-      body: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.only(bottom: 12),
-        child: SafeArea(
-          child: Row(
+      body: SafeArea(
+        child: Container(
+          // color: Colors.white,
+          padding: const EdgeInsets.only(bottom: 12, top: 12),
+          child: Column(
             children: [
-              IconButton(
-                  onPressed: Navigation.instance.goBack,
-                  icon: Icon(
-                    Icons.close,
-                    color: Constance.primaryColor,
-                  )),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: GooglePlaceAutoCompleteTextField(
-                      textEditingController: searchController,
-                      googleAPIKey: Constance.googleApiKey,
-                      inputDecoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade200)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade200)),
-                        contentPadding:
-                            const EdgeInsets.only(left: 16, right: 16),
-                        hintText: "Search Location",
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: Navigation.instance.goBack,
+                    icon: Icon(
+                      Icons.close,
+                      color: Constance.primaryColor,
+                    ),
+                  ),
+                  Container(
+                    // height: 10.h,
+                    width: 80.w,
+                    child: Center(
+                      child: TextField(
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline5
+                            ?.copyWith(color: Colors.black),
+                        decoration: InputDecoration(
+                          labelText: "Search",
+                          labelStyle: Theme.of(context)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(color: Colors.black),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                              width: 2.0,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black54,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            autoCompleteSearch(value);
+                          } else {
+                            if (predictions.length > 0 && mounted) {
+                              setState(() {
+                                predictions = [];
+                              });
+                            }
+                          }
+                        },
                       ),
-                      countries: const ["in"],
-                      isLatLngRequired: true,
-                      getPlaceDetailWithLatLng: (Prediction prediction) async {
-                        Storage.instance.signUpdata?.latitude =
-                            double.parse(prediction.lat ?? "0");
-                        Storage.instance.signUpdata?.longitude =
-                            double.parse(prediction.lng ?? "0");
-                        getAddress(
-                            prediction.lat ?? "0", prediction.lng ?? "0");
-                        // final result = await Navigation.instance.navigate("/locationSelect",args: LatLng(double.parse(prediction.lat ?? "0"), double.parse(prediction.lng ?? "0")));
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: predictions.length,
+                  itemBuilder: (context, index) {
+                    var data = predictions[index];
+                    return ListTile(
+                      onTap: () async {
+                        DetailsResponse? current =
+                            await googlePlace.details.get(data.placeId!);
+                        debugPrint(current?.result?.reference);
+                        // var googleGeocoding =
+                        //     GoogleGeocoding(Constance.googleApiKey);
+                        // var result = await googleGeocoding.geocoding
+                        //     .get(current?.result?.formattedAddress ?? "", []);
+                        // result?.result[0].geometry.location?.lat
+                        Navigator.pop(
+                            Navigation.instance.navigatorKey.currentContext ??
+                                context,
+                            current?.result?.formattedAddress);
+                        // getAddress(data);
                       },
-                      itmClick: (Prediction prediction) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      }),
+                      leading: const CircleAvatar(
+                        backgroundColor: Constance.primaryColor,
+                        child: Icon(
+                          Icons.pin_drop,
+                          color: Constance.secondaryColor,
+                        ),
+                      ),
+                      title: Text(
+                        predictions[index].description ?? "",
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                              color: Colors.black,
+                            ),
+                      ),
+                      // onTap: () {
+                      //   debugPrint(predictions[index].placeId);
+                      // },
+                    );
+                  },
                 ),
               ),
             ],
@@ -76,6 +142,15 @@ class _LocationSearchPageState extends State<LocationSearchPage> {
         ),
       ),
     );
+  }
+
+  void autoCompleteSearch(String value) async {
+    var result = await googlePlace.autocomplete.get(value);
+    if (result != null && result.predictions != null && mounted) {
+      setState(() {
+        predictions = result.predictions!;
+      });
+    }
   }
 
   Future<void> getAddress(latitude, longitude) async {
@@ -93,6 +168,7 @@ class _LocationSearchPageState extends State<LocationSearchPage> {
     locationName = address;
     print('city pincode ${pincode}  ${street}');
     // setState(() {});
+    // searchController.text = locationName;
     Navigator.pop(Navigation.instance.navigatorKey.currentContext ?? context,
         locationName);
   }

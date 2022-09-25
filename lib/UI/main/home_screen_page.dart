@@ -7,6 +7,7 @@ import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Model/opinion.dart';
 import 'package:gplusapp/Model/top_picks.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:search_page/search_page.dart';
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _poll = Constance.pollWeek[0];
 
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -45,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchGPlusExcl();
     fetchToppicks();
     fetchAds();
+    askPermissions();
   }
 
   void _onRefresh() async {
@@ -120,78 +122,100 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Padding(
             padding: EdgeInsets.only(top: 0.3.h),
             child: Consumer<DataProvider>(builder: (context, data, _) {
-              return Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
+              return data.ads.isEmpty
+                  ? Container()
+                  : Container(
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
                 color: Colors.grey.shade100,
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      CarouselWithIndicatorDemo(),
+                      HomeBannerPage(),
                       Container(
                         width: double.infinity,
                         height: 20.h,
                         padding: EdgeInsets.symmetric(
                             vertical: 2.h, horizontal: 8.w),
-                        child: Card(
-                          color: Constance.thirdColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 4.w, vertical: 0.5.h),
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigation.instance.navigate('/bigdealpage');
+                            Provider.of<DataProvider>(
+                                Navigation.instance.navigatorKey
+                                    .currentContext ??
+                                    context,
+                                listen: false)
+                                .setCurrent(1);
+                          },
+                          child: Card(
+                            color: Constance.thirdColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    child: Center(
-                                      child: Text(
-                                        'Big Deals\nand Offers',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3
-                                            ?.copyWith(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 4.w, vertical: 0.5.h),
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      child: Center(
+                                        child: Text(
+                                          'Big Deals\nand Offers',
+                                          style: Theme
+                                              .of(context)
+                                              .textTheme
+                                              .headline3
+                                              ?.copyWith(
+                                              color: Colors.white,
+                                              fontWeight:
+                                              FontWeight.bold),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                    child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.white,
-                                    ),
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(5),
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: CachedNetworkImage(
-                                      imageUrl: Constance.kfc_offer,
-                                      placeholder: (cont, _) {
-                                        return const Icon(
-                                          Icons.image,
-                                          color: Colors.black,
-                                        );
-                                      },
-                                      errorWidget: (cont, _, e) {
-                                        // print(e);
-                                        print(_);
-                                        return Text(_);
-                                      },
-                                    ),
-                                  ),
-                                )),
-                              ],
+                                  Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.white,
+                                          ),
+                                          borderRadius:
+                                          const BorderRadius.all(
+                                            Radius.circular(5),
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: CachedNetworkImage(
+                                            imageUrl: Constance.kfc_offer,
+                                            placeholder: (cont, _) {
+                                              return const Icon(
+                                                Icons.image,
+                                                color: Colors.black,
+                                              );
+                                            },
+                                            errorWidget: (cont, _, e) {
+                                              // print(e);
+                                              print(_);
+                                              return Text(_);
+                                            },
+                                          ),
+                                        ),
+                                      )),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -206,17 +230,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.w),
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 5.w),
                               child: Text(
                                 'Top picks for you',
-                                style: Theme.of(context)
+                                style: Theme
+                                    .of(context)
                                     .textTheme
                                     .headline3
                                     ?.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16.sp,
-                                    ),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.sp,
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -228,15 +254,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
                                     itemBuilder: (cont, count) {
-                                      var item = data.home_toppicks[count];
-                                      return ToppicksCard(item: item);
+                                      var item =
+                                      data.home_toppicks[count];
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigation.instance.navigate(
+                                              '/story',
+                                              args:
+                                              '${item.categories?.first
+                                                  .seo_name},${item.seo_name}');
+                                        },
+                                        child: ToppicksCard(item: item),
+                                      );
                                     },
                                     separatorBuilder: (cont, inde) {
                                       return SizedBox(
                                         width: 10.w,
                                       );
                                     },
-                                    itemCount: data.home_toppicks.length > 4
+                                    itemCount:
+                                    data.home_toppicks.length > 4
                                         ? 4
                                         : data.home_toppicks.length),
                               ),
@@ -252,19 +289,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: double.infinity,
                         child: GestureDetector(
                           onTap: () {
-                            _launchUrl(Uri.parse(data
-                                .ads[random].link
-                                .toString()));
+                            _launchUrl(Uri.parse(
+                                data.ads[random].link.toString()));
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 2.w, vertical: 1.5.h),
                             child: CachedNetworkImage(
                               fit: BoxFit.fill,
-                              imageUrl: data
-                                      .ads[random]
-                                      .image_file_name ??
-                                  '',
+                              imageUrl:
+                              data.ads[random].image_file_name ?? '',
                               placeholder: (cont, _) {
                                 return const Icon(
                                   Icons.image,
@@ -300,17 +334,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.w),
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 5.w),
                               child: Text(
                                 'GPlus Exclusive',
-                                style: Theme.of(context)
+                                style: Theme
+                                    .of(context)
                                     .textTheme
                                     .headline3
                                     ?.copyWith(
-                                      fontSize: 16.sp,
-                                      color: Constance.primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  fontSize: 16.sp,
+                                  color: Constance.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -321,37 +357,53 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: ListView.separated(
                                     scrollDirection: Axis.horizontal,
                                     itemBuilder: (cont, count) {
-                                      var item = data.home_exclusive[count];
+                                      var item =
+                                      data.home_exclusive[count];
                                       return GestureDetector(
-                                          onTap: (){
-                                            Navigation.instance.navigate('/story', args: '${'exclusive-news'},${item.seo_name}');
+                                          onTap: () {
+                                            Navigation.instance.navigate(
+                                                '/story',
+                                                args:
+                                                '${'exclusive-news'},${item
+                                                    .seo_name}');
                                           },
-                                          child: GPlusExecCard(item: item));
+                                          child:
+                                          GPlusExecCard(item: item));
                                     },
                                     separatorBuilder: (cont, inde) {
                                       return SizedBox(
                                         width: 10.w,
                                       );
                                     },
-                                    itemCount: (data.home_exclusive.length > 4
+                                    itemCount:
+                                    (data.home_exclusive.length > 4
                                         ? 4
-                                        : data.home_exclusive.length)),
+                                        : data
+                                        .home_exclusive.length)),
                               ),
                             ),
                             SizedBox(
                               height: 1.h,
                             ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.w),
-                              child: Text(
-                                'Read More',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigation.instance
+                                    .navigate('/exclusivePage');
+                              },
+                              child: Padding(
+                                padding:
+                                EdgeInsets.symmetric(horizontal: 5.w),
+                                child: Text(
+                                  'Read More',
+                                  style: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .headline5
+                                      ?.copyWith(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -371,7 +423,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       //   height: 0.5.h,
                       // ),
                       Container(
-                        height: 35.h,
+                        // height: 35.h,
                         width: double.infinity,
                         // color: Constance.secondaryColor,
                         padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -380,17 +432,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.w),
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 5.w),
                               child: Text(
                                 'Video of the week',
-                                style: Theme.of(context)
+                                style: Theme
+                                    .of(context)
                                     .textTheme
                                     .headline3
                                     ?.copyWith(
-                                      fontSize: 16.sp,
-                                      color: Constance.primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  fontSize: 16.sp,
+                                  color: Constance.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -417,22 +471,30 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: 1.h,
                             ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.w),
-                              child: Text(
-                                'View All',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigation.instance
+                                    .navigate('/videoReport');
+                              },
+                              child: Padding(
+                                padding:
+                                EdgeInsets.symmetric(horizontal: 5.w),
+                                child: Text(
+                                  'View All',
+                                  style: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .headline5
+                                      ?.copyWith(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
+                            // SizedBox(
+                            //   height: 1.h,
+                            // ),
                           ],
                         ),
                       ),
@@ -453,21 +515,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.w),
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 5.w),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'Poll of the week',
-                                    style: Theme.of(context)
+                                    style: Theme
+                                        .of(context)
                                         .textTheme
                                         .headline3
                                         ?.copyWith(
                                       fontSize: 16.sp,
-                                          color: Constance.primaryColor,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      color: Constance.primaryColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   IconButton(
                                     onPressed: () {},
@@ -489,17 +553,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                   scrollDirection: Axis.vertical,
                                   itemBuilder: (cont, count) {
                                     var item = Constance.pollWeek[count];
-                                    var value = Constance.pollValue[count];
+                                    var value =
+                                    Constance.pollValue[count];
                                     return Theme(
                                       data: ThemeData(
                                         unselectedWidgetColor:
-                                            Colors.grey.shade900,
-                                        backgroundColor: Colors.grey.shade200,
+                                        Colors.grey.shade900,
+                                        backgroundColor:
+                                        Colors.grey.shade200,
                                       ),
                                       child: RadioListTile(
                                         controlAffinity:
-                                            ListTileControlAffinity.leading,
-                                        selected: _poll == item ? true : false,
+                                        ListTileControlAffinity
+                                            .leading,
+                                        selected:
+                                        _poll == item ? true : false,
                                         tileColor: Colors.grey.shade300,
                                         selectedTileColor: Colors.black,
                                         value: item,
@@ -512,24 +580,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                         },
                                         title: Text(
                                           item,
-                                          style: Theme.of(context)
+                                          style: Theme
+                                              .of(context)
                                               .textTheme
                                               .headline6
                                               ?.copyWith(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                            color: Colors.black,
+                                            fontWeight:
+                                            FontWeight.bold,
+                                          ),
                                         ),
                                         secondary: Text(
                                           '${value}%',
-                                          style: Theme.of(context)
+                                          style: Theme
+                                              .of(context)
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
-                                                  color: Colors.black,
-                                                  fontSize: 1.7.h
-                                                  // fontWeight: FontWeight.bold,
-                                                  ),
+                                              color: Colors.black,
+                                              fontSize: 1.7.h
+                                            // fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     );
@@ -545,16 +616,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 1.h,
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.w),
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 5.w),
                               child: Text(
                                 'View All',
-                                style: Theme.of(context)
+                                style: Theme
+                                    .of(context)
                                     .textTheme
                                     .headline5
                                     ?.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -580,24 +653,27 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.w),
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 5.w),
                               child: Text(
                                 'Opinion',
-                                style: Theme.of(context)
+                                style: Theme
+                                    .of(context)
                                     .textTheme
                                     .headline3
                                     ?.copyWith(
                                   fontSize: 16.sp,
-                                      color: Constance.thirdColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  color: Constance.thirdColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                             SizedBox(
                               height: 1.h,
                             ),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 7.w),
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 7.w),
                               child: ListView.separated(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
@@ -612,8 +688,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   );
                                 },
                                 itemCount: (data.latestOpinions.length > 3
-                                        ? data.latestOpinions.length / 3.toInt()
-                                        : data.latestOpinions.length)
+                                    ? data.latestOpinions.length /
+                                    3.toInt()
+                                    : data.latestOpinions.length)
                                     .toInt(),
                               ),
                             ),
@@ -621,20 +698,25 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 1.h,
                             ),
                             GestureDetector(
-                             onTap: (){
-                               Navigation.instance.navigate('/authorPage',args: 1);
-                             },
+                              onTap: () {
+                                Navigation.instance
+                                    .navigate('/opinionPage');
+                                // Navigation.instance
+                                //     .navigate('/authorPage', args: 1);
+                              },
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                                padding:
+                                EdgeInsets.symmetric(horizontal: 5.w),
                                 child: Text(
                                   'Read More',
-                                  style: Theme.of(context)
+                                  style: Theme
+                                      .of(context)
                                       .textTheme
                                       .headline5
                                       ?.copyWith(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
@@ -728,8 +810,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await ApiProvider.instance.getLatestOpinion();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setLatestOpinions(response.opinion ?? []);
     }
   }
@@ -738,8 +820,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await ApiProvider.instance.getTopPicks();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setHomeTopPicks(response.toppicks ?? []);
     }
   }
@@ -748,8 +830,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await ApiProvider.instance.getArticle('exclusive-news');
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setHomeExecl(response.articles ?? []);
     }
   }
@@ -758,10 +840,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await ApiProvider.instance.getAdvertise();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setAds(response.ads ?? []);
-      random = Random().nextInt(response.ads?.length??0);
+      random = Random().nextInt(response.ads?.length ?? 0);
     }
   }
 
@@ -787,6 +869,17 @@ class _HomeScreenState extends State<HomeScreen> {
       throw 'Could not launch $_url';
     }
   }
+
+  void askPermissions() async {
+    var status = await Permission.location.status;
+    if (status.isDenied) {
+      if (await Permission.location
+          .request()
+          .isGranted) {} else {
+        // showError("We require storage permissions");
+      }
+    }
+  }
 }
 
 class OpinionCard extends StatelessWidget {
@@ -802,9 +895,7 @@ class OpinionCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
-        side: BorderSide(
-            width: 0.5,
-            color: Constance.primaryColor),
+        side: BorderSide(width: 0.5, color: Constance.primaryColor),
       ),
       child: Container(
         // padding: EdgeInsets.symmetric(
@@ -816,40 +907,27 @@ class OpinionCard extends StatelessWidget {
           color: Colors.white,
         ),
         height: 12.h,
-        width: MediaQuery.of(context).size.width -
-            7.w,
+        width: MediaQuery.of(context).size.width - 7.w,
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
                 flex: 4,
                 child: Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 3.w,
-                      vertical: 2.h),
+                  padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
                   decoration: const BoxDecoration(
-                    borderRadius:
-                        BorderRadius.all(
+                    borderRadius: BorderRadius.all(
                       Radius.circular(5),
                     ),
                     border: Border(
-                      top: BorderSide(
-                          width: 0.5,
-                          color: Constance
-                              .primaryColor),
-                      bottom: BorderSide(
-                          width: 0.5,
-                          color: Constance
-                              .primaryColor),
-                      right: BorderSide(
-                          width: 0.5,
-                          color: Constance
-                              .primaryColor),
-                      left: BorderSide(
-                          width: 0.5,
-                          color: Constance
-                              .primaryColor),
+                      top:
+                          BorderSide(width: 0.5, color: Constance.primaryColor),
+                      bottom:
+                          BorderSide(width: 0.5, color: Constance.primaryColor),
+                      right:
+                          BorderSide(width: 0.5, color: Constance.primaryColor),
+                      left:
+                          BorderSide(width: 0.5, color: Constance.primaryColor),
                     ),
                     color: Colors.white,
                   ),
@@ -861,17 +939,11 @@ class OpinionCard extends StatelessWidget {
                           child: Text(
                             item.title ?? "",
                             maxLines: 3,
-                            textAlign:
-                                TextAlign.start,
-                            overflow: TextOverflow
-                                .ellipsis,
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.ellipsis,
                             style:
-                                Theme.of(context)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Colors
-                                          .black,
+                                Theme.of(context).textTheme.headline5?.copyWith(
+                                      color: Colors.black,
                                       // fontWeight:
                                       //     FontWeight.bold,
                                     ),
@@ -884,37 +956,22 @@ class OpinionCard extends StatelessWidget {
             Expanded(
                 flex: 2,
                 child: Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 3.w),
+                  padding: EdgeInsets.symmetric(horizontal: 3.w),
                   child: Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment
-                            .spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         item.author_name ?? "",
-                        overflow:
-                            TextOverflow.ellipsis,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            ?.copyWith(
-                              color: Constance
-                                  .thirdColor,
-                              fontWeight:
-                                  FontWeight.bold,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                              color: Constance.thirdColor,
+                              fontWeight: FontWeight.bold,
                             ),
                       ),
                       Text(
-                        item.publish_date
-                                ?.split(" ")[0] ??
-                            "",
-                        overflow:
-                            TextOverflow.ellipsis,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            ?.copyWith(
+                        item.publish_date?.split(" ")[0] ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.black,
                               // fontWeight: FontWeight.bold,
                             ),

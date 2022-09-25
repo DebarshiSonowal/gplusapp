@@ -68,63 +68,14 @@ class VideoCard extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Navigation.instance.navigate('/videoPlayer',args: item.youtube_id);
-                        // YoutubePlayerController _controller =
-                        //     YoutubePlayerController(
-                        //   initialVideoId: '${item.youtube_id}' ?? 'iLnmTe5Q2Qw',
-                        //   flags: const YoutubePlayerFlags(
-                        //     autoPlay: true,
-                        //     mute: true,
-                        //   ),
-                        // );
-                        //
-                        // showDialog(
-                        //     context: context,
-                        //     builder: (context) {
-                        //       return AlertDialog(
-                        //         // title: Text(
-                        //         //   item.title
-                        //         //       .toString(),
-                        //         //   overflow: TextOverflow.ellipsis,
-                        //         //   style: Theme.of(context).textTheme.headline5?.copyWith(
-                        //         //     color: Colors.white,
-                        //         //   ),
-                        //         // ),
-                        //         backgroundColor: Colors.transparent,
-                        //         content: YoutubePlayer(
-                        //           controller: _controller,
-                        //           aspectRatio: 16 / 9,
-                        //           showVideoProgressIndicator: true,
-                        //           // videoProgressIndicatorColor: Colors.amber,
-                        //           progressColors: const ProgressBarColors(
-                        //             playedColor: Colors.amber,
-                        //             handleColor: Colors.amberAccent,
-                        //           ),
-                        //           onReady: () {
-                        //             // _controller
-                        //             //     .addListener(() {});
-                        //             _controller.play();
-                        //           },
-                        //         ),
-                        //         // actions: <Widget>[
-                        //         //   // TextButton(
-                        //         //   //     onPressed: () {
-                        //         //   //       //action code for "Yes" button
-                        //         //   //     },
-                        //         //   //     child: Text('Yes')),
-                        //         //   TextButton(
-                        //         //     onPressed: () {
-                        //         //       Navigator.pop(
-                        //         //           context); //close Dialog
-                        //         //     },
-                        //         //     child: Text('Close'),
-                        //         //   )
-                        //         // ],
-                        //       );
-                        //     });
                       },
                       child: Container(
                         width: 40.w,
                         decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [Colors.transparent, Colors.black]),
                           // color: Constance.secondaryColor,
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(5.0),

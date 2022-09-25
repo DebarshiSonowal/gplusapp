@@ -17,9 +17,9 @@ class Profile {
     city = json['city'] ?? "";
     image_file_name = json['image_file_name'] ?? "";
     sign_in_count = json['sign_in_count'] ?? "";
-    super_admin = int.parse(json['super_admin'].toString()) ?? 0;
-    role_id = int.parse(json['role_id'].toString()) ?? 0;
-    status = int.parse(json['status'].toString()) ?? 0;
+    super_admin = int.parse((json['super_admin']?? 0).toString()) ;
+    role_id = int.parse((json['role_id']?? 0).toString()) ?? 0;
+    status = int.parse((json['status']?? 0).toString()) ?? 0;
   }
 }
 

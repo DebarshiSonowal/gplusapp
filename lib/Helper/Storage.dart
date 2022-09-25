@@ -11,6 +11,10 @@ class Storage {
 
   temp? signUpdata;
 
+  setSignUpData(temp data){
+    signUpdata = data;
+  }
+
   Future<void> initializeStorage() async {
     sharedpreferences = await SharedPreferences.getInstance();
   }

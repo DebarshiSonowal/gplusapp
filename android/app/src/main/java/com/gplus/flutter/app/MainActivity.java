@@ -1,6 +1,7 @@
-package com.gplus.app.gplusapp;
+package com.gplus.flutter.app;
 
 import io.flutter.embedding.android.FlutterActivity;
 
 public class MainActivity extends FlutterActivity {
+
 }

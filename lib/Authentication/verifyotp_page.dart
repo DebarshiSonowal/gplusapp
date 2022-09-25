@@ -249,13 +249,15 @@ class _VerifyOTPState extends State<VerifyOTP> {
   Future<void> phoneSignIn({required String phoneNumber}) async {
     debugPrint('+91$phoneNumber');
     showLoaderDialog(context);
-    await _auth.verifyPhoneNumber(
-        phoneNumber: '+91$phoneNumber',
-        verificationCompleted: _onVerificationCompleted,
-        verificationFailed: _onVerificationFailed,
-        codeSent: _onCodeSent,
-        codeAutoRetrievalTimeout: _onCodeTimeout).onError((error, stackTrace){
-          print(error);
+    await _auth
+        .verifyPhoneNumber(
+            phoneNumber: '+91$phoneNumber',
+            verificationCompleted: _onVerificationCompleted,
+            verificationFailed: _onVerificationFailed,
+            codeSent: _onCodeSent,
+            codeAutoRetrievalTimeout: _onCodeTimeout)
+        .onError((error, stackTrace) {
+      print(error);
     });
   }
 
@@ -360,8 +362,15 @@ class _VerifyOTPState extends State<VerifyOTP> {
           .setProfile(reponse.profile!);
       // Navigation.instance.goBack();
       Navigation.instance.navigateAndReplace('/main');
+      // if (reponse.profile?.email == null || reponse.profile?.email == "") {
+      //   Navigation.instance
+      //       .navigate('/terms&conditions', args: widget.number);
+      // } else {
+      //   Navigation.instance.navigateAndReplace('/main');
+      // }
     } else {
-      Navigation.instance.navigateAndReplace('/terms&conditions');
+      Navigation.instance
+          .navigate('/terms&conditions', args: widget.number);
     }
   }
 

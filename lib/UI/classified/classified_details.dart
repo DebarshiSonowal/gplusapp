@@ -31,7 +31,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CarouselWithIndicatorDemo(),
+              HomeBannerPage(),
               SizedBox(
                 height: 2.h,
               ),
