@@ -61,9 +61,9 @@ class PromotedDealResponse {
   PromotedDealResponse.fromJson(json) {
     success = json['success'].toString() == 'true' ? true : false;
     message = json['message'] ?? "Something Went Wrong";
-    deals = json['data'] == null
+    deals = json['result'] == null
         ? []
-        : (json['data'] as List).map((e) => PromotedDeal.fromJson(e)).toList();
+        : (json['result'] as List).map((e) => PromotedDeal.fromJson(e)).toList();
   }
 
   PromotedDealResponse.withError(msg) {

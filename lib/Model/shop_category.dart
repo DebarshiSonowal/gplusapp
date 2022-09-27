@@ -61,9 +61,9 @@ class ShopCategoryResponse {
   ShopCategoryResponse.fromJson(json) {
     success = json['success'].toString() == 'true' ? true : false;
     message = json['message'] ?? "Something Went Wrong";
-    categories = json['data'] == null
+    categories = json['result'] == null
         ? []
-        : (json['data'] as List).map((e) => ShopCategory.fromJson(e)).toList();
+        : (json['result'] as List).map((e) => ShopCategory.fromJson(e)).toList();
   }
 
   ShopCategoryResponse.withError(msg) {

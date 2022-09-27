@@ -125,18 +125,18 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void sendOTP(String text) async {
-    final response = await ApiProvider.instance.login(text);
-    if (response.status ?? false) {
-      Fluttertoast.showToast(
-        msg: 'OTP sent successfully',
-        // fontSize: th
-      );
-      Navigation.instance.navigate('/verifyOtp', args: int.parse(text));
-    } else {
-      showError(response.message ?? "Something went wrong");
-    }
-  }
+  // void sendOTP(String text) async {
+  //   final response = await ApiProvider.instance.login(text);
+  //   if (response.status ?? false) {
+  //     Fluttertoast.showToast(
+  //       msg: 'OTP sent successfully',
+  //       // fontSize: th
+  //     );
+  //     Navigation.instance.navigate('/verifyOtp', args: int.parse(text));
+  //   } else {
+  //     showError(response.message ?? "Something went wrong");
+  //   }
+  // }
 
   void showError(String msg) {
     AlertX.instance.showAlert(

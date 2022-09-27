@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gplusapp/Model/about_us.dart';
 import 'package:gplusapp/Model/advertise.dart';
 import 'package:gplusapp/Model/article.dart';
 import 'package:gplusapp/Model/classified.dart';
@@ -12,7 +13,9 @@ import 'package:gplusapp/Model/refer_earn_response.dart';
 import 'package:gplusapp/Model/shop_category.dart';
 import 'package:gplusapp/Model/top_picks.dart';
 import 'package:gplusapp/Model/video_news.dart';
+import 'package:gplusapp/UI/others/contact_us_page.dart';
 
+import '../Model/contact_us.dart';
 import '../Model/membership.dart';
 import '../Model/redeem_details.dart';
 import '../Model/topick.dart';
@@ -22,7 +25,10 @@ class DataProvider extends ChangeNotifier {
   Profile? profile;
 
   List<Opinion> opinions = [];
-  List<Article> home_albums = [], home_exclusive = [], news_from = [],suggestion=[];
+  List<Article> home_albums = [],
+      home_exclusive = [],
+      news_from = [],
+      suggestion = [];
   List<VideoNews> home_weekly = [], video_news = [];
   List<Opinion> latestOpinions = [];
   List<Membership> memberships = [];
@@ -32,16 +38,26 @@ class DataProvider extends ChangeNotifier {
   List<Advertise> ads = [];
   DealDetails? details;
   RedeemDetails? redeemDetails;
-  List<Topick> topicks = [];
-  List<GeoTopick> geoTopicks = [];
+  List<Topick> topicks = [], mytopicks = [];
+  List<GeoTopick> geoTopicks = [], mygeoTopicks = [];
   List<Classified> classified = [];
   List<ClassifiedCategory> classified_category = [];
   List<Locality> locality = [];
   ReferEarn? referEarn;
   Article? selectedArticle;
+  AboutUs? aboutUs;
+  ContactUs? contactUs;
 
-  setArticleDetails(Article data){
+  setArticleDetails(Article data) {
     selectedArticle = data;
+    notifyListeners();
+  }
+ setAboutUs(AboutUs data) {
+   aboutUs = data;
+    notifyListeners();
+  }
+  setContactUs(ContactUs data) {
+    contactUs = data;
     notifyListeners();
   }
 
@@ -72,6 +88,16 @@ class DataProvider extends ChangeNotifier {
 
   setGeoTopicks(List<GeoTopick> list) {
     geoTopicks = list;
+    notifyListeners();
+  }
+
+  setMyTopicks(List<Topick> list) {
+    mytopicks = list;
+    notifyListeners();
+  }
+
+  setMyGeoTopicks(List<GeoTopick> list) {
+    mygeoTopicks = list;
     notifyListeners();
   }
 
@@ -117,6 +143,7 @@ class DataProvider extends ChangeNotifier {
     news_from = list;
     notifyListeners();
   }
+
   setSuggestion(List<Article> list) {
     suggestion = list;
     notifyListeners();

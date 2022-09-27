@@ -12,15 +12,18 @@ import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../Model/about_us.dart';
 import '../Model/advertise.dart';
 import '../Model/article.dart';
 import '../Model/article_desc.dart';
 import '../Model/classified.dart';
 import '../Model/classified_category.dart';
+import '../Model/contact_us.dart';
 import '../Model/deal_details.dart';
 import '../Model/e_paper.dart';
 import '../Model/generic_response.dart';
-import '../Model/login_response.dart';
+
+// import '../Model/login_response.dart';
 import '../Model/membership.dart';
 import '../Model/opinion.dart';
 import '../Model/promoted_deal.dart';
@@ -49,33 +52,33 @@ class ApiProvider {
     // 'APP-KEY': ConstanceData.app_key
   });
 
+  // Future<LoginResponse> login(mobile) async {
+  //   var data = {
+  //     'mobile': mobile,
+  //   };
+  //
+  //   var url = "$baseUrl/login";
+  //   dio = Dio(option);
+  //   debugPrint(url.toString());
+  //   debugPrint(jsonEncode(data));
+  //
+  //   try {
+  //     Response? response = await dio?.post(url, data: jsonEncode(data));
+  //     debugPrint("login response: ${response?.data}");
+  //     if (response?.statusCode == 200 || response?.statusCode == 201) {
+  //       return LoginResponse.fromJson(response?.data);
+  //     } else {
+  //       debugPrint("login error: ${response?.data}");
+  //       return LoginResponse.withError(
+  //           response?.data['message'] ?? "Something went wrong");
+  //     }
+  //   } on DioError catch (e) {
+  //     debugPrint("login response: ${e.response}");
+  //     return LoginResponse.withError(e.message.toString());
+  //   }
+  // }
+
   Future<LoginResponse> login(mobile) async {
-    var data = {
-      'mobile': mobile,
-    };
-
-    var url = "$baseUrl/login";
-    dio = Dio(option);
-    debugPrint(url.toString());
-    debugPrint(jsonEncode(data));
-
-    try {
-      Response? response = await dio?.post(url, data: jsonEncode(data));
-      debugPrint("login response: ${response?.data}");
-      if (response?.statusCode == 200 || response?.statusCode == 201) {
-        return LoginResponse.fromJson(response?.data);
-      } else {
-        debugPrint("login error: ${response?.data}");
-        return LoginResponse.withError(
-            response?.data['message'] ?? "Something went wrong");
-      }
-    } on DioError catch (e) {
-      debugPrint("login response: ${e.response}");
-      return LoginResponse.withError(e.message.toString());
-    }
-  }
-
-  Future<ProfileResponse> getprofile(mobile) async {
     var data = {
       'mobile': mobile,
     };
@@ -87,21 +90,58 @@ class ApiProvider {
 
     try {
       Response? response = await dio?.post(url, data: jsonEncode(data));
+      debugPrint("login response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return LoginResponse.fromJson(response?.data);
+      } else {
+        debugPrint("login  error: ${response?.data}");
+        return LoginResponse.withError();
+      }
+    } on DioError catch (e) {
+      debugPrint("login  response: ${e.response}");
+      return LoginResponse.withError();
+    }
+  }
+
+  Future<ProfileResponse> getprofile() async {
+    var url = "${baseUrl}/profile";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+      );
       debugPrint("Profile response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ProfileResponse.fromJson(response?.data);
       } else {
         debugPrint("Profile error: ${response?.data}");
-        return ProfileResponse.withError();
+        return ProfileResponse.withError("Something went wrong");
       }
     } on DioError catch (e) {
       debugPrint("Profile response: ${e.response}");
-      return ProfileResponse.withError();
+      return ProfileResponse.withError(e.message);
     }
   }
 
-  Future<GenericResponse> createProfile(
-      mobile, f_name, l_name, email, dob, address, longitude, latitude) async {
+  Future<ProfileResponse> createProfile(
+    address_id,
+    mobile,
+    f_name,
+    l_name,
+    email,
+    dob,
+    address,
+    longitude,
+    latitude,
+    topic_ids,
+    geo_ids,
+    has_deal_notify_perm,
+    has_ghy_connect_notify_perm,
+    has_classified_notify_perm,
+  ) async {
     var data = {
       'mobile': mobile,
       'f_name': f_name,
@@ -111,9 +151,13 @@ class ApiProvider {
       'address': address,
       'longitude': longitude,
       'latitude': latitude,
+      'address_id': address_id,
+      'topic_ids': topic_ids,
+      'geo_ids': geo_ids,
+      'has_deal_notify_perm': has_deal_notify_perm,
+      'has_ghy_connect_notify_perm': has_ghy_connect_notify_perm,
     };
-
-    var url = "${baseUrl}/new-personal-details";
+    var url = "${baseUrl}/profile";
     dio = Dio(option);
     debugPrint(url.toString());
     debugPrint(jsonEncode(data));
@@ -122,14 +166,14 @@ class ApiProvider {
       Response? response = await dio?.post(url, data: jsonEncode(data));
       debugPrint("create Profile response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
-        return GenericResponse.fromJson(response?.data);
+        return ProfileResponse.fromJson(response?.data);
       } else {
         debugPrint("create Profile error: ${response?.data}");
-        return GenericResponse.withError("Something went wrong");
+        return ProfileResponse.withError("Something went wrong");
       }
     } on DioError catch (e) {
       debugPrint("create Profile error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return ProfileResponse.withError(e.message);
     }
   }
 
@@ -706,6 +750,81 @@ class ApiProvider {
     } on DioError catch (e) {
       debugPrint("ReferEarnResponse response: ${e.response}");
       return ReferEarnResponse.withError(e.message);
+    }
+  }
+
+  Future<AboutUsResponse> getAboutUs() async {
+    var url = "${baseUrl}/app/pages/about";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("AboutUsResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return AboutUsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("AboutUsResponse error: ${response?.data}");
+        return AboutUsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("AboutUsResponse response: ${e.response}");
+      return AboutUsResponse.withError(e.message);
+    }
+  }
+
+  Future<AboutUsResponse> getPrivacyPolicy() async {
+    var url = "${baseUrl}/app/pages/privacy-n-policy";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("privacy-n-policy response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return AboutUsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("privacy-n-policy error: ${response?.data}");
+        return AboutUsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("privacy-n-policy response: ${e.response}");
+      return AboutUsResponse.withError(e.message);
+    }
+  }
+
+  Future<ContactUsResponse> getContactUs() async {
+    var url = "${baseUrl}/app/pages/contact";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("ContactUsResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ContactUsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("ContactUsResponse error: ${response?.data}");
+        return ContactUsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("ContactUsResponse response: ${e.response}");
+      return ContactUsResponse.withError(e.message);
     }
   }
 

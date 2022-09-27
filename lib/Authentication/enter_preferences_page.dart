@@ -24,7 +24,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero,(){
+    Future.delayed(Duration.zero, () {
       fetchTopicks();
     });
   }
@@ -239,18 +239,25 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
 
   void signUp() async {
     final reponse = await ApiProvider.instance.createProfile(
-        Storage.instance.signUpdata?.mobile,
-        Storage.instance.signUpdata?.f_name,
-        Storage.instance.signUpdata?.l_name,
-        Storage.instance.signUpdata?.email,
-        Storage.instance.signUpdata?.dob,
-        Storage.instance.signUpdata?.address,
-        Storage.instance.signUpdata?.longitude,
-        Storage.instance.signUpdata?.latitude);
+      '0',
+      Storage.instance.signUpdata?.mobile,
+      Storage.instance.signUpdata?.f_name,
+      Storage.instance.signUpdata?.l_name,
+      Storage.instance.signUpdata?.email,
+      Storage.instance.signUpdata?.dob,
+      Storage.instance.signUpdata?.address,
+      Storage.instance.signUpdata?.longitude,
+      Storage.instance.signUpdata?.latitude,
+      getComaSeparated(selTop),
+      getComaSeparated(selGeo),
+      0,
+      0,
+      0,
+    );
     if (reponse.success ?? false) {
       setPreferences();
     } else {
-      showError(reponse.message ?? "Something went wrong");
+      showError(reponse.msg ?? "Something went wrong");
     }
   }
 
@@ -268,7 +275,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
 
   void getProfile() async {
     final reponse = await ApiProvider.instance
-        .getprofile(Storage.instance.signUpdata?.mobile.toString());
+        .login(Storage.instance.signUpdata?.mobile.toString());
     if (reponse.status ?? false) {
       Storage.instance.setUser(reponse.access_token ?? "");
       Provider.of<DataProvider>(

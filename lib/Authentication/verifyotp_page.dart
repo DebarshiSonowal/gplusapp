@@ -351,7 +351,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
 
   void getProfile() async {
     final reponse =
-        await ApiProvider.instance.getprofile(widget.number.toString());
+        await ApiProvider.instance.login(widget.number.toString());
     if (reponse.status ?? false) {
       setState(() {
         Storage.instance.setUser(reponse.access_token ?? "");
@@ -362,12 +362,14 @@ class _VerifyOTPState extends State<VerifyOTP> {
           .setProfile(reponse.profile!);
       // Navigation.instance.goBack();
       Navigation.instance.navigateAndReplace('/main');
-      // if (reponse.profile?.email == null || reponse.profile?.email == "") {
-      //   Navigation.instance
-      //       .navigate('/terms&conditions', args: widget.number);
-      // } else {
-      //   Navigation.instance.navigateAndReplace('/main');
-      // }
+      if (reponse.profile?.email == null || reponse.profile?.email == "") {
+        Navigation.instance
+            .navigate('/terms&conditions', args: widget.number);
+      } else {
+        // Navigation.instance.navigateAndReplace('/main');
+        Navigation.instance
+            .navigate('/terms&conditions', args: widget.number);
+      }
     } else {
       Navigation.instance
           .navigate('/terms&conditions', args: widget.number);

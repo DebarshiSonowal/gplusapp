@@ -41,8 +41,9 @@ import '../UI/main/home_screen_page.dart';
 import '../UI/news_from/news_from.dart';
 import '../UI/opinion/opinion_page.dart';
 import '../UI/others/about_us_page.dart';
-import '../UI/others/contact_us.dart';
+import '../UI/others/contact_us_page.dart';
 import '../UI/others/grievanceRedressal.dart';
+import '../UI/others/privacy_policy_page.dart';
 import '../UI/profile/profile_page.dart';
 import '../UI/refer_earn/redeem_points.dart';
 import '../UI/refer_earn/refer&earn.dart';
@@ -120,7 +121,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(page: VideoReport());
 
     case '/contactUs':
-      return FadeTransitionPageRouteBuilder(page: ContactUs());
+      return FadeTransitionPageRouteBuilder(page: ContactUsPage());
 
     case '/submitStory':
       return FadeTransitionPageRouteBuilder(page: SubmitStoryPage());
@@ -152,6 +153,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(page: SearchPage());
     case '/aboutUs':
       return FadeTransitionPageRouteBuilder(page: AboutUsPage());
+      case '/privacy':
+      return FadeTransitionPageRouteBuilder(page: PrivacyPolicyPage());
     case '/grieveanceRedressal':
       return FadeTransitionPageRouteBuilder(page: GrieveanceRedressal());
 

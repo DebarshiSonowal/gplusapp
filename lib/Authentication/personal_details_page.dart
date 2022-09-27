@@ -6,12 +6,15 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_geocoding/google_geocoding.dart';
 import 'package:gplusapp/Components/custom_button.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Components/alert.dart';
 import '../Helper/Constance.dart';
+import '../Helper/DataProvider.dart';
 import '../Helper/Storage.dart';
 import '../Model/temp.dart';
 import '../Navigation/Navigate.dart';
@@ -66,6 +69,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         year = currentY - 18;
         max = currentY + 18;
       });
+
       getLocations();
     });
   }

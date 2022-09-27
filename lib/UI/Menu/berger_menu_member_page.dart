@@ -893,25 +893,30 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   SizedBox(
                     height: 1.5.h,
                   ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.lock,
-                        color: Constance.secondaryColor,
-                        // size: 2.h,
-                      ),
-                      SizedBox(
-                        width: 2.w,
-                      ),
-                      Text(
-                        'Privacy Policy',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Colors.white,
-                              // fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
+                  GestureDetector(
+                   onTap: (){
+                     Navigation.instance.navigate('/privacy');
+                   },
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.lock,
+                          color: Constance.secondaryColor,
+                          // size: 2.h,
+                        ),
+                        SizedBox(
+                          width: 2.w,
+                        ),
+                        Text(
+                          'Privacy Policy',
+                          style: Theme.of(context).textTheme.headline4?.copyWith(
+                                color: Colors.white,
+                                // fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 1.5.h,
