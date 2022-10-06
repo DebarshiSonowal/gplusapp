@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
+import '../../Networking/api_provider.dart';
 
 class StoriesSubmitted extends StatefulWidget {
   const StoriesSubmitted({Key? key}) : super(key: key);
@@ -14,6 +15,8 @@ class StoriesSubmitted extends StatefulWidget {
 }
 
 class _StoriesSubmittedState extends State<StoriesSubmitted> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +52,7 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                       physics: const NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       itemBuilder: (cont, count) {
-                        var item = data.opinions[count];
+                        var item = data.citizenlist[count];
                         return Container(
                           padding: EdgeInsets.symmetric(
                               horizontal: 3.w, vertical: 2.h),
@@ -88,7 +91,7 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                                       children: [
                                         Expanded(
                                           child:  Text(
-                                            item.publish_date?.split(" ")[0] ?? "",
+                                            item.story?? "",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headline6
@@ -129,7 +132,7 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                           ),
                         );
                       },
-                      itemCount:data.opinions.length),
+                      itemCount:data.citizenlist.length),
                 ],
               ),
             );
@@ -138,7 +141,21 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
       ),
     );
   }
+  fetchDrafts() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getCitizenJournalistDraft();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setCitizenJournalist(response.posts);
+      // Fluttertoast.showToast(msg: "G successfully");
+      Navigation.instance.goBack();
+    } else {
 
+      Navigation.instance.goBack();
+    }
+  }
   AppBar buildAppBar() {
     return AppBar(
       title: Image.asset(
@@ -159,5 +176,11 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
         ),
       ],
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () => fetchDrafts());
   }
 }

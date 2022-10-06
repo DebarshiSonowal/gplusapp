@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Model/opinion.dart';
 import 'package:gplusapp/Model/top_picks.dart';
@@ -675,6 +676,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         _poll = getOptionName(
                                                             count, data);
                                                       });
+                                                      postPollOfTheWeek(data.pollOfTheWeek?.id,_poll);
                                                     },
                                                     title: Text(
                                                       getOptionName(
@@ -819,7 +821,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 17.h,
+                                      height: 20.h,
                                     ),
                                   ],
                                 ),
@@ -1034,6 +1036,16 @@ class _HomeScreenState extends State<HomeScreen> {
       Navigation.instance.goBack();
     } else {
       Navigation.instance.goBack();
+    }
+  }
+
+  void postPollOfTheWeek(int? id, String poll) async{
+    final response = await ApiProvider.instance.postPollOfTheWeek(id,poll);
+    if(response.success??false){
+      Fluttertoast.showToast(msg: "Posted successfully");
+      fetchPoll();
+    }else{
+
     }
   }
 }

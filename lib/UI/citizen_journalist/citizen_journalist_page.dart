@@ -7,14 +7,14 @@ import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
-class CitizenJournalist extends StatefulWidget {
-  const CitizenJournalist({Key? key}) : super(key: key);
+class CitizenJournalistPage extends StatefulWidget {
+  const CitizenJournalistPage({Key? key}) : super(key: key);
 
   @override
-  State<CitizenJournalist> createState() => _CitizenJournalistState();
+  State<CitizenJournalistPage> createState() => _CitizenJournalistPageState();
 }
 
-class _CitizenJournalistState extends State<CitizenJournalist> {
+class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
   int current = 1;
 
   @override

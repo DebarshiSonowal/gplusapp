@@ -3,6 +3,7 @@ import 'package:gplusapp/Model/about_us.dart';
 import 'package:gplusapp/Model/address.dart';
 import 'package:gplusapp/Model/advertise.dart';
 import 'package:gplusapp/Model/article.dart';
+import 'package:gplusapp/Model/citizen_journalist.dart';
 import 'package:gplusapp/Model/classified.dart';
 import 'package:gplusapp/Model/classified_category.dart';
 import 'package:gplusapp/Model/deal_details.dart';
@@ -15,6 +16,7 @@ import 'package:gplusapp/Model/refer_earn_response.dart';
 import 'package:gplusapp/Model/shop_category.dart';
 import 'package:gplusapp/Model/top_picks.dart';
 import 'package:gplusapp/Model/video_news.dart';
+import 'package:gplusapp/UI/citizen_journalist/citizen_journalist_page.dart';
 import 'package:gplusapp/UI/others/contact_us_page.dart';
 
 import '../Model/contact_us.dart';
@@ -53,6 +55,12 @@ class DataProvider extends ChangeNotifier {
   PollOfTheWeek? pollOfTheWeek;
   List<Address>? addresses = [];
   List<GuwahatiConnect> guwahatiConnect = [];
+  List<CitizenJournalist> citizenlist = [];
+
+  setCitizenJournalist(List<CitizenJournalist> list) {
+    citizenlist = list;
+    notifyListeners();
+  }
 
   setArticleDetails(Article data) {
     selectedArticle = data;

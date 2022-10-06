@@ -17,6 +17,7 @@ import '../Model/address.dart';
 import '../Model/advertise.dart';
 import '../Model/article.dart';
 import '../Model/article_desc.dart';
+import '../Model/citizen_journalist.dart';
 import '../Model/guwahati_connect.dart';
 import '../Model/classified.dart';
 import '../Model/classified_category.dart';
@@ -914,6 +915,31 @@ class ApiProvider {
     }
   }
 
+  Future<CitizenJournalistResponse> getCitizenJournalistDraft() async {
+    var url = "${baseUrl}/app/citizen-journalist-list/draft";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("citizen-journalist-list response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return CitizenJournalistResponse.fromJson(response?.data);
+      } else {
+        debugPrint("citizen-journalist-list error: ${response?.data}");
+        return CitizenJournalistResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("citizen-journalist-list error: ${e.response}");
+      return CitizenJournalistResponse.withError(e.message);
+    }
+  }
+
   Future<PollOfTheWeekResponse> getPollOfTheWeek() async {
     var url = "${baseUrl}/app/poll-question";
     dio = Dio(option);
@@ -936,6 +962,38 @@ class ApiProvider {
     } on DioError catch (e) {
       debugPrint("PollOfTheWeekResponse response: ${e.response}");
       return PollOfTheWeekResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> postPollOfTheWeek(
+      poll_question_id, ans_option) async {
+    var url = "${baseUrl}/app/post-poll-answer";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'poll_question_id': poll_question_id,
+      'ans_option': ans_option,
+    };
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("postPollOfTheWeek response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("postPollOfTheWeek error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("postPollOfTheWeek error: ${e.response}");
+      return GenericResponse.withError(e.message);
     }
   }
 
