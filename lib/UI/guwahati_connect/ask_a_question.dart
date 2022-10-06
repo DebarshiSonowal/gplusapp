@@ -1,16 +1,20 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../Components/NavigationBar.dart';
+import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 
 class AskAQuestionPage extends StatefulWidget {
   const AskAQuestionPage({Key? key}) : super(key: key);
+
   @override
   State<AskAQuestionPage> createState() => _AskAQuestionPageState();
 }
@@ -22,6 +26,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
 
   var current = 3;
   final ImagePicker _picker = ImagePicker();
+  List<File> attachements = [];
 
   @override
   void initState() {
@@ -63,9 +68,9 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
               ),
               TextFormField(
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Colors.black,
-                  // fontSize: 1.6.h,
-                ),
+                      color: Colors.black,
+                      // fontSize: 1.6.h,
+                    ),
                 controller: desc,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
@@ -77,9 +82,9 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                   fillColor: Colors.white,
                   labelText: 'Ask a question',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
-                    color: Colors.black,
-                    // fontSize: 1.5.h,
-                  ),
+                        color: Colors.black,
+                        // fontSize: 1.5.h,
+                      ),
                   border: const OutlineInputBorder(),
                   enabledBorder: const OutlineInputBorder(),
                 ),
@@ -96,9 +101,9 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                   Text(
                     'Add more attachments',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Colors.black,
-                      // fontSize: 1.6.h,
-                    ),
+                          color: Colors.black,
+                          // fontSize: 1.6.h,
+                        ),
                   ),
                 ],
               ),
@@ -109,37 +114,37 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                 spacing: 8,
                 runSpacing: 8,
                 children: List.generate(
-                  (Constance.attachements.length ?? 0) + 1,
-                      (pos) => (pos == Constance.attachements.length)
+                  (attachements.length ?? 0) + 1,
+                  (pos) => (pos == attachements.length)
                       ? GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        showPhotoBottomSheet(getProfileImage);
-                      });
-                    },
-                    child: Container(
-                      height: 8.h,
-                      width: 20.w,
-                      color: Colors.grey.shade200,
-                      child: const Center(
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  )
+                          onTap: () {
+                            setState(() {
+                              showPhotoBottomSheet(getProfileImage);
+                            });
+                          },
+                          child: Container(
+                            height: 8.h,
+                            width: 20.w,
+                            color: Colors.grey.shade200,
+                            child: const Center(
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        )
                       : Container(
-                    height: 8.h,
-                    width: 20.w,
-                    // color: Colors.grey.shade200,
-                    child: Center(
-                      child: Image.file(
-                        Constance.attachements[pos],
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
+                          height: 8.h,
+                          width: 20.w,
+                          // color: Colors.grey.shade200,
+                          child: Center(
+                            child: Image.file(
+                              attachements[pos],
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
                 ),
               ),
               SizedBox(
@@ -150,6 +155,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                 child: CustomButton(
                   onTap: () {
                     // showDialogBox();
+                    postQuestion();
                   },
                   txt: 'Submit',
                 ),
@@ -187,9 +193,9 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
             return AlertDialog(
                 title: const Center(
                     child: Text(
-                      "Add Photo",
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                    )),
+                  "Add Photo",
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                )),
                 contentPadding: const EdgeInsets.only(top: 24, bottom: 30),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -267,12 +273,34 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
       setState(() {
         // profileImage = File(pickedFile.path);
         print(pickedFile.path);
-        Constance.attachements.add(
+        attachements.add(
           File(pickedFile.path),
         );
       });
     }
   }
 
+  void postQuestion() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance
+        .postGuwhahatiConnect(title.text, attachements);
+    if (response.success ?? false) {
+      Fluttertoast.showToast(msg: "Posted successfully");
+      Navigation.instance.goBack();
+      Navigation.instance.goBack();
+    } else {
+      showError(response.message??"Something went wrong");
+      Navigation.instance.goBack();
+    }
+  }
 
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
+  }
 }

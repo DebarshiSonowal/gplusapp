@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:geocoding/geocoding.dart' as geo;
 import '../Components/alert.dart';
 import '../Helper/Constance.dart';
 import '../Helper/DataProvider.dart';
@@ -47,6 +47,8 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   ];
 
   var address = "";
+
+  String address_id = "0";
 
   @override
   void dispose() {
@@ -496,16 +498,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                       address = result;
                       //  s
                     });
-                    var googleGeocoding =
-                        GoogleGeocoding(Constance.googleApiKey);
-                    var result1 =
-                        await googleGeocoding.geocoding.get(address ?? "", []);
-                    setState(() {
-                      latitude =
-                          result1?.results![0].geometry?.location?.lat ?? 0;
-                      longitude =
-                          result1?.results![0].geometry?.location?.lng ?? 0;
-                    });
+                    findLocation(address);
                   }
                 },
                 child: Row(
@@ -716,7 +709,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
 
   void setData(mobile, fname, lname, email, dob, address) {
     Storage.instance.setSignUpData(
-        temp(mobile, fname, lname, email, dob, address, longitude, latitude));
+      temp(mobile, fname, lname, email, dob, address, longitude, latitude,
+          address_id),
+    );
     // Storage.instance.signUpdata?.f_name = fname;
     // Storage.instance.signUpdata?.l_name = lname;
     // Storage.instance.signUpdata?.email = email;
@@ -727,5 +722,29 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     print(Storage.instance.signUpdata?.mobile);
     print(Storage.instance.signUpdata?.f_name);
     Navigation.instance.navigate('/enterPreferences');
+  }
+
+  void findLocation(String? address) async {
+    List<geo.Location> locations = await locationFromAddress(address!);
+    // var result1 = await googleGeocoding.geocoding.get(address ?? "", []);
+    // debugPrint(result1?.results?.length.toString());
+    latitude = locations[0].latitude ?? 0;
+    longitude = locations[0].longitude ?? 0;
+    addAddress(address);
+  }
+
+  void addAddress(String? address) async {
+    final response =
+        await ApiProvider.instance.postAddress(address, latitude, longitude);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setAddressess(response.addresses);
+      address_id = response.addresses.last.id.toString();
+      // Navigator.of(context).pop(response.addresses.last.id);
+    } else {
+      showError("Something went wrong");
+    }
   }
 }

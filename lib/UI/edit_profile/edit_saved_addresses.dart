@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+
+// import 'package:google_geocoding/google_geocoding.dart';
 import 'package:google_place/google_place.dart';
-import 'package:google_places_flutter/google_places_flutter.dart';
-import 'package:google_places_flutter/model/prediction.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
-import '../../Helper/Storage.dart';
+import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 
 class EditSavedAddresses extends StatefulWidget {
   const EditSavedAddresses({Key? key}) : super(key: key);
@@ -20,6 +26,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
   late GooglePlace googlePlace;
   List<AutocompletePrediction> predictions = [];
   String locationName = "";
+  double longitude = 0, latitude = 0;
 
   @override
   void dispose() {
@@ -32,6 +39,9 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
     // String apiKey = DotEnv().env['API_KEY'];
     googlePlace = GooglePlace(Constance.googleApiKey);
     super.initState();
+    Future.delayed(Duration.zero, () {
+      fetchAddress();
+    });
   }
 
   @override
@@ -139,8 +149,14 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                                       color: Colors.black,
                                     ),
                           ),
-                          onTap: () {
+                          onTap: () async {
                             debugPrint(predictions[index].placeId);
+                            var data = await googlePlace.details
+                                .get(predictions[index].placeId!);
+                            debugPrint(
+                                'desc ${predictions[index].description}');
+                            findLocation(predictions[index].description);
+                            // addAddress(predictions[index].placeId);
                           },
                         );
                       },
@@ -159,9 +175,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                 height: 1.5.h,
               ),
               GestureDetector(
-                onTap: () {
-                  Navigation.instance.navigate('/locationSearchPage');
-                },
+                onTap: () {},
                 child: Row(
                   children: [
                     Icon(
@@ -221,146 +235,77 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
               SizedBox(
                 height: 1.5.h,
               ),
-              Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Home',
-                          style:
-                              Theme.of(context).textTheme.headline3?.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        Icon(
-                          Icons.edit,
-                          color: Colors.black,
-                          size: 3.h,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Text(
-                      'Royal Arcade, Kasturba Nagar, Ulubaria, Guwhahti, 781003',
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Colors.black,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                      child: Divider(
-                        color: Colors.black,
-                        thickness: 0.4.sp,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Other',
-                          style:
-                              Theme.of(context).textTheme.headline3?.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        Icon(
-                          Icons.edit,
-                          color: Colors.black,
-                          size: 3.h,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Text(
-                      'Royal Arcade, Kasturba Nagar, Ulubaria, Guwhahti, 781003',
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Colors.black,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                      child: Divider(
-                        color: Colors.black,
-                        thickness: 0.4.sp,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Other',
-                          style:
-                              Theme.of(context).textTheme.headline3?.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        Icon(
-                          Icons.edit,
-                          color: Colors.black,
-                          size: 3.h,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Text(
-                      'Royal Arcade, Kasturba Nagar, Ulubaria, Guwhahti, 781003',
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Colors.black,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                      child: Divider(
-                        color: Colors.black,
-                        thickness: 0.4.sp,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Text(
-                        'See more',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Constance.secondaryColor,
-                              fontWeight: FontWeight.bold,
+              Consumer<DataProvider>(builder: (context, data, _) {
+                return ListView.separated(
+                    shrinkWrap: true,
+                    itemBuilder: (cont, count) {
+                      var current = data.addresses![count];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop(current.id);
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  current.title ?? 'Home',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      ?.copyWith(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                Icon(
+                                  Icons.edit,
+                                  color: Colors.black,
+                                  size: 3.h,
+                                ),
+                              ],
                             ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                            SizedBox(
+                              height: 1.h,
+                            ),
+                            Text(
+                              current.address ??
+                                  'Royal Arcade, Kasturba Nagar, Ulubaria, Guwhahti, 781003',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: Colors.black,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    separatorBuilder: (cont, count) {
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 1.5.h,
+                          ),
+                          SizedBox(
+                            height: 1.h,
+                            child: Divider(
+                              color: Colors.black,
+                              thickness: 0.4.sp,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 1.5.h,
+                          ),
+                        ],
+                      );
+                    },
+                    itemCount: data.addresses?.length ?? 0);
+              }),
             ],
           ),
         ),
@@ -386,6 +331,38 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
       setState(() {
         predictions = result.predictions!;
       });
+      // addAddress();
+    }
+  }
+
+  void getLocations() async {
+    debugPrint('got locations1');
+    var status = await Permission.location.status;
+    if (status.isDenied) {
+      if (await Permission.location.request().isGranted) {
+        debugPrint('got1 locations1');
+        final position = await _determinePosition();
+        longitude = position.longitude;
+        latitude = position.latitude;
+        debugPrint('got locations ${longitude} ${latitude}');
+        if (mounted) {
+          setState(() {});
+        }
+        getAddress(position.latitude, position.longitude);
+      } else {
+        showError("We require Location permissions");
+      }
+      // We didn't ask for permission yet or the permission has been denied before but not permanently.
+    } else {
+      debugPrint('got1 locations1');
+      final position = await _determinePosition();
+      longitude = position.longitude;
+      latitude = position.latitude;
+      debugPrint('got locations ${longitude} ${latitude}');
+      if (mounted) {
+        setState(() {});
+      }
+      getAddress(position.latitude, position.longitude);
     }
   }
 
@@ -406,5 +383,90 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
     // setState(() {});
     // Navigator.pop(Navigation.instance.navigatorKey.currentContext ?? context,
     //     locationName);
+  }
+
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      debugPrint('got locations2');
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+
+  void fetchAddress() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getAddress();
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setAddressess(response.addresses);
+    } else {
+      Navigation.instance.goBack();
+    }
+  }
+
+  void addAddress(String? address) async {
+    final response =
+        await ApiProvider.instance.postAddress(address, latitude, longitude);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setAddressess(response.addresses);
+      Navigator.of(context).pop(response.addresses.last.id);
+    } else {
+      showError("Something went wrong");
+    }
+  }
+
+  void findLocation(String? address) async {
+    List<geo.Location> locations = await locationFromAddress(address!);
+    // var result1 = await googleGeocoding.geocoding.get(address ?? "", []);
+    // debugPrint(result1?.results?.length.toString());
+    latitude = locations[0].latitude ?? 0;
+    longitude = locations[0].longitude ?? 0;
+    addAddress(address);
   }
 }

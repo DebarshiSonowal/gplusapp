@@ -3,10 +3,15 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Model/opinion.dart';
 import 'package:gplusapp/Model/top_picks.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:material_dialogs/material_dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -36,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _poll = Constance.pollWeek[0];
 
   final RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -44,13 +49,22 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchHome();
     fetchOpinion();
     fetchGPlusExcl();
+    fetchPoll();
     fetchToppicks();
     fetchAds();
     askPermissions();
+    Future.delayed(Duration.zero, () => fetchProfile());
+    Future.delayed(
+        Duration.zero,
+        () => Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .setCurrent(0));
   }
 
   void _onRefresh() async {
     // monitor network fetch
+    fetchPoll();
     fetchOpinion();
     fetchGPlusExcl();
     fetchToppicks();
@@ -124,612 +138,697 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Consumer<DataProvider>(builder: (context, data, _) {
               return data.ads.isEmpty
                   ? Container()
-                  : Container(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                color: Colors.grey.shade100,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      HomeBannerPage(),
-                      Container(
-                        width: double.infinity,
-                        height: 20.h,
-                        padding: EdgeInsets.symmetric(
-                            vertical: 2.h, horizontal: 8.w),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigation.instance.navigate('/bigdealpage');
-                            Provider.of<DataProvider>(
-                                Navigation.instance.navigatorKey
-                                    .currentContext ??
-                                    context,
-                                listen: false)
-                                .setCurrent(1);
-                          },
-                          child: Card(
-                            color: Constance.thirdColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 4.w, vertical: 0.5.h),
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      child: Center(
-                                        child: Text(
-                                          'Big Deals\nand Offers',
-                                          style: Theme
-                                              .of(context)
-                                              .textTheme
-                                              .headline3
-                                              ?.copyWith(
-                                              color: Colors.white,
-                                              fontWeight:
-                                              FontWeight.bold),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Colors.white,
-                                          ),
-                                          borderRadius:
-                                          const BorderRadius.all(
-                                            Radius.circular(5),
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: CachedNetworkImage(
-                                            imageUrl: Constance.kfc_offer,
-                                            placeholder: (cont, _) {
-                                              return const Icon(
-                                                Icons.image,
-                                                color: Colors.black,
-                                              );
-                                            },
-                                            errorWidget: (cont, _, e) {
-                                              // print(e);
-                                              print(_);
-                                              return Text(_);
-                                            },
-                                          ),
-                                        ),
-                                      )),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 25.h,
-                        width: double.infinity,
-                        color: Constance.secondaryColor,
-                        padding: EdgeInsets.symmetric(vertical: 2.h),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                              EdgeInsets.symmetric(horizontal: 5.w),
-                              child: Text(
-                                'Top picks for you',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .headline3
-                                    ?.copyWith(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.sp,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            Expanded(
-                              child: Container(
-                                child: ListView.separated(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (cont, count) {
-                                      var item =
-                                      data.home_toppicks[count];
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Navigation.instance.navigate(
-                                              '/story',
-                                              args:
-                                              '${item.categories?.first
-                                                  .seo_name},${item.seo_name}');
-                                        },
-                                        child: ToppicksCard(item: item),
-                                      );
-                                    },
-                                    separatorBuilder: (cont, inde) {
-                                      return SizedBox(
-                                        width: 10.w,
-                                      );
-                                    },
-                                    itemCount:
-                                    data.home_toppicks.length > 4
-                                        ? 4
-                                        : data.home_toppicks.length),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                        width: double.infinity,
-                        child: GestureDetector(
-                          onTap: () {
-                            _launchUrl(Uri.parse(
-                                data.ads[random].link.toString()));
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 2.w, vertical: 1.5.h),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.fill,
-                              imageUrl:
-                              data.ads[random].image_file_name ?? '',
-                              placeholder: (cont, _) {
-                                return const Icon(
-                                  Icons.image,
-                                  color: Colors.black,
-                                );
-                              },
-                              errorWidget: (cont, _, e) {
-                                // print(e);
-                                print(_);
-                                return Text(_);
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: Divider(
-                          color: Colors.grey.shade800,
-                          thickness: 0.1.h,
-                        ),
-                      ),
-                      // SizedBox(
-                      //   height: 1.h,
-                      // ),
-                      Container(
-                        height: 30.h,
-                        width: double.infinity,
-                        // color: Constance.secondaryColor,
-                        padding: EdgeInsets.symmetric(vertical: 0.5.h),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                              EdgeInsets.symmetric(horizontal: 5.w),
-                              child: Text(
-                                'GPlus Exclusive',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .headline3
-                                    ?.copyWith(
-                                  fontSize: 16.sp,
-                                  color: Constance.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            Expanded(
-                              child: Container(
-                                child: ListView.separated(
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (cont, count) {
-                                      var item =
-                                      data.home_exclusive[count];
-                                      return GestureDetector(
-                                          onTap: () {
-                                            Navigation.instance.navigate(
-                                                '/story',
-                                                args:
-                                                '${'exclusive-news'},${item
-                                                    .seo_name}');
-                                          },
-                                          child:
-                                          GPlusExecCard(item: item));
-                                    },
-                                    separatorBuilder: (cont, inde) {
-                                      return SizedBox(
-                                        width: 10.w,
-                                      );
-                                    },
-                                    itemCount:
-                                    (data.home_exclusive.length > 4
-                                        ? 4
-                                        : data
-                                        .home_exclusive.length)),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigation.instance
-                                    .navigate('/exclusivePage');
-                              },
-                              child: Padding(
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 5.w),
-                                child: Text(
-                                  'Read More',
-                                  style: Theme
-                                      .of(context)
-                                      .textTheme
-                                      .headline5
-                                      ?.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: Divider(
-                          color: Colors.grey.shade800,
-                          thickness: 0.1.h,
-                        ),
-                      ),
-                      // SizedBox(
-                      //   height: 0.5.h,
-                      // ),
-                      Container(
-                        // height: 35.h,
-                        width: double.infinity,
-                        // color: Constance.secondaryColor,
-                        padding: EdgeInsets.symmetric(vertical: 1.h),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                              EdgeInsets.symmetric(horizontal: 5.w),
-                              child: Text(
-                                'Video of the week',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .headline3
-                                    ?.copyWith(
-                                  fontSize: 16.sp,
-                                  color: Constance.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            SizedBox(
-                              height: 20.h,
-                              width: double.infinity,
-                              child: ListView.separated(
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (cont, count) {
-                                    var item = data.home_weekly[count];
-                                    return VideoCard(item: item);
-                                  },
-                                  separatorBuilder: (cont, inde) {
-                                    return SizedBox(
-                                      width: 10.w,
-                                    );
-                                  },
-                                  itemCount: data.home_weekly.length > 4
-                                      ? 4
-                                      : data.home_weekly.length),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigation.instance
-                                    .navigate('/videoReport');
-                              },
-                              child: Padding(
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 5.w),
-                                child: Text(
-                                  'View All',
-                                  style: Theme
-                                      .of(context)
-                                      .textTheme
-                                      .headline5
-                                      ?.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // SizedBox(
-                            //   height: 1.h,
-                            // ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: Divider(
-                          color: Colors.grey.shade800,
-                          thickness: 0.1.h,
-                        ),
-                      ),
-                      Container(
-                        // height: 35.h,
-                        width: double.infinity,
-                        // color: Constance.secondaryColor,
-                        padding: EdgeInsets.symmetric(vertical: 1.h),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                              EdgeInsets.symmetric(horizontal: 5.w),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Poll of the week',
-                                    style: Theme
-                                        .of(context)
-                                        .textTheme
-                                        .headline3
-                                        ?.copyWith(
-                                      fontSize: 16.sp,
-                                      color: Constance.primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.share,
+                  : WillPopScope(
+                      onWillPop: () async {
+                        Dialogs.materialDialog(
+                            msg: 'Are you sure ? you want to exit',
+                            title: "Exit",
+                            color: Colors.white,
+                            context: context,
+                            titleStyle:
+                                Theme.of(context).textTheme.headline2!.copyWith(
                                       color: Colors.black,
                                     ),
-                                  ),
-                                ],
+                            msgStyle:
+                                Theme.of(context).textTheme.headline5!.copyWith(
+                                      color: Colors.black,
+                                    ),
+                            actions: [
+                              IconsOutlineButton(
+                                onPressed: () {
+                                  Navigation.instance.goBack();
+                                },
+                                text: 'Cancel',
+                                iconData: Icons.cancel_outlined,
+                                textStyle: TextStyle(color: Colors.grey),
+                                iconColor: Colors.grey,
                               ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            Container(
-                              child: ListView.separated(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  scrollDirection: Axis.vertical,
-                                  itemBuilder: (cont, count) {
-                                    var item = Constance.pollWeek[count];
-                                    var value =
-                                    Constance.pollValue[count];
-                                    return Theme(
-                                      data: ThemeData(
-                                        unselectedWidgetColor:
-                                        Colors.grey.shade900,
-                                        backgroundColor:
-                                        Colors.grey.shade200,
-                                      ),
-                                      child: RadioListTile(
-                                        controlAffinity:
-                                        ListTileControlAffinity
-                                            .leading,
-                                        selected:
-                                        _poll == item ? true : false,
-                                        tileColor: Colors.grey.shade300,
-                                        selectedTileColor: Colors.black,
-                                        value: item,
-                                        activeColor: Colors.black,
-                                        groupValue: _poll,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            _poll = item;
-                                          });
-                                        },
-                                        title: Text(
-                                          item,
-                                          style: Theme
-                                              .of(context)
-                                              .textTheme
-                                              .headline6
-                                              ?.copyWith(
-                                            color: Colors.black,
-                                            fontWeight:
-                                            FontWeight.bold,
-                                          ),
+                              IconsButton(
+                                onPressed: () {
+                                  SystemChannels.platform
+                                      .invokeMethod('SystemNavigator.pop');
+                                },
+                                text: 'Exit',
+                                iconData: Icons.exit_to_app,
+                                color: Constance.thirdColor,
+                                textStyle: TextStyle(color: Colors.white),
+                                iconColor: Colors.white,
+                              ),
+                            ]);
+                        return false;
+                      },
+                      child: Container(
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.grey.shade100,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              HomeBannerPage(),
+                              Container(
+                                width: double.infinity,
+                                height: 20.h,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 2.h, horizontal: 8.w),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigation.instance
+                                        .navigate('/bigdealpage');
+                                    Provider.of<DataProvider>(
+                                            Navigation.instance.navigatorKey
+                                                    .currentContext ??
+                                                context,
+                                            listen: false)
+                                        .setCurrent(1);
+                                  },
+                                  child: Card(
+                                    color: Constance.thirdColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 4.w, vertical: 0.5.h),
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
                                         ),
-                                        secondary: Text(
-                                          '${value}%',
-                                          style: Theme
-                                              .of(context)
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              child: Center(
+                                                child: Text(
+                                                  'Big Deals\nand Offers',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline3
+                                                      ?.copyWith(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                              child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: Colors.white,
+                                              ),
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(5),
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: CachedNetworkImage(
+                                                imageUrl: Constance.kfc_offer,
+                                                placeholder: (cont, _) {
+                                                  return const Icon(
+                                                    Icons.image,
+                                                    color: Colors.black,
+                                                  );
+                                                },
+                                                errorWidget: (cont, _, e) {
+                                                  // print(e);
+                                                  print(_);
+                                                  return Text(_);
+                                                },
+                                              ),
+                                            ),
+                                          )),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 25.h,
+                                width: double.infinity,
+                                color: Constance.secondaryColor,
+                                padding: EdgeInsets.symmetric(vertical: 2.h),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5.w),
+                                      child: Text(
+                                        'Top picks for you',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3
+                                            ?.copyWith(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16.sp,
+                                            ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: ListView.separated(
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (cont, count) {
+                                              var item =
+                                                  data.home_toppicks[count];
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  Navigation.instance.navigate(
+                                                      '/story',
+                                                      args:
+                                                          '${item.categories?.first.seo_name},${item.seo_name}');
+                                                },
+                                                child: ToppicksCard(item: item),
+                                              );
+                                            },
+                                            separatorBuilder: (cont, inde) {
+                                              return SizedBox(
+                                                width: 10.w,
+                                              );
+                                            },
+                                            itemCount:
+                                                data.home_toppicks.length > 4
+                                                    ? 4
+                                                    : data
+                                                        .home_toppicks.length),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 1.h,
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                                width: double.infinity,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _launchUrl(Uri.parse(
+                                        data.ads[random].link.toString()));
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 2.w, vertical: 1.5.h),
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.fill,
+                                      imageUrl:
+                                          data.ads[random].image_file_name ??
+                                              '',
+                                      placeholder: (cont, _) {
+                                        return const Icon(
+                                          Icons.image,
+                                          color: Colors.black,
+                                        );
+                                      },
+                                      errorWidget: (cont, _, e) {
+                                        // print(e);
+                                        print(_);
+                                        return Text(_);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                child: Divider(
+                                  color: Colors.grey.shade800,
+                                  thickness: 0.1.h,
+                                ),
+                              ),
+                              // SizedBox(
+                              //   height: 1.h,
+                              // ),
+                              Container(
+                                height: 30.h,
+                                width: double.infinity,
+                                // color: Constance.secondaryColor,
+                                padding: EdgeInsets.symmetric(vertical: 0.5.h),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5.w),
+                                      child: Text(
+                                        'GPlus Exclusive',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3
+                                            ?.copyWith(
+                                              fontSize: 16.sp,
+                                              color: Constance.primaryColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: ListView.separated(
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (cont, count) {
+                                              var item =
+                                                  data.home_exclusive[count];
+                                              return GestureDetector(
+                                                  onTap: () {
+                                                    Navigation.instance.navigate(
+                                                        '/story',
+                                                        args:
+                                                            '${'exclusive-news'},${item.seo_name}');
+                                                  },
+                                                  child: GPlusExecCard(
+                                                      item: item));
+                                            },
+                                            separatorBuilder: (cont, inde) {
+                                              return SizedBox(
+                                                width: 10.w,
+                                              );
+                                            },
+                                            itemCount:
+                                                (data.home_exclusive.length > 4
+                                                    ? 4
+                                                    : data.home_exclusive
+                                                        .length)),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigation.instance
+                                            .navigate('/exclusivePage');
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5.w),
+                                        child: Text(
+                                          'Read More',
+                                          style: Theme.of(context)
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
-                                              color: Colors.black,
-                                              fontSize: 1.7.h
-                                            // fontWeight: FontWeight.bold,
-                                          ),
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                  separatorBuilder: (cont, inde) {
-                                    return SizedBox(
-                                      width: 10.w,
-                                    );
-                                  },
-                                  itemCount: Constance.pollWeek.length),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            Padding(
-                              padding:
-                              EdgeInsets.symmetric(horizontal: 5.w),
-                              child: Text(
-                                'View All',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: Divider(
-                          color: Colors.grey.shade800,
-                          thickness: 0.1.h,
-                        ),
-                      ),
-                      Container(
-                        // height: 27.h,
-                        width: double.infinity,
-                        // color: Constance.secondaryColor,
-                        padding: EdgeInsets.symmetric(vertical: 1.h),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                              EdgeInsets.symmetric(horizontal: 5.w),
-                              child: Text(
-                                'Opinion',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .headline3
-                                    ?.copyWith(
-                                  fontSize: 16.sp,
-                                  color: Constance.thirdColor,
-                                  fontWeight: FontWeight.bold,
+                              SizedBox(
+                                height: 1.h,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                child: Divider(
+                                  color: Colors.grey.shade800,
+                                  thickness: 0.1.h,
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            Container(
-                              padding:
-                              EdgeInsets.symmetric(horizontal: 7.w),
-                              child: ListView.separated(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (cont, count) {
-                                  var item = data.latestOpinions[count];
-                                  return OpinionCard(item: item);
-                                },
-                                separatorBuilder: (cont, inde) {
-                                  return SizedBox(
-                                    width: 10.w,
-                                  );
-                                },
-                                itemCount: (data.latestOpinions.length > 3
-                                    ? data.latestOpinions.length /
-                                    3.toInt()
-                                    : data.latestOpinions.length)
-                                    .toInt(),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigation.instance
-                                    .navigate('/opinionPage');
-                                // Navigation.instance
-                                //     .navigate('/authorPage', args: 1);
-                              },
-                              child: Padding(
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 5.w),
-                                child: Text(
-                                  'Read More',
-                                  style: Theme
-                                      .of(context)
-                                      .textTheme
-                                      .headline5
-                                      ?.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              // SizedBox(
+                              //   height: 0.5.h,
+                              // ),
+                              Container(
+                                // height: 35.h,
+                                width: double.infinity,
+                                // color: Constance.secondaryColor,
+                                padding: EdgeInsets.symmetric(vertical: 1.h),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5.w),
+                                      child: Text(
+                                        'Video of the week',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3
+                                            ?.copyWith(
+                                              fontSize: 16.sp,
+                                              color: Constance.primaryColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                      width: double.infinity,
+                                      child: ListView.separated(
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (cont, count) {
+                                            var item = data.home_weekly[count];
+                                            return VideoCard(item: item);
+                                          },
+                                          separatorBuilder: (cont, inde) {
+                                            return SizedBox(
+                                              width: 10.w,
+                                            );
+                                          },
+                                          itemCount: data.home_weekly.length > 4
+                                              ? 4
+                                              : data.home_weekly.length),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigation.instance
+                                            .navigate('/videoReport');
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5.w),
+                                        child: Text(
+                                          'View All',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline5
+                                              ?.copyWith(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                    // SizedBox(
+                                    //   height: 1.h,
+                                    // ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 17.h,
-                            ),
-                          ],
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                child: Divider(
+                                  color: Colors.grey.shade800,
+                                  thickness: 0.1.h,
+                                ),
+                              ),
+                              Container(
+                                // height: 35.h,
+                                width: double.infinity,
+                                // color: Constance.secondaryColor,
+                                padding: EdgeInsets.symmetric(vertical: 1.h),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5.w),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Poll of the week',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline3
+                                                ?.copyWith(
+                                                  fontSize: 16.sp,
+                                                  color: Constance.primaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: Icon(
+                                              Icons.share,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5.w),
+                                      child: Text(
+                                        data.pollOfTheWeek?.title ??
+                                            'Poll of the week',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3
+                                            ?.copyWith(
+                                              fontSize: 13.sp,
+                                              color: Constance.primaryColor,
+                                              // fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    Container(
+                                      child: ListView.separated(
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          scrollDirection: Axis.vertical,
+                                          itemBuilder: (cont, count) {
+                                            var item =
+                                                Constance.pollWeek[count];
+                                            var value =
+                                                Constance.pollValue[count];
+                                            return Stack(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 2.w,
+                                                      vertical: 1.h),
+                                                  child: LinearPercentIndicator(
+                                                    barRadius:
+                                                        Radius.circular(5),
+                                                    width: 80.w,
+                                                    lineHeight: 5.h,
+                                                    percent:
+                                                        getOption(count, data) /
+                                                            100,
+                                                    center: const Text(
+                                                      "",
+                                                      style: TextStyle(
+                                                          fontSize: 12.0),
+                                                    ),
+                                                    // trailing: Icon(Icons.mood),
+                                                    linearStrokeCap:
+                                                        LinearStrokeCap
+                                                            .roundAll,
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    progressColor: Constance
+                                                        .secondaryColor,
+                                                  ),
+                                                ),
+                                                Theme(
+                                                  data: ThemeData(
+                                                    unselectedWidgetColor:
+                                                        Colors.grey.shade900,
+                                                    backgroundColor:
+                                                        Colors.grey.shade200,
+                                                  ),
+                                                  child: RadioListTile(
+                                                    controlAffinity:
+                                                        ListTileControlAffinity
+                                                            .leading,
+                                                    selected: _poll ==
+                                                            getOptionName(
+                                                                count, data)
+                                                        ? true
+                                                        : false,
+                                                    tileColor:
+                                                        Colors.grey.shade300,
+                                                    selectedTileColor:
+                                                        Colors.black,
+                                                    value: getOptionName(
+                                                        count, data),
+                                                    activeColor: Colors.black,
+                                                    groupValue: _poll,
+                                                    onChanged: (val) {
+                                                      setState(() {
+                                                        _poll = getOptionName(
+                                                            count, data);
+                                                      });
+                                                    },
+                                                    title: Text(
+                                                      getOptionName(
+                                                          count, data),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .headline6
+                                                          ?.copyWith(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                    ),
+                                                    secondary: Text(
+                                                      '${getOption(count, data)}%',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .headline5
+                                                          ?.copyWith(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 1.7.h
+                                                              // fontWeight: FontWeight.bold,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                          separatorBuilder: (cont, inde) {
+                                            return SizedBox(
+                                              width: 10.w,
+                                            );
+                                          },
+                                          itemCount: 3),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5.w),
+                                      child: Text(
+                                        'View All',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5
+                                            ?.copyWith(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                child: Divider(
+                                  color: Colors.grey.shade800,
+                                  thickness: 0.1.h,
+                                ),
+                              ),
+                              Container(
+                                // height: 27.h,
+                                width: double.infinity,
+                                // color: Constance.secondaryColor,
+                                padding: EdgeInsets.symmetric(vertical: 1.h),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5.w),
+                                      child: Text(
+                                        'Opinion',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3
+                                            ?.copyWith(
+                                              fontSize: 16.sp,
+                                              color: Constance.thirdColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    Container(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 7.w),
+                                      child: ListView.separated(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        scrollDirection: Axis.vertical,
+                                        itemBuilder: (cont, count) {
+                                          var item = data.latestOpinions[count];
+                                          return OpinionCard(item: item);
+                                        },
+                                        separatorBuilder: (cont, inde) {
+                                          return SizedBox(
+                                            width: 10.w,
+                                          );
+                                        },
+                                        itemCount: (data.latestOpinions.length >
+                                                    3
+                                                ? data.latestOpinions.length /
+                                                    3.toInt()
+                                                : data.latestOpinions.length)
+                                            .toInt(),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigation.instance
+                                            .navigate('/opinionPage');
+                                        // Navigation.instance
+                                        //     .navigate('/authorPage', args: 1);
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5.w),
+                                        child: Text(
+                                          'Read More',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline5
+                                              ?.copyWith(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 17.h,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              );
+                    );
             }),
           ),
         ),
@@ -810,8 +909,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await ApiProvider.instance.getLatestOpinion();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setLatestOpinions(response.opinion ?? []);
     }
   }
@@ -820,8 +919,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await ApiProvider.instance.getTopPicks();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setHomeTopPicks(response.toppicks ?? []);
     }
   }
@@ -830,9 +929,19 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await ApiProvider.instance.getArticle('exclusive-news');
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setHomeExecl(response.articles ?? []);
+    }
+  }
+
+  void fetchPoll() async {
+    final response = await ApiProvider.instance.getPollOfTheWeek();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setPollOfTheWeek(response.pollOfTheWeek!);
     }
   }
 
@@ -840,8 +949,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await ApiProvider.instance.getAdvertise();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setAds(response.ads ?? []);
       random = Random().nextInt(response.ads?.length ?? 0);
     }
@@ -873,11 +982,58 @@ class _HomeScreenState extends State<HomeScreen> {
   void askPermissions() async {
     var status = await Permission.location.status;
     if (status.isDenied) {
-      if (await Permission.location
-          .request()
-          .isGranted) {} else {
+      if (await Permission.location.request().isGranted) {
+      } else {
         // showError("We require storage permissions");
       }
+    }
+  }
+
+  getOption(int count, data) {
+    switch (count) {
+      case 0:
+        return data.pollOfTheWeek?.percent1;
+      case 1:
+        return data.pollOfTheWeek?.percent2;
+      case 2:
+        return data.pollOfTheWeek?.percent3;
+      default:
+        return data.pollOfTheWeek?.option1;
+    }
+  }
+
+  String getOptionName(int count, data) {
+    switch (count) {
+      case 0:
+        return data.pollOfTheWeek?.option1 ?? "";
+      case 1:
+        return data.pollOfTheWeek?.option2 ?? "";
+      case 2:
+        return data.pollOfTheWeek?.option3 ?? "";
+      default:
+        return data.pollOfTheWeek?.option1 ?? "";
+    }
+  }
+
+  void fetchProfile() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getprofile();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setProfile(response.profile!);
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setMyTopicks(response.topicks);
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setMyGeoTopicks(response.geoTopicks);
+      Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
     }
   }
 }

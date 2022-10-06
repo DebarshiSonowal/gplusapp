@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Model/about_us.dart';
+import 'package:gplusapp/Model/address.dart';
 import 'package:gplusapp/Model/advertise.dart';
 import 'package:gplusapp/Model/article.dart';
 import 'package:gplusapp/Model/classified.dart';
@@ -7,6 +8,7 @@ import 'package:gplusapp/Model/classified_category.dart';
 import 'package:gplusapp/Model/deal_details.dart';
 import 'package:gplusapp/Model/locality.dart';
 import 'package:gplusapp/Model/opinion.dart';
+import 'package:gplusapp/Model/poll_of_the_week.dart';
 import 'package:gplusapp/Model/profile.dart';
 import 'package:gplusapp/Model/promoted_deal.dart';
 import 'package:gplusapp/Model/refer_earn_response.dart';
@@ -16,6 +18,7 @@ import 'package:gplusapp/Model/video_news.dart';
 import 'package:gplusapp/UI/others/contact_us_page.dart';
 
 import '../Model/contact_us.dart';
+import '../Model/guwahati_connect.dart';
 import '../Model/membership.dart';
 import '../Model/redeem_details.dart';
 import '../Model/topick.dart';
@@ -47,15 +50,25 @@ class DataProvider extends ChangeNotifier {
   Article? selectedArticle;
   AboutUs? aboutUs;
   ContactUs? contactUs;
+  PollOfTheWeek? pollOfTheWeek;
+  List<Address>? addresses = [];
+  List<GuwahatiConnect> guwahatiConnect = [];
 
   setArticleDetails(Article data) {
     selectedArticle = data;
     notifyListeners();
   }
- setAboutUs(AboutUs data) {
-   aboutUs = data;
+
+  setPollOfTheWeek(PollOfTheWeek data) {
+    pollOfTheWeek = data;
     notifyListeners();
   }
+
+  setAboutUs(AboutUs data) {
+    aboutUs = data;
+    notifyListeners();
+  }
+
   setContactUs(ContactUs data) {
     contactUs = data;
     notifyListeners();
@@ -68,6 +81,16 @@ class DataProvider extends ChangeNotifier {
 
   setClassified(List<Classified> list) {
     classified = list;
+    notifyListeners();
+  }
+
+  setGuwahatiConnect(List<GuwahatiConnect> list) {
+    guwahatiConnect = list;
+    notifyListeners();
+  }
+
+  setAddressess(List<Address> list) {
+    addresses = list;
     notifyListeners();
   }
 

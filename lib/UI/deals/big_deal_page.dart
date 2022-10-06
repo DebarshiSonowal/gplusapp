@@ -1,9 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
+import 'package:material_dialogs/material_dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -94,713 +98,753 @@ class _BigDealPageState extends State<BigDealPage> {
         controller: _refreshController,
         onRefresh: _onRefresh,
         // onLoading: _onLoading,
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(vertical: 2.h),
-          child: Consumer<DataProvider>(builder: (context, current, _) {
-            return current.deals.isNotEmpty
-                ? SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5.w),
-                          child: Text(
-                            'Promoted Deals',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline3
-                                ?.copyWith(
-                                    color: Constance.primaryColor,
-                                    fontWeight: FontWeight.bold),
+        child: WillPopScope(
+          onWillPop: () async {
+            // Dialogs.materialDialog(
+            //     msg: 'Are you sure ? you want to exit',
+            //     title: "Exit",
+            //     color: Colors.white,
+            //     context: context,
+            //     titleStyle:
+            //     Theme.of(context).textTheme.headline2!.copyWith(
+            //       color: Colors.black,
+            //     ),
+            //     msgStyle:
+            //     Theme.of(context).textTheme.headline5!.copyWith(
+            //       color: Colors.black,
+            //     ),
+            //     actions: [
+            //       IconsOutlineButton(
+            //         onPressed: () {
+            //           Navigation.instance.goBack();
+            //         },
+            //         text: 'Cancel',
+            //         iconData: Icons.cancel_outlined,
+            //         textStyle: TextStyle(color: Colors.grey),
+            //         iconColor: Colors.grey,
+            //       ),
+            //       IconsButton(
+            //         onPressed: () {
+            //           SystemChannels.platform
+            //               .invokeMethod('SystemNavigator.pop');
+            //         },
+            //         text: 'Exit',
+            //         iconData: Icons.exit_to_app,
+            //         color: Constance.thirdColor,
+            //         textStyle: TextStyle(color: Colors.white),
+            //         iconColor: Colors.white,
+            //       ),
+            //     ]);
+            return true;
+          },
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(vertical: 2.h),
+            child: Consumer<DataProvider>(builder: (context, current, _) {
+              return current.deals.isNotEmpty
+                  ? SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5.w),
+                            child: Text(
+                              'Promoted Deals',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline3
+                                  ?.copyWith(
+                                      color: Constance.primaryColor,
+                                      fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        SizedBox(
-                          height: 33.h,
-                          width: double.infinity,
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: current.deals.length,
-                            itemBuilder: (cont, cout) {
-                              var data = current.deals[cout];
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigation.instance.navigate(
-                                      '/categorySelect',
-                                      args: data.id);
-                                },
-                                child: SizedBox(
-                                  height: 30.h,
-                                  width: 60.w,
-                                  child: Card(
-                                    elevation: 3,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    color: Colors.white,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                topRight: Radius.circular(5.0),
-                                                bottomRight:
-                                                    Radius.circular(5.0),
-                                                topLeft: Radius.circular(5.0),
-                                                bottomLeft:
-                                                    Radius.circular(5.0),
-                                              ),
-                                              image: DecorationImage(
-                                                fit: BoxFit.contain,
-                                                image: CachedNetworkImageProvider(
-                                                    data.vendor
-                                                            ?.image_file_name ??
-                                                        "https://source.unsplash.com/user/c_v_r/1900x800",
-                                                    maxWidth: 100),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        // SizedBox(
-                                        //   height: 1.h,
-                                        // ),
-                                        Expanded(
-                                            child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 4.w, vertical: 1.h),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                data.vendor?.shop_name ?? "",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline4
-                                                    ?.copyWith(
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                              ),
-                                              SizedBox(
-                                                height: 0.5.h,
-                                              ),
-                                              Text(
-                                                data.vendor?.address ?? "",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline5
-                                                    ?.copyWith(
-                                                      color: Colors.black,
-                                                      // fontWeight: FontWeight.bold
-                                                    ),
-                                              ),
-                                              SizedBox(
-                                                height: 0.5.h,
-                                              ),
-                                              Text(
-                                                data.title ?? "",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline4
-                                                    ?.copyWith(
-                                                        color: Constance
-                                                            .thirdColor,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                              ),
-                                            ],
-                                          ),
-                                        )),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return SizedBox(
-                                width: 2.h,
-                              );
-                            },
+                          SizedBox(
+                            height: 2.h,
                           ),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5.w),
-                          child: Text(
-                            'Categories',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline4
-                                ?.copyWith(
-                                    color: Constance.primaryColor,
-                                    fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 1.w),
-                          child: Wrap(
-                            alignment: WrapAlignment.spaceEvenly,
-                            children: current.category.map((e) {
-                              return GestureDetector(
-                                onTap: () {
-                                  selectedCategory(e.name);
-                                },
-                                child: Container(
-                                  // height: 10.h,
-                                  width: 10.h,
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 1.w, vertical: 0.5.w),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 8.h,
-                                        height: 8.h,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 2.w, vertical: 1.h),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Constance.secondaryColor),
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        child: Image.network(
-                                          e.image_file_name ?? "",
-                                          // color: Constance.primaryColor,
-                                        ),
+                          SizedBox(
+                            height: 33.h,
+                            width: double.infinity,
+                            child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: current.deals.length,
+                              itemBuilder: (cont, cout) {
+                                var data = current.deals[cout];
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigation.instance.navigate(
+                                        '/categorySelect',
+                                        args: data.id);
+                                  },
+                                  child: SizedBox(
+                                    height: 30.h,
+                                    width: 60.w,
+                                    child: Card(
+                                      elevation: 3,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5.0),
                                       ),
-                                      SizedBox(
-                                        height: 0.5.h,
-                                      ),
-                                      Text(
-                                        e.name ?? "",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6
-                                            ?.copyWith(
-                                              color: Constance.primaryColor,
-                                              // fontSize: 1.7.h,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      SizedBox(
-                                        height: 0.5.h,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 2.5.h,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Center(
-                            child: CustomButton(
-                                txt: 'View More ',
-                                onTap: () {
-                                  showDialogBox();
-                                }),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 4.w),
-                          child: Card(
-                            color: Colors.white,
-                            child: ExpansionTile(
-                              collapsedIconColor: Colors.black,
-                              iconColor: Colors.black,
-                              title: Text(
-                                'History',
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline3
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      // fontSize: 11.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: Divider(
-                                    color: Constance.secondaryColor,
-                                    thickness: 0.1.h,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 4.w, vertical: 1.h),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
+                                      color: Colors.white,
+                                      child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            '25% OFF',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation
-                                                .instance
-                                                .navigatorKey
-                                                .currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            'Subway',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation
-                                                    .instance
-                                                    .navigatorKey
-                                                    .currentContext!)
-                                                .textTheme
-                                                .headline4
-                                                ?.copyWith(
-                                                  color: Colors.black,
-                                                  // fontSize: 11.sp,
-                                                  fontWeight: FontWeight.bold,
+                                          Expanded(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topRight: Radius.circular(5.0),
+                                                  bottomRight:
+                                                      Radius.circular(5.0),
+                                                  topLeft: Radius.circular(5.0),
+                                                  bottomLeft:
+                                                      Radius.circular(5.0),
                                                 ),
-                                          ),
-                                          Text(
-                                            'RGB road, Zoo tiniali',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation
-                                                    .instance
-                                                    .navigatorKey
-                                                    .currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                                  color: Colors.black,
-                                                  // fontSize: 11.sp,
-                                                  // fontWeight: FontWeight.bold,
+                                                image: DecorationImage(
+                                                  fit: BoxFit.contain,
+                                                  image: CachedNetworkImageProvider(
+                                                      data.vendor
+                                                              ?.image_file_name ??
+                                                          "https://source.unsplash.com/user/c_v_r/1900x800",
+                                                      maxWidth: 100),
                                                 ),
-                                          ),
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            '8486',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.grey.shade800,
-                                              // fontSize: 11.sp,
-                                              fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
-                                          Text(
-                                            '26-12-2022',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation.instance
-                                                    .navigatorKey.currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                                  color: Colors.black,
-                                                  // fontSize: 11.sp,
-                                                  // fontWeight: FontWeight.bold,
+                                          // SizedBox(
+                                          //   height: 1.h,
+                                          // ),
+                                          Expanded(
+                                              child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 4.w, vertical: 1.h),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  data.vendor?.shop_name ?? "",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline4
+                                                      ?.copyWith(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                 ),
-                                          ),
+                                                SizedBox(
+                                                  height: 0.5.h,
+                                                ),
+                                                Text(
+                                                  data.vendor?.address ?? "",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline5
+                                                      ?.copyWith(
+                                                        color: Colors.black,
+                                                        // fontWeight: FontWeight.bold
+                                                      ),
+                                                ),
+                                                SizedBox(
+                                                  height: 0.5.h,
+                                                ),
+                                                Text(
+                                                  data.title ?? "",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline4
+                                                      ?.copyWith(
+                                                          color: Constance
+                                                              .thirdColor,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                          )),
                                         ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 4.w, vertical: 1.h),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '25% OFF',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation
-                                                .instance
-                                                .navigatorKey
-                                                .currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            'Subway',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation
-                                                .instance
-                                                .navigatorKey
-                                                .currentContext!)
-                                                .textTheme
-                                                .headline4
-                                                ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            'RGB road, Zoo tiniali',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation
-                                                .instance
-                                                .navigatorKey
-                                                .currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            '8486',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.grey.shade800,
-                                              // fontSize: 11.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            '26-12-2022',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 4.w, vertical: 1.h),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '25% OFF',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation
-                                                .instance
-                                                .navigatorKey
-                                                .currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            'Subway',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation
-                                                .instance
-                                                .navigatorKey
-                                                .currentContext!)
-                                                .textTheme
-                                                .headline4
-                                                ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            'RGB road, Zoo tiniali',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation
-                                                .instance
-                                                .navigatorKey
-                                                .currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            '8486',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.grey.shade800,
-                                              // fontSize: 11.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            '26-12-2022',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 4.w, vertical: 1.h),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '25% OFF',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation
-                                                .instance
-                                                .navigatorKey
-                                                .currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            'Subway',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation
-                                                .instance
-                                                .navigatorKey
-                                                .currentContext!)
-                                                .textTheme
-                                                .headline4
-                                                ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            'RGB road, Zoo tiniali',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation
-                                                .instance
-                                                .navigatorKey
-                                                .currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            '8486',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.grey.shade800,
-                                              // fontSize: 11.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            '26-12-2022',
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: Divider(
-                                    color: Constance.secondaryColor,
-                                    thickness: 0.1.h,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 4.w, vertical: 1.h),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'See More',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline4
-                                            ?.copyWith(
-                                              color: Constance.secondaryColor,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                ),
-                              ],
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) {
+                                return SizedBox(
+                                  width: 2.h,
+                                );
+                              },
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  )
-                : Center(
-                    child: SizedBox(
-                        height: 2.h,
-                        width: 2.h,
-                        child: const CircularProgressIndicator()),
-                  );
-          }),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5.w),
+                            child: Text(
+                              'Categories',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                      color: Constance.primaryColor,
+                                      fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 1.w),
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceEvenly,
+                              children: current.category.map((e) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    selectedCategory(e.name);
+                                  },
+                                  child: Container(
+                                    // height: 10.h,
+                                    width: 10.h,
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 1.w, vertical: 0.5.w),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: 8.h,
+                                          height: 8.h,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 2.w, vertical: 1.h),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Constance.secondaryColor),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Image.network(
+                                            e.image_file_name ?? "",
+                                            // color: Constance.primaryColor,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 0.5.h,
+                                        ),
+                                        Text(
+                                          e.name ?? "",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(
+                                                color: Constance.primaryColor,
+                                                // fontSize: 1.7.h,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                        SizedBox(
+                                          height: 0.5.h,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2.5.h,
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Center(
+                              child: CustomButton(
+                                  txt: 'View More ',
+                                  onTap: () {
+                                    showDialogBox();
+                                  }),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.w),
+                            child: Card(
+                              color: Colors.white,
+                              child: ExpansionTile(
+                                collapsedIconColor: Colors.black,
+                                iconColor: Colors.black,
+                                title: Text(
+                                  'History',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(Navigation
+                                          .instance.navigatorKey.currentContext!)
+                                      .textTheme
+                                      .headline3
+                                      ?.copyWith(
+                                        color: Colors.black,
+                                        // fontSize: 11.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Divider(
+                                      color: Constance.secondaryColor,
+                                      thickness: 0.1.h,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 1.h),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '25% OFF',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                  .instance
+                                                  .navigatorKey
+                                                  .currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Subway',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                      .instance
+                                                      .navigatorKey
+                                                      .currentContext!)
+                                                  .textTheme
+                                                  .headline4
+                                                  ?.copyWith(
+                                                    color: Colors.black,
+                                                    // fontSize: 11.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                            Text(
+                                              'RGB road, Zoo tiniali',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                      .instance
+                                                      .navigatorKey
+                                                      .currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                    color: Colors.black,
+                                                    // fontSize: 11.sp,
+                                                    // fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                        const Spacer(),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              '8486',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.grey.shade800,
+                                                // fontSize: 11.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              '26-12-2022',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation.instance
+                                                      .navigatorKey.currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                    color: Colors.black,
+                                                    // fontSize: 11.sp,
+                                                    // fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 1.h,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 1.h),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '25% OFF',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                  .instance
+                                                  .navigatorKey
+                                                  .currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Subway',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                  .instance
+                                                  .navigatorKey
+                                                  .currentContext!)
+                                                  .textTheme
+                                                  .headline4
+                                                  ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'RGB road, Zoo tiniali',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                  .instance
+                                                  .navigatorKey
+                                                  .currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const Spacer(),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              '8486',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.grey.shade800,
+                                                // fontSize: 11.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              '26-12-2022',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 1.h,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 1.h),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '25% OFF',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                  .instance
+                                                  .navigatorKey
+                                                  .currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Subway',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                  .instance
+                                                  .navigatorKey
+                                                  .currentContext!)
+                                                  .textTheme
+                                                  .headline4
+                                                  ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'RGB road, Zoo tiniali',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                  .instance
+                                                  .navigatorKey
+                                                  .currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const Spacer(),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              '8486',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.grey.shade800,
+                                                // fontSize: 11.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              '26-12-2022',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 1.h,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 1.h),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '25% OFF',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                  .instance
+                                                  .navigatorKey
+                                                  .currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Subway',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                  .instance
+                                                  .navigatorKey
+                                                  .currentContext!)
+                                                  .textTheme
+                                                  .headline4
+                                                  ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'RGB road, Zoo tiniali',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                  .instance
+                                                  .navigatorKey
+                                                  .currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const Spacer(),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              '8486',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.grey.shade800,
+                                                // fontSize: 11.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              '26-12-2022',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 1.h,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Divider(
+                                      color: Constance.secondaryColor,
+                                      thickness: 0.1.h,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 1.h),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          'See More',
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.start,
+                                          style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
+                                              .textTheme
+                                              .headline4
+                                              ?.copyWith(
+                                                color: Constance.secondaryColor,
+                                                // fontSize: 11.sp,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 1.h,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Center(
+                      child: SizedBox(
+                          height: 2.h,
+                          width: 2.h,
+                          child: const CircularProgressIndicator()),
+                    );
+            }),
+          ),
         ),
       ),
       bottomNavigationBar: CustomNavigationBar(current),

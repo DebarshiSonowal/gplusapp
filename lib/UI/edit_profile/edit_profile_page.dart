@@ -26,7 +26,7 @@ class _EditProfileState extends State<EditProfile> {
   int year = 2000;
   int max = 2022;
   int currentY = 2022;
-  String dropdownvalue = 'Male';
+  String dropdownvalue = 'Male', address = '', id = '0';
   var items = [
     'Male',
     'Women',
@@ -178,13 +178,28 @@ class _EditProfileState extends State<EditProfile> {
                   height: 1.5.h,
                 ),
                 GestureDetector(
-                  onTap: () {
-                    Navigation.instance.navigate('/editSavedAddresses');
+                  onTap: () async {
+                    final response = await Navigation.instance
+                        .navigate('/editSavedAddresses');
+                    if (response != null) {
+                      setState(() {
+                        address = Provider.of<DataProvider>(
+                                    Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                        context,
+                                    listen: false)
+                                .addresses!
+                                .firstWhere((element) => element.id == response)
+                                .address ??
+                            "";
+                        id = response.toString();
+                      });
+                    } else {}
                   },
                   child: Row(
                     children: [
                       Text(
-                        'Khanapara, Guwahati',
+                        address,
                         style: Theme.of(context).textTheme.headline5?.copyWith(
                               color: Constance.primaryColor,
                               // fontSize: 2.h,
@@ -247,14 +262,14 @@ class _EditProfileState extends State<EditProfile> {
                             decoration: BoxDecoration(
                               color: selGeo == null
                                   ? Colors.white
-                                  : !selGeo.contains(Constance.geo[i])
+                                  : !selGeo.contains(data.mygeoTopicks[i])
                                       ? Colors.white
                                       : Constance.secondaryColor,
                               borderRadius: BorderRadius.circular(5),
                               border: Border.all(
                                 color: selGeo == null
                                     ? Constance.primaryColor
-                                    : !selGeo.contains(Constance.geo[i])
+                                    : !selGeo.contains(data.mygeoTopicks[i])
                                         ? Constance.primaryColor
                                         : Constance.secondaryColor,
                                 width: 0.5.w,
@@ -265,7 +280,7 @@ class _EditProfileState extends State<EditProfile> {
                               ),
                             ),
                             child: Text(
-                              Constance.geo[i],
+                              data.mygeoTopicks[i].title!,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline5
@@ -318,14 +333,14 @@ class _EditProfileState extends State<EditProfile> {
                             decoration: BoxDecoration(
                               color: selTop == null
                                   ? Colors.white
-                                  : !selTop.contains(Constance.topical[i])
+                                  : !selTop.contains(data.mytopicks[i])
                                       ? Colors.white
                                       : Constance.secondaryColor,
                               borderRadius: BorderRadius.circular(5),
                               border: Border.all(
                                 color: selTop == null
                                     ? Constance.primaryColor
-                                    : !selTop.contains(Constance.topical[i])
+                                    : !selTop.contains(data.mytopicks[i])
                                         ? Constance.primaryColor
                                         : Constance.secondaryColor,
                                 width: 0.5.w,
@@ -336,7 +351,7 @@ class _EditProfileState extends State<EditProfile> {
                               ),
                             ),
                             child: Text(
-                              Constance.topical[i],
+                              data.mytopicks[i].title!,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline5
@@ -471,6 +486,7 @@ class _EditProfileState extends State<EditProfile> {
                   child: CustomButton(
                     txt: 'Save & Continue',
                     onTap: () {
+                      saveDetails();
                       // Navigation.instance.navigateAndReplace('/enterPreferences');
                     },
                   ),
@@ -504,6 +520,8 @@ class _EditProfileState extends State<EditProfile> {
           .setMyGeoTopicks(response.geoTopicks);
       Navigation.instance.goBack();
       setData(response.profile!);
+      selGeo = response.geoTopicks;
+      selTop = response.topicks;
     } else {
       Navigation.instance.goBack();
     }
@@ -534,5 +552,65 @@ class _EditProfileState extends State<EditProfile> {
     big_deal = prof.has_deal_notify_perm ?? false;
     guwahati_connect = prof.has_ghy_connect_notify_perm ?? false;
     classified = prof.has_classified_notify_perm ?? false;
+    try {
+      address = prof.addresses[0].address??"";
+    } catch (e) {
+      print(e);
+    }
+    try {
+      id = prof.addresses.where((element) => (element.is_primary!)==0).toString();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void saveDetails() async {
+    final response = await ApiProvider.instance.createProfile(
+        id.toString(),
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .profile
+            ?.mobile,
+        first_name.text,
+        last_name.text,
+        email.text,
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .profile
+            ?.dob,
+        address,
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .addresses!
+            .firstWhere((element) => element.id.toString().trim() == id)
+            .longitude,
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .addresses!
+            .firstWhere((element) => element.id.toString().trim() == id)
+            .latitude,
+        getComaSeparated(selTop),
+        getComaSeparated(selGeo),
+        big_deal,
+        guwahati_connect,
+        classified);
+    if (response.success ?? false) {
+      fetchProfile();
+    }
+  }
+  String getComaSeparated(List<dynamic> list) {
+    String temp = "";
+    for (int i = 0; i < list.length; i++) {
+      if (i == 0) {
+        temp = '${list[i].id.toString()},';
+      } else {
+        temp += '${list[i].id.toString()},';
+      }
+    }
+    return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
 }

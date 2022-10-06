@@ -13,9 +13,11 @@ import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../Model/about_us.dart';
+import '../Model/address.dart';
 import '../Model/advertise.dart';
 import '../Model/article.dart';
 import '../Model/article_desc.dart';
+import '../Model/guwahati_connect.dart';
 import '../Model/classified.dart';
 import '../Model/classified_category.dart';
 import '../Model/contact_us.dart';
@@ -26,6 +28,7 @@ import '../Model/generic_response.dart';
 // import '../Model/login_response.dart';
 import '../Model/membership.dart';
 import '../Model/opinion.dart';
+import '../Model/poll_of_the_week.dart';
 import '../Model/promoted_deal.dart';
 import '../Model/redeem_details.dart';
 import '../Model/refer_earn_response.dart';
@@ -156,6 +159,7 @@ class ApiProvider {
       'geo_ids': geo_ids,
       'has_deal_notify_perm': has_deal_notify_perm,
       'has_ghy_connect_notify_perm': has_ghy_connect_notify_perm,
+      'has_classified_notify_perm': has_classified_notify_perm,
     };
     var url = "${baseUrl}/profile";
     dio = Dio(option);
@@ -201,6 +205,63 @@ class ApiProvider {
     } on DioError catch (e) {
       debugPrint("Article response: ${e.response}");
       return ArticleResponse.withError(e.message);
+    }
+  }
+
+  Future<AddressResponse> getAddress() async {
+    // var data = {
+    //   // 'mobile': mobile,
+    // };
+
+    var url = "${baseUrl}/address-list";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+      );
+      debugPrint("address-list response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return AddressResponse.fromJson(response?.data);
+      } else {
+        debugPrint("address-list error: ${response?.data}");
+        return AddressResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("address-list response: ${e.response}");
+      return AddressResponse.withError(e.message);
+    }
+  }
+
+  Future<AddressResponse> postAddress(address, lat, lang) async {
+    var data = {
+      'address': address,
+      'latitude': lat,
+      'longitude': lang,
+    };
+
+    var url = "${baseUrl}/address";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+      );
+      debugPrint("address response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return AddressResponse.fromJson(response?.data);
+      } else {
+        debugPrint("address error: ${response?.data}");
+        return AddressResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("address response: ${e.response}");
+      return AddressResponse.withError(e.message);
     }
   }
 
@@ -828,6 +889,56 @@ class ApiProvider {
     }
   }
 
+  Future<GuwahatiConnectResponse> getGuwahatiConnect() async {
+    var url = "${baseUrl}/app/guwahati-connect";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("guwahati-connect response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GuwahatiConnectResponse.fromJson(response?.data);
+      } else {
+        debugPrint("guwahati-connect error: ${response?.data}");
+        return GuwahatiConnectResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("guwahati-connect error: ${e.response}");
+      return GuwahatiConnectResponse.withError(e.message);
+    }
+  }
+
+  Future<PollOfTheWeekResponse> getPollOfTheWeek() async {
+    var url = "${baseUrl}/app/poll-question";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("PollOfTheWeekResponse: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return PollOfTheWeekResponse.fromJson(response?.data);
+      } else {
+        debugPrint("PollOfTheWeekResponse error: ${response?.data}");
+        return PollOfTheWeekResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("PollOfTheWeekResponse response: ${e.response}");
+      return PollOfTheWeekResponse.withError(e.message);
+    }
+  }
+
   Future<GenericResponse> postClassified(classified_category_id, locality_id,
       title, description, price, List<File> files) async {
     var url = "${baseUrl}/app/classified";
@@ -871,6 +982,93 @@ class ApiProvider {
       }
     } on DioError catch (e) {
       debugPrint("postClassified error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> postCitizenJournalist(
+      title, story, List<File> files) async {
+    var url = "${baseUrl}/app/citizen-journalist";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    FormData data = FormData.fromMap({
+      'title': title,
+      'story': story,
+    });
+    for (int i = 0; i < files.length; i++) {
+      var type = lookupMimeType(files[i].path, headerBytes: [0xFF, 0xD8])!;
+      MultipartFile file = await MultipartFile.fromFile(
+        files[i].path,
+        filename: files[i].path.split("/").last,
+        contentType:
+            MediaType(type.split('/').first, type.split('/').last), //important
+      );
+      // data[''] = file;
+      data.files.add(MapEntry('attachment_list[${i}][file_data]', file));
+      data.fields.add(MapEntry('attachment_list[${i}][file_type]', type));
+    }
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("postCitizenJournalist response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("postCitizenJournalist error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("postCitizenJournalist error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> postGuwhahatiConnect(
+      question, List<File> files) async {
+    var url = "${baseUrl}/app/guwahati-connect";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    FormData data = FormData.fromMap({
+      'question': question,
+    });
+    for (int i = 0; i < files.length; i++) {
+      var type = lookupMimeType(files[i].path, headerBytes: [0xFF, 0xD8])!;
+      MultipartFile file = await MultipartFile.fromFile(
+        files[i].path,
+        filename: files[i].path.split("/").last,
+        contentType:
+            MediaType(type.split('/').first, type.split('/').last), //important
+      );
+      // data[''] = file;
+      data.files.add(MapEntry('attachment_list[${i}][file_data]', file));
+      data.fields.add(MapEntry('attachment_list[${i}][file_type]', type));
+    }
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("postguwahati-connect response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("postguwahati-connect error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("postguwahati-connect error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
   }

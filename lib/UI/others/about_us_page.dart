@@ -76,6 +76,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   Html(
                     data: data.aboutUs?.content?.trim() ?? "",
                     shrinkWrap: true,
+
                     style: {
                       '#': Style(
                         // fontSize: FontSize(_counterValue),

@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/NavigationBar.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
@@ -17,6 +20,12 @@ class GuwahatiConnect extends StatefulWidget {
 
 class _GuwahatiConnectState extends State<GuwahatiConnect> {
   int current = 2;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () => fetchGuwahatiConnect());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,15 +103,15 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
               SizedBox(
                 height: 1.h,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                child: ListView.separated(
-
+              Consumer<DataProvider>(builder: (context, current, _) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4.w),
+                  child: ListView.separated(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: Constance.connects.length,
+                    itemCount: current.guwahatiConnect.length,
                     itemBuilder: (context, count) {
-                      var data = Constance.connects[count];
+                      var data = current.guwahatiConnect[count];
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -112,7 +121,7 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  data.title ?? "",
+                                  "",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline3
@@ -128,22 +137,25 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
                               ],
                             ),
                           ),
-                          data.image==null?Container():Padding(
-                            padding: EdgeInsets.symmetric(vertical: 1.h),
-                            child: SizedBox(
-                              height: 25.h,
-                              width: double.infinity,
-                              child: CachedNetworkImage(
-                                imageUrl: data.image ?? "",
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
+                          data.attachment?.isEmpty ?? false
+                              ? Container()
+                              : Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 1.h),
+                                  child: SizedBox(
+                                    height: 25.h,
+                                    width: double.infinity,
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          data.attachment![0].file_name ?? "",
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
                           SizedBox(
                             height: 1.h,
                           ),
                           Text(
-                            data.desc ?? "",
+                            data.question ?? "",
                             style:
                                 Theme.of(context).textTheme.headline5?.copyWith(
                                       color: Colors.black,
@@ -154,7 +166,7 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
                             height: 1.h,
                           ),
                           Text(
-                            data.tags ?? "",
+                            "",
                             style:
                                 Theme.of(context).textTheme.headline5?.copyWith(
                                       color: Colors.black,
@@ -171,23 +183,33 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  '${data.likes} likes' ?? "",
+                                  '${data.total_liked} likes' ?? "",
                                   style: Theme.of(context)
                                       .textTheme
-                                      .headline5
+                                      .headline6
                                       ?.copyWith(
                                         color: Colors.black,
-                                        fontWeight: FontWeight.bold,
+                                        // fontWeight: FontWeight.bold,
                                       ),
                                 ),
                                 Text(
-                                  '${data.comments?.length} comments' ?? "",
+                                  '${data.total_disliked} dislikes' ?? "",
                                   style: Theme.of(context)
                                       .textTheme
-                                      .headline5
+                                      .headline6
+                                      ?.copyWith(
+                                    color: Colors.black,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  '${data.total_comment} comments' ?? "",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
                                       ?.copyWith(
                                         color: Colors.black,
-                                        fontWeight: FontWeight.bold,
+                                        // fontWeight: FontWeight.bold,
                                       ),
                                 ),
                               ],
@@ -209,6 +231,13 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
                                       icon: const Icon(
                                         Icons.thumb_up,
                                         color: Constance.secondaryColor,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.thumb_down,
+                                        color: Constance.primaryColor,
                                       ),
                                     ),
                                     IconButton(
@@ -270,198 +299,199 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
                           SizedBox(
                             height: 1.h,
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15.w, right: 5.w),
-                            child: ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount:
-                                    Constance.connects[count].comments?.length,
-                                itemBuilder: (cont, ind) {
-                                  var current =
-                                      Constance.connects[count].comments![ind];
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              current.title ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline4
-                                                  ?.copyWith(
-                                                    color:
-                                                        Constance.primaryColor,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                            Icon(
-                                              Icons.menu,
-                                              color: Colors.black,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                      Text(
-                                        current.desc ?? "",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                      Text(
-                                        current.tags ?? "",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '${current.likes} likes' ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5
-                                                  ?.copyWith(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                            Text(
-                                              '${current.comments?.length} comments' ??
-                                                  "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5
-                                                  ?.copyWith(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () {},
-                                                  icon: const Icon(
-                                                    Icons.thumb_up,
-                                                    color: Constance
-                                                        .secondaryColor,
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {},
-                                                  icon: const Icon(
-                                                    Icons.comment,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            // Text(
-                                            //   '${15} mins ago' ?? "",
-                                            //   style: Theme.of(context)
-                                            //       .textTheme
-                                            //       .headline5
-                                            //       ?.copyWith(
-                                            //     color: Colors.black,
-                                            //     fontWeight: FontWeight.bold,
-                                            //   ),
-                                            // ),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 2.w),
-                                        child: GestureDetector(
-                                          onTap: () {},
-                                          child: Card(
-                                            color: Colors.white,
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 5.w,
-                                                  vertical: 1.h),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    'Write a comment',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyText2
-                                                        ?.copyWith(
-                                                          color: Colors.black,
-                                                        ),
-                                                  ),
-                                                  const Icon(
-                                                    Icons.link,
-                                                    color: Colors.black,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                    ],
-                                  );
-                                }),
-                            // child: Column(
-                            //   crossAxisAlignment: CrossAxisAlignment.start,
-                            //   children: [],
-                            // ),
-                          ),
+                          // Padding(
+                          //   padding: EdgeInsets.only(left: 15.w, right: 5.w),
+                          //   child: ListView.builder(
+                          //       physics: NeverScrollableScrollPhysics(),
+                          //       shrinkWrap: true,
+                          //       itemCount:
+                          //           Constance.connects[count].comments?.length,
+                          //       itemBuilder: (cont, ind) {
+                          //         var current =
+                          //             Constance.connects[count].comments![ind];
+                          //         return Column(
+                          //           crossAxisAlignment: CrossAxisAlignment.end,
+                          //           children: [
+                          //             SizedBox(
+                          //               width: double.infinity,
+                          //               child: Row(
+                          //                 mainAxisAlignment:
+                          //                     MainAxisAlignment.spaceBetween,
+                          //                 children: [
+                          //                   Text(
+                          //                     current.title ?? "",
+                          //                     style: Theme.of(context)
+                          //                         .textTheme
+                          //                         .headline4
+                          //                         ?.copyWith(
+                          //                           color:
+                          //                               Constance.primaryColor,
+                          //                           fontWeight: FontWeight.bold,
+                          //                         ),
+                          //                   ),
+                          //                   Icon(
+                          //                     Icons.menu,
+                          //                     color: Colors.black,
+                          //                   ),
+                          //                 ],
+                          //               ),
+                          //             ),
+                          //             SizedBox(
+                          //               height: 1.h,
+                          //             ),
+                          //             Text(
+                          //               current.desc ?? "",
+                          //               style: Theme.of(context)
+                          //                   .textTheme
+                          //                   .headline5
+                          //                   ?.copyWith(
+                          //                     color: Colors.black,
+                          //                     // fontWeight: FontWeight.bold,
+                          //                   ),
+                          //             ),
+                          //             SizedBox(
+                          //               height: 1.h,
+                          //             ),
+                          //             Text(
+                          //               current.tags ?? "",
+                          //               style: Theme.of(context)
+                          //                   .textTheme
+                          //                   .headline5
+                          //                   ?.copyWith(
+                          //                     color: Colors.black,
+                          //                     fontWeight: FontWeight.bold,
+                          //                   ),
+                          //             ),
+                          //             SizedBox(
+                          //               height: 1.h,
+                          //             ),
+                          //             SizedBox(
+                          //               width: double.infinity,
+                          //               child: Row(
+                          //                 mainAxisAlignment:
+                          //                     MainAxisAlignment.spaceBetween,
+                          //                 crossAxisAlignment:
+                          //                     CrossAxisAlignment.center,
+                          //                 children: [
+                          //                   Text(
+                          //                     '${current.likes} likes' ?? "",
+                          //                     style: Theme.of(context)
+                          //                         .textTheme
+                          //                         .headline5
+                          //                         ?.copyWith(
+                          //                           color: Colors.black,
+                          //                           fontWeight: FontWeight.bold,
+                          //                         ),
+                          //                   ),
+                          //                   Text(
+                          //                     '${current.comments?.length} comments' ??
+                          //                         "",
+                          //                     style: Theme.of(context)
+                          //                         .textTheme
+                          //                         .headline5
+                          //                         ?.copyWith(
+                          //                           color: Colors.black,
+                          //                           fontWeight: FontWeight.bold,
+                          //                         ),
+                          //                   ),
+                          //                 ],
+                          //               ),
+                          //             ),
+                          //             SizedBox(
+                          //               height: 1.h,
+                          //             ),
+                          //             SizedBox(
+                          //               width: double.infinity,
+                          //               child: Row(
+                          //                 mainAxisAlignment:
+                          //                     MainAxisAlignment.spaceBetween,
+                          //                 crossAxisAlignment:
+                          //                     CrossAxisAlignment.center,
+                          //                 children: [
+                          //                   Row(
+                          //                     children: [
+                          //                       IconButton(
+                          //                         onPressed: () {},
+                          //                         icon: const Icon(
+                          //                           Icons.thumb_up,
+                          //                           color: Constance
+                          //                               .secondaryColor,
+                          //                         ),
+                          //                       ),
+                          //                       IconButton(
+                          //                         onPressed: () {},
+                          //                         icon: const Icon(
+                          //                           Icons.comment,
+                          //                           color: Colors.black,
+                          //                         ),
+                          //                       ),
+                          //                     ],
+                          //                   ),
+                          //                   // Text(
+                          //                   //   '${15} mins ago' ?? "",
+                          //                   //   style: Theme.of(context)
+                          //                   //       .textTheme
+                          //                   //       .headline5
+                          //                   //       ?.copyWith(
+                          //                   //     color: Colors.black,
+                          //                   //     fontWeight: FontWeight.bold,
+                          //                   //   ),
+                          //                   // ),
+                          //                 ],
+                          //               ),
+                          //             ),
+                          //             Padding(
+                          //               padding: EdgeInsets.symmetric(
+                          //                   horizontal: 2.w),
+                          //               child: GestureDetector(
+                          //                 onTap: () {},
+                          //                 child: Card(
+                          //                   color: Colors.white,
+                          //                   child: Padding(
+                          //                     padding: EdgeInsets.symmetric(
+                          //                         horizontal: 5.w,
+                          //                         vertical: 1.h),
+                          //                     child: Row(
+                          //                       mainAxisAlignment:
+                          //                           MainAxisAlignment
+                          //                               .spaceBetween,
+                          //                       crossAxisAlignment:
+                          //                           CrossAxisAlignment.center,
+                          //                       children: [
+                          //                         Text(
+                          //                           'Write a comment',
+                          //                           style: Theme.of(context)
+                          //                               .textTheme
+                          //                               .bodyText2
+                          //                               ?.copyWith(
+                          //                                 color: Colors.black,
+                          //                               ),
+                          //                         ),
+                          //                         const Icon(
+                          //                           Icons.link,
+                          //                           color: Colors.black,
+                          //                         ),
+                          //                       ],
+                          //                     ),
+                          //                   ),
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //             SizedBox(
+                          //               height: 1.h,
+                          //             ),
+                          //           ],
+                          //         );
+                          //       }),
+                          //   // child: Column(
+                          //   //   crossAxisAlignment: CrossAxisAlignment.start,
+                          //   //   children: [],
+                          //   // ),
+                          // ),
                         ],
                       );
-                    }, separatorBuilder: (BuildContext context, int index) {
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 3.w),
                         child: Divider(
@@ -469,8 +499,10 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
                           color: Colors.black,
                         ),
                       );
-                },),
-              )
+                    },
+                  ),
+                );
+              })
             ],
           ),
         ),
@@ -575,12 +607,31 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
                       onTap: () {
                         Navigation.instance.goBack();
                       }),
-                )
+                ),
               ],
             ),
           ),
         );
       },
     );
+  }
+
+  void fetchGuwahatiConnect() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getGuwahatiConnect();
+    if (response.success ?? false) {
+      // setGuwahatiConnect
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setGuwahatiConnect(response.posts);
+      Navigation.instance.goBack();
+    } else {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setGuwahatiConnect(response.posts);
+      Navigation.instance.goBack();
+    }
   }
 }

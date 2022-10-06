@@ -31,6 +31,12 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   void initState() {
     super.initState();
     fetchClassified();
+    // Future.delayed(
+    //     Duration.zero,
+    //         () => Provider.of<DataProvider>(
+    //         Navigation.instance.navigatorKey.currentContext ?? context,
+    //         listen: false)
+    //         .setCurrent(4));
   }
 
   void _onRefresh() async {

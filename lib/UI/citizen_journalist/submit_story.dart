@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 
 import '../../Components/NavigationBar.dart';
+import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
@@ -26,6 +29,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
 
   var current = 3;
   final ImagePicker _picker = ImagePicker();
+  List<File> attachements = [];
 
   @override
   void initState() {
@@ -71,7 +75,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                       // fontSize: 1.6.h,
                     ),
                 controller: title,
-                maxLines: 2,
+                // maxLines: 2,
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   filled: true,
@@ -134,8 +138,8 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                 spacing: 8,
                 runSpacing: 8,
                 children: List.generate(
-                  (Constance.attachements.length ?? 0) + 1,
-                  (pos) => (pos == Constance.attachements.length)
+                  (attachements.length ?? 0) + 1,
+                  (pos) => (pos == attachements.length)
                       ? GestureDetector(
                           onTap: () {
                             setState(() {
@@ -160,7 +164,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                           // color: Colors.grey.shade200,
                           child: Center(
                             child: Image.file(
-                              Constance.attachements[pos],
+                              attachements[pos],
                               fit: BoxFit.fill,
                             ),
                           ),
@@ -174,7 +178,8 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                 width: double.infinity,
                 child: CustomButton(
                   onTap: () {
-                    showDialogBox();
+                    // showDialogBox();
+                    postStory();
                   },
                   txt: 'Submit',
                 ),
@@ -292,7 +297,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
       setState(() {
         // profileImage = File(pickedFile.path);
         print(pickedFile.path);
-        Constance.attachements.add(
+        attachements.add(
           File(pickedFile.path),
         );
       });
@@ -375,5 +380,28 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
         );
       },
     );
+  }
+
+  void postStory() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance
+        .postCitizenJournalist(title.text, desc.text, attachements);
+    if (response.success ?? false) {
+      Fluttertoast.showToast(msg: "Posted successfully");
+      Navigation.instance.goBack();
+      Navigation.instance.goBack();
+    } else {
+      showError(response.message??"Something went wrong");
+      Navigation.instance.goBack();
+    }
+  }
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }

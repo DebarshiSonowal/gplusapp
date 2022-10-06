@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -26,22 +28,27 @@ class VerifyOTP extends StatefulWidget {
 class _VerifyOTPState extends State<VerifyOTP> {
   var textEditingController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  Timer? timer;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String? _verificationId;
 
   // final SmsAutoFill _autoFill = SmsAutoFill();
   String currentText = '';
+  String time = '30';
+  bool resend = false;
 
   @override
   void dispose() {
-    super.dispose();
     textEditingController.dispose();
+    timer?.cancel();
+    super.dispose();
+
   }
 
   @override
   void initState() {
     super.initState();
+
     PhoneVerificationCompleted verificationCompleted =
         (PhoneAuthCredential phoneAuthCredential) async {
       await _auth.signInWithCredential(phoneAuthCredential);
@@ -202,7 +209,13 @@ class _VerifyOTPState extends State<VerifyOTP> {
                   ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                if (time == '0') {
+                  phoneSignIn(phoneNumber: widget.number.toString());
+                } else {
+
+                }
+              },
               child: Text(
                 'Send Again',
                 style: Theme.of(context).textTheme.headline6?.copyWith(
@@ -213,7 +226,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
               ),
             ),
             Text(
-              'In 30 seconds',
+              'In ${time} seconds',
               style: Theme.of(context).textTheme.headline6?.copyWith(
                     color: Colors.black,
                     fontSize: 15.sp,
@@ -307,6 +320,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
     print("code sent");
     Fluttertoast.showToast(msg: "OTP sent successfully");
     Navigation.instance.goBack();
+    setTimer();
   }
 
   _onCodeTimeout(String timeout) {
@@ -350,8 +364,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
   }
 
   void getProfile() async {
-    final reponse =
-        await ApiProvider.instance.login(widget.number.toString());
+    final reponse = await ApiProvider.instance.login(widget.number.toString());
     if (reponse.status ?? false) {
       setState(() {
         Storage.instance.setUser(reponse.access_token ?? "");
@@ -361,18 +374,15 @@ class _VerifyOTPState extends State<VerifyOTP> {
               listen: false)
           .setProfile(reponse.profile!);
       // Navigation.instance.goBack();
-      Navigation.instance.navigateAndReplace('/main');
+      // Navigation.instance.navigateAndReplace('/main');
       if (reponse.profile?.email == null || reponse.profile?.email == "") {
-        Navigation.instance
-            .navigate('/terms&conditions', args: widget.number);
+        Navigation.instance.navigate('/terms&conditions', args: widget.number);
       } else {
-        // Navigation.instance.navigateAndReplace('/main');
-        Navigation.instance
-            .navigate('/terms&conditions', args: widget.number);
+        Navigation.instance.navigateAndReplace('/main');
+        // Navigation.instance.navigate('/terms&conditions', args: widget.number);
       }
     } else {
-      Navigation.instance
-          .navigate('/terms&conditions', args: widget.number);
+      Navigation.instance.navigate('/terms&conditions', args: widget.number);
     }
   }
 
@@ -404,5 +414,34 @@ class _VerifyOTPState extends State<VerifyOTP> {
         return alert;
       },
     );
+  }
+
+  void setTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timer.tick == 30) {
+        if (mounted) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          timer.cancel();
+        }
+      }
+      if (mounted) {
+        print(timer.tick);
+        try {
+          setState(() {
+            time  = (30 - timer.tick).toString();
+          });
+        } catch (e) {
+          print(e);
+          time = (30 - timer.tick).toString();
+        }
+      } else {
+        print(timer.tick);
+        time = (30 - timer.tick).toString();
+      }
+      print("Dekhi 5 sec por por kisu hy ni :/");
+    });
   }
 }

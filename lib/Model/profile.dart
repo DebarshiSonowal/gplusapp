@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:gplusapp/Model/topick.dart';
 
 import 'address.dart';
@@ -15,7 +16,7 @@ class Profile {
       plan_active_date,
       plan_expiry_date,
       plan_reminder_date,
-      referral_code;
+      referral_code,dob;
   int? super_admin, role_id, status, id, plan_id, referral_point_balance;
   bool? has_deal_notify_perm,
       has_ghy_connect_notify_perm,
@@ -23,6 +24,7 @@ class Profile {
   List<Address> addresses = [];
 
   Profile.fromJson(json) {
+    debugPrint(json['name'].toString());
     email = json['email'] ?? "";
     id = json['id'] ?? 0;
     plan_id =
@@ -31,6 +33,7 @@ class Profile {
     name = json['name'] ?? "";
     f_name = json['f_name'] ?? "";
     l_name = json['l_name'] ?? "";
+    dob = json['dob'] ?? "";
     mobile = json['mobile'] ?? "";
     city = json['city'] ?? "";
     referral_code = json['referral_code'] ?? "";
@@ -89,7 +92,7 @@ class ProfileResponse {
   ProfileResponse.fromJson(json) {
     success = true;
     msg = json['message'] ?? "";
-    profile = Profile.fromJson(json['result']['data']['data']);
+    profile = Profile.fromJson(json['result']['data']);
     topicks = json['result']['topics'] == null
         ? []
         : (json['result']['topics'] as List)
