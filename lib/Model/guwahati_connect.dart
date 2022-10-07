@@ -1,7 +1,10 @@
+import 'package:gplusapp/Model/profile.dart';
+
 class GuwahatiConnect {
   int? id, user_id, total_liked, total_disliked, total_comment, status;
-  String? question;
+  String? question, updated_at;
   List<GCAttachment>? attachment;
+  Profile? user;
 
   GuwahatiConnect.fromJson(json) {
     id = json['id'] ?? 0;
@@ -17,11 +20,14 @@ class GuwahatiConnect {
         ? 0
         : int.parse(json['total_comment'].toString());
     status = json['status'] == null ? 0 : int.parse(json['status'].toString());
-
+    updated_at = json['updated_at'] == null
+        ? ""
+        : json['updated_at'].toString().split("T")[0];
     //String
     question = json['question'] ?? "";
 
     //other
+    user = Profile.fromJson(json['user']);
     attachment = json['data'] == null
         ? []
         : (json['data'] as List).map((e) => GCAttachment.fromJson(e)).toList();
@@ -58,8 +64,9 @@ class GuwahatiConnectResponse {
             .map((e) => GuwahatiConnect.fromJson(e))
             .toList();
   }
-  GuwahatiConnectResponse.withError(msg){
+
+  GuwahatiConnectResponse.withError(msg) {
     success = false;
-    message = msg??"Something went wrong";
+    message = msg ?? "Something went wrong";
   }
 }

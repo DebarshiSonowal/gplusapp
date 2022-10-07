@@ -8,6 +8,9 @@ import 'package:google_geocoding/google_geocoding.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:material_dialogs/material_dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -72,7 +75,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         max = currentY + 18;
       });
 
-      getLocations();
+      // getLocations();
     });
   }
 
@@ -459,13 +462,52 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               ),
               GestureDetector(
                 onTap: () async {
-                  final result =
-                      await Navigation.instance.navigate('/locationSearchPage');
-                  if (result != null && result != "") {
-                    setState(() {
-                      address = result;
-                    });
-                  }
+                  Dialogs.materialDialog(
+                      msg: 'Where do you live?',
+                      title: "Address",
+                      color: Colors.white,
+                      context: context,
+                      titleStyle:
+                      Theme.of(context).textTheme.headline2!.copyWith(
+                        color: Colors.black,
+                      ),
+                      msgStyle:
+                      Theme.of(context).textTheme.headline5!.copyWith(
+                        color: Colors.black,
+                      ),
+                      actions: [
+                        IconsOutlineButton(
+
+                          onPressed: () {
+                            Navigation.instance.goBack();
+                            getLocations();
+                          },
+                          color: Constance.thirdColor,
+                          text: 'Current Location',
+                          iconData: Icons.gps_fixed,
+                          textStyle: const TextStyle(color: Colors.white,),
+                          iconColor: Colors.white,
+                        ),
+                        IconsButton(
+                          onPressed: () async{
+                            Navigation.instance.goBack();
+                            final result =
+                            await Navigation.instance.navigate('/locationSearchPage');
+                            if (result != null && result != "") {
+                              setState(() {
+                                address = result;
+                              });
+                              findLocation(address);
+                            }
+                          },
+                          text: 'Search',
+                          iconData: Icons.exit_to_app,
+                          color: Constance.primaryColor,
+                          textStyle: const TextStyle(color: Colors.white,),
+                          iconColor: Colors.white,
+                        ),
+                      ]);
+
                 },
                 child: Row(
                   children: [
@@ -491,15 +533,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               GestureDetector(
                 onTap: () async {
                   // getLocations();
-                  final result =
-                      await Navigation.instance.navigate('/locationSearchPage');
-                  if (result != null && result != "") {
-                    setState(() {
-                      address = result;
-                      //  s
-                    });
-                    findLocation(address);
-                  }
+
                 },
                 child: Row(
                   children: [

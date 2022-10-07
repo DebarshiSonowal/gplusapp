@@ -23,7 +23,7 @@ import '../UI/author/author_page.dart';
 import '../UI/citizen_journalist/citizen_journalist_page.dart';
 import '../UI/citizen_journalist/draft_story.dart';
 import '../UI/guwahati_connect/ask_a_question.dart';
-import '../UI/guwahati_connect/guwahati_connect.dart';
+import '../UI/guwahati_connect/guwahati_connect_page.dart';
 import '../UI/citizen_journalist/stories_submitted.dart';
 import '../UI/citizen_journalist/submit_story.dart';
 import '../UI/classified/classified_details.dart';
@@ -146,7 +146,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/postClassified':
       return FadeTransitionPageRouteBuilder(page: PostAListing());
     case '/guwahatiConnects':
-      return FadeTransitionPageRouteBuilder(page: GuwahatiConnect());
+      return FadeTransitionPageRouteBuilder(page: GuwahatiConnectPage());
       case '/askAQuestion':
       return FadeTransitionPageRouteBuilder(page: AskAQuestionPage());
     case '/search':

@@ -305,10 +305,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   data.home_toppicks[count];
                                               return GestureDetector(
                                                 onTap: () {
-                                                  Navigation.instance.navigate(
-                                                      '/story',
-                                                      args:
-                                                          '${item.categories?.first.seo_name},${item.seo_name}');
+                                                  Constance.showMembershipPrompt(context);
+                                                  // Navigation.instance.navigate(
+                                                  //     '/story',
+                                                  //     args:
+                                                  //         '${item.categories?.first.seo_name},${item.seo_name}');
                                                 },
                                                 child: ToppicksCard(item: item),
                                               );
@@ -676,7 +677,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         _poll = getOptionName(
                                                             count, data);
                                                       });
-                                                      postPollOfTheWeek(data.pollOfTheWeek?.id,_poll);
+                                                      postPollOfTheWeek(
+                                                          data.pollOfTheWeek
+                                                              ?.id,
+                                                          _poll);
                                                     },
                                                     title: Text(
                                                       getOptionName(
@@ -1039,14 +1043,12 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void postPollOfTheWeek(int? id, String poll) async{
-    final response = await ApiProvider.instance.postPollOfTheWeek(id,poll);
-    if(response.success??false){
+  void postPollOfTheWeek(int? id, String poll) async {
+    final response = await ApiProvider.instance.postPollOfTheWeek(id, poll);
+    if (response.success ?? false) {
       Fluttertoast.showToast(msg: "Posted successfully");
       fetchPoll();
-    }else{
-
-    }
+    } else {}
   }
 }
 
@@ -1152,4 +1154,6 @@ class OpinionCard extends StatelessWidget {
       ),
     );
   }
+
+
 }

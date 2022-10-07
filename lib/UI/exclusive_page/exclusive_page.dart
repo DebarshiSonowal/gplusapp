@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
@@ -193,7 +194,9 @@ class _ExclusivePageState extends State<ExclusivePage> {
                           height: 2.h,
                         ),
                         Text(
-                          '${data.home_exclusive[0].author_name}, ${data.home_exclusive[0].publish_date?.split(" ")[0]}',
+                          '${data.home_exclusive[0].author_name}, ${
+                              Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd")
+                                  .fromNow()}',
                           style: Theme.of(Navigation
                                   .instance.navigatorKey.currentContext!)
                               .textTheme

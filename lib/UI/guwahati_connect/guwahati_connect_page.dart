@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/NavigationBar.dart';
@@ -11,14 +12,14 @@ import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
-class GuwahatiConnect extends StatefulWidget {
-  const GuwahatiConnect({Key? key}) : super(key: key);
+class GuwahatiConnectPage extends StatefulWidget {
+  const GuwahatiConnectPage({Key? key}) : super(key: key);
 
   @override
-  State<GuwahatiConnect> createState() => _GuwahatiConnectState();
+  State<GuwahatiConnectPage> createState() => _GuwahatiConnectPageState();
 }
 
-class _GuwahatiConnectState extends State<GuwahatiConnect> {
+class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
   int current = 2;
 
   @override
@@ -121,7 +122,7 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "",
+                                  data.user?.name ?? "",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline3
@@ -198,9 +199,9 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
                                       .textTheme
                                       .headline6
                                       ?.copyWith(
-                                    color: Colors.black,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                                        color: Colors.black,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                                 Text(
                                   '${data.total_comment} comments' ?? "",
@@ -250,7 +251,11 @@ class _GuwahatiConnectState extends State<GuwahatiConnect> {
                                   ],
                                 ),
                                 Text(
-                                  '${15} mins ago' ?? "",
+                                  Jiffy(data.updated_at, "yyyy-MM-dd")
+                                          .fromNow()
+                                          .toString() ??
+                                      '${15} mins ago' ??
+                                      "",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline5

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/Constance.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -38,10 +39,9 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                   .map(
                     (e) => GestureDetector(
                       onTap: () {
-                        Navigation.instance.navigate(
-                            '/story',
+                        Navigation.instance.navigate('/story',
                             args:
-                            '${e.value.first_cat_name?.seo_name},${e.value.seo_name}');
+                                '${e.value.first_cat_name?.seo_name},${e.value.seo_name}');
                       },
                       child: Stack(
                         alignment: Alignment.bottomLeft,
@@ -91,7 +91,7 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                                   height: 0.5.h,
                                 ),
                                 Text(
-                                  "${e.value.author_name?.trim()}, ${e.value.publish_date?.split(" ")[0]}",
+                                  "${e.value.author_name?.trim()}, ${Jiffy(e.value.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline6

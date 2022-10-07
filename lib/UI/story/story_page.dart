@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -117,7 +118,7 @@ class _StoryPageState extends State<StoryPage> {
                               height: 1.h,
                             ),
                             Text(
-                              '${data.selectedArticle?.author_name ?? "GPlus"}, ${data.selectedArticle?.publish_date?.split(" ")[0]}',
+                              '${data.selectedArticle?.author_name ?? "GPlus"}, ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
                               style: Theme.of(Navigation
                                       .instance.navigatorKey.currentContext!)
                                   .textTheme

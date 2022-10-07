@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import '../../Helper/Constance.dart';
@@ -77,7 +78,8 @@ class _NotificationPageState extends State<NotificationPage> {
                       ),
                       Spacer(),
                       Text(
-                        '${current.date}',
+                        Jiffy(current.date, "dd-MM-yyyy")
+                            .fromNow()??'${current.date}',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: Theme.of(
