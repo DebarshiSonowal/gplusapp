@@ -9,6 +9,7 @@ import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Model/opinion.dart';
 import 'package:gplusapp/Model/top_picks.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
@@ -305,7 +306,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   data.home_toppicks[count];
                                               return GestureDetector(
                                                 onTap: () {
-                                                  Constance.showMembershipPrompt(context);
+                                                  Constance
+                                                      .showMembershipPrompt(
+                                                          context);
                                                   // Navigation.instance.navigate(
                                                   //     '/story',
                                                   //     args:
@@ -408,14 +411,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                               var item =
                                                   data.home_exclusive[count];
                                               return GestureDetector(
-                                                  onTap: () {
-                                                    Navigation.instance.navigate(
-                                                        '/story',
-                                                        args:
-                                                            '${'exclusive-news'},${item.seo_name}');
-                                                  },
-                                                  child: GPlusExecCard(
-                                                      item: item));
+                                                onTap: () {
+                                                  Navigation.instance.navigate(
+                                                      '/story',
+                                                      args:
+                                                          '${'exclusive-news'},${item.seo_name}');
+                                                },
+                                                child:
+                                                    GPlusExecCard(item: item),
+                                              );
                                             },
                                             separatorBuilder: (cont, inde) {
                                               return SizedBox(
@@ -845,12 +849,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   AppBar buildAppBar() {
     return AppBar(
-      // leading: IconButton(
-      //   onPressed: () {
-      //     Navigation.instance.navigate('/bergerMenuMem');
-      //   },
-      //   icon: Icon(Icons.menu),
-      // ),
       title: Image.asset(
         Constance.logoIcon,
         fit: BoxFit.fill,
@@ -868,42 +866,6 @@ class _HomeScreenState extends State<HomeScreen> {
         IconButton(
           onPressed: () {
             Navigation.instance.navigate('/search');
-            // showSearch(
-            //   context: context,
-            //   delegate: SearchPage<Listing>(
-            //     items: Constance.listings,
-            //     searchLabel: 'Search posts',
-            //     suggestion: Center(
-            //       child: Text(
-            //         'Filter posts by name, descr',
-            //         style: Theme.of(context).textTheme.headline5,
-            //       ),
-            //     ),
-            //     failure: const Center(
-            //       child: Text('No posts found :('),
-            //     ),
-            //     filter: (current) => [
-            //       current.title,
-            //       current.descr,
-            //       // person.age.toString(),
-            //     ],
-            //     builder: (data) => ListTile(
-            //       title: Text(
-            //         data.title ?? "",
-            //         style: Theme.of(context).textTheme.headline5,
-            //       ),
-            //       subtitle: Text(
-            //         data.descr ?? '',
-            //         style: Theme.of(context).textTheme.headline6,
-            //       ),
-            //       // trailing: CachedNetworkImage(
-            //       //   imageUrl: data.image??'',
-            //       //   height: 20,
-            //       //   width: 20,
-            //       // ),
-            //     ),
-            //   ),
-            // );
           },
           icon: Icon(Icons.search),
         ),
@@ -1139,7 +1101,9 @@ class OpinionCard extends StatelessWidget {
                             ),
                       ),
                       Text(
-                        item.publish_date?.split(" ")[0] ?? "",
+                        // item.publish_date?.split(" ")[0] ?? "",
+                        Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                            .format("dd/MM/yyyy"),
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Colors.black,
@@ -1154,6 +1118,4 @@ class OpinionCard extends StatelessWidget {
       ),
     );
   }
-
-
 }

@@ -21,7 +21,7 @@ class Storage {
   }
 
   Future<void> setUser(String token) async {
-    debugPrint('set token ${token}');
+    print('set token ${token}');
     await sharedpreferences.setString("token", token);
     await sharedpreferences.setBool("isLoggedIn", true);
   }
@@ -34,7 +34,7 @@ class Storage {
 
   get isOnBoarding => sharedpreferences.getBool("isOnBoarding") ?? false;
 
-  get token => sharedpreferences.getString("token") ?? "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9ncGx1cy5zaGVjdXJlLmNvLmluXC9hcGlcL3YxXC9sb2dpbiIsImlhdCI6MTY2MjQ3OTIwNiwiZXhwIjoxNjYzOTkxMjA2LCJuYmYiOjE2NjI0NzkyMDYsImp0aSI6IkhNMU1GcG1WMnRpZzhzTnIiLCJzdWIiOjk3MjAwLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.T1TOW7h1R1PIgtnRV4oXeMwL6mq5cRWIKWvKiibpEGU";
+  get token => sharedpreferences.getString("token") ?? "";
 
   // void logout() {}
   Future<void> logout() async {

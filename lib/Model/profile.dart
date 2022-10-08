@@ -5,6 +5,7 @@ import 'address.dart';
 
 class Profile {
   String? email,
+      gender,
       enc_password,
       name,
       mobile,
@@ -16,7 +17,8 @@ class Profile {
       plan_active_date,
       plan_expiry_date,
       plan_reminder_date,
-      referral_code,dob;
+      referral_code,
+      dob;
   int? super_admin, role_id, status, id, plan_id, referral_point_balance;
   bool? has_deal_notify_perm,
       has_ghy_connect_notify_perm,
@@ -24,7 +26,7 @@ class Profile {
   List<Address> addresses = [];
 
   Profile.fromJson(json) {
-    debugPrint(json['name'].toString());
+    // debugPrint(json['name'].toString());
     email = json['email'] ?? "";
     id = json['id'] ?? 0;
     plan_id =
@@ -36,6 +38,7 @@ class Profile {
     dob = json['dob'] ?? "";
     mobile = json['mobile'] ?? "";
     city = json['city'] ?? "";
+    gender = json['gender'] ?? "";
     referral_code = json['referral_code'] ?? "";
     image_file_name = json['image_file_name'] ?? "";
     plan_active_date = json['plan_active_date'] ?? "";
@@ -93,14 +96,14 @@ class ProfileResponse {
     success = true;
     msg = json['message'] ?? "";
     profile = Profile.fromJson(json['result']['data']);
-    topicks = json['result']['topics'] == null
+    topicks = json['result']['data']['topics'] == null
         ? []
-        : (json['result']['topics'] as List)
+        : (json['result']['data']['topics'] as List)
             .map((e) => Topick.fromJson(e))
             .toList();
-    geoTopicks = json['result']['geographical'] == null
+    geoTopicks = json['result']['data']['geo'] == null
         ? []
-        : (json['result']['geographical'] as List)
+        : (json['result']['data']['geo'] as List)
             .map((e) => GeoTopick.fromJson(e))
             .toList();
   }

@@ -265,9 +265,11 @@ class _ExclusivePageState extends State<ExclusivePage> {
                                               height: 1.h,
                                             ),
                                             Text(
-                                              item.publish_date
-                                                      ?.split(" ")[0] ??
-                                                  "",
+                                              // item.publish_date
+                                              //         ?.split(" ")[0] ??
+                                              //     "",
+                                              Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                                                  .format("dd/MM/yyyy"),
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline6

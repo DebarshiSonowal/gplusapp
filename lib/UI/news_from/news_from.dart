@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
@@ -195,7 +196,9 @@ class _NewsFromState extends State<NewsFrom> {
                           height: 2.h,
                         ),
                         Text(
-                          '${data.news_from[0].author_name}, ${data.news_from[0].publish_date?.split(" ")[0]}',
+                          '${data.news_from[0].author_name}, ${
+                              Jiffy(data.news_from[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()
+                              }',
                           style: Theme.of(Navigation
                                   .instance.navigatorKey.currentContext!)
                               .textTheme
@@ -264,9 +267,11 @@ class _NewsFromState extends State<NewsFrom> {
                                                 height: 1.h,
                                               ),
                                               Text(
-                                                item.publish_date
-                                                        ?.split(" ")[0] ??
-                                                    "",
+                                                // item.publish_date
+                                                //         ?.split(" ")[0] ??
+                                                //     "",
+                                                Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                                                    .format("dd/MM/yyyy"),
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .headline6

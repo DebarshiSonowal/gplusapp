@@ -1,3 +1,4 @@
+import 'package:gplusapp/Model/comment.dart';
 import 'package:gplusapp/Model/profile.dart';
 
 class GuwahatiConnect {
@@ -5,6 +6,7 @@ class GuwahatiConnect {
   String? question, updated_at;
   List<GCAttachment>? attachment;
   Profile? user;
+  List<Comment> comments=[];
 
   GuwahatiConnect.fromJson(json) {
     id = json['id'] ?? 0;
@@ -27,10 +29,17 @@ class GuwahatiConnect {
     question = json['question'] ?? "";
 
     //other
-    user = Profile.fromJson(json['user']);
-    attachment = json['data'] == null
+    try {
+      user = Profile.fromJson(json['user']);
+    } catch (e) {
+      print(e);
+    }
+    attachment = json['attached_files'] == null
         ? []
-        : (json['data'] as List).map((e) => GCAttachment.fromJson(e)).toList();
+        : (json['attached_files'] as List).map((e) => GCAttachment.fromJson(e)).toList();
+    comments = json['comments'] == null
+        ? []
+        : (json['comments'] as List).map((e) => Comment.fromJson(e)).toList();
   }
 }
 
@@ -42,7 +51,7 @@ class GCAttachment {
     id = json['id'] ?? 0;
     guwahati_connect_id = json['guwahati_connect_id'] == null
         ? 0
-        : int.parse(json['tguwahati_connect_id'].toString());
+        : int.parse(json['guwahati_connect_id'].toString());
     status = json['status'] == null ? 0 : int.parse(json['status'].toString());
 
     file_name = json['file_name'] ?? "";

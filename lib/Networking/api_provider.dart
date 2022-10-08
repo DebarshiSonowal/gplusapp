@@ -18,6 +18,7 @@ import '../Model/advertise.dart';
 import '../Model/article.dart';
 import '../Model/article_desc.dart';
 import '../Model/citizen_journalist.dart';
+import '../Model/comment.dart';
 import '../Model/guwahati_connect.dart';
 import '../Model/classified.dart';
 import '../Model/classified_category.dart';
@@ -32,7 +33,9 @@ import '../Model/opinion.dart';
 import '../Model/poll_of_the_week.dart';
 import '../Model/promoted_deal.dart';
 import '../Model/redeem_details.dart';
+import '../Model/redeem_history.dart';
 import '../Model/refer_earn_response.dart';
+import '../Model/search_result.dart';
 import '../Model/shop_category.dart';
 import '../Model/top_picks.dart';
 import '../Model/topick.dart';
@@ -43,18 +46,12 @@ class ApiProvider {
 
   static final ApiProvider instance = ApiProvider._();
   final String baseUrl = "http://gplus.shecure.co.in/api/v1";
+
+  // final String baseUrl = "http://develop.guwahatiplus.com/api/v1";
   final String homeUrl = "https://www.guwahatiplus.com/api/v1";
   final String path = "/books";
 
   Dio? dio;
-
-  BaseOptions option =
-      BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'Authorization': 'Bearer ${Storage.instance.token}'
-    // 'APP-KEY': ConstanceData.app_key
-  });
 
   // Future<LoginResponse> login(mobile) async {
   //   var data = {
@@ -86,7 +83,13 @@ class ApiProvider {
     var data = {
       'mobile': mobile,
     };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${baseUrl}/login";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -107,8 +110,50 @@ class ApiProvider {
     }
   }
 
+  Future<SearchResultResponse> search(search, type) async {
+    var data = {
+      'search': search,
+      'type': type,
+    };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${baseUrl}/";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        queryParameters: data,
+      );
+      debugPrint("SearchResultResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return SearchResultResponse.fromJson(response?.data);
+      } else {
+        debugPrint("SearchResultResponse  error: ${response?.data}");
+        return SearchResultResponse.withError("Something went wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("SearchResultResponse response: ${e.response}");
+      return SearchResultResponse.withError(e.message);
+    }
+  }
+
   Future<ProfileResponse> getprofile() async {
     var url = "${baseUrl}/profile";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     // debugPrint(jsonEncode(data));
@@ -130,6 +175,41 @@ class ApiProvider {
     }
   }
 
+  Future<CommentResponse> getComments(comment_for_id, comment_for) async {
+    var url = "${baseUrl}/comment";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'comment_for_id': comment_for_id,
+      'comment_for': comment_for,
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        queryParameters: data,
+      );
+      debugPrint("CommentResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return CommentResponse.fromJson(response?.data);
+      } else {
+        debugPrint("CommentResponse error: ${response?.data}");
+        return CommentResponse.withError("Something went wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("CommentResponse response: ${e.response}");
+      return CommentResponse.withError(e.message);
+    }
+  }
+
   Future<ProfileResponse> createProfile(
     address_id,
     mobile,
@@ -145,13 +225,26 @@ class ApiProvider {
     has_deal_notify_perm,
     has_ghy_connect_notify_perm,
     has_classified_notify_perm,
+    gender,
   ) async {
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var data = {
       'mobile': mobile,
       'f_name': f_name,
       'l_name': l_name,
       'email': email,
       'dob': dob,
+      'gender': gender == 'Male'
+          ? 1
+          : gender == 'Female'
+              ? 2
+              : 0,
       'address': address,
       'longitude': longitude,
       'latitude': latitude,
@@ -186,7 +279,13 @@ class ApiProvider {
     // var data = {
     //   // 'mobile': mobile,
     // };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${homeUrl}/${categ_name}";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -213,7 +312,13 @@ class ApiProvider {
     // var data = {
     //   // 'mobile': mobile,
     // };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${baseUrl}/address-list";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -242,7 +347,13 @@ class ApiProvider {
       'latitude': lat,
       'longitude': lang,
     };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${baseUrl}/address";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -253,7 +364,7 @@ class ApiProvider {
         url,
         data: data,
       );
-      debugPrint("address response: ${response?.data}");
+      debugPrint("address response: ${response?.headers}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return AddressResponse.fromJson(response?.data);
       } else {
@@ -261,7 +372,7 @@ class ApiProvider {
         return AddressResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
-      debugPrint("address response: ${e.response}");
+      debugPrint("address response: ${e.response} ${e.response?.headers}");
       return AddressResponse.withError(e.message);
     }
   }
@@ -270,7 +381,13 @@ class ApiProvider {
     // var data = {
     //   // 'mobile': mobile,
     // };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${homeUrl}/${categ_name}/${slug}";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -299,7 +416,13 @@ class ApiProvider {
       'per_page': per_page,
       'page': page,
     };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${homeUrl}/opinion-list";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -327,7 +450,13 @@ class ApiProvider {
     // var data = {
     //   // 'mobile': mobile,
     // };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${baseUrl}/${categ_name}/${slur}";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -354,7 +483,13 @@ class ApiProvider {
     // var data = {
     //   // 'mobile': mobile,
     // };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${homeUrl}/app/latest-news";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -381,7 +516,13 @@ class ApiProvider {
     // var data = {
     //   // 'mobile': mobile,
     // };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${homeUrl}/app/weekly-videos";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -410,7 +551,13 @@ class ApiProvider {
     //   'per_page': per_page,
     //   'page': page,
     // };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${homeUrl}/app/latest-opinions";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -440,7 +587,13 @@ class ApiProvider {
     //   'per_page': per_page,
     //   'page': page,
     // };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${homeUrl}/get-epaper";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -468,7 +621,13 @@ class ApiProvider {
     // var data = {
     //   // 'mobile': mobile,
     // };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${homeUrl}/app/video-news";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -497,7 +656,13 @@ class ApiProvider {
     //   'per_page': per_page,
     //   'page': page,
     // };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${baseUrl}/app/subscriptions";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -524,6 +689,13 @@ class ApiProvider {
 
   Future<PromotedDealResponse> getPromotedDeals() async {
     var url = "${baseUrl}/app/promoted-deal-list";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -549,6 +721,13 @@ class ApiProvider {
 
   Future<DealDetailsResponse> getDealDetails(id) async {
     var url = "${baseUrl}/app/deal-details/$id";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -574,6 +753,13 @@ class ApiProvider {
 
   Future<RedeemDetailsResponse> redeemCupon(id, code) async {
     var url = "${baseUrl}/app/apply-coupon/$id";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'coupon_code': code};
@@ -600,6 +786,13 @@ class ApiProvider {
 
   Future<GenericResponse> enterPreferences(mobile, topicks, geotopicks) async {
     var url = "${baseUrl}/app/topic-geo";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {
@@ -634,7 +827,13 @@ class ApiProvider {
     //   'per_page': per_page,
     //   'page': page,
     // };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${baseUrl}/app/shop-categories";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -659,13 +858,56 @@ class ApiProvider {
     }
   }
 
+  Future<RedeemHistoryResponse> getRedeemHistory() async {
+    // var data = {
+    //   'category': 'opinion',
+    //   'per_page': per_page,
+    //   'page': page,
+    // };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${baseUrl}/app/big-deal-history";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("RedeemHistoryResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return RedeemHistoryResponse.fromJson(response?.data);
+      } else {
+        debugPrint("RedeemHistoryResponse error: ${response?.data}");
+        return RedeemHistoryResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("RedeemHistoryResponse response: ${e.response}");
+      return RedeemHistoryResponse.withError(e.message);
+    }
+  }
+
   Future<AdvertiseResponse> getAdvertise() async {
     // var data = {
     //   'category': 'opinion',
     //   'per_page': per_page,
     //   'page': page,
     // };
-
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     var url = "${homeUrl}/advertise";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -692,6 +934,13 @@ class ApiProvider {
 
   Future<TopPicksResponse> getTopPicks() async {
     var url = "${baseUrl}/app/top-picks";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -717,6 +966,13 @@ class ApiProvider {
 
   Future<TopickResponse> getTopicks() async {
     var url = "${baseUrl}/app/topic-geo";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -742,6 +998,13 @@ class ApiProvider {
 
   Future<ClassifiedResponse> getClassified() async {
     var url = "${baseUrl}/app/classified/my-list";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -767,6 +1030,13 @@ class ApiProvider {
 
   Future<ClassifiedCategoryResponse> getClassifiedCategory() async {
     var url = "${baseUrl}/app/classifies-categories-localities";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -792,6 +1062,13 @@ class ApiProvider {
 
   Future<ReferEarnResponse> getReferAndEarn() async {
     var url = "${baseUrl}/app/get-refer-n-earn";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -817,6 +1094,13 @@ class ApiProvider {
 
   Future<AboutUsResponse> getAboutUs() async {
     var url = "${baseUrl}/app/pages/about";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -842,6 +1126,13 @@ class ApiProvider {
 
   Future<AboutUsResponse> getPrivacyPolicy() async {
     var url = "${baseUrl}/app/pages/privacy-n-policy";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -867,6 +1158,13 @@ class ApiProvider {
 
   Future<ContactUsResponse> getContactUs() async {
     var url = "${baseUrl}/app/pages/contact";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -892,6 +1190,13 @@ class ApiProvider {
 
   Future<GuwahatiConnectResponse> getGuwahatiConnect() async {
     var url = "${baseUrl}/app/guwahati-connect";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -917,6 +1222,13 @@ class ApiProvider {
 
   Future<CitizenJournalistResponse> getCitizenJournalistDraft() async {
     var url = "${baseUrl}/app/citizen-journalist-list/draft";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -942,6 +1254,13 @@ class ApiProvider {
 
   Future<PollOfTheWeekResponse> getPollOfTheWeek() async {
     var url = "${baseUrl}/app/poll-question";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -968,6 +1287,13 @@ class ApiProvider {
   Future<GenericResponse> postPollOfTheWeek(
       poll_question_id, ans_option) async {
     var url = "${baseUrl}/app/post-poll-answer";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {
@@ -997,9 +1323,94 @@ class ApiProvider {
     }
   }
 
+  Future<GenericResponse> postLike(comment_id, is_liked) async {
+    var url = "${baseUrl}/app/like";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'comment_id': comment_id,
+      'is_liked': is_liked,
+    };
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("postLike response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("postLike error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("postLike error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> postComment(
+      comment_for_id, comment_for, comment) async {
+    var url = "${baseUrl}/app/comment";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'comment_for_id': comment_for_id,
+      'comment_for': comment_for,
+      'comment': comment,
+    };
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("postComment response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("postComment error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("postComment error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
   Future<GenericResponse> postClassified(classified_category_id, locality_id,
       title, description, price, List<File> files) async {
     var url = "${baseUrl}/app/classified";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     FormData data = FormData.fromMap({
@@ -1047,6 +1458,13 @@ class ApiProvider {
   Future<GenericResponse> postCitizenJournalist(
       title, story, List<File> files) async {
     var url = "${baseUrl}/app/citizen-journalist";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     FormData data = FormData.fromMap({
@@ -1091,6 +1509,13 @@ class ApiProvider {
   Future<GenericResponse> postGuwhahatiConnect(
       question, List<File> files) async {
     var url = "${baseUrl}/app/guwahati-connect";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
     dio = Dio(option);
     debugPrint(url.toString());
     FormData data = FormData.fromMap({

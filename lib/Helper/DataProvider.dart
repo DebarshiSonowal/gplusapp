@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_place/google_place.dart';
 import 'package:gplusapp/Model/about_us.dart';
 import 'package:gplusapp/Model/address.dart';
 import 'package:gplusapp/Model/advertise.dart';
@@ -12,13 +13,15 @@ import 'package:gplusapp/Model/opinion.dart';
 import 'package:gplusapp/Model/poll_of_the_week.dart';
 import 'package:gplusapp/Model/profile.dart';
 import 'package:gplusapp/Model/promoted_deal.dart';
+import 'package:gplusapp/Model/redeem_history.dart';
 import 'package:gplusapp/Model/refer_earn_response.dart';
+import 'package:gplusapp/Model/search_result.dart';
 import 'package:gplusapp/Model/shop_category.dart';
 import 'package:gplusapp/Model/top_picks.dart';
 import 'package:gplusapp/Model/video_news.dart';
 import 'package:gplusapp/UI/citizen_journalist/citizen_journalist_page.dart';
 import 'package:gplusapp/UI/others/contact_us_page.dart';
-
+import '../Model/search_result.dart' as search;
 import '../Model/contact_us.dart';
 import '../Model/guwahati_connect.dart';
 import '../Model/membership.dart';
@@ -56,9 +59,21 @@ class DataProvider extends ChangeNotifier {
   List<Address>? addresses = [];
   List<GuwahatiConnect> guwahatiConnect = [];
   List<CitizenJournalist> citizenlist = [];
+  List<RedeemHistory> history = [];
+  List<search.SearchResult> searchlist = [];
 
   setCitizenJournalist(List<CitizenJournalist> list) {
     citizenlist = list;
+    notifyListeners();
+  }
+
+  setRedeemHistory(List<RedeemHistory> list) {
+    history = list;
+    notifyListeners();
+  }
+
+  setSearchResult(List<search.SearchResult> list) {
+    searchlist = list;
     notifyListeners();
   }
 

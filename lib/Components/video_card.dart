@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Model/video_news.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:sizer/sizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../Helper/Constance.dart';
@@ -114,7 +115,9 @@ class VideoCard extends StatelessWidget {
                   height: 1.5.h,
                 ),
                 Text(
-                  item.publish_date?.split(" ")[0] ?? "",
+                  // item.publish_date?.split(" ")[0] ?? "",
+                  Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                      .format("dd/MM/yyyy"),
                   style: Theme.of(context)
                       .textTheme
                       .headline6

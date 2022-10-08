@@ -36,7 +36,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   var last_name = TextEditingController();
   var email = TextEditingController();
   var date = '';
-  int year = 2000;
+  int year = 1800;
   int max = 2022;
   int currentY = 2022;
   String dropdownvalue = 'Male';
@@ -71,8 +71,8 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         date = f.format(current);
         final y = DateFormat('yyyy');
         currentY = int.parse(y.format(current));
-        year = currentY - 18;
-        max = currentY + 18;
+        year = 1800;
+        max = currentY;
       });
 
       // getLocations();
@@ -462,52 +462,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               ),
               GestureDetector(
                 onTap: () async {
-                  Dialogs.materialDialog(
-                      msg: 'Where do you live?',
-                      title: "Address",
-                      color: Colors.white,
-                      context: context,
-                      titleStyle:
-                      Theme.of(context).textTheme.headline2!.copyWith(
-                        color: Colors.black,
-                      ),
-                      msgStyle:
-                      Theme.of(context).textTheme.headline5!.copyWith(
-                        color: Colors.black,
-                      ),
-                      actions: [
-                        IconsOutlineButton(
-
-                          onPressed: () {
-                            Navigation.instance.goBack();
-                            getLocations();
-                          },
-                          color: Constance.thirdColor,
-                          text: 'Current Location',
-                          iconData: Icons.gps_fixed,
-                          textStyle: const TextStyle(color: Colors.white,),
-                          iconColor: Colors.white,
-                        ),
-                        IconsButton(
-                          onPressed: () async{
-                            Navigation.instance.goBack();
-                            final result =
-                            await Navigation.instance.navigate('/locationSearchPage');
-                            if (result != null && result != "") {
-                              setState(() {
-                                address = result;
-                              });
-                              findLocation(address);
-                            }
-                          },
-                          text: 'Search',
-                          iconData: Icons.exit_to_app,
-                          color: Constance.primaryColor,
-                          textStyle: const TextStyle(color: Colors.white,),
-                          iconColor: Colors.white,
-                        ),
-                      ]);
-
+                  showLocationSelectDialog();
                 },
                 child: Row(
                   children: [
@@ -533,7 +488,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               GestureDetector(
                 onTap: () async {
                   // getLocations();
-
+                  showLocationSelectDialog();
                 },
                 child: Row(
                   children: [
@@ -541,7 +496,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                       // height: 5.h,
                       width: 40.w,
                       child: Text(
-                        address == '' ? 'Khanapara, Guwahati' : address,
+                        address == '' ? 'Please Select one address' : address,
                         overflow: TextOverflow.clip,
                         style: Theme.of(context).textTheme.headline5?.copyWith(
                               color: Constance.primaryColor,
@@ -744,7 +699,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   void setData(mobile, fname, lname, email, dob, address) {
     Storage.instance.setSignUpData(
       temp(mobile, fname, lname, email, dob, address, longitude, latitude,
-          address_id),
+          address_id, dropdownvalue),
     );
     // Storage.instance.signUpdata?.f_name = fname;
     // Storage.instance.signUpdata?.l_name = lname;
@@ -780,5 +735,54 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     } else {
       showError("Something went wrong");
     }
+  }
+
+  void showLocationSelectDialog() {
+    Dialogs.materialDialog(
+        msg: 'Where do you live?',
+        title: "Address",
+        color: Colors.white,
+        context: context,
+        titleStyle: Theme.of(context).textTheme.headline2!.copyWith(
+              color: Colors.black,
+            ),
+        msgStyle: Theme.of(context).textTheme.headline5!.copyWith(
+              color: Colors.black,
+            ),
+        actions: [
+          IconsOutlineButton(
+            onPressed: () {
+              Navigation.instance.goBack();
+              getLocations();
+            },
+            color: Constance.thirdColor,
+            text: 'Current Location',
+            iconData: Icons.gps_fixed,
+            textStyle: const TextStyle(
+              color: Colors.white,
+            ),
+            iconColor: Colors.white,
+          ),
+          IconsButton(
+            onPressed: () async {
+              Navigation.instance.goBack();
+              final result =
+                  await Navigation.instance.navigate('/locationSearchPage');
+              if (result != null && result != "") {
+                setState(() {
+                  address = result;
+                });
+                findLocation(address);
+              }
+            },
+            text: 'Search',
+            iconData: Icons.exit_to_app,
+            color: Constance.primaryColor,
+            textStyle: const TextStyle(
+              color: Colors.white,
+            ),
+            iconColor: Colors.white,
+          ),
+        ]);
   }
 }

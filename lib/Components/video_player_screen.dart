@@ -22,25 +22,31 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
+  PageController controller = PageController(initialPage: 0);
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        itemScrollController.jumpTo(
-            index: Provider.of<DataProvider>(
-                    Navigation.instance.navigatorKey.currentContext ?? context,
-                    listen: false)
-                .home_weekly
-                .indexWhere(
-                    (element) => element.youtube_id == widget.youtube_id));
+        // itemScrollController.jumpTo(
+        //     index: Provider.of<DataProvider>(
+        //             Navigation.instance.navigatorKey.currentContext ?? context,
+        //             listen: false)
+        //         .home_weekly
+        //         .indexWhere(
+        //             (element) => element.youtube_id == widget.youtube_id));
+        controller.jumpToPage(Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .home_weekly
+            .indexWhere((element) => element.youtube_id == widget.youtube_id));
       });
-      print(Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .home_weekly
-          .indexWhere((element) => element.youtube_id == widget.youtube_id));
+      // print(Provider.of<DataProvider>(
+      //         Navigation.instance.navigatorKey.currentContext ?? context,
+      //         listen: false)
+      //     .home_weekly
+      //     .indexWhere((element) => element.youtube_id == widget.youtube_id));
     });
   }
 
@@ -50,11 +56,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       height: double.infinity,
       width: double.infinity,
       child: Consumer<DataProvider>(builder: (context, data, _) {
-        return ScrollablePositionedList.builder(
-          itemScrollController: itemScrollController,
-          itemPositionsListener: itemPositionsListener,
-          itemCount: data.home_weekly.length,
-          itemBuilder: (context, index) {
+        return PageView.builder(
+          scrollDirection: Axis.vertical,
+          controller: controller,
+          itemBuilder: (BuildContext context, int index) {
             var current = data.home_weekly[index];
             _controller = YoutubePlayerController(
               initialVideoId:
@@ -100,3 +105,89 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     );
   }
 }
+//var current = data.home_weekly[index];
+//             _controller = YoutubePlayerController(
+//               initialVideoId:
+//                   // widget.youtube_id ??
+//                   '${current.youtube_id}' ?? 'iLnmTe5Q2Qw',
+//               flags: const YoutubePlayerFlags(
+//                 autoPlay: true,
+//                 mute: false,
+//               ),
+//             );
+//             return SizedBox(
+//               height: MediaQuery.of(context).size.height,
+//               width: MediaQuery.of(context).size.width,
+//               child: VisibilityDetector(
+//                 key: Key(current.youtube_id!),
+//                 onVisibilityChanged: (visibilityInfo) {
+//                   var visiblePercentage = visibilityInfo.visibleFraction * 100;
+//                   if (visiblePercentage < 80) {
+//                     _controller!.pause();
+//                     print('pause');
+//                   }
+//                 },
+//                 child: YoutubePlayer(
+//                   controller: _controller!,
+//                   showVideoProgressIndicator: true,
+//                   aspectRatio: 2 / 3,
+//                   // videoProgressIndicatorColor: Colors.amber,
+//                   progressColors: const ProgressBarColors(
+//                     playedColor: Colors.amber,
+//                     handleColor: Colors.amberAccent,
+//                   ),
+//                   onReady: () {
+//                     // _controller
+//                     //     .addListener(() {});
+//                     _controller!.play();
+//                   },
+//                 ),
+//               ),
+//             );
+
+// return ScrollablePositionedList.builder(
+//           itemScrollController: itemScrollController,
+//           itemPositionsListener: itemPositionsListener,
+//           itemCount: data.home_weekly.length,
+//           itemBuilder: (context, index) {
+//             var current = data.home_weekly[index];
+//             _controller = YoutubePlayerController(
+//               initialVideoId:
+//                   // widget.youtube_id ??
+//                   '${current.youtube_id}' ?? 'iLnmTe5Q2Qw',
+//               flags: const YoutubePlayerFlags(
+//                 autoPlay: true,
+//                 mute: false,
+//               ),
+//             );
+//             return SizedBox(
+//               height: MediaQuery.of(context).size.height,
+//               width: MediaQuery.of(context).size.width,
+//               child: VisibilityDetector(
+//                 key: Key(current.youtube_id!),
+//                 onVisibilityChanged: (visibilityInfo) {
+//                   var visiblePercentage = visibilityInfo.visibleFraction * 100;
+//                   if (visiblePercentage < 80) {
+//                     _controller!.pause();
+//                     print('pause');
+//                   }
+//                 },
+//                 child: YoutubePlayer(
+//                   controller: _controller!,
+//                   showVideoProgressIndicator: true,
+//                   aspectRatio: 2 / 3,
+//                   // videoProgressIndicatorColor: Colors.amber,
+//                   progressColors: const ProgressBarColors(
+//                     playedColor: Colors.amber,
+//                     handleColor: Colors.amberAccent,
+//                   ),
+//                   onReady: () {
+//                     // _controller
+//                     //     .addListener(() {});
+//                     _controller!.play();
+//                   },
+//                 ),
+//               ),
+//             );
+//           },
+//         );

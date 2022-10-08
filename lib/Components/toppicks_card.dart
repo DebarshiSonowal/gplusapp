@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Model/top_picks.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
-
 
 class ToppicksCard extends StatelessWidget {
   final TopPicks item;
@@ -22,8 +22,7 @@ class ToppicksCard extends StatelessWidget {
         ),
       ),
       child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: 4.w, vertical: 1.5.h),
+        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(
             Radius.circular(5),
@@ -31,19 +30,16 @@ class ToppicksCard extends StatelessWidget {
           color: Colors.white,
         ),
         height: 10.h,
-        width:
-        MediaQuery.of(context).size.width - 7.w,
+        width: MediaQuery.of(context).size.width - 7.w,
         child: Row(
           children: [
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: ClipRRect(
-                      borderRadius:
-                      BorderRadius.circular(5.0),
+                      borderRadius: BorderRadius.circular(5.0),
                       child: CachedNetworkImage(
                         fit: BoxFit.fill,
                         imageUrl: item.image_file_name ?? '',
@@ -65,12 +61,11 @@ class ToppicksCard extends StatelessWidget {
                     height: 1.5.h,
                   ),
                   Text(
-                    item.date?? "",
+                    Jiffy(item.date, "yyyy-MM-dd").format("dd/MM/yyyy"),
                     style: Theme.of(context)
                         .textTheme
                         .headline6
-                        ?.copyWith(
-                        color: Colors.black),
+                        ?.copyWith(color: Colors.black),
                   ),
                 ],
               ),
@@ -80,25 +75,18 @@ class ToppicksCard extends StatelessWidget {
             ),
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Center(
                       child: Text(
-                        item.title??"",
+                        item.title ?? "",
                         maxLines: 4,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline5
-                            ?.copyWith(
-                          // fontSize: 2.2.h,
-                            fontWeight:
-                            FontWeight.bold,
-                            overflow: TextOverflow
-                                .ellipsis,
-                            color: Constance
-                                .primaryColor),
+                        style: Theme.of(context).textTheme.headline5?.copyWith(
+                            // fontSize: 2.2.h,
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,
+                            color: Constance.primaryColor),
                       ),
                     ),
                   ),
@@ -110,8 +98,7 @@ class ToppicksCard extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .headline6
-                        ?.copyWith(
-                        color: Colors.black),
+                        ?.copyWith(color: Colors.black),
                   ),
                 ],
               ),
@@ -122,4 +109,3 @@ class ToppicksCard extends StatelessWidget {
     );
   }
 }
-

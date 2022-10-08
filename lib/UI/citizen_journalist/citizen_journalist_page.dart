@@ -137,11 +137,15 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
       backgroundColor: Constance.primaryColor,
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
           icon: Icon(Icons.notifications),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
           icon: Icon(Icons.search),
         ),
       ],

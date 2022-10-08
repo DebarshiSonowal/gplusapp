@@ -447,12 +447,6 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      // leading: IconButton(
-      //   onPressed: () {
-      //     Navigation.instance.navigate('/bergerMenuMem');
-      //   },
-      //   icon: Icon(Icons.menu),
-      // ),
       title: Image.asset(
         Constance.logoIcon,
         fit: BoxFit.fill,
@@ -462,11 +456,15 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
       backgroundColor: Constance.primaryColor,
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
           icon: Icon(Icons.notifications),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
           icon: Icon(Icons.search),
         ),
       ],

@@ -126,13 +126,11 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                       SizedBox(
                         height: 5.h,
                         width: double.infinity,
-                        child: Expanded(
-                          child: CustomButton(
-                            txt: 'Redeem Coin',
-                            onTap: () {
-                              Navigation.instance.navigate('/redeemPoints');
-                            },
-                          ),
+                        child: CustomButton(
+                          txt: 'Redeem Coin',
+                          onTap: () {
+                            Navigation.instance.navigate('/redeemPoints');
+                          },
                         ),
                       ),
                       SizedBox(
@@ -218,11 +216,9 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                       SizedBox(
                         height: 5.h,
                         width: double.infinity,
-                        child: Expanded(
-                          child: CustomButton(
-                            txt: 'Send to us',
-                            onTap: () {},
-                          ),
+                        child: CustomButton(
+                          txt: 'Send to us',
+                          onTap: () {},
                         ),
                       ),
                       SizedBox(

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
@@ -120,6 +121,12 @@ class _VideoReportState extends State<VideoReport> {
                               ),
                             ),
                             Container(
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [Colors.transparent, Colors.black]),
+                              ),
                               padding: EdgeInsets.symmetric(horizontal: 5.w),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,8 +151,10 @@ class _VideoReportState extends State<VideoReport> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            Navigation.instance.navigate('/videoPlayer',args: data.video_news[0].youtube_id);
-
+                                            Navigation.instance.navigate(
+                                                '/videoPlayer',
+                                                args: data
+                                                    .video_news[0].youtube_id);
                                           },
                                           child: Text(
                                             'Play Now',
@@ -182,7 +191,7 @@ class _VideoReportState extends State<VideoReport> {
                                     height: 2.h,
                                   ),
                                   Text(
-                                    'GPlus Admin, ${data.video_news[0].publish_date?.split(" ")[0]}',
+                                    'GPlus Admin, ${Jiffy(data.video_news[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
                                     style: Theme.of(Navigation.instance
                                             .navigatorKey.currentContext!)
                                         .textTheme
@@ -260,7 +269,9 @@ class _VideoReportState extends State<VideoReport> {
                                             ),
                                             GestureDetector(
                                               onTap: () {
-                                                Navigation.instance.navigate('/videoPlayer',args: item.youtube_id);
+                                                Navigation.instance.navigate(
+                                                    '/videoPlayer',
+                                                    args: item.youtube_id);
                                               },
                                               child: Container(
                                                 width: 40.w,
@@ -311,8 +322,10 @@ class _VideoReportState extends State<VideoReport> {
                                           height: 1.5.h,
                                         ),
                                         Text(
-                                          item.publish_date?.split(" ")[0] ??
-                                              "",
+                                          // item.publish_date?.split(" ")[0] ??
+                                          //     "",
+                                          Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                                              .format("dd/MM/yyyy"),
                                           style: Theme.of(context)
                                               .textTheme
                                               .headline6
@@ -373,7 +386,7 @@ class _VideoReportState extends State<VideoReport> {
                                 ),
                               );
                             },
-                            itemCount:  data.video_news.length),
+                            itemCount: data.video_news.length),
                       ],
                     ),
                   )

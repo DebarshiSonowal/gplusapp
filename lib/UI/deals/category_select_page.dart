@@ -53,7 +53,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   @override
   void initState() {
     super.initState();
-    fetchDetails();
+    Future.delayed(Duration.zero, () => fetchDetails());
   }
 
   @override
@@ -289,41 +289,56 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                 SizedBox(
                   width: 4.w,
                 ),
-                SizedBox(
-                  width: 45.w,
-                  child: Center(
-                    child: DropdownButton(
-                      isExpanded: false,
-                      // Initial Value
-                      value: dropdownvalue,
-
-                      // Down Arrow Icon
-                      icon: const Icon(Icons.keyboard_arrow_down),
-
-                      // Array list of items
-                      items: items.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(
-                            items,
-                            style:
-                                Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Colors.black,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${current.details?.opening_time} - ${current.details?.closing_time}' ??
+                          '',
+                      // overflow: TextOverflow.clip,
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Colors.black,
+                            // fontWeight: FontWeight.bold,
                           ),
-                        );
-                      }).toList(),
-                      // After selecting the desired option,it will
-                      // change button value to selected value
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownvalue = newValue!;
-                        });
-                      },
                     ),
-                  ),
+                  ],
                 ),
+                // SizedBox(
+                //   width: 45.w,
+                //   child: Center(
+                //     child: DropdownButton(
+                //       isExpanded: false,
+                //       // Initial Value
+                //       value: dropdownvalue,
+                //
+                //       // Down Arrow Icon
+                //       icon: const Icon(Icons.keyboard_arrow_down),
+                //
+                //       // Array list of items
+                //       items: items.map((String items) {
+                //         return DropdownMenuItem(
+                //           value: items,
+                //           child: Text(
+                //             items,
+                //             style:
+                //                 Theme.of(context).textTheme.headline5?.copyWith(
+                //                       color: Colors.black,
+                //                       // fontWeight: FontWeight.bold,
+                //                     ),
+                //           ),
+                //         );
+                //       }).toList(),
+                //       // After selecting the desired option,it will
+                //       // change button value to selected value
+                //       onChanged: (String? newValue) {
+                //         setState(() {
+                //           dropdownvalue = newValue!;
+                //         });
+                //       },
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -507,7 +522,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
           .setRedeemDetails(response.details!);
       Navigation.instance.navigate('/redeemOfferPage');
     } else {
-      showError("Something went wrong");
+      showError(response.message ?? "Something went wrong");
     }
   }
 
@@ -522,16 +537,18 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   }
 
   void fetchDetails() async {
+    Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getDealDetails(widget.id);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setDealDetails(response.details!);
-
+      Navigation.instance.goBack();
       // _refreshController.refreshCompleted();
     } else {
       // _refreshController.refreshFailed();
+      Navigation.instance.goBack();
     }
   }
 }

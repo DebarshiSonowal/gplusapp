@@ -1,6 +1,6 @@
-import 'package:gplusapp/Model/promoted_deal.dart';
+import 'package:gplusapp/Model/vendor.dart';
 
-class RedeemDetails {
+class RedeemHistory {
   int? id,
       vendor_id,
       total,
@@ -11,9 +11,10 @@ class RedeemDetails {
       plan_id,
       status;
   bool? is_percent, is_one_time;
-  String? plan_active_date, plan_expiry_date, title, description, code;
+  String? plan_active_date, plan_expiry_date, title, description, code, date;
+  Vendor? vendor;
 
-  RedeemDetails.fromJson(json) {
+  RedeemHistory.fromJson(json) {
     id = json['id'] ?? 0;
     vendor_id =
         json['vendor_id'] == null ? 0 : int.parse(json['vendor_id'].toString());
@@ -44,29 +45,32 @@ class RedeemDetails {
     //String
     plan_active_date = json['plan_active_date'] ?? "";
     plan_expiry_date = json['plan_expiry_date'] ?? "";
+    date = json['updated_at'] ?? "";
     title = json['title'] ?? "";
     description = json['description'] ?? "";
     code = json['code'] ?? "";
+
+    vendor = Vendor.fromJson(json['vendor']);
   }
 }
 
-class RedeemDetailsResponse{
+class RedeemHistoryResponse {
   bool? success;
   String? message;
-  RedeemDetails? details;
+  List<RedeemHistory>? data;
 
-  RedeemDetailsResponse.fromJson(json) {
-    success = json['success'].toString() == 'true' ? true : false;
-    message = json['message'] ?? "Something Went Wrong";
-    try {
-      details = RedeemDetails.fromJson(json['result']);
-    } catch (e) {
-      print(e);
-    }
+  RedeemHistoryResponse.fromJson(json) {
+    success = json['success'] ?? false;
+    message = json['message'] ?? "Something went wrong";
+    data = json['result'] == null
+        ? []
+        : (json['result'] as List)
+            .map((e) => RedeemHistory.fromJson(e))
+            .toList();
   }
 
-  RedeemDetailsResponse.withError(msg) {
+  RedeemHistoryResponse.withError(msg) {
     success = false;
-    message = msg ?? "Something Went Wrong";
+    message = msg ?? "Something went wrong";
   }
 }

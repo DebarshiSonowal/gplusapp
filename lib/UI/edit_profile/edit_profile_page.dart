@@ -5,6 +5,7 @@ import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
@@ -53,7 +54,9 @@ class _EditProfileState extends State<EditProfile> {
         year = currentY - 18;
         max = currentY + 18;
       });
+      fetchTopicks();
       fetchProfile();
+      fetchAddress();
     });
   }
 
@@ -189,7 +192,8 @@ class _EditProfileState extends State<EditProfile> {
                                         context,
                                     listen: false)
                                 .addresses!
-                                .firstWhere((element) => element.id == response)
+                                    // .firstWhere((element) => element.id == response)
+                                    [0]
                                 .address ??
                             "";
                         id = response.toString();
@@ -243,14 +247,16 @@ class _EditProfileState extends State<EditProfile> {
                   width: double.infinity,
                   child: Wrap(
                     children: [
-                      for (int i = 0; i < data.mygeoTopicks.length; i++)
+                      for (int i = 0; i < data.geoTopicks.length; i++)
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              if (!selGeo.contains(data.mygeoTopicks[i])) {
-                                selGeo.add(data.mygeoTopicks[i]);
+                              if (!check(selGeo, data.geoTopicks[i])) {
+                                selGeo.add(data.geoTopicks[i]);
                               } else {
-                                selGeo.remove(data.mygeoTopicks[i]);
+                                // selGeo.remove(data.geoTopicks[i]);
+                                selGeo.removeWhere((element) =>
+                                    element.id == data.geoTopicks[i].id);
                               }
                             });
                           },
@@ -262,14 +268,14 @@ class _EditProfileState extends State<EditProfile> {
                             decoration: BoxDecoration(
                               color: selGeo == null
                                   ? Colors.white
-                                  : !selGeo.contains(data.mygeoTopicks[i])
+                                  : !check(selGeo, data.geoTopicks[i])
                                       ? Colors.white
                                       : Constance.secondaryColor,
                               borderRadius: BorderRadius.circular(5),
                               border: Border.all(
                                 color: selGeo == null
                                     ? Constance.primaryColor
-                                    : !selGeo.contains(data.mygeoTopicks[i])
+                                    : !check(selGeo, data.geoTopicks[i])
                                         ? Constance.primaryColor
                                         : Constance.secondaryColor,
                                 width: 0.5.w,
@@ -280,7 +286,7 @@ class _EditProfileState extends State<EditProfile> {
                               ),
                             ),
                             child: Text(
-                              data.mygeoTopicks[i].title!,
+                              data.geoTopicks[i].title!,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline5
@@ -314,14 +320,19 @@ class _EditProfileState extends State<EditProfile> {
                   width: double.infinity,
                   child: Wrap(
                     children: [
-                      for (int i = 0; i < data.mytopicks.length; i++)
+                      for (int i = 0; i < data.topicks.length; i++)
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              if (!selTop.contains(data.mytopicks[i])) {
-                                selTop.add(data.mytopicks[i]);
+                              if (!check(selTop, data.topicks[i])) {
+                                print('add ${data.topicks[i].title}');
+                                selTop.add(data.topicks[i]);
                               } else {
-                                selTop.remove(data.mytopicks[i]);
+                                // print(
+                                //     'rmv ${}');
+                                // selTop.remove(data.topicks[i]);
+                                selTop.removeWhere((element) =>
+                                    element.id == data.topicks[i].id);
                               }
                             });
                           },
@@ -333,14 +344,14 @@ class _EditProfileState extends State<EditProfile> {
                             decoration: BoxDecoration(
                               color: selTop == null
                                   ? Colors.white
-                                  : !selTop.contains(data.mytopicks[i])
+                                  : !check(selTop, data.topicks[i])
                                       ? Colors.white
                                       : Constance.secondaryColor,
                               borderRadius: BorderRadius.circular(5),
                               border: Border.all(
                                 color: selTop == null
                                     ? Constance.primaryColor
-                                    : !selTop.contains(data.mytopicks[i])
+                                    : !check(selTop, data.topicks[i])
                                         ? Constance.primaryColor
                                         : Constance.secondaryColor,
                                 width: 0.5.w,
@@ -351,7 +362,7 @@ class _EditProfileState extends State<EditProfile> {
                               ),
                             ),
                             child: Text(
-                              data.mytopicks[i].title!,
+                              data.topicks[i].title!,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline5
@@ -470,10 +481,10 @@ class _EditProfileState extends State<EditProfile> {
                       activeColor: Constance.secondaryColor,
                       onChanged: (bool value) {
                         setState(() {
-                          classified = value;
+                          dark_mode = value;
                         });
                       },
-                      value: classified,
+                      value: dark_mode,
                     ),
                   ],
                 ),
@@ -553,12 +564,14 @@ class _EditProfileState extends State<EditProfile> {
     guwahati_connect = prof.has_ghy_connect_notify_perm ?? false;
     classified = prof.has_classified_notify_perm ?? false;
     try {
-      address = prof.addresses[0].address??"";
+      address = prof.addresses[0].address ?? "";
     } catch (e) {
       print(e);
     }
     try {
-      id = prof.addresses.where((element) => (element.is_primary!)==0).toString();
+      id = prof.addresses
+          .firstWhere((element) => element.is_primary == 1)
+          .toString();
     } catch (e) {
       print(e);
     }
@@ -585,23 +598,30 @@ class _EditProfileState extends State<EditProfile> {
                 Navigation.instance.navigatorKey.currentContext ?? context,
                 listen: false)
             .addresses!
-            .firstWhere((element) => element.id.toString().trim() == id)
+            // .firstWhere((element) => element.id.toString().trim() == id)
+            .firstWhere((element) => element.is_primary == 1)
             .longitude,
         Provider.of<DataProvider>(
                 Navigation.instance.navigatorKey.currentContext ?? context,
                 listen: false)
             .addresses!
-            .firstWhere((element) => element.id.toString().trim() == id)
+            .firstWhere((element) => element.is_primary == 1)
             .latitude,
         getComaSeparated(selTop),
         getComaSeparated(selGeo),
         big_deal,
         guwahati_connect,
-        classified);
+        classified,
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .profile
+            ?.gender);
     if (response.success ?? false) {
       fetchProfile();
     }
   }
+
   String getComaSeparated(List<dynamic> list) {
     String temp = "";
     for (int i = 0; i < list.length; i++) {
@@ -612,5 +632,97 @@ class _EditProfileState extends State<EditProfile> {
       }
     }
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
+  }
+
+  void fetchAddress() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getAddress();
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setAddressess(response.addresses);
+      if (mounted) {
+        setState(() {
+          id = response.addresses
+              .firstWhere((element) => element.is_primary == 1)
+              .id
+              .toString();
+        });
+      } else {
+        id = response.addresses
+            .firstWhere((element) => element.is_primary == 1)
+            .id
+            .toString();
+      }
+      print(id);
+    } else {
+      Navigation.instance.goBack();
+    }
+  }
+
+  void fetchTopicks() async {
+    // showLoaderDialog(context);
+    final response = await ApiProvider.instance.getTopicks();
+    if (response.success ?? false) {
+      setState(() {
+        selTop = Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .mytopicks;
+      });
+      // Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setTopicks(response.topicks);
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setGeoTopicks(response.geoTopicks);
+      for (var i in Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .mygeoTopicks) {
+        for (var j in response.geoTopicks) {
+          if (i.id == j.id) {
+            selGeo.add(j);
+          }
+        }
+      }
+      for (var i in Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .mytopicks) {
+        for (var j in response.topicks) {
+          if (i.id == j.id) {
+            selTop.add(j);
+          }
+        }
+      }
+    } else {
+      // Navigation.instance.goBack();
+      showError("Something went wrong");
+    }
+  }
+
+  bool check(List<dynamic> list1, dynamic list2) {
+    for (var i in list1) {
+      if (i.id == list2.id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }

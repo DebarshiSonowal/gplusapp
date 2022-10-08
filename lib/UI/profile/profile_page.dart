@@ -156,42 +156,7 @@ class _ProfilePageState extends State<ProfilePage> {
         IconButton(
           onPressed: () {
             Navigation.instance.navigate('/search');
-            // showSearch(
-            //   context: context,
-            //   delegate: SearchPage<Listing>(
-            //     items: Constance.listings,
-            //     searchLabel: 'Search posts',
-            //     suggestion: Center(
-            //       child: Text(
-            //         'Filter posts by name, descr',
-            //         style: Theme.of(context).textTheme.headline5,
-            //       ),
-            //     ),
-            //     failure: const Center(
-            //       child: Text('No posts found :('),
-            //     ),
-            //     filter: (current) => [
-            //       current.title,
-            //       current.descr,
-            //       // person.age.toString(),
-            //     ],
-            //     builder: (data) => ListTile(
-            //       title: Text(
-            //         data.title ?? "",
-            //         style: Theme.of(context).textTheme.headline5,
-            //       ),
-            //       subtitle: Text(
-            //         data.descr ?? '',
-            //         style: Theme.of(context).textTheme.headline6,
-            //       ),
-            //       // trailing: CachedNetworkImage(
-            //       //   imageUrl: data.image??'',
-            //       //   height: 20,
-            //       //   width: 20,
-            //       // ),
-            //     ),
-            //   ),
-            // );
+
           },
           icon: Icon(Icons.search),
         ),

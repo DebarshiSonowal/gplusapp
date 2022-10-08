@@ -169,14 +169,29 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         SizedBox(
                           width: 8.w,
                         ),
-                        Text(
-                          'Khanapara, Guwahati',
-                          style:
-                              Theme.of(context).textTheme.headline6?.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 11.sp,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                        SizedBox(
+                          width: 45.w,
+                          child: Text(
+                            data.profile?.addresses
+                                        .where((element) =>
+                                            element.is_primary == 1)
+                                        .isEmpty ??
+                                    false
+                                ? ""
+                                : data.profile?.addresses
+                                        .where((element) =>
+                                            element.is_primary == 1)
+                                        .first
+                                        .address ??
+                                    '',
+                            overflow: TextOverflow.ellipsis,
+                            style:
+                                Theme.of(context).textTheme.headline6?.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 11.sp,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                          ),
                         ),
                         SizedBox(
                           width: 2.w,

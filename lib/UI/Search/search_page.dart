@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
+import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 
@@ -64,7 +67,13 @@ class _SearchPageState extends State<SearchPage> {
                       border: InputBorder.none,
                       hintStyle: const TextStyle(color: Colors.black26),
                       suffixIcon: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (_searchQueryController.text.isNotEmpty) {
+                            search(_searchQueryController.text,selected);
+                          } else {
+                            showError('Enter something to search');
+                          }
+                        },
                         icon: const Icon(Icons.search),
                       ),
                     ),
@@ -72,9 +81,7 @@ class _SearchPageState extends State<SearchPage> {
                         .textTheme
                         .headline4
                         ?.copyWith(color: Colors.black),
-                    onChanged: (query) => {
-
-                    },
+                    onChanged: (query) => {},
                   ),
                 ),
               ),
@@ -167,7 +174,7 @@ class _SearchPageState extends State<SearchPage> {
                     // physics: const NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     itemBuilder: (cont, count) {
-                      var item = data.opinions[count];
+                      var item = data.searchlist[count];
                       return Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: 3.w, vertical: 2.h),
@@ -190,11 +197,15 @@ class _SearchPageState extends State<SearchPage> {
                                       imageUrl: item.image_file_name ?? '',
                                       fit: BoxFit.fill,
                                       placeholder: (cont, _) {
-                                        return const Icon(
-                                          Icons.image,
-                                          color: Colors.black,
+                                        return Shimmer.fromColors(
+                                          baseColor: Colors.red,
+                                          highlightColor: Colors.yellow,
+                                          child: Container(
+
+                                          ),
                                         );
                                       },
+
                                       errorWidget: (cont, _, e) {
                                         // print(e);
                                         print(_);
@@ -270,7 +281,7 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       );
                     },
-                    itemCount: data.opinions.length),
+                    itemCount: data.searchlist.length),
               ),
             ],
           );
@@ -289,5 +300,28 @@ class _SearchPageState extends State<SearchPage> {
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );
+  }
+
+  void search(query,type) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.search(query,type);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setSearchResult(response.data!);
+      Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
+    }
+  }
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }

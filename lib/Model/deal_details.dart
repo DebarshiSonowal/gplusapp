@@ -9,7 +9,14 @@ class DealDetails {
       locality_id,
       alt_mobile,
       shop_type_id;
-  String? code, shop_name, contact_name, email, image_file_name,address;
+  String? code,
+      shop_name,
+      contact_name,
+      email,
+      image_file_name,
+      address,
+      opening_time,
+      closing_time;
   double? latitude, longitude;
   List<Coupon>? coupons;
 
@@ -47,6 +54,8 @@ class DealDetails {
     contact_name = json['contact_name'] ?? "";
     email = json['email'] ?? "";
     address = json['address'] ?? "";
+    opening_time = json['opening_time'] ?? "";
+    closing_time = json['closing_time'] ?? "";
     // address = json['address']??"";
 
     coupons = json['coupons'] == null
@@ -54,7 +63,8 @@ class DealDetails {
         : (json['coupons'] as List).map((e) => Coupon.fromJson(e)).toList();
   }
 }
-class DealDetailsResponse{
+
+class DealDetailsResponse {
   bool? success;
   String? message;
   DealDetails? details;
@@ -62,13 +72,11 @@ class DealDetailsResponse{
   DealDetailsResponse.fromJson(json) {
     success = json['success'].toString() == 'true' ? true : false;
     message = json['message'] ?? "Something Went Wrong";
-    details = DealDetails.fromJson(json['data']);
+    details = DealDetails.fromJson(json['result']);
   }
 
   DealDetailsResponse.withError(msg) {
     success = false;
     message = msg ?? "Something Went Wrong";
   }
-
 }
-

@@ -253,9 +253,11 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
       0,
       0,
       0,
+      Storage.instance.signUpdata?.gender,
     );
     if (reponse.success ?? false) {
-      setPreferences();
+      // setPreferences();
+      getProfile();
     } else {
       showError(reponse.msg ?? "Something went wrong");
     }
