@@ -22,6 +22,7 @@ import '../UI/VideoReport/video_report.dart';
 import '../UI/author/author_page.dart';
 import '../UI/citizen_journalist/citizen_journalist_page.dart';
 import '../UI/citizen_journalist/draft_story.dart';
+import '../UI/citizen_journalist/edit_story.dart';
 import '../UI/guwahati_connect/ask_a_question.dart';
 import '../UI/guwahati_connect/guwahati_connect_page.dart';
 import '../UI/citizen_journalist/stories_submitted.dart';
@@ -47,6 +48,7 @@ import '../UI/others/privacy_policy_page.dart';
 import '../UI/profile/profile_page.dart';
 import '../UI/refer_earn/redeem_points.dart';
 import '../UI/refer_earn/refer&earn.dart';
+import '../UI/opinion/opinion_details_page.dart';
 import '../UI/story/story_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -72,7 +74,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           page: PersonalDetailsPage(settings.arguments as int));
     case '/editProfile':
       return FadeTransitionPageRouteBuilder(page: EditProfile());
-      case '/editSavedAddresses':
+    case '/editSavedAddresses':
       return FadeTransitionPageRouteBuilder(page: EditSavedAddresses());
 
     case '/profile':
@@ -99,7 +101,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/categorySelect':
       return FadeTransitionPageRouteBuilder(
           page: CategorySelectPage(settings.arguments as int));
-      case '/story':
+    case '/story':
       return FadeTransitionPageRouteBuilder(
           page: StoryPage(settings.arguments as String));
 
@@ -117,6 +119,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case '/opinionPage':
       return FadeTransitionPageRouteBuilder(page: OpinionPage());
+    case '/opinionDetails':
+      return FadeTransitionPageRouteBuilder(
+          page: OpinionDetailsPage(settings.arguments as String));
     case '/videoReport':
       return FadeTransitionPageRouteBuilder(page: VideoReport());
 
@@ -125,7 +130,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '/submitStory':
       return FadeTransitionPageRouteBuilder(page: SubmitStoryPage());
-      case '/submitedStory':
+    case '/submitedStory':
       return FadeTransitionPageRouteBuilder(page: StoriesSubmitted());
     case '/draftStory':
       return FadeTransitionPageRouteBuilder(page: DraftStory());
@@ -140,20 +145,24 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/redeemPoints':
       return FadeTransitionPageRouteBuilder(page: RedeemPoints());
     case '/classifiedDetails':
-      return FadeTransitionPageRouteBuilder(page: ClassifiedDetails());
+      return FadeTransitionPageRouteBuilder(
+          page: ClassifiedDetails(settings.arguments as int));
     case '/citizenJournalist':
       return FadeTransitionPageRouteBuilder(page: CitizenJournalistPage());
+    case '/editCitizenJournalist':
+      return FadeTransitionPageRouteBuilder(
+          page: EditStory(settings.arguments as int));
     case '/postClassified':
       return FadeTransitionPageRouteBuilder(page: PostAListing());
     case '/guwahatiConnects':
       return FadeTransitionPageRouteBuilder(page: GuwahatiConnectPage());
-      case '/askAQuestion':
+    case '/askAQuestion':
       return FadeTransitionPageRouteBuilder(page: AskAQuestionPage());
     case '/search':
       return FadeTransitionPageRouteBuilder(page: SearchPage());
     case '/aboutUs':
       return FadeTransitionPageRouteBuilder(page: AboutUsPage());
-      case '/privacy':
+    case '/privacy':
       return FadeTransitionPageRouteBuilder(page: PrivacyPolicyPage());
     case '/grieveanceRedressal':
       return FadeTransitionPageRouteBuilder(page: GrieveanceRedressal());

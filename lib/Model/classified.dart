@@ -37,8 +37,8 @@ class Classified {
             .map((e) => AttachFile.fromJson(e))
             .toList();
 
-    title = json['title']??"";
-    description = json['description']??"";
+    title = json['title'] ?? "";
+    description = json['description'] ?? "";
   }
 }
 
@@ -56,6 +56,27 @@ class ClassifiedResponse {
   }
 
   ClassifiedResponse.withError(msg) {
+    success = false;
+    message = msg ?? "Something Went Wrong";
+  }
+}
+
+class ClassifiedDetailsResponse {
+  bool? success;
+  String? message;
+  Classified? classifieds;
+
+  ClassifiedDetailsResponse.fromJson(json) {
+    success = json['success'].toString() == 'true' ? true : false;
+    message = json['message'] ?? "Something Went Wrong";
+    try {
+      classifieds = Classified.fromJson(json['data']);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  ClassifiedDetailsResponse.withError(msg) {
     success = false;
     message = msg ?? "Something Went Wrong";
   }

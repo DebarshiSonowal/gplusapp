@@ -251,9 +251,9 @@ class _NewsFromState extends State<NewsFrom> {
                                                       item.image_file_name ?? '',
                                                   fit: BoxFit.fill,
                                                   placeholder: (cont, _) {
-                                                    return const Icon(
-                                                      Icons.image,
-                                                      color: Colors.black,
+                                                    return Image.asset(
+                                                      Constance.logoIcon,
+                                                      // color: Colors.black,
                                                     );
                                                   },
                                                   errorWidget: (cont, _, e) {

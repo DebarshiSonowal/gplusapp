@@ -100,6 +100,12 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
+                        placeholder: (cont, _) {
+                          return Image.asset(
+                            Constance.logoIcon,
+                            // color: Colors.black,
+                          );
+                        },
                         height: 30.h,
                         imageUrl: current.details?.image_file_name ??
                             Constance.salonImage),

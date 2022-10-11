@@ -27,19 +27,19 @@ class GuwahatiConnect {
         : json['updated_at'].toString().split("T")[0];
     //String
     question = json['question'] ?? "";
-
-    //other
-    try {
-      user = Profile.fromJson(json['user']);
-    } catch (e) {
-      print(e);
-    }
     attachment = json['attached_files'] == null
         ? []
         : (json['attached_files'] as List).map((e) => GCAttachment.fromJson(e)).toList();
     comments = json['comments'] == null
         ? []
         : (json['comments'] as List).map((e) => Comment.fromJson(e)).toList();
+    //other
+    // try {
+    //   user = Profile.fromJson(json['user']);
+    // } catch (e) {
+    //   print(e);
+    // }
+
   }
 }
 

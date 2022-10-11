@@ -637,6 +637,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   }
 
   void getLocations() async {
+    showLoaderDialog(context);
     debugPrint('got locations1');
     var status = await Permission.location.status;
     if (status.isDenied) {
@@ -651,6 +652,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         }
         getAddress(position.latitude, position.longitude);
       } else {
+        Navigation.instance.goBack();
         showError("We require Location permissions");
       }
       // We didn't ask for permission yet or the permission has been denied before but not permanently.
@@ -694,6 +696,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     setState(() {
       address = address1;
     });
+    Navigation.instance.goBack();
   }
 
   void setData(mobile, fname, lname, email, dob, address) {
@@ -784,5 +787,35 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
             iconColor: Colors.white,
           ),
         ]);
+  }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      backgroundColor: Colors.white,
+      content: Container(
+        color: Colors.white,
+        child: Row(
+          children: [
+            const CircularProgressIndicator(),
+            Container(
+              margin: const EdgeInsets.only(left: 7),
+              child: Text(
+                "Loading...",
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                      color: Colors.black,
+                    ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

@@ -44,9 +44,9 @@ class ToppicksCard extends StatelessWidget {
                         fit: BoxFit.fill,
                         imageUrl: item.image_file_name ?? '',
                         placeholder: (cont, _) {
-                          return const Icon(
-                            Icons.image,
-                            color: Colors.black,
+                          return Image.asset(
+                            Constance.logoIcon,
+                            // color: Colors.black,
                           );
                         },
                         errorWidget: (cont, _, e) {

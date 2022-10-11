@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/date_picker.dart';
 import 'package:flutter_holo_date_picker/i18n/date_picker_i18n.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/custom_button.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 
@@ -293,16 +296,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                       Text(
                         'Grievances Received',
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          // fontWeight: FontWeight.bold,
-                        ),
+                              color: Constance.primaryColor,
+                              // fontWeight: FontWeight.bold,
+                            ),
                       ),
                       Text(
                         '20',
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Constance.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -318,16 +321,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                       Text(
                         'Grievances Resolved  ',
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          // fontWeight: FontWeight.bold,
-                        ),
+                              color: Constance.primaryColor,
+                              // fontWeight: FontWeight.bold,
+                            ),
                       ),
                       Text(
                         '20',
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Constance.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -348,8 +351,8 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 // width: 5.0,
               ),
               borderRadius: const BorderRadius.all(Radius.circular(
-                  5.0) //                 <--- border radius here
-              ),
+                      5.0) //                 <--- border radius here
+                  ),
             ),
             child: ExpansionTile(
               collapsedIconColor: Colors.black,
@@ -357,9 +360,9 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
               title: Text(
                 'June 2022',
                 style: Theme.of(context).textTheme.headline4?.copyWith(
-                  color: Constance.primaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
+                      color: Constance.primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               children: [
                 Container(
@@ -382,16 +385,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                       Text(
                         'Grievances Received',
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          // fontWeight: FontWeight.bold,
-                        ),
+                              color: Constance.primaryColor,
+                              // fontWeight: FontWeight.bold,
+                            ),
                       ),
                       Text(
                         '20',
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Constance.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -407,16 +410,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                       Text(
                         'Grievances Resolved  ',
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          // fontWeight: FontWeight.bold,
-                        ),
+                              color: Constance.primaryColor,
+                              // fontWeight: FontWeight.bold,
+                            ),
                       ),
                       Text(
                         '20',
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Constance.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -437,8 +440,8 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 // width: 5.0,
               ),
               borderRadius: const BorderRadius.all(Radius.circular(
-                  5.0) //                 <--- border radius here
-              ),
+                      5.0) //                 <--- border radius here
+                  ),
             ),
             child: ExpansionTile(
               collapsedIconColor: Colors.black,
@@ -446,9 +449,9 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
               title: Text(
                 'May 2022',
                 style: Theme.of(context).textTheme.headline4?.copyWith(
-                  color: Constance.primaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
+                      color: Constance.primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               children: [
                 Container(
@@ -471,16 +474,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                       Text(
                         'Grievances Received',
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          // fontWeight: FontWeight.bold,
-                        ),
+                              color: Constance.primaryColor,
+                              // fontWeight: FontWeight.bold,
+                            ),
                       ),
                       Text(
                         '20',
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Constance.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -496,16 +499,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                       Text(
                         'Grievances Resolved  ',
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          // fontWeight: FontWeight.bold,
-                        ),
+                              color: Constance.primaryColor,
+                              // fontWeight: FontWeight.bold,
+                            ),
                       ),
                       Text(
                         '20',
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Constance.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -1439,7 +1442,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
             width: double.infinity,
             child: CustomButton(
               txt: 'Submit',
-              onTap: () {},
+              onTap: () {
+                if (verifyEverything()) {
+                  sendGrievance();
+                } else {}
+              },
             ),
           ),
           SizedBox(
@@ -1480,5 +1487,59 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
         ],
       );
     }
+  }
+
+  sendGrievance() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final respones = await ApiProvider.instance.postGrievance(
+        _first_name.text,
+        _last_name.text,
+        _mobile.text,
+        _email.text,
+        _address.text,
+        _pin.text,
+        _link.text,
+        publicationDate,
+        _desc.text,
+        _violation.text,
+        _name.text,
+        date);
+    if (respones.success ?? false) {
+      Fluttertoast.showToast(msg: "Grievance sumbitted successfully");
+      Navigation.instance.goBack();
+      Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
+      showError(respones.message ?? "Something went wrong");
+    }
+  }
+
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
+  }
+
+  bool verifyEverything() {
+    if (_first_name.text.isEmpty ||
+        _last_name.text.isEmpty ||
+        _name.text.isEmpty ||
+        _desc.text.isEmpty ||
+        _link.text.isEmpty ||
+        _pin.text.isEmpty ||
+        _address.text.isEmpty ||
+        _email.text.isEmpty ||
+        _mobile.text.isEmpty ||
+        _violation.text.isEmpty ||
+        date == "" ||
+        publicationDate == "") {
+      showError("All fields are mandatory. Fill all of them");
+      return false;
+    }
+    return true;
   }
 }

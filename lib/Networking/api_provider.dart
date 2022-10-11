@@ -581,6 +581,78 @@ class ApiProvider {
     }
   }
 
+  Future<OpinionDetailsResponse> getOpinionDetails(slug) async {
+    // var data = {
+    //   'category': 'opinion',
+    //   'per_page': per_page,
+    //   'page': page,
+    // };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${homeUrl}/opinion/opinion/${slug}";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("OpinionDetailsResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return OpinionDetailsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("OpinionDetailsResponse error: ${response?.data}");
+        return OpinionDetailsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("OpinionDetailsResponse response: ${e.response}");
+      return OpinionDetailsResponse.withError(e.message);
+    }
+  }
+
+  Future<ClassifiedDetailsResponse> getClassifiedDetails(id) async {
+    // var data = {
+    //   'category': 'opinion',
+    //   'per_page': per_page,
+    //   'page': page,
+    // };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${baseUrl}/app/get-classified/${id}";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("ClassifiedDetailsResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ClassifiedDetailsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("ClassifiedDetailsResponse error: ${response?.data}");
+        return ClassifiedDetailsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("ClassifiedDetailsResponse response: ${e.response}");
+      return ClassifiedDetailsResponse.withError(e.message);
+    }
+  }
+
   Future<E_paperRepsonse> getEpaper() async {
     // var data = {
     //   'category': 'opinion',
@@ -748,6 +820,38 @@ class ApiProvider {
     } on DioError catch (e) {
       debugPrint("DealDetailsResponse error: ${e.response}");
       return DealDetailsResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericMsgResponse> getCitizenText() async {
+    var url = "${baseUrl}/be-a-journalist-msg";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("GenericMsgResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericMsgResponse.fromJson(response?.data);
+      } else {
+        debugPrint("DealDetailsResponse error: ${response?.data}");
+        return GenericMsgResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("GenericMsgResponse error: ${e.response}");
+      return GenericMsgResponse.withError(e.message);
     }
   }
 
@@ -996,8 +1100,8 @@ class ApiProvider {
     }
   }
 
-  Future<ClassifiedResponse> getClassified() async {
-    var url = "${baseUrl}/app/classified/my-list";
+  Future<ClassifiedResponse> getClassified(categ, result, title) async {
+    var url = "${baseUrl}/app/classified/${categ}";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',
@@ -1007,13 +1111,16 @@ class ApiProvider {
     });
     dio = Dio(option);
     debugPrint(url.toString());
-    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
-    debugPrint(jsonEncode(data));
+    var data = {
+      'locality_ids': result,
+      'title': title,
+    };
+    // debugPrint(jsonEncode(data));
 
     try {
       Response? response = await dio?.get(
         url,
-        // queryParameters: data,
+        queryParameters: data,
       );
       debugPrint("ClassifiedResponse response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
@@ -1323,8 +1430,8 @@ class ApiProvider {
     }
   }
 
-  Future<GenericResponse> postLike(comment_id, is_liked) async {
-    var url = "${baseUrl}/app/like";
+  Future<GenericResponse> postCommentLike(comment_id, is_liked) async {
+    var url = "${baseUrl}/app/comment/like";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',
@@ -1336,6 +1443,45 @@ class ApiProvider {
     debugPrint(url.toString());
     var data = {
       'comment_id': comment_id,
+      'is_liked': is_liked,
+    };
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("postLike response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("postLike error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("postLike error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> postLike(like_for_id, is_liked, like_for) async {
+    var url = "${baseUrl}/app/post/like";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'like_for_id': like_for_id,
+      'like_for': like_for,
       'is_liked': is_liked,
     };
     //attachment_list[0][file_data]
@@ -1397,6 +1543,94 @@ class ApiProvider {
       }
     } on DioError catch (e) {
       debugPrint("postComment error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> deleteCitizenJournalist(id) async {
+    var url = "${baseUrl}/app/citizen-journalist-delete/${id}";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // var data = {
+    //   'comment_for_id': comment_for_id,
+    //   'comment_for': comment_for,
+    //   'comment': comment,
+    // };
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        // data: data,
+        // queryParameters: data,
+      );
+      debugPrint("citizen-journalist-delete response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("citizen-journalist-delete error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("citizen-journalist-delete error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> postGrievance(fname, lname, mobile, email, address,
+      pincode, link, dop, details, summary, name, date) async {
+    var url = "${baseUrl}/submit-grievance-form";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      "first_name": fname,
+      "last_name": lname,
+      "phone_number": mobile,
+      "email": email,
+      "full_address": address,
+      "pincode": pincode,
+      "complain_link": link,
+      "date_of_publication": dop,
+      "exact_details": details,
+      "summery_details": summary,
+      "name": name,
+      "date": date,
+    };
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("postGrievance response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("postGrievance error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("postGrievance error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
   }
@@ -1506,6 +1740,57 @@ class ApiProvider {
     }
   }
 
+  Future<GenericResponse> editCitizenJournalist(
+      id, title, story, List<File> files) async {
+    var url = "${baseUrl}/app/citizen-journalist/${id}";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    FormData data = FormData.fromMap({
+      'title': title,
+      'story': story,
+    });
+    for (int i = 0; i < files.length; i++) {
+      var type = lookupMimeType(files[i].path, headerBytes: [0xFF, 0xD8])!;
+      MultipartFile file = await MultipartFile.fromFile(
+        files[i].path,
+        filename: files[i].path.split("/").last,
+        contentType:
+            MediaType(type.split('/').first, type.split('/').last), //important
+      );
+      // data[''] = file;
+      data.files.add(MapEntry('attachment_list[${i}][file_data]', file));
+      data.fields.add(MapEntry('attachment_list[${i}][file_type]', type));
+    }
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("postCitizenJournalist response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("postCitizenJournalist error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("postCitizenJournalist error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
   Future<GenericResponse> postGuwhahatiConnect(
       question, List<File> files) async {
     var url = "${baseUrl}/app/guwahati-connect";
@@ -1535,7 +1820,9 @@ class ApiProvider {
     }
     //attachment_list[0][file_data]
     //attachment_list[0][file_type]
-    // debugPrint(jsonEncode(data));
+    // debugPrint(jsonEncode(data.fields));
+    print(data.fields);
+    // debugPrint(jsonEncode(data.files));
 
     try {
       Response? response = await dio?.post(

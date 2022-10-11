@@ -250,14 +250,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                               child: CachedNetworkImage(
                                                 imageUrl: Constance.kfc_offer,
                                                 placeholder: (cont, _) {
-                                                  return const Icon(
-                                                    Icons.image,
-                                                    color: Colors.black,
+                                                  return Image.asset(
+                                                    Constance.logoIcon,
+                                                    // color: Colors.black,
                                                   );
                                                 },
                                                 errorWidget: (cont, _, e) {
                                                   // print(e);
-                                                  print(_);
                                                   return Text(_);
                                                 },
                                               ),
@@ -352,9 +351,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           data.ads[random].image_file_name ??
                                               '',
                                       placeholder: (cont, _) {
-                                        return const Icon(
-                                          Icons.image,
-                                          color: Colors.black,
+                                        return Image.asset(
+                                          Constance.logoIcon,
+                                          // color: Colors.black,
                                         );
                                       },
                                       errorWidget: (cont, _, e) {
@@ -788,7 +787,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                         scrollDirection: Axis.vertical,
                                         itemBuilder: (cont, count) {
                                           var item = data.latestOpinions[count];
-                                          return OpinionCard(item: item);
+                                          return GestureDetector(
+                                              onTap: () {
+                                                Navigation.instance.navigate(
+                                                    '/opinionDetails',
+                                                    args: item.seo_name?.trim());
+                                              },
+                                              child: OpinionCard(item: item));
                                         },
                                         separatorBuilder: (cont, inde) {
                                           return SizedBox(
@@ -1102,7 +1107,8 @@ class OpinionCard extends StatelessWidget {
                       ),
                       Text(
                         // item.publish_date?.split(" ")[0] ?? "",
-                        Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                        Jiffy(item.publish_date?.split(" ")[0] ?? "",
+                                "yyyy-MM-dd")
                             .format("dd/MM/yyyy"),
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(

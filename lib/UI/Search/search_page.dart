@@ -69,7 +69,7 @@ class _SearchPageState extends State<SearchPage> {
                       suffixIcon: IconButton(
                         onPressed: () {
                           if (_searchQueryController.text.isNotEmpty) {
-                            search(_searchQueryController.text,selected);
+                            search(_searchQueryController.text, selected);
                           } else {
                             showError('Enter something to search');
                           }
@@ -197,15 +197,11 @@ class _SearchPageState extends State<SearchPage> {
                                       imageUrl: item.image_file_name ?? '',
                                       fit: BoxFit.fill,
                                       placeholder: (cont, _) {
-                                        return Shimmer.fromColors(
-                                          baseColor: Colors.red,
-                                          highlightColor: Colors.yellow,
-                                          child: Container(
-
-                                          ),
+                                        return Image.asset(
+                                          Constance.logoIcon,
+                                          // color: Colors.black,
                                         );
                                       },
-
                                       errorWidget: (cont, _, e) {
                                         // print(e);
                                         print(_);
@@ -302,9 +298,9 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  void search(query,type) async {
+  void search(query, type) async {
     Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.search(query,type);
+    final response = await ApiProvider.instance.search(query, type);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
@@ -315,6 +311,7 @@ class _SearchPageState extends State<SearchPage> {
       Navigation.instance.goBack();
     }
   }
+
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",

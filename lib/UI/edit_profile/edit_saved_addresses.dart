@@ -175,7 +175,9 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                 height: 1.5.h,
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  getLocations();
+                },
                 child: Row(
                   children: [
                     Icon(
@@ -336,6 +338,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
   }
 
   void getLocations() async {
+    showLoaderDialog(context);
     debugPrint('got locations1');
     var status = await Permission.location.status;
     if (status.isDenied) {
@@ -350,6 +353,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
         }
         getAddress(position.latitude, position.longitude);
       } else {
+        Navigation.instance.goBack();
         showError("We require Location permissions");
       }
       // We didn't ask for permission yet or the permission has been denied before but not permanently.
@@ -383,6 +387,9 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
     // setState(() {});
     // Navigator.pop(Navigation.instance.navigatorKey.currentContext ?? context,
     //     locationName);
+    addAddress(address);
+    Navigation.instance.goBack();
+
   }
 
   void showError(String msg) {
@@ -468,5 +475,35 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
     latitude = locations[0].latitude ?? 0;
     longitude = locations[0].longitude ?? 0;
     addAddress(address);
+  }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      backgroundColor: Colors.white,
+      content: Container(
+        color: Colors.white,
+        child: Row(
+          children: [
+            const CircularProgressIndicator(),
+            Container(
+              margin: const EdgeInsets.only(left: 7),
+              child: Text(
+                "Loading...",
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                      color: Colors.black,
+                    ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

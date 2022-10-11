@@ -22,15 +22,17 @@ class ClassifiedPage extends StatefulWidget {
 }
 
 class _ClassifiedPageState extends State<ClassifiedPage> {
-  var current = 4;
-  var selected = 0;
+  var current = 0;
+  var selected = 1;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  String result = '';
+  final controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    fetchClassified();
+    Future.delayed(Duration.zero, () => fetchClassified(''));
     // Future.delayed(
     //     Duration.zero,
     //         () => Provider.of<DataProvider>(
@@ -41,7 +43,8 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
 
   void _onRefresh() async {
     // monitor network fetch
-    final response = await ApiProvider.instance.getClassified();
+    final response = await ApiProvider.instance
+        .getClassified(getCategory(current), result, controller.text);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
@@ -52,6 +55,12 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
       _refreshController.refreshFailed();
     }
     // if failed,use refreshFailed()
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
   }
 
   @override
@@ -111,7 +120,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    color: Constance.forthColor,
+                    // color: Constance.forthColor,
                     height: 5.h,
                     width: double.infinity,
                     child: Row(
@@ -123,33 +132,47 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                             setState(() {
                               selected = 1;
                             });
+                            getFilter();
                           },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                FontAwesomeIcons.list,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: 1.w,
-                              ),
-                              Text(
-                                'List by',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 2.h,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 1.h,
+                              horizontal: 5.w,
+                            ),
+                            color: selected == 1
+                                ? Constance.secondaryColor
+                                : Constance.forthColor,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.list,
+                                  color: selected == 1
+                                      ? Colors.black
+                                      : Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 1.w,
+                                ),
+                                Text(
+                                  'List by',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      ?.copyWith(
+                                        color: selected == 1
+                                            ? Colors.black
+                                            : Colors.white,
+                                        fontSize: 2.h,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(
-                          width: 20.w,
+                          width: 2.w,
                           child: Center(
                             child: Container(
                               height: double.infinity,
@@ -160,30 +183,100 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigation.instance.navigate('/filterPage');
+                            setState(() {
+                              selected = 2;
+                            });
+                            fetchClassified(result);
                           },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                FontAwesomeIcons.heart,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: 1.w,
-                              ),
-                              Text(
-                                'Favourites',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 2.h,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 1.h,
+                              horizontal: 5.w,
+                            ),
+                            color: selected == 2
+                                ? Constance.secondaryColor
+                                : Constance.forthColor,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.solidHeart,
+                                  color: selected == 2
+                                      ? Colors.black
+                                      : Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 1.w,
+                                ),
+                                Text(
+                                  'Favourites',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      ?.copyWith(
+                                        color: selected == 2
+                                            ? Colors.black
+                                            : Colors.white,
+                                        fontSize: 2.h,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 2.w,
+                          child: Center(
+                            child: Container(
+                              height: double.infinity,
+                              width: 0.5.w,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selected = 3;
+                            });
+                            fetchClassified(result);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 1.h,
+                              horizontal: 5.w,
+                            ),
+                            color: selected == 3
+                                ? Constance.secondaryColor
+                                : Constance.forthColor,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.person,
+                                  color: selected == 3
+                                      ? Colors.black
+                                      : Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 1.w,
+                                ),
+                                Text(
+                                  'My List',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      ?.copyWith(
+                                        color: selected == 3
+                                            ? Colors.black
+                                            : Colors.white,
+                                        fontSize: 2.h,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -201,33 +294,37 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 5.w),
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Card(
-                        color: Colors.white,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 5.w, vertical: 1.h),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Search',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                    ),
-                              ),
-                              Icon(
-                                Icons.search,
-                                color: Colors.black,
-                              ),
-                            ],
+                    child: Card(
+                      color: Colors.white,
+                      child: TextField(
+                        controller: controller,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline5
+                            ?.copyWith(color: Colors.black),
+                        decoration: InputDecoration(
+                          labelText: "Search",
+                          labelStyle: Theme.of(context)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(color: Colors.black),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                              width: 2.0,
+                            ),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black54,
+                              width: 2.0,
+                            ),
                           ),
                         ),
+                        onChanged: (value) {},
+                        onSubmitted: (value) {
+                          fetchClassified(result);
+                        },
                       ),
                     ),
                   ),
@@ -249,7 +346,8 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                         var current = data.classified[count];
                         return GestureDetector(
                           onTap: () {
-                            Navigation.instance.navigate('/classifiedDetails');
+                            Navigation.instance.navigate('/classifiedDetails',
+                                args: current.id);
                           },
                           child: Card(
                             color: Colors.white,
@@ -272,7 +370,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         SizedBox(
-                                          width:70.w,
+                                          width: 70.w,
                                           child: Text(
                                             current.title ?? "",
                                             overflow: TextOverflow.ellipsis,
@@ -280,8 +378,10 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                                 .textTheme
                                                 .headline3
                                                 ?.copyWith(
-                                                    color: Constance.primaryColor,
-                                                    fontWeight: FontWeight.bold),
+                                                    color:
+                                                        Constance.primaryColor,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                           ),
                                         ),
                                         LikeButton(
@@ -434,7 +534,10 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                         );
                       },
                     ),
-                  )
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
                 ],
               ),
             ),
@@ -549,13 +652,37 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
     );
   }
 
-  void fetchClassified() async {
-    final response = await ApiProvider.instance.getClassified();
+  void fetchClassified(result) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance
+        .getClassified(getCategory(current), result, controller.text);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setClassified(response.classifieds ?? []);
+
+      Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
+    }
+  }
+
+  getCategory(int current) {
+    switch (current) {
+      case 3:
+        return "my-list";
+      case 2:
+        return "favourites";
+      default:
+        return "list-by";
+    }
+  }
+
+  void getFilter() async {
+    final result = await Navigation.instance.navigate('/filterPage');
+    if (result != null) {
+      fetchClassified(result);
     }
   }
 }

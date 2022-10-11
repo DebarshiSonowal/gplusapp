@@ -2,29 +2,30 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter_html/flutter_html.dart';
+
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
-class StoryPage extends StatefulWidget {
+class OpinionDetailsPage extends StatefulWidget {
   final String? slug;
 
-  StoryPage(this.slug);
+  OpinionDetailsPage(this.slug);
 
   @override
-  State<StoryPage> createState() => _StoryPageState();
+  State<OpinionDetailsPage> createState() => _OpinionDetailsPageState();
 }
 
-class _StoryPageState extends State<StoryPage> {
+class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   int random = 0;
   var categories = ['international', 'assam', 'guwahati', 'india'];
   var dropdownvalue = 'international';
@@ -50,7 +51,7 @@ class _StoryPageState extends State<StoryPage> {
         color: Colors.white,
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return SingleChildScrollView(
-            child: data.selectedArticle == null
+            child: data.opinion == null
                 ? Container()
                 : Column(
                     children: [
@@ -64,7 +65,7 @@ class _StoryPageState extends State<StoryPage> {
                           image: DecorationImage(
                             fit: BoxFit.fill,
                             image: CachedNetworkImageProvider(
-                              data.selectedArticle?.image_file_name ??
+                              data.opinion?.image_file_name ??
                                   'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
                             ),
                           ),
@@ -104,7 +105,7 @@ class _StoryPageState extends State<StoryPage> {
                               height: 2.h,
                             ),
                             Text(
-                              data.selectedArticle?.title ??
+                              data.opinion?.title ??
                                   'It is a long established fact that a reader will be distracted by the readable content of a',
                               style: Theme.of(Navigation
                                       .instance.navigatorKey.currentContext!)
@@ -120,7 +121,7 @@ class _StoryPageState extends State<StoryPage> {
                               height: 1.h,
                             ),
                             Text(
-                              '${data.selectedArticle?.author_name ?? "GPlus"}, ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                              '${data.opinion?.author_name ?? "GPlus"}, ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
                               style: Theme.of(Navigation
                                       .instance.navigatorKey.currentContext!)
                                   .textTheme
@@ -141,7 +142,7 @@ class _StoryPageState extends State<StoryPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      postLike(data.selectedClassified?.id, 0);
+                                      postLike(data.opinion?.id, 0);
                                     },
                                     splashRadius: 20.0,
                                     splashColor: Constance.secondaryColor,
@@ -158,7 +159,7 @@ class _StoryPageState extends State<StoryPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      postLike(data.selectedClassified?.id, 1);
+                                      postLike(data.opinion?.id, 1);
                                     },
                                     splashRadius: 20.0,
                                     splashColor: Constance.secondaryColor,
@@ -217,7 +218,7 @@ class _StoryPageState extends State<StoryPage> {
                             //       ),
                             // ),
                             Html(
-                              data: data.selectedArticle?.description?.trim() ??
+                              data: data.opinion?.description?.trim() ??
                                   "",
                               shrinkWrap: true,
                               style: {
@@ -433,13 +434,16 @@ class _StoryPageState extends State<StoryPage> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 scrollDirection: Axis.vertical,
                                 itemBuilder: (cont, count) {
-                                  var item = data.suggestion[count];
+                                  var item = data.opinions[count];
                                   if (count != 0) {
                                     return GestureDetector(
                                       onTap: () {
-                                        Navigation.instance.navigate('/story',
-                                            args:
-                                                '$dropdownvalue,${item.seo_name}');
+                                        // Navigation.instance.navigate('/story',
+                                        //     args:
+                                        //         '$dropdownvalue,${item.seo_name}');
+                                        Navigation.instance.navigate(
+                                            '/opinionDetails',
+                                            args: item.seo_name?.trim());
                                       },
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
@@ -471,7 +475,7 @@ class _StoryPageState extends State<StoryPage> {
                                                       placeholder: (cont, _) {
                                                         return Image.asset(
                                                           Constance.logoIcon,
-
+                                                          // color: Colors.black,
                                                         );
                                                       },
                                                       errorWidget:
@@ -571,7 +575,7 @@ class _StoryPageState extends State<StoryPage> {
                                     );
                                   }
                                 },
-                                itemCount: data.suggestion.length),
+                                itemCount: data.opinions.length),
                             SizedBox(
                               height: 4.h,
                             ),
@@ -611,42 +615,6 @@ class _StoryPageState extends State<StoryPage> {
         IconButton(
           onPressed: () {
             Navigation.instance.navigate('/search');
-            // showSearch(
-            //   context: context,
-            //   delegate: SearchPage<Listing>(
-            //     items: Constance.listings,
-            //     searchLabel: 'Search posts',
-            //     suggestion: Center(
-            //       child: Text(
-            //         'Filter posts by name, descr',
-            //         style: Theme.of(context).textTheme.headline5,
-            //       ),
-            //     ),
-            //     failure: const Center(
-            //       child: Text('No posts found :('),
-            //     ),
-            //     filter: (current) => [
-            //       current.title,
-            //       current.descr,
-            //       // person.age.toString(),
-            //     ],
-            //     builder: (data) => ListTile(
-            //       title: Text(
-            //         data.title ?? "",
-            //         style: Theme.of(context).textTheme.headline5,
-            //       ),
-            //       subtitle: Text(
-            //         data.descr ?? '',
-            //         style: Theme.of(context).textTheme.headline6,
-            //       ),
-            //       // trailing: CachedNetworkImage(
-            //       //   imageUrl: data.image??'',
-            //       //   height: 20,
-            //       //   width: 20,
-            //       // ),
-            //     ),
-            //   ),
-            // );
           },
           icon: Icon(Icons.search),
         ),
@@ -673,14 +641,12 @@ class _StoryPageState extends State<StoryPage> {
 
   void fetchDetails() async {
     Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.getArticleDetails(
-        widget.slug.toString().split(',')[0],
-        widget.slug.toString().split(',')[1]);
+    final response = await ApiProvider.instance.getOpinionDetails(widget.slug);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
-          .setArticleDetails(response.article!);
+          .setOpinionDetails(response.opinion!);
       Navigation.instance.goBack();
     } else {
       Navigation.instance.goBack();
@@ -688,20 +654,19 @@ class _StoryPageState extends State<StoryPage> {
   }
 
   void fetchContent() async {
-    final response = await ApiProvider.instance.getArticle(dropdownvalue);
+    final response = await ApiProvider.instance.getOpinion(5, 1);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .setSuggestion(response.articles ?? []);
+          Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
+          .setOpinions(response.opinion ?? []);
       // _refreshController.refreshCompleted();
     } else {
       // _refreshController.refreshFailed();
     }
   }
-
   void postLike(id, is_like) async {
-    final response = await ApiProvider.instance.postLike(id, is_like,'news');
+    final response = await ApiProvider.instance.postLike(id, is_like,'opinion');
     if (response.success ?? false) {
       Fluttertoast.showToast(msg: "Post Liked");
       fetchDetails();

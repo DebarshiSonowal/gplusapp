@@ -95,11 +95,30 @@ class OpinionResponse {
                 .map((e) => Opinion.fromJson(e))
                 .toList();
   }
-  OpinionResponse.withError(msg){
+
+  OpinionResponse.withError(msg) {
     success = false;
-    message = msg??"Something went wrong";
+    message = msg ?? "Something went wrong";
   }
 }
+
+class OpinionDetailsResponse {
+  bool? success;
+  String? message;
+  Opinion? opinion;
+
+  OpinionDetailsResponse.fromJson(json) {
+    success = json['success'] ?? false;
+    message = json['message'] ?? "Something Went Wrong";
+    opinion = Opinion.fromJson(json['data']);
+  }
+
+  OpinionDetailsResponse.withError(msg) {
+    success = false;
+    message = msg ?? "Something went wrong";
+  }
+}
+
 class LatestOpinionResponse {
   bool? success;
   String? message;
@@ -111,12 +130,11 @@ class LatestOpinionResponse {
     message = json['message'] ?? "Something Went Wrong";
     opinion = json['data'] == null
         ? []
-            : (json['data'] as List)
-                .map((e) => Opinion.fromJson(e))
-                .toList();
+        : (json['data'] as List).map((e) => Opinion.fromJson(e)).toList();
   }
-  LatestOpinionResponse.withError(msg){
+
+  LatestOpinionResponse.withError(msg) {
     success = false;
-    message = msg??"Something went wrong";
+    message = msg ?? "Something went wrong";
   }
 }

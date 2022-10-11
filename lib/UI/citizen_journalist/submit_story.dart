@@ -158,16 +158,38 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                             ),
                           ),
                         )
-                      : Container(
-                          height: 8.h,
-                          width: 20.w,
-                          // color: Colors.grey.shade200,
-                          child: Center(
-                            child: Image.file(
-                              attachements[pos],
-                              fit: BoxFit.fill,
+                      : Stack(
+                    alignment: Alignment.topRight,
+                          children: [
+                            Container(
+                              height: 8.h,
+                              width: 20.w,
+                              color: Colors.grey.shade200,
+                              child: Center(
+                                child: Image.file(
+                                  attachements[pos],
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
                             ),
-                          ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  attachements.removeAt(pos);
+                                });
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                color: Colors.white,
+                                child: Icon(
+                                  Icons.remove,
+                                  color: Constance.thirdColor,
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                 ),
               ),
@@ -391,10 +413,11 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
       Navigation.instance.goBack();
       Navigation.instance.goBack();
     } else {
-      showError(response.message??"Something went wrong");
       Navigation.instance.goBack();
+      showError(response.message ?? "Something went wrong");
     }
   }
+
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",

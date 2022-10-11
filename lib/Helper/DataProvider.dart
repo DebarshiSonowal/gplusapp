@@ -53,6 +53,7 @@ class DataProvider extends ChangeNotifier {
   List<Locality> locality = [];
   ReferEarn? referEarn;
   Article? selectedArticle;
+  Opinion? opinion;
   AboutUs? aboutUs;
   ContactUs? contactUs;
   PollOfTheWeek? pollOfTheWeek;
@@ -61,12 +62,16 @@ class DataProvider extends ChangeNotifier {
   List<CitizenJournalist> citizenlist = [];
   List<RedeemHistory> history = [];
   List<search.SearchResult> searchlist = [];
+  Classified? selectedClassified;
 
   setCitizenJournalist(List<CitizenJournalist> list) {
     citizenlist = list;
     notifyListeners();
   }
-
+  setClassifiedDetails(Classified data) {
+    selectedClassified = data;
+    notifyListeners();
+  }
   setRedeemHistory(List<RedeemHistory> list) {
     history = list;
     notifyListeners();
@@ -79,6 +84,10 @@ class DataProvider extends ChangeNotifier {
 
   setArticleDetails(Article data) {
     selectedArticle = data;
+    notifyListeners();
+  }
+  setOpinionDetails(Opinion data) {
+    opinion = data;
     notifyListeners();
   }
 
@@ -234,4 +243,6 @@ class DataProvider extends ChangeNotifier {
     currentIndex = i;
     notifyListeners();
   }
+
+
 }

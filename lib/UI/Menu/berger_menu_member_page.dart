@@ -209,213 +209,216 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 color: Colors.white,
                 thickness: 0.2,
               ),
-              ListTileTheme(
-                contentPadding: EdgeInsets.all(0),
-                child: ExpansionTile(
-                  title: Row(
+              Theme(
+                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                child: ListTileTheme(
+                  contentPadding: EdgeInsets.all(0),
+                  child: ExpansionTile(
+                    title: Row(
+                      children: [
+                        const Icon(
+                          Icons.backpack,
+                          color: Constance.secondaryColor,
+                        ),
+                        SizedBox(
+                          width: 2.w,
+                        ),
+                        Text(
+                          'News from',
+                          style: Theme.of(context).textTheme.headline4?.copyWith(
+                                color: Colors.white,
+                                // fontSize: 19.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        SizedBox(
+                          width: 2.w,
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.white,
+                          size: 3.h,
+                        ),
+                      ],
+                    ),
+                    trailing: Container(
+                      height: 6,
+                      width: 6,
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
                     children: [
-                      const Icon(
-                        Icons.backpack,
-                        color: Constance.secondaryColor,
-                      ),
-                      SizedBox(
-                        width: 2.w,
-                      ),
-                      Text(
-                        'News from',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Colors.white,
-                              // fontSize: 19.sp,
-                              fontWeight: FontWeight.bold,
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 8.w,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigation.instance
+                                  .navigate('/newsfrom', args: 'guwahati');
+                            },
+                            child: Text(
+                              'Guwahati',
+                              style:
+                                  Theme.of(context).textTheme.headline6?.copyWith(
+                                        color: Colors.white,
+                                        fontSize: 10.sp,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
                             ),
+                          ),
+                          Expanded(child: Container()),
+                          Container(
+                            height: 6,
+                            width: 6,
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
-                        width: 2.w,
+                        height: 1.5.h,
                       ),
-                      Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.white,
-                        size: 3.h,
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 8.w,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigation.instance
+                                  .navigate('/newsfrom', args: 'assam');
+                            },
+                            child: Text(
+                              'Assam',
+                              style:
+                                  Theme.of(context).textTheme.headline6?.copyWith(
+                                        color: Colors.white,
+                                        fontSize: 10.sp,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                            ),
+                          ),
+                          Expanded(child: Container()),
+                          Container(
+                            height: 6,
+                            width: 6,
+                            decoration: const BoxDecoration(
+                              // color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 1.5.h,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 8.w,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigation.instance
+                                  .navigate('/newsfrom', args: 'northeast');
+                            },
+                            child: Text(
+                              'Northeast',
+                              style:
+                                  Theme.of(context).textTheme.headline6?.copyWith(
+                                        color: Colors.white,
+                                        fontSize: 10.sp,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                            ),
+                          ),
+                          Expanded(child: Container()),
+                          Container(
+                            height: 6,
+                            width: 6,
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 1.5.h,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 8.w,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigation.instance
+                                  .navigate('/newsfrom', args: 'india');
+                            },
+                            child: Text(
+                              'India',
+                              style:
+                                  Theme.of(context).textTheme.headline6?.copyWith(
+                                        color: Colors.white,
+                                        fontSize: 10.sp,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                            ),
+                          ),
+                          Expanded(child: Container()),
+                          Container(
+                            height: 6,
+                            width: 6,
+                            decoration: const BoxDecoration(
+                              // color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 1.5.h,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 8.w,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigation.instance
+                                  .navigate('/newsfrom', args: 'international');
+                            },
+                            child: Text(
+                              'International',
+                              style:
+                                  Theme.of(context).textTheme.headline6?.copyWith(
+                                        color: Colors.white,
+                                        fontSize: 10.sp,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                            ),
+                          ),
+                          Expanded(child: Container()),
+                          Container(
+                            height: 6,
+                            width: 6,
+                            decoration: const BoxDecoration(
+                              // color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  trailing: Container(
-                    height: 6,
-                    width: 6,
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 8.w,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigation.instance
-                                .navigate('/newsfrom', args: 'guwahati');
-                          },
-                          child: Text(
-                            'Guwahati',
-                            style:
-                                Theme.of(context).textTheme.headline6?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 10.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                        ),
-                        Expanded(child: Container()),
-                        Container(
-                          height: 6,
-                          width: 6,
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 8.w,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigation.instance
-                                .navigate('/newsfrom', args: 'assam');
-                          },
-                          child: Text(
-                            'Assam',
-                            style:
-                                Theme.of(context).textTheme.headline6?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 10.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                        ),
-                        Expanded(child: Container()),
-                        Container(
-                          height: 6,
-                          width: 6,
-                          decoration: const BoxDecoration(
-                            // color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 8.w,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigation.instance
-                                .navigate('/newsfrom', args: 'northeast');
-                          },
-                          child: Text(
-                            'Northeast',
-                            style:
-                                Theme.of(context).textTheme.headline6?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 10.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                        ),
-                        Expanded(child: Container()),
-                        Container(
-                          height: 6,
-                          width: 6,
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 8.w,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigation.instance
-                                .navigate('/newsfrom', args: 'india');
-                          },
-                          child: Text(
-                            'India',
-                            style:
-                                Theme.of(context).textTheme.headline6?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 10.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                        ),
-                        Expanded(child: Container()),
-                        Container(
-                          height: 6,
-                          width: 6,
-                          decoration: const BoxDecoration(
-                            // color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 8.w,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigation.instance
-                                .navigate('/newsfrom', args: 'international');
-                          },
-                          child: Text(
-                            'International',
-                            style:
-                                Theme.of(context).textTheme.headline6?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 10.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                        ),
-                        Expanded(child: Container()),
-                        Container(
-                          height: 6,
-                          width: 6,
-                          decoration: const BoxDecoration(
-                            // color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
                 ),
               ),
               const Divider(
@@ -626,62 +629,98 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     SizedBox(
                       height: 1.5.h,
                     ),
-                    ListTileTheme(
-                      contentPadding: const EdgeInsets.all(0),
-                      child: ExpansionTile(
-                        title: Row(
+                    Theme(
+                      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                      child: ListTileTheme(
+                        shape: const RoundedRectangleBorder(
+                          side: BorderSide.none,
+                        ),
+                        contentPadding: const EdgeInsets.all(0),
+                        child: ExpansionTile(
+                          title: Row(
+                            children: [
+                              const Icon(
+                                Icons.video_call,
+                                color: Constance.secondaryColor,
+                              ),
+                              SizedBox(
+                                width: 2.w,
+                              ),
+                              Text(
+                                'Video Reports',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                      // fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              SizedBox(
+                                width: 2.w,
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Colors.white,
+                                size: 3.h,
+                              ),
+                            ],
+                          ),
+                          trailing: Container(
+                            height: 6,
+                            width: 6,
+                            decoration: const BoxDecoration(
+                              // color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
                           children: [
-                            const Icon(
-                              Icons.video_call,
-                              color: Constance.secondaryColor,
-                            ),
                             SizedBox(
-                              width: 2.w,
+                              height: 1.5.h,
                             ),
-                            Text(
-                              'Video Reports',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4
-                                  ?.copyWith(
-                                    color: Colors.white,
-                                    // fontSize: 14.sp,
-                                    fontWeight: FontWeight.bold,
+                            InkWell(
+                              onTap: () {
+                                Navigation.instance.navigate('/videoReport');
+                              },
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 8.w,
                                   ),
+                                  Text(
+                                    'News',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        ?.copyWith(
+                                          color: Colors.white,
+                                          fontSize: 11.sp,
+                                          // fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  Expanded(child: Container()),
+                                  Container(
+                                    height: 6,
+                                    width: 6,
+                                    decoration: const BoxDecoration(
+                                      // color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
-                              width: 2.w,
+                              height: 1.5.h,
                             ),
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Colors.white,
-                              size: 3.h,
-                            ),
-                          ],
-                        ),
-                        trailing: Container(
-                          height: 6,
-                          width: 6,
-                          decoration: const BoxDecoration(
-                            // color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        children: [
-                          SizedBox(
-                            height: 1.5.h,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigation.instance.navigate('/videoReport');
-                            },
-                            child: Row(
+                            Row(
                               children: [
                                 SizedBox(
                                   width: 8.w,
                                 ),
                                 Text(
-                                  'News',
+                                  'Features',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline6
@@ -702,41 +741,11 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                 ),
                               ],
                             ),
-                          ),
-                          SizedBox(
-                            height: 1.5.h,
-                          ),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 8.w,
-                              ),
-                              Text(
-                                'Features',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 11.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              Expanded(child: Container()),
-                              Container(
-                                height: 6,
-                                width: 6,
-                                decoration: const BoxDecoration(
-                                  // color: Colors.red,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 1.h,
-                          ),
-                        ],
+                            SizedBox(
+                              height: 1.h,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],

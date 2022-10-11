@@ -134,17 +134,39 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                             ),
                           ),
                         )
-                      : Container(
-                          height: 8.h,
-                          width: 20.w,
-                          // color: Colors.grey.shade200,
-                          child: Center(
-                            child: Image.file(
-                              attachements[pos],
-                              fit: BoxFit.fill,
-                            ),
+                      : Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Container(
+                        height: 8.h,
+                        width: 20.w,
+                        color: Colors.grey.shade200,
+                        child: Center(
+                          child: Image.file(
+                            attachements[pos],
+                            fit: BoxFit.fill,
                           ),
                         ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            attachements.removeAt(pos);
+                          });
+                        },
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          color: Colors.white,
+                          child: Icon(
+                            Icons.remove,
+                            color: Constance.thirdColor,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -155,7 +177,11 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                 child: CustomButton(
                   onTap: () {
                     // showDialogBox();
-                    postQuestion();
+                    if (desc.text.isNotEmpty) {
+                      postQuestion();
+                    } else {
+
+                    }
                   },
                   txt: 'Submit',
                 ),
@@ -283,14 +309,17 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
   void postQuestion() async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance
-        .postGuwhahatiConnect(title.text, attachements);
+        .postGuwhahatiConnect(desc.text, attachements);
     if (response.success ?? false) {
+      print("post success ${response.success} ${response.message}");
       Fluttertoast.showToast(msg: "Posted successfully");
       Navigation.instance.goBack();
       Navigation.instance.goBack();
     } else {
-      showError(response.message??"Something went wrong");
+      print("post failed ${response.success} ${response.message}");
       Navigation.instance.goBack();
+      showError(response.message??"Something went wrong");
+
     }
   }
 

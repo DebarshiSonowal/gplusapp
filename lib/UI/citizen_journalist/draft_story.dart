@@ -87,39 +87,51 @@ class _DraftStoryState extends State<DraftStory> {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          item.story??"",
+                                          item.story ?? "",
                                           style: Theme.of(context)
                                               .textTheme
                                               .headline6
                                               ?.copyWith(color: Colors.black),
                                         ),
                                       ),
-                                      Text(
-                                        "Edit",
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 2.2.h,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigation.instance.navigate(
+                                              '/editCitizenJournalist',
+                                              args: item.id);
+                                        },
+                                        child: Text(
+                                          "Edit",
+                                          style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
+                                              .textTheme
+                                              .headline5
+                                              ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 2.2.h,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
                                       ),
                                       SizedBox(
                                         width: 4.w,
                                       ),
-                                      Text(
-                                        "Delete",
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                              color: Constance.thirdColor,
-                                              // fontSize: 2.2.h,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          deletePost(item.id);
+                                        },
+                                        child: Text(
+                                          "Delete",
+                                          style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
+                                              .textTheme
+                                              .headline5
+                                              ?.copyWith(
+                                                color: Constance.thirdColor,
+                                                // fontSize: 2.2.h,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -169,6 +181,18 @@ class _DraftStoryState extends State<DraftStory> {
     Future.delayed(Duration.zero, () => fetchDrafts());
   }
 
+  deletePost(id) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.deleteCitizenJournalist(id);
+    if (response.success ?? false) {
+      Fluttertoast.showToast(msg: 'Deleted Succesfully');
+      Navigation.instance.goBack();
+      fetchDrafts();
+    } else {
+      Navigation.instance.goBack();
+    }
+  }
+
   fetchDrafts() async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getCitizenJournalistDraft();
@@ -180,7 +204,6 @@ class _DraftStoryState extends State<DraftStory> {
       // Fluttertoast.showToast(msg: "G successfully");
       Navigation.instance.goBack();
     } else {
-
       Navigation.instance.goBack();
     }
   }

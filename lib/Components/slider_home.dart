@@ -54,9 +54,9 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                               fit: BoxFit.fitWidth,
                               // filterQuality: FilterQuality.low,
                               placeholder: (cont, _) {
-                                return const Icon(
-                                  Icons.image,
-                                  color: Colors.black,
+                                return Image.asset(
+                                  Constance.logoIcon,
+                                  // color: Colors.black,
                                 );
                               },
                               errorWidget: (cont, _, e) {

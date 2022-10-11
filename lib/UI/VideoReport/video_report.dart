@@ -254,9 +254,9 @@ class _VideoReportState extends State<VideoReport> {
                                                       item.image_file_name ??
                                                           '',
                                                   placeholder: (cont, _) {
-                                                    return const Icon(
-                                                      Icons.image,
-                                                      color: Colors.black,
+                                                    return Image.asset(
+                                                      Constance.logoIcon,
+                                                      // color: Colors.black,
                                                     );
                                                   },
                                                   errorWidget: (cont, _, e) {
@@ -387,6 +387,9 @@ class _VideoReportState extends State<VideoReport> {
                               );
                             },
                             itemCount: data.video_news.length),
+                        SizedBox(
+                          height: 17.h,
+                        ),
                       ],
                     ),
                   )

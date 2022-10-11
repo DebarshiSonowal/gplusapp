@@ -485,7 +485,7 @@ class _BigDealPageState extends State<BigDealPage> {
                                             Column(
                                               children: [
                                                 Text(
-                                                  '${data.total ?? '8486'}',
+                                                  '${data.code ?? '8486'}',
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   textAlign: TextAlign.start,
@@ -567,7 +567,7 @@ class _BigDealPageState extends State<BigDealPage> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: 1.h,
+                                    height: 20.h,
                                   ),
                                 ],
                               ),

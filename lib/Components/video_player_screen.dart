@@ -3,6 +3,7 @@ import 'package:flutter_cards_reel/cards_reel_view.dart';
 import 'package:flutter_cards_reel/sliver_cards_reel.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
+import 'package:pod_player/pod_player.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -23,7 +24,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
   PageController controller = PageController(initialPage: 0);
-
+  // PodPlayerController? _controller;
+  @override
+  void dispose() {
+    controller.dispose();
+    _controller?.dispose();
+    super.dispose();
+  }
   @override
   void initState() {
     super.initState();
@@ -42,6 +49,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             .home_weekly
             .indexWhere((element) => element.youtube_id == widget.youtube_id));
       });
+      // _controller = PodPlayerController(
+      //   playVideoFrom: PlayVideoFrom.network(
+      //     'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+      //   ),
+      // )..initialise();
       // print(Provider.of<DataProvider>(
       //         Navigation.instance.navigatorKey.currentContext ?? context,
       //         listen: false)
@@ -61,7 +73,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           controller: controller,
           itemBuilder: (BuildContext context, int index) {
             var current = data.home_weekly[index];
-            _controller = YoutubePlayerController(
+            // _controller = PodPlayerController(
+            //   playVideoFrom: PlayVideoFrom.youtube(
+            //       'https://youtu.be/${current.youtube_id}'),
+            // );
+                        _controller = YoutubePlayerController(
               initialVideoId:
                   // widget.youtube_id ??
                   '${current.youtube_id}' ?? 'iLnmTe5Q2Qw',
@@ -77,11 +93,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 key: Key(current.youtube_id!),
                 onVisibilityChanged: (visibilityInfo) {
                   var visiblePercentage = visibilityInfo.visibleFraction * 100;
-                  if (visiblePercentage < 80) {
-                    _controller!.pause();
-                    print('pause');
-                  }
+                  // if (visiblePercentage < 80) {
+                  //   _controller?.pause();
+                  //   print('pause');
+                  // }
                 },
+                // child: PodVideoPlayer(controller: _controller),
                 child: YoutubePlayer(
                   controller: _controller!,
                   showVideoProgressIndicator: true,

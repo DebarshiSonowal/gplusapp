@@ -1,14 +1,16 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
-import 'package:gplusapp/Model/top_picks.dart';
+import 'package:gplusapp/Model/attach_file.dart';
+import 'package:gplusapp/Model/citizen_journalist.dart';
+import 'package:gplusapp/Model/profile.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
@@ -16,38 +18,29 @@ import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
-class PostAListing extends StatefulWidget {
-  const PostAListing({Key? key}) : super(key: key);
+class EditStory extends StatefulWidget {
+  final int id;
+
+  EditStory(this.id);
 
   @override
-  State<PostAListing> createState() => _PostAListingState();
+  State<EditStory> createState() => _EditStoryState();
 }
 
-class _PostAListingState extends State<PostAListing> {
+class _EditStoryState extends State<EditStory> {
   var title = TextEditingController();
-
+  CitizenJournalist? local;
   var desc = TextEditingController();
 
-  var price = TextEditingController();
-
   var current = 3;
-
-  var category = [
-    'Vehicles',
-    'House',
-  ];
-  var selectedCategory = '';
-  var selectedLocality = '';
-  var locality = ['Rukminigaon', 'Khanapara', 'Beltola', ''];
-
   final ImagePicker _picker = ImagePicker();
-
   List<File> attachements = [];
+  List<CJAttachment> images = [];
 
   @override
   void initState() {
     super.initState();
-    fetchClassified();
+    Future.delayed(Duration.zero, () => fetchDetails());
   }
 
   @override
@@ -55,13 +48,13 @@ class _PostAListingState extends State<PostAListing> {
     super.dispose();
     title.dispose();
     desc.dispose();
-    price.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
+      // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -71,96 +64,15 @@ class _PostAListingState extends State<PostAListing> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Post a story',
-                style: Theme.of(context).textTheme.headline2?.copyWith(
-                    color: Constance.primaryColor, fontWeight: FontWeight.bold),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: Text(
+                  'Submit a story',
+                  style: Theme.of(context).textTheme.headline2?.copyWith(
+                      color: Constance.primaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Text(
-                'Category',
-                style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Constance.primaryColor, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 0.3.h,
-              ),
-              Consumer<DataProvider>(builder: (context, data, _) {
-                return DropdownButton(
-                  // Initial Value
-                  value: selectedCategory,
-
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
-
-                  // Array list of items
-                  items: data.classified_category
-                      .map((e) => DropdownMenuItem(
-                            value: e.id.toString(),
-                            child: Text(
-                              e.title ?? "",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4
-                                  ?.copyWith(
-                                    color: Constance.primaryColor,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ))
-                      .toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedCategory = newValue!;
-                    });
-                  },
-                );
-              }),
-              Text(
-                'Add your locality',
-                style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Constance.primaryColor, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 0.3.h,
-              ),
-              Consumer<DataProvider>(builder: (context, data, _) {
-                return DropdownButton(
-                  // Initial Value
-                  value: selectedLocality,
-
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
-
-                  // Array list of items
-                  items: data.locality
-                      .map((e) => DropdownMenuItem(
-                            value: e.id.toString(),
-                            child: Text(
-                              e.name ?? "",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4
-                                  ?.copyWith(
-                                    color: Constance.primaryColor,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ))
-                      .toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedLocality = newValue!;
-                    });
-                  },
-                );
-              }),
               SizedBox(
                 height: 2.h,
               ),
@@ -170,7 +82,7 @@ class _PostAListingState extends State<PostAListing> {
                       // fontSize: 1.6.h,
                     ),
                 controller: title,
-                maxLines: 1,
+                // maxLines: 2,
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   filled: true,
@@ -233,6 +145,64 @@ class _PostAListingState extends State<PostAListing> {
                 spacing: 8,
                 runSpacing: 8,
                 children: List.generate(
+                  (images.length ?? 0),
+                  (pos) => (pos == images.length)
+                      ? GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: 8.h,
+                            width: 20.w,
+                            color: Colors.grey.shade200,
+                            child: const Center(
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            Container(
+                              height: 8.h,
+                              width: 20.w,
+                              color: Colors.grey.shade200,
+                              child: Center(
+                                child: Image.network(
+                                  images[pos].file_name ?? "",
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  attachements.removeAt(pos);
+                                });
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                color: Colors.white,
+                                child: Icon(
+                                  Icons.remove,
+                                  color: Constance.thirdColor,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                ),
+              ),
+              SizedBox(
+                height: 1.h,
+              ),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: List.generate(
                   (attachements.length ?? 0) + 1,
                   (pos) => (pos == attachements.length)
                       ? GestureDetector(
@@ -254,87 +224,51 @@ class _PostAListingState extends State<PostAListing> {
                           ),
                         )
                       : Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      Container(
-                        height: 8.h,
-                        width: 20.w,
-                        color: Colors.grey.shade200,
-                        child: Center(
-                          child: Image.file(
-                            attachements[pos],
-                            fit: BoxFit.fill,
-                          ),
+                          alignment: Alignment.topRight,
+                          children: [
+                            Container(
+                              height: 8.h,
+                              width: 20.w,
+                              color: Colors.grey.shade200,
+                              child: Center(
+                                child: Image.file(
+                                  attachements[pos],
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  attachements.removeAt(pos);
+                                });
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                color: Colors.white,
+                                child: const Icon(
+                                  Icons.remove,
+                                  color: Constance.thirdColor,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            attachements.removeAt(pos);
-                          });
-                        },
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          color: Colors.white,
-                          child: Icon(
-                            Icons.remove,
-                            color: Constance.thirdColor,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
                 ),
               ),
               SizedBox(
-                height: 2.h,
-              ),
-              Text(
-                'Add Price',
-                style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Constance.primaryColor, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 0.5.h,
-              ),
-              TextFormField(
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Colors.black,
-                      // fontSize: 1.6.h,
-                    ),
-                controller: price,
-                maxLines: 1,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Enter the price',
-                  labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.black,
-                        // fontSize: 1.5.h,
-                      ),
-                  border: const OutlineInputBorder(),
-                  enabledBorder: const OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(
-                height: 2.h,
+                height: 5.h,
               ),
               SizedBox(
                 width: double.infinity,
                 child: CustomButton(
                   onTap: () {
                     // showDialogBox();
-                    if (title.text.isNotEmpty &&
-                        desc.text.isNotEmpty &&
-                        price.text.isNotEmpty) {
-                      postClassified(selectedCategory, selectedLocality,
-                          title.text, desc.text, price.text, attachements);
-                    }
+                    postStory(widget.id);
                   },
-                  txt: 'Go ahead',
+                  txt: 'Submit',
                 ),
               ),
             ],
@@ -347,12 +281,6 @@ class _PostAListingState extends State<PostAListing> {
 
   AppBar buildAppBar() {
     return AppBar(
-      // leading: IconButton(
-      //   onPressed: () {
-      //     Navigation.instance.navigate('/bergerMenuMem');
-      //   },
-      //   icon: Icon(Icons.menu),
-      // ),
       title: Image.asset(
         Constance.logoIcon,
         fit: BoxFit.fill,
@@ -360,16 +288,6 @@ class _PostAListingState extends State<PostAListing> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.notifications),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.search),
-        ),
-      ],
     );
   }
 
@@ -509,7 +427,7 @@ class _PostAListingState extends State<PostAListing> {
                   size: 15.h,
                 ),
                 Text(
-                  'Hello Jonathan!',
+                  'Hello ${Provider.of<DataProvider>(context).profile?.name ?? ""}',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -551,52 +469,33 @@ class _PostAListingState extends State<PostAListing> {
     );
   }
 
-  void fetchClassified() async {
-    // showLoaderDialog(context);
-    final response = await ApiProvider.instance.getClassifiedCategory();
+  void postStory(id) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance
+        .editCitizenJournalist(id, title.text, desc.text, attachements);
     if (response.success ?? false) {
-      // Navigation.instance.goBack();
-      print(response.categories);
-      setState(() {
-        Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .setClassifiedCategory(response.categories ?? []);
-        selectedCategory = response.categories![0].id.toString();
-        Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .setLocality(response.localities ?? []);
-        selectedLocality = response.localities![0].id.toString();
-      });
+      Fluttertoast.showToast(msg: "Posted successfully");
+      Navigation.instance.goBack();
+      Navigation.instance.goBack();
     } else {
-      setState(() {
-        Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .setClassifiedCategory(response.categories ?? []);
-        selectedCategory = response.categories![0].id.toString();
-        Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .setLocality(response.localities ?? []);
-        selectedLocality = response.localities![0].id.toString();
-      });
-      // Navigation.instance.goBack();
-      // showError("Something went wrong");
+      Navigation.instance.goBack();
+      showError(response.message ?? "Something went wrong");
     }
   }
 
-  void postClassified(classified_category_id, locality_id, title, description,
-      price, List<File> files) async {
-    final reponse = await ApiProvider.instance.postClassified(
-        classified_category_id, locality_id, title, description, price, files);
-    if (reponse.success ?? false) {
-      Fluttertoast.showToast(msg: "Posted successfully");
-      Navigation.instance.goBack();
-    } else {
-      showError("Something went wrong");
-    }
+  fetchDetails() async {
+    setState(() {
+      local = Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .citizenlist
+          .where((element) => element.id == widget.id)
+          .first;
+      title.text = local?.title ?? "";
+      desc.text = local?.story ?? "";
+      // attachements.add(File(''));
+      images = local?.attach_files ?? [];
+    });
   }
 
   void showError(String msg) {
@@ -608,5 +507,4 @@ class _PostAListingState extends State<PostAListing> {
           Navigation.instance.goBack();
         });
   }
-
 }
