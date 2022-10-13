@@ -260,9 +260,10 @@ class _VideoReportState extends State<VideoReport> {
                                                     );
                                                   },
                                                   errorWidget: (cont, _, e) {
-                                                    // print(e);
-                                                    print(_);
-                                                    return Text(_);
+                                                    return Image.network(
+                                                      Constance.defaultImage,
+                                                      fit: BoxFit.fitWidth,
+                                                    );
                                                   },
                                                 ),
                                               ),

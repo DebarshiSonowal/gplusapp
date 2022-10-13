@@ -6,12 +6,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
@@ -159,7 +161,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                           ),
                         )
                       : Stack(
-                    alignment: Alignment.topRight,
+                          alignment: Alignment.topRight,
                           children: [
                             Container(
                               height: 8.h,
@@ -227,7 +229,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
   }
 
   void showPhotoBottomSheet(Function(int) getImage) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
     BuildContext? context = Navigation.instance.navigatorKey.currentContext;
@@ -318,7 +320,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
     if (pickedFile != null) {
       setState(() {
         // profileImage = File(pickedFile.path);
-        print(pickedFile.path);
+        // print(pickedFile.path);
         attachements.add(
           File(pickedFile.path),
         );
@@ -362,7 +364,9 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                   size: 15.h,
                 ),
                 Text(
-                  'Hello Jonathan!',
+                  'Hello ${Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext ?? context,
+                      listen: false).profile?.name}',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,

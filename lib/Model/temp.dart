@@ -8,7 +8,8 @@ class temp {
       address_id,
       longitude,
       latitude,
-      gender;
+      gender,
+      refer;
 
   temp(
       this.mobile,
@@ -20,5 +21,6 @@ class temp {
       this.longitude,
       this.latitude,
       this.address_id,
-      this.gender);
+      this.gender,
+      this.refer);
 }

@@ -26,11 +26,12 @@ import '../Model/contact_us.dart';
 import '../Model/guwahati_connect.dart';
 import '../Model/membership.dart';
 import '../Model/redeem_details.dart';
+import '../Model/shop.dart';
 import '../Model/topick.dart';
 
 class DataProvider extends ChangeNotifier {
   int currentIndex = 0;
-  Profile? profile;
+  Profile? profile, author;
 
   List<Opinion> opinions = [];
   List<Article> home_albums = [],
@@ -63,15 +64,23 @@ class DataProvider extends ChangeNotifier {
   List<RedeemHistory> history = [];
   List<search.SearchResult> searchlist = [];
   Classified? selectedClassified;
+  List<Shop> shops = [];
 
   setCitizenJournalist(List<CitizenJournalist> list) {
     citizenlist = list;
     notifyListeners();
   }
+
+  setShops(List<Shop> list) {
+    shops = list;
+    notifyListeners();
+  }
+
   setClassifiedDetails(Classified data) {
     selectedClassified = data;
     notifyListeners();
   }
+
   setRedeemHistory(List<RedeemHistory> list) {
     history = list;
     notifyListeners();
@@ -86,6 +95,7 @@ class DataProvider extends ChangeNotifier {
     selectedArticle = data;
     notifyListeners();
   }
+
   setOpinionDetails(Opinion data) {
     opinion = data;
     notifyListeners();
@@ -229,6 +239,11 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setAuthor(Profile prof) {
+    author = prof;
+    notifyListeners();
+  }
+
   setDealDetails(DealDetails data) {
     details = data;
     notifyListeners();
@@ -243,6 +258,4 @@ class DataProvider extends ChangeNotifier {
     currentIndex = i;
     notifyListeners();
   }
-
-
 }

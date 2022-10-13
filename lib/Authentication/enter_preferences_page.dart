@@ -254,6 +254,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
       0,
       0,
       Storage.instance.signUpdata?.gender,
+      Storage.instance.signUpdata?.refer,
     );
     if (reponse.success ?? false) {
       // setPreferences();

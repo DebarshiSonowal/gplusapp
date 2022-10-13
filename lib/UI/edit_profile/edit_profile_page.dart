@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Model/profile.dart';
 import 'package:gplusapp/Model/topick.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
@@ -578,47 +579,55 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   void saveDetails() async {
+    Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.createProfile(
-        id.toString(),
-        Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .profile
-            ?.mobile,
-        first_name.text,
-        last_name.text,
-        email.text,
-        Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .profile
-            ?.dob,
-        address,
-        Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .addresses!
-            // .firstWhere((element) => element.id.toString().trim() == id)
-            .firstWhere((element) => element.is_primary == 1)
-            .longitude,
-        Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .addresses!
-            .firstWhere((element) => element.is_primary == 1)
-            .latitude,
-        getComaSeparated(selTop),
-        getComaSeparated(selGeo),
-        big_deal,
-        guwahati_connect,
-        classified,
-        Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .profile
-            ?.gender);
+      id.toString(),
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .profile
+          ?.mobile,
+      first_name.text,
+      last_name.text,
+      email.text,
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .profile
+          ?.dob,
+      address,
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .addresses!
+          // .firstWhere((element) => element.id.toString().trim() == id)
+          .firstWhere((element) => element.is_primary == 1)
+          .longitude,
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .addresses!
+          .firstWhere((element) => element.is_primary == 1)
+          .latitude,
+      getComaSeparated(selTop),
+      getComaSeparated(selGeo),
+      big_deal,
+      guwahati_connect,
+      classified,
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .profile
+          ?.gender,
+      '',
+    );
     if (response.success ?? false) {
+      Navigation.instance.goBack();
+      Fluttertoast.showToast(msg: "Profile Updated");
       fetchProfile();
+    } else {
+      Navigation.instance.goBack();
+      showError(response.msg ?? "Something went wrong");
     }
   }
 

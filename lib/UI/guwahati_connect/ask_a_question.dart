@@ -20,13 +20,14 @@ class AskAQuestionPage extends StatefulWidget {
 }
 
 class _AskAQuestionPageState extends State<AskAQuestionPage> {
-  var title = TextEditingController();
+  // var title = TextEditingController();
 
   var desc = TextEditingController();
 
   var current = 3;
   final ImagePicker _picker = ImagePicker();
   List<File> attachements = [];
+
 
   @override
   void initState() {
@@ -36,7 +37,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
   @override
   void dispose() {
     super.dispose();
-    title.dispose();
+    // title.dispose();
     desc.dispose();
   }
 
@@ -135,38 +136,38 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                           ),
                         )
                       : Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      Container(
-                        height: 8.h,
-                        width: 20.w,
-                        color: Colors.grey.shade200,
-                        child: Center(
-                          child: Image.file(
-                            attachements[pos],
-                            fit: BoxFit.fill,
-                          ),
+                          alignment: Alignment.topRight,
+                          children: [
+                            Container(
+                              height: 8.h,
+                              width: 20.w,
+                              color: Colors.grey.shade200,
+                              child: Center(
+                                child: Image.file(
+                                  attachements[pos],
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  attachements.removeAt(pos);
+                                });
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                color: Colors.white,
+                                child: Icon(
+                                  Icons.remove,
+                                  color: Constance.thirdColor,
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            attachements.removeAt(pos);
-                          });
-                        },
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          color: Colors.white,
-                          child: Icon(
-                            Icons.remove,
-                            color: Constance.thirdColor,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
                 ),
               ),
               SizedBox(
@@ -179,9 +180,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                     // showDialogBox();
                     if (desc.text.isNotEmpty) {
                       postQuestion();
-                    } else {
-
-                    }
+                    } else {}
                   },
                   txt: 'Submit',
                 ),
@@ -318,8 +317,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
     } else {
       print("post failed ${response.success} ${response.message}");
       Navigation.instance.goBack();
-      showError(response.message??"Something went wrong");
-
+      showError(response.message ?? "Something went wrong");
     }
   }
 

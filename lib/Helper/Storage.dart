@@ -12,7 +12,7 @@ class Storage {
 
   temp? signUpdata;
 
-  setSignUpData(temp data){
+  setSignUpData(temp data) {
     signUpdata = data;
   }
 
@@ -29,6 +29,32 @@ class Storage {
   Future<void> setOnBoarding() async {
     await sharedpreferences.setBool("isOnBoarding", true);
   }
+
+  Future<void> setBigDeal() async {
+    await sharedpreferences.setBool("isBigDeal", true);
+  }
+
+  Future<void> setClassified() async {
+    await sharedpreferences.setBool("isClassified", true);
+  }
+
+  Future<void> setCitizenJournalist() async {
+    await sharedpreferences.setBool("isCitizenJournalist", true);
+  }
+
+  Future<void> setGuwahatiConnect() async {
+    await sharedpreferences.setBool("isGuwahatiConnect", true);
+  }
+
+  get isGuwahatiConnect =>
+      sharedpreferences.getBool("isGuwahatiConnect") ?? false;
+
+  get isCitizenJournalist =>
+      sharedpreferences.getBool("isCitizenJournalist") ?? false;
+
+  get isClassified => sharedpreferences.getBool("isClassified") ?? false;
+
+  get isBigDeal => sharedpreferences.getBool("isBigDeal") ?? false;
 
   get isLoggedIn => sharedpreferences.getBool("isLoggedIn") ?? false;
 

@@ -1,12 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:sizer/sizer.dart';
+import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
+import '../../Model/razorpay_key.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
@@ -20,11 +26,25 @@ class BeAMember extends StatefulWidget {
 class _BeAMemberState extends State<BeAMember> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  final _razorpay = Razorpay();
+
+  double tempTotal = 0;
+
+  var temp_order_id = "";
 
   @override
   void initState() {
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     super.initState();
     fetch();
+  }
+
+  @override
+  void dispose() {
+    _razorpay.clear(); // Removes all listeners
+    super.dispose();
   }
 
   void _onRefresh() async {
@@ -267,7 +287,9 @@ class _BeAMemberState extends State<BeAMember> {
                                   width: double.infinity,
                                   child: CustomButton(
                                     txt: 'Get it',
-                                    onTap: () {},
+                                    onTap: () {
+                                      initiateOrder(current.id, 0);
+                                    },
                                   ),
                                 ),
                               ],
@@ -379,6 +401,149 @@ class _BeAMemberState extends State<BeAMember> {
               listen: false)
           .setMembership(response.membership ?? []);
       // _refreshController.refreshFailed();
+    }
+  }
+
+  void order(subscription_id, use_referral_point, razorpay) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance
+        .createOrder(subscription_id, use_referral_point);
+    // startPayment(response.order?.base_price,response.order?.id,);
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      tempTotal = response.order?.base_price ?? 0;
+      temp_order_id = response.order?.id.toString() ?? "";
+      startPayment(
+          razorpay,
+          response.order?.base_price,
+          response.order?.id,
+          Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .profile
+              ?.id);
+    } else {
+      Navigation.instance.goBack();
+      showError(response.message ?? "Something went wrong");
+    }
+  }
+
+  // void initiatePaymentProcess() async {
+  //   Navigation.instance.navigate('/loadingDialog');
+  //   final response = await ApiProvider.instance.fetchRazorpay();
+  //   if (response.status ?? false) {
+  //     initateOrder(response.razorpay!);
+  //   } else {
+  //     Navigation.instance.goBack();
+  //     // CoolAlert.show(
+  //     //   context: context,
+  //     //   type: CoolAlertType.warning,
+  //     //   text: "Something went wrong",
+  //     // );
+  //   }
+  // }
+
+  void startPayment(RazorpayKey razorpay, double? total, id, customer_id) {
+    var options = {
+      'key': razorpay.api_key,
+      'amount': total! * 100,
+      // 'order_id': id,
+      'name':
+          '${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.f_name} ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.l_name}',
+      'description': 'Books',
+      'prefill': {
+        'contact': Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .profile
+            ?.mobile,
+        'email': Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .profile
+            ?.email
+      },
+      'note': {
+        'customer_id': customer_id,
+        'order_id': id,
+      },
+    };
+    debugPrint(jsonEncode(options));
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    print(
+        'success ${response.paymentId} ${response.orderId} ${response.signature}');
+    handleSuccess(response);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Do something when payment fails
+    print('error ${response.message} ${response.code} ');
+    showError(response.message??"Something went wrong");
+    // Navigation.instance.goBack();
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet was selected
+  }
+
+  void handleSuccess(PaymentSuccessResponse response) async {
+    final response1 = await ApiProvider.instance
+        .verifyPayment(temp_order_id, response.paymentId, tempTotal ?? 1);
+    if (response1.success ?? false) {
+      Navigation.instance.goBack();
+      Fluttertoast.showToast(msg: response1.message ?? "Something went wrong");
+    } else {
+      Navigation.instance.goBack();
+      showError(response1.message ?? "Something went wrong");
+    }
+  }
+
+  void fetchProfile() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getprofile();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setProfile(response.profile!);
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setMyTopicks(response.topicks);
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setMyGeoTopicks(response.geoTopicks);
+      Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
+      showError(response.msg ?? "Something went wrong");
+    }
+  }
+
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
+  }
+
+  void initiateOrder(int? id, int i) async {
+    final response = await ApiProvider.instance.fetchRazorpay();
+    if (response.status ?? false) {
+      order(id, i, response.razorpay!);
+    } else {
+      showError(response.message ?? "Something went wrong");
     }
   }
 }

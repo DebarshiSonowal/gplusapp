@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +33,12 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () => fetchClassified(''));
+    Future.delayed(Duration.zero, () {
+      if (!Storage.instance.isClassified) {
+        showDialogBox();
+      }
+      fetchClassified('');
+    });
     // Future.delayed(
     //     Duration.zero,
     //         () => Provider.of<DataProvider>(
@@ -191,7 +197,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                           child: Container(
                             padding: EdgeInsets.symmetric(
                               vertical: 1.h,
-                              horizontal: 5.w,
+                              horizontal: 3.w,
                             ),
                             color: selected == 2
                                 ? Constance.secondaryColor
@@ -575,6 +581,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   }
 
   void showDialogBox() {
+    Storage.instance.setClassified();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -610,7 +617,9 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                   size: 15.h,
                 ),
                 Text(
-                  'Hello Jonathan!',
+                  'Hello ${Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext ?? context,
+                      listen: false).profile?.name}',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,

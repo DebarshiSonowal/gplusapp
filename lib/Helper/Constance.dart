@@ -25,6 +25,7 @@ class Constance {
   static const thirdColor = Color(0xffD03830);
   static const forthColor = Color(0xff001f34);
   static const logoIcon = 'assets/images/logo.png';
+  static const defaultImage = 'http://gplus.shecure.co.in/public/web/images/logo.png';
   static const googleApiKey = "AIzaSyAOniov-vDxU0pIg--OvkCeEsN7iK2Eozo";
   static var listPagesViewModel = [
     PageViewModel(

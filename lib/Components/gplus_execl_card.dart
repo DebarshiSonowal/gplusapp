@@ -54,9 +54,10 @@ class GPlusExecCard extends StatelessWidget {
                           );
                         },
                         errorWidget: (cont, _, e) {
-                          // print(e);
-                          print(_);
-                          return Text(_);
+                          return Image.network(
+                            Constance.defaultImage,
+                            fit: BoxFit.fitWidth,
+                          );
                         },
                       ),
                     ),

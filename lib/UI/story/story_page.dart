@@ -29,6 +29,7 @@ class _StoryPageState extends State<StoryPage> {
   var categories = ['international', 'assam', 'guwahati', 'india'];
   var dropdownvalue = 'international';
   WebViewController? _controller;
+  bool like = false, dislike = false;
 
   @override
   void initState() {
@@ -119,17 +120,23 @@ class _StoryPageState extends State<StoryPage> {
                             SizedBox(
                               height: 1.h,
                             ),
-                            Text(
-                              '${data.selectedArticle?.author_name ?? "GPlus"}, ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
-                              style: Theme.of(Navigation
-                                      .instance.navigatorKey.currentContext!)
-                                  .textTheme
-                                  .headline5
-                                  ?.copyWith(
-                                    color: Colors.black,
-                                    // fontSize: 2.2.h,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigation.instance
+                                    .navigate('/authorPage', args: data.selectedArticle?.author);
+                              },
+                              child: Text(
+                                '${data.selectedArticle?.author_name ?? "GPlus"}, ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                                style: Theme.of(Navigation
+                                        .instance.navigatorKey.currentContext!)
+                                    .textTheme
+                                    .headline5
+                                    ?.copyWith(
+                                      color: Colors.black,
+                                      // fontSize: 2.2.h,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                              ),
                             ),
 
                             SizedBox(
@@ -141,13 +148,25 @@ class _StoryPageState extends State<StoryPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      postLike(data.selectedClassified?.id, 0);
+                                      postLike(data.selectedArticle?.id, 0);
+                                      setState(() {
+                                        like = !like;
+                                        if(dislike){
+                                          dislike = !like;
+                                        }
+                                      });
                                     },
                                     splashRadius: 20.0,
-                                    splashColor: Constance.secondaryColor,
-                                    icon: const Icon(
+                                    splashColor: !like
+                                        ? Constance.secondaryColor
+                                        : Constance.primaryColor,
+                                    icon: Icon(
                                       Icons.thumb_up,
-                                      color: Constance.primaryColor,
+                                      color: like
+                                          ? Constance
+                                          .secondaryColor
+                                          : Constance
+                                          .primaryColor,
                                     ),
                                   ),
                                 ),
@@ -158,13 +177,25 @@ class _StoryPageState extends State<StoryPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      postLike(data.selectedClassified?.id, 1);
+                                      postLike(data.selectedArticle?.id, 1);
+                                      setState(() {
+                                        dislike = !dislike;
+                                        if(like){
+                                          like = !dislike;
+                                        }
+                                      });
                                     },
                                     splashRadius: 20.0,
-                                    splashColor: Constance.secondaryColor,
-                                    icon: const Icon(
+                                    splashColor: !dislike
+                                        ? Constance.secondaryColor
+                                        : Constance.primaryColor,
+                                    icon: Icon(
                                       Icons.thumb_down,
-                                      color: Constance.primaryColor,
+                                      color: dislike
+                                          ? Constance
+                                          .secondaryColor
+                                          : Constance
+                                          .primaryColor,
                                     ),
                                   ),
                                 ),
@@ -254,9 +285,10 @@ class _StoryPageState extends State<StoryPage> {
                                       );
                                     },
                                     errorWidget: (cont, _, e) {
-                                      // print(e);
-                                      print(_);
-                                      return Text(_);
+                                      return Image.network(
+                                        Constance.defaultImage,
+                                        fit: BoxFit.fitWidth,
+                                      );
                                     },
                                   ),
                                 ),
@@ -302,41 +334,89 @@ class _StoryPageState extends State<StoryPage> {
                             ),
                             Row(
                               children: [
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: const Icon(
-                                    Icons.thumb_up,
-                                    color: Constance.secondaryColor,
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      postLike(data.selectedArticle?.id, 0);
+                                      setState(() {
+                                        like = !like;
+                                        if(dislike){
+                                          dislike = !like;
+                                        }
+                                      });
+                                    },
+                                    splashRadius: 20.0,
+                                    splashColor: !like
+                                        ? Constance.secondaryColor
+                                        : Constance.primaryColor,
+                                    icon: Icon(
+                                      Icons.thumb_up,
+                                      color: like
+                                          ? Constance
+                                          .secondaryColor
+                                          : Constance
+                                          .primaryColor,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 4.w,
+                                  width: 2.w,
                                 ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: const Icon(
-                                    Icons.thumb_down,
-                                    color: Constance.primaryColor,
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      postLike(data.selectedArticle?.id, 1);
+                                      setState(() {
+                                        dislike = !dislike;
+                                        if(like){
+                                          like = !dislike;
+                                        }
+                                      });
+                                    },
+                                    splashRadius: 20.0,
+                                    splashColor: !dislike
+                                        ? Constance.secondaryColor
+                                        : Constance.primaryColor,
+                                    icon: Icon(
+                                      Icons.thumb_down,
+                                      color: dislike
+                                          ? Constance
+                                          .secondaryColor
+                                          : Constance
+                                          .primaryColor,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 4.w,
+                                  width: 2.w,
                                 ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: const Icon(
-                                    Icons.comment,
-                                    color: Constance.primaryColor,
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    splashRadius: 20.0,
+                                    splashColor: Constance.secondaryColor,
+                                    icon: const Icon(
+                                      Icons.comment,
+                                      color: Constance.primaryColor,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 4.w,
+                                  width: 2.w,
                                 ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: const Icon(
-                                    Icons.share,
-                                    color: Constance.primaryColor,
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    splashRadius: 20.0,
+                                    splashColor: Constance.secondaryColor,
+                                    icon: const Icon(
+                                      Icons.share,
+                                      color: Constance.primaryColor,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -471,14 +551,15 @@ class _StoryPageState extends State<StoryPage> {
                                                       placeholder: (cont, _) {
                                                         return Image.asset(
                                                           Constance.logoIcon,
-
                                                         );
                                                       },
                                                       errorWidget:
                                                           (cont, _, e) {
-                                                        // print(e);
-                                                        print(_);
-                                                        return Text(_);
+                                                        return Image.network(
+                                                          Constance
+                                                              .defaultImage,
+                                                          fit: BoxFit.fitWidth,
+                                                        );
                                                       },
                                                     ),
                                                   ),
@@ -701,10 +782,11 @@ class _StoryPageState extends State<StoryPage> {
   }
 
   void postLike(id, is_like) async {
-    final response = await ApiProvider.instance.postLike(id, is_like,'news');
+    print(id);
+    final response = await ApiProvider.instance.postLike(id, is_like, 'news');
     if (response.success ?? false) {
       Fluttertoast.showToast(msg: "Post Liked");
-      fetchDetails();
+      // fetchDetails();
     } else {
       showError("Something went wrong");
     }

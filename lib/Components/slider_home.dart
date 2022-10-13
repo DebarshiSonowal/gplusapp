@@ -60,7 +60,10 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                                 );
                               },
                               errorWidget: (cont, _, e) {
-                                return Text(_);
+                                return Image.network(
+                                  Constance.defaultImage,
+                                  fit: BoxFit.fitWidth,
+                                );
                               },
                             ),
                           ),

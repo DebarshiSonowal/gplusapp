@@ -32,9 +32,10 @@ class PersonalDetailsPage extends StatefulWidget {
 }
 
 class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
-  var first_name = TextEditingController();
-  var last_name = TextEditingController();
-  var email = TextEditingController();
+  final first_name = TextEditingController();
+  final last_name = TextEditingController();
+  final email = TextEditingController();
+  final refer = TextEditingController();
   var date = '';
   int year = 1800;
   int max = 2022;
@@ -514,7 +515,41 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 ),
               ),
               SizedBox(
-                height: 4.h,
+                height: 1.h,
+              ),
+              Text(
+                'Enter referral code (if any)',
+                style: Theme.of(context).textTheme.headline4?.copyWith(
+                      color: Constance.primaryColor,
+                      // fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              SizedBox(
+                height: 1.h,
+              ),
+              TextFormField(
+                style: Theme.of(context).textTheme.headline6?.copyWith(
+                      color: Colors.black,
+                      fontSize: 11.sp,
+                    ),
+                controller: refer,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  labelText: 'Enter referral code',
+                  labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Colors.black,
+                        // fontSize: 1.5.h,
+                        fontSize: 11.sp,
+                      ),
+                  border: const OutlineInputBorder(),
+                  enabledBorder: const OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(
+                height: 1.h,
               ),
               Text(
                 'The data can be changed in your profile later',
@@ -553,8 +588,14 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                           if (address != "" &&
                               latitude != 0 &&
                               longitude != 0) {
-                            setData(widget.mobile, first_name.text,
-                                last_name.text, email.text, date, address);
+                            setData(
+                                widget.mobile,
+                                first_name.text,
+                                last_name.text,
+                                email.text,
+                                date,
+                                address,
+                                refer.text ?? "");
                           } else {
                             showError("Please select your location");
                           }
@@ -699,10 +740,10 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     Navigation.instance.goBack();
   }
 
-  void setData(mobile, fname, lname, email, dob, address) {
+  void setData(mobile, fname, lname, email, dob, address, refer) {
     Storage.instance.setSignUpData(
       temp(mobile, fname, lname, email, dob, address, longitude, latitude,
-          address_id, dropdownvalue),
+          address_id, dropdownvalue, refer),
     );
     // Storage.instance.signUpdata?.f_name = fname;
     // Storage.instance.signUpdata?.l_name = lname;

@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Model/opinion.dart';
 import 'package:gplusapp/Model/top_picks.dart';
@@ -22,6 +24,7 @@ import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../Components/NavigationBar.dart';
 import '../../Components/gplus_execl_card.dart';
+import '../../Components/opinion_card.dart';
 import '../../Components/toppicks_card.dart';
 import '../../Components/video_card.dart';
 import '../../Components/slider_home.dart';
@@ -62,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigation.instance.navigatorKey.currentContext ?? context,
                 listen: false)
             .setCurrent(0));
+    showPopUp();
   }
 
   void _onRefresh() async {
@@ -85,18 +89,9 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       _refreshController.refreshFailed();
     }
-    // if failed,use refreshFailed()
   }
 
   void _onLoading() async {
-    // // monitor network fetch
-    // await Future.delayed(Duration(milliseconds: 1000));
-    // // if failed,use loadFailed(),if no data return,use LoadNodata()
-    // items.add((items.length+1).toString());
-    // if(mounted)
-    //   setState(() {
-    //
-    //   });
     _refreshController.loadComplete();
   }
 
@@ -256,8 +251,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   );
                                                 },
                                                 errorWidget: (cont, _, e) {
-                                                  // print(e);
-                                                  return Text(_);
+                                                  return Image.network(
+                                                    Constance.defaultImage,
+                                                    fit: BoxFit.fitWidth,
+                                                  );
                                                 },
                                               ),
                                             ),
@@ -357,9 +354,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         );
                                       },
                                       errorWidget: (cont, _, e) {
-                                        // print(e);
-                                        print(_);
-                                        return Text(_);
+                                        return Image.network(
+                                          Constance.defaultImage,
+                                          fit: BoxFit.fitWidth,
+                                        );
                                       },
                                     ),
                                   ),
@@ -791,7 +789,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               onTap: () {
                                                 Navigation.instance.navigate(
                                                     '/opinionDetails',
-                                                    args: item.seo_name?.trim());
+                                                    args:
+                                                        item.seo_name?.trim());
                                               },
                                               child: OpinionCard(item: item));
                                         },
@@ -1015,113 +1014,113 @@ class _HomeScreenState extends State<HomeScreen> {
     if (response.success ?? false) {
       Fluttertoast.showToast(msg: "Posted successfully");
       fetchPoll();
+      setState(() {});
     } else {}
   }
-}
 
-class OpinionCard extends StatelessWidget {
-  const OpinionCard({
-    Key? key,
-    required this.item,
-  }) : super(key: key);
-
-  final Opinion item;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5.0),
-        side: BorderSide(width: 0.5, color: Constance.primaryColor),
-      ),
-      child: Container(
-        // padding: EdgeInsets.symmetric(
-        //     horizontal: 3.w, vertical: 2.h),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(5),
+  void showDialogBox() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          contentPadding: EdgeInsets.zero,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
           ),
-          color: Colors.white,
-        ),
-        height: 12.h,
-        width: MediaQuery.of(context).size.width - 7.w,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-                flex: 4,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5),
-                    ),
-                    border: Border(
-                      top:
-                          BorderSide(width: 0.5, color: Constance.primaryColor),
-                      bottom:
-                          BorderSide(width: 0.5, color: Constance.primaryColor),
-                      right:
-                          BorderSide(width: 0.5, color: Constance.primaryColor),
-                      left:
-                          BorderSide(width: 0.5, color: Constance.primaryColor),
-                    ),
-                    color: Colors.white,
-                  ),
-                  child: Center(
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 70.w,
-                          child: Text(
-                            item.title ?? "",
-                            maxLines: 3,
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.ellipsis,
-                            style:
-                                Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Colors.black,
-                                      // fontWeight:
-                                      //     FontWeight.bold,
-                                    ),
-                          ),
+          backgroundColor: Colors.white,
+          title: Text(
+            'Oops! You are not a member',
+            style: Theme.of(context).textTheme.headline1?.copyWith(
+                  color: Constance.secondaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          content: Container(
+            padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
+            // height: 50.h,
+            width: 80.w,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
+                  style: Theme.of(context).textTheme.headline3?.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(height: 1.h),
+                Flexible(
+                  child: Text(
+                    '''Projected to be a smart city by 2025, Guwahati is a
+major port on the banks of Brahmaputra, the capital
+of Assam and the urban hub of the North East. This
+metropolitan city is growing leaps and bounds, and 
+for its unparalleled pace of growth, comes the need
+for an unparalleled publication, that people call their''',
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Colors.black,
+                          // fontWeight: FontWeight.bold,
                         ),
-                      ],
+                  ),
+                ),
+                SizedBox(height: 1.h),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Text(
+                  'Do you want to be a member?',
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomButton(
+                      txt: 'Yes, take me there',
+                      onTap: () {
+                        Navigation.instance.navigate('/beamember');
+                      },
+                      size: 12.sp,
                     ),
-                  ),
-                )),
-            Expanded(
-                flex: 2,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 3.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        item.author_name ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Constance.thirdColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                      Text(
-                        // item.publish_date?.split(" ")[0] ?? "",
-                        Jiffy(item.publish_date?.split(" ")[0] ?? "",
-                                "yyyy-MM-dd")
-                            .format("dd/MM/yyyy"),
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Colors.black,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
-                  ),
-                )),
-          ],
-        ),
-      ),
+                    SizedBox(
+                      width: 2.w,
+                    ),
+                    CustomButton(
+                      txt: '''No, I don't want it''',
+                      onTap: () {
+                        Navigation.instance.goBack();
+                      },
+                      color: Colors.black,
+                      size: 12.sp,
+                      fcolor: Colors.white,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
+  }
+
+  void showPopUp() {
+    Future.delayed(Duration(milliseconds: Random().nextInt(420)), () {
+      // code will be here
+      showDialogBox();
+    });
+    // Future.delayed(Duration(seconds: 5), () => showDialogBox());
   }
 }

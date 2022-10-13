@@ -24,6 +24,7 @@ class _OpinionPageState extends State<OpinionPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
+
   void _onRefresh() async {
     // monitor network fetch
     page_no = 1;
@@ -268,9 +269,10 @@ class _OpinionPageState extends State<OpinionPage> {
                                                   );
                                                 },
                                                 errorWidget: (cont, _, e) {
-                                                  // print(e);
-                                                  print(_);
-                                                  return Text(_);
+                                                  return Image.network(
+                                                    Constance.defaultImage,
+                                                    fit: BoxFit.fitWidth,
+                                                  );
                                                 },
                                               ),
                                             ),

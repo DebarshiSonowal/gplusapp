@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,12 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () => fetchGuwahatiConnect());
+    Future.delayed(Duration.zero, () {
+      fetchGuwahatiConnect();
+      if (!Storage.instance.isGuwahatiConnect) {
+        showDialogBox();
+      }
+    });
   }
 
   @override
@@ -118,353 +124,174 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 2.w),
                   child: ListView.separated(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: current.guwahatiConnect.length,
                     itemBuilder: (context, count) {
                       var data = current.guwahatiConnect[count];
-                      bool expand = false;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Card(
-                            elevation: 3,
-                            color: Colors.white,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 2.w, vertical: 1.h),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              data.user?.name ?? "GPlus Author",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline3
-                                                  ?.copyWith(
-                                                    color:
-                                                        Constance.primaryColor,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                            SizedBox(
-                                              height: 0.7.h,
-                                            ),
-                                            Text(
-                                              Jiffy(data.updated_at,
-                                                          "yyyy-MM-dd")
-                                                      .fromNow() ??
-                                                  '${15} mins ago' ??
-                                                  "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                    color: Colors.black45,
-                                                    // fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                        const Icon(
-                                          Icons.menu,
-                                          color: Colors.black,
-                                        ),
-                                      ],
+                      bool like = false, dislike = false;
+                      return StatefulBuilder(builder: (context, _) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Card(
+                              elevation: 3,
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 2.w, vertical: 1.h),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                data.user?.name ??
+                                                    "GPlus Author",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline3
+                                                    ?.copyWith(
+                                                      color: Constance
+                                                          .primaryColor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
+                                              SizedBox(
+                                                height: 0.7.h,
+                                              ),
+                                              Text(
+                                                Jiffy(data.updated_at,
+                                                            "yyyy-MM-dd")
+                                                        .fromNow() ??
+                                                    '${15} mins ago' ??
+                                                    "",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6
+                                                    ?.copyWith(
+                                                      color: Colors.black45,
+                                                      // fontWeight: FontWeight.bold,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                          const Icon(
+                                            Icons.menu,
+                                            color: Colors.black,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  data.attachment?.isEmpty ?? false
-                                      ? Container()
-                                      : Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 1.h),
-                                          child: SizedBox(
-                                            height: 25.h,
-                                            width: double.infinity,
-                                            child: CachedNetworkImage(
-                                              placeholder: (cont, _) {
-                                                return Image.asset(
-                                                  Constance.logoIcon,
-                                                  // color: Colors.black,
-                                                );
-                                              },
-                                              imageUrl: data.attachment![0]
-                                                      .file_name ??
-                                                  "",
-                                              fit: BoxFit.fill,
+                                    data.attachment?.isEmpty ?? false
+                                        ? Container()
+                                        : Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 1.h),
+                                            child: SizedBox(
+                                              height: 25.h,
+                                              width: double.infinity,
+                                              child: CachedNetworkImage(
+                                                placeholder: (cont, _) {
+                                                  return Image.asset(
+                                                    Constance.logoIcon,
+                                                    // color: Colors.black,
+                                                  );
+                                                },
+                                                imageUrl: data.attachment![0]
+                                                        .file_name ??
+                                                    "",
+                                                fit: BoxFit.fill,
+                                                errorWidget: (cont, _, e) {
+                                                  return Image.network(
+                                                    Constance.defaultImage,
+                                                    fit: BoxFit.fitWidth,
+                                                  );
+                                                },
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                  SizedBox(
-                                    height: 1.h,
-                                  ),
-                                  Text(
-                                    data.question ?? "",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline5
-                                        ?.copyWith(
-                                          color: Colors.black,
-                                          // fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                  SizedBox(
-                                    height: 1.h,
-                                  ),
-                                  // Text(
-                                  //   "",
-                                  //   style: Theme.of(context)
-                                  //       .textTheme
-                                  //       .headline5
-                                  //       ?.copyWith(
-                                  //         color: Colors.black,
-                                  //         fontWeight: FontWeight.bold,
-                                  //       ),
-                                  // ),
-                                  SizedBox(
-                                    height: 2.h,
-                                    child: Center(
-                                      child: Divider(
-                                        thickness: 0.05.h,
-                                        color: Colors.black26,
-                                      ),
+                                    SizedBox(
+                                      height: 1.h,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 0.5.h,
-                                  ),
-                                  Container(
-                                    width: double.infinity,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 1.w),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          '${data.total_liked} likes' ?? "",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline6
-                                              ?.copyWith(
-                                                color: Colors.black,
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                        Text(
-                                          '${data.total_disliked} dislikes' ??
-                                              "",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline6
-                                              ?.copyWith(
-                                                color: Colors.black,
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                        Text(
-                                          '${data.total_comment} comments' ??
-                                              "",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline6
-                                              ?.copyWith(
-                                                color: Colors.black,
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ],
+                                    Text(
+                                      data.question ?? "",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Colors.black,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 0.5.h,
-                                  ),
-                                  SizedBox(
-                                    height: 2.h,
-                                    child: Center(
-                                      child: Divider(
-                                        thickness: 0.05.h,
-                                        color: Colors.black26,
-                                      ),
+                                    SizedBox(
+                                      height: 1.h,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Material(
-                                              type: MaterialType.transparency,
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  postLike(data.id, 1);
-                                                },
-                                                splashRadius: 20.0,
-                                                splashColor:
-                                                    Constance.secondaryColor,
-                                                icon: const Icon(
-                                                  Icons.thumb_up,
-                                                  color: Constance.primaryColor,
-                                                ),
-                                              ),
-                                            ),
-                                            Material(
-                                              type: MaterialType.transparency,
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  postLike(data.id, 0);
-                                                },
-                                                splashRadius: 20.0,
-                                                splashColor:
-                                                    Constance.secondaryColor,
-                                                icon: const Icon(
-                                                  Icons.thumb_down,
-                                                  color: Constance.primaryColor,
-                                                ),
-                                              ),
-                                            ),
-                                            Material(
-                                              type: MaterialType.transparency,
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    if (expand) {
-                                                      expand = false;
-                                                    } else {
-                                                      expand = true;
-                                                    }
-                                                  });
-                                                  print(expand);
-                                                },
-                                                splashRadius: 20.0,
-                                                splashColor:
-                                                    Constance.secondaryColor,
-                                                icon: const Icon(
-                                                  Icons.comment,
-                                                  color: Constance.primaryColor,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 2.w),
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Card(
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 5.w, vertical: 0.5.h),
-                                  child: TextField(
-                                    controller: _searchQueryController,
-                                    autofocus: false,
-                                    decoration: InputDecoration(
-                                      hintText: "Write a comment",
-                                      border: InputBorder.none,
-                                      hintStyle: const TextStyle(
-                                          color: Colors.black26),
-                                      suffixIcon: IconButton(
-                                        onPressed: () {
-                                          if (_searchQueryController
-                                              .text.isNotEmpty) {
-                                            // search(_searchQueryController.text);
-                                            postComment(
-                                                data.id,
-                                                'guwahati-connect',
-                                                _searchQueryController.text);
-                                          } else {
-                                            showError(
-                                                'Enter something to search');
-                                          }
-                                        },
-                                        icon: const Icon(
-                                          Icons.link,
-                                          color: Colors.black,
+                                    // Text(
+                                    //   "",
+                                    //   style: Theme.of(context)
+                                    //       .textTheme
+                                    //       .headline5
+                                    //       ?.copyWith(
+                                    //         color: Colors.black,
+                                    //         fontWeight: FontWeight.bold,
+                                    //       ),
+                                    // ),
+                                    SizedBox(
+                                      height: 2.h,
+                                      child: Center(
+                                        child: Divider(
+                                          thickness: 0.05.h,
+                                          color: Colors.black26,
                                         ),
                                       ),
                                     ),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline4
-                                        ?.copyWith(color: Colors.black),
-                                    onChanged: (query) => {},
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 1.h,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15.w, right: 5.w),
-                            child: ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: data.comments.isNotEmpty
-                                    ? 1
-                                    : data.comments.length,
-                                itemBuilder: (cont, ind) {
-                                  var current = data.comments[ind];
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              current.name ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5
-                                                  ?.copyWith(
-                                                    color:
-                                                        Constance.primaryColor,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                            // Icon(
-                                            //   Icons.menu,
-                                            //   color: Colors.black,
-                                            // ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                      Row(
+                                    SizedBox(
+                                      height: 0.5.h,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 1.w),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Text(
-                                            current.comment ?? "",
+                                            '${data.total_liked} likes' ?? "",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                ?.copyWith(
+                                                  color: Colors.black,
+                                                  // fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          Text(
+                                            '${data.total_disliked} dislikes' ??
+                                                "",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                ?.copyWith(
+                                                  color: Colors.black,
+                                                  // fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          Text(
+                                            '${data.total_comment} comments' ??
+                                                "",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headline6
@@ -475,351 +302,450 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(
-                                        height: 1.h,
+                                    ),
+                                    SizedBox(
+                                      height: 0.5.h,
+                                    ),
+                                    SizedBox(
+                                      height: 2.h,
+                                      child: Center(
+                                        child: Divider(
+                                          thickness: 0.05.h,
+                                          color: Colors.black26,
+                                        ),
                                       ),
-                                      // Text(
-                                      //   "",
-                                      //   style: Theme.of(context)
-                                      //       .textTheme
-                                      //       .headline5
-                                      //       ?.copyWith(
-                                      //         color: Colors.black,
-                                      //         fontWeight: FontWeight.bold,
-                                      //       ),
-                                      // ),
-                                      // SizedBox(
-                                      //   height: 1.h,
-                                      // ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Material(
+                                                type: MaterialType.transparency,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    postLike(data.id, 1);
+                                                    _(() {
+                                                      like = !like;
+                                                     if(dislike){
+                                                       dislike = !like;
+                                                     }
+                                                    });
+                                                    debugPrint('${like}');
+                                                  },
+                                                  splashRadius: 20.0,
+                                                  splashColor: !like
+                                                      ? Constance.secondaryColor
+                                                      : Constance.primaryColor,
+                                                  icon: Icon(
+                                                    Icons.thumb_up,
+                                                    color: like
+                                                        ? Constance
+                                                            .secondaryColor
+                                                        : Constance
+                                                            .primaryColor,
+                                                  ),
+                                                ),
+                                              ),
+                                              Material(
+                                                type: MaterialType.transparency,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    postLike(data.id, 0);
+                                                    _(() {
+                                                      dislike = !dislike;
+                                                      if(like){
+                                                        like = !dislike;
+                                                      }
+                                                    });
+                                                  },
+                                                  splashRadius: 20.0,
+                                                  splashColor: !dislike
+                                                      ? Constance.secondaryColor
+                                                      : Constance.primaryColor,
+                                                  icon: Icon(
+                                                    Icons.thumb_down,
+                                                    color: dislike
+                                                        ? Constance
+                                                            .secondaryColor
+                                                        : Constance
+                                                            .primaryColor,
+                                                  ),
+                                                ),
+                                              ),
+                                              Material(
+                                                type: MaterialType.transparency,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    // setState(() {
+                                                    //   if (expand) {
+                                                    //     expand = false;
+                                                    //   } else {
+                                                    //     expand = true;
+                                                    //   }
+                                                    // });
+                                                    // print(expand);
+                                                  },
+                                                  splashRadius: 20.0,
+                                                  splashColor:
+                                                      Constance.secondaryColor,
+                                                  icon: const Icon(
+                                                    Icons.comment,
+                                                    color:
+                                                        Constance.primaryColor,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 2.w),
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Card(
+                                  color: Colors.white,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 5.w, vertical: 0.5.h),
+                                    child: TextField(
+                                      controller: _searchQueryController,
+                                      autofocus: false,
+                                      decoration: InputDecoration(
+                                        hintText: "Write a comment",
+                                        border: InputBorder.none,
+                                        hintStyle: const TextStyle(
+                                            color: Colors.black26),
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            if (_searchQueryController
+                                                .text.isNotEmpty) {
+                                              // search(_searchQueryController.text);
+                                              postComment(
+                                                  data.id,
+                                                  'guwahati-connect',
+                                                  _searchQueryController.text);
+                                            } else {
+                                              showError(
+                                                  'Enter something to search');
+                                            }
+                                          },
+                                          icon: const Icon(
+                                            Icons.send,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline4
+                                          ?.copyWith(color: Colors.black),
+                                      onChanged: (query) => {},
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 1.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 15.w, right: 5.w),
+                              child: ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: data.comments.isNotEmpty
+                                      ? 1
+                                      : data.comments.length,
+                                  itemBuilder: (cont, ind) {
+                                    var current = data.comments[ind];
+                                    bool like = false, dislike = false;
+                                    return StatefulBuilder(
+                                      builder: (context,_) {
+                                        return Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                              CrossAxisAlignment.end,
                                           children: [
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    current.name ?? "",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline5
+                                                        ?.copyWith(
+                                                          color: Constance
+                                                              .primaryColor,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                  // Icon(
+                                                  //   Icons.menu,
+                                                  //   color: Colors.black,
+                                                  // ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 1.h,
+                                            ),
                                             Row(
                                               children: [
-                                                Material(
-                                                  type:
-                                                      MaterialType.transparency,
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      postLike(current.id, 1);
-                                                    },
-                                                    splashRadius: 20.0,
-                                                    splashColor: Constance
-                                                        .secondaryColor,
-                                                    icon: const Icon(
-                                                      Icons.thumb_up,
-                                                      color: Constance
-                                                          .primaryColor,
-                                                    ),
-                                                  ),
+                                                Text(
+                                                  current.comment ?? "",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline6
+                                                      ?.copyWith(
+                                                        color: Colors.black,
+                                                        // fontWeight: FontWeight.bold,
+                                                      ),
                                                 ),
-                                                Material(
-                                                  type:
-                                                      MaterialType.transparency,
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      postLike(current.id, 0);
-                                                    },
-                                                    splashRadius: 20.0,
-                                                    splashColor: Constance
-                                                        .secondaryColor,
-                                                    icon: const Icon(
-                                                      Icons.comment,
-                                                      color: Constance
-                                                          .primaryColor,
-                                                    ),
-                                                  ),
-                                                ),
-                                                // Material(
-                                                //   type: MaterialType.transparency,
-                                                //   child: IconButton(
-                                                //     onPressed: () {},
-                                                //     splashRadius:20.0,
-                                                //     splashColor:
-                                                //     Constance.secondaryColor,
-                                                //     icon: const Icon(
-                                                //       Icons.comment,
-                                                //       color:
-                                                //       Constance.primaryColor,
-                                                //     ),
-                                                //   ),
-                                                // ),
                                               ],
                                             ),
+                                            SizedBox(
+                                              height: 1.h,
+                                            ),
                                             // Text(
-                                            //   '${15} mins ago' ?? "",
+                                            //   "",
                                             //   style: Theme.of(context)
                                             //       .textTheme
                                             //       .headline5
-                                            //       ?.copyWith(
-                                            //     color: Colors.black,
-                                            //     fontWeight: FontWeight.bold,
-                                            //   ),
-                                            // ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Row(
-                                          // mainAxisAlignment:
-                                          //     MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '${current.like_count} likes' ??
-                                                  "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                            SizedBox(
-                                              width: 2.w,
-                                            ),
-                                            // Text(
-                                            //   '${current.dislike_count} dislike' ??
-                                            //       "",
-                                            //   style: Theme.of(context)
-                                            //       .textTheme
-                                            //       .headline6
                                             //       ?.copyWith(
                                             //         color: Colors.black,
                                             //         fontWeight: FontWeight.bold,
                                             //       ),
                                             // ),
-                                          ],
-                                        ),
-                                      ),
-                                      // SizedBox(
-                                      //   height: 1.h,
-                                      // ),
+                                            // SizedBox(
+                                            //   height: 1.h,
+                                            // ),
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Material(
+                                                        type: MaterialType
+                                                            .transparency,
+                                                        child: IconButton(
+                                                          onPressed: () {
+                                                            postLike(current.id, 1);
+                                                            _((){
+                                                              like = !like;
+                                                              // if(dislike){
+                                                              //   dislike = !like;
+                                                              // }
+                                                            });
+                                                          },
+                                                          splashRadius: 20.0,
+                                                          splashColor: !like
+                                                              ? Constance.secondaryColor
+                                                              : Constance.primaryColor,
+                                                          icon: Icon(
+                                                            Icons.thumb_up,
+                                                            color: like
+                                                                ? Constance
+                                                                .secondaryColor
+                                                                : Constance
+                                                                .primaryColor,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Material(
+                                                        type: MaterialType
+                                                            .transparency,
+                                                        child: IconButton(
+                                                          onPressed: () {
+                                                            // postLike(current.id, 0);
 
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                    ],
-                                  );
-                                }),
-                            // child: Column(
-                            //   crossAxisAlignment: CrossAxisAlignment.start,
-                            //   children: [],
-                            // ),
-                          ),
-                          data.comments.length <= 1
-                              ? Container()
-                              : ExpansionTile(
-                                  title: Padding(
-                                    padding: EdgeInsets.only(left: 15.w),
-                                    child: Text(
-                                      "View ${data.comments.length - 1} Comments",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline5
-                                          ?.copyWith(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ),
-                                  iconColor: Colors.white,
-                                  collapsedIconColor: Colors.white,
-                                  children: [
-                                    Padding(
+                                                          },
+                                                          splashRadius: 20.0,
+                                                          splashColor: Constance
+                                                              .secondaryColor,
+                                                          icon: const Icon(
+                                                            Icons.comment,
+                                                            color: Constance
+                                                                .primaryColor,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      // Material(
+                                                      //   type: MaterialType.transparency,
+                                                      //   child: IconButton(
+                                                      //     onPressed: () {},
+                                                      //     splashRadius:20.0,
+                                                      //     splashColor:
+                                                      //     Constance.secondaryColor,
+                                                      //     icon: const Icon(
+                                                      //       Icons.comment,
+                                                      //       color:
+                                                      //       Constance.primaryColor,
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                    ],
+                                                  ),
+                                                  // Text(
+                                                  //   '${15} mins ago' ?? "",
+                                                  //   style: Theme.of(context)
+                                                  //       .textTheme
+                                                  //       .headline5
+                                                  //       ?.copyWith(
+                                                  //     color: Colors.black,
+                                                  //     fontWeight: FontWeight.bold,
+                                                  //   ),
+                                                  // ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: Row(
+                                                // mainAxisAlignment:
+                                                //     MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    '${current.like_count} likes' ??
+                                                        "",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline6
+                                                        ?.copyWith(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 2.w,
+                                                  ),
+                                                  // Text(
+                                                  //   '${current.dislike_count} dislike' ??
+                                                  //       "",
+                                                  //   style: Theme.of(context)
+                                                  //       .textTheme
+                                                  //       .headline6
+                                                  //       ?.copyWith(
+                                                  //         color: Colors.black,
+                                                  //         fontWeight: FontWeight.bold,
+                                                  //       ),
+                                                  // ),
+                                                ],
+                                              ),
+                                            ),
+                                            // SizedBox(
+                                            //   height: 1.h,
+                                            // ),
+
+                                            SizedBox(
+                                              height: 1.h,
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                    );
+                                  }),
+                              // child: Column(
+                              //   crossAxisAlignment: CrossAxisAlignment.start,
+                              //   children: [],
+                              // ),
+                            ),
+                            data.comments.length <= 1
+                                ? Container()
+                                : ExpansionTile(
+                                    title: Padding(
                                       padding: EdgeInsets.only(left: 15.w),
-                                      child: ListView.builder(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemCount: data.comments.length,
-                                          itemBuilder: (cont, ind) {
-                                            var current = data.comments[ind];
-                                            return ind == 0
-                                                ? Container()
-                                                : SizedBox(
-                                                    width: 40.w,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .end,
-                                                      children: [
-                                                        SizedBox(
-                                                          width:
-                                                              double.infinity,
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Text(
-                                                                current.name ??
-                                                                    "",
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .headline5
-                                                                    ?.copyWith(
-                                                                      color: Constance
-                                                                          .primaryColor,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                              ),
-                                                              // Icon(
-                                                              //   Icons.menu,
-                                                              //   color: Colors.black,
-                                                              // ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 1.h,
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              current.comment ??
-                                                                  "",
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .headline6
-                                                                  ?.copyWith(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    // fontWeight: FontWeight.bold,
-                                                                  ),
+                                      child: Text(
+                                        "View ${data.comments.length - 1} Comments",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5
+                                            ?.copyWith(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ),
+                                    iconColor: Colors.white,
+                                    collapsedIconColor: Colors.white,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 15.w),
+                                        child: ListView.builder(
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: data.comments.length,
+                                            itemBuilder: (cont, ind) {
+                                              var current = data.comments[ind];
+                                              return ind == 0
+                                                  ? Container()
+                                                  : SizedBox(
+                                                      width: 40.w,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          SizedBox(
+                                                            width:
+                                                                double.infinity,
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Text(
+                                                                  current.name ??
+                                                                      "",
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .headline5
+                                                                      ?.copyWith(
+                                                                        color: Constance
+                                                                            .primaryColor,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                ),
+                                                                // Icon(
+                                                                //   Icons.menu,
+                                                                //   color: Colors.black,
+                                                                // ),
+                                                              ],
                                                             ),
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                          height: 1.h,
-                                                        ),
-                                                        // Text(
-                                                        //   "",
-                                                        //   style: Theme.of(context)
-                                                        //       .textTheme
-                                                        //       .headline5
-                                                        //       ?.copyWith(
-                                                        //         color: Colors.black,
-                                                        //         fontWeight: FontWeight.bold,
-                                                        //       ),
-                                                        // ),
-                                                        // SizedBox(
-                                                        //   height: 1.h,
-                                                        // ),
-                                                        SizedBox(
-                                                          width:
-                                                              double.infinity,
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Row(
-                                                                children: [
-                                                                  Material(
-                                                                    type: MaterialType
-                                                                        .transparency,
-                                                                    child:
-                                                                        IconButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        postCommentLike(
-                                                                            current.id,
-                                                                            1);
-                                                                      },
-                                                                      splashRadius:
-                                                                          20.0,
-                                                                      splashColor:
-                                                                          Constance
-                                                                              .secondaryColor,
-                                                                      icon:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .thumb_up,
-                                                                        color: Constance
-                                                                            .primaryColor,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Material(
-                                                                    type: MaterialType
-                                                                        .transparency,
-                                                                    child:
-                                                                        IconButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        // postLike(current.id, 0);
-                                                                      },
-                                                                      splashRadius:
-                                                                          20.0,
-                                                                      splashColor:
-                                                                          Constance
-                                                                              .secondaryColor,
-                                                                      icon:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .comment,
-                                                                        color: Constance
-                                                                            .primaryColor,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  // Material(
-                                                                  //   type: MaterialType.transparency,
-                                                                  //   child: IconButton(
-                                                                  //     onPressed: () {},
-                                                                  //     splashRadius:20.0,
-                                                                  //     splashColor:
-                                                                  //     Constance.secondaryColor,
-                                                                  //     icon: const Icon(
-                                                                  //       Icons.comment,
-                                                                  //       color:
-                                                                  //       Constance.primaryColor,
-                                                                  //     ),
-                                                                  //   ),
-                                                                  // ),
-                                                                ],
-                                                              ),
-                                                              // Text(
-                                                              //   '${15} mins ago' ?? "",
-                                                              //   style: Theme.of(context)
-                                                              //       .textTheme
-                                                              //       .headline5
-                                                              //       ?.copyWith(
-                                                              //     color: Colors.black,
-                                                              //     fontWeight: FontWeight.bold,
-                                                              //   ),
-                                                              // ),
-                                                            ],
                                                           ),
-                                                        ),
-                                                        SizedBox(
-                                                          width:
-                                                              double.infinity,
-                                                          child: Row(
-                                                            // mainAxisAlignment:
-                                                            //     MainAxisAlignment.spaceBetween,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
+                                                          SizedBox(
+                                                            height: 1.h,
+                                                          ),
+                                                          Row(
                                                             children: [
                                                               Text(
-                                                                '${current.like_count} likes' ??
+                                                                current.comment ??
                                                                     "",
                                                                 style: Theme.of(
                                                                         context)
@@ -828,84 +754,213 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                                                     ?.copyWith(
                                                                       color: Colors
                                                                           .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
+                                                                      // fontWeight: FontWeight.bold,
                                                                     ),
                                                               ),
-                                                              // SizedBox(
-                                                              //   width: 2.w,
-                                                              // ),
-                                                              // Text(
-                                                              //   '${current.dislike_count} dislike' ??
-                                                              //       "",
-                                                              //   style: Theme.of(context)
-                                                              //       .textTheme
-                                                              //       .headline6
-                                                              //       ?.copyWith(
-                                                              //     color: Colors.black,
-                                                              //     fontWeight: FontWeight.bold,
-                                                              //   ),
-                                                              // ),
                                                             ],
                                                           ),
-                                                        ),
-                                                        // SizedBox(
-                                                        //   height: 1.h,
-                                                        // ),
+                                                          SizedBox(
+                                                            height: 1.h,
+                                                          ),
+                                                          // Text(
+                                                          //   "",
+                                                          //   style: Theme.of(context)
+                                                          //       .textTheme
+                                                          //       .headline5
+                                                          //       ?.copyWith(
+                                                          //         color: Colors.black,
+                                                          //         fontWeight: FontWeight.bold,
+                                                          //       ),
+                                                          // ),
+                                                          // SizedBox(
+                                                          //   height: 1.h,
+                                                          // ),
+                                                          SizedBox(
+                                                            width:
+                                                                double.infinity,
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    Material(
+                                                                      type: MaterialType
+                                                                          .transparency,
+                                                                      child:
+                                                                          IconButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          postCommentLike(
+                                                                              current.id,
+                                                                              1);
+                                                                        },
+                                                                        splashRadius:
+                                                                            20.0,
+                                                                        splashColor:
+                                                                            Constance.secondaryColor,
+                                                                        icon:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .thumb_up,
+                                                                          color:
+                                                                              Constance.primaryColor,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Material(
+                                                                      type: MaterialType
+                                                                          .transparency,
+                                                                      child:
+                                                                          IconButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          // postLike(current.id, 0);
+                                                                        },
+                                                                        splashRadius:
+                                                                            20.0,
+                                                                        splashColor:
+                                                                            Constance.secondaryColor,
+                                                                        icon:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .comment,
+                                                                          color:
+                                                                              Constance.primaryColor,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    // Material(
+                                                                    //   type: MaterialType.transparency,
+                                                                    //   child: IconButton(
+                                                                    //     onPressed: () {},
+                                                                    //     splashRadius:20.0,
+                                                                    //     splashColor:
+                                                                    //     Constance.secondaryColor,
+                                                                    //     icon: const Icon(
+                                                                    //       Icons.comment,
+                                                                    //       color:
+                                                                    //       Constance.primaryColor,
+                                                                    //     ),
+                                                                    //   ),
+                                                                    // ),
+                                                                  ],
+                                                                ),
+                                                                // Text(
+                                                                //   '${15} mins ago' ?? "",
+                                                                //   style: Theme.of(context)
+                                                                //       .textTheme
+                                                                //       .headline5
+                                                                //       ?.copyWith(
+                                                                //     color: Colors.black,
+                                                                //     fontWeight: FontWeight.bold,
+                                                                //   ),
+                                                                // ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            width:
+                                                                double.infinity,
+                                                            child: Row(
+                                                              // mainAxisAlignment:
+                                                              //     MainAxisAlignment.spaceBetween,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                  '${current.like_count} likes' ??
+                                                                      "",
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .headline6
+                                                                      ?.copyWith(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                ),
+                                                                // SizedBox(
+                                                                //   width: 2.w,
+                                                                // ),
+                                                                // Text(
+                                                                //   '${current.dislike_count} dislike' ??
+                                                                //       "",
+                                                                //   style: Theme.of(context)
+                                                                //       .textTheme
+                                                                //       .headline6
+                                                                //       ?.copyWith(
+                                                                //     color: Colors.black,
+                                                                //     fontWeight: FontWeight.bold,
+                                                                //   ),
+                                                                // ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          // SizedBox(
+                                                          //   height: 1.h,
+                                                          // ),
 
-                                                        // Padding(
-                                                        //   padding: EdgeInsets.symmetric(
-                                                        //       horizontal: 2.w),
-                                                        //   child: GestureDetector(
-                                                        //     onTap: () {},
-                                                        //     child: Card(
-                                                        //       color: Colors.white,
-                                                        //       child: Padding(
-                                                        //         padding: EdgeInsets.symmetric(
-                                                        //             horizontal: 5.w,
-                                                        //             vertical: 1.h),
-                                                        //         child: Row(
-                                                        //           mainAxisAlignment:
-                                                        //               MainAxisAlignment
-                                                        //                   .spaceBetween,
-                                                        //           crossAxisAlignment:
-                                                        //               CrossAxisAlignment.center,
-                                                        //           children: [
-                                                        //             Text(
-                                                        //               'Write a comment',
-                                                        //               style: Theme.of(context)
-                                                        //                   .textTheme
-                                                        //                   .bodyText2
-                                                        //                   ?.copyWith(
-                                                        //                     color: Colors.black,
-                                                        //                   ),
-                                                        //             ),
-                                                        //             const Icon(
-                                                        //               Icons.link,
-                                                        //               color: Colors.black,
-                                                        //             ),
-                                                        //           ],
-                                                        //         ),
-                                                        //       ),
-                                                        //     ),
-                                                        //   ),
-                                                        // ),
-                                                        SizedBox(
-                                                          height: 1.h,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                          }),
-                                    )
-                                  ],
-                                ),
-                          SizedBox(
-                            height: 1.h,
-                          ),
-                        ],
-                      );
+                                                          // Padding(
+                                                          //   padding: EdgeInsets.symmetric(
+                                                          //       horizontal: 2.w),
+                                                          //   child: GestureDetector(
+                                                          //     onTap: () {},
+                                                          //     child: Card(
+                                                          //       color: Colors.white,
+                                                          //       child: Padding(
+                                                          //         padding: EdgeInsets.symmetric(
+                                                          //             horizontal: 5.w,
+                                                          //             vertical: 1.h),
+                                                          //         child: Row(
+                                                          //           mainAxisAlignment:
+                                                          //               MainAxisAlignment
+                                                          //                   .spaceBetween,
+                                                          //           crossAxisAlignment:
+                                                          //               CrossAxisAlignment.center,
+                                                          //           children: [
+                                                          //             Text(
+                                                          //               'Write a comment',
+                                                          //               style: Theme.of(context)
+                                                          //                   .textTheme
+                                                          //                   .bodyText2
+                                                          //                   ?.copyWith(
+                                                          //                     color: Colors.black,
+                                                          //                   ),
+                                                          //             ),
+                                                          //             const Icon(
+                                                          //               Icons.link,
+                                                          //               color: Colors.black,
+                                                          //             ),
+                                                          //           ],
+                                                          //         ),
+                                                          //       ),
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
+                                                          SizedBox(
+                                                            height: 1.h,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                            }),
+                                      )
+                                    ],
+                                  ),
+                            SizedBox(
+                              height: 1.h,
+                            ),
+                          ],
+                        );
+                      });
                     },
                     separatorBuilder: (BuildContext context, int index) {
                       return Padding(
@@ -954,6 +1009,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
   }
 
   void showDialogBox() {
+    Storage.instance.setGuwahatiConnect();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -989,7 +1045,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                   size: 15.h,
                 ),
                 Text(
-                  'Hello Jonathan!',
+                  'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -1054,8 +1110,8 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
     final response =
         await ApiProvider.instance.postLike(id, is_like, 'guwahati-connect');
     if (response.success ?? false) {
-      Fluttertoast.showToast(msg: response.message??"Post Liked");
-      fetchGuwahatiConnect();
+      Fluttertoast.showToast(msg: response.message ?? "Post Liked");
+      // fetchGuwahatiConnect();
     } else {
       showError("Something went wrong");
     }

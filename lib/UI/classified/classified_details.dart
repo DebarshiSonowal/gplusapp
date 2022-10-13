@@ -76,7 +76,10 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                                       );
                                     },
                                     errorWidget: (cont, _, e) {
-                                      return Text(_);
+                                      return Image.network(
+                                        Constance.defaultImage,
+                                        fit: BoxFit.fitWidth,
+                                      );
                                     },
                                   ),
                                 ),

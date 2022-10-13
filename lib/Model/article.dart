@@ -1,7 +1,8 @@
 import 'category_name.dart';
 
 class Article {
-  int? id, is_app, status, view_count, share_count;
+  int? id, is_app, status, view_count, share_count, author;
+
   String? title,
       author_name,
       seo_name,
@@ -13,7 +14,6 @@ class Article {
       as_author_name,
       as_description,
       as_short_description,
-      author,
       web_url;
 
   CategoryName? first_cat_name;
@@ -25,6 +25,8 @@ class Article {
     id = json['id'] == null ? 0 : int.parse(json['id'].toString());
     is_app = json['is_app'] == null ? 0 : int.parse(json['is_app'].toString());
     status = json['status'] == null ? 1 : int.parse(json['status'].toString());
+    author =
+        json['author_id'] == null ? 1 : int.parse(json['author_id'].toString());
     view_count = json['view_count'] == null
         ? 1
         : int.parse(json['view_count'].toString());

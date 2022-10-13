@@ -95,7 +95,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/redeemOfferPage':
       return FadeTransitionPageRouteBuilder(page: RedeemOfferPage());
     case '/fooddealpage':
-      return FadeTransitionPageRouteBuilder(page: FoodDealPage());
+      return FadeTransitionPageRouteBuilder(
+          page: FoodDealPage(settings.arguments as int));
     case '/filterPage':
       return FadeTransitionPageRouteBuilder(page: FilterPage());
     case '/categorySelect':

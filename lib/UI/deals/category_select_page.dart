@@ -106,6 +106,12 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                             // color: Colors.black,
                           );
                         },
+                        errorWidget: (cont, _, e) {
+                          return Image.network(
+                            Constance.defaultImage,
+                            fit: BoxFit.fitWidth,
+                          );
+                        },
                         height: 30.h,
                         imageUrl: current.details?.image_file_name ??
                             Constance.salonImage),
@@ -446,7 +452,9 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
           ),
           backgroundColor: Colors.white,
           title: Text(
-            'Hello Jonathan!',
+            'Hello ${Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false).profile?.name}',
             style: Theme.of(context).textTheme.headline3?.copyWith(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -526,12 +534,23 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setRedeemDetails(response.details!);
+      fetchHistory();
       Navigation.instance.navigate('/redeemOfferPage');
     } else {
       showError(response.message ?? "Something went wrong");
     }
   }
-
+  void fetchHistory() async {
+    final response = await ApiProvider.instance.getRedeemHistory();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setRedeemHistory(response.data ?? []);
+    } else {
+      // _refreshController.refreshFailed();
+    }
+  }
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",

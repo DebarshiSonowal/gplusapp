@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:material_dialogs/material_dialogs.dart';
@@ -63,6 +64,14 @@ class _BigDealPageState extends State<BigDealPage> {
   void initState() {
     super.initState();
     // showDialogBox();
+    Future.delayed(Duration.zero,(){
+      if(!Storage.instance.isBigDeal){
+        showDialogBox();
+        debugPrint("Here1");
+      }else{
+        debugPrint("Here");
+      }
+    });
     fetchDeals();
     fetchHistory();
   }
@@ -309,7 +318,8 @@ class _BigDealPageState extends State<BigDealPage> {
                               children: current.category.map((e) {
                                 return GestureDetector(
                                   onTap: () {
-                                    selectedCategory(e.name);
+                                    // selectedCategory(e.name);
+                                    Navigation.instance.navigate('/fooddealpage',args: e.id!);
                                   },
                                   child: Container(
                                     // height: 10.h,
@@ -370,7 +380,7 @@ class _BigDealPageState extends State<BigDealPage> {
                               child: CustomButton(
                                   txt: 'View More ',
                                   onTap: () {
-                                    showDialogBox();
+
                                   }),
                             ),
                           ),
@@ -566,12 +576,13 @@ class _BigDealPageState extends State<BigDealPage> {
                                       ],
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 20.h,
-                                  ),
+
                                 ],
                               ),
                             ),
+                          ),
+                          SizedBox(
+                            height: 10.h,
                           ),
                         ],
                       ),
@@ -720,6 +731,7 @@ class _BigDealPageState extends State<BigDealPage> {
   }
 
   void showDialogBox() {
+    Storage.instance.setBigDeal();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -734,7 +746,9 @@ class _BigDealPageState extends State<BigDealPage> {
           ),
           backgroundColor: Colors.white,
           title: Text(
-            'Hello Jonathan!',
+            'Hello ${Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false).profile?.name}',
             style: Theme.of(context).textTheme.headline3?.copyWith(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,

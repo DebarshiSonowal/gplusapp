@@ -1,13 +1,20 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/NavigationBar.dart';
+import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
 
-class FoodDealPage  extends StatefulWidget {
-  const FoodDealPage({Key? key}) : super(key: key);
+class FoodDealPage extends StatefulWidget {
+  final int id;
+
+  FoodDealPage(this.id);
 
   @override
   State<FoodDealPage> createState() => _FoodDealPageState();
@@ -17,6 +24,15 @@ class _FoodDealPageState extends State<FoodDealPage> {
   String _value = 'Time';
 
   var current = 1;
+
+  var locality = '', order_by = 'Time';
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () => fetchCategories());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,170 +41,200 @@ class _FoodDealPageState extends State<FoodDealPage> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(7.w),
-              child: Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Constance.secondaryColor),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Icon(
-                      FontAwesomeIcons.spoon,
-                      color: Constance.primaryColor,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 5.w,
-                  ),
-                  Text(
-                    'Food',
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                      color: Constance.primaryColor,
-                      fontSize: 3.h,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              color: Constance.primaryColor,
-              height: 5.h,
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      showSortByOption();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          FontAwesomeIcons.sort,
-                          color: Colors.white,
-                        ),
-                        SizedBox(
-                          width: 1.w,
-                        ),
-                        Text(
-                          'Sort by',
-                          style:
-                          Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Colors.white,
-                            fontSize: 2.h,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 20.w,
-                    child: Center(
-                      child: Container(
-                        height: double.infinity,
-                        width: 0.5.w,
-                        color: Colors.white,
+        child: Consumer<DataProvider>(builder: (context, data, _) {
+          return Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(7.w),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 4),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Constance.secondaryColor),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: CachedNetworkImage(
+                        height: 7.h,
+                        imageUrl:
+                            '${data.category.firstWhere((element) => element.id == widget.id).image_file_name}',
+                        errorWidget: (cont, _, e) {
+                          return Image.network(
+                            Constance.defaultImage,
+                            fit: BoxFit.fitWidth,
+                          );
+                        },
+                        placeholder: (cont, _) {
+                          return Image.asset(
+                            Constance.logoIcon,
+                            // color: Colors.black,
+                          );
+                        },
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigation.instance.navigate('/filterPage');
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          FontAwesomeIcons.filter,
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    Text(
+                      '${data.category.firstWhere((element) => element.id == widget.id).name}',
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Constance.primaryColor,
+                            fontSize: 3.h,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                color: Constance.primaryColor,
+                height: 5.h,
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showSortByOption();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            FontAwesomeIcons.sort,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 1.w,
+                          ),
+                          Text(
+                            'Sort by',
+                            style:
+                                Theme.of(context).textTheme.headline6?.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 2.h,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20.w,
+                      child: Center(
+                        child: Container(
+                          height: double.infinity,
+                          width: 0.5.w,
                           color: Colors.white,
                         ),
-                        SizedBox(
-                          width: 1.w,
-                        ),
-                        Text(
-                          'Filter by',
-                          style:
-                          Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Colors.white,
-                            fontSize: 2.h,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 1.h,
-            ),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: Constance.discounts.length,
-                  itemBuilder: (cont, cout) {
-                    var data = Constance.discounts[cout];
-                    return Container(
-                      margin: EdgeInsets.all(5),
-                      child: ListTile(
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Icon(
-                            data.icon,
-                            size: 6.h,
-                          ),
-                        ),
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              data.title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  ?.copyWith(
-                                color: Colors.black,
-                                fontSize: 2.2.h,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 0.5.h,
-                            ),
-                            Text(
-                              data.address,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  ?.copyWith(
-                                color: Colors.grey.shade800,
-                                fontSize:
-                                1.5.h, // fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        trailing: CustomButton(
-                          txt: "View",
-                          onTap: () {
-                            Navigation.instance.navigate('/main');
-                          },
-                        ),
                       ),
-                    );
-                  }),
-            )
-          ],
-        ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigation.instance.navigate('/filterPage');
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            FontAwesomeIcons.filter,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 1.w,
+                          ),
+                          Text(
+                            'Filter by',
+                            style:
+                                Theme.of(context).textTheme.headline6?.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 2.h,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 1.h,
+              ),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: data.shops.length,
+                    itemBuilder: (cont, cout) {
+                      var current = data.shops[cout];
+                      return Container(
+                        margin: const EdgeInsets.all(5),
+                        child: ListTile(
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: CachedNetworkImage(
+                              // height: 6.h,
+                              width: 16.w,
+                              imageUrl: current.vendor?.image_file_name ?? "",
+                              placeholder: (cont, _) {
+                                return Image.asset(
+                                  Constance.logoIcon,
+                                  // color: Colors.black,
+                                );
+                              },
+                              errorWidget: (cont, _, e) {
+                                return Image.network(
+                                  Constance.defaultImage,
+                                  fit: BoxFit.fitWidth,
+                                );
+                              },
+                            ),
+                          ),
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                current.title ?? "",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    ?.copyWith(
+                                      color: Colors.black,
+                                      fontSize: 2.2.h,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              SizedBox(
+                                height: 0.5.h,
+                              ),
+                              Text(
+                                current.vendor?.address ?? "",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    ?.copyWith(
+                                      color: Colors.grey.shade800,
+                                      fontSize:
+                                          1.5.h, // fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ],
+                          ),
+                          trailing: CustomButton(
+                            txt: "View",
+                            onTap: () {
+                              Navigation.instance.navigate('/categorySelect',
+                                  args: current.id!);
+                            },
+                          ),
+                        ),
+                      );
+                    }),
+              )
+            ],
+          );
+        }),
       ),
       bottomNavigationBar: CustomNavigationBar(current),
     );
@@ -196,8 +242,11 @@ class _FoodDealPageState extends State<FoodDealPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(Constance.logoIcon,
-          fit: BoxFit.fill,scale: 2,),
+      title: Image.asset(
+        Constance.logoIcon,
+        fit: BoxFit.fill,
+        scale: 2,
+      ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
     );
@@ -230,10 +279,10 @@ class _FoodDealPageState extends State<FoodDealPage> {
                     Text(
                       'Sort by',
                       style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Constance.primaryColor,
-                        fontSize: 2.h,
-                        fontWeight: FontWeight.bold,
-                      ),
+                            color: Constance.primaryColor,
+                            fontSize: 2.h,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     SizedBox(
                       height: 4.h,
@@ -260,11 +309,11 @@ class _FoodDealPageState extends State<FoodDealPage> {
                         Text(
                           'Time',
                           style:
-                          Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Constance.primaryColor,
-                            fontSize: 1.8.h,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Constance.primaryColor,
+                                    fontSize: 1.8.h,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     ),
@@ -282,7 +331,9 @@ class _FoodDealPageState extends State<FoodDealPage> {
                             _(() {
                               setState(() {
                                 _value = value ?? "";
+                                order_by=_value;
                               });
+                              fetchCategories();
                             });
                           },
                           activeColor: Constance.primaryColor,
@@ -290,11 +341,11 @@ class _FoodDealPageState extends State<FoodDealPage> {
                         Text(
                           'Alphabetical',
                           style:
-                          Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Constance.primaryColor,
-                            fontSize: 1.8.h,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Constance.primaryColor,
+                                    fontSize: 1.8.h,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     ),
@@ -303,6 +354,32 @@ class _FoodDealPageState extends State<FoodDealPage> {
               ),
             );
           });
+        });
+  }
+
+  void fetchCategories() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance
+        .getShopByCategory(widget.id, locality, order_by);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setShops(response.shops ?? []);
+      Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
+      showError(response.message ?? "something went wrong");
+    }
+  }
+
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
         });
   }
 }

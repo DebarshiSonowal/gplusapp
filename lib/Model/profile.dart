@@ -113,3 +113,23 @@ class ProfileResponse {
     this.msg = msg ?? "Something went wrong";
   }
 }
+
+class AuthorResponse {
+  bool? success;
+  String? msg;
+  Profile? profile;
+
+  // List<Topick> topicks = [];
+  // List<GeoTopick> geoTopicks = [];
+
+  AuthorResponse.fromJson(json) {
+    success = true;
+    msg = json['message'] ?? "";
+    profile = Profile.fromJson(json['data']);
+  }
+
+  AuthorResponse.withError(msg) {
+    success = false;
+    this.msg = msg ?? "Something went wrong";
+  }
+}

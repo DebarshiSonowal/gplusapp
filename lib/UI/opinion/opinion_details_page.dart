@@ -30,6 +30,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   var categories = ['international', 'assam', 'guwahati', 'india'];
   var dropdownvalue = 'international';
   WebViewController? _controller;
+  bool like = false, dislike = false;
 
   @override
   void initState() {
@@ -143,12 +144,22 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   child: IconButton(
                                     onPressed: () {
                                       postLike(data.opinion?.id, 0);
+                                      setState(() {
+                                        like = !like;
+                                        if (dislike) {
+                                          dislike = !like;
+                                        }
+                                      });
                                     },
                                     splashRadius: 20.0,
-                                    splashColor: Constance.secondaryColor,
-                                    icon: const Icon(
+                                    splashColor: !like
+                                        ? Constance.secondaryColor
+                                        : Constance.primaryColor,
+                                    icon: Icon(
                                       Icons.thumb_up,
-                                      color: Constance.primaryColor,
+                                      color: like
+                                          ? Constance.secondaryColor
+                                          : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -160,12 +171,22 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   child: IconButton(
                                     onPressed: () {
                                       postLike(data.opinion?.id, 1);
+                                      setState(() {
+                                        dislike = !dislike;
+                                        if (like) {
+                                          like = !dislike;
+                                        }
+                                      });
                                     },
                                     splashRadius: 20.0,
-                                    splashColor: Constance.secondaryColor,
-                                    icon: const Icon(
+                                    splashColor: !dislike
+                                        ? Constance.secondaryColor
+                                        : Constance.primaryColor,
+                                    icon: Icon(
                                       Icons.thumb_down,
-                                      color: Constance.primaryColor,
+                                      color: dislike
+                                          ? Constance.secondaryColor
+                                          : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -218,8 +239,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             //       ),
                             // ),
                             Html(
-                              data: data.opinion?.description?.trim() ??
-                                  "",
+                              data: data.opinion?.description?.trim() ?? "",
                               shrinkWrap: true,
                               style: {
                                 '#': Style(
@@ -255,9 +275,10 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                       );
                                     },
                                     errorWidget: (cont, _, e) {
-                                      // print(e);
-                                      print(_);
-                                      return Text(_);
+                                      return Image.network(
+                                        Constance.defaultImage,
+                                        fit: BoxFit.fitWidth,
+                                      );
                                     },
                                   ),
                                 ),
@@ -303,41 +324,85 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             ),
                             Row(
                               children: [
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: const Icon(
-                                    Icons.thumb_up,
-                                    color: Constance.secondaryColor,
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      postLike(data.opinion?.id, 0);
+                                      setState(() {
+                                        like = !like;
+                                        if (dislike) {
+                                          dislike = !like;
+                                        }
+                                      });
+                                    },
+                                    splashRadius: 20.0,
+                                    splashColor: !like
+                                        ? Constance.secondaryColor
+                                        : Constance.primaryColor,
+                                    icon: Icon(
+                                      Icons.thumb_up,
+                                      color: like
+                                          ? Constance.secondaryColor
+                                          : Constance.primaryColor,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 4.w,
+                                  width: 2.w,
                                 ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: const Icon(
-                                    Icons.thumb_down,
-                                    color: Constance.primaryColor,
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      postLike(data.opinion?.id, 1);
+                                      setState(() {
+                                        dislike = !dislike;
+                                        if (like) {
+                                          like = !dislike;
+                                        }
+                                      });
+                                    },
+                                    splashRadius: 20.0,
+                                    splashColor: !dislike
+                                        ? Constance.secondaryColor
+                                        : Constance.primaryColor,
+                                    icon: Icon(
+                                      Icons.thumb_down,
+                                      color: dislike
+                                          ? Constance.secondaryColor
+                                          : Constance.primaryColor,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 4.w,
+                                  width: 2.w,
                                 ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: const Icon(
-                                    Icons.comment,
-                                    color: Constance.primaryColor,
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    splashRadius: 20.0,
+                                    splashColor: Constance.secondaryColor,
+                                    icon: const Icon(
+                                      Icons.comment,
+                                      color: Constance.primaryColor,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 4.w,
+                                  width: 2.w,
                                 ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: const Icon(
-                                    Icons.share,
-                                    color: Constance.primaryColor,
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    splashRadius: 20.0,
+                                    splashColor: Constance.secondaryColor,
+                                    icon: const Icon(
+                                      Icons.share,
+                                      color: Constance.primaryColor,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -480,9 +545,11 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                                       },
                                                       errorWidget:
                                                           (cont, _, e) {
-                                                        // print(e);
-                                                        print(_);
-                                                        return Text(_);
+                                                        return Image.network(
+                                                          Constance
+                                                              .defaultImage,
+                                                          fit: BoxFit.fitWidth,
+                                                        );
                                                       },
                                                     ),
                                                   ),
@@ -657,19 +724,21 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
     final response = await ApiProvider.instance.getOpinion(5, 1);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext!,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
           .setOpinions(response.opinion ?? []);
       // _refreshController.refreshCompleted();
     } else {
       // _refreshController.refreshFailed();
     }
   }
+
   void postLike(id, is_like) async {
-    final response = await ApiProvider.instance.postLike(id, is_like,'opinion');
+    final response =
+        await ApiProvider.instance.postLike(id, is_like, 'opinion');
     if (response.success ?? false) {
       Fluttertoast.showToast(msg: "Post Liked");
-      fetchDetails();
+      // fetchDetails();
     } else {
       showError("Something went wrong");
     }

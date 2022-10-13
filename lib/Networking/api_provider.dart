@@ -30,12 +30,15 @@ import '../Model/generic_response.dart';
 // import '../Model/login_response.dart';
 import '../Model/membership.dart';
 import '../Model/opinion.dart';
+import '../Model/order.dart';
 import '../Model/poll_of_the_week.dart';
 import '../Model/promoted_deal.dart';
+import '../Model/razorpay_key.dart';
 import '../Model/redeem_details.dart';
 import '../Model/redeem_history.dart';
 import '../Model/refer_earn_response.dart';
 import '../Model/search_result.dart';
+import '../Model/shop.dart';
 import '../Model/shop_category.dart';
 import '../Model/top_picks.dart';
 import '../Model/topick.dart';
@@ -175,6 +178,36 @@ class ApiProvider {
     }
   }
 
+  Future<AuthorResponse> getAuthor(id) async {
+    var url = "${baseUrl}/app/author-detail/${id}";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+      );
+      debugPrint("AuthorResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return AuthorResponse.fromJson(response?.data);
+      } else {
+        debugPrint("AuthorResponse error: ${response?.data}");
+        return AuthorResponse.withError("Something went wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("AuthorResponse response: ${e.response}");
+      return AuthorResponse.withError(e.message);
+    }
+  }
+
   Future<CommentResponse> getComments(comment_for_id, comment_for) async {
     var url = "${baseUrl}/comment";
     BaseOptions option =
@@ -226,6 +259,7 @@ class ApiProvider {
     has_ghy_connect_notify_perm,
     has_classified_notify_perm,
     gender,
+    referal,
   ) async {
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -254,6 +288,7 @@ class ApiProvider {
       'has_deal_notify_perm': has_deal_notify_perm,
       'has_ghy_connect_notify_perm': has_ghy_connect_notify_perm,
       'has_classified_notify_perm': has_classified_notify_perm,
+      'referred_by_code': referal,
     };
     var url = "${baseUrl}/profile";
     dio = Dio(option);
@@ -791,6 +826,43 @@ class ApiProvider {
     }
   }
 
+  Future<ShopResponse> getShopByCategory(id, locality_ids, order_by) async {
+    var url = "${baseUrl}/app/deal-list/${id}";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'locality_ids': locality_ids,
+      'order_by': order_by,
+      // “locality_ids”:”2,3,4”
+      // “order_by”:”alphabet/timeline”
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("ShopResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ShopResponse.fromJson(response?.data);
+      } else {
+        debugPrint("ShopResponse error: ${response?.data}");
+        return ShopResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("ShopResponse error: ${e.response}");
+      return ShopResponse.withError(e.message);
+    }
+  }
+
   Future<DealDetailsResponse> getDealDetails(id) async {
     var url = "${baseUrl}/app/deal-details/$id";
     BaseOptions option =
@@ -921,6 +993,70 @@ class ApiProvider {
       }
     } on DioError catch (e) {
       debugPrint("enterPreferences error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<RazorpayResponse> fetchRazorpay() async {
+    var url = "${baseUrl}/payment-gateway";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    try {
+      Response? response = await dio?.get(url.toString());
+      debugPrint("Razorpay response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return RazorpayResponse.fromJson(response?.data);
+      } else {
+        debugPrint("Razorpay error: ${response?.data}");
+        return RazorpayResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("Razorpay error: ${e.response}");
+      return RazorpayResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> verifyPayment(
+      order_code, razorpay_payment_id, amount) async {
+    var url = "${baseUrl}/app/order/verify-payment";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'order_code': order_code,
+      'razorpay_payment_id': razorpay_payment_id,
+      'amount': amount,
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("verifyPayment response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("verifyPayment error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("verifyPayment error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
   }
@@ -1486,7 +1622,7 @@ class ApiProvider {
     };
     //attachment_list[0][file_data]
     //attachment_list[0][file_type]
-    // debugPrint(jsonEncode(data));
+    debugPrint(jsonEncode(data));
 
     try {
       Response? response = await dio?.post(
@@ -1544,6 +1680,45 @@ class ApiProvider {
     } on DioError catch (e) {
       debugPrint("postComment error: ${e.response}");
       return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<CreateOrderResponse> createOrder(
+      subscription_id, use_referral_point) async {
+    var url = "${baseUrl}/app/order/subscription";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'subscription_id': subscription_id,
+      'use_referral_point': use_referral_point,
+    };
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("CreateOrderResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return CreateOrderResponse.fromJson(response?.data);
+      } else {
+        debugPrint("CreateOrderResponse error: ${response?.data}");
+        return CreateOrderResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("CreateOrderResponse error: ${e.response}");
+      return CreateOrderResponse.withError(e.message);
     }
   }
 
