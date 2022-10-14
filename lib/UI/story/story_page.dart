@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -122,8 +123,8 @@ class _StoryPageState extends State<StoryPage> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Navigation.instance
-                                    .navigate('/authorPage', args: data.selectedArticle?.author);
+                                Navigation.instance.navigate('/authorPage',
+                                    args: data.selectedArticle?.author);
                               },
                               child: Text(
                                 '${data.selectedArticle?.author_name ?? "GPlus"}, ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
@@ -151,7 +152,7 @@ class _StoryPageState extends State<StoryPage> {
                                       postLike(data.selectedArticle?.id, 0);
                                       setState(() {
                                         like = !like;
-                                        if(dislike){
+                                        if (dislike) {
                                           dislike = !like;
                                         }
                                       });
@@ -163,10 +164,8 @@ class _StoryPageState extends State<StoryPage> {
                                     icon: Icon(
                                       Icons.thumb_up,
                                       color: like
-                                          ? Constance
-                                          .secondaryColor
-                                          : Constance
-                                          .primaryColor,
+                                          ? Constance.secondaryColor
+                                          : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -180,7 +179,7 @@ class _StoryPageState extends State<StoryPage> {
                                       postLike(data.selectedArticle?.id, 1);
                                       setState(() {
                                         dislike = !dislike;
-                                        if(like){
+                                        if (like) {
                                           like = !dislike;
                                         }
                                       });
@@ -192,10 +191,8 @@ class _StoryPageState extends State<StoryPage> {
                                     icon: Icon(
                                       Icons.thumb_down,
                                       color: dislike
-                                          ? Constance
-                                          .secondaryColor
-                                          : Constance
-                                          .primaryColor,
+                                          ? Constance.secondaryColor
+                                          : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -220,7 +217,13 @@ class _StoryPageState extends State<StoryPage> {
                                 Material(
                                   type: MaterialType.transparency,
                                   child: IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Share.share(data
+                                                  .selectedArticle?.web_url ==
+                                              ""
+                                          ? 'check out our website https://guwahatiplus.com/'
+                                          : '${data.selectedArticle?.web_url}');
+                                    },
                                     splashRadius: 20.0,
                                     splashColor: Constance.secondaryColor,
                                     icon: const Icon(
@@ -341,7 +344,7 @@ class _StoryPageState extends State<StoryPage> {
                                       postLike(data.selectedArticle?.id, 0);
                                       setState(() {
                                         like = !like;
-                                        if(dislike){
+                                        if (dislike) {
                                           dislike = !like;
                                         }
                                       });
@@ -353,10 +356,8 @@ class _StoryPageState extends State<StoryPage> {
                                     icon: Icon(
                                       Icons.thumb_up,
                                       color: like
-                                          ? Constance
-                                          .secondaryColor
-                                          : Constance
-                                          .primaryColor,
+                                          ? Constance.secondaryColor
+                                          : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -370,7 +371,7 @@ class _StoryPageState extends State<StoryPage> {
                                       postLike(data.selectedArticle?.id, 1);
                                       setState(() {
                                         dislike = !dislike;
-                                        if(like){
+                                        if (like) {
                                           like = !dislike;
                                         }
                                       });
@@ -382,10 +383,8 @@ class _StoryPageState extends State<StoryPage> {
                                     icon: Icon(
                                       Icons.thumb_down,
                                       color: dislike
-                                          ? Constance
-                                          .secondaryColor
-                                          : Constance
-                                          .primaryColor,
+                                          ? Constance.secondaryColor
+                                          : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -410,7 +409,13 @@ class _StoryPageState extends State<StoryPage> {
                                 Material(
                                   type: MaterialType.transparency,
                                   child: IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Share.share(data
+                                          .selectedArticle?.web_url ==
+                                          ""
+                                          ? 'check out our website https://guwahatiplus.com/'
+                                          : '${data.selectedArticle?.web_url}');
+                                    },
                                     splashRadius: 20.0,
                                     splashColor: Constance.secondaryColor,
                                     icon: const Icon(

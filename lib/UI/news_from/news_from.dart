@@ -23,7 +23,6 @@ class _NewsFromState extends State<NewsFrom> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-
   @override
   void initState() {
     super.initState();
@@ -173,11 +172,14 @@ class _NewsFromState extends State<NewsFrom> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigation.instance.navigate('/story',
-                                args:
-                                '${widget.categ},${data.news_from[0].seo_name}');
+                            if (data.profile?.is_plan_active ?? false) {
+                              Navigation.instance.navigate('/story',
+                                  args:
+                                      '${widget.categ},${data.news_from[0].seo_name}');
+                            } else {
+                              Constance.showMembershipPrompt(context);
+                            }
                           },
-
                           child: Text(
                             data.news_from[0].title ??
                                 'It is a long established fact that a reader will be distracted by the readable content of a',
@@ -196,9 +198,7 @@ class _NewsFromState extends State<NewsFrom> {
                           height: 2.h,
                         ),
                         Text(
-                          '${data.news_from[0].author_name}, ${
-                              Jiffy(data.news_from[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()
-                              }',
+                          '${data.news_from[0].author_name}, ${Jiffy(data.news_from[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
                           style: Theme.of(Navigation
                                   .instance.navigatorKey.currentContext!)
                               .textTheme
@@ -222,9 +222,13 @@ class _NewsFromState extends State<NewsFrom> {
                               if (count != 0) {
                                 return GestureDetector(
                                   onTap: () {
-                                    Navigation.instance.navigate('/story',
-                                        args:
-                                        '${widget.categ},${item.seo_name}');
+                                    if (data.profile?.is_plan_active ?? false) {
+                                      Navigation.instance.navigate('/story',
+                                          args:
+                                              '${widget.categ},${item.seo_name}');
+                                    } else {
+                                      Constance.showMembershipPrompt(context);
+                                    }
                                   },
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
@@ -248,7 +252,8 @@ class _NewsFromState extends State<NewsFrom> {
                                               Expanded(
                                                 child: CachedNetworkImage(
                                                   imageUrl:
-                                                      item.image_file_name ?? '',
+                                                      item.image_file_name ??
+                                                          '',
                                                   fit: BoxFit.fill,
                                                   placeholder: (cont, _) {
                                                     return Image.asset(
@@ -271,7 +276,12 @@ class _NewsFromState extends State<NewsFrom> {
                                                 // item.publish_date
                                                 //         ?.split(" ")[0] ??
                                                 //     "",
-                                                Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                                                Jiffy(
+                                                        item.publish_date
+                                                                ?.split(
+                                                                    " ")[0] ??
+                                                            "",
+                                                        "yyyy-MM-dd")
                                                     .format("dd/MM/yyyy"),
                                                 style: Theme.of(context)
                                                     .textTheme
@@ -311,7 +321,8 @@ class _NewsFromState extends State<NewsFrom> {
                                                 height: 1.h,
                                               ),
                                               Text(
-                                                item.author_name ?? "GPlus News",
+                                                item.author_name ??
+                                                    "GPlus News",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .headline6
@@ -352,11 +363,11 @@ class _NewsFromState extends State<NewsFrom> {
                     ),
                   )
                 : Center(
-                  child: SizedBox(
-                      height: 2.h,
-                      width: 2.h,
-                      child: const CircularProgressIndicator()),
-                ),
+                    child: SizedBox(
+                        height: 2.h,
+                        width: 2.h,
+                        child: const CircularProgressIndicator()),
+                  ),
           );
         }),
       ),
@@ -379,12 +390,12 @@ class _NewsFromState extends State<NewsFrom> {
     return "${str[0].toUpperCase()}${str.substring(1).toLowerCase()}";
   }
 
-  void fetchContent() async{
+  void fetchContent() async {
     final response = await ApiProvider.instance.getArticle(widget.categ);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setNewsFrom(response.articles ?? []);
       // _refreshController.refreshCompleted();
     } else {

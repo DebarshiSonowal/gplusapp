@@ -23,6 +23,7 @@ class Profile {
   bool? has_deal_notify_perm,
       has_ghy_connect_notify_perm,
       has_classified_notify_perm;
+  bool is_plan_active = false;
   List<Address> addresses = [];
 
   Profile.fromJson(json) {
@@ -66,6 +67,12 @@ class Profile {
     addresses = json['addresses'] == null
         ? []
         : (json['addresses'] as List).map((e) => Address.fromJson(e)).toList();
+    is_plan_active = json['plan_id'] == null ||
+            json['plan_id'].toString() == '0' ||
+            json['plan_active_date'] == null ||
+            json['plan_expiry_date'] == null
+        ? false
+        : true;
   }
 }
 

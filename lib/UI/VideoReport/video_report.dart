@@ -151,10 +151,16 @@ class _VideoReportState extends State<VideoReport> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            Navigation.instance.navigate(
-                                                '/videoPlayer',
-                                                args: data
-                                                    .video_news[0].youtube_id);
+                                            if (data.profile?.is_plan_active ??
+                                                false) {
+                                              Navigation.instance.navigate(
+                                                  '/videoPlayer',
+                                                  args: data.video_news[0]
+                                                      .youtube_id);
+                                            } else {
+                                              Constance.showMembershipPrompt(
+                                                  context);
+                                            }
                                           },
                                           child: Text(
                                             'Play Now',
@@ -270,9 +276,17 @@ class _VideoReportState extends State<VideoReport> {
                                             ),
                                             GestureDetector(
                                               onTap: () {
-                                                Navigation.instance.navigate(
-                                                    '/videoPlayer',
-                                                    args: item.youtube_id);
+                                                if (data.profile
+                                                        ?.is_plan_active ??
+                                                    false) {
+                                                  Navigation.instance.navigate(
+                                                      '/videoPlayer',
+                                                      args: item.youtube_id);
+                                                } else {
+                                                  Constance
+                                                      .showMembershipPrompt(
+                                                          context);
+                                                }
                                               },
                                               child: Container(
                                                 width: 40.w,
@@ -325,7 +339,11 @@ class _VideoReportState extends State<VideoReport> {
                                         Text(
                                           // item.publish_date?.split(" ")[0] ??
                                           //     "",
-                                          Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                                          Jiffy(
+                                                  item.publish_date
+                                                          ?.split(" ")[0] ??
+                                                      "",
+                                                  "yyyy-MM-dd")
                                               .format("dd/MM/yyyy"),
                                           style: Theme.of(context)
                                               .textTheme

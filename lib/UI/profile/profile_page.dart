@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:jiffy/jiffy.dart';
+import 'package:provider/provider.dart';
 
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 import 'package:sizer/sizer.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -21,112 +25,121 @@ class _ProfilePageState extends State<ProfilePage> {
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'My Account',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline3
-                  ?.copyWith(
-                  color: Constance.secondaryColor,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 3.h,
-            ),
-            Card(
-              color: Constance.primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+        child: Consumer<DataProvider>(builder: (context, data, _) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'My Account',
+                style: Theme.of(context).textTheme.headline3?.copyWith(
+                    color: Constance.secondaryColor,
+                    fontWeight: FontWeight.bold),
               ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: 1.5.h, horizontal: 4.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Present Plan',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline5
-                          ?.copyWith(
-                        color: Colors.white,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Rs 999/',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1
-                              ?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "month",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline4
-                              ?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    Text(
-                      'expires on 25th October,2022',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(
-                        color: Colors.white,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    Text(
-                      '164 Days left',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline4
-                          ?.copyWith(
-                        color: Colors.white,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CustomButton(
-                        txt: 'Buy next membership term',
-                        onTap: () {},
-                      ),
-                    ),
-                  ],
-                ),
+              SizedBox(
+                height: 3.h,
               ),
-            ),
-          ],
-        ),
+              data.profile?.is_plan_active ?? false
+                  ? Card(
+                      color: Constance.primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 1.5.h, horizontal: 4.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Present Plan',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            SizedBox(
+                              height: 1.5.h,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  'Rs ${data.memberships.firstWhere((element) => element.id == data.profile?.plan_id).base_price ?? '999'}/',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline1
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                Text(
+                                  data.memberships
+                                          .firstWhere((element) =>
+                                              element.id ==
+                                              data.profile?.plan_id)
+                                          .duration
+                                          ?.split(' ')[1] ??
+                                      "month",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 1.5.h,
+                            ),
+                            Text(
+                              'expires on ${Jiffy(data.profile?.plan_expiry_date ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            SizedBox(
+                              height: 2.h,
+                            ),
+                            Text(
+                              '${Jiffy(data.profile?.plan_expiry_date ?? "", "yyyy-MM-dd").fromNow().substring(2)} left',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              child: CustomButton(
+                                txt: 'Buy next membership term',
+                                onTap: () {
+                                  Navigation.instance.navigate('/beamember');
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ],
+          );
+        }),
       ),
     );
   }
@@ -156,7 +169,6 @@ class _ProfilePageState extends State<ProfilePage> {
         IconButton(
           onPressed: () {
             Navigation.instance.navigate('/search');
-
           },
           icon: Icon(Icons.search),
         ),

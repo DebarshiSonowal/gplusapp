@@ -50,7 +50,7 @@ class ApiProvider {
   static final ApiProvider instance = ApiProvider._();
   final String baseUrl = "http://gplus.shecure.co.in/api/v1";
 
-  // final String baseUrl = "http://develop.guwahatiplus.com/api/v1";
+  final String baseUrl2 = "http://develop.guwahatiplus.com/api/v1";
   final String homeUrl = "https://www.guwahatiplus.com/api/v1";
   final String path = "/books";
 
@@ -305,7 +305,7 @@ class ApiProvider {
         return ProfileResponse.withError("Something went wrong");
       }
     } on DioError catch (e) {
-      debugPrint("create Profile error: ${e.response}");
+      debugPrint("create Profile error: ${e.response} ${e}");
       return ProfileResponse.withError(e.message);
     }
   }
@@ -423,6 +423,7 @@ class ApiProvider {
       'Authorization': 'Bearer ${Storage.instance.token}'
       // 'APP-KEY': ConstanceData.app_key
     });
+    // var url = "${homeUrl}/${categ_name}/${slug}";
     var url = "${homeUrl}/${categ_name}/${slug}";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -468,7 +469,7 @@ class ApiProvider {
         url,
         queryParameters: data,
       );
-      debugPrint("Article response: ${response?.data}");
+      // debugPrint("Article response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return OpinionResponse.fromJson(response?.data);
       } else {
@@ -1191,7 +1192,8 @@ class ApiProvider {
         url,
         // queryParameters: data,
       );
-      debugPrint("toppicks response: ${response?.data}");
+      // debugPrint("toppicks response: ${response?.data}");
+      debugPrint("toppicks response: ");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return TopPicksResponse.fromJson(response?.data);
       } else {

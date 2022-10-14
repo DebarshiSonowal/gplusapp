@@ -24,7 +24,6 @@ class _OpinionPageState extends State<OpinionPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-
   void _onRefresh() async {
     // monitor network fetch
     page_no = 1;
@@ -160,8 +159,12 @@ class _OpinionPageState extends State<OpinionPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigation.instance.navigate('/opinionDetails',
-                                args: data.opinions[0].seo_name?.trim());
+                            if (data.profile?.is_plan_active ?? false) {
+                              Navigation.instance.navigate('/opinionDetails',
+                                  args: data.opinions[0].seo_name?.trim());
+                            } else {
+                              Constance.showMembershipPrompt(context);
+                            }
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 5.w),
@@ -234,9 +237,13 @@ class _OpinionPageState extends State<OpinionPage> {
                               var item = data.opinions[count];
                               return GestureDetector(
                                 onTap: () {
-                                  Navigation.instance.navigate(
-                                      '/opinionDetails',
-                                      args: item.seo_name?.trim());
+                                  if (data.profile?.is_plan_active ?? false) {
+                                    Navigation.instance.navigate(
+                                        '/opinionDetails',
+                                        args: item.seo_name?.trim());
+                                  } else {
+                                    Constance.showMembershipPrompt(context);
+                                  }
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(

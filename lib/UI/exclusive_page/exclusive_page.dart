@@ -172,9 +172,13 @@ class _ExclusivePageState extends State<ExclusivePage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigation.instance.navigate('/story',
-                                args:
-                                    '${'exclusive-news'},${data.home_exclusive[0].seo_name}');
+                            if (data.profile?.is_plan_active ?? false) {
+                              Navigation.instance.navigate('/story',
+                                  args:
+                                      '${'exclusive-news'},${data.home_exclusive[0].seo_name}');
+                            } else {
+                              Constance.showMembershipPrompt(context);
+                            }
                           },
                           child: Text(
                             data.home_exclusive[0].title ??
@@ -194,9 +198,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
                           height: 2.h,
                         ),
                         Text(
-                          '${data.home_exclusive[0].author_name}, ${
-                              Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd")
-                                  .fromNow()}',
+                          '${data.home_exclusive[0].author_name}, ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
                           style: Theme.of(Navigation
                                   .instance.navigatorKey.currentContext!)
                               .textTheme
@@ -220,9 +222,13 @@ class _ExclusivePageState extends State<ExclusivePage> {
                             if (count != 0) {
                               return GestureDetector(
                                 onTap: () {
-                                  Navigation.instance.navigate('/story',
-                                      args:
-                                          '${'exclusive-news'},${item.seo_name}');
+                                  if (data.profile?.is_plan_active ?? false) {
+                                    Navigation.instance.navigate('/story',
+                                        args:
+                                            '${'exclusive-news'},${item.seo_name}');
+                                  } else {
+                                    Constance.showMembershipPrompt(context);
+                                  }
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
@@ -268,7 +274,11 @@ class _ExclusivePageState extends State<ExclusivePage> {
                                               // item.publish_date
                                               //         ?.split(" ")[0] ??
                                               //     "",
-                                              Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                                              Jiffy(
+                                                      item.publish_date
+                                                              ?.split(" ")[0] ??
+                                                          "",
+                                                      "yyyy-MM-dd")
                                                   .format("dd/MM/yyyy"),
                                               style: Theme.of(context)
                                                   .textTheme

@@ -122,7 +122,7 @@ class _BeAMemberState extends State<BeAMember> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Hello Jonathan!',
+                    'Hello ${data.profile?.name}',
                     style: Theme.of(context).textTheme.headline4?.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -412,11 +412,11 @@ class _BeAMemberState extends State<BeAMember> {
     if (response.success ?? false) {
       Navigation.instance.goBack();
       tempTotal = response.order?.base_price ?? 0;
-      temp_order_id = response.order?.id.toString() ?? "";
+      temp_order_id = response.order?.voucher_no.toString() ?? "";
       startPayment(
           razorpay,
           response.order?.base_price,
-          response.order?.id,
+          response.order?.voucher_no,
           Provider.of<DataProvider>(
                   Navigation.instance.navigatorKey.currentContext ?? context,
                   listen: false)
@@ -485,7 +485,7 @@ class _BeAMemberState extends State<BeAMember> {
   void _handlePaymentError(PaymentFailureResponse response) {
     // Do something when payment fails
     print('error ${response.message} ${response.code} ');
-    showError(response.message??"Something went wrong");
+    showError(response.message ?? "Something went wrong");
     // Navigation.instance.goBack();
   }
 
@@ -497,8 +497,11 @@ class _BeAMemberState extends State<BeAMember> {
     final response1 = await ApiProvider.instance
         .verifyPayment(temp_order_id, response.paymentId, tempTotal ?? 1);
     if (response1.success ?? false) {
-      Navigation.instance.goBack();
-      Fluttertoast.showToast(msg: response1.message ?? "Something went wrong");
+      // Navigation.instance.goBack();
+      showDialogBox();
+      // Fluttertoast.showToast(
+      //     msg: "Payment Successful. Congratulations You are now a member. ");
+
     } else {
       Navigation.instance.goBack();
       showError(response1.message ?? "Something went wrong");
@@ -545,5 +548,60 @@ class _BeAMemberState extends State<BeAMember> {
     } else {
       showError(response.message ?? "Something went wrong");
     }
+  }
+
+  void showDialogBox() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          contentPadding: EdgeInsets.zero,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          title: Text(
+            'Congratulations',
+            style: Theme.of(context).textTheme.headline1?.copyWith(
+                  color: Constance.secondaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          content: Container(
+            padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
+            // height: 50.h,
+            width: 80.w,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'You are now a member of Gplus community',
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.black,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(height: 1.h),
+                SizedBox(
+                  width: double.infinity,
+                  child: CustomButton(
+                      txt: 'Close',
+                      onTap: () {
+                        Navigation.instance.goBack();
+                        Navigation.instance.goBack();
+                      }),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

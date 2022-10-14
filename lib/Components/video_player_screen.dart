@@ -9,6 +9,9 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+// import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+// import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+
 class VideoPlayerScreen extends StatefulWidget {
   final String youtube_id;
 
@@ -24,6 +27,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
   PageController controller = PageController(initialPage: 0);
+
   // PodPlayerController? _controller;
   @override
   void dispose() {
@@ -31,6 +35,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     _controller?.dispose();
     super.dispose();
   }
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +53,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 listen: false)
             .home_weekly
             .indexWhere((element) => element.youtube_id == widget.youtube_id));
+        _controller = YoutubePlayerController(
+          initialVideoId: widget.youtube_id,
+          flags: YoutubePlayerFlags(
+            autoPlay: true,
+            mute: true,
+          ),
+        );
       });
       // _controller = PodPlayerController(
       //   playVideoFrom: PlayVideoFrom.network(
@@ -76,44 +88,31 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             // _controller = PodPlayerController(
             //   playVideoFrom: PlayVideoFrom.youtube(
             //       'https://youtu.be/${current.youtube_id}'),
-            // );
-                        _controller = YoutubePlayerController(
-              initialVideoId:
-                  // widget.youtube_id ??
-                  '${current.youtube_id}' ?? 'iLnmTe5Q2Qw',
-              flags: const YoutubePlayerFlags(
-                autoPlay: true,
-                mute: false,
-              ),
-            );
+            // _controller?.load(current.youtube_id!);
+
             return SizedBox(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              child: VisibilityDetector(
-                key: Key(current.youtube_id!),
-                onVisibilityChanged: (visibilityInfo) {
-                  var visiblePercentage = visibilityInfo.visibleFraction * 100;
-                  // if (visiblePercentage < 80) {
-                  //   _controller?.pause();
-                  //   print('pause');
-                  // }
-                },
-                // child: PodVideoPlayer(controller: _controller),
-                child: YoutubePlayer(
-                  controller: _controller!,
-                  showVideoProgressIndicator: true,
-                  aspectRatio: 2 / 3,
-                  // videoProgressIndicatorColor: Colors.amber,
-                  progressColors: const ProgressBarColors(
-                    playedColor: Colors.amber,
-                    handleColor: Colors.amberAccent,
+              child: YoutubePlayer(
+                controller: YoutubePlayerController(
+                  initialVideoId: current.youtube_id!,
+                  flags: const YoutubePlayerFlags(
+                    autoPlay: false,
+                    mute: false,
                   ),
-                  onReady: () {
-                    // _controller
-                    //     .addListener(() {});
-                    _controller!.play();
-                  },
                 ),
+                showVideoProgressIndicator: true,
+                aspectRatio: 2 / 3,
+                // videoProgressIndicatorColor: Colors.amber,
+                progressColors: const ProgressBarColors(
+                  playedColor: Colors.amber,
+                  handleColor: Colors.amberAccent,
+                ),
+                onReady: () {
+                  // _controller
+                  //     .addListener(() {});
+                  _controller!.play();
+                },
               ),
             );
           },
