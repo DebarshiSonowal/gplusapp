@@ -1092,17 +1092,19 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
     final response = await ApiProvider.instance.getGuwahatiConnect();
     if (response.success ?? false) {
       // setGuwahatiConnect
+      Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setGuwahatiConnect(response.posts);
-      Navigation.instance.goBack();
+
     } else {
+      Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setGuwahatiConnect(response.posts);
-      Navigation.instance.goBack();
+
     }
   }
 

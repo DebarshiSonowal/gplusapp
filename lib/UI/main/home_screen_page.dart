@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, () => fetchProfile());
     fetchHome();
     fetchOpinion();
     fetchGPlusExcl();
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchToppicks();
     fetchAds();
     askPermissions();
-    Future.delayed(Duration.zero, () => fetchProfile());
+
     Future.delayed(
         Duration.zero,
         () => Provider.of<DataProvider>(
@@ -1177,7 +1178,7 @@ for an unparalleled publication, that people call their''',
   }
 
   void showPopUp() {
-    Future.delayed(Duration(milliseconds: Random().nextInt(420)), () {
+    Future.delayed(Duration(milliseconds: Random().nextInt(10000)), () {
       // code will be here
       showDialogBox();
     });

@@ -998,6 +998,42 @@ class ApiProvider {
     }
   }
 
+  Future<GenericResponse> setAsFavourite(id, type) async {
+    var url = "${baseUrl}/app/favourite";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'type': type,
+      'favourite_for_id': id,
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("setAsFavourite response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("setAsFavourite error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      debugPrint("setAsFavourite error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
   Future<RazorpayResponse> fetchRazorpay() async {
     var url = "${baseUrl}/payment-gateway";
     BaseOptions option =

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/NavigationBar.dart';
+import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Components/slider_home.dart';
 import '../../Helper/Constance.dart';
@@ -104,7 +106,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
             } else if (mode == LoadStatus.canLoading) {
               body = const Text("release to load more");
             } else {
-              body = Text("No more Data");
+              body = const Text("No more Data");
             }
             return Container(
               height: 55.0,
@@ -120,12 +122,12 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             color: Colors.white,
-            padding: EdgeInsets.symmetric(vertical: 2.h),
+            padding: EdgeInsets.symmetric(vertical: 1.h),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     // color: Constance.forthColor,
                     height: 5.h,
                     width: double.infinity,
@@ -350,189 +352,208 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                       itemCount: data.classified.length,
                       itemBuilder: (cont, count) {
                         var current = data.classified[count];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigation.instance.navigate('/classifiedDetails',
-                                args: current.id);
-                          },
-                          child: Card(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                color: Colors.grey.shade900,
-                                width: 0.2,
+                        bool like = false;
+                        return StatefulBuilder(builder: (context, _) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigation.instance.navigate('/classifiedDetails',
+                                  args: current.id);
+                            },
+                            child: Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: Colors.grey.shade900,
+                                  width: 0.2,
+                                ),
+                                borderRadius: BorderRadius.circular(15.0),
                               ),
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(9.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(
-                                          width: 70.w,
-                                          child: Text(
-                                            current.title ?? "",
-                                            overflow: TextOverflow.ellipsis,
+                              child: Padding(
+                                padding: const EdgeInsets.all(9.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            width: 70.w,
+                                            child: Text(
+                                              current.title ?? "",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline3
+                                                  ?.copyWith(
+                                                      color: Constance
+                                                          .primaryColor,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                            ),
+                                          ),
+                                          LikeButton(
+                                            size: 2.5.h,
+                                            onTap: (val) async {
+                                              setAsFavourite(
+                                                  current.id, 'classified');
+                                              _(() {
+                                                like = !like;
+                                              });
+                                              return like;
+                                            },
+                                            circleColor: const CircleColor(
+                                              start: Colors.red,
+                                              end: Colors.black87,
+                                            ),
+                                            bubblesColor: const BubblesColor(
+                                              dotPrimaryColor:
+                                                  Color(0xff33b5e5),
+                                              dotSecondaryColor:
+                                                  Color(0xff0099cc),
+                                            ),
+                                            likeBuilder: (bool isLiked) {
+                                              return Icon(
+                                                like
+                                                    ? FontAwesomeIcons
+                                                        .solidHeart
+                                                    : FontAwesomeIcons.heart,
+                                                color: like
+                                                    ? Constance.thirdColor
+                                                    : Colors.grey,
+                                                size: 3.h,
+                                              );
+                                            },
+                                            likeCount: 665,
+                                            countBuilder: (int? count,
+                                                bool isLiked, String text) {
+                                              var color = like
+                                                  ? Colors.deepPurpleAccent
+                                                  : Colors.grey;
+                                              Widget result;
+                                              if (count == 0) {
+                                                result = Text(
+                                                  "",
+                                                  style:
+                                                      TextStyle(color: color),
+                                                );
+                                              } else {
+                                                result = Text(
+                                                  '',
+                                                  style:
+                                                      TextStyle(color: color),
+                                                );
+                                              }
+                                              return result;
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    current.price == null || current.price == 0
+                                        ? Container()
+                                        : SizedBox(
+                                            height: 0.5.h,
+                                          ),
+                                    current.price == null
+                                        ? Container()
+                                        : Text(
+                                            'Rs:${current.price}' ?? '0',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headline3
                                                 ?.copyWith(
-                                                    color:
-                                                        Constance.primaryColor,
+                                                    color: Constance.thirdColor,
                                                     fontWeight:
                                                         FontWeight.bold),
                                           ),
-                                        ),
-                                        LikeButton(
-                                          size: 2.5.h,
-                                          circleColor: const CircleColor(
-                                              start: Color(0xff00ddff),
-                                              end: Color(0xff0099cc)),
-                                          bubblesColor: const BubblesColor(
-                                            dotPrimaryColor: Color(0xff33b5e5),
-                                            dotSecondaryColor:
-                                                Color(0xff0099cc),
+                                    SizedBox(
+                                      height: 0.5.h,
+                                    ),
+                                    Text(
+                                      current.description ?? "",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Colors.black,
+                                            // fontWeight: FontWeight.bold,
                                           ),
-                                          likeBuilder: (bool isLiked) {
-                                            return Icon(
-                                              FontAwesomeIcons.heart,
-                                              color: isLiked
-                                                  ? Colors.deepPurpleAccent
-                                                  : Colors.grey,
-                                              size: 2.5.h,
-                                            );
-                                          },
-                                          likeCount: 665,
-                                          countBuilder: (int? count,
-                                              bool isLiked, String text) {
-                                            var color = isLiked
-                                                ? Colors.deepPurpleAccent
-                                                : Colors.grey;
-                                            Widget result;
-                                            if (count == 0) {
-                                              result = Text(
-                                                "",
-                                                style: TextStyle(color: color),
-                                              );
-                                            } else {
-                                              result = Text(
-                                                '',
-                                                style: TextStyle(color: color),
-                                              );
-                                            }
-                                            return result;
-                                          },
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Icon(
+                                          Icons.remove_red_eye,
+                                          color: Colors.black,
+                                        ),
+                                        SizedBox(
+                                          width: 4.w,
+                                        ),
+                                        Expanded(
+                                          child: SizedBox(
+                                            height: 5.h,
+                                            child: Text(
+                                              '4999 views',
+                                              // overflow: TextOverflow.clip,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                    color: Colors.black,
+                                                  ),
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  current.price == null || current.price == 0
-                                      ? Container()
-                                      : SizedBox(
-                                          height: 0.5.h,
-                                        ),
-                                  current.price == null
-                                      ? Container()
-                                      : Text(
-                                          'Rs:${current.price}' ?? '0',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline3
-                                              ?.copyWith(
-                                                  color: Constance.thirdColor,
-                                                  fontWeight: FontWeight.bold),
-                                        ),
-                                  SizedBox(
-                                    height: 0.5.h,
-                                  ),
-                                  Text(
-                                    current.description ?? "",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline5
-                                        ?.copyWith(
+                                    // SizedBox(
+                                    //   height: 0.4.h,
+                                    // ),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Icon(
+                                          Icons.location_on,
                                           color: Colors.black,
-                                          // fontWeight: FontWeight.bold,
                                         ),
-                                  ),
-                                  SizedBox(
-                                    height: 1.h,
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Icon(
-                                        Icons.remove_red_eye,
-                                        color: Colors.black,
-                                      ),
-                                      SizedBox(
-                                        width: 4.w,
-                                      ),
-                                      Expanded(
-                                        child: SizedBox(
-                                          height: 5.h,
-                                          child: Text(
-                                            '4999 views',
-                                            // overflow: TextOverflow.clip,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                                  color: Colors.black,
-                                                ),
+                                        SizedBox(
+                                          width: 4.w,
+                                        ),
+                                        Expanded(
+                                          child: SizedBox(
+                                            height: 5.h,
+                                            child: Text(
+                                              current.locality?.name ??
+                                                  'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
+                                              // overflow: TextOverflow.clip,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                    color: Colors.black,
+                                                  ),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  // SizedBox(
-                                  //   height: 0.4.h,
-                                  // ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Icon(
-                                        Icons.location_on,
-                                        color: Colors.black,
-                                      ),
-                                      SizedBox(
-                                        width: 4.w,
-                                      ),
-                                      Expanded(
-                                        child: SizedBox(
-                                          height: 5.h,
-                                          child: Text(
-                                            current.locality?.name ??
-                                                'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
-                                            // overflow: TextOverflow.clip,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                                  color: Colors.black,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  // SizedBox(
-                                  //   height: 1.h,
-                                  // ),
-                                ],
+                                      ],
+                                    ),
+                                    // SizedBox(
+                                    //   height: 1.h,
+                                    // ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
+                          );
+                        });
                       },
                       separatorBuilder: (BuildContext context, int index) {
                         return SizedBox(
@@ -617,9 +638,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                   size: 15.h,
                 ),
                 Text(
-                  'Hello ${Provider.of<DataProvider>(
-                      Navigation.instance.navigatorKey.currentContext ?? context,
-                      listen: false).profile?.name}',
+                  'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -693,5 +712,24 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
     if (result != null) {
       fetchClassified(result);
     }
+  }
+
+  void setAsFavourite(int? id, String type) async {
+    final response = await ApiProvider.instance.setAsFavourite(id, type);
+    if (response.success ?? false) {
+      Fluttertoast.showToast(msg: "Added to favourites");
+    } else {
+      showError("Something went wrong");
+    }
+  }
+
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }

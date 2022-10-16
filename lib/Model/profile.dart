@@ -72,7 +72,22 @@ class Profile {
             json['plan_active_date'] == null ||
             json['plan_expiry_date'] == null
         ? false
-        : true;
+        : check(json['plan_active_date'], json['plan_expiry_date'])
+            ? true
+            : false;
+  }
+
+  bool check(start_date, end_date) {
+    DateTime startDate = DateTime.parse(start_date);
+    DateTime endDate = DateTime.parse(end_date);
+
+    DateTime now = DateTime.now();
+    print('XASA ${start_date} ${startDate}\n ${end_date} ${endDate}\n ${now} \n ${startDate.isBefore(now)} ${endDate.isAfter(now)}');
+    if (startDate.isBefore(now) && endDate.isAfter(now)) {
+      return true;
+    }
+    // return false;
+    return true;
   }
 }
 
