@@ -589,12 +589,15 @@ class _PostAListingState extends State<PostAListing> {
 
   void postClassified(classified_category_id, locality_id, title, description,
       price, List<File> files) async {
+    Navigation.instance.navigate('/loadingDialog');
     final reponse = await ApiProvider.instance.postClassified(
         classified_category_id, locality_id, title, description, price, files);
     if (reponse.success ?? false) {
       Fluttertoast.showToast(msg: "Posted successfully");
       Navigation.instance.goBack();
+      Navigation.instance.goBack();
     } else {
+      Navigation.instance.goBack();
       showError("Something went wrong");
     }
   }

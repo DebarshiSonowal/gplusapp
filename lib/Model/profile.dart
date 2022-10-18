@@ -19,7 +19,7 @@ class Profile {
       plan_reminder_date,
       referral_code,
       dob;
-  int? super_admin, role_id, status, id, plan_id, referral_point_balance;
+  int? super_admin, role_id, status, id, plan_id, referral_point_balance,is_new;
   bool? has_deal_notify_perm,
       has_ghy_connect_notify_perm,
       has_classified_notify_perm;
@@ -48,6 +48,7 @@ class Profile {
     plan_reminder_date = json['plan_reminder_date'] ?? "";
     super_admin = int.parse((json['super_admin'] ?? 0).toString());
     role_id = int.parse((json['role_id'] ?? 0).toString()) ?? 0;
+    is_new= int.parse((json['is_new'] ?? 0).toString()) ?? 0;
     status = int.parse((json['status'] ?? 0).toString()) ?? 0;
     referral_point_balance =
         int.parse((json['referral_point_balance'] ?? 0).toString()) ?? 0;

@@ -783,7 +783,17 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
               ),
               InkWell(
                 onTap: () {
-                  downloadEpaper();
+                  if (Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext ?? context,
+                      listen: false)
+                      .profile
+                      ?.is_plan_active ??
+                      false) {
+                    downloadEpaper();
+                  }else{
+                    showError("Oops! You are not a member yet");
+                  }
+
                 },
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 1.0.h),
@@ -1029,9 +1039,9 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       height: 1.5.h,
                     ),
                     InkWell(
-                      onTap: () {
+                      onTap: () async {
                         final FirebaseAuth _auth = FirebaseAuth.instance;
-                        _auth.signOut();
+                        await _auth.signOut();
                         Storage.instance.logout();
                         Navigation.instance.navigateAndRemoveUntil('/login');
                       },

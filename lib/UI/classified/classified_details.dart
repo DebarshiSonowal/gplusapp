@@ -61,7 +61,11 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                             .entries
                             .map(
                               (e) => GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigation.instance.navigate('/viewImage',
+                                      args: e.value.file_name ??
+                                          Constance.defaultImage);
+                                },
                                 child: Opacity(
                                   opacity: 0.85,
                                   child: CachedNetworkImage(

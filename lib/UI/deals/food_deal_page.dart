@@ -56,7 +56,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: CachedNetworkImage(
-                        height: 7.h,
+                        height: 4.h,
                         imageUrl:
                             '${data.category.firstWhere((element) => element.id == widget.id).image_file_name}',
                         errorWidget: (cont, _, e) {
@@ -224,8 +224,20 @@ class _FoodDealPageState extends State<FoodDealPage> {
                           trailing: CustomButton(
                             txt: "View",
                             onTap: () {
-                              Navigation.instance.navigate('/categorySelect',
-                                  args: current.id!);
+                              if (Provider.of<DataProvider>(
+                                  Navigation.instance.navigatorKey.currentContext ??
+                                      context,
+                                  listen: false)
+                                  .profile
+                                  ?.is_plan_active ??
+                                  false) {
+                                Navigation.instance.navigate('/categorySelect',
+                                    args: current.id!);
+                              } else {
+                                Constance.showMembershipPrompt(
+                                    context);
+                              }
+
                             },
                           ),
                         ),

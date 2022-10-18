@@ -26,7 +26,7 @@ class BeAMember extends StatefulWidget {
 class _BeAMemberState extends State<BeAMember> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  final _razorpay = Razorpay();
+  // final _razorpay = Razorpay();
 
   double tempTotal = 0;
 
@@ -34,16 +34,16 @@ class _BeAMemberState extends State<BeAMember> {
 
   @override
   void initState() {
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     super.initState();
     fetch();
   }
 
   @override
   void dispose() {
-    _razorpay.clear(); // Removes all listeners
+    // _razorpay.clear(); // Removes all listeners
     super.dispose();
   }
 
@@ -288,7 +288,8 @@ class _BeAMemberState extends State<BeAMember> {
                                   child: CustomButton(
                                     txt: 'Get it',
                                     onTap: () {
-                                      initiateOrder(current.id, 0);
+                                      // initiateOrder(current.id, 0);
+                                      Navigation.instance.navigate('/paymentProcessing',args: '${current.id},0');
                                     },
                                   ),
                                 ),
@@ -404,29 +405,29 @@ class _BeAMemberState extends State<BeAMember> {
     }
   }
 
-  void order(subscription_id, use_referral_point, razorpay) async {
-    Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance
-        .createOrder(subscription_id, use_referral_point);
-    // startPayment(response.order?.base_price,response.order?.id,);
-    if (response.success ?? false) {
-      Navigation.instance.goBack();
-      tempTotal = response.order?.base_price ?? 0;
-      temp_order_id = response.order?.voucher_no.toString() ?? "";
-      startPayment(
-          razorpay,
-          response.order?.base_price,
-          response.order?.voucher_no,
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .profile
-              ?.id);
-    } else {
-      Navigation.instance.goBack();
-      showError(response.message ?? "Something went wrong");
-    }
-  }
+  // void order(subscription_id, use_referral_point, razorpay) async {
+  //   Navigation.instance.navigate('/loadingDialog');
+  //   final response = await ApiProvider.instance
+  //       .createOrder(subscription_id, use_referral_point);
+  //   // startPayment(response.order?.base_price,response.order?.id,);
+  //   if (response.success ?? false) {
+  //     Navigation.instance.goBack();
+  //     tempTotal = response.order?.base_price ?? 0;
+  //     temp_order_id = response.order?.voucher_no.toString() ?? "";
+  //     startPayment(
+  //         razorpay,
+  //         response.order?.base_price,
+  //         response.order?.voucher_no,
+  //         Provider.of<DataProvider>(
+  //                 Navigation.instance.navigatorKey.currentContext ?? context,
+  //                 listen: false)
+  //             .profile
+  //             ?.id);
+  //   } else {
+  //     Navigation.instance.goBack();
+  //     showError(response.message ?? "Something went wrong");
+  //   }
+  // }
 
   // void initiatePaymentProcess() async {
   //   Navigation.instance.navigate('/loadingDialog');
@@ -443,70 +444,70 @@ class _BeAMemberState extends State<BeAMember> {
   //   }
   // }
 
-  void startPayment(RazorpayKey razorpay, double? total, id, customer_id) {
-    var options = {
-      'key': razorpay.api_key,
-      'amount': total! * 100,
-      // 'order_id': id,
-      'name':
-          '${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.f_name} ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.l_name}',
-      'description': 'Books',
-      'prefill': {
-        'contact': Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .profile
-            ?.mobile,
-        'email': Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .profile
-            ?.email
-      },
-      'note': {
-        'customer_id': customer_id,
-        'order_id': id,
-      },
-    };
-    debugPrint(jsonEncode(options));
-    try {
-      _razorpay.open(options);
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print(
-        'success ${response.paymentId} ${response.orderId} ${response.signature}');
-    handleSuccess(response);
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    // Do something when payment fails
-    print('error ${response.message} ${response.code} ');
-    showError(response.message ?? "Something went wrong");
-    // Navigation.instance.goBack();
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    // Do something when an external wallet was selected
-  }
-
-  void handleSuccess(PaymentSuccessResponse response) async {
-    final response1 = await ApiProvider.instance
-        .verifyPayment(temp_order_id, response.paymentId, tempTotal ?? 1);
-    if (response1.success ?? false) {
-      // Navigation.instance.goBack();
-      showDialogBox();
-      // Fluttertoast.showToast(
-      //     msg: "Payment Successful. Congratulations You are now a member. ");
-
-    } else {
-      Navigation.instance.goBack();
-      showError(response1.message ?? "Something went wrong");
-    }
-  }
+  // void startPayment(RazorpayKey razorpay, double? total, id, customer_id) {
+  //   var options = {
+  //     'key': razorpay.api_key,
+  //     'amount': total! * 100,
+  //     // 'order_id': id,
+  //     'name':
+  //         '${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.f_name} ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.l_name}',
+  //     'description': 'Books',
+  //     'prefill': {
+  //       'contact': Provider.of<DataProvider>(
+  //               Navigation.instance.navigatorKey.currentContext ?? context,
+  //               listen: false)
+  //           .profile
+  //           ?.mobile,
+  //       'email': Provider.of<DataProvider>(
+  //               Navigation.instance.navigatorKey.currentContext ?? context,
+  //               listen: false)
+  //           .profile
+  //           ?.email
+  //     },
+  //     'note': {
+  //       'customer_id': customer_id,
+  //       'order_id': id,
+  //     },
+  //   };
+  //   debugPrint(jsonEncode(options));
+  //   try {
+  //     _razorpay.open(options);
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+  //
+  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  //   print(
+  //       'success ${response.paymentId} ${response.orderId} ${response.signature}');
+  //   handleSuccess(response);
+  // }
+  //
+  // void _handlePaymentError(PaymentFailureResponse response) {
+  //   // Do something when payment fails
+  //   print('error ${response.message} ${response.code} ');
+  //   showError(response.message ?? "Something went wrong");
+  //   // Navigation.instance.goBack();
+  // }
+  //
+  // void _handleExternalWallet(ExternalWalletResponse response) {
+  //   // Do something when an external wallet was selected
+  // }
+  //
+  // void handleSuccess(PaymentSuccessResponse response) async {
+  //   final response1 = await ApiProvider.instance
+  //       .verifyPayment(temp_order_id, response.paymentId, tempTotal ?? 1);
+  //   if (response1.success ?? false) {
+  //     // Navigation.instance.goBack();
+  //     showDialogBox();
+  //     // Fluttertoast.showToast(
+  //     //     msg: "Payment Successful. Congratulations You are now a member. ");
+  //
+  //   } else {
+  //     Navigation.instance.goBack();
+  //     showError(response1.message ?? "Something went wrong");
+  //   }
+  // }
 
   void fetchProfile() async {
     Navigation.instance.navigate('/loadingDialog');
@@ -541,14 +542,14 @@ class _BeAMemberState extends State<BeAMember> {
         });
   }
 
-  void initiateOrder(int? id, int i) async {
-    final response = await ApiProvider.instance.fetchRazorpay();
-    if (response.status ?? false) {
-      order(id, i, response.razorpay!);
-    } else {
-      showError(response.message ?? "Something went wrong");
-    }
-  }
+  // void initiateOrder(int? id, int i) async {
+  //   final response = await ApiProvider.instance.fetchRazorpay();
+  //   if (response.status ?? false) {
+  //     order(id, i, response.razorpay!);
+  //   } else {
+  //     showError(response.message ?? "Something went wrong");
+  //   }
+  // }
 
   void showDialogBox() {
     showDialog(

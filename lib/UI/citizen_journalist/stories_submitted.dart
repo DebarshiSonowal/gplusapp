@@ -72,16 +72,21 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Expanded(
-                                      child: Text(
-                                        item.title?? "",
-                                        maxLines: 3,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4
-                                            ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            overflow: TextOverflow.ellipsis,
-                                            color: Constance.primaryColor),
+                                      child: GestureDetector(
+                                        onTap:(){
+                                          Navigation.instance.navigate('/viewStoryPage',args: item.id);
+                                        },
+                                        child: Text(
+                                          item.title?? "",
+                                          maxLines: 3,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline4
+                                              ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              overflow: TextOverflow.ellipsis,
+                                              color: Constance.primaryColor),
+                                        ),
                                       ),
                                     ),
                                     SizedBox(
@@ -90,12 +95,17 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                                     Row(
                                       children: [
                                         Expanded(
-                                          child:  Text(
-                                            item.story?? "",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                ?.copyWith(color: Colors.black),
+                                          child:  GestureDetector(
+                                            onTap:(){
+                                              Navigation.instance.navigate('/viewStoryPage',args: item.id);
+                                            },
+                                            child: Text(
+                                              item.story?? "",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  ?.copyWith(color: Colors.black),
+                                            ),
                                           ),
                                         ),
                                         Text(

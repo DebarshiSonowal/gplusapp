@@ -40,6 +40,8 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   int year = 1800;
   int max = 2022;
   int currentY = 2022;
+  int currentM = 1;
+  int currentD = 1;
   String dropdownvalue = 'Male';
   double longitude = 0, latitude = 0;
 
@@ -72,11 +74,15 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         date = f.format(current);
         final y = DateFormat('yyyy');
         currentY = int.parse(y.format(current));
+        final M = DateFormat('MM');
+        currentM = int.parse(M.format(current));
+        final D = DateFormat('yyyy');
+        currentD = int.parse(D.format(current));
         year = 1800;
         max = currentY;
       });
 
-      // getLocations();
+      getLocationsWithoutLoader();
     });
   }
 
@@ -189,9 +195,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 onTap: () async {
                   var datePicked = await DatePicker.showSimpleDatePicker(
                     context,
-                    initialDate: DateTime(currentY),
-                    firstDate: DateTime(year),
-                    lastDate: DateTime(max),
+                    initialDate: DateTime(currentY,currentM,currentD),
+                    firstDate: DateTime(year,1,1),
+                    lastDate: DateTime(max,12,31),
                     dateFormat: "dd-MMMM-yyyy",
                     itemTextStyle:
                         Theme.of(context).textTheme.headline6?.copyWith(
@@ -709,6 +715,38 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       getAddress(position.latitude, position.longitude);
     }
   }
+  void getLocationsWithoutLoader() async {
+    // showLoaderDialog(context);
+    debugPrint('got locations1');
+    var status = await Permission.location.status;
+    if (status.isDenied) {
+      if (await Permission.location.request().isGranted) {
+        debugPrint('got1 locations1');
+        final position = await _determinePosition();
+        longitude = position.longitude;
+        latitude = position.latitude;
+        debugPrint('got locations ${longitude} ${latitude}');
+        if (mounted) {
+          setState(() {});
+        }
+        getAddressNoGoBack(position.latitude, position.longitude);
+      } else {
+        // Navigation.instance.goBack();
+        showError("We require Location permissions");
+      }
+      // We didn't ask for permission yet or the permission has been denied before but not permanently.
+    } else {
+      debugPrint('got1 locations1');
+      final position = await _determinePosition();
+      longitude = position.longitude;
+      latitude = position.latitude;
+      debugPrint('got locations ${longitude} ${latitude}');
+      if (mounted) {
+        setState(() {});
+      }
+      getAddressNoGoBack(position.latitude, position.longitude);
+    }
+  }
 
   void showError(String msg) {
     AlertX.instance.showAlert(
@@ -738,6 +776,25 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       address = address1;
     });
     Navigation.instance.goBack();
+  }
+  Future<void> getAddressNoGoBack(latitude, longitude) async {
+    List<Placemark> placemarks =
+    await placemarkFromCoordinates(latitude, longitude);
+    Placemark place = placemarks[0];
+    String street = place.street ?? "";
+    String thoroughfare = place.thoroughfare ?? "";
+    String locality = place.locality ?? "";
+    String subLocality = place.subLocality ?? "";
+    String state = place.subAdministrativeArea ?? "";
+    String pincode = place.postalCode ?? "";
+    String address1 =
+        "${(street.isEmpty) ? "" : "$street, "}${(thoroughfare.isEmpty) ? "" : "$thoroughfare, "}${(locality.isEmpty) ? "" : "$locality, "}${(subLocality.isEmpty) ? "" : "$subLocality, "}${(state.isEmpty) ? "" : "$state, "}${(pincode.isEmpty) ? "" : "$pincode."}";
+
+    print('city pincode ${pincode}  ${street}');
+    setState(() {
+      address = address1;
+    });
+    // Navigation.instance.goBack();
   }
 
   void setData(mobile, fname, lname, email, dob, address, refer) {

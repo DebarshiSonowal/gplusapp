@@ -42,7 +42,6 @@ class _VerifyOTPState extends State<VerifyOTP> {
     textEditingController.dispose();
     timer?.cancel();
     super.dispose();
-
   }
 
   @override
@@ -212,9 +211,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
               onPressed: () {
                 if (time == '0') {
                   phoneSignIn(phoneNumber: widget.number.toString());
-                } else {
-
-                }
+                } else {}
               },
               child: Text(
                 'Send Again',
@@ -375,7 +372,9 @@ class _VerifyOTPState extends State<VerifyOTP> {
           .setProfile(reponse.profile!);
       // Navigation.instance.goBack();
       // Navigation.instance.navigateAndReplace('/main');
-      if (reponse.profile?.email == null || reponse.profile?.email == "") {
+      if (reponse.profile?.email == null ||
+          reponse.profile?.email == "" ||
+          reponse.profile?.is_new == 1) {
         Navigation.instance.navigate('/terms&conditions', args: widget.number);
       } else {
         Navigation.instance.navigateAndReplace('/main');
@@ -431,7 +430,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
         print(timer.tick);
         try {
           setState(() {
-            time  = (30 - timer.tick).toString();
+            time = (30 - timer.tick).toString();
           });
         } catch (e) {
           print(e);

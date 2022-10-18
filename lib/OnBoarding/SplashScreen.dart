@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/Constance.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
+import 'package:provider/provider.dart';
+
+import '../Helper/DataProvider.dart';
+import '../Networking/api_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -40,13 +44,45 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 3), () {
       print('LOGGEDIN');
       if (Storage.instance.isLoggedIn) {
-        Navigation.instance.navigateAndRemoveUntil('/main');
-      } else if (Storage.instance.isOnBoarding) {
-        Navigation.instance.navigateAndRemoveUntil('/login');
+        fetchProfile();
+
+      // } else if (Storage.instance.isOnBoarding) {
+      //   Navigation.instance.navigateAndRemoveUntil('/login');
       } else {
         Navigation.instance.navigateAndRemoveUntil('/login');
         // Navigation.instance.navigateAndRemoveUntil('/onboarding');
       }
     });
+  }
+  void fetchProfile() async {
+    print('object profile');
+    // Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getprofile();
+    if (response.success ?? false) {
+      // Navigation.instance.goBack();
+      print('object profile');
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setProfile(response.profile!);
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setMyTopicks(response.topicks);
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setMyGeoTopicks(response.geoTopicks);
+      if (response.profile?.email == null ||
+          response.profile?.email == "" ||
+          response.profile?.is_new == 0) {
+        Navigation.instance.navigateAndRemoveUntil('/main');
+      }else{
+        Navigation.instance.navigateAndRemoveUntil('/login');
+      }
+    } else {
+      // Navigation.instance.goBack();
+      Navigation.instance.navigateAndRemoveUntil('/login');
+    }
   }
 }

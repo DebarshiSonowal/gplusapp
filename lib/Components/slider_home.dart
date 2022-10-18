@@ -39,9 +39,17 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                   .map(
                     (e) => GestureDetector(
                       onTap: () {
-                        Navigation.instance.navigate('/story',
-                            args:
-                                '${e.value.first_cat_name?.seo_name},${e.value.seo_name}');
+                        if (data.profile
+                            ?.is_plan_active ??
+                            false) {
+                          Navigation.instance.navigate('/story',
+                              args:
+                              '${e.value.first_cat_name?.seo_name},${e.value.seo_name}');
+                        } else {
+                          Constance.showMembershipPrompt(
+                              context);
+                        }
+
                       },
                       child: Stack(
                         alignment: Alignment.bottomLeft,

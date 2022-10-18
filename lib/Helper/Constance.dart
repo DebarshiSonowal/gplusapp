@@ -366,7 +366,7 @@ of Guwahati - living, rising and growing with the city.
   ''';
 
   static showMembershipPrompt(context) {
-    showBottomSheet(
+    showBottomSheet<void>(
         context: context,
         backgroundColor: Colors.grey.shade100,
         shape: const RoundedRectangleBorder(

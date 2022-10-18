@@ -232,20 +232,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: Row(
                                             children: [
                                               Expanded(
-                                                child: Container(
-                                                  child: Center(
-                                                    child: Text(
-                                                      'Big Deals\nand Offers',
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .headline3
-                                                          ?.copyWith(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                    ),
+                                                child: Center(
+                                                  child: Text(
+                                                    'Big Deals\nand Offers',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline3
+                                                        ?.copyWith(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                   ),
                                                 ),
                                               ),
@@ -315,38 +312,66 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Expanded(
                                     child: Container(
                                       child: ListView.separated(
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder: (cont, count) {
-                                            var item =
-                                                data.home_toppicks[count];
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: data.home_toppicks.length > 4
+                                            ? 4
+                                            : data.home_toppicks.length + 1,
+                                        itemBuilder: (cont, count) {
+                                          var item = data.home_toppicks[count];
+                                          if ((data.home_toppicks.length > 4
+                                                  ? 3
+                                                  : data.home_toppicks.length-1) ==
+                                              count) {
+                                            return Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.5.h),
+                                              // height: 5.h,
+                                              // width: 20.w,
+                                              child: TextButton(
+                                                onPressed: () {
+                                                  Navigation.instance.navigate('/toppicks');
+                                                },
+                                                child: Text(
+                                                  'View All',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline3
+                                                      ?.copyWith(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                    FontWeight.bold,
+                                                    fontSize: 10.sp,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          } else {
+
                                             return GestureDetector(
                                               onTap: () {
                                                 if (data.profile
-                                                        ?.is_plan_active ??
+                                                    ?.is_plan_active ??
                                                     false) {
                                                   Navigation.instance.navigate(
                                                       '/story',
                                                       args:
-                                                          '${item.categories?.first.seo_name},${item.seo_name}');
+                                                      '${item.categories?.first.seo_name},${item.seo_name}');
                                                 } else {
                                                   Constance
                                                       .showMembershipPrompt(
-                                                          context);
+                                                      context);
                                                 }
                                               },
                                               child: ToppicksCard(item: item),
                                             );
-                                          },
-                                          separatorBuilder: (cont, inde) {
-                                            return SizedBox(
-                                              width: 10.w,
-                                            );
-                                          },
-                                          itemCount:
-                                              data.home_toppicks.length > 4
-                                                  ? 4
-                                                  : data.home_toppicks.length),
+                                          }
+                                        },
+                                        separatorBuilder: (cont, inde) {
+                                          return SizedBox(
+                                            width: 10.w,
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -454,8 +479,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             );
                                           },
                                           itemCount:
-                                              (data.home_exclusive.length > 4
-                                                  ? 4
+                                              (data.home_exclusive.length > 3
+                                                  ? 3
                                                   : data
                                                       .home_exclusive.length)),
                                     ),
@@ -559,8 +584,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             width: 10.w,
                                           );
                                         },
-                                        itemCount: data.home_weekly.length > 4
-                                            ? 4
+                                        itemCount: data.home_weekly.length > 3
+                                            ? 3
                                             : data.home_weekly.length),
                                   ),
                                   SizedBox(
@@ -666,12 +691,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Container(
                                     child: ListView.separated(
                                         shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
+                                        physics: const NeverScrollableScrollPhysics(),
                                         scrollDirection: Axis.vertical,
                                         itemBuilder: (cont, count) {
-                                          var item = Constance.pollWeek[count];
-                                          var value =
-                                              Constance.pollValue[count];
+                                          // var item = Constance.pollWeek[count];
+                                          // var value =
+                                          //     Constance.pollValue[count];
                                           return Stack(
                                             children: [
                                               Padding(
@@ -679,7 +704,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     horizontal: 2.w,
                                                     vertical: 1.h),
                                                 child: LinearPercentIndicator(
-                                                  barRadius: Radius.circular(5),
+                                                  barRadius: const Radius.circular(5),
                                                   width: 80.w,
                                                   lineHeight: 5.h,
                                                   percent:
@@ -777,18 +802,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                   SizedBox(
                                     height: 1.h,
                                   ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 5.w),
-                                    child: Text(
-                                      'View All',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline5
-                                          ?.copyWith(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                  GestureDetector(
+                                    onTap: (){
+                                      Navigation.instance.navigate('/pollPage');
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5.w),
+                                      child: Text(
+                                        'View All',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5
+                                            ?.copyWith(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
                                     ),
                                   ),
                                   SizedBox(
@@ -873,8 +903,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      Navigation.instance
-                                          .navigate('/opinionPage');
+                                      if (data.profile?.is_plan_active ??
+                                          false) {
+                                        Navigation.instance
+                                            .navigate('/opinionPage');
+                                      } else {
+                                        Constance.showMembershipPrompt(context);
+                                      }
+
                                       // Navigation.instance
                                       //     .navigate('/authorPage', args: 1);
                                     },
@@ -990,12 +1026,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void fetchHome() async {
     final result = await ApiProvider.instance.getHomeAlbum();
     if (result.success ?? false) {
-      Provider.of<DataProvider>(context, listen: false)
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setHomeAlbum(result.articles ?? []);
 
       final response = await ApiProvider.instance.getWeekly();
       if (response.success ?? false) {
-        Provider.of<DataProvider>(context, listen: false)
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
             .setVideoWeekly(response.videos ?? []);
         // _refreshController.refreshCompleted();
       }
@@ -1178,9 +1218,21 @@ for an unparalleled publication, that people call their''',
   }
 
   void showPopUp() {
-    Future.delayed(Duration(milliseconds: Random().nextInt(10000)), () {
+    double doubleInRange(Random source, num start, num end) =>
+        source.nextDouble() * (end - start) + start;
+    Future.delayed(
+        Duration(milliseconds: doubleInRange(Random(), 10000, 20000).toInt()),
+        () {
       // code will be here
-      showDialogBox();
+      if (Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .profile
+              ?.is_plan_active ??
+          false) {
+      } else {
+        showDialogBox();
+      }
     });
     // Future.delayed(Duration(seconds: 5), () => showDialogBox());
   }

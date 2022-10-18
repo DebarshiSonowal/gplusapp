@@ -30,7 +30,7 @@ class BigDealPage extends StatefulWidget {
 
 class _BigDealPageState extends State<BigDealPage> {
   String _value = 'Time';
-
+  bool expandCateg = false;
   var current = 1;
 
   final RefreshController _refreshController =
@@ -64,11 +64,11 @@ class _BigDealPageState extends State<BigDealPage> {
   void initState() {
     super.initState();
     // showDialogBox();
-    Future.delayed(Duration.zero,(){
-      if(!Storage.instance.isBigDeal){
+    Future.delayed(Duration.zero, () {
+      if (!Storage.instance.isBigDeal) {
         showDialogBox();
         debugPrint("Here1");
-      }else{
+      } else {
         debugPrint("Here");
       }
     });
@@ -184,9 +184,20 @@ class _BigDealPageState extends State<BigDealPage> {
                                 var data = current.deals[cout];
                                 return GestureDetector(
                                   onTap: () {
-                                    Navigation.instance.navigate(
-                                        '/categorySelect',
-                                        args: data.id);
+                                    if (Provider.of<DataProvider>(
+                                                Navigation.instance.navigatorKey
+                                                        .currentContext ??
+                                                    context,
+                                                listen: false)
+                                            .profile
+                                            ?.is_plan_active ??
+                                        false) {
+                                      Navigation.instance.navigate(
+                                          '/categorySelect',
+                                          args: data.id);
+                                    } else {
+                                      Constance.showMembershipPrompt(context);
+                                    }
                                   },
                                   child: SizedBox(
                                     height: 30.h,
@@ -315,11 +326,12 @@ class _BigDealPageState extends State<BigDealPage> {
                             padding: EdgeInsets.symmetric(horizontal: 1.w),
                             child: Wrap(
                               alignment: WrapAlignment.spaceEvenly,
-                              children: current.category.map((e) {
+                              children: expandCateg?current.category.map((e) {
                                 return GestureDetector(
                                   onTap: () {
                                     // selectedCategory(e.name);
-                                    Navigation.instance.navigate('/fooddealpage',args: e.id!);
+                                    Navigation.instance
+                                        .navigate('/fooddealpage', args: e.id!);
                                   },
                                   child: Container(
                                     // height: 10.h,
@@ -368,6 +380,60 @@ class _BigDealPageState extends State<BigDealPage> {
                                     ),
                                   ),
                                 );
+                              }).toList():current.category.sublist(0,4).toList().map((e) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    // selectedCategory(e.name);
+                                    Navigation.instance
+                                        .navigate('/fooddealpage', args: e.id!);
+                                  },
+                                  child: Container(
+                                    // height: 10.h,
+                                    width: 10.h,
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 1.w, vertical: 0.5.w),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: 8.h,
+                                          height: 8.h,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 2.w, vertical: 1.h),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color:
+                                                Constance.secondaryColor),
+                                            borderRadius:
+                                            BorderRadius.circular(5),
+                                          ),
+                                          child: Image.network(
+                                            e.image_file_name ?? "",
+                                            // color: Constance.primaryColor,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 0.5.h,
+                                        ),
+                                        Text(
+                                          e.name ?? "",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(
+                                            color: Constance.primaryColor,
+                                            // fontSize: 1.7.h,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 0.5.h,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
                               }).toList(),
                             ),
                           ),
@@ -378,9 +444,11 @@ class _BigDealPageState extends State<BigDealPage> {
                             width: double.infinity,
                             child: Center(
                               child: CustomButton(
-                                  txt: 'View More ',
+                                  txt: expandCateg?'Show less':'View More',
                                   onTap: () {
-
+                                    setState(() {
+                                      expandCateg = !expandCateg;
+                                    });
                                   }),
                             ),
                           ),
@@ -514,9 +582,13 @@ class _BigDealPageState extends State<BigDealPage> {
                                                       ),
                                                 ),
                                                 Text(
-                                                  Jiffy(data.date
-                                                      .toString()
-                                                      .split('T')[0] ?? "", "yyyy-MM-dd")
+                                                  Jiffy(
+                                                          data.date
+                                                                  .toString()
+                                                                  .split(
+                                                                      'T')[0] ??
+                                                              "",
+                                                          "yyyy-MM-dd")
                                                       .format("dd/MM/yyyy"),
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -576,7 +648,6 @@ class _BigDealPageState extends State<BigDealPage> {
                                       ],
                                     ),
                                   ),
-
                                 ],
                               ),
                             ),
@@ -746,9 +817,7 @@ class _BigDealPageState extends State<BigDealPage> {
           ),
           backgroundColor: Colors.white,
           title: Text(
-            'Hello ${Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false).profile?.name}',
+            'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
             style: Theme.of(context).textTheme.headline3?.copyWith(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,

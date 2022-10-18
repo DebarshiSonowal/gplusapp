@@ -23,6 +23,7 @@ import '../UI/author/author_page.dart';
 import '../UI/citizen_journalist/citizen_journalist_page.dart';
 import '../UI/citizen_journalist/draft_story.dart';
 import '../UI/citizen_journalist/edit_story.dart';
+import '../UI/citizen_journalist/view_story_page.dart';
 import '../UI/guwahati_connect/ask_a_question.dart';
 import '../UI/guwahati_connect/guwahati_connect_page.dart';
 import '../UI/citizen_journalist/stories_submitted.dart';
@@ -45,11 +46,15 @@ import '../UI/others/about_us_page.dart';
 import '../UI/others/contact_us_page.dart';
 import '../UI/others/grievanceRedressal.dart';
 import '../UI/others/privacy_policy_page.dart';
+import '../UI/payment_processing_page.dart';
+import '../UI/poll_of_the week/poll_page.dart';
 import '../UI/profile/profile_page.dart';
 import '../UI/refer_earn/redeem_points.dart';
 import '../UI/refer_earn/refer&earn.dart';
 import '../UI/opinion/opinion_details_page.dart';
 import '../UI/story/story_page.dart';
+import '../UI/toppicks/top_picks_page.dart';
+import '../UI/view/view_image_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -89,6 +94,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/videoPlayer':
       return FadeTransitionPageRouteBuilder(
           page: VideoPlayerScreen(settings.arguments as String));
+      case '/viewImage':
+      return FadeTransitionPageRouteBuilder(
+          page: ViewImagePage(settings.arguments as String));
 
     case '/bigdealpage':
       return FadeTransitionPageRouteBuilder(page: BigDealPage());
@@ -99,12 +107,17 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           page: FoodDealPage(settings.arguments as int));
     case '/filterPage':
       return FadeTransitionPageRouteBuilder(page: FilterPage());
+      case '/pollPage':
+      return FadeTransitionPageRouteBuilder(page: PollPage());
     case '/categorySelect':
       return FadeTransitionPageRouteBuilder(
           page: CategorySelectPage(settings.arguments as int));
     case '/story':
       return FadeTransitionPageRouteBuilder(
           page: StoryPage(settings.arguments as String));
+case '/paymentProcessing':
+      return FadeTransitionPageRouteBuilder(
+          page: PaymentProcessingPage(settings.arguments as String));
 
     case '/notification':
       return FadeTransitionPageRouteBuilder(page: NotificationPage());
@@ -141,6 +154,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '/classified':
       return FadeTransitionPageRouteBuilder(page: ClassifiedPage());
+      case '/toppicks':
+      return FadeTransitionPageRouteBuilder(page: TopPicksPage());
     case '/refer&earn':
       return FadeTransitionPageRouteBuilder(page: ReferAndEarn());
     case '/redeemPoints':
@@ -153,6 +168,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/editCitizenJournalist':
       return FadeTransitionPageRouteBuilder(
           page: EditStory(settings.arguments as int));
+      case '/viewStoryPage':
+      return FadeTransitionPageRouteBuilder(
+          page: ViewStoryPage(settings.arguments as int));
     case '/postClassified':
       return FadeTransitionPageRouteBuilder(page: PostAListing());
     case '/guwahatiConnects':

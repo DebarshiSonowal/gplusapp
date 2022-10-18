@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gplusapp/Components/custom_button.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Helper/Constance.dart';
@@ -14,7 +15,7 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
-  final Map<String, bool> _map = {};
+  final Map<int, bool> _map = {};
   int _count = 0;
 
   @override
@@ -31,99 +32,152 @@ class _FilterPageState extends State<FilterPage> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
-        child: Row(
+        child: Stack(
+          alignment: Alignment.bottomCenter,
           children: [
-            Expanded(
-              child: Container(
-                color: Constance.secondaryColor,
-                height: MediaQuery.of(context).size.height,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 5.w,
-                  vertical: 2.h,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Filter By',
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
-                            color: Constance.primaryColor,
-                            fontSize: 3.h,
-                            fontWeight: FontWeight.bold,
-                          ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: Constance.secondaryColor,
+                    height: MediaQuery.of(context).size.height,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 5.w,
+                      vertical: 2.h,
                     ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Locality',
+                          'Filter By',
                           style:
                               Theme.of(context).textTheme.headline5?.copyWith(
+                                    color: Constance.primaryColor,
+                                    fontSize: 3.h,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Locality',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5
+                                  ?.copyWith(
                                     color: Colors.black,
                                     fontSize: 2.h,
                                     // fontWeight: FontWeight.bold,
                                   ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                          ),
-                          padding: EdgeInsets.all(4),
-                          child: Text(
-                            '2',
-                            style:
-                                Theme.of(context).textTheme.headline5?.copyWith(
+                            ),
+                            Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                              padding: EdgeInsets.all(4),
+                              child: Text(
+                                '${_map.length}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline5
+                                    ?.copyWith(
                                       color: Colors.black,
                                       // fontSize: 2.h,
                                       // fontWeight: FontWeight.bold,
                                     ),
-                          ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                Consumer<DataProvider>(builder: (context, data, _) {
+                  return Expanded(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: ListView.builder(
+                          itemCount: data.locality.length,
+                          itemBuilder: (conte, cout) {
+                            var current = data.locality[cout];
+                            return Theme(
+                              data:
+                                  ThemeData(unselectedWidgetColor: Colors.grey),
+                              child: CheckboxListTile(
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
+                                checkColor: Colors.black,
+                                activeColor: Colors.grey.shade300,
+                                // tileColor: Colors.grey,
+                                value: _map[current.id] ?? false,
+                                onChanged: (value) => setState(() {
+                                  _map[current.id!] = value!;
+                                }),
+                                title: Text(
+                                  current.name ?? "",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline5
+                                      ?.copyWith(color: Colors.black),
+                                ),
+                              ),
+                            );
+                          }),
+                    ),
+                  );
+                }),
+              ],
             ),
-            Consumer<DataProvider>(builder: (context, data, _) {
-              return Expanded(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: ListView.builder(
-                      itemCount: data.locality.length,
-                      itemBuilder: (conte, cout) {
-                        var current = data.locality[cout];
-                        return Theme(
-                          data: ThemeData(unselectedWidgetColor: Colors.grey),
-                          child: CheckboxListTile(
-                            controlAffinity: ListTileControlAffinity.leading,
-                            checkColor: Colors.black,
-                            activeColor: Colors.grey.shade300,
-                            // tileColor: Colors.grey,
-                            value: _map[current.name ?? ""] ?? false,
-                            onChanged: (value) => setState(
-                                () => _map[current.name ?? ""] = value!),
-                            title: Text(
-                              current.name ?? "",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline5
-                                  ?.copyWith(color: Colors.black),
-                            ),
-                          ),
-                        );
-                      }),
-                ),
-              );
-            }),
+            _map.isNotEmpty &&
+                    _map.values
+                        .toList()
+                        .where((element) => element == true)
+                        .isNotEmpty
+                ? Container(
+                    margin: EdgeInsets.only(bottom: 2.h),
+                    width: 80.w,
+                    height: 5.h,
+                    child: CustomButton(
+                      txt: 'Done',
+                      onTap: () {
+                        Navigator.pop(
+                            context,
+                            getComaSeparated(
+                              _map.keys.toList(),
+                              _map.values.toList(),
+                            ));
+                        //  _map.keys.toList()_map.keys.toList()
+                        // print(
+                        //
+                        // );
+                      },
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),
     );
+  }
+
+  String getComaSeparated(List<dynamic> list, List<dynamic> list2) {
+    String temp = "";
+    for (int i = 0; i < list.length; i++) {
+      if (list2[i] == true) {
+        if (i == 0) {
+          temp = '${list[i]},';
+        } else {
+          temp += '${list[i]},';
+        }
+      }
+    }
+    return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
 
   AppBar buildAppBar() {
@@ -138,15 +192,22 @@ class _FilterPageState extends State<FilterPage> {
       centerTitle: false,
       backgroundColor: Constance.primaryColor,
       actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 10.0),
-          child: Center(
-            child: Text(
-              'Clear Filters',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5
-                  ?.copyWith(color: Colors.white),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _map.clear();
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: Center(
+              child: Text(
+                'Clear Filters',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5
+                    ?.copyWith(color: Colors.white),
+              ),
             ),
           ),
         ),
