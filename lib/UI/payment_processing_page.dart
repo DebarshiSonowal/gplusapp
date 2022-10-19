@@ -185,6 +185,7 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
     final response1 = await ApiProvider.instance
         .verifyPayment(temp_order_id, response.paymentId, tempTotal ?? 1);
     if (response1.success ?? false) {
+      fetchProfile();
       Navigation.instance.goBack();
       showDialogBox();
     } else {
@@ -193,7 +194,27 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
       showError(response1.message ?? "Something went wrong");
     }
   }
-
+  void fetchProfile() async {
+    // Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getprofile();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setProfile(response.profile!);
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setMyTopicks(response.topicks);
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setMyGeoTopicks(response.geoTopicks);
+      // Navigation.instance.goBack();
+    } else {
+      // Navigation.instance.goBack();
+    }
+  }
   void showDialogBox() {
     showDialog(
       context: context,

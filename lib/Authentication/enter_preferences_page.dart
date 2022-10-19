@@ -258,7 +258,11 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
     );
     if (reponse.success ?? false) {
       // setPreferences();
-      getProfile();
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setProfile(reponse.profile!);
+      Navigation.instance.navigateAndReplace('/main');
     } else {
       showError(reponse.msg ?? "Something went wrong");
     }

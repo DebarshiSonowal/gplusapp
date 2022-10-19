@@ -131,8 +131,14 @@ class _FoodDealPageState extends State<FoodDealPage> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Navigation.instance.navigate('/filterPage');
+                      onTap: () async{
+                        final result = await Navigation.instance.navigate('/filterPage');
+                        if(result!=''){
+                        setState(() {
+                          locality = result;
+                        });
+                          fetchCategories();
+                        }
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

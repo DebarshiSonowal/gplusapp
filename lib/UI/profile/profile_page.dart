@@ -8,6 +8,8 @@ import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../Networking/api_provider.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -174,5 +176,24 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ],
     );
+  }
+  void fetch() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getMembership();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setMembership(response.membership ?? []);
+      // _refreshController.refreshCompleted();
+      Navigation.instance.goBack();
+    } else {
+      // Provider.of<DataProvider>(
+      //     Navigation.instance.navigatorKey.currentContext ?? context,
+      //     listen: false)
+      //     .setMembership(response.membership ?? []);
+      Navigation.instance.goBack();
+      // _refreshController.refreshFailed();
+    }
   }
 }

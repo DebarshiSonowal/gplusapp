@@ -1289,7 +1289,8 @@ class ApiProvider {
       'locality_ids': result,
       'title': title,
     };
-    // debugPrint(jsonEncode(data));
+    debugPrint(jsonEncode(data));
+
 
     try {
       Response? response = await dio?.get(

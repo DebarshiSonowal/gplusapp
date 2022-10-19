@@ -188,6 +188,11 @@ class _VerifyOTPState extends State<VerifyOTP> {
                           .signInWithCredential(credential)
                           .then((value) {
                         getProfile();
+                      }).catchError((e){
+                        print( _verificationId);
+                        print( _verificationId);
+                        print(textEditingController.text);
+                        showError(e??"Something went wrong");
                       });
                     } catch (e) {
                       print(e);
@@ -314,7 +319,8 @@ class _VerifyOTPState extends State<VerifyOTP> {
   _onCodeSent(String verification, int? forceResendingToken) {
     _verificationId = verification;
     print(forceResendingToken);
-    print("code sent");
+    print(forceResendingToken);
+    print("code sent ${_verificationId}");
     Fluttertoast.showToast(msg: "OTP sent successfully");
     Navigation.instance.goBack();
     setTimer();

@@ -414,7 +414,9 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   ),
                 ),
                 trailing: CustomButton(
-                  txt: 'Redeem Now',
+                  color: (data?.is_used??false)?Colors.grey:Constance.secondaryColor,
+                  txt: (data?.is_used??false)?'Redeemed':'   Redeem   ',
+                  fcolor: (data?.is_used??false)?Colors.white:Colors.black,
                   onTap: () {
                     showDialogBox(data?.code);
                   },

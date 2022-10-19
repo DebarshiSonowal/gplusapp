@@ -20,6 +20,7 @@ class DealDetails {
   double? latitude, longitude;
   List<Coupon>? coupons;
 
+
   DealDetails.fromJson(json) {
     //int
     id = json['id'] ?? 0;
@@ -61,6 +62,8 @@ class DealDetails {
     coupons = json['coupons'] == null
         ? []
         : (json['coupons'] as List).map((e) => Coupon.fromJson(e)).toList();
+
+
   }
 }
 

@@ -8,6 +8,7 @@ class Coupon {
       plan_id,
       status;
   String? code, title, description;
+  bool? is_used;
 
   Coupon.fromJson(json) {
     id = json['id'] ?? 0;
@@ -25,6 +26,8 @@ class Coupon {
     plan_id =
         json['plan_id'] == null ? 0 : int.parse(json['plan_id'].toString());
     status = json['status'] == null ? 0 : int.parse(json['status'].toString());
+
+    is_used = json['is_used'] ?? false;
 
     //String
     code = json['code'] ?? "";

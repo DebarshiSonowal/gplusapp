@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../Components/NavigationBar.dart';
+import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import 'package:sizer/sizer.dart';
 
@@ -71,8 +72,9 @@ class _BigDealPageState extends State<BigDealPage> {
       } else {
         debugPrint("Here");
       }
+      fetchDeals();
     });
-    fetchDeals();
+
     fetchHistory();
   }
 
@@ -326,115 +328,128 @@ class _BigDealPageState extends State<BigDealPage> {
                             padding: EdgeInsets.symmetric(horizontal: 1.w),
                             child: Wrap(
                               alignment: WrapAlignment.spaceEvenly,
-                              children: expandCateg?current.category.map((e) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    // selectedCategory(e.name);
-                                    Navigation.instance
-                                        .navigate('/fooddealpage', args: e.id!);
-                                  },
-                                  child: Container(
-                                    // height: 10.h,
-                                    width: 10.h,
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 1.w, vertical: 0.5.w),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: 8.h,
-                                          height: 8.h,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 2.w, vertical: 1.h),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color:
-                                                    Constance.secondaryColor),
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          child: Image.network(
-                                            e.image_file_name ?? "",
-                                            // color: Constance.primaryColor,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 0.5.h,
-                                        ),
-                                        Text(
-                                          e.name ?? "",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline6
-                                              ?.copyWith(
-                                                color: Constance.primaryColor,
-                                                // fontSize: 1.7.h,
-                                                fontWeight: FontWeight.bold,
+                              children: expandCateg
+                                  ? current.category.map((e) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          // selectedCategory(e.name);
+                                          Navigation.instance.navigate(
+                                              '/fooddealpage',
+                                              args: e.id!);
+                                        },
+                                        child: Container(
+                                          // height: 10.h,
+                                          width: 10.h,
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 1.w, vertical: 0.5.w),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 8.h,
+                                                height: 8.h,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 2.w,
+                                                    vertical: 1.h),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Constance
+                                                          .secondaryColor),
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                ),
+                                                child: Image.network(
+                                                  e.image_file_name ?? "",
+                                                  // color: Constance.primaryColor,
+                                                ),
                                               ),
-                                        ),
-                                        SizedBox(
-                                          height: 0.5.h,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }).toList():current.category.sublist(0,4).toList().map((e) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    // selectedCategory(e.name);
-                                    Navigation.instance
-                                        .navigate('/fooddealpage', args: e.id!);
-                                  },
-                                  child: Container(
-                                    // height: 10.h,
-                                    width: 10.h,
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 1.w, vertical: 0.5.w),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: 8.h,
-                                          height: 8.h,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 2.w, vertical: 1.h),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color:
-                                                Constance.secondaryColor),
-                                            borderRadius:
-                                            BorderRadius.circular(5),
-                                          ),
-                                          child: Image.network(
-                                            e.image_file_name ?? "",
-                                            // color: Constance.primaryColor,
+                                              SizedBox(
+                                                height: 0.5.h,
+                                              ),
+                                              Text(
+                                                e.name ?? "",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6
+                                                    ?.copyWith(
+                                                      color: Constance
+                                                          .primaryColor,
+                                                      // fontSize: 1.7.h,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
+                                              SizedBox(
+                                                height: 0.5.h,
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 0.5.h,
-                                        ),
-                                        Text(
-                                          e.name ?? "",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline6
-                                              ?.copyWith(
-                                            color: Constance.primaryColor,
-                                            // fontSize: 1.7.h,
-                                            fontWeight: FontWeight.bold,
+                                      );
+                                    }).toList()
+                                  : current.category
+                                      .sublist(0, 4)
+                                      .toList()
+                                      .map((e) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          // selectedCategory(e.name);
+                                          Navigation.instance.navigate(
+                                              '/fooddealpage',
+                                              args: e.id!);
+                                        },
+                                        child: Container(
+                                          // height: 10.h,
+                                          width: 10.h,
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 1.w, vertical: 0.5.w),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 8.h,
+                                                height: 8.h,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 2.w,
+                                                    vertical: 1.h),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Constance
+                                                          .secondaryColor),
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                ),
+                                                child: Image.network(
+                                                  e.image_file_name ?? "",
+                                                  // color: Constance.primaryColor,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 0.5.h,
+                                              ),
+                                              Text(
+                                                e.name ?? "",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6
+                                                    ?.copyWith(
+                                                      color: Constance
+                                                          .primaryColor,
+                                                      // fontSize: 1.7.h,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
+                                              SizedBox(
+                                                height: 0.5.h,
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 0.5.h,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
+                                      );
+                                    }).toList(),
                             ),
                           ),
                           SizedBox(
@@ -444,7 +459,7 @@ class _BigDealPageState extends State<BigDealPage> {
                             width: double.infinity,
                             child: Center(
                               child: CustomButton(
-                                  txt: expandCateg?'Show less':'View More',
+                                  txt: expandCateg ? 'Show less' : 'View More',
                                   onTap: () {
                                     setState(() {
                                       expandCateg = !expandCateg;
@@ -485,129 +500,150 @@ class _BigDealPageState extends State<BigDealPage> {
                                     shrinkWrap: true,
                                     itemBuilder: (cont, count) {
                                       var data = current.history[count];
-                                      return Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 4.w, vertical: 1.h),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  data.title ?? '25% OFF',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.start,
-                                                  style: Theme.of(Navigation
-                                                          .instance
-                                                          .navigatorKey
-                                                          .currentContext!)
-                                                      .textTheme
-                                                      .headline5
-                                                      ?.copyWith(
-                                                        color: Colors.black,
-                                                        // fontSize: 11.sp,
-                                                        // fontWeight: FontWeight.bold,
-                                                      ),
-                                                ),
-                                                Text(
-                                                  data.vendor?.shop_name ==
-                                                              "" ||
-                                                          data.vendor
-                                                                  ?.shop_name ==
-                                                              null
-                                                      ? data.vendor
-                                                              ?.contact_name ??
-                                                          'Subway'
-                                                      : '',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.start,
-                                                  style: Theme.of(Navigation
-                                                          .instance
-                                                          .navigatorKey
-                                                          .currentContext!)
-                                                      .textTheme
-                                                      .headline4
-                                                      ?.copyWith(
-                                                        color: Colors.black,
-                                                        // fontSize: 11.sp,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                ),
-                                                Text(
-                                                  data.vendor?.address ??
-                                                      'RGB road, Zoo tiniali',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.start,
-                                                  style: Theme.of(Navigation
-                                                          .instance
-                                                          .navigatorKey
-                                                          .currentContext!)
-                                                      .textTheme
-                                                      .headline5
-                                                      ?.copyWith(
-                                                        color: Colors.black,
-                                                        // fontSize: 11.sp,
-                                                        // fontWeight: FontWeight.bold,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                            const Spacer(),
-                                            Column(
-                                              children: [
-                                                Text(
-                                                  '${data.code ?? '8486'}',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.start,
-                                                  style: Theme.of(Navigation
-                                                          .instance
-                                                          .navigatorKey
-                                                          .currentContext!)
-                                                      .textTheme
-                                                      .headline5
-                                                      ?.copyWith(
-                                                        color: Colors
-                                                            .grey.shade800,
-                                                        // fontSize: 11.sp,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                ),
-                                                Text(
-                                                  Jiffy(
-                                                          data.date
-                                                                  .toString()
-                                                                  .split(
-                                                                      'T')[0] ??
-                                                              "",
-                                                          "yyyy-MM-dd")
-                                                      .format("dd/MM/yyyy"),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.start,
-                                                  style: Theme.of(Navigation
-                                                          .instance
-                                                          .navigatorKey
-                                                          .currentContext!)
-                                                      .textTheme
-                                                      .headline5
-                                                      ?.copyWith(
-                                                        color: Colors.black,
-                                                        // fontSize: 11.sp,
-                                                        // fontWeight: FontWeight.bold,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                      return GestureDetector(
+                                        onTap: (){
+                                          redeem(data.vendor_id!,data.code);
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 4.w, vertical: 1.h),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    data.title ?? '25% OFF',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.start,
+                                                    style: Theme.of(Navigation
+                                                            .instance
+                                                            .navigatorKey
+                                                            .currentContext!)
+                                                        .textTheme
+                                                        .headline5
+                                                        ?.copyWith(
+                                                          color: Colors.black,
+                                                          // fontSize: 11.sp,
+                                                          // fontWeight: FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    data.vendor?.shop_name ?? "",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.start,
+                                                    style: Theme.of(Navigation
+                                                            .instance
+                                                            .navigatorKey
+                                                            .currentContext!)
+                                                        .textTheme
+                                                        .headline4
+                                                        ?.copyWith(
+                                                          color: Colors.black,
+                                                          // fontSize: 11.sp,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    data.vendor?.address ??
+                                                        'RGB road, Zoo tiniali',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.start,
+                                                    style: Theme.of(Navigation
+                                                            .instance
+                                                            .navigatorKey
+                                                            .currentContext!)
+                                                        .textTheme
+                                                        .headline5
+                                                        ?.copyWith(
+                                                          color: Colors.black,
+                                                          // fontSize: 11.sp,
+                                                          // fontWeight: FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const Spacer(),
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    '${data.code ?? '8486'}',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.start,
+                                                    style: Theme.of(Navigation
+                                                            .instance
+                                                            .navigatorKey
+                                                            .currentContext!)
+                                                        .textTheme
+                                                        .headline5
+                                                        ?.copyWith(
+                                                          color: Colors
+                                                              .grey.shade800,
+                                                          // fontSize: 11.sp,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    Jiffy(
+                                                            data.plan_active_date
+                                                                    .toString()
+                                                                    .split(
+                                                                        'T')[0] ??
+                                                                "",
+                                                            "yyyy-MM-dd")
+                                                        .format("dd/MM/yyyy"),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.start,
+                                                    style: Theme.of(Navigation
+                                                            .instance
+                                                            .navigatorKey
+                                                            .currentContext!)
+                                                        .textTheme
+                                                        .headline5
+                                                        ?.copyWith(
+                                                          color: Colors.black,
+                                                          // fontSize: 11.sp,
+                                                          // fontWeight: FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    Jiffy(
+                                                            data.plan_expiry_date
+                                                                    .toString()
+                                                                    .split(
+                                                                        'T')[0] ??
+                                                                "",
+                                                            "yyyy-MM-dd")
+                                                        .format("dd/MM/yyyy"),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.start,
+                                                    style: Theme.of(Navigation
+                                                            .instance
+                                                            .navigatorKey
+                                                            .currentContext!)
+                                                        .textTheme
+                                                        .headline5
+                                                        ?.copyWith(
+                                                          color: Colors.black,
+                                                          // fontSize: 11.sp,
+                                                          // fontWeight: FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       );
                                     },
@@ -653,7 +689,7 @@ class _BigDealPageState extends State<BigDealPage> {
                             ),
                           ),
                           SizedBox(
-                            height: 10.h,
+                            height: 20.h,
                           ),
                         ],
                       ),
@@ -906,6 +942,7 @@ class _BigDealPageState extends State<BigDealPage> {
   }
 
   void fetchDeals() async {
+    Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getPromotedDeals();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -919,14 +956,30 @@ class _BigDealPageState extends State<BigDealPage> {
                 listen: false)
             .setShopCategory(response1.categories ?? []);
         // _refreshController.refreshCompleted();
+        Navigation.instance.goBack();
       } else {
+        Navigation.instance.goBack();
         // _refreshController.refreshFailed();
       }
     } else {
+      Navigation.instance.goBack();
       // _refreshController.refreshFailed();
     }
   }
+  void redeem(int id, String? code) async {
+    final response = await ApiProvider.instance.redeemCupon(id, code);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setRedeemDetails(response.details!);
+      fetchHistory();
+      Navigation.instance.navigate('/redeemOfferPage');
+    } else {
+      Navigation.instance.navigate('/redeemOfferPage');
+    }
 
+  }
   void fetchHistory() async {
     final response = await ApiProvider.instance.getRedeemHistory();
     if (response.success ?? false) {
@@ -937,5 +990,14 @@ class _BigDealPageState extends State<BigDealPage> {
     } else {
       // _refreshController.refreshFailed();
     }
+  }
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }

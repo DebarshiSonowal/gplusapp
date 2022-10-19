@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
+import '../../Networking/api_provider.dart';
 
 class RedeemOfferPage extends StatefulWidget {
   const RedeemOfferPage({Key? key}) : super(key: key);
@@ -15,9 +18,18 @@ class RedeemOfferPage extends StatefulWidget {
 }
 
 class _RedeemOfferPageState extends State<RedeemOfferPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDeals();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: buildAppBar(),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -138,24 +150,45 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
                                   Radius.circular(5),
                                 ),
                               ),
-                              child: Center(
-                                child: Text(
-                                  data.redeemDetails?.code ?? '8488',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline3
-                                      ?.copyWith(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        data.redeemDetails?.code ?? '8488',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3
+                                            ?.copyWith(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
-                                ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () async {
+                                      await Clipboard.setData(
+                                        ClipboardData(
+                                            text: data.redeemDetails?.code ??
+                                                '8488'),
+                                      );
+                                      showInSnackBar(
+                                          "Coupon Code copied successfully");
+                                    },
+                                    icon: const Icon(
+                                      Icons.copy,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             SizedBox(
                               height: 1.h,
                             ),
                             Text(
-                              '* The offer expires of ${data.redeemDetails?.plan_expiry_date??'5th August,2022'}',
+                              '* The offer expires of ${Jiffy(data.redeemDetails?.plan_expiry_date ?? "0000-00-00", "yyyy-MM-dd").format("dd/MM/yyyy")}',
                               style: Theme.of(context)
                                   .textTheme
                                   .headline6
@@ -199,9 +232,9 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 4.w, vertical: 1.h),
                                 child: Text(
-                                  data.redeemDetails?.description??
-                                  'when an unknown printer took a galley of type'
-                                  ' and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently',
+                                  data.redeemDetails?.description ??
+                                      'when an unknown printer took a galley of type'
+                                          ' and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline5
@@ -286,6 +319,7 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
       backgroundColor: Constance.primaryColor,
     );
   }
+
   void showDialogBox() {
     showDialog(
       context: context,
@@ -303,9 +337,9 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
           title: Text(
             'Hello Jonathan!',
             style: Theme.of(context).textTheme.headline3?.copyWith(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           content: Container(
             padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
@@ -320,20 +354,20 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
                 Text(
                   'Do you really want to redeem the offer?',
                   style: Theme.of(context).textTheme.headline1?.copyWith(
-                    color: Constance.secondaryColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+                        color: Constance.secondaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 SizedBox(height: 2.h),
                 Text(
                   'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                      ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                      ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                      ' remaining essentially unchanged',
+                  ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+                  ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+                  ' remaining essentially unchanged',
                   style: Theme.of(context).textTheme.headline5?.copyWith(
-                    color: Colors.black,
-                    // fontWeight: FontWeight.bold,
-                  ),
+                        color: Colors.black,
+                        // fontWeight: FontWeight.bold,
+                      ),
                 ),
                 SizedBox(height: 1.h),
                 SizedBox(
@@ -373,5 +407,28 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
       },
     );
   }
-
+  void fetchDeals() async {
+    final response = await ApiProvider.instance.getPromotedDeals();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setPromotedDeals(response.deals ?? []);
+      final response1 = await ApiProvider.instance.getShopCategory();
+      if (response1.success ?? false) {
+        Provider.of<DataProvider>(
+            Navigation.instance.navigatorKey.currentContext ?? context,
+            listen: false)
+            .setShopCategory(response1.categories ?? []);
+        // _refreshController.refreshCompleted();
+      } else {
+        // _refreshController.refreshFailed();
+      }
+    } else {
+      // _refreshController.refreshFailed();
+    }
+  }
+  void showInSnackBar(String value) {
+    _scaffoldKey.currentState?.showSnackBar(SnackBar(content: Text(value)));
+  }
 }

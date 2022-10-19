@@ -53,7 +53,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   void _onRefresh() async {
     // monitor network fetch
     final response = await ApiProvider.instance
-        .getClassified(getCategory(current), result, controller.text);
+        .getClassified(getCategory(selected), result, controller.text);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
@@ -685,7 +685,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   void fetchClassified(result) async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance
-        .getClassified(getCategory(current), result, controller.text);
+        .getClassified(getCategory(selected), result, controller.text);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
