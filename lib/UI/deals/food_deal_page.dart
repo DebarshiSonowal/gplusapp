@@ -25,7 +25,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
 
   var current = 1;
 
-  var locality = '', order_by = 'Time';
+  var locality = '', order_by = 'alphabet';
 
   @override
   void initState() {
@@ -278,19 +278,19 @@ class _FoodDealPageState extends State<FoodDealPage> {
         builder: (context) {
           return StatefulBuilder(builder: (context, _) {
             return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.only(
-                    topLeft: const Radius.circular(15.0),
-                    topRight: const Radius.circular(15.0)),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    topRight: Radius.circular(15.0)),
               ),
               child: Container(
                 padding: EdgeInsets.only(
                     top: 3.h, right: 10.w, left: 10.w, bottom: 3.h),
-                decoration: new BoxDecoration(
+                decoration: const BoxDecoration(
                     color: Colors.white,
-                    borderRadius: new BorderRadius.only(
-                        topLeft: const Radius.circular(15.0),
-                        topRight: const Radius.circular(15.0))),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15.0),
+                        topRight: Radius.circular(15.0))),
                 child: Wrap(
                   // crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -309,17 +309,18 @@ class _FoodDealPageState extends State<FoodDealPage> {
                       children: [
                         Radio(
                           groupValue: _value,
-                          value: 'Time',
+                          value: 'timeline',
                           fillColor: MaterialStateProperty.all(
                             Constance.primaryColor,
                           ),
                           onChanged: (String? value) {
                             _(() {
                               setState(() {
-                                _value = value ?? "";
+                                _value = value?? "";
+                                order_by=_value;
                               });
                             });
-
+                            fetchCategories();
                             print(_value);
                           },
                           activeColor: Constance.primaryColor,
@@ -341,7 +342,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
                           focusColor: Constance.primaryColor,
                           // overlayColor: MaterialStateProperty,
                           groupValue: _value,
-                          value: 'Alphabetical',
+                          value: 'alphabet',
                           fillColor: MaterialStateProperty.all(
                             Constance.primaryColor,
                           ),

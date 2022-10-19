@@ -18,6 +18,9 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
         color: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
         child: Consumer<DataProvider>(builder: (context, data, _) {
-          return Column(
+          return data.memberships.isNotEmpty?Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -140,7 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     )
                   : Container(),
             ],
-          );
+          ):Container();
         }),
       ),
     );
@@ -195,5 +198,11 @@ class _ProfilePageState extends State<ProfilePage> {
       Navigation.instance.goBack();
       // _refreshController.refreshFailed();
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero,()=>fetch());
   }
 }

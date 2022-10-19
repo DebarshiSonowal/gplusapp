@@ -1372,302 +1372,311 @@ for an unparalleled publication, that people call their''',
 
   void showComments(data) {
     scaffoldKey.currentState?.showBottomSheet((context) {
-      return Card(
-        elevation: 3,
-        color: Colors.grey.shade200,
-        shape: RoundedRectangleBorder(
-          // side: BorderSide(color: Colors.white70, width: 1),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Container(
-          padding: EdgeInsets.only(top: 3.h),
-          height: 70.h,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Comments",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline3
-                        ?.copyWith(
-                      color: Constance
-                          .primaryColor,
-                      fontWeight:
-                      FontWeight.bold,
+      return StatefulBuilder(
+        builder: (context,_) {
+          return Card(
+            elevation: 3,
+            color: Colors.grey.shade200,
+            shape: RoundedRectangleBorder(
+              // side: BorderSide(color: Colors.white70, width: 1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.only(top: 3.h),
+              height: 70.h,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Comments",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline3
+                              ?.copyWith(
+                            color: Constance
+                                .primaryColor,
+                            fontWeight:
+                            FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 55.h,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w),
-                  child: ListView.builder(
-                      // physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: data.comments.length,
-                      itemBuilder: (cont, ind) {
-                        var current = data.comments[ind];
-                        return SizedBox(
-                          height: 16.h,
-                          width: 40.w,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              SizedBox(
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                    SizedBox(
+                      height: 55.h,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: ListView.builder(
+                            // physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: data.comments.length,
+                            itemBuilder: (cont, ind) {
+                              var current = data.comments[ind];
+                              return SizedBox(
+                                height: 16.h,
+                                width: 40.w,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Text(
-                                      current.name ?? "",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline5
-                                          ?.copyWith(
-                                            color: Constance.primaryColor,
-                                            fontWeight: FontWeight.bold,
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            current.name ?? "",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline5
+                                                ?.copyWith(
+                                                  color: Constance.primaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                           ),
+                                          // Icon(
+                                          //   Icons.menu,
+                                          //   color: Colors.black,
+                                          // ),
+                                        ],
+                                      ),
                                     ),
-                                    // Icon(
-                                    //   Icons.menu,
-                                    //   color: Colors.black,
-                                    // ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 1.h,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    current.comment ?? "",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline6
-                                        ?.copyWith(
-                                          color: Colors.black,
-                                          // fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 1.h,
-                              ),
-                              // Text(
-                              //   "",
-                              //   style: Theme.of(context)
-                              //       .textTheme
-                              //       .headline5
-                              //       ?.copyWith(
-                              //         color: Colors.black,
-                              //         fontWeight: FontWeight.bold,
-                              //       ),
-                              // ),
-                              // SizedBox(
-                              //   height: 1.h,
-                              // ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
                                     Row(
                                       children: [
-                                        Material(
-                                          type: MaterialType.transparency,
-                                          child: IconButton(
-                                            onPressed: () {
-                                              postCommentLike(current.id, 1);
-                                            },
-                                            splashRadius: 20.0,
-                                            splashColor: Constance.secondaryColor,
-                                            icon: const Icon(
-                                              Icons.thumb_up,
-                                              color: Constance.primaryColor,
-                                            ),
-                                          ),
+                                        Text(
+                                          current.comment ?? "",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(
+                                                color: Colors.black,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
                                         ),
-                                        Material(
-                                          type: MaterialType.transparency,
-                                          child: IconButton(
-                                            onPressed: () {
-                                              // postLike(current.id, 0);
-                                            },
-                                            splashRadius: 20.0,
-                                            splashColor: Constance.secondaryColor,
-                                            icon: const Icon(
-                                              Icons.comment,
-                                              color: Constance.primaryColor,
-                                            ),
-                                          ),
-                                        ),
-                                        // Material(
-                                        //   type: MaterialType.transparency,
-                                        //   child: IconButton(
-                                        //     onPressed: () {},
-                                        //     splashRadius:20.0,
-                                        //     splashColor:
-                                        //     Constance.secondaryColor,
-                                        //     icon: const Icon(
-                                        //       Icons.comment,
-                                        //       color:
-                                        //       Constance.primaryColor,
-                                        //     ),
-                                        //   ),
-                                        // ),
                                       ],
                                     ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
                                     // Text(
-                                    //   '${15} mins ago' ?? "",
+                                    //   "",
                                     //   style: Theme.of(context)
                                     //       .textTheme
                                     //       .headline5
                                     //       ?.copyWith(
-                                    //     color: Colors.black,
-                                    //     fontWeight: FontWeight.bold,
-                                    //   ),
+                                    //         color: Colors.black,
+                                    //         fontWeight: FontWeight.bold,
+                                    //       ),
                                     // ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: Row(
-                                  // mainAxisAlignment:
-                                  //     MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '${current.like_count} likes' ?? "",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          ?.copyWith(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
+                                    // SizedBox(
+                                    //   height: 1.h,
+                                    // ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Material(
+                                                type: MaterialType.transparency,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    postCommentLike(current.id, 1);
+                                                  },
+                                                  splashRadius: 20.0,
+                                                  splashColor: Constance.secondaryColor,
+                                                  icon: const Icon(
+                                                    Icons.thumb_up,
+                                                    color: Constance.primaryColor,
+                                                  ),
+                                                ),
+                                              ),
+                                              Material(
+                                                type: MaterialType.transparency,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    // postLike(current.id, 0);
+                                                  },
+                                                  splashRadius: 20.0,
+                                                  splashColor: Constance.secondaryColor,
+                                                  icon: const Icon(
+                                                    Icons.comment,
+                                                    color: Constance.primaryColor,
+                                                  ),
+                                                ),
+                                              ),
+                                              // Material(
+                                              //   type: MaterialType.transparency,
+                                              //   child: IconButton(
+                                              //     onPressed: () {},
+                                              //     splashRadius:20.0,
+                                              //     splashColor:
+                                              //     Constance.secondaryColor,
+                                              //     icon: const Icon(
+                                              //       Icons.comment,
+                                              //       color:
+                                              //       Constance.primaryColor,
+                                              //     ),
+                                              //   ),
+                                              // ),
+                                            ],
                                           ),
+                                          // Text(
+                                          //   '${15} mins ago' ?? "",
+                                          //   style: Theme.of(context)
+                                          //       .textTheme
+                                          //       .headline5
+                                          //       ?.copyWith(
+                                          //     color: Colors.black,
+                                          //     fontWeight: FontWeight.bold,
+                                          //   ),
+                                          // ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Row(
+                                        // mainAxisAlignment:
+                                        //     MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '${current.like_count} likes' ?? "",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                ?.copyWith(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          // SizedBox(
+                                          //   width: 2.w,
+                                          // ),
+                                          // Text(
+                                          //   '${current.dislike_count} dislike' ??
+                                          //       "",
+                                          //   style: Theme.of(context)
+                                          //       .textTheme
+                                          //       .headline6
+                                          //       ?.copyWith(
+                                          //     color: Colors.black,
+                                          //     fontWeight: FontWeight.bold,
+                                          //   ),
+                                          // ),
+                                        ],
+                                      ),
                                     ),
                                     // SizedBox(
-                                    //   width: 2.w,
+                                    //   height: 1.h,
                                     // ),
-                                    // Text(
-                                    //   '${current.dislike_count} dislike' ??
-                                    //       "",
-                                    //   style: Theme.of(context)
-                                    //       .textTheme
-                                    //       .headline6
-                                    //       ?.copyWith(
-                                    //     color: Colors.black,
-                                    //     fontWeight: FontWeight.bold,
+
+                                    // Padding(
+                                    //   padding: EdgeInsets.symmetric(
+                                    //       horizontal: 2.w),
+                                    //   child: GestureDetector(
+                                    //     onTap: () {},
+                                    //     child: Card(
+                                    //       color: Colors.white,
+                                    //       child: Padding(
+                                    //         padding: EdgeInsets.symmetric(
+                                    //             horizontal: 5.w,
+                                    //             vertical: 1.h),
+                                    //         child: Row(
+                                    //           mainAxisAlignment:
+                                    //               MainAxisAlignment
+                                    //                   .spaceBetween,
+                                    //           crossAxisAlignment:
+                                    //               CrossAxisAlignment.center,
+                                    //           children: [
+                                    //             Text(
+                                    //               'Write a comment',
+                                    //               style: Theme.of(context)
+                                    //                   .textTheme
+                                    //                   .bodyText2
+                                    //                   ?.copyWith(
+                                    //                     color: Colors.black,
+                                    //                   ),
+                                    //             ),
+                                    //             const Icon(
+                                    //               Icons.link,
+                                    //               color: Colors.black,
+                                    //             ),
+                                    //           ],
+                                    //         ),
+                                    //       ),
+                                    //     ),
                                     //   ),
                                     // ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
                                   ],
                                 ),
+                              );
+                            }),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 2.w),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Card(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 5.w, vertical: 0.5.h),
+                            child: TextField(
+                              controller: _searchQueryController,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                hintText: "Write a comment",
+                                border: InputBorder.none,
+                                hintStyle: const TextStyle(color: Colors.black26),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    if (_searchQueryController.text.isNotEmpty) {
+                                      // search(_searchQueryController.text);
+                                     _((){
+                                       postComment(data.id, 'guwahati-connect',
+                                           _searchQueryController.text);
+                                     });
+                                    } else {
+                                      showError('Enter something to search');
+                                    }
+                                  },
+                                  icon: const Icon(
+                                    Icons.send,
+                                    color: Colors.black,
+                                  ),
+                                ),
                               ),
-                              // SizedBox(
-                              //   height: 1.h,
-                              // ),
-
-                              // Padding(
-                              //   padding: EdgeInsets.symmetric(
-                              //       horizontal: 2.w),
-                              //   child: GestureDetector(
-                              //     onTap: () {},
-                              //     child: Card(
-                              //       color: Colors.white,
-                              //       child: Padding(
-                              //         padding: EdgeInsets.symmetric(
-                              //             horizontal: 5.w,
-                              //             vertical: 1.h),
-                              //         child: Row(
-                              //           mainAxisAlignment:
-                              //               MainAxisAlignment
-                              //                   .spaceBetween,
-                              //           crossAxisAlignment:
-                              //               CrossAxisAlignment.center,
-                              //           children: [
-                              //             Text(
-                              //               'Write a comment',
-                              //               style: Theme.of(context)
-                              //                   .textTheme
-                              //                   .bodyText2
-                              //                   ?.copyWith(
-                              //                     color: Colors.black,
-                              //                   ),
-                              //             ),
-                              //             const Icon(
-                              //               Icons.link,
-                              //               color: Colors.black,
-                              //             ),
-                              //           ],
-                              //         ),
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
-                              SizedBox(
-                                height: 1.h,
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 2.w),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Card(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 5.w, vertical: 0.5.h),
-                      child: TextField(
-                        controller: _searchQueryController,
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          hintText: "Write a comment",
-                          border: InputBorder.none,
-                          hintStyle: const TextStyle(color: Colors.black26),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              if (_searchQueryController.text.isNotEmpty) {
-                                // search(_searchQueryController.text);
-                                postComment(data.id, 'guwahati-connect',
-                                    _searchQueryController.text);
-                              } else {
-                                showError('Enter something to search');
-                              }
-                            },
-                            icon: const Icon(
-                              Icons.send,
-                              color: Colors.black,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(color: Colors.black),
+                              onChanged: (query) => {},
                             ),
                           ),
                         ),
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline4
-                            ?.copyWith(color: Colors.black),
-                        onChanged: (query) => {},
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        }
       );
     });
   }
