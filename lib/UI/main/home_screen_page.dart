@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
@@ -52,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    secureScreen();
     Future.delayed(Duration.zero, () => fetchProfile());
     fetchHome();
     fetchOpinion();
@@ -106,6 +108,18 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: buildAppBar(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
+        onPressed: () {
+          _launchUrl(
+              Uri.parse('whatsapp://send?phone=919365974702&text=Hi+G+Plus!'));
+        },
+        child: Icon(
+          FontAwesomeIcons.whatsapp,
+          color: Colors.white,
+          size: 22.sp,
+        ),
+      ),
       drawer: BergerMenuMemPage(),
       body: OfflineBuilder(
         connectivityBuilder: (
@@ -295,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 5.w),
                                     child: Text(
-                                      'Top picks for you',
+                                      'Suggested for you',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline3
@@ -321,15 +335,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                           var item = data.home_toppicks[count];
                                           if ((data.home_toppicks.length > 4
                                                   ? 3
-                                                  : data.home_toppicks.length-1) ==
+                                                  : data.home_toppicks.length -
+                                                      1) ==
                                               count) {
                                             return Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.5.h),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 1.w,
+                                                  vertical: 1.5.h),
                                               // height: 5.h,
                                               // width: 20.w,
                                               child: TextButton(
                                                 onPressed: () {
-                                                  Navigation.instance.navigate('/toppicks');
+                                                  Navigation.instance
+                                                      .navigate('/toppicks');
                                                 },
                                                 child: Text(
                                                   'View All',
@@ -337,29 +355,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       .textTheme
                                                       .headline3
                                                       ?.copyWith(
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                    FontWeight.bold,
-                                                    fontSize: 10.sp,
-                                                  ),
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 10.sp,
+                                                      ),
                                                 ),
                                               ),
                                             );
                                           } else {
-
                                             return GestureDetector(
                                               onTap: () {
                                                 if (data.profile
-                                                    ?.is_plan_active ??
+                                                        ?.is_plan_active ??
                                                     false) {
                                                   Navigation.instance.navigate(
                                                       '/story',
                                                       args:
-                                                      '${item.categories?.first.seo_name},${item.seo_name}');
+                                                          '${item.categories?.first.seo_name},${item.seo_name}');
                                                 } else {
                                                   Constance
                                                       .showMembershipPrompt(
-                                                      context);
+                                                          context);
                                                 }
                                               },
                                               child: ToppicksCard(item: item),
@@ -380,35 +397,71 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: 1.h,
                             ),
-                            SizedBox(
-                              height: 10.h,
-                              width: double.infinity,
-                              child: GestureDetector(
-                                onTap: () {
-                                  _launchUrl(Uri.parse(
-                                      data.ads[random].link.toString()));
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 2.w, vertical: 1.5.h),
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit.fill,
-                                    imageUrl:
-                                        data.ads[random].image_file_name ?? '',
-                                    placeholder: (cont, _) {
-                                      return Image.asset(
-                                        Constance.logoIcon,
-                                        // color: Colors.black,
-                                      );
-                                    },
-                                    errorWidget: (cont, _, e) {
-                                      return Image.network(
-                                        Constance.defaultImage,
-                                        fit: BoxFit.fitWidth,
-                                      );
-                                    },
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 1.w),
+                              padding: EdgeInsets.symmetric(vertical: 1.h),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        color: Constance.secondaryColor,
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 0.2.h, horizontal: 1.w),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 5.w),
+                                        child: Text(
+                                          'Ad',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline3
+                                              ?.copyWith(
+                                                fontSize: 12.sp,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
+                                  // SizedBox(
+                                  //   height: 1.h,
+                                  // ),
+                                  SizedBox(
+                                    // height: 8.5.h,
+                                    width: double.infinity,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _launchUrl(Uri.parse(
+                                            data.ads[random].link.toString()));
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 5.w,
+                                            right: 5.w,
+                                            bottom: 0.5.h),
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.fitWidth,
+                                          imageUrl: data.ads[random]
+                                                  .image_file_name ??
+                                              '',
+                                          placeholder: (cont, _) {
+                                            return Image.asset(
+                                              Constance.logoIcon,
+                                              // color: Colors.black,
+                                            );
+                                          },
+                                          errorWidget: (cont, _, e) {
+                                            return Image.network(
+                                              Constance.defaultImage,
+                                              fit: BoxFit.fitWidth,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             Padding(
@@ -434,7 +487,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 5.w),
                                     child: Text(
-                                      'GPlus Exclusive',
+                                      'G Plus Exclusive',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline3
@@ -542,7 +595,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 5.w),
                                     child: Text(
-                                      'Video of the week',
+                                      'Video reports',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline3
@@ -691,7 +744,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Container(
                                     child: ListView.separated(
                                         shrinkWrap: true,
-                                        physics: const NeverScrollableScrollPhysics(),
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
                                         scrollDirection: Axis.vertical,
                                         itemBuilder: (cont, count) {
                                           // var item = Constance.pollWeek[count];
@@ -704,7 +758,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     horizontal: 2.w,
                                                     vertical: 1.h),
                                                 child: LinearPercentIndicator(
-                                                  barRadius: const Radius.circular(5),
+                                                  barRadius:
+                                                      const Radius.circular(5),
                                                   width: 80.w,
                                                   lineHeight: 5.h,
                                                   percent:
@@ -803,7 +858,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: 1.h,
                                   ),
                                   GestureDetector(
-                                    onTap: (){
+                                    onTap: () {
                                       Navigation.instance.navigate('/pollPage');
                                     },
                                     child: Padding(
@@ -1045,8 +1100,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _launchUrl(_url) async {
-    if (!await launchUrl(_url)) {
-      throw 'Could not launch $_url';
+    if (await canLaunchUrl(_url)) {
+      launchUrl(_url,mode: LaunchMode.externalApplication);
+    } else {
+      launchUrl(
+        Uri.parse('https://api.whatsapp.com/send?phone=919365974702'),
+        mode: LaunchMode.inAppWebView
+      );
     }
   }
 
@@ -1270,5 +1330,9 @@ for an unparalleled publication, that people call their''',
             iconColor: Colors.white,
           ),
         ]);
+  }
+
+  Future<void> secureScreen() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 }

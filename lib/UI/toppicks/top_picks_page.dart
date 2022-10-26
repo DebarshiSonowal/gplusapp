@@ -115,7 +115,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
                             //   size: 4.h,
                             // ),
                             Text(
-                              'Top Picks',
+                              'Suggested for you',
                               style: Theme.of(Navigation
                                       .instance.navigatorKey.currentContext!)
                                   .textTheme
@@ -153,27 +153,27 @@ class _TopPicksPageState extends State<TopPicksPage> {
                         SizedBox(
                           height: 2.h,
                         ),
-                        Row(
-                          children: [
-                            Container(
-                              color: Constance.primaryColor,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 2.w, vertical: 1.h),
-                              child: Text(
-                                'Guwahati',
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      // fontSize: 2.2.h,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Container(
+                        //       color: Constance.primaryColor,
+                        //       padding: EdgeInsets.symmetric(
+                        //           horizontal: 2.w, vertical: 1.h),
+                        //       child: Text(
+                        //         'Guwahati',
+                        //         style: Theme.of(Navigation
+                        //                 .instance.navigatorKey.currentContext!)
+                        //             .textTheme
+                        //             .headline5
+                        //             ?.copyWith(
+                        //               color: Colors.white,
+                        //               // fontSize: 2.2.h,
+                        //               // fontWeight: FontWeight.bold,
+                        //             ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         SizedBox(
                           height: 2.h,
                         ),
@@ -270,7 +270,10 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                                 errorWidget: (cont, _, e) {
                                                   // print(e);
                                                   print(_);
-                                                  return Text(_);
+                                                  return Image.asset(
+                                                    Constance.logoIcon,
+                                                    // color: Colors.black,
+                                                  );
                                                 },
                                               ),
                                             ),

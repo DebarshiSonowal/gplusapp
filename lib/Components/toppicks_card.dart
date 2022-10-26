@@ -95,7 +95,7 @@ class ToppicksCard extends StatelessWidget {
                     height: 1.5.h,
                   ),
                   Text(
-                    "",
+                    item.author_name??"",
                     style: Theme.of(context)
                         .textTheme
                         .headline6

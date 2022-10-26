@@ -60,6 +60,13 @@ class _SearchPageState extends State<SearchPage> {
                 // height: 5.h,
                 child: Center(
                   child: TextField(
+                    toolbarOptions: const ToolbarOptions(
+                        copy:false,
+                        paste: false,
+                        cut: false,
+                        selectAll: false
+                      //by default all are disabled 'false'
+                    ),
                     controller: _searchQueryController,
                     autofocus: true,
                     decoration: InputDecoration(
@@ -81,7 +88,9 @@ class _SearchPageState extends State<SearchPage> {
                         .textTheme
                         .headline4
                         ?.copyWith(color: Colors.black),
-                    onChanged: (query) => {},
+                    onChanged: (query) => {
+
+                    },
                   ),
                 ),
               ),
@@ -106,6 +115,7 @@ class _SearchPageState extends State<SearchPage> {
                         setState(() {
                           selected = 0;
                         });
+                        search(_searchQueryController.text, selected);
                       },
                       child: Container(
                         height: 5.h,
@@ -133,6 +143,7 @@ class _SearchPageState extends State<SearchPage> {
                         setState(() {
                           selected = 1;
                         });
+                        search(_searchQueryController.text, selected);
                       },
                       child: Container(
                         height: 5.h,

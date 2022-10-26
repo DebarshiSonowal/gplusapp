@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/Storage.dart';
@@ -36,6 +37,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   @override
   void initState() {
     super.initState();
+    secureScreen();
     Future.delayed(Duration.zero, () {
       if (!Storage.instance.isClassified) {
         showDialogBox();
@@ -396,61 +398,153 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                                           FontWeight.bold),
                                             ),
                                           ),
-                                          LikeButton(
-                                            size: 2.5.h,
-                                            onTap: (val) async {
-                                              setAsFavourite(
-                                                  current.id, 'classified');
-                                              _(() {
-                                                like = !like;
-                                              });
-                                              return like;
-                                            },
-                                            circleColor: const CircleColor(
-                                              start: Colors.red,
-                                              end: Colors.black87,
-                                            ),
-                                            bubblesColor: const BubblesColor(
-                                              dotPrimaryColor:
-                                                  Color(0xff33b5e5),
-                                              dotSecondaryColor:
-                                                  Color(0xff0099cc),
-                                            ),
-                                            likeBuilder: (bool isLiked) {
-                                              return Icon(
-                                                like
-                                                    ? FontAwesomeIcons
-                                                        .solidHeart
-                                                    : FontAwesomeIcons.heart,
-                                                color: like
-                                                    ? Constance.thirdColor
-                                                    : Colors.grey,
-                                                size: 3.h,
-                                              );
-                                            },
-                                            likeCount: 665,
-                                            countBuilder: (int? count,
-                                                bool isLiked, String text) {
-                                              var color = like
-                                                  ? Colors.deepPurpleAccent
-                                                  : Colors.grey;
-                                              Widget result;
-                                              if (count == 0) {
-                                                result = Text(
-                                                  "",
-                                                  style:
-                                                      TextStyle(color: color),
-                                                );
-                                              } else {
-                                                result = Text(
-                                                  '',
-                                                  style:
-                                                      TextStyle(color: color),
-                                                );
-                                              }
-                                              return result;
-                                            },
-                                          ),
+                                          selected == 3
+                                              ? PopupMenuButton<int>(
+                                                  itemBuilder:
+                                                      (BuildContext context) =>
+                                                          <PopupMenuItem<int>>[
+                                                    PopupMenuItem<int>(
+                                                      value: 1,
+                                                      child: Row(
+                                                        children: [
+                                                          const Icon(
+                                                            Icons.edit,
+                                                            color: Colors.black,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 2.w,
+                                                          ),
+                                                          Text(
+                                                            'Edit',
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .headline6
+                                                                ?.copyWith(
+                                                                    color: Colors
+                                                                        .black),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    PopupMenuItem<int>(
+                                                      value: 2,
+                                                      child: Row(
+                                                        children: [
+                                                          const Icon(
+                                                            Icons.delete,
+                                                            color: Colors.black,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 2.w,
+                                                          ),
+                                                          Text(
+                                                            'Delete',
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .headline6
+                                                                ?.copyWith(
+                                                                    color: Colors
+                                                                        .black),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    PopupMenuItem<int>(
+                                                      value: 3,
+                                                      child: Row(
+                                                        children: [
+                                                          const Icon(
+                                                            Icons.rocket,
+                                                            color: Colors.black,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 2.w,
+                                                          ),
+                                                          Text(
+                                                            'Boost',
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .headline6
+                                                                ?.copyWith(
+                                                                    color: Colors
+                                                                        .black),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                  onSelected: (int value) {
+                                                    setState(() {});
+                                                  },
+                                                  color: Colors.white,
+                                                  icon: const Icon(
+                                                    Icons.menu,
+                                                    color: Colors.black,
+                                                  ),
+                                                )
+                                              : LikeButton(
+                                                  size: 2.5.h,
+                                                  onTap: (val) async {
+                                                    setAsFavourite(current.id,
+                                                        'classified');
+                                                    _(() {
+                                                      like = !like;
+                                                    });
+                                                    return like;
+                                                  },
+                                                  circleColor:
+                                                      const CircleColor(
+                                                    start: Colors.red,
+                                                    end: Colors.black87,
+                                                  ),
+                                                  bubblesColor:
+                                                      const BubblesColor(
+                                                    dotPrimaryColor:
+                                                        Color(0xff33b5e5),
+                                                    dotSecondaryColor:
+                                                        Color(0xff0099cc),
+                                                  ),
+                                                  likeBuilder: (bool isLiked) {
+                                                    return Icon(
+                                                      like
+                                                          ? FontAwesomeIcons
+                                                              .solidHeart
+                                                          : FontAwesomeIcons
+                                                              .heart,
+                                                      color: like
+                                                          ? Constance.thirdColor
+                                                          : Colors.grey,
+                                                      size: 3.h,
+                                                    );
+                                                  },
+                                                  likeCount: 665,
+                                                  countBuilder: (int? count,
+                                                      bool isLiked,
+                                                      String text) {
+                                                    var color = like
+                                                        ? Colors
+                                                            .deepPurpleAccent
+                                                        : Colors.grey;
+                                                    Widget result;
+                                                    if (count == 0) {
+                                                      result = Text(
+                                                        "",
+                                                        style: TextStyle(
+                                                            color: color),
+                                                      );
+                                                    } else {
+                                                      result = Text(
+                                                        '',
+                                                        style: TextStyle(
+                                                            color: color),
+                                                      );
+                                                    }
+                                                    return result;
+                                                  },
+                                                ),
                                         ],
                                       ),
                                     ),
@@ -648,23 +742,20 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                 ),
                 SizedBox(height: 1.h),
                 Text(
-                  'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                  ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                  ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                  ' remaining essentially unchanged',
+                  'Posting made easy! All you have to do is log in and click the “Post a Listing” button at the corner',
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontWeight: FontWeight.bold,
                       ),
                 ),
-                SizedBox(height: 1.h),
-                Text(
-                  'is simply dummy text of the printing and typesetting industry',
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                ),
+                // SizedBox(height: 1.h),
+                // Text(
+                //   'is simply dummy text of the printing and typesetting industry',
+                //   style: Theme.of(context).textTheme.headline5?.copyWith(
+                //         color: Colors.black,
+                //         // fontWeight: FontWeight.bold,
+                //       ),
+                // ),
                 SizedBox(height: 1.h),
                 SizedBox(
                   width: double.infinity,
@@ -742,7 +833,10 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
             .profile
             ?.is_plan_active ??
         false) {
-      Navigation.instance.navigate('/postClassified');
+      final resp = await Navigation.instance.navigate('/postClassified');
+      if(resp==null){
+        fetchClassified("");
+      }
     } else {
       scaffoldKey.currentState?.showBottomSheet(
         (context) {
@@ -864,5 +958,9 @@ for an unparalleled publication, that people call their''',
         ),
       );
     }
+  }
+
+  Future<void> secureScreen() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 }

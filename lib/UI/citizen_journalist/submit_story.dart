@@ -203,7 +203,11 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                 child: CustomButton(
                   onTap: () {
                     // showDialogBox();
-                    postStory();
+                    if (title.text.isNotEmpty && desc.text.isNotEmpty) {
+                      postStory();
+                    } else {
+                      showError("Title and Description is mandatory to post");
+                    }
                   },
                   txt: 'Submit',
                 ),
@@ -364,9 +368,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                   size: 15.h,
                 ),
                 Text(
-                  'Hello ${Provider.of<DataProvider>(
-                      Navigation.instance.navigatorKey.currentContext ?? context,
-                      listen: false).profile?.name}',
+                  'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,

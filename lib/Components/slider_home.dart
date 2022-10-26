@@ -24,11 +24,11 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
   Widget build(BuildContext context) {
     return Consumer<DataProvider>(builder: (context, data, _) {
       return SizedBox(
-        // height: 40.h,
+        // height: 30.h,
         width: MediaQuery.of(context).size.width,
         child: Stack(alignment: Alignment.bottomCenter, children: [
           Container(
-            padding: EdgeInsets.only(top: 0.h),
+            // padding: EdgeInsets.only(top: 0.h),
             color: Colors.grey.shade200,
             width: MediaQuery.of(context).size.width,
             // height: 40.h,
@@ -59,7 +59,8 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                             child: CachedNetworkImage(
                               imageUrl: e.value.image_file_name ?? "",
                               width: double.infinity,
-                              fit: BoxFit.fitWidth,
+                              height: double.infinity,
+                              fit: BoxFit.fill,
                               // filterQuality: FilterQuality.low,
                               placeholder: (cont, _) {
                                 return Image.asset(
@@ -137,8 +138,8 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
               return GestureDetector(
                 onTap: () => _controller.animateToPage(entry.key),
                 child: Container(
-                  width: 12.0,
-                  height: 12.0,
+                  width: 2.w,
+                  height: 2.h,
                   margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,

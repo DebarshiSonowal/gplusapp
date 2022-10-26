@@ -19,7 +19,14 @@ class CitizenJournalistPage extends StatefulWidget {
 
 class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
   int current = 1;
-  String? txt;
+  String txt =
+      'Worried about the security in your area, a garbage dump in your locality,'
+      ' increasing traffic on the roads, potholes, lack of access to water, and several'
+      ' other issues which fails to reflect in mainstream media? Do you want the authorities'
+      ' to take notice but you\’re not being heard?'
+      ' We want to change that. We are passing the baton to you, the citizen. Be active and'
+      ' vigilant through G Plus ‘Citizen Journalist’ programme – an empowering platform for '
+      'citizens to raise their voice.';
 
   @override
   void initState() {
@@ -72,10 +79,13 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
               SizedBox(height: 1.h),
               Text(
                 txt ??
-                    'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                        ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                        ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                        ' remaining essentially unchanged',
+                    'Worried about the security in your area, a garbage dump in your locality,'
+                        ' increasing traffic on the roads, potholes, lack of access to water, and several'
+                        ' other issues which fails to reflect in mainstream media? Do you want the authorities'
+                        ' to take notice but you\’re not being heard?'
+                        ' We want to change that. We are passing the baton to you, the citizen. Be active and'
+                        ' vigilant through G Plus ‘Citizen Journalist’ programme – an empowering platform for '
+                        'citizens to raise their voice.',
                 style: Theme.of(context).textTheme.headline4?.copyWith(
                       color: Colors.black,
                       // fontWeight: FontWeight.bold,
@@ -174,7 +184,7 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
     final response = await ApiProvider.instance.getCitizenText();
     if (response.success ?? false) {
       setState(() {
-        txt = response.desc;
+        txt = response.desc!;
       });
       Navigation.instance.goBack();
     } else {

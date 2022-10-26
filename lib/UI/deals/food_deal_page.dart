@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () => fetchCategories());
+    secureScreen();
   }
 
   @override
@@ -400,5 +402,8 @@ class _FoodDealPageState extends State<FoodDealPage> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+  Future<void> secureScreen() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 }

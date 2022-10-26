@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -27,6 +28,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
   void initState() {
     super.initState();
     fetchGplus();
+    secureScreen();
   }
 
   void _onRefresh() async {
@@ -146,27 +148,27 @@ class _ExclusivePageState extends State<ExclusivePage> {
                         SizedBox(
                           height: 2.h,
                         ),
-                        Row(
-                          children: [
-                            Container(
-                              color: Constance.primaryColor,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 2.w, vertical: 1.h),
-                              child: Text(
-                                'Guwahati',
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      // fontSize: 2.2.h,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Container(
+                        //       color: Constance.primaryColor,
+                        //       padding: EdgeInsets.symmetric(
+                        //           horizontal: 2.w, vertical: 1.h),
+                        //       child: Text(
+                        //         'Guwahati',
+                        //         style: Theme.of(Navigation
+                        //                 .instance.navigatorKey.currentContext!)
+                        //             .textTheme
+                        //             .headline5
+                        //             ?.copyWith(
+                        //               color: Colors.white,
+                        //               // fontSize: 2.2.h,
+                        //               // fontWeight: FontWeight.bold,
+                        //             ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         SizedBox(
                           height: 2.h,
                         ),
@@ -392,5 +394,8 @@ class _ExclusivePageState extends State<ExclusivePage> {
     } else {
       // _refreshController.refreshFailed();
     }
+  }
+  Future<void> secureScreen() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 }

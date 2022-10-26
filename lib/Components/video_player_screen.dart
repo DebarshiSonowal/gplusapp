@@ -6,6 +6,7 @@ import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:pod_player/pod_player.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:sizer/sizer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -27,6 +28,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
   PageController controller = PageController(initialPage: 0);
+  int page = 0;
 
   // PodPlayerController? _controller;
   @override
@@ -53,9 +55,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 listen: false)
             .home_weekly
             .indexWhere((element) => element.youtube_id == widget.youtube_id));
+        page = Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .home_weekly
+            .indexWhere((element) => element.youtube_id == widget.youtube_id);
         _controller = YoutubePlayerController(
           initialVideoId: widget.youtube_id,
-          flags: YoutubePlayerFlags(
+          flags: const YoutubePlayerFlags(
             autoPlay: true,
             mute: true,
           ),
@@ -76,134 +83,116 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: double.infinity,
       width: double.infinity,
+      color: Colors.black,
+      padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.5.h),
       child: Consumer<DataProvider>(builder: (context, data, _) {
-        return PageView.builder(
-          scrollDirection: Axis.vertical,
-          controller: controller,
-          itemBuilder: (BuildContext context, int index) {
-            var current = data.home_weekly[index];
-            // _controller = PodPlayerController(
-            //   playVideoFrom: PlayVideoFrom.youtube(
-            //       'https://youtu.be/${current.youtube_id}'),
-            // _controller?.load(current.youtube_id!);
-
-            return SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: YoutubePlayer(
-                controller: YoutubePlayerController(
-                  initialVideoId: current.youtube_id!,
-                  flags: const YoutubePlayerFlags(
-                    autoPlay: false,
-                    mute: false,
-                  ),
+        return Container(
+          padding: EdgeInsets.only(top: 1.h),
+          child: Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                height: 4.h,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.1.h,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 1.w),
+                      child: Text(
+                        "${page+1} of ${data.home_weekly.length}",
+                        style: Theme.of(context).textTheme.headline3?.copyWith(
+                              fontSize: 14.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.1.h,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
-                showVideoProgressIndicator: true,
-                aspectRatio: 2 / 3,
-                // videoProgressIndicatorColor: Colors.amber,
-                progressColors: const ProgressBarColors(
-                  playedColor: Colors.amber,
-                  handleColor: Colors.amberAccent,
-                ),
-                onReady: () {
-                  // _controller
-                  //     .addListener(() {});
-                  _controller!.play();
-                },
               ),
-            );
-          },
+              Expanded(
+                child: PageView.builder(
+                  itemCount: data.home_weekly.length,
+                  scrollDirection: Axis.horizontal,
+                  controller: controller,
+                  itemBuilder: (BuildContext context, int index) {
+                    var current = data.home_weekly[index];
+                    // _controller = PodPlayerController(
+                    //   playVideoFrom: PlayVideoFrom.youtube(
+                    //       'https://youtu.be/${current.youtube_id}'),
+                    // _controller?.load(current.youtube_id!);
+
+                    return Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        SizedBox(
+                          height: double.infinity,
+                          width: double.infinity,
+                          child: YoutubePlayer(
+                            controller: YoutubePlayerController(
+                              initialVideoId: current.youtube_id!,
+                              flags: const YoutubePlayerFlags(
+                                disableDragSeek: true,
+                                autoPlay: false,
+                                mute: false,
+                              ),
+                            ),
+                            showVideoProgressIndicator: true,
+                            aspectRatio: 2 / 3,
+                            // videoProgressIndicatorColor: Colors.amber,
+                            progressColors: const ProgressBarColors(
+                              playedColor: Colors.amber,
+                              handleColor: Colors.amberAccent,
+                            ),
+                            onReady: () {
+                              // _controller
+                              //     .addListener(() {});
+                              _controller!.play();
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 3.h, horizontal: 2.w),
+                          child: Text(
+                            current.title ?? "",
+                            style:
+                                Theme.of(context).textTheme.headline3?.copyWith(
+                                      fontSize: 16.sp,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                  onPageChanged: (count) {
+                    setState(() {
+                      page = count;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
         );
       }),
     );
   }
 }
-//var current = data.home_weekly[index];
-//             _controller = YoutubePlayerController(
-//               initialVideoId:
-//                   // widget.youtube_id ??
-//                   '${current.youtube_id}' ?? 'iLnmTe5Q2Qw',
-//               flags: const YoutubePlayerFlags(
-//                 autoPlay: true,
-//                 mute: false,
-//               ),
-//             );
-//             return SizedBox(
-//               height: MediaQuery.of(context).size.height,
-//               width: MediaQuery.of(context).size.width,
-//               child: VisibilityDetector(
-//                 key: Key(current.youtube_id!),
-//                 onVisibilityChanged: (visibilityInfo) {
-//                   var visiblePercentage = visibilityInfo.visibleFraction * 100;
-//                   if (visiblePercentage < 80) {
-//                     _controller!.pause();
-//                     print('pause');
-//                   }
-//                 },
-//                 child: YoutubePlayer(
-//                   controller: _controller!,
-//                   showVideoProgressIndicator: true,
-//                   aspectRatio: 2 / 3,
-//                   // videoProgressIndicatorColor: Colors.amber,
-//                   progressColors: const ProgressBarColors(
-//                     playedColor: Colors.amber,
-//                     handleColor: Colors.amberAccent,
-//                   ),
-//                   onReady: () {
-//                     // _controller
-//                     //     .addListener(() {});
-//                     _controller!.play();
-//                   },
-//                 ),
-//               ),
-//             );
-
-// return ScrollablePositionedList.builder(
-//           itemScrollController: itemScrollController,
-//           itemPositionsListener: itemPositionsListener,
-//           itemCount: data.home_weekly.length,
-//           itemBuilder: (context, index) {
-//             var current = data.home_weekly[index];
-//             _controller = YoutubePlayerController(
-//               initialVideoId:
-//                   // widget.youtube_id ??
-//                   '${current.youtube_id}' ?? 'iLnmTe5Q2Qw',
-//               flags: const YoutubePlayerFlags(
-//                 autoPlay: true,
-//                 mute: false,
-//               ),
-//             );
-//             return SizedBox(
-//               height: MediaQuery.of(context).size.height,
-//               width: MediaQuery.of(context).size.width,
-//               child: VisibilityDetector(
-//                 key: Key(current.youtube_id!),
-//                 onVisibilityChanged: (visibilityInfo) {
-//                   var visiblePercentage = visibilityInfo.visibleFraction * 100;
-//                   if (visiblePercentage < 80) {
-//                     _controller!.pause();
-//                     print('pause');
-//                   }
-//                 },
-//                 child: YoutubePlayer(
-//                   controller: _controller!,
-//                   showVideoProgressIndicator: true,
-//                   aspectRatio: 2 / 3,
-//                   // videoProgressIndicatorColor: Colors.amber,
-//                   progressColors: const ProgressBarColors(
-//                     playedColor: Colors.amber,
-//                     handleColor: Colors.amberAccent,
-//                   ),
-//                   onReady: () {
-//                     // _controller
-//                     //     .addListener(() {});
-//                     _controller!.play();
-//                   },
-//                 ),
-//               ),
-//             );
-//           },
-//         );

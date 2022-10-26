@@ -6,6 +6,7 @@ import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
@@ -525,16 +526,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'It is a long established fact that a reader will be'
-            ' distracted by the readable content of a page when looking'
-            ' at its layout. The point of using Lorem Ipsum is that it has'
-            ' a more-or-less normal distribution of letters, as opposed to'
-            ' using',
-            style: Theme.of(context).textTheme.headline6?.copyWith(
-                  color: Colors.black54,
-                ),
-          ),
+          // Text(
+          //   'It is a long established fact that a reader will be'
+          //   ' distracted by the readable content of a page when looking'
+          //   ' at its layout. The point of using Lorem Ipsum is that it has'
+          //   ' a more-or-less normal distribution of letters, as opposed to'
+          //   ' using',
+          //   style: Theme.of(context).textTheme.headline6?.copyWith(
+          //         color: Colors.black54,
+          //       ),
+          // ),
           SizedBox(
             height: 1.7.h,
           ),
@@ -1452,36 +1453,41 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           SizedBox(
             height: 2.7.h,
           ),
-          RichText(
-            text: TextSpan(
-              // Note: Styles for TextSpans must be explicitly defined.
-              // Child text spans will inherit styles from parent
-              style: Theme.of(context).textTheme.headline5?.copyWith(
-                    color: Constance.thirdColor,
-                    // fontWeight: FontWeight.bold,
+          GestureDetector(
+            onTap: (){
+              _launchUrl(Uri.parse('mailto:selfregulatorybody@digipubindia.in?subject=Grievance Redressal'));
+            },
+            child: RichText(
+              text: TextSpan(
+                // Note: Styles for TextSpans must be explicitly defined.
+                // Child text spans will inherit styles from parent
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                      color: Constance.thirdColor,
+                      // fontWeight: FontWeight.bold,
+                    ),
+                children: <TextSpan>[
+                  const TextSpan(text: 'G Plus is a member of '),
+                  TextSpan(
+                    text: 'DIGIPUB News India Foundation',
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Constance.thirdColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
-              children: <TextSpan>[
-                const TextSpan(text: 'G Plus is a member of '),
-                TextSpan(
-                  text: 'DIGIPUB News India Foundation',
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Constance.thirdColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                const TextSpan(
-                  text: '. If a complainant is dissatisfied with our'
-                      'grievance redressal, lease reach out to IGIpuR\'s '
-                      'grievance officer at the following address: ',
-                ),
-                TextSpan(
-                  text: 'selfregulatorybody@digipubindia.in',
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Constance.thirdColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ],
+                  const TextSpan(
+                    text: '. If a complainant is dissatisfied with our '
+                        'grievance redressal, Please reach out to DIGIPUB\'s '
+                        'grievance officer at the following address: ',
+                  ),
+                  TextSpan(
+                    text: 'selfregulatorybody@digipubindia.in',
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Constance.thirdColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -1541,5 +1547,10 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
       return false;
     }
     return true;
+  }
+  Future<void> _launchUrl(_url) async {
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
   }
 }

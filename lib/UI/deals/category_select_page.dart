@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:provider/provider.dart';
@@ -54,6 +55,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () => fetchDetails());
+    secureScreen();
   }
 
   @override
@@ -418,7 +420,11 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   txt: (data?.is_used??false)?'Redeemed':'   Redeem   ',
                   fcolor: (data?.is_used??false)?Colors.white:Colors.black,
                   onTap: () {
-                    showDialogBox(data?.code);
+                    if (data?.is_used??false) {
+                      redeem(widget.id, data?.code);
+                    } else {
+                      showDialogBox(data?.code);
+                    }
                   },
                 ),
               );
@@ -537,6 +543,15 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
               listen: false)
           .setRedeemDetails(response.details!);
       fetchHistory();
+      final response1= await ApiProvider.instance.getDealDetails(widget.id);
+      if (response1.success ?? false) {
+        Provider.of<DataProvider>(
+            Navigation.instance.navigatorKey.currentContext ?? context,
+            listen: false)
+            .setDealDetails(response1.details!);
+        // Navigation.instance.goBack();
+        // _refreshController.refreshCompleted();
+      }
       Navigation.instance.navigate('/redeemOfferPage');
     } else {
       showError(response.message ?? "Something went wrong");
@@ -577,5 +592,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
       // _refreshController.refreshFailed();
       Navigation.instance.goBack();
     }
+  }
+  Future<void> secureScreen() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 }

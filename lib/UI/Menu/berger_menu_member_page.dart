@@ -210,7 +210,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 thickness: 0.2,
               ),
               Theme(
-                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
                 child: ListTileTheme(
                   contentPadding: EdgeInsets.all(0),
                   child: ExpansionTile(
@@ -225,11 +226,12 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         ),
                         Text(
                           'News from',
-                          style: Theme.of(context).textTheme.headline4?.copyWith(
-                                color: Colors.white,
-                                // fontSize: 19.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.headline4?.copyWith(
+                                    color: Colors.white,
+                                    // fontSize: 19.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                         SizedBox(
                           width: 2.w,
@@ -262,12 +264,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             },
                             child: Text(
                               'Guwahati',
-                              style:
-                                  Theme.of(context).textTheme.headline6?.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 10.sp,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ),
                           Expanded(child: Container()),
@@ -296,12 +300,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             },
                             child: Text(
                               'Assam',
-                              style:
-                                  Theme.of(context).textTheme.headline6?.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 10.sp,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ),
                           Expanded(child: Container()),
@@ -330,12 +336,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             },
                             child: Text(
                               'Northeast',
-                              style:
-                                  Theme.of(context).textTheme.headline6?.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 10.sp,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ),
                           Expanded(child: Container()),
@@ -364,12 +372,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             },
                             child: Text(
                               'India',
-                              style:
-                                  Theme.of(context).textTheme.headline6?.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 10.sp,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ),
                           Expanded(child: Container()),
@@ -398,12 +408,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             },
                             child: Text(
                               'International',
-                              style:
-                                  Theme.of(context).textTheme.headline6?.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 10.sp,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ),
                           Expanded(child: Container()),
@@ -560,7 +572,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                         .navigate('/newsfrom', args: 'buzz');
                                   },
                                   child: Text(
-                                    'Promotional',
+                                    'Featured',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline6
@@ -630,7 +642,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       height: 1.5.h,
                     ),
                     Theme(
-                      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                      data: Theme.of(context)
+                          .copyWith(dividerColor: Colors.transparent),
                       child: ListTileTheme(
                         shape: const RoundedRectangleBorder(
                           side: BorderSide.none,
@@ -784,16 +797,16 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
               InkWell(
                 onTap: () {
                   if (Provider.of<DataProvider>(
-                      Navigation.instance.navigatorKey.currentContext ?? context,
-                      listen: false)
-                      .profile
-                      ?.is_plan_active ??
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .profile
+                          ?.is_plan_active ??
                       false) {
                     downloadEpaper();
-                  }else{
+                  } else {
                     showError("Oops! You are not a member yet");
                   }
-
                 },
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 1.0.h),
@@ -889,6 +902,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+
                     GestureDetector(
                       onTap: () {
                         Navigation.instance.navigate('/aboutUs');
@@ -1002,6 +1016,36 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         ],
                       ),
                     ),
+                    SizedBox(
+                      height: 1.5.h,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigation.instance.navigate('/advertiseWithUs');
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.ad,
+                            color: Constance.secondaryColor,
+                            size: 2.5.h,
+                          ),
+                          SizedBox(
+                            width: 3.5.w,
+                          ),
+                          Text(
+                            'Advertise with us',
+                            style:
+                            Theme.of(context).textTheme.headline4?.copyWith(
+                              color: Colors.white,
+                              // fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
                   ],
                 ),
               ),

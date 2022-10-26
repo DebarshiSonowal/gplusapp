@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/Storage.dart';
@@ -65,6 +66,7 @@ class _BigDealPageState extends State<BigDealPage> {
   void initState() {
     super.initState();
     // showDialogBox();
+    secureScreen();
     Future.delayed(Duration.zero, () {
       if (!Storage.instance.isBigDeal) {
         showDialogBox();
@@ -999,5 +1001,8 @@ class _BigDealPageState extends State<BigDealPage> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+  Future<void> secureScreen() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 }

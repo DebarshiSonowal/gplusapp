@@ -81,27 +81,27 @@ class _StoryPageState extends State<StoryPage> {
                             SizedBox(
                               height: 2.h,
                             ),
-                            Row(
-                              children: [
-                                Container(
-                                  color: Constance.primaryColor,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 2.w, vertical: 1.h),
-                                  child: Text(
-                                    'Guwahati',
-                                    style: Theme.of(Navigation.instance
-                                            .navigatorKey.currentContext!)
-                                        .textTheme
-                                        .headline5
-                                        ?.copyWith(
-                                          color: Colors.white,
-                                          // fontSize: 2.2.h,
-                                          // fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // Row(
+                            //   children: [
+                            //     Container(
+                            //       color: Constance.primaryColor,
+                            //       padding: EdgeInsets.symmetric(
+                            //           horizontal: 2.w, vertical: 1.h),
+                            //       child: Text(
+                            //         'Guwahati',
+                            //         style: Theme.of(Navigation.instance
+                            //                 .navigatorKey.currentContext!)
+                            //             .textTheme
+                            //             .headline5
+                            //             ?.copyWith(
+                            //               color: Colors.white,
+                            //               // fontSize: 2.2.h,
+                            //               // fontWeight: FontWeight.bold,
+                            //             ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                             SizedBox(
                               height: 2.h,
                             ),
@@ -266,6 +266,27 @@ class _StoryPageState extends State<StoryPage> {
                             SizedBox(
                               height: 1.5.h,
                             ),
+                            Row(
+                              children: [
+                                Container(
+                                  color: Constance.secondaryColor,
+                                  padding: EdgeInsets.symmetric(vertical: 0.2.h,horizontal: 1.w),
+                                  margin:
+                                  EdgeInsets.symmetric(horizontal: 2.w),
+                                  child: Text(
+                                    'Ad',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline3
+                                        ?.copyWith(
+                                      fontSize: 12.sp,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                             SizedBox(
                               // height: 10.h,
                               width: double.infinity,
@@ -276,7 +297,7 @@ class _StoryPageState extends State<StoryPage> {
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 2.w, vertical: 1.5.h),
+                                      horizontal: 2.w, ),
                                   child: CachedNetworkImage(
                                     fit: BoxFit.fill,
                                     imageUrl:

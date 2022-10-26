@@ -1,0 +1,332 @@
+import 'package:flutter/material.dart';
+import 'package:gplusapp/Components/custom_button.dart';
+import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../Helper/Constance.dart';
+import '../../Navigation/Navigate.dart';
+
+class AdvertiseWithUsPage extends StatefulWidget {
+  const AdvertiseWithUsPage({Key? key}) : super(key: key);
+
+  @override
+  State<AdvertiseWithUsPage> createState() => _AdvertiseWithUsPageState();
+}
+
+class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
+  final _first_name = TextEditingController();
+  final _last_name = TextEditingController();
+  final _email = TextEditingController();
+  final _mobile = TextEditingController();
+  final _feedback = TextEditingController();
+  String selected = "Print";
+
+  @override
+  void dispose() {
+    super.dispose();
+    _first_name.dispose();
+    _last_name.dispose();
+    _email.dispose();
+    _mobile.dispose();
+    _feedback.dispose();
+  }
+
+  final advertiseType = [
+    'Print',
+    'Website Banners',
+    'Social Media',
+    'Branded Content'
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: buildAppBar(),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+        child: Consumer<DataProvider>(builder: (context, data, _) {
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Please fill out all the details of the Grievance Redressal'
+                  ' form. Any section left blank or anonymous* or fake'
+                  ' submissions will not be accepted',
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
+                        color: Colors.black87,
+                      ),
+                ),
+                SizedBox(
+                  height: 1.7.h,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: 2.w),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(
+                            5.0) //                 <--- border radius here
+                        ),
+                    border: Border.all(
+                        width: 1,
+                        //                   <--- border width here
+                        color: Colors.black26),
+                  ),
+                  // color: Colors.black,
+                  // height: 5.h,
+                  child: Center(
+                    child: TextField(
+                      controller: _first_name,
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        hintText: "Please Enter First Name",
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Colors.black26),
+                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
+                          ?.copyWith(color: Colors.black),
+                      onChanged: (query) => {},
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 1.7.h,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: 2.w),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(
+                            5.0) //                 <--- border radius here
+                        ),
+                    border: Border.all(
+                        width: 1,
+                        //                   <--- border width here
+                        color: Colors.black26),
+                  ),
+                  // color: Colors.black,
+                  // height: 5.h,
+                  child: Center(
+                    child: TextField(
+                      controller: _last_name,
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        hintText: "Please Enter Last Name",
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Colors.black26),
+                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
+                          ?.copyWith(color: Colors.black),
+                      onChanged: (query) => {},
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 1.7.h,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: 2.w),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(
+                            5.0) //                 <--- border radius here
+                        ),
+                    border: Border.all(
+                        width: 1,
+                        //                   <--- border width here
+                        color: Colors.black26),
+                  ),
+                  // color: Colors.black,
+                  // height: 5.h,
+                  child: Center(
+                    child: TextField(
+                      controller: _email,
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        hintText: "Please Enter Email",
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Colors.black26),
+                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
+                          ?.copyWith(color: Colors.black),
+                      onChanged: (query) => {},
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 1.7.h,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: 2.w),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(
+                            5.0) //                 <--- border radius here
+                        ),
+                    border: Border.all(
+                        width: 1,
+                        //                   <--- border width here
+                        color: Colors.black26),
+                  ),
+                  // color: Colors.black,
+                  // height: 5.h,
+                  child: Center(
+                    child: TextField(
+                      controller: _mobile,
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        hintText: "Please Enter Mobile No.",
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Colors.black26),
+                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
+                          ?.copyWith(color: Colors.black),
+                      onChanged: (query) => {},
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 1.7.h,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: 2.w),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(
+                            5.0) //                 <--- border radius here
+                        ),
+                    border: Border.all(
+                        width: 1,
+                        //                   <--- border width here
+                        color: Colors.black26),
+                  ),
+                  // color: Colors.black,
+                  // height: 5.h,
+                  child: Center(
+                    child: DropdownButton(
+                      isExpanded: true,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
+                          ?.copyWith(color: Colors.black),
+                      // Initial Value
+                      value: selected,
+
+                      // Down Arrow Icon
+                      icon: const Icon(Icons.keyboard_arrow_down),
+
+                      // Array list of items
+                      items: advertiseType.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      // After selecting the desired option,it will
+                      // change button value to selected value
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selected = newValue!;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 1.7.h,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: 2.w),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(
+                            5.0) //                 <--- border radius here
+                        ),
+                    border: Border.all(
+                        width: 1,
+                        //                   <--- border width here
+                        color: Colors.black26),
+                  ),
+                  // color: Colors.black,
+                  // height: 5.h,
+                  child: Center(
+                    child: TextField(
+                      controller: _feedback,
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        hintText: "Text your feedback here",
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Colors.black26),
+                      ),
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
+                          ?.copyWith(color: Colors.black),
+                      onChanged: (query) => {},
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 3.h,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: CustomButton(
+                    txt: 'Submit',
+                    onTap: () {
+                      submit(_first_name.text,_last_name.text,_email.text,_mobile.text,selected,_feedback.text);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      title: Image.asset(
+        Constance.logoIcon,
+        fit: BoxFit.fill,
+        scale: 2,
+      ),
+      centerTitle: true,
+      backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
+    );
+  }
+
+  void submit(String text, String text2, String text3, String text4, String selected, String text5) async{
+
+  }
+}

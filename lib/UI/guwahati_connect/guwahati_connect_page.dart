@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/Storage.dart';
@@ -32,6 +33,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
   @override
   void initState() {
     super.initState();
+    secureScreen();
     Future.delayed(Duration.zero, () {
       fetchGuwahatiConnect();
       if (!Storage.instance.isGuwahatiConnect) {
@@ -474,7 +476,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                                     //   }
                                                     // });
                                                     // print(expand);
-                                                    showComments(data);
+                                                    showComments(count);
                                                   },
                                                   splashRadius: 20.0,
                                                   splashColor:
@@ -1092,10 +1094,17 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                 ),
                 SizedBox(height: 1.h),
                 Text(
-                  'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                  ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                  ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                  ' remaining essentially unchanged',
+                  '''If you have a huge friends’ list, 
+                  you know a lot of people and you think you have 
+                  resources to help someone out, this is where your 
+                  inputs are required. G Plus Connect is here to bridge 
+                  the gap between you and the things you are looking for.
+                   Imagine all of Guwahati on one single group; people from
+                    different backgrounds with different interests who stay
+                     in different circles. We aim to link all of Guwahati 
+                     together, so all you need to do is ask. Post your questions
+                     , queries about accommodations, eateries, hospitals, places 
+                     to visit etc. and someone will definitely help you out.''',
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontWeight: FontWeight.bold,
@@ -1103,7 +1112,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                 ),
                 SizedBox(height: 1.h),
                 Text(
-                  'is simply dummy text of the printing and typesetting industry',
+                  'If you help someone out, remember you’re going to get back the favour! So, start posting!',
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontWeight: FontWeight.bold,
@@ -1370,10 +1379,10 @@ for an unparalleled publication, that people call their''',
     Navigation.instance.navigate('/viewImage', args: s);
   }
 
-  void showComments(data) {
+  void showComments(count) {
     scaffoldKey.currentState?.showBottomSheet((context) {
-      return StatefulBuilder(
-        builder: (context,_) {
+      return StatefulBuilder(builder: (context, _) {
+        return Consumer<DataProvider>(builder: (context, data, __) {
           return Card(
             elevation: 3,
             color: Colors.grey.shade200,
@@ -1392,16 +1401,13 @@ for an unparalleled publication, that people call their''',
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Comments",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline3
-                              ?.copyWith(
-                            color: Constance
-                                .primaryColor,
-                            fontWeight:
-                            FontWeight.bold,
-                          ),
+                        Text(
+                          "Comments",
+                          style:
+                              Theme.of(context).textTheme.headline3?.copyWith(
+                                    color: Constance.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     ),
@@ -1412,9 +1418,11 @@ for an unparalleled publication, that people call their''',
                         child: ListView.builder(
                             // physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: data.comments.length,
+                            itemCount:
+                                data.guwahatiConnect[count].comments.length,
                             itemBuilder: (cont, ind) {
-                              var current = data.comments[ind];
+                              var current =
+                                  data.guwahatiConnect[count].comments[ind];
                               return SizedBox(
                                 height: 16.h,
                                 width: 40.w,
@@ -1482,7 +1490,8 @@ for an unparalleled publication, that people call their''',
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Row(
                                             children: [
@@ -1490,13 +1499,16 @@ for an unparalleled publication, that people call their''',
                                                 type: MaterialType.transparency,
                                                 child: IconButton(
                                                   onPressed: () {
-                                                    postCommentLike(current.id, 1);
+                                                    postCommentLike(
+                                                        current.id, 1);
                                                   },
                                                   splashRadius: 20.0,
-                                                  splashColor: Constance.secondaryColor,
+                                                  splashColor:
+                                                      Constance.secondaryColor,
                                                   icon: const Icon(
                                                     Icons.thumb_up,
-                                                    color: Constance.primaryColor,
+                                                    color:
+                                                        Constance.primaryColor,
                                                   ),
                                                 ),
                                               ),
@@ -1507,10 +1519,12 @@ for an unparalleled publication, that people call their''',
                                                     // postLike(current.id, 0);
                                                   },
                                                   splashRadius: 20.0,
-                                                  splashColor: Constance.secondaryColor,
+                                                  splashColor:
+                                                      Constance.secondaryColor,
                                                   icon: const Icon(
                                                     Icons.comment,
-                                                    color: Constance.primaryColor,
+                                                    color:
+                                                        Constance.primaryColor,
                                                   ),
                                                 ),
                                               ),
@@ -1548,7 +1562,8 @@ for an unparalleled publication, that people call their''',
                                       child: Row(
                                         // mainAxisAlignment:
                                         //     MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Text(
                                             '${current.like_count} likes' ?? "",
@@ -1642,15 +1657,17 @@ for an unparalleled publication, that people call their''',
                               decoration: InputDecoration(
                                 hintText: "Write a comment",
                                 border: InputBorder.none,
-                                hintStyle: const TextStyle(color: Colors.black26),
+                                hintStyle:
+                                    const TextStyle(color: Colors.black26),
                                 suffixIcon: IconButton(
                                   onPressed: () {
-                                    if (_searchQueryController.text.isNotEmpty) {
+                                    if (_searchQueryController
+                                        .text.isNotEmpty) {
                                       // search(_searchQueryController.text);
-                                     _((){
-                                       postComment(data.id, 'guwahati-connect',
-                                           _searchQueryController.text);
-                                     });
+                                      _(() {
+                                        postComment(data.guwahatiConnect[count].id, 'guwahati-connect',
+                                            _searchQueryController.text);
+                                      });
                                     } else {
                                       showError('Enter something to search');
                                     }
@@ -1676,8 +1693,13 @@ for an unparalleled publication, that people call their''',
               ),
             ),
           );
-        }
-      );
-    });
+        });
+      });
+    },
+    );
+  }
+
+  Future<void> secureScreen() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 }

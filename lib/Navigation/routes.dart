@@ -43,6 +43,7 @@ import '../UI/main/home_screen_page.dart';
 import '../UI/news_from/news_from.dart';
 import '../UI/opinion/opinion_page.dart';
 import '../UI/others/about_us_page.dart';
+import '../UI/others/advertise_with_us_page.dart';
 import '../UI/others/contact_us_page.dart';
 import '../UI/others/grievanceRedressal.dart';
 import '../UI/others/privacy_policy_page.dart';
@@ -185,6 +186,9 @@ case '/paymentProcessing':
       return FadeTransitionPageRouteBuilder(page: PrivacyPolicyPage());
     case '/grieveanceRedressal':
       return FadeTransitionPageRouteBuilder(page: GrieveanceRedressal());
+
+     case '/advertiseWithUs':
+      return FadeTransitionPageRouteBuilder(page: AdvertiseWithUsPage());
 
     //Main
     case '/main':

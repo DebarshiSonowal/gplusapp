@@ -332,6 +332,8 @@ class _PostAListingState extends State<PostAListing> {
                         price.text.isNotEmpty) {
                       postClassified(selectedCategory, selectedLocality,
                           title.text, desc.text, price.text, attachements);
+                    }else{
+                      showError("Title, Description and Price is mandatory to post");
                     }
                   },
                   txt: 'Go ahead',
