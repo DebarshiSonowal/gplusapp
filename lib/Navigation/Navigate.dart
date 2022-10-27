@@ -24,6 +24,10 @@ class Navigation {
   }
 
   goBack() {
-    return navigatorKey.currentState?.pop();
+    try {
+      return navigatorKey.currentState?.pop();
+    } catch (e) {
+      print(e);
+    }
   }
 }

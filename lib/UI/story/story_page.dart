@@ -199,18 +199,7 @@ class _StoryPageState extends State<StoryPage> {
                                 SizedBox(
                                   width: 2.w,
                                 ),
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {},
-                                    splashRadius: 20.0,
-                                    splashColor: Constance.secondaryColor,
-                                    icon: const Icon(
-                                      Icons.comment,
-                                      color: Constance.primaryColor,
-                                    ),
-                                  ),
-                                ),
+
                                 SizedBox(
                                   width: 2.w,
                                 ),
@@ -412,18 +401,7 @@ class _StoryPageState extends State<StoryPage> {
                                 SizedBox(
                                   width: 2.w,
                                 ),
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {},
-                                    splashRadius: 20.0,
-                                    splashColor: Constance.secondaryColor,
-                                    icon: const Icon(
-                                      Icons.comment,
-                                      color: Constance.primaryColor,
-                                    ),
-                                  ),
-                                ),
+
                                 SizedBox(
                                   width: 2.w,
                                 ),

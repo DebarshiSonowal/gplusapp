@@ -93,7 +93,7 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
               ),
               // Spacer(),
               SizedBox(
-                height: 5.h,
+                height: 2.h,
               ),
               SizedBox(
                 height: 5.h,

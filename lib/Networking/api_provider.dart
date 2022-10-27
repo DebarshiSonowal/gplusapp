@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Model/profile.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
@@ -12,6 +13,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../Components/alert.dart';
 import '../Model/about_us.dart';
 import '../Model/address.dart';
 import '../Model/advertise.dart';
@@ -143,6 +145,11 @@ class ApiProvider {
         return SearchResultResponse.withError("Something went wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("SearchResultResponse response: ${e.response}");
       return SearchResultResponse.withError(e.message);
     }
@@ -168,12 +175,17 @@ class ApiProvider {
       debugPrint("Profile response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ProfileResponse.fromJson(response?.data);
-      } else {
+      }else {
         debugPrint("Profile error: ${response?.data}");
         return ProfileResponse.withError("Something went wrong");
       }
     } on DioError catch (e) {
-      debugPrint("Profile response: ${e.response}");
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("Profile error response: ${e.response}");
       return ProfileResponse.withError(e.message);
     }
   }
@@ -203,6 +215,11 @@ class ApiProvider {
         return AuthorResponse.withError("Something went wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("AuthorResponse response: ${e.response}");
       return AuthorResponse.withError(e.message);
     }
@@ -238,6 +255,11 @@ class ApiProvider {
         return CommentResponse.withError("Something went wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("CommentResponse response: ${e.response}");
       return CommentResponse.withError(e.message);
     }
@@ -305,6 +327,11 @@ class ApiProvider {
         return ProfileResponse.withError("Something went wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("create Profile error: ${e.response} ${e}");
       return ProfileResponse.withError(e.message);
     }
@@ -338,6 +365,11 @@ class ApiProvider {
         return ArticleResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("Article response: ${e.response}");
       return ArticleResponse.withError(e.message);
     }
@@ -371,6 +403,11 @@ class ApiProvider {
         return AddressResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("address-list response: ${e.response}");
       return AddressResponse.withError(e.message);
     }
@@ -407,6 +444,11 @@ class ApiProvider {
         return AddressResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("address response: ${e.response} ${e.response?.headers}");
       return AddressResponse.withError(e.message);
     }
@@ -441,6 +483,11 @@ class ApiProvider {
         return ArticleDetailsResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("Article Details response: ${e.response}");
       return ArticleDetailsResponse.withError(e.message);
     }
@@ -477,6 +524,11 @@ class ApiProvider {
         return OpinionResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("Article response: ${e.response}");
       return OpinionResponse.withError(e.message);
     }
@@ -510,6 +562,11 @@ class ApiProvider {
         return ArticleDescResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("Article desc response: ${e.response}");
       return ArticleDescResponse.withError(e.message);
     }
@@ -543,6 +600,11 @@ class ApiProvider {
         return ArticleResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("HomeAlbum response: ${e.response}");
       return ArticleResponse.withError(e.message);
     }
@@ -576,6 +638,11 @@ class ApiProvider {
         return VideoNewsResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("Weekly response: ${e.response}");
       return VideoNewsResponse.withError(e.message);
     }
@@ -612,6 +679,11 @@ class ApiProvider {
         return LatestOpinionResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("latest-opinions response: ${e.response}");
       return LatestOpinionResponse.withError(e.message);
     }
@@ -648,6 +720,11 @@ class ApiProvider {
         return OpinionDetailsResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("OpinionDetailsResponse response: ${e.response}");
       return OpinionDetailsResponse.withError(e.message);
     }
@@ -684,6 +761,11 @@ class ApiProvider {
         return ClassifiedDetailsResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("ClassifiedDetailsResponse response: ${e.response}");
       return ClassifiedDetailsResponse.withError(e.message);
     }
@@ -720,6 +802,11 @@ class ApiProvider {
         return E_paperRepsonse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("E_paper response: ${e.response}");
       return E_paperRepsonse.withError(e.message);
     }
@@ -753,6 +840,11 @@ class ApiProvider {
         return VideoNewsResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("video-news response: ${e.response}");
       return VideoNewsResponse.withError(e.message);
     }
@@ -790,6 +882,11 @@ class ApiProvider {
         return MembershipResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("subscriptions response: ${e.response}");
       return MembershipResponse.withError(e.message);
     }
@@ -822,6 +919,11 @@ class ApiProvider {
         return PromotedDealResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("promoted-deal-list error: ${e.response}");
       return PromotedDealResponse.withError(e.message);
     }
@@ -859,6 +961,11 @@ class ApiProvider {
         return ShopResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("ShopResponse error: ${e.response}");
       return ShopResponse.withError(e.message);
     }
@@ -886,11 +993,16 @@ class ApiProvider {
       debugPrint("DealDetailsResponse response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return DealDetailsResponse.fromJson(response?.data);
-      } else {
+      }  else {
         debugPrint("DealDetailsResponse error: ${response?.data}");
         return DealDetailsResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("DealDetailsResponse error: ${e.response}");
       return DealDetailsResponse.withError(e.message);
     }
@@ -923,7 +1035,49 @@ class ApiProvider {
         return GenericMsgResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("GenericMsgResponse error: ${e.response}");
+      return GenericMsgResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericMsgResponse> getGuwahatiConnectText() async {
+    var url = "${baseUrl}/guwahati-connect-msg";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("GuwahatiConnect response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericMsgResponse.fromJson(response?.data);
+      } else {
+        debugPrint("GuwahatiConnect error: ${response?.data}");
+        return GenericMsgResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("GuwahatiConnect error: ${e.response}");
       return GenericMsgResponse.withError(e.message);
     }
   }
@@ -956,6 +1110,11 @@ class ApiProvider {
         return RedeemDetailsResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("RedeemDetailsResponse error: ${e.response}");
       return RedeemDetailsResponse.withError(e.message);
     }
@@ -993,6 +1152,11 @@ class ApiProvider {
         return GenericResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("enterPreferences error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
@@ -1029,6 +1193,11 @@ class ApiProvider {
         return GenericResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("setAsFavourite error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
@@ -1055,6 +1224,11 @@ class ApiProvider {
         return RazorpayResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("Razorpay error: ${e.response}");
       return RazorpayResponse.withError(e.message);
     }
@@ -1093,6 +1267,11 @@ class ApiProvider {
         return GenericResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("verifyPayment error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
@@ -1130,6 +1309,11 @@ class ApiProvider {
         return ShopCategoryResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("shop-categories response: ${e.response}");
       return ShopCategoryResponse.withError(e.message);
     }
@@ -1167,6 +1351,11 @@ class ApiProvider {
         return RedeemHistoryResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("RedeemHistoryResponse response: ${e.response}");
       return RedeemHistoryResponse.withError(e.message);
     }
@@ -1204,6 +1393,11 @@ class ApiProvider {
         return AdvertiseResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("advertise error: ${e.response}");
       return AdvertiseResponse.withError(e.message);
     }
@@ -1237,6 +1431,11 @@ class ApiProvider {
         return TopPicksResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("toppicks response: ${e.response}");
       return TopPicksResponse.withError(e.message);
     }
@@ -1269,6 +1468,11 @@ class ApiProvider {
         return TopickResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("topicks response: ${e.response}");
       return TopickResponse.withError(e.message);
     }
@@ -1291,7 +1495,6 @@ class ApiProvider {
     };
     debugPrint(jsonEncode(data));
 
-
     try {
       Response? response = await dio?.get(
         url,
@@ -1305,6 +1508,11 @@ class ApiProvider {
         return ClassifiedResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("ClassifiedResponse response: ${e.response}");
       return ClassifiedResponse.withError(e.message);
     }
@@ -1337,6 +1545,11 @@ class ApiProvider {
         return ClassifiedCategoryResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("ClassifiedCategoryResponse response: ${e.response}");
       return ClassifiedCategoryResponse.withError(e.message);
     }
@@ -1401,6 +1614,11 @@ class ApiProvider {
         return AboutUsResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("AboutUsResponse response: ${e.response}");
       return AboutUsResponse.withError(e.message);
     }
@@ -1433,6 +1651,11 @@ class ApiProvider {
         return AboutUsResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("privacy-n-policy response: ${e.response}");
       return AboutUsResponse.withError(e.message);
     }
@@ -1465,6 +1688,11 @@ class ApiProvider {
         return ContactUsResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("ContactUsResponse response: ${e.response}");
       return ContactUsResponse.withError(e.message);
     }
@@ -1497,6 +1725,11 @@ class ApiProvider {
         return GuwahatiConnectResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("guwahati-connect error: ${e.response}");
       return GuwahatiConnectResponse.withError(e.message);
     }
@@ -1529,6 +1762,11 @@ class ApiProvider {
         return CitizenJournalistResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("citizen-journalist-list error: ${e.response}");
       return CitizenJournalistResponse.withError(e.message);
     }
@@ -1561,6 +1799,11 @@ class ApiProvider {
         return PollOfTheWeekResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("PollOfTheWeekResponse response: ${e.response}");
       return PollOfTheWeekResponse.withError(e.message);
     }
@@ -1600,6 +1843,11 @@ class ApiProvider {
         return GenericResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("postPollOfTheWeek error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
@@ -1638,6 +1886,11 @@ class ApiProvider {
         return GenericResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("postLike error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
@@ -1677,6 +1930,11 @@ class ApiProvider {
         return GenericResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("postLike error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
@@ -1717,6 +1975,11 @@ class ApiProvider {
         return GenericResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("postComment error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
@@ -1756,6 +2019,11 @@ class ApiProvider {
         return CreateOrderResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("CreateOrderResponse error: ${e.response}");
       return CreateOrderResponse.withError(e.message);
     }
@@ -1795,6 +2063,11 @@ class ApiProvider {
         return GenericResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("citizen-journalist-delete error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
@@ -1844,6 +2117,11 @@ class ApiProvider {
         return GenericResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("postGrievance error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
@@ -1898,6 +2176,11 @@ class ApiProvider {
         return GenericResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("postClassified error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
@@ -1949,6 +2232,11 @@ class ApiProvider {
         return GenericResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("postCitizenJournalist error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
@@ -2000,6 +2288,11 @@ class ApiProvider {
         return GenericResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("postCitizenJournalist error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
@@ -2052,6 +2345,11 @@ class ApiProvider {
         return GenericResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
       debugPrint("postguwahati-connect error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
@@ -2132,5 +2430,14 @@ class ApiProvider {
           'Saved Successfully', platformChannelSpecifics,
           payload: fullPath);
     });
+  }
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }

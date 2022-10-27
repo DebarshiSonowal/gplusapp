@@ -90,336 +90,338 @@ class _VideoReportState extends State<VideoReport> {
         controller: _refreshController,
         onRefresh: _onRefresh,
         onLoading: _onLoading,
-        child: Consumer<DataProvider>(builder: (context, data, _) {
-          return Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-            // padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-            child: data.video_news.isNotEmpty
-                ? SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Stack(
-                          alignment: Alignment.bottomCenter,
-                          children: [
-                            Container(
-                              height: 30.h,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(0),
-                                ),
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: CachedNetworkImageProvider(
-                                    data.video_news[0].image_file_name ??
-                                        'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+        child: SafeArea(
+          child: Consumer<DataProvider>(builder: (context, data, _) {
+            return Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.white,
+              // padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+              child: data.video_news.isNotEmpty
+                  ? SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Stack(
+                            alignment: Alignment.bottomCenter,
+                            children: [
+                              Container(
+                                height: 30.h,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(0),
                                   ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [Colors.transparent, Colors.black]),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 5.w),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                        color: Constance.secondaryColor,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(5.0),
-                                        )),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 2.w, vertical: 1.h),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Icon(
-                                          Icons.play_arrow,
-                                          color: Colors.white,
-                                        ),
-                                        SizedBox(
-                                          height: 1.h,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            if (data.profile?.is_plan_active ??
-                                                false) {
-                                              Navigation.instance.navigate(
-                                                  '/videoPlayer',
-                                                  args: data.video_news[0]
-                                                      .youtube_id);
-                                            } else {
-                                              Constance.showMembershipPrompt(
-                                                  context);
-                                            }
-                                          },
-                                          child: Text(
-                                            'Play Now',
-                                            style: Theme.of(Navigation
-                                                    .instance
-                                                    .navigatorKey
-                                                    .currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                                  color: Colors.white,
-                                                  // fontSize: 2.2.h,
-                                                  // fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                        ),
-                                      ],
+                                  image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: CachedNetworkImageProvider(
+                                      data.video_news[0].image_file_name ??
+                                          'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
                                     ),
                                   ),
-                                  Text(
-                                    data.video_news[0].title ??
-                                        'It is a long established fact that a reader will be distracted by the readable content of a',
-                                    style: Theme.of(Navigation.instance
-                                            .navigatorKey.currentContext!)
-                                        .textTheme
-                                        .headline4
-                                        ?.copyWith(
-                                          color: Colors.white,
-                                          // fontSize: 2.2.h,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                  SizedBox(
-                                    height: 2.h,
-                                  ),
-                                  Text(
-                                    'GPlus Admin, ${Jiffy(data.video_news[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
-                                    style: Theme.of(Navigation.instance
-                                            .navigatorKey.currentContext!)
-                                        .textTheme
-                                        .headline5
-                                        ?.copyWith(
-                                          color: Colors.white,
-                                          // fontSize: 2.2.h,
-                                          // fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                  SizedBox(
-                                    height: 1.h,
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (cont, count) {
-                              var item = data.video_news[count];
-                              if (count == 0) {
-                                return Container();
-                              }
-                              return Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 4.w, vertical: 1.5.h),
+                              Container(
                                 decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(5),
-                                  ),
-                                  color: Colors.white,
+                                  gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [Colors.transparent, Colors.black]),
                                 ),
-                                // height: 5.h,
-                                width: MediaQuery.of(context).size.width - 7.w,
-                                child: Row(
+                                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Stack(
-                                          alignment: Alignment.bottomCenter,
-                                          children: [
-                                            SizedBox(
-                                              width: 40.w,
-                                              height: 12.h,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(5.0),
-                                                child: CachedNetworkImage(
-                                                  fit: BoxFit.fill,
-                                                  imageUrl:
-                                                      item.image_file_name ??
-                                                          '',
-                                                  placeholder: (cont, _) {
-                                                    return Image.asset(
-                                                      Constance.logoIcon,
-                                                      // color: Colors.black,
-                                                    );
-                                                  },
-                                                  errorWidget: (cont, _, e) {
-                                                    return Image.network(
-                                                      Constance.defaultImage,
-                                                      fit: BoxFit.fitWidth,
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                if (data.profile
-                                                        ?.is_plan_active ??
-                                                    false) {
-                                                  Navigation.instance.navigate(
-                                                      '/videoPlayer',
-                                                      args: item.youtube_id);
-                                                } else {
-                                                  Constance
-                                                      .showMembershipPrompt(
-                                                          context);
-                                                }
-                                              },
-                                              child: Container(
-                                                width: 40.w,
-                                                decoration: const BoxDecoration(
-                                                  color:
-                                                      Constance.secondaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    bottomLeft:
-                                                        Radius.circular(5.0),
-                                                    bottomRight:
-                                                        Radius.circular(5.0),
-                                                  ),
-                                                ),
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 1.w,
-                                                    vertical: 0.3.h),
-                                                child: Row(
-                                                  // mainAxisSize: MainAxisSize.min,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.play_arrow,
-                                                      color: Colors.white,
-                                                    ),
-                                                    Text(
-                                                      'Play Now',
-                                                      style: Theme.of(Navigation
-                                                              .instance
-                                                              .navigatorKey
-                                                              .currentContext!)
-                                                          .textTheme
-                                                          .headline5
-                                                          ?.copyWith(
-                                                            color: Colors.white,
-                                                            // fontSize: 2.2.h,
-                                                            // fontWeight: FontWeight.bold,
-                                                          ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 1.5.h,
-                                        ),
-                                        Text(
-                                          // item.publish_date?.split(" ")[0] ??
-                                          //     "",
-                                          Jiffy(
-                                                  item.publish_date
-                                                          ?.split(" ")[0] ??
-                                                      "",
-                                                  "yyyy-MM-dd")
-                                              .format("dd/MM/yyyy"),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline6
-                                              ?.copyWith(color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        // crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                          color: Constance.secondaryColor,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.0),
+                                          )),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 2.w, vertical: 1.h),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Text(
-                                            item.title ?? "",
-                                            overflow: TextOverflow.clip,
-                                            maxLines: 4,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline4
-                                                ?.copyWith(
-                                                    // fontSize: 2.2.h,
-                                                    fontWeight: FontWeight.bold,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    color:
-                                                        Constance.primaryColor),
+                                          const Icon(
+                                            Icons.play_arrow,
+                                            color: Colors.white,
                                           ),
                                           SizedBox(
-                                            height: 7.h,
+                                            height: 1.h,
                                           ),
-                                          // Text(
-                                          //   "",
-                                          //   style: Theme.of(context)
-                                          //       .textTheme
-                                          //       .headline6
-                                          //       ?.copyWith(color: Colors.black),
-                                          // ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (data.profile?.is_plan_active ??
+                                                  false) {
+                                                Navigation.instance.navigate(
+                                                    '/videoPlayer',
+                                                    args: data.video_news[0]
+                                                        .youtube_id);
+                                              } else {
+                                                Constance.showMembershipPrompt(
+                                                    context);
+                                              }
+                                            },
+                                            child: Text(
+                                              'Play Now',
+                                              style: Theme.of(Navigation
+                                                      .instance
+                                                      .navigatorKey
+                                                      .currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                    color: Colors.white,
+                                                    // fontSize: 2.2.h,
+                                                    // fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
+                                    Text(
+                                      data.video_news[0].title ??
+                                          'It is a long established fact that a reader will be distracted by the readable content of a',
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline4
+                                          ?.copyWith(
+                                            color: Colors.white,
+                                            // fontSize: 2.2.h,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
+                                    Text(
+                                      'GPlus Admin, ${Jiffy(data.video_news[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Colors.white,
+                                            // fontSize: 2.2.h,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
                                   ],
                                 ),
-                              );
-                            },
-                            separatorBuilder: (cont, inde) {
-                              if (inde == 0) {
-                                return Container();
-                              }
-                              return SizedBox(
-                                height: 1.h,
-                                child: Divider(
-                                  color: Colors.black,
-                                  thickness: 0.3.sp,
-                                ),
-                              );
-                            },
-                            itemCount: data.video_news.length),
-                        SizedBox(
-                          height: 17.h,
-                        ),
-                      ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                          ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (cont, count) {
+                                var item = data.video_news[count];
+                                if (count == 0) {
+                                  return Container();
+                                }
+                                return Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 4.w, vertical: 1.5.h),
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
+                                    color: Colors.white,
+                                  ),
+                                  // height: 5.h,
+                                  width: MediaQuery.of(context).size.width - 7.w,
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Stack(
+                                            alignment: Alignment.bottomCenter,
+                                            children: [
+                                              SizedBox(
+                                                width: 40.w,
+                                                height: 12.h,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5.0),
+                                                  child: CachedNetworkImage(
+                                                    fit: BoxFit.fill,
+                                                    imageUrl:
+                                                        item.image_file_name ??
+                                                            '',
+                                                    placeholder: (cont, _) {
+                                                      return Image.asset(
+                                                        Constance.logoIcon,
+                                                        // color: Colors.black,
+                                                      );
+                                                    },
+                                                    errorWidget: (cont, _, e) {
+                                                      return Image.network(
+                                                        Constance.defaultImage,
+                                                        fit: BoxFit.fitWidth,
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  if (data.profile
+                                                          ?.is_plan_active ??
+                                                      false) {
+                                                    Navigation.instance.navigate(
+                                                        '/videoPlayer',
+                                                        args: item.youtube_id);
+                                                  } else {
+                                                    Constance
+                                                        .showMembershipPrompt(
+                                                            context);
+                                                  }
+                                                },
+                                                child: Container(
+                                                  width: 40.w,
+                                                  decoration: const BoxDecoration(
+                                                    color:
+                                                        Constance.secondaryColor,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      bottomLeft:
+                                                          Radius.circular(5.0),
+                                                      bottomRight:
+                                                          Radius.circular(5.0),
+                                                    ),
+                                                  ),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 1.w,
+                                                      vertical: 0.3.h),
+                                                  child: Row(
+                                                    // mainAxisSize: MainAxisSize.min,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                    children: [
+                                                      const Icon(
+                                                        Icons.play_arrow,
+                                                        color: Colors.white,
+                                                      ),
+                                                      Text(
+                                                        'Play Now',
+                                                        style: Theme.of(Navigation
+                                                                .instance
+                                                                .navigatorKey
+                                                                .currentContext!)
+                                                            .textTheme
+                                                            .headline5
+                                                            ?.copyWith(
+                                                              color: Colors.white,
+                                                              // fontSize: 2.2.h,
+                                                              // fontWeight: FontWeight.bold,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 1.5.h,
+                                          ),
+                                          Text(
+                                            // item.publish_date?.split(" ")[0] ??
+                                            //     "",
+                                            Jiffy(
+                                                    item.publish_date
+                                                            ?.split(" ")[0] ??
+                                                        "",
+                                                    "yyyy-MM-dd")
+                                                .format("dd/MM/yyyy"),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                ?.copyWith(color: Colors.black),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 5.w,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          // crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              item.title ?? "",
+                                              overflow: TextOverflow.clip,
+                                              maxLines: 4,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline4
+                                                  ?.copyWith(
+                                                      // fontSize: 2.2.h,
+                                                      fontWeight: FontWeight.bold,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      color:
+                                                          Constance.primaryColor),
+                                            ),
+                                            SizedBox(
+                                              height: 7.h,
+                                            ),
+                                            // Text(
+                                            //   "",
+                                            //   style: Theme.of(context)
+                                            //       .textTheme
+                                            //       .headline6
+                                            //       ?.copyWith(color: Colors.black),
+                                            // ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (cont, inde) {
+                                if (inde == 0) {
+                                  return Container();
+                                }
+                                return SizedBox(
+                                  height: 1.h,
+                                  child: Divider(
+                                    color: Colors.black,
+                                    thickness: 0.3.sp,
+                                  ),
+                                );
+                              },
+                              itemCount: data.video_news.length),
+                          SizedBox(
+                            height: 17.h,
+                          ),
+                        ],
+                      ),
+                    )
+                  : Center(
+                      child: SizedBox(
+                          height: 2.h,
+                          width: 2.h,
+                          child: const CircularProgressIndicator()),
                     ),
-                  )
-                : Center(
-                    child: SizedBox(
-                        height: 2.h,
-                        width: 2.h,
-                        child: const CircularProgressIndicator()),
-                  ),
-          );
-        }),
+            );
+          }),
+        ),
       ),
     );
   }
