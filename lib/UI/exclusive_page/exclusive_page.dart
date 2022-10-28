@@ -28,7 +28,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
   void initState() {
     super.initState();
     fetchGplus();
-    secureScreen();
+    // secureScreen();
   }
 
   void _onRefresh() async {
@@ -126,21 +126,18 @@ class _ExclusivePageState extends State<ExclusivePage> {
                         SizedBox(
                           height: 1.h,
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5.w),
-                          child: Container(
-                            height: 30.h,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: CachedNetworkImageProvider(
-                                  data.home_exclusive[0].image_file_name ??
-                                      'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-                                ),
+                        Container(
+                          height: 30.h,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: CachedNetworkImageProvider(
+                                data.home_exclusive[0].image_file_name ??
+                                    'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
                               ),
                             ),
                           ),

@@ -4,6 +4,7 @@ import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 
@@ -288,7 +289,16 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                   child: CustomButton(
                     txt: 'Submit',
                     onTap: () {
-                      submit(_first_name.text,_last_name.text,_email.text,_mobile.text,selected,_feedback.text);
+                      if (_first_name.text.isNotEmpty &&
+                          _last_name.text.isNotEmpty &&
+                          _email.text.isNotEmpty &&
+                          _mobile.text.isNotEmpty &&
+                          _feedback.text.isNotEmpty) {
+                        submit(_first_name.text, _last_name.text, _email.text,
+                            _mobile.text, selected, _feedback.text);
+                      } else {
+                        showError("Enter all the details");
+                      }
                     },
                   ),
                 ),
@@ -299,7 +309,15 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
       ),
     );
   }
-
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
+  }
   AppBar buildAppBar() {
     return AppBar(
       title: Image.asset(
@@ -326,7 +344,6 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
     );
   }
 
-  void submit(String text, String text2, String text3, String text4, String selected, String text5) async{
-
-  }
+  void submit(String text, String text2, String text3, String text4,
+      String selected, String text5) async {}
 }

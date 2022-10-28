@@ -2,14 +2,16 @@ import 'package:gplusapp/Model/category_name.dart';
 
 import 'attach_file.dart';
 import 'locality.dart';
+import 'profile.dart';
 
 class Classified {
-  int? id, user_id, classified_category_id, locality_id, status;
+  int? id, user_id, classified_category_id, locality_id, status,total_views;
   double? price;
   CategoryName? categoryName;
   String? title, description;
   Locality? locality;
   List<AttachFile>? attach_files;
+  Profile? user;
 
   Classified.fromJson(json) {
     id = json['id'] ?? 0;
@@ -19,6 +21,9 @@ class Classified {
     locality_id = json['locality_id'] == null
         ? 0
         : int.parse(json['locality_id'].toString());
+    total_views = json['total_views'] == null
+        ? 0
+        : int.parse(json['total_views'].toString());
     classified_category_id = json['classified_category_id'] == null
         ? 0
         : int.parse(json['classified_category_id'].toString());
@@ -36,7 +41,9 @@ class Classified {
         : (json['attached_files'] as List)
             .map((e) => AttachFile.fromJson(e))
             .toList();
-
+    if(json['user']!=null){
+      user = Profile.fromJson(json['user']);
+    }
     title = json['title'] ?? "";
     description = json['description'] ?? "";
   }

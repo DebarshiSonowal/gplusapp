@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    secureScreen();
+    // secureScreen();
     Future.delayed(Duration.zero, () => fetchProfile());
     fetchHome();
     fetchOpinion();
@@ -1101,11 +1101,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _launchUrl(_url) async {
     if (await canLaunchUrl(_url)) {
-      launchUrl(_url,mode: LaunchMode.externalApplication);
+      launchUrl(_url);
     } else {
       launchUrl(
         Uri.parse('https://api.whatsapp.com/send?phone=919365974702'),
-        mode: LaunchMode.inAppWebView
       );
     }
   }

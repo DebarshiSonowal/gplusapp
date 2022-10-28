@@ -32,7 +32,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () => fetchCategories());
-    secureScreen();
+    // secureScreen();
   }
 
   @override

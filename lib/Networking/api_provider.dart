@@ -175,7 +175,7 @@ class ApiProvider {
       debugPrint("Profile response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ProfileResponse.fromJson(response?.data);
-      }else {
+      } else {
         debugPrint("Profile error: ${response?.data}");
         return ProfileResponse.withError("Something went wrong");
       }
@@ -362,6 +362,51 @@ class ApiProvider {
         return ArticleResponse.fromJson(response?.data);
       } else {
         debugPrint("Article error: ${response?.data}");
+        return ArticleResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("Article response: ${e.response}");
+      return ArticleResponse.withError(e.message);
+    }
+  }
+
+  Future<ArticleResponse> getMoreArticle(
+      categ_name, per_page, page, skip) async {
+    // var data = {
+    //   // 'mobile': mobile,
+    // };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${homeUrl}/${categ_name}/news1";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'per_page': per_page,
+      'page': page,
+      'skip': skip,
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        queryParameters: data,
+      );
+      debugPrint("More Article response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ArticleResponse.fromJson(response?.data);
+      } else {
+        debugPrint("More Article error: ${response?.data}");
         return ArticleResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
@@ -993,7 +1038,7 @@ class ApiProvider {
       debugPrint("DealDetailsResponse response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return DealDetailsResponse.fromJson(response?.data);
-      }  else {
+      } else {
         debugPrint("DealDetailsResponse error: ${response?.data}");
         return DealDetailsResponse.withError("Something Went Wrong");
       }
@@ -1772,6 +1817,43 @@ class ApiProvider {
     }
   }
 
+  Future<CitizenJournalistResponse> getCitizenJournalistApproved() async {
+    var url = "${baseUrl}/app/citizen-journalist-list/approved";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("citizen-journalist-list response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return CitizenJournalistResponse.fromJson(response?.data);
+      } else {
+        debugPrint("citizen-journalist-list error: ${response?.data}");
+        return CitizenJournalistResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("citizen-journalist-list error: ${e.response}");
+      return CitizenJournalistResponse.withError(e.message);
+    }
+  }
+
   Future<PollOfTheWeekResponse> getPollOfTheWeek() async {
     var url = "${baseUrl}/app/poll-question";
     BaseOptions option =
@@ -2431,6 +2513,7 @@ class ApiProvider {
           payload: fullPath);
     });
   }
+
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",

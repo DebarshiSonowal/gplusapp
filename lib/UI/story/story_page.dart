@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,8 @@ class _StoryPageState extends State<StoryPage> {
   var dropdownvalue = 'international';
   WebViewController? _controller;
   bool like = false, dislike = false;
+
+  int page = 1;
 
   @override
   void initState() {
@@ -199,7 +202,6 @@ class _StoryPageState extends State<StoryPage> {
                                 SizedBox(
                                   width: 2.w,
                                 ),
-
                                 SizedBox(
                                   width: 2.w,
                                 ),
@@ -259,19 +261,19 @@ class _StoryPageState extends State<StoryPage> {
                               children: [
                                 Container(
                                   color: Constance.secondaryColor,
-                                  padding: EdgeInsets.symmetric(vertical: 0.2.h,horizontal: 1.w),
-                                  margin:
-                                  EdgeInsets.symmetric(horizontal: 2.w),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 0.2.h, horizontal: 1.w),
+                                  margin: EdgeInsets.symmetric(horizontal: 2.w),
                                   child: Text(
                                     'Ad',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline3
                                         ?.copyWith(
-                                      fontSize: 12.sp,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                          fontSize: 12.sp,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
                                 ),
                               ],
@@ -286,7 +288,8 @@ class _StoryPageState extends State<StoryPage> {
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 2.w, ),
+                                    horizontal: 2.w,
+                                  ),
                                   child: CachedNetworkImage(
                                     fit: BoxFit.fill,
                                     imageUrl:
@@ -401,7 +404,6 @@ class _StoryPageState extends State<StoryPage> {
                                 SizedBox(
                                   width: 2.w,
                                 ),
-
                                 SizedBox(
                                   width: 2.w,
                                 ),
@@ -410,8 +412,8 @@ class _StoryPageState extends State<StoryPage> {
                                   child: IconButton(
                                     onPressed: () {
                                       Share.share(data
-                                          .selectedArticle?.web_url ==
-                                          ""
+                                                  .selectedArticle?.web_url ==
+                                              ""
                                           ? 'check out our website https://guwahatiplus.com/'
                                           : '${data.selectedArticle?.web_url}');
                                     },
@@ -658,6 +660,18 @@ class _StoryPageState extends State<StoryPage> {
                                 },
                                 itemCount: data.suggestion.length),
                             SizedBox(
+                              height: 2.h,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CustomButton(txt: 'Load More', onTap: (){
+                                  page++;
+                                  fetchContent();
+                                }),
+                              ],
+                            ),
+                            SizedBox(
                               height: 4.h,
                             ),
                           ],
@@ -773,7 +787,8 @@ class _StoryPageState extends State<StoryPage> {
   }
 
   void fetchContent() async {
-    final response = await ApiProvider.instance.getArticle(dropdownvalue);
+    final response =
+        await ApiProvider.instance.getMoreArticle(dropdownvalue, 11, page, 10);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,

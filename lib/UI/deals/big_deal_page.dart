@@ -66,7 +66,7 @@ class _BigDealPageState extends State<BigDealPage> {
   void initState() {
     super.initState();
     // showDialogBox();
-    secureScreen();
+    // secureScreen();
     Future.delayed(Duration.zero, () {
       if (!Storage.instance.isBigDeal) {
         showDialogBox();
@@ -534,6 +534,9 @@ class _BigDealPageState extends State<BigDealPage> {
                                                           // fontWeight: FontWeight.bold,
                                                         ),
                                                   ),
+                                                  SizedBox(
+                                                    height: 0.5.h,
+                                                  ),
                                                   Text(
                                                     data.vendor?.shop_name ?? "",
                                                     overflow:
@@ -551,6 +554,9 @@ class _BigDealPageState extends State<BigDealPage> {
                                                           fontWeight:
                                                               FontWeight.bold,
                                                         ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 0.5.h,
                                                   ),
                                                   Text(
                                                     data.vendor?.address ??
@@ -574,6 +580,7 @@ class _BigDealPageState extends State<BigDealPage> {
                                               ),
                                               const Spacer(),
                                               Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     '${data.code ?? '8486'}',
@@ -594,15 +601,18 @@ class _BigDealPageState extends State<BigDealPage> {
                                                               FontWeight.bold,
                                                         ),
                                                   ),
+                                                  SizedBox(
+                                                    height: 0.5.h,
+                                                  ),
                                                   Text(
-                                                    Jiffy(
-                                                            data.plan_active_date
-                                                                    .toString()
-                                                                    .split(
-                                                                        'T')[0] ??
-                                                                "",
-                                                            "yyyy-MM-dd")
-                                                        .format("dd/MM/yyyy"),
+                                                    'From: ${Jiffy(
+                                                        data.plan_active_date
+                                                            .toString()
+                                                            .split(
+                                                            'T')[0] ??
+                                                            "",
+                                                        "yyyy-MM-dd")
+                                                        .format("dd/MM/yyyy")}',
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     textAlign: TextAlign.start,
@@ -618,15 +628,18 @@ class _BigDealPageState extends State<BigDealPage> {
                                                           // fontWeight: FontWeight.bold,
                                                         ),
                                                   ),
+                                                  SizedBox(
+                                                    height: 0.5.h,
+                                                  ),
                                                   Text(
-                                                    Jiffy(
-                                                            data.plan_expiry_date
-                                                                    .toString()
-                                                                    .split(
-                                                                        'T')[0] ??
-                                                                "",
-                                                            "yyyy-MM-dd")
-                                                        .format("dd/MM/yyyy"),
+                                                    'To: ${Jiffy(
+                                                        data.plan_expiry_date
+                                                            .toString()
+                                                            .split(
+                                                            'T')[0] ??
+                                                            "",
+                                                        "yyyy-MM-dd")
+                                                        .format("dd/MM/yyyy")}',
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     textAlign: TextAlign.start,

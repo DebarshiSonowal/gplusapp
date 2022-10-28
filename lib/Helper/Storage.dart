@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,6 +26,11 @@ class Storage {
     print('set token ${token}');
     await sharedpreferences.setString("token", token);
     await sharedpreferences.setBool("isLoggedIn", true);
+  }
+
+  Future<void> setFilter(String filters) async {
+    print('set filters ${filters.toString()}');
+    await sharedpreferences.setString("filter", filters);
   }
 
   Future<void> setOnBoarding() async {
@@ -61,6 +68,8 @@ class Storage {
   get isOnBoarding => sharedpreferences.getBool("isOnBoarding") ?? false;
 
   get token => sharedpreferences.getString("token") ?? "";
+
+  get filters => sharedpreferences.getString("filter") ?? "";
 
   // void logout() {}
   Future<void> logout() async {

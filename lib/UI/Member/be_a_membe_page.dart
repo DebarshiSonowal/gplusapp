@@ -365,7 +365,7 @@ class _BeAMemberState extends State<BeAMember> {
                         );
                       }),
                   SizedBox(
-                    height: 5.h,
+                    height: 15.h,
                   ),
                 ],
               ),

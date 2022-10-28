@@ -229,67 +229,67 @@ class _VideoReportState extends State<VideoReport> {
                                 if (count == 0) {
                                   return Container();
                                 }
-                                return Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 4.w, vertical: 1.5.h),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5),
+                                return GestureDetector(
+                                  onTap: () {
+                                    if (data.profile
+                                        ?.is_plan_active ??
+                                        false) {
+                                      Navigation.instance.navigate(
+                                          '/videoPlayer',
+                                          args: item.youtube_id);
+                                    } else {
+                                      Constance
+                                          .showMembershipPrompt(
+                                          context);
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 1.5.h),
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(5),
+                                      ),
+                                      color: Colors.white,
                                     ),
-                                    color: Colors.white,
-                                  ),
-                                  // height: 5.h,
-                                  width: MediaQuery.of(context).size.width - 7.w,
-                                  child: Row(
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Stack(
-                                            alignment: Alignment.bottomCenter,
-                                            children: [
-                                              SizedBox(
-                                                width: 40.w,
-                                                height: 12.h,
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5.0),
-                                                  child: CachedNetworkImage(
-                                                    fit: BoxFit.fill,
-                                                    imageUrl:
-                                                        item.image_file_name ??
-                                                            '',
-                                                    placeholder: (cont, _) {
-                                                      return Image.asset(
-                                                        Constance.logoIcon,
-                                                        // color: Colors.black,
-                                                      );
-                                                    },
-                                                    errorWidget: (cont, _, e) {
-                                                      return Image.network(
-                                                        Constance.defaultImage,
-                                                        fit: BoxFit.fitWidth,
-                                                      );
-                                                    },
+                                    // height: 5.h,
+                                    width: MediaQuery.of(context).size.width - 7.w,
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Stack(
+                                              alignment: Alignment.bottomCenter,
+                                              children: [
+                                                SizedBox(
+                                                  width: 40.w,
+                                                  height: 12.h,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(5.0),
+                                                    child: CachedNetworkImage(
+                                                      fit: BoxFit.fill,
+                                                      imageUrl:
+                                                          item.image_file_name ??
+                                                              '',
+                                                      placeholder: (cont, _) {
+                                                        return Image.asset(
+                                                          Constance.logoIcon,
+                                                          // color: Colors.black,
+                                                        );
+                                                      },
+                                                      errorWidget: (cont, _, e) {
+                                                        return Image.network(
+                                                          Constance.defaultImage,
+                                                          fit: BoxFit.fitWidth,
+                                                        );
+                                                      },
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  if (data.profile
-                                                          ?.is_plan_active ??
-                                                      false) {
-                                                    Navigation.instance.navigate(
-                                                        '/videoPlayer',
-                                                        args: item.youtube_id);
-                                                  } else {
-                                                    Constance
-                                                        .showMembershipPrompt(
-                                                            context);
-                                                  }
-                                                },
-                                                child: Container(
+                                                Container(
                                                   width: 40.w,
                                                   decoration: const BoxDecoration(
                                                     color:
@@ -331,66 +331,66 @@ class _VideoReportState extends State<VideoReport> {
                                                     ],
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 1.5.h,
-                                          ),
-                                          Text(
-                                            // item.publish_date?.split(" ")[0] ??
-                                            //     "",
-                                            Jiffy(
-                                                    item.publish_date
-                                                            ?.split(" ")[0] ??
-                                                        "",
-                                                    "yyyy-MM-dd")
-                                                .format("dd/MM/yyyy"),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                ?.copyWith(color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        width: 5.w,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          // crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              item.title ?? "",
-                                              overflow: TextOverflow.clip,
-                                              maxLines: 4,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline4
-                                                  ?.copyWith(
-                                                      // fontSize: 2.2.h,
-                                                      fontWeight: FontWeight.bold,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      color:
-                                                          Constance.primaryColor),
+                                              ],
                                             ),
                                             SizedBox(
-                                              height: 7.h,
+                                              height: 1.5.h,
                                             ),
-                                            // Text(
-                                            //   "",
-                                            //   style: Theme.of(context)
-                                            //       .textTheme
-                                            //       .headline6
-                                            //       ?.copyWith(color: Colors.black),
-                                            // ),
+                                            Text(
+                                              // item.publish_date?.split(" ")[0] ??
+                                              //     "",
+                                              Jiffy(
+                                                      item.publish_date
+                                                              ?.split(" ")[0] ??
+                                                          "",
+                                                      "yyyy-MM-dd")
+                                                  .format("dd/MM/yyyy"),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  ?.copyWith(color: Colors.black),
+                                            ),
                                           ],
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(
+                                          width: 5.w,
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            // crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                item.title ?? "",
+                                                overflow: TextOverflow.clip,
+                                                maxLines: 4,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline4
+                                                    ?.copyWith(
+                                                        // fontSize: 2.2.h,
+                                                        fontWeight: FontWeight.bold,
+                                                        overflow:
+                                                            TextOverflow.ellipsis,
+                                                        color:
+                                                            Constance.primaryColor),
+                                              ),
+                                              SizedBox(
+                                                height: 7.h,
+                                              ),
+                                              // Text(
+                                              //   "",
+                                              //   style: Theme.of(context)
+                                              //       .textTheme
+                                              //       .headline6
+                                              //       ?.copyWith(color: Colors.black),
+                                              // ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
                               },

@@ -74,7 +74,8 @@ class _DraftStoryState extends State<DraftStory> {
                                     child: Expanded(
                                       child: Text(
                                         item.title ?? "",
-                                        maxLines: 3,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline4
@@ -97,6 +98,8 @@ class _DraftStoryState extends State<DraftStory> {
                                           },
                                           child: Text(
                                             item.story ?? "",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headline6

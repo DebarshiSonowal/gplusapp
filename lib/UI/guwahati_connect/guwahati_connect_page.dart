@@ -1,12 +1,18 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:gplusapp/Model/guwahati_connect.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
@@ -27,7 +33,8 @@ class GuwahatiConnectPage extends StatefulWidget {
 class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
   int current = 2;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   final _searchQueryController = TextEditingController();
 
   String txt = '''If you have a huge friends’ list, 
@@ -46,7 +53,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
   void initState() {
     super.initState();
     getText();
-    secureScreen();
+    // secureScreen();
     Future.delayed(Duration.zero, () {
       fetchGuwahatiConnect();
       if (!Storage.instance.isGuwahatiConnect) {
@@ -59,6 +66,28 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
   void dispose() {
     super.dispose();
     _searchQueryController.dispose();
+  }
+
+  void _onRefresh() async {
+    // monitor network fetch
+    final response = await ApiProvider.instance.getGuwahatiConnect();
+    if (response.success ?? false) {
+      // setGuwahatiConnect
+      // Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setGuwahatiConnect(response.posts);
+      _refreshController.refreshCompleted();
+    } else {
+      // Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setGuwahatiConnect(response.posts);
+      _refreshController.refreshFailed();
+    }
+    // if failed,use refreshFailed()
   }
 
   @override
@@ -83,453 +112,444 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
         ),
       ),
       bottomNavigationBar: CustomNavigationBar(current),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: 2.h),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.radio,
-                            color: Colors.black,
-                            size: 6.h,
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 1.w,
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: Text(
-                        'Guwahati Connect',
-                        overflow: TextOverflow.clip,
-                        style: Theme.of(context).textTheme.headline2?.copyWith(
-                            color: Constance.primaryColor,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 3.w),
-                child: Divider(
-                  thickness: 0.07.h,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Consumer<DataProvider>(builder: (context, current, _) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 2.w),
-                  child: ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: current.guwahatiConnect.length,
-                    itemBuilder: (context, count) {
-                      var data = current.guwahatiConnect[count];
-                      bool like = false, dislike = false;
-                      return StatefulBuilder(builder: (context, _) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: Colors.white,
+      body: SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: true,
+        header: WaterDropHeader(),
+        footer: CustomFooter(
+          builder: (BuildContext context, LoadStatus? mode) {
+            Widget body;
+            if (mode == LoadStatus.idle) {
+              body = const Text("pull up load");
+            } else if (mode == LoadStatus.loading) {
+              body = const CupertinoActivityIndicator();
+            } else if (mode == LoadStatus.failed) {
+              body = const Text("Load Failed!Click retry!");
+            } else if (mode == LoadStatus.canLoading) {
+              body = const Text("release to load more");
+            } else {
+              body = Text("No more Data");
+            }
+            return Container(
+              height: 55.0,
+              child: Center(child: body),
+            );
+          },
+        ),
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          color: Colors.white,
+          padding: EdgeInsets.symmetric(vertical: 2.h),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Card(
-                              elevation: 3,
-                              color: Colors.white,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 2.w, vertical: 1.h),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                data.user?.name ??
-                                                    "GPlus Author",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline3
-                                                    ?.copyWith(
-                                                      color: Constance
-                                                          .primaryColor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                              ),
-                                              SizedBox(
-                                                height: 0.7.h,
-                                              ),
-                                              Text(
-                                                Jiffy(data.updated_at,
-                                                            "yyyy-MM-dd")
-                                                        .fromNow() ??
-                                                    '${15} mins ago' ??
-                                                    "",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline6
-                                                    ?.copyWith(
-                                                      color: Colors.black45,
-                                                      // fontWeight: FontWeight.bold,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                          const Icon(
-                                            Icons.menu,
-                                            color: Colors.black,
-                                          ),
-                                        ],
+                            Icon(
+                              FontAwesomeIcons.radio,
+                              color: Colors.black,
+                              size: 6.h,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 1.w,
+                      ),
+                      Expanded(
+                        flex: 5,
+                        child: Text(
+                          'Guwahati Connect',
+                          overflow: TextOverflow.clip,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline2
+                              ?.copyWith(
+                                  color: Constance.primaryColor,
+                                  fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 3.w),
+                  child: Divider(
+                    thickness: 0.07.h,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Consumer<DataProvider>(builder: (context, current, _) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 2.w),
+                    child: ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: current.guwahatiConnect.length,
+                      itemBuilder: (context, count) {
+                        var data = current.guwahatiConnect[count];
+                        bool like = false, dislike = false;
+                        return StatefulBuilder(builder: (context, _) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Card(
+                                elevation: 3,
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 2.w, vertical: 1.h),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  data.user?.name ??
+                                                      "GPlus Author",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline3
+                                                      ?.copyWith(
+                                                        color: Constance
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                                SizedBox(
+                                                  height: 0.7.h,
+                                                ),
+                                                Text(
+                                                  Jiffy(data.updated_at,
+                                                              "yyyy-MM-dd")
+                                                          .fromNow() ??
+                                                      '${15} mins ago' ??
+                                                      "",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline6
+                                                      ?.copyWith(
+                                                        color: Colors.black45,
+                                                        // fontWeight: FontWeight.bold,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                            const Icon(
+                                              Icons.menu,
+                                              color: Colors.black,
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    data.attachment?.isEmpty ?? false
-                                        ? Container()
-                                        : Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 1.h),
-                                            child: SizedBox(
-                                              height: 25.h,
-                                              width: double.infinity,
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  // Navigation.instance.goBack();
-                                                  (data.attachment?.length ??
-                                                              1) >
-                                                          1
-                                                      ? showAllImages(data)
-                                                      : showThisImage(data
-                                                              .attachment![0]
-                                                              .file_name ??
-                                                          Constance
-                                                              .defaultImage);
-                                                },
-                                                child: (data.attachment
-                                                                ?.length ??
-                                                            1) >
-                                                        1
-                                                    ? StaggeredGrid.count(
-                                                        crossAxisCount: 4,
-                                                        mainAxisSpacing: 4,
-                                                        crossAxisSpacing: 4,
-                                                        children: [
-                                                          for (int i = 0;
-                                                              i <
-                                                                  (data.attachment
-                                                                          ?.length ??
-                                                                      1);
-                                                              i++)
-                                                            StaggeredGridTile
-                                                                .count(
-                                                              crossAxisCellCount:
-                                                                  (data.attachment?.length ??
-                                                                              1) >=
-                                                                          3
-                                                                      ? 1
-                                                                      : 2,
-                                                              mainAxisCellCount:
-                                                                  (data.attachment?.length ??
-                                                                              1) >=
-                                                                          4
-                                                                      ? 1
-                                                                      : 2,
-                                                              child:
-                                                                  CachedNetworkImage(
-                                                                placeholder:
-                                                                    (cont, _) {
-                                                                  return Image
-                                                                      .asset(
-                                                                    Constance
-                                                                        .logoIcon,
-                                                                    // color: Colors.black,
-                                                                  );
-                                                                },
-                                                                imageUrl: (data
-                                                                        .attachment![
-                                                                            i]
-                                                                        .file_name) ??
-                                                                    "",
-                                                                fit: BoxFit
-                                                                    .fitHeight,
-                                                                errorWidget:
-                                                                    (cont, _,
-                                                                        e) {
-                                                                  return Image
-                                                                      .network(
-                                                                    Constance
-                                                                        .defaultImage,
-                                                                    fit: BoxFit
-                                                                        .fitWidth,
-                                                                  );
-                                                                },
-                                                              ),
-                                                            ),
-                                                        ],
-                                                      )
-                                                    : CachedNetworkImage(
-                                                        placeholder: (cont, _) {
-                                                          return Image.asset(
-                                                            Constance.logoIcon,
-                                                            // color: Colors.black,
-                                                          );
-                                                        },
-                                                        imageUrl: data
+                                      data.attachment?.isEmpty ?? false
+                                          ? Container()
+                                          : Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 1.h),
+                                              child: SizedBox(
+                                                height: 25.h,
+                                                width: double.infinity,
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    // Navigation.instance.goBack();
+                                                    (data.attachment?.length ??
+                                                                1) >
+                                                            1
+                                                        ? showAllImages(count)
+                                                        : showThisImage(data
                                                                 .attachment![0]
                                                                 .file_name ??
-                                                            "",
-                                                        fit: BoxFit.fitHeight,
-                                                        errorWidget:
-                                                            (cont, _, e) {
-                                                          return Image.network(
                                                             Constance
-                                                                .defaultImage,
-                                                            fit:
-                                                                BoxFit.fitWidth,
-                                                          );
-                                                        },
-                                                      ),
+                                                                .defaultImage);
+                                                  },
+                                                  child: (data.attachment
+                                                                  ?.length ??
+                                                              1) >
+                                                          1
+                                                      ? getGridBasedOnNumbers(
+                                                          data.attachment)
+                                                      : CachedNetworkImage(
+                                                          placeholder:
+                                                              (cont, _) {
+                                                            return Image.asset(
+                                                              Constance
+                                                                  .logoIcon,
+                                                              // color: Colors.black,
+                                                            );
+                                                          },
+                                                          imageUrl: data
+                                                                  .attachment![
+                                                                      0]
+                                                                  .file_name ??
+                                                              "",
+                                                          fit: BoxFit.fitHeight,
+                                                          errorWidget:
+                                                              (cont, _, e) {
+                                                            return Image
+                                                                .network(
+                                                              Constance
+                                                                  .defaultImage,
+                                                              fit: BoxFit
+                                                                  .fitWidth,
+                                                            );
+                                                          },
+                                                        ),
+                                                ),
                                               ),
                                             ),
+                                      SizedBox(
+                                        height: 1.h,
+                                      ),
+                                      ReadMoreText(
+                                        data.question ?? "",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5
+                                            ?.copyWith(
+                                              color: Colors.black,
+                                              // fontWeight: FontWeight.bold,
+                                            ),
+                                        trimLines: 5,
+                                        colorClickableText:
+                                            Constance.secondaryColor,
+                                        trimMode: TrimMode.Line,
+                                        trimCollapsedText: 'Show more',
+                                        trimExpandedText: 'Show less',
+                                      ),
+                                      SizedBox(
+                                        height: 1.h,
+                                      ),
+                                      // Text(
+                                      //   "",
+                                      //   style: Theme.of(context)
+                                      //       .textTheme
+                                      //       .headline5
+                                      //       ?.copyWith(
+                                      //         color: Colors.black,
+                                      //         fontWeight: FontWeight.bold,
+                                      //       ),
+                                      // ),
+                                      SizedBox(
+                                        height: 2.h,
+                                        child: Center(
+                                          child: Divider(
+                                            thickness: 0.05.h,
+                                            color: Colors.black26,
                                           ),
-                                    SizedBox(
-                                      height: 1.h,
-                                    ),
-                                    Text(
-                                      data.question ?? "",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline5
-                                          ?.copyWith(
-                                            color: Colors.black,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    SizedBox(
-                                      height: 1.h,
-                                    ),
-                                    // Text(
-                                    //   "",
-                                    //   style: Theme.of(context)
-                                    //       .textTheme
-                                    //       .headline5
-                                    //       ?.copyWith(
-                                    //         color: Colors.black,
-                                    //         fontWeight: FontWeight.bold,
-                                    //       ),
-                                    // ),
-                                    SizedBox(
-                                      height: 2.h,
-                                      child: Center(
-                                        child: Divider(
-                                          thickness: 0.05.h,
-                                          color: Colors.black26,
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 0.5.h,
-                                    ),
-                                    Container(
-                                      width: double.infinity,
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 1.w),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '${data.total_liked} likes' ?? "",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                ?.copyWith(
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                          Text(
-                                            '${data.total_disliked} dislikes' ??
-                                                "",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                ?.copyWith(
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                          Text(
-                                            '${data.total_comment} comments' ??
-                                                "",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                ?.copyWith(
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                        ],
+                                      SizedBox(
+                                        height: 0.5.h,
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 0.5.h,
-                                    ),
-                                    SizedBox(
-                                      height: 2.h,
-                                      child: Center(
-                                        child: Divider(
-                                          thickness: 0.05.h,
-                                          color: Colors.black26,
+                                      Container(
+                                        width: double.infinity,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 1.w),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '${data.total_liked} likes' ?? "",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  ?.copyWith(
+                                                    color: Colors.black,
+                                                    // fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                            Text(
+                                              '${data.total_disliked} dislikes' ??
+                                                  "",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  ?.copyWith(
+                                                    color: Colors.black,
+                                                    // fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                            Text(
+                                              '${data.total_comment} comments' ??
+                                                  "",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  ?.copyWith(
+                                                    color: Colors.black,
+                                                    // fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Material(
-                                                type: MaterialType.transparency,
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    postLike(data.id, 1);
-                                                    _(() {
-                                                      like = !like;
-                                                      if (dislike) {
-                                                        dislike = !like;
-                                                      }
-                                                    });
-                                                    debugPrint('${like}');
-                                                  },
-                                                  splashRadius: 20.0,
-                                                  splashColor: !like
-                                                      ? Constance.secondaryColor
-                                                      : Constance.primaryColor,
-                                                  icon: Icon(
-                                                    Icons.thumb_up,
-                                                    color: like
+                                      SizedBox(
+                                        height: 0.5.h,
+                                      ),
+                                      SizedBox(
+                                        height: 2.h,
+                                        child: Center(
+                                          child: Divider(
+                                            thickness: 0.05.h,
+                                            color: Colors.black26,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Material(
+                                                  type:
+                                                      MaterialType.transparency,
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      postLike(data.id, 1);
+                                                      _(() {
+                                                        like = !like;
+                                                        if (dislike) {
+                                                          dislike = !like;
+                                                        }
+                                                      });
+                                                      debugPrint('${like}');
+                                                    },
+                                                    splashRadius: 20.0,
+                                                    splashColor: !like
                                                         ? Constance
                                                             .secondaryColor
                                                         : Constance
                                                             .primaryColor,
+                                                    icon: Icon(
+                                                      Icons.thumb_up,
+                                                      color: like
+                                                          ? Constance
+                                                              .secondaryColor
+                                                          : Constance
+                                                              .primaryColor,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              Material(
-                                                type: MaterialType.transparency,
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    postLike(data.id, 0);
-                                                    _(() {
-                                                      dislike = !dislike;
-                                                      if (like) {
-                                                        like = !dislike;
-                                                      }
-                                                    });
-                                                  },
-                                                  splashRadius: 20.0,
-                                                  splashColor: !dislike
-                                                      ? Constance.secondaryColor
-                                                      : Constance.primaryColor,
-                                                  icon: Icon(
-                                                    Icons.thumb_down,
-                                                    color: dislike
+                                                Material(
+                                                  type:
+                                                      MaterialType.transparency,
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      postLike(data.id, 0);
+                                                      _(() {
+                                                        dislike = !dislike;
+                                                        if (like) {
+                                                          like = !dislike;
+                                                        }
+                                                      });
+                                                    },
+                                                    splashRadius: 20.0,
+                                                    splashColor: !dislike
                                                         ? Constance
                                                             .secondaryColor
                                                         : Constance
                                                             .primaryColor,
+                                                    icon: Icon(
+                                                      Icons.thumb_down,
+                                                      color: dislike
+                                                          ? Constance
+                                                              .secondaryColor
+                                                          : Constance
+                                                              .primaryColor,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              Material(
-                                                type: MaterialType.transparency,
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    // setState(() {
-                                                    //   if (expand) {
-                                                    //     expand = false;
-                                                    //   } else {
-                                                    //     expand = true;
-                                                    //   }
-                                                    // });
-                                                    // print(expand);
-                                                    showComments(count);
-                                                  },
-                                                  splashRadius: 20.0,
-                                                  splashColor:
-                                                      Constance.secondaryColor,
-                                                  icon: const Icon(
-                                                    Icons.comment,
-                                                    color:
-                                                        Constance.primaryColor,
+                                                Material(
+                                                  type:
+                                                      MaterialType.transparency,
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      // setState(() {
+                                                      //   if (expand) {
+                                                      //     expand = false;
+                                                      //   } else {
+                                                      //     expand = true;
+                                                      //   }
+                                                      // });
+                                                      // print(expand);
+                                                      showComments(count);
+                                                    },
+                                                    splashRadius: 20.0,
+                                                    splashColor: Constance
+                                                        .secondaryColor,
+                                                    icon: const Icon(
+                                                      Icons.comment,
+                                                      color: Constance
+                                                          .primaryColor,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-
-
-                          ],
+                            ],
+                          );
+                        });
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 3.w, vertical: 1.h),
+                          child: Divider(
+                            thickness: 0.07.h,
+                            color: Colors.black,
+                          ),
                         );
-                      });
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.w, vertical: 1.h),
-                        child: Divider(
-                          thickness: 0.07.h,
-                          color: Colors.black,
-                        ),
-                      );
-                    },
-                  ),
-                );
-              })
-            ],
+                      },
+                    ),
+                  );
+                })
+              ],
+            ),
           ),
         ),
       ),
@@ -828,54 +848,18 @@ for an unparalleled publication, that people call their''',
   }
 
   showAllImages(data) {
-    scaffoldKey.currentState?.showBottomSheet((context) {
-      return Card(
-        elevation: 3,
-        color: Colors.grey.shade200,
-        shape: RoundedRectangleBorder(
-          // side: BorderSide(color: Colors.white70, width: 1),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Container(
-          padding: EdgeInsets.only(top: 2.h),
-          height: 70.h,
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: data.attachment?.length ?? 1,
-            itemBuilder: (context, count) {
-              var current = data.attachment![count];
-              return GestureDetector(
-                onTap: () {
-                  Navigation.instance.navigate('/viewImage',
-                      args: current.file_name ?? Constance.defaultImage);
-                },
-                child: CachedNetworkImage(
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  imageUrl: current.file_name ?? Constance.defaultImage,
-                  fit: BoxFit.fitHeight,
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(
-                height: 2.h,
-              );
-            },
-          ),
-        ),
-      );
-    }, enableDrag: true);
+    Navigation.instance.navigate('/allImagesPage', args: data);
+    // scaffoldKey.currentState?.showBottomSheet((context) {
+    //   return Card(
+    //     elevation: 5,
+    //     color: Colors.grey.shade100,
+    //     shape: RoundedRectangleBorder(
+    //       // side: BorderSide(color: Colors.white70, width: 1),
+    //       borderRadius: BorderRadius.circular(10),
+    //     ),
+    //     child: ,
+    //   );
+    // }, enableDrag: true);
   }
 
   showThisImage(String s) {
@@ -1018,23 +1002,23 @@ for an unparalleled publication, that people call their''',
                                                     ),
                                                   ),
                                                 ),
-                                                Material(
-                                                  type:
-                                                      MaterialType.transparency,
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      // postLike(current.id, 0);
-                                                    },
-                                                    splashRadius: 20.0,
-                                                    splashColor: Constance
-                                                        .secondaryColor,
-                                                    icon: const Icon(
-                                                      Icons.comment,
-                                                      color: Constance
-                                                          .primaryColor,
-                                                    ),
-                                                  ),
-                                                ),
+                                                // Material(
+                                                //   type:
+                                                //       MaterialType.transparency,
+                                                //   child: IconButton(
+                                                //     onPressed: () {
+                                                //       // postLike(current.id, 0);
+                                                //     },
+                                                //     splashRadius: 20.0,
+                                                //     splashColor: Constance
+                                                //         .secondaryColor,
+                                                //     icon: const Icon(
+                                                //       Icons.comment,
+                                                //       color: Constance
+                                                //           .primaryColor,
+                                                //     ),
+                                                //   ),
+                                                // ),
                                                 // Material(
                                                 //   type: MaterialType.transparency,
                                                 //   child: IconButton(
@@ -1217,10 +1201,540 @@ for an unparalleled publication, that people call their''',
     final response = await ApiProvider.instance.getGuwahatiConnectText();
     if (response.success ?? false) {
       setState(() {
-        txt = response.desc??"";
-
+        txt = response.desc ?? "";
       });
     } else {}
+  }
+
+  getGridBasedOnNumbers(List<GCAttachment>? attachment) {
+    switch (attachment?.length) {
+      case 2:
+        return StaggeredGrid.count(
+          crossAxisCount: 4,
+          mainAxisSpacing: 4,
+          crossAxisSpacing: 4,
+          children: [
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 2,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
+                decoration: BoxDecoration(
+                  border: Border(
+                    right: BorderSide(
+                      //                   <--- left side
+                      color: Colors.grey.shade200,
+                      width: 3.0,
+                    ),
+                    // top: BorderSide( //                    <--- top side
+                    //   color: Colors.white,
+                    //   width: 3.0,
+                    // ),
+                  ),
+                ),
+                child: CachedNetworkImage(
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  imageUrl: (attachment![0].file_name) ?? "",
+                  fit: BoxFit.fitHeight,
+                  errorWidget: (cont, _, e) {
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
+                  },
+                ),
+              ),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 2,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
+                // decoration: BoxDecoration(
+                //   border: Border(
+                //     // left: BorderSide( //                   <--- left side
+                //     //   color: Colors.grey.shade200,
+                //     //   width: 3.0,
+                //     // ),
+                //     // top: BorderSide( //                    <--- top side
+                //     //   color: Colors.white,
+                //     //   width: 3.0,
+                //     // ),
+                //   ),
+                // ),
+                child: CachedNetworkImage(
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  imageUrl: (attachment[1].file_name) ?? "",
+                  fit: BoxFit.fitHeight,
+                  errorWidget: (cont, _, e) {
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        );
+      case 3:
+        return StaggeredGrid.count(
+          crossAxisCount: 4,
+          mainAxisSpacing: 4,
+          crossAxisSpacing: 4,
+          children: [
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      //                   <--- left side
+                      color: Colors.grey.shade200,
+                      width: 3.0,
+                    ),
+                    // top: BorderSide( //                    <--- top side
+                    //   color: Colors.white,
+                    //   width: 3.0,
+                    // ),
+                  ),
+                ),
+                child: CachedNetworkImage(
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  imageUrl: (attachment![0].file_name) ?? "",
+                  fit: BoxFit.fitHeight,
+                  errorWidget: (cont, _, e) {
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
+                  },
+                ),
+              ),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 2,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
+                decoration: BoxDecoration(
+                  border: Border(
+                    left: BorderSide(
+                      //                   <--- left side
+                      color: Colors.grey.shade200,
+                      width: 3.0,
+                    ),
+                    // top: BorderSide( //                    <--- top side
+                    //   color: Colors.white,
+                    //   width: 3.0,
+                    // ),
+                  ),
+                ),
+                child: CachedNetworkImage(
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  imageUrl: (attachment[1].file_name) ?? "",
+                  fit: BoxFit.fitHeight,
+                  errorWidget: (cont, _, e) {
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
+                  },
+                ),
+              ),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
+                decoration: BoxDecoration(
+                  border: Border(
+                      // left: BorderSide( //                   <--- left side
+                      //   color: Colors.grey.shade200,
+                      //   width: 3.0,
+                      // ),
+                      // top: BorderSide( //                    <--- top side
+                      //   color: Colors.white,
+                      //   width: 3.0,
+                      // ),
+                      ),
+                ),
+                child: CachedNetworkImage(
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  imageUrl: (attachment[2].file_name) ?? "",
+                  fit: BoxFit.fitHeight,
+                  errorWidget: (cont, _, e) {
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        );
+      case 4:
+        return StaggeredGrid.count(
+          crossAxisCount: 4,
+          mainAxisSpacing: 4,
+          crossAxisSpacing: 4,
+          children: [
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
+                decoration: BoxDecoration(
+                  border: Border(
+                    right: BorderSide(
+                      //                   <--- left side
+                      color: Colors.grey.shade200,
+                      width: 3.0,
+                    ),
+                    // top: BorderSide( //                    <--- top side
+                    //   color: Colors.white,
+                    //   width: 3.0,
+                    // ),
+                  ),
+                ),
+                child: CachedNetworkImage(
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  imageUrl: (attachment![0].file_name) ?? "",
+                  fit: BoxFit.fitHeight,
+                  errorWidget: (cont, _, e) {
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
+                  },
+                ),
+              ),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
+                // decoration: BoxDecoration(
+                //   border: Border(
+                //     // left: BorderSide( //                   <--- left side
+                //     //   color: Colors.grey.shade200,
+                //     //   width: 3.0,
+                //     // ),
+                //     // top: BorderSide( //                    <--- top side
+                //     //   color: Colors.white,
+                //     //   width: 3.0,
+                //     // ),
+                //   ),
+                // ),
+                child: CachedNetworkImage(
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  imageUrl: (attachment![1].file_name) ?? "",
+                  fit: BoxFit.fitHeight,
+                  errorWidget: (cont, _, e) {
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
+                  },
+                ),
+              ),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
+                decoration: BoxDecoration(
+                  border: Border(
+                    right: BorderSide(
+                      //                   <--- left side
+                      color: Colors.grey.shade200,
+                      width: 3.0,
+                    ),
+                    // top: BorderSide( //                    <--- top side
+                    //   color: Colors.white,
+                    //   width: 3.0,
+                    // ),
+                  ),
+                ),
+                child: CachedNetworkImage(
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  imageUrl: (attachment[2].file_name) ?? "",
+                  fit: BoxFit.fitHeight,
+                  errorWidget: (cont, _, e) {
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
+                  },
+                ),
+              ),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
+                decoration: BoxDecoration(
+                  border: Border(
+                      // left: BorderSide( //                   <--- left side
+                      //   color: Colors.grey.shade200,
+                      //   width: 3.0,
+                      // ),
+                      // top: BorderSide( //                    <--- top side
+                      //   color: Colors.white,
+                      //   width: 3.0,
+                      // ),
+                      ),
+                ),
+                child: CachedNetworkImage(
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  imageUrl: (attachment![3].file_name) ?? "",
+                  fit: BoxFit.fitHeight,
+                  errorWidget: (cont, _, e) {
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        );
+      case 1:
+        return CachedNetworkImage(
+          placeholder: (cont, _) {
+            return Image.asset(
+              Constance.logoIcon,
+              // color: Colors.black,
+            );
+          },
+          imageUrl: (attachment![0].file_name) ?? "",
+          fit: BoxFit.fitHeight,
+          errorWidget: (cont, _, e) {
+            return Image.network(
+              Constance.defaultImage,
+              fit: BoxFit.fitWidth,
+            );
+          },
+        );
+      default:
+        return StaggeredGrid.count(
+          crossAxisCount: 4,
+          mainAxisSpacing: 4,
+          crossAxisSpacing: 4,
+          children: [
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
+                decoration: BoxDecoration(
+                  border: Border(
+                    right: BorderSide(
+                      //                   <--- left side
+                      color: Colors.grey.shade200,
+                      width: 3.0,
+                    ),
+                    // top: BorderSide( //                    <--- top side
+                    //   color: Colors.white,
+                    //   width: 3.0,
+                    // ),
+                  ),
+                ),
+                child: CachedNetworkImage(
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  imageUrl: (attachment![0].file_name) ?? "",
+                  fit: BoxFit.fitHeight,
+                  errorWidget: (cont, _, e) {
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
+                  },
+                ),
+              ),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
+                // decoration: BoxDecoration(
+                //   border: Border(
+                //     // left: BorderSide( //                   <--- left side
+                //     //   color: Colors.grey.shade200,
+                //     //   width: 3.0,
+                //     // ),
+                //     // top: BorderSide( //                    <--- top side
+                //     //   color: Colors.white,
+                //     //   width: 3.0,
+                //     // ),
+                //   ),
+                // ),
+                child: CachedNetworkImage(
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  imageUrl: (attachment[1].file_name) ?? "",
+                  fit: BoxFit.fitHeight,
+                  errorWidget: (cont, _, e) {
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
+                  },
+                ),
+              ),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
+                decoration: BoxDecoration(
+                  border: Border(
+                    right: BorderSide(
+                      //                   <--- left side
+                      color: Colors.grey.shade200,
+                      width: 3.0,
+                    ),
+                    // top: BorderSide( //                    <--- top side
+                    //   color: Colors.white,
+                    //   width: 3.0,
+                    // ),
+                  ),
+                ),
+                child: CachedNetworkImage(
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  imageUrl: (attachment[2].file_name) ?? "",
+                  fit: BoxFit.fitHeight,
+                  errorWidget: (cont, _, e) {
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
+                  },
+                ),
+              ),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
+                decoration: BoxDecoration(
+                  border: Border(
+                      // left: BorderSide( //                   <--- left side
+                      //   color: Colors.grey.shade200,
+                      //   width: 3.0,
+                      // ),
+                      // top: BorderSide( //                    <--- top side
+                      //   color: Colors.white,
+                      //   width: 3.0,
+                      // ),
+                      ),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Opacity(
+                      opacity: 0.3,
+                      child: CachedNetworkImage(
+                        placeholder: (cont, _) {
+                          return Image.asset(
+                            Constance.logoIcon,
+                            // color: Colors.black,
+                          );
+                        },
+                        imageUrl: (attachment[3].file_name) ?? "",
+                        fit: BoxFit.fitHeight,
+                        errorWidget: (cont, _, e) {
+                          return Image.network(
+                            Constance.defaultImage,
+                            fit: BoxFit.fitWidth,
+                          );
+                        },
+                      ),
+                    ),
+                    Text(
+                      "View ${attachment.length - 4} More",
+                      style: Theme.of(context).textTheme.headline4?.copyWith(
+                            color: Constance.primaryColor,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+    }
   }
 }
 // Padding(

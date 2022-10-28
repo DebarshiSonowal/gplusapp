@@ -78,7 +78,8 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                                         },
                                         child: Text(
                                           item.title?? "",
-                                          maxLines: 3,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                           style: Theme.of(context)
                                               .textTheme
                                               .headline4
@@ -101,6 +102,8 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                                             },
                                             child: Text(
                                               item.story?? "",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline6
@@ -153,7 +156,7 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
   }
   fetchDrafts() async {
     Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.getCitizenJournalistDraft();
+    final response = await ApiProvider.instance.getCitizenJournalistApproved();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
           Navigation.instance.navigatorKey.currentContext ?? context,

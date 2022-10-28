@@ -8,6 +8,7 @@ import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
@@ -37,7 +38,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   @override
   void initState() {
     super.initState();
-    secureScreen();
+    // secureScreen();
     Future.delayed(Duration.zero, () {
       if (!Storage.instance.isClassified) {
         showDialogBox();
@@ -356,7 +357,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                       itemCount: data.classified.length,
                       itemBuilder: (cont, count) {
                         var current = data.classified[count];
-                        bool like = false;
+                        bool like = selected == 2 ? true : false;
                         return StatefulBuilder(builder: (context, _) {
                           return GestureDetector(
                             onTap: () {
@@ -566,9 +567,9 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                                         FontWeight.bold),
                                           ),
                                     SizedBox(
-                                      height: 0.5.h,
+                                      height: 1.h,
                                     ),
-                                    Text(
+                                    ReadMoreText(
                                       current.description ?? "",
                                       style: Theme.of(context)
                                           .textTheme
@@ -577,6 +578,12 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                             color: Colors.black,
                                             // fontWeight: FontWeight.bold,
                                           ),
+                                      trimLines: 3,
+                                      colorClickableText:
+                                          Constance.secondaryColor,
+                                      trimMode: TrimMode.Line,
+                                      trimCollapsedText: 'Show more',
+                                      trimExpandedText: 'Show less',
                                     ),
                                     SizedBox(
                                       height: 1.h,
@@ -596,7 +603,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                           child: SizedBox(
                                             height: 5.h,
                                             child: Text(
-                                              '4999 views',
+                                              '${current.total_views} views',
                                               // overflow: TextOverflow.clip,
                                               style: Theme.of(context)
                                                   .textTheme
@@ -834,7 +841,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
             ?.is_plan_active ??
         false) {
       final resp = await Navigation.instance.navigate('/postClassified');
-      if(resp==null){
+      if (resp == null) {
         fetchClassified("");
       }
     } else {

@@ -124,21 +124,18 @@ class _NewsFromState extends State<NewsFrom> {
                         SizedBox(
                           height: 1.h,
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 2.w),
-                          child: Container(
-                            height: 30.h,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: CachedNetworkImageProvider(
-                                  data.news_from[0].image_file_name ??
-                                      'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-                                ),
+                        Container(
+                          height: 30.h,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: CachedNetworkImageProvider(
+                                data.news_from[0].image_file_name ??
+                                    'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
                               ),
                             ),
                           ),
@@ -146,27 +143,27 @@ class _NewsFromState extends State<NewsFrom> {
                         SizedBox(
                           height: 2.h,
                         ),
-                        Row(
-                          children: [
-                            Container(
-                              color: Constance.primaryColor,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 2.w, vertical: 1.h),
-                              child: Text(
-                                'Guwahati',
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      // fontSize: 2.2.h,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Container(
+                        //       color: Constance.primaryColor,
+                        //       padding: EdgeInsets.symmetric(
+                        //           horizontal: 2.w, vertical: 1.h),
+                        //       child: Text(
+                        //         'Guwahati',
+                        //         style: Theme.of(Navigation
+                        //                 .instance.navigatorKey.currentContext!)
+                        //             .textTheme
+                        //             .headline5
+                        //             ?.copyWith(
+                        //               color: Colors.white,
+                        //               // fontSize: 2.2.h,
+                        //               // fontWeight: FontWeight.bold,
+                        //             ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         SizedBox(
                           height: 2.h,
                         ),

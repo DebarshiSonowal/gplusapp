@@ -34,11 +34,11 @@ class GuwahatiConnect {
         ? []
         : (json['comments'] as List).map((e) => Comment.fromJson(e)).toList();
     //other
-    // try {
-    //   user = Profile.fromJson(json['user']);
-    // } catch (e) {
-    //   print(e);
-    // }
+    try {
+      user = Profile.fromJson(json['user']);
+    } catch (e) {
+      print(e);
+    }
 
   }
 }

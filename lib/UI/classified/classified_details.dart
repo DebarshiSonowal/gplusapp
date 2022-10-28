@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../Components/NavigationBar.dart';
 import '../../Components/custom_button.dart';
 import '../../Components/slider_home.dart';
@@ -71,7 +73,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                                   child: CachedNetworkImage(
                                     imageUrl: e.value.file_name ?? "",
                                     width: double.infinity,
-                                    fit: BoxFit.fitWidth,
+                                    fit: BoxFit.contain,
                                     // filterQuality: FilterQuality.low,
                                     placeholder: (cont, _) {
                                       return Image.asset(
@@ -143,7 +145,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                   height: 2.h,
                 ),
                 Text(
-                  'Posted by ${data.selectedClassified?.user_id}',
+                  'Posted by ${data.selectedClassified?.user?.name??"Anonymous"}',
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontWeight: FontWeight.bold,
@@ -188,9 +190,9 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 2.h,
-                ),
+                // SizedBox(
+                //   height: 1.h,
+                // ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -205,7 +207,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                       child: SizedBox(
                         height: 5.h,
                         child: Text(
-                          '4999 views',
+                          '${data.selectedClassified?.total_views} views',
                           // overflow: TextOverflow.clip,
                           style:
                               Theme.of(context).textTheme.headline5?.copyWith(
@@ -216,7 +218,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                     ),
                   ],
                 ),
-                Text(
+                ReadMoreText(
                   data.selectedClassified?.description ??
                       'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
                           ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
@@ -226,16 +228,22 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                         color: Colors.black,
                         // fontWeight: FontWeight.bold,
                       ),
+                  trimLines: 5,
+                  colorClickableText: Constance.secondaryColor,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: 'Show more',
+                  trimExpandedText: 'Show less',
                 ),
                 SizedBox(
-                  height: 1.h,
+                  height: 3.h,
                 ),
-                SizedBox(
+                data.selectedClassified?.user==null?Container():SizedBox(
                   width: double.infinity,
                   child: CustomButton(
-                      txt: 'Call ${data.selectedClassified?.id}',
+                      txt: 'Call ${data.selectedClassified?.user?.name??"Anonymous"}',
                       onTap: () {
-                        showDialogBox();
+                        // showDialogBox();
+                        _launchUrl(Uri.parse('tel:${data.selectedClassified?.user?.mobile}'));
                       }),
                 ),
               ],
@@ -246,7 +254,11 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
       bottomNavigationBar: CustomNavigationBar(current),
     );
   }
-
+  Future<void> _launchUrl(_url) async {
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
+  }
   AppBar buildAppBar() {
     return AppBar(
       // leading: IconButton(

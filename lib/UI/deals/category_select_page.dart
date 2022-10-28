@@ -55,7 +55,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () => fetchDetails());
-    secureScreen();
+    // secureScreen();
   }
 
   @override

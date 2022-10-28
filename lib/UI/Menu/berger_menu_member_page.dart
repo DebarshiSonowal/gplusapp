@@ -252,17 +252,19 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       ),
                     ),
                     children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 8.w,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigation.instance
-                                  .navigate('/newsfrom', args: 'guwahati');
-                            },
-                            child: Text(
+                      InkWell(
+                        splashColor: Constance.secondaryColor,
+                        radius: 15.w,
+                        onTap: () {
+                          Navigation.instance
+                              .navigate('/newsfrom', args: 'guwahati');
+                        },
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 8.w,
+                            ),
+                            Text(
                               'Guwahati',
                               style: Theme.of(context)
                                   .textTheme
@@ -273,32 +275,34 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
-                          ),
-                          Expanded(child: Container()),
-                          Container(
-                            height: 6,
-                            width: 6,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
+                            Expanded(child: Container()),
+                            Container(
+                              height: 6,
+                              width: 6,
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 1.5.h,
                       ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 8.w,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigation.instance
-                                  .navigate('/newsfrom', args: 'assam');
-                            },
-                            child: Text(
+                      InkWell(
+                        splashColor: Constance.secondaryColor,
+                        radius: 15.w,
+                        onTap: () {
+                          Navigation.instance
+                              .navigate('/newsfrom', args: 'assam');
+                        },
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 8.w,
+                            ),
+                            Text(
                               'Assam',
                               style: Theme.of(context)
                                   .textTheme
@@ -309,32 +313,34 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
-                          ),
-                          Expanded(child: Container()),
-                          Container(
-                            height: 6,
-                            width: 6,
-                            decoration: const BoxDecoration(
-                              // color: Colors.red,
-                              shape: BoxShape.circle,
+                            Expanded(child: Container()),
+                            Container(
+                              height: 6,
+                              width: 6,
+                              decoration: const BoxDecoration(
+                                // color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 1.5.h,
                       ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 8.w,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigation.instance
-                                  .navigate('/newsfrom', args: 'northeast');
-                            },
-                            child: Text(
+                      InkWell(
+                        splashColor: Constance.secondaryColor,
+                        radius: 15.w,
+                        onTap: () {
+                          Navigation.instance
+                              .navigate('/newsfrom', args: 'northeast');
+                        },
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 8.w,
+                            ),
+                            Text(
                               'Northeast',
                               style: Theme.of(context)
                                   .textTheme
@@ -345,32 +351,34 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
-                          ),
-                          Expanded(child: Container()),
-                          Container(
-                            height: 6,
-                            width: 6,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
+                            Expanded(child: Container()),
+                            Container(
+                              height: 6,
+                              width: 6,
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 1.5.h,
                       ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 8.w,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigation.instance
-                                  .navigate('/newsfrom', args: 'india');
-                            },
-                            child: Text(
+                      InkWell(
+                        splashColor: Constance.secondaryColor,
+                        radius: 15.w,
+                        onTap: () {
+                          Navigation.instance
+                              .navigate('/newsfrom', args: 'india');
+                        },
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 8.w,
+                            ),
+                            Text(
                               'India',
                               style: Theme.of(context)
                                   .textTheme
@@ -381,32 +389,34 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
-                          ),
-                          Expanded(child: Container()),
-                          Container(
-                            height: 6,
-                            width: 6,
-                            decoration: const BoxDecoration(
-                              // color: Colors.red,
-                              shape: BoxShape.circle,
+                            Expanded(child: Container()),
+                            Container(
+                              height: 6,
+                              width: 6,
+                              decoration: const BoxDecoration(
+                                // color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 1.5.h,
                       ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 8.w,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigation.instance
-                                  .navigate('/newsfrom', args: 'international');
-                            },
-                            child: Text(
+                      InkWell(
+                        splashColor: Constance.secondaryColor,
+                        radius: 15.w,
+                        onTap: () {
+                          Navigation.instance
+                              .navigate('/newsfrom', args: 'international');
+                        },
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 8.w,
+                            ),
+                            Text(
                               'International',
                               style: Theme.of(context)
                                   .textTheme
@@ -417,17 +427,17 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
-                          ),
-                          Expanded(child: Container()),
-                          Container(
-                            height: 6,
-                            width: 6,
-                            decoration: const BoxDecoration(
-                              // color: Colors.red,
-                              shape: BoxShape.circle,
+                            Expanded(child: Container()),
+                            Container(
+                              height: 6,
+                              width: 6,
+                              decoration: const BoxDecoration(
+                                // color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -444,20 +454,22 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.star,
-                          color: Constance.secondaryColor,
-                        ),
-                        SizedBox(
-                          width: 2.w,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigation.instance.navigate('/exclusivePage');
-                          },
-                          child: Text(
+                    InkWell(
+                      splashColor: Constance.secondaryColor,
+                      radius: 5.h,
+                      onTap: () {
+                        Navigation.instance.navigate('/exclusivePage');
+                      },
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.star,
+                            color: Constance.secondaryColor,
+                          ),
+                          SizedBox(
+                            width: 2.w,
+                          ),
+                          Text(
                             'GPlus Exclusive',
                             style:
                                 Theme.of(context).textTheme.headline4?.copyWith(
@@ -466,17 +478,17 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                           ),
-                        ),
-                        Expanded(child: Container()),
-                        Container(
-                          height: 6,
-                          width: 6,
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
+                          Expanded(child: Container()),
+                          Container(
+                            height: 6,
+                            width: 6,
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 1.5.h,
@@ -525,17 +537,19 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             ),
                           ),
                           children: [
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigation.instance.navigate('/newsfrom',
-                                        args: 'entertainment');
-                                  },
-                                  child: Text(
+                            InkWell(
+                              splashColor: Constance.secondaryColor,
+                              radius: 15.h,
+                              onTap: () {
+                                Navigation.instance.navigate('/newsfrom',
+                                    args: 'entertainment');
+                              },
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 8.w,
+                                  ),
+                                  Text(
                                     'Entertainment',
                                     style: Theme.of(context)
                                         .textTheme
@@ -546,32 +560,34 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                           // fontWeight: FontWeight.bold,
                                         ),
                                   ),
-                                ),
-                                Expanded(child: Container()),
-                                Container(
-                                  height: 6,
-                                  width: 6,
-                                  decoration: const BoxDecoration(
-                                    // color: Colors.red,
-                                    shape: BoxShape.circle,
+                                  Expanded(child: Container()),
+                                  Container(
+                                    height: 6,
+                                    width: 6,
+                                    decoration: const BoxDecoration(
+                                      // color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 1.5.h,
                             ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigation.instance
-                                        .navigate('/newsfrom', args: 'buzz');
-                                  },
-                                  child: Text(
+                            InkWell(
+                              splashColor: Constance.secondaryColor,
+                              radius: 15.h,
+                              onTap: () {
+                                Navigation.instance
+                                    .navigate('/newsfrom', args: 'buzz');
+                              },
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 8.w,
+                                  ),
+                                  Text(
                                     'Featured',
                                     style: Theme.of(context)
                                         .textTheme
@@ -582,17 +598,17 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                           // fontWeight: FontWeight.bold,
                                         ),
                                   ),
-                                ),
-                                Expanded(child: Container()),
-                                Container(
-                                  height: 6,
-                                  width: 6,
-                                  decoration: const BoxDecoration(
-                                    // color: Colors.red,
-                                    shape: BoxShape.circle,
+                                  Expanded(child: Container()),
+                                  Container(
+                                    height: 6,
+                                    width: 6,
+                                    decoration: const BoxDecoration(
+                                      // color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 1.5.h,
@@ -605,6 +621,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       height: 1.5.h,
                     ),
                     InkWell(
+                      splashColor: Constance.secondaryColor,
+                      radius: 15.h,
                       onTap: () {
                         Navigation.instance.navigate('/opinionPage');
                       },
@@ -693,6 +711,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                               height: 1.5.h,
                             ),
                             InkWell(
+                              splashColor: Constance.secondaryColor,
+                              radius: 15.h,
                               onTap: () {
                                 Navigation.instance.navigate('/videoReport');
                               },
@@ -727,32 +747,39 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             SizedBox(
                               height: 1.5.h,
                             ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                Text(
-                                  'Features',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      ?.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 11.sp,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                Expanded(child: Container()),
-                                Container(
-                                  height: 6,
-                                  width: 6,
-                                  decoration: const BoxDecoration(
-                                    // color: Colors.red,
-                                    shape: BoxShape.circle,
+                            InkWell(
+                              splashColor: Constance.secondaryColor,
+                              radius: 15.h,
+                              onTap: (){
+                                Navigation.instance.navigate('/videoReport');
+                              },
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 8.w,
                                   ),
-                                ),
-                              ],
+                                  Text(
+                                    'Features',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        ?.copyWith(
+                                          color: Colors.white,
+                                          fontSize: 11.sp,
+                                          // fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  Expanded(child: Container()),
+                                  Container(
+                                    height: 6,
+                                    width: 6,
+                                    decoration: const BoxDecoration(
+                                      // color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 1.h,
@@ -795,6 +822,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 thickness: 0.2,
               ),
               InkWell(
+                splashColor: Constance.secondaryColor,
+                radius: 15.h,
                 onTap: () {
                   if (Provider.of<DataProvider>(
                               Navigation.instance.navigatorKey.currentContext ??
@@ -836,6 +865,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 thickness: 0.2,
               ),
               InkWell(
+                splashColor: Constance.secondaryColor,
+                radius: 15.h,
                 onTap: () {
                   Navigation.instance.navigate('/beamember');
                 },
@@ -868,7 +899,9 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 1.0.h),
-                child: GestureDetector(
+                child: InkWell(
+                  splashColor: Constance.secondaryColor,
+                  radius: 15.h,
                   onTap: () {
                     Navigation.instance.navigate('/refer&earn');
                   },
@@ -903,7 +936,9 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
 
-                    GestureDetector(
+                    InkWell(
+                      splashColor: Constance.secondaryColor,
+                      radius: 15.h,
                       onTap: () {
                         Navigation.instance.navigate('/aboutUs');
                       },
@@ -932,7 +967,9 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     SizedBox(
                       height: 1.5.h,
                     ),
-                    GestureDetector(
+                    InkWell(
+                      splashColor: Constance.secondaryColor,
+                      radius: 15.h,
                       onTap: () {
                         Navigation.instance.navigate('/contactUs');
                       },
@@ -961,7 +998,9 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     SizedBox(
                       height: 1.5.h,
                     ),
-                    GestureDetector(
+                    InkWell(
+                      splashColor: Constance.secondaryColor,
+                      radius: 15.h,
                       onTap: () {
                         Navigation.instance.navigate('/privacy');
                       },
@@ -990,7 +1029,9 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     SizedBox(
                       height: 1.5.h,
                     ),
-                    GestureDetector(
+                    InkWell(
+                      splashColor: Constance.secondaryColor,
+                      radius: 15.h,
                       onTap: () {
                         Navigation.instance.navigate('/grieveanceRedressal');
                       },
@@ -1019,7 +1060,9 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     SizedBox(
                       height: 1.5.h,
                     ),
-                    GestureDetector(
+                    InkWell(
+                      splashColor: Constance.secondaryColor,
+                      radius: 15.h,
                       onTap: () {
                         Navigation.instance.navigate('/advertiseWithUs');
                       },
@@ -1083,6 +1126,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       height: 1.5.h,
                     ),
                     InkWell(
+                      splashColor: Constance.secondaryColor,
+                      radius: 15.h,
                       onTap: () async {
                         final FirebaseAuth _auth = FirebaseAuth.instance;
                         await _auth.signOut();
