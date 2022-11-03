@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:gplusapp/OnBoarding/SplashScreen.dart';
+import 'package:gplusapp/UI/classified/classified_mylist_page.dart';
 
 import '../Authentication/Signin/login_page.dart';
 import '../Authentication/Signup/signup_page.dart';
@@ -48,6 +49,7 @@ import '../UI/others/advertise_with_us_page.dart';
 import '../UI/others/contact_us_page.dart';
 import '../UI/others/grievanceRedressal.dart';
 import '../UI/others/privacy_policy_page.dart';
+import '../UI/others/settings_page.dart';
 import '../UI/payment_processing_page.dart';
 import '../UI/poll_of_the week/poll_page.dart';
 import '../UI/profile/profile_page.dart';
@@ -96,7 +98,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/videoPlayer':
       return FadeTransitionPageRouteBuilder(
           page: VideoPlayerScreen(settings.arguments as String));
-      case '/viewImage':
+    case '/viewImage':
       return FadeTransitionPageRouteBuilder(
           page: ViewImagePage(settings.arguments as String));
 
@@ -109,7 +111,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           page: FoodDealPage(settings.arguments as int));
     case '/filterPage':
       return FadeTransitionPageRouteBuilder(page: FilterPage());
-      case '/pollPage':
+    case '/pollPage':
       return FadeTransitionPageRouteBuilder(page: PollPage());
     case '/categorySelect':
       return FadeTransitionPageRouteBuilder(
@@ -117,7 +119,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/story':
       return FadeTransitionPageRouteBuilder(
           page: StoryPage(settings.arguments as String));
-case '/paymentProcessing':
+    case '/paymentProcessing':
       return FadeTransitionPageRouteBuilder(
           page: PaymentProcessingPage(settings.arguments as String));
 
@@ -127,6 +129,8 @@ case '/paymentProcessing':
       return FadeTransitionPageRouteBuilder(page: BeAMember());
     case '/exclusivePage':
       return FadeTransitionPageRouteBuilder(page: ExclusivePage());
+    case '/settingsPage':
+      return FadeTransitionPageRouteBuilder(page: SettingsPage());
     case '/newsfrom':
       return FadeTransitionPageRouteBuilder(
         page: NewsFrom(
@@ -156,7 +160,7 @@ case '/paymentProcessing':
 
     case '/classified':
       return FadeTransitionPageRouteBuilder(page: ClassifiedPage());
-      case '/toppicks':
+    case '/toppicks':
       return FadeTransitionPageRouteBuilder(page: TopPicksPage());
     case '/refer&earn':
       return FadeTransitionPageRouteBuilder(page: ReferAndEarn());
@@ -165,20 +169,23 @@ case '/paymentProcessing':
     case '/classifiedDetails':
       return FadeTransitionPageRouteBuilder(
           page: ClassifiedDetails(settings.arguments as int));
+    case '/classifiedMyListDetails':
+      return FadeTransitionPageRouteBuilder(page: ClassifiedMyList());
     case '/citizenJournalist':
       return FadeTransitionPageRouteBuilder(page: CitizenJournalistPage());
     case '/editCitizenJournalist':
       return FadeTransitionPageRouteBuilder(
           page: EditStory(settings.arguments as int));
-      case '/viewStoryPage':
+    case '/viewStoryPage':
       return FadeTransitionPageRouteBuilder(
           page: ViewStoryPage(settings.arguments as int));
     case '/postClassified':
       return FadeTransitionPageRouteBuilder(page: PostAListing());
     case '/guwahatiConnects':
       return FadeTransitionPageRouteBuilder(page: GuwahatiConnectPage());
-      case '/allImagesPage':
-      return FadeTransitionPageRouteBuilder(page: AllImagePage(settings.arguments as int));
+    case '/allImagesPage':
+      return FadeTransitionPageRouteBuilder(
+          page: AllImagePage(settings.arguments as int));
     case '/askAQuestion':
       return FadeTransitionPageRouteBuilder(page: AskAQuestionPage());
     case '/search':
@@ -190,7 +197,7 @@ case '/paymentProcessing':
     case '/grieveanceRedressal':
       return FadeTransitionPageRouteBuilder(page: GrieveanceRedressal());
 
-     case '/advertiseWithUs':
+    case '/advertiseWithUs':
       return FadeTransitionPageRouteBuilder(page: AdvertiseWithUsPage());
 
     //Main

@@ -67,7 +67,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                 height: 3.h,
               ),
               SizedBox(
-                height: 15.h,
+                height: 16.h,
                 width: double.infinity,
                 child: Wrap(
                   children: [
@@ -227,10 +227,19 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: (){
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,

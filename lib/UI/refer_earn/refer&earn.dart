@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/custom_button.dart';
@@ -191,7 +192,8 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                             GestureDetector(
                               onTap: () {
                                 Clipboard.setData(ClipboardData(
-                                        text: data.referEarn?.referral_link ??
+                                        text: data.referEarn?.referral_link
+                                                ?.split('/')[3] ??
                                             'https://guwahatiplus.com/topic/bollywood'))
                                     .then((_) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -487,250 +489,83 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                 thickness: 0.1.h,
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 4.w, vertical: 1.h),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Redeem for subscription',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              fontWeight: FontWeight.bold,
+                            ListView.separated(
+                                shrinkWrap: true,
+                                itemBuilder: (cont, count) {
+                                  var current = data.referHistory[count];
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 1.h),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              current.is_subscription == 1
+                                                  ? 'Redeem for subscription'
+                                                  : 'Referral',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                      .instance
+                                                      .navigatorKey
+                                                      .currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                    color: Colors.black,
+                                                    // fontSize: 11.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                             ),
-                                      ),
-                                      Text(
-                                        '250 points',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline6
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
+                                            Text(
+                                              '${current.points ?? '250'} points',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                      .instance
+                                                      .navigatorKey
+                                                      .currentContext!)
+                                                  .textTheme
+                                                  .headline6
+                                                  ?.copyWith(
+                                                    color: Colors.black,
+                                                    // fontSize: 11.sp,
+                                                    // fontWeight: FontWeight.bold,
+                                                  ),
                                             ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    '26-12-2022',
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.start,
-                                    style: Theme.of(Navigation.instance
-                                            .navigatorKey.currentContext!)
-                                        .textTheme
-                                        .headline6
-                                        ?.copyWith(
-                                          color: Colors.black,
-                                          // fontSize: 11.sp,
-                                          // fontWeight: FontWeight.bold,
+                                          ],
                                         ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 4.w, vertical: 1.h),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Redeem for subscription',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      Text(
-                                        '250 points',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline6
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    '26-12-2022',
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.start,
-                                    style: Theme.of(Navigation.instance
-                                            .navigatorKey.currentContext!)
-                                        .textTheme
-                                        .headline6
-                                        ?.copyWith(
-                                          color: Colors.black,
-                                          // fontSize: 11.sp,
-                                          // fontWeight: FontWeight.bold,
+                                        const Spacer(),
+                                        Text(
+                                          Jiffy(current.updated_at, "yyyy-MM-dd")
+                                              .format("dd/MM/yyyy"),
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.start,
+                                          style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(
+                                                color: Colors.black,
+                                                // fontSize: 11.sp,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
                                         ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 4.w, vertical: 1.h),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Redeem for subscription',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      Text(
-                                        '250 points',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline6
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    '26-12-2022',
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.start,
-                                    style: Theme.of(Navigation.instance
-                                            .navigatorKey.currentContext!)
-                                        .textTheme
-                                        .headline6
-                                        ?.copyWith(
-                                          color: Colors.black,
-                                          // fontSize: 11.sp,
-                                          // fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 4.w, vertical: 1.h),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Redeem for subscription',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      Text(
-                                        '250 points',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline6
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    '26-12-2022',
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.start,
-                                    style: Theme.of(Navigation.instance
-                                            .navigatorKey.currentContext!)
-                                        .textTheme
-                                        .headline6
-                                        ?.copyWith(
-                                          color: Colors.black,
-                                          // fontSize: 11.sp,
-                                          // fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                separatorBuilder: (cont, count) {
+                                  return SizedBox(
+                                    height: 1.h,
+                                  );
+                                },
+                                itemCount: data.referHistory.length),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
@@ -777,10 +612,19 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: () {
+          Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
@@ -792,6 +636,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
     super.initState();
     Future.delayed(Duration.zero, () {
       fetchReferEarn();
+      fetchHistory();
     });
   }
 
@@ -807,5 +652,15 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
     } else {
       Navigation.instance.goBack();
     }
+  }
+
+  void fetchHistory() async {
+    final response = await ApiProvider.instance.fetchReferEarnHistory();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setReferEarnHistory(response.history);
+    } else {}
   }
 }

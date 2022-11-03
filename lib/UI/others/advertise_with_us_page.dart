@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -320,10 +321,19 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
   }
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: (){
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
@@ -345,5 +355,14 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
   }
 
   void submit(String text, String text2, String text3, String text4,
-      String selected, String text5) async {}
+      String selected, String text5) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.advertiseWithUs(text,text2,text3,text4,selected,text5);
+    if(response.success??false){
+      Navigation.instance.goBack();
+    }else{
+      Navigation.instance.goBack();
+      showError(response.message??"Something went wrong");
+    }
+  }
 }

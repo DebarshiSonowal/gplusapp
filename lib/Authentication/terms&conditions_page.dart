@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Components/alert.dart';
 import '../Helper/Constance.dart';
+import '../Helper/DataProvider.dart';
 
 class TermsAndConditions extends StatefulWidget {
   final int mobile;
@@ -127,10 +129,19 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: (){
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,

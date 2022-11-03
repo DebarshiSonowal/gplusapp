@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -111,10 +113,19 @@ class _NotificationPageState extends State<NotificationPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: (){
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,

@@ -23,103 +23,88 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<DataProvider>(builder: (context, data, _) {
-      return SizedBox(
-        // height: 30.h,
+      return Container(
+        margin: EdgeInsets.only(top: 0.2.h),
+        // height:25.5.h,
         width: MediaQuery.of(context).size.width,
         child: Stack(alignment: Alignment.bottomCenter, children: [
           Container(
+            // height: 25.5.h,
             // padding: EdgeInsets.only(top: 0.h),
             color: Colors.grey.shade200,
             width: MediaQuery.of(context).size.width,
-            // height: 40.h,
-            child: CarouselSlider(
-              items: data.home_albums
-                  .asMap()
-                  .entries
-                  .map(
-                    (e) => GestureDetector(
-                      onTap: () {
-                        if (data.profile
-                            ?.is_plan_active ??
-                            false) {
-                          Navigation.instance.navigate('/story',
-                              args:
-                              '${e.value.first_cat_name?.seo_name},${e.value.seo_name}');
-                        } else {
-                          Constance.showMembershipPrompt(
-                              context);
-                        }
-
-                      },
-                      child: Stack(
-                        alignment: Alignment.bottomLeft,
-                        children: [
-                          Opacity(
-                            opacity: 0.85,
-                            child: CachedNetworkImage(
-                              imageUrl: e.value.image_file_name ?? "",
-                              width: double.infinity,
-                              height: double.infinity,
-                              fit: BoxFit.fill,
-                              // filterQuality: FilterQuality.low,
-                              placeholder: (cont, _) {
-                                return Image.asset(
-                                  Constance.logoIcon,
-                                  // color: Colors.black,
-                                );
-                              },
-                              errorWidget: (cont, _, e) {
-                                return Image.network(
-                                  Constance.defaultImage,
-                                  fit: BoxFit.fitWidth,
-                                );
-                              },
-                            ),
-                          ),
-                          Container(
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [Colors.transparent, Colors.black]),
-                            ),
-                            // color: Colors.black.withOpacity(0.5),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 3.h, horizontal: 2.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  e.value.title ?? 'Big Deals\nand Offers',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline4
-                                      ?.copyWith(
-                                          color: Colors.grey.shade200,
-                                          fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 0.5.h,
-                                ),
-                                Text(
-                                  "${e.value.author_name?.trim()}, ${Jiffy(e.value.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      ?.copyWith(
-                                        color: Colors.white,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+            // height: 30.h,
+            child: CarouselSlider.builder(
+              itemCount: data.home_albums.length,
+              itemBuilder: (BuildContext context, int index, int realIndex) {
+                var current = data.home_albums[index];
+                return Container(
+                  // height: 45.h,
+                  width: double.infinity,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl:current.image_file_name ?? "",
+                        width: double.infinity,
+                        // height:55.h,
+                        fit: BoxFit.fill,
+                        // filterQuality: FilterQuality.low,
+                        placeholder: (cont, _) {
+                          return Image.asset(
+                            Constance.logoIcon,
+                            // color: Colors.black,
+                          );
+                        },
+                        errorWidget: (cont, _, e) {
+                          return Image.network(
+                            Constance.defaultImage,
+                            fit: BoxFit.fitWidth,
+                          );
+                        },
                       ),
-                    ),
-                  )
-                  .toList(),
-              carouselController: _controller,
+                      Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [Colors.transparent, Colors.black]),
+                        ),
+                        // color: Colors.black.withOpacity(0.5),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 3.h, horizontal: 2.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              current.title ?? 'Big Deals\nand Offers',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                  color: Colors.grey.shade200,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 0.5.h,
+                            ),
+                            Text(
+                              "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
               options: CarouselOptions(
                   autoPlay: true,
                   // enlargeCenterPage: true,

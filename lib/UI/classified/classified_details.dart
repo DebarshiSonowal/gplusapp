@@ -43,16 +43,18 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+        padding: EdgeInsets.symmetric(vertical: 1.h),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
+                  // height: .h,
                   width: MediaQuery.of(context).size.width,
                   child: Stack(alignment: Alignment.bottomCenter, children: [
                     Container(
+                      // height: 2.h,
                       padding: EdgeInsets.only(top: 0.h),
                       color: Colors.grey.shade200,
                       width: MediaQuery.of(context).size.width,
@@ -68,26 +70,24 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                                       args: e.value.file_name ??
                                           Constance.defaultImage);
                                 },
-                                child: Opacity(
-                                  opacity: 0.85,
-                                  child: CachedNetworkImage(
-                                    imageUrl: e.value.file_name ?? "",
-                                    width: double.infinity,
-                                    fit: BoxFit.contain,
-                                    // filterQuality: FilterQuality.low,
-                                    placeholder: (cont, _) {
-                                      return Image.asset(
-                                        Constance.logoIcon,
-                                        // color: Colors.black,
-                                      );
-                                    },
-                                    errorWidget: (cont, _, e) {
-                                      return Image.network(
-                                        Constance.defaultImage,
-                                        fit: BoxFit.fitWidth,
-                                      );
-                                    },
-                                  ),
+                                child: CachedNetworkImage(
+                                  imageUrl: e.value.file_name ?? "",
+                                  width: double.infinity,
+                                  // height: 35.h,
+                                  fit: BoxFit.fill,
+                                  // filterQuality: FilterQuality.low,
+                                  placeholder: (cont, _) {
+                                    return Image.asset(
+                                      Constance.logoIcon,
+                                      // color: Colors.black,
+                                    );
+                                  },
+                                  errorWidget: (cont, _, e) {
+                                    return Image.network(
+                                      Constance.defaultImage,
+                                      fit: BoxFit.fill,
+                                    );
+                                  },
                                 ),
                               ),
                             )
@@ -95,9 +95,9 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                         carouselController: _controller,
                         options: CarouselOptions(
                             autoPlay: false,
-                            // enlargeCenterPage: true,
-                            // aspectRatio: 16/9,
-                            viewportFraction: 1,
+                            enlargeCenterPage: true,
+                            // aspectRatio: 1,
+                            viewportFraction: 0.9,
                             onPageChanged: (index, reason) {
                               setState(() {
                                 _current = index;
@@ -106,146 +106,258 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                       ),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: data.selectedClassified!.attach_files!
-                          .asMap()
-                          .entries
-                          .map((entry) {
-                        return GestureDetector(
-                          onTap: () => _controller.animateToPage(entry.key),
-                          child: Container(
-                            width: 12.0,
-                            height: 12.0,
-                            margin: EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 4.0),
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: (Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? Colors.white
-                                        : Colors.white)
-                                    .withOpacity(
-                                        _current == entry.key ? 0.9 : 0.4)),
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              FontAwesomeIcons.solidHeart,
+                              color: Colors.grey.shade400,
+                            )),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: data.selectedClassified!.attach_files!
+                              .asMap()
+                              .entries
+                              .map((entry) {
+                            return GestureDetector(
+                              onTap: () => _controller.animateToPage(entry.key),
+                              child: Container(
+                                width: 12.0,
+                                height: 12.0,
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 4.0),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: (Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.white
+                                            : Colors.white)
+                                        .withOpacity(
+                                            _current == entry.key ? 0.9 : 0.4)),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        PopupMenuButton<int>(
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuItem<int>>[
+                            PopupMenuItem<int>(
+                              value: 1,
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.edit,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    width: 2.w,
+                                  ),
+                                  Text(
+                                    'Edit',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        ?.copyWith(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem<int>(
+                              value: 2,
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.delete,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    width: 2.w,
+                                  ),
+                                  Text(
+                                    'Delete',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        ?.copyWith(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem<int>(
+                              value: 3,
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.rocket,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    width: 2.w,
+                                  ),
+                                  Text(
+                                    'Boost',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        ?.copyWith(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                          onSelected: (int value) {
+                            setState(() {});
+                          },
+                          color: Colors.white,
+                          icon: const Icon(
+                            Icons.menu,
+                            color: Colors.white,
                           ),
-                        );
-                      }).toList(),
+                        ),
+                      ],
                     ),
                   ]),
                 ),
                 SizedBox(
-                  height: 2.h,
+                  height: 1.5.h,
                 ),
-                Text(
-                  data.selectedClassified?.title ?? '2BHK for Rent',
-                  style: Theme.of(context).textTheme.headline2?.copyWith(
-                      color: Constance.primaryColor,
-                      fontWeight: FontWeight.bold),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  child: Text(
+                    data.selectedClassified?.title ?? '2BHK for Rent',
+                    style: Theme.of(context).textTheme.headline2?.copyWith(
+                        color: Constance.primaryColor,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
                 SizedBox(
-                  height: 2.h,
+                  height: 1.h,
                 ),
-                Text(
-                  'Posted by ${data.selectedClassified?.user?.name??"Anonymous"}',
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  child: Text(
+                    'Posted by ${data.selectedClassified?.user?.name ?? "Anonymous"}',
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Colors.black,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  child: Text(
+                    'Rs: ${data.selectedClassified?.price}',
+                    style: Theme.of(context).textTheme.headline3?.copyWith(
+                          color: Constance.thirdColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(
+                        Icons.location_on,
                         color: Colors.black,
-                        // fontWeight: FontWeight.bold,
                       ),
-                ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Text(
-                  'Rs: ${data.selectedClassified?.price}',
-                  style: Theme.of(context).textTheme.headline3?.copyWith(
-                        color: Constance.thirdColor,
-                        fontWeight: FontWeight.bold,
+                      SizedBox(
+                        width: 4.w,
                       ),
-                ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.location_on,
-                      color: Colors.black,
-                    ),
-                    SizedBox(
-                      width: 4.w,
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 5.h,
-                        child: Text(
-                          data.selectedClassified?.locality?.name ??
-                              'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
-                          // overflow: TextOverflow.clip,
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.black,
-                                  ),
+                      Expanded(
+                        child: SizedBox(
+                          height: 5.h,
+                          child: Text(
+                            data.selectedClassified?.locality?.name ??
+                                'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
+                            // overflow: TextOverflow.clip,
+                            style:
+                                Theme.of(context).textTheme.headline5?.copyWith(
+                                      color: Colors.black,
+                                    ),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 // SizedBox(
                 //   height: 1.h,
                 // ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.black,
-                    ),
-                    SizedBox(
-                      width: 4.w,
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 5.h,
-                        child: Text(
-                          '${data.selectedClassified?.total_views} views',
-                          // overflow: TextOverflow.clip,
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.black,
-                                  ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.remove_red_eye,
+                        color: Colors.black,
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      Expanded(
+                        child: SizedBox(
+                          height: 5.h,
+                          child: Text(
+                            '${data.selectedClassified?.total_views} views',
+                            // overflow: TextOverflow.clip,
+                            style:
+                                Theme.of(context).textTheme.headline5?.copyWith(
+                                      color: Colors.black,
+                                    ),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                ReadMoreText(
-                  data.selectedClassified?.description ??
-                      'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                          ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                          ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                          ' remaining essentially unchanged',
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                  trimLines: 5,
-                  colorClickableText: Constance.secondaryColor,
-                  trimMode: TrimMode.Line,
-                  trimCollapsedText: 'Show more',
-                  trimExpandedText: 'Show less',
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  child: ReadMoreText(
+                    data.selectedClassified?.description ??
+                        'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
+                            ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+                            ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+                            ' remaining essentially unchanged',
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Colors.black,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                    trimLines: 5,
+                    colorClickableText: Constance.secondaryColor,
+                    trimMode: TrimMode.Line,
+                    trimCollapsedText: 'Show more',
+                    trimExpandedText: 'Show less',
+                  ),
                 ),
                 SizedBox(
                   height: 3.h,
                 ),
-                data.selectedClassified?.user==null?Container():SizedBox(
-                  width: double.infinity,
-                  child: CustomButton(
-                      txt: 'Call ${data.selectedClassified?.user?.name??"Anonymous"}',
-                      onTap: () {
-                        // showDialogBox();
-                        _launchUrl(Uri.parse('tel:${data.selectedClassified?.user?.mobile}'));
-                      }),
-                ),
+                data.selectedClassified?.user == null
+                    ? Container()
+                    : Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: CustomButton(
+                              txt:
+                                  'Call ${data.selectedClassified?.user?.name ?? "Anonymous"}',
+                              onTap: () {
+                                // showDialogBox();
+                                _launchUrl(Uri.parse(
+                                    'tel:${data.selectedClassified?.user?.mobile}'));
+                              }),
+                        ),
+                      ),
               ],
             ),
           );
@@ -254,11 +366,13 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
       bottomNavigationBar: CustomNavigationBar(current),
     );
   }
+
   Future<void> _launchUrl(_url) async {
     if (!await launchUrl(_url)) {
       throw 'Could not launch $_url';
     }
   }
+
   AppBar buildAppBar() {
     return AppBar(
       // leading: IconButton(
@@ -267,10 +381,19 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
       //   },
       //   icon: Icon(Icons.menu),
       // ),
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: () {
+          Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,

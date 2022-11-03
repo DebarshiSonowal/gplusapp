@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:jiffy/jiffy.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
@@ -17,579 +20,334 @@ class _RedeemPointsState extends State<RedeemPoints> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: buildAppBar(),
-      body: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: 1.h,
-          horizontal: 7.w,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 3.w),
-                decoration: const BoxDecoration(
-                  color: Color(0xff001f34),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(7.0),
-                    bottomRight: Radius.circular(7.0),
-                    topLeft: Radius.circular(7.0),
-                    bottomLeft: Radius.circular(7.0),
-                  ),
-                ),
-                width: double.infinity,
-                height: 7.h,
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.wallet,
-                      color: Constance.secondaryColor,
-                      size: 4.h,
+      body: Consumer<DataProvider>(
+        builder: (context,data,_) {
+          return Container(
+            padding: EdgeInsets.symmetric(
+              vertical: 1.h,
+              horizontal: 7.w,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 3.w),
+                    decoration: const BoxDecoration(
+                      color: Color(0xff001f34),
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(7.0),
+                        bottomRight: Radius.circular(7.0),
+                        topLeft: Radius.circular(7.0),
+                        bottomLeft: Radius.circular(7.0),
+                      ),
                     ),
-                    SizedBox(
-                      width: 5.w,
-                    ),
-                    Text(
-                      'Coin Balance',
-                      style: Theme.of(
-                              Navigation.instance.navigatorKey.currentContext!)
-                          .textTheme
-                          .headline5
-                          ?.copyWith(
-                            color: Colors.white,
-                            // fontSize: 11.sp,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      '100000',
-                      style: Theme.of(
-                              Navigation.instance.navigatorKey.currentContext!)
-                          .textTheme
-                          .headline3
-                          ?.copyWith(
-                            color: Colors.white,
-                            // fontSize: 11.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Card(
-                color: Constance.primaryColor,
-                child: Container(
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    // color: Color(0xff001f34),
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(7.0),
-                      bottomRight: Radius.circular(7.0),
-                      topLeft: Radius.circular(7.0),
-                      bottomLeft: Radius.circular(7.0),
+                    width: double.infinity,
+                    height: 7.h,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.wallet,
+                          color: Constance.secondaryColor,
+                          size: 4.h,
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Text(
+                          'Coin Balance',
+                          style: Theme.of(
+                                  Navigation.instance.navigatorKey.currentContext!)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(
+                                color: Colors.white,
+                                // fontSize: 11.sp,
+                                // fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          '${data.referEarn?.coin_balance??0}',
+                          style: Theme.of(
+                                  Navigation.instance.navigatorKey.currentContext!)
+                              .textTheme
+                              .headline3
+                              ?.copyWith(
+                                color: Colors.white,
+                                // fontSize: 11.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
                     ),
                   ),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Redeem points',
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Card(
+                    color: Constance.primaryColor,
+                    child: Container(
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        // color: Color(0xff001f34),
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(7.0),
+                          bottomRight: Radius.circular(7.0),
+                          topLeft: Radius.circular(7.0),
+                          bottomLeft: Radius.circular(7.0),
+                        ),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Redeem points',
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(Navigation
+                                    .instance.navigatorKey.currentContext!)
+                                .textTheme
+                                .headline3
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  // fontSize: 11.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                          Divider(
+                            color: Constance.secondaryColor,
+                            thickness: 0.1.h,
+                          ),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                          ListView.separated(
+                            shrinkWrap: true,
+                            itemBuilder: (cont, count) {
+                              var current = data.referEarn?.plans[count];
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        current?.name??'1 Month Subscription',
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.start,
+                                        style: Theme.of(Navigation.instance
+                                                .navigatorKey.currentContext!)
+                                            .textTheme
+                                            .headline6
+                                            ?.copyWith(
+                                              color: Colors.white,
+                                              // fontSize: 11.sp,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                      SizedBox(
+                                        height: 1.h,
+                                      ),
+                                      Text(
+                                        '${current?.referral_points??50} points',
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.start,
+                                        style: Theme.of(Navigation.instance
+                                                .navigatorKey.currentContext!)
+                                            .textTheme
+                                            .headline6
+                                            ?.copyWith(
+                                              color: Colors.white,
+                                              // fontSize: 11.sp,
+                                              // fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Spacer(),
+                                  CustomButton(
+                                      txt: 'Spend Coin',
+                                      onTap: () {
+                                        confirm_Redeem();
+                                      }),
+                                ],
+                              );
+                            },
+                            separatorBuilder: (BuildContext context, int index) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    height: 1.h,
+                                  ),
+                                  Divider(
+                                    color: Constance.secondaryColor,
+                                    thickness: 0.1.h,
+                                  ),
+                                ],
+                              );
+                            }, itemCount: data.referEarn?.plans.length??0,
+                          ),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ExpansionTile(
+                      collapsedIconColor: Colors.black,
+                      iconColor: Colors.black,
+                      title: Text(
+                        'History',
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(Navigation
-                                .instance.navigatorKey.currentContext!)
+                        style: Theme.of(
+                                Navigation.instance.navigatorKey.currentContext!)
                             .textTheme
                             .headline3
                             ?.copyWith(
-                              color: Colors.white,
+                              color: Colors.black,
                               // fontSize: 11.sp,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Divider(
-                        color: Constance.secondaryColor,
-                        thickness: 0.1.h,
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '1 Month Subscription',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      // fontSize: 11.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              SizedBox(
-                                height: 1.h,
-                              ),
-                              Text(
-                                '250 points',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      // fontSize: 11.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
+                      children: [
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Divider(
+                            color: Constance.secondaryColor,
+                            thickness: 0.1.h,
                           ),
-                          const Spacer(),
-                          CustomButton(
-                              txt: 'Spend Coin',
-                              onTap: () {
-                                confirm_Redeem();
-                              }),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Divider(
-                        color: Constance.secondaryColor,
-                        thickness: 0.1.h,
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '2 Month Subscription',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      // fontSize: 11.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              SizedBox(
-                                height: 1.h,
-                              ),
-                              Text(
-                                '500 points',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      // fontSize: 11.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          CustomButton(txt: 'Spend Coin', onTap: () {}),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Divider(
-                        color: Constance.secondaryColor,
-                        thickness: 0.1.h,
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '5 Month Subscription',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      // fontSize: 11.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              SizedBox(
-                                height: 1.h,
-                              ),
-                              Text(
-                                '1000 points',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      // fontSize: 11.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          CustomButton(txt: 'Spend Coin', onTap: () {}),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Card(
-                color: Colors.white,
-                child: ExpansionTile(
-                  collapsedIconColor: Colors.black,
-                  iconColor: Colors.black,
-                  title: Text(
-                    'History',
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(
-                            Navigation.instance.navigatorKey.currentContext!)
-                        .textTheme
-                        .headline3
-                        ?.copyWith(
-                          color: Colors.black,
-                          // fontSize: 11.sp,
-                          fontWeight: FontWeight.bold,
                         ),
-                  ),
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Divider(
-                        color: Constance.secondaryColor,
-                        thickness: 0.1.h,
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        ListView.separated(
+                            shrinkWrap: true,
+                            itemBuilder: (cont, count) {
+                              var current = data.referHistory[count];
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 4.w, vertical: 1.h),
+                                child: Row(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          current.is_subscription == 1
+                                              ? 'Redeem for subscription'
+                                              : 'Referral',
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.start,
+                                          style: Theme.of(Navigation
+                                              .instance
+                                              .navigatorKey
+                                              .currentContext!)
+                                              .textTheme
+                                              .headline5
+                                              ?.copyWith(
+                                            color: Colors.black,
+                                            // fontSize: 11.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          '${current.is_credit==1?'+':'-'}${current.points ?? '250'} points',
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.start,
+                                          style: Theme.of(Navigation
+                                              .instance
+                                              .navigatorKey
+                                              .currentContext!)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(
+                                            color: current.is_credit==1?Colors.green:Constance.thirdColor,
+                                            // fontSize: 11.sp,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      Jiffy(current.updated_at, "yyyy-MM-dd")
+                                          .format("dd/MM/yyyy"),
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.start,
+                                      style: Theme.of(Navigation.instance
+                                          .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline6
+                                          ?.copyWith(
+                                        color: Colors.black,
+                                        // fontSize: 11.sp,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            separatorBuilder: (cont, count) {
+                              return SizedBox(
+                                height: 1.h,
+                              );
+                            },
+                            itemCount: data.referHistory.length),
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Divider(
+                            color: Constance.secondaryColor,
+                            thickness: 0.1.h,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 4.w, vertical: 1.h),
+                          child: Row(
                             children: [
                               Text(
-                                'Redeem for subscription',
+                                'See More',
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
+                                style: Theme.of(Navigation.instance
+                                    .navigatorKey.currentContext!)
                                     .textTheme
-                                    .headline5
+                                    .headline4
                                     ?.copyWith(
-                                      color: Colors.black,
-                                      // fontSize: 11.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              Text(
-                                '250 points',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      // fontSize: 11.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          Text(
-                            '26-12-2022',
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start,
-                            style: Theme.of(Navigation
-                                    .instance.navigatorKey.currentContext!)
-                                .textTheme
-                                .headline6
-                                ?.copyWith(
-                                  color: Colors.black,
-                                  // fontSize: 11.sp,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Redeem for subscription',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      // fontSize: 11.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              Text(
-                                '250 points',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      // fontSize: 11.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          Text(
-                            '26-12-2022',
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start,
-                            style: Theme.of(Navigation
-                                    .instance.navigatorKey.currentContext!)
-                                .textTheme
-                                .headline6
-                                ?.copyWith(
-                                  color: Colors.black,
-                                  // fontSize: 11.sp,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Redeem for subscription',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      // fontSize: 11.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              Text(
-                                '250 points',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      // fontSize: 11.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          Text(
-                            '26-12-2022',
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start,
-                            style: Theme.of(Navigation
-                                    .instance.navigatorKey.currentContext!)
-                                .textTheme
-                                .headline6
-                                ?.copyWith(
-                                  color: Colors.black,
-                                  // fontSize: 11.sp,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Redeem for subscription',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      // fontSize: 11.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              Text(
-                                '250 points',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      // fontSize: 11.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          Text(
-                            '26-12-2022',
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start,
-                            style: Theme.of(Navigation
-                                    .instance.navigatorKey.currentContext!)
-                                .textTheme
-                                .headline6
-                                ?.copyWith(
-                                  color: Colors.black,
-                                  // fontSize: 11.sp,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Divider(
-                        color: Constance.secondaryColor,
-                        thickness: 0.1.h,
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                      child: Row(
-                        children: [
-                          Text(
-                            'See More',
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start,
-                            style: Theme.of(Navigation
-                                    .instance.navigatorKey.currentContext!)
-                                .textTheme
-                                .headline4
-                                ?.copyWith(
                                   color: Constance.secondaryColor,
                                   // fontSize: 11.sp,
                                   // fontWeight: FontWeight.bold,
                                 ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        }
       ),
     );
   }
@@ -703,9 +461,9 @@ class _RedeemPointsState extends State<RedeemPoints> {
           title: Text(
             'Congratulations',
             style: Theme.of(context).textTheme.headline1?.copyWith(
-              color: Constance.secondaryColor,
-              fontWeight: FontWeight.bold,
-            ),
+                  color: Constance.secondaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           content: Container(
             padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
@@ -716,14 +474,13 @@ class _RedeemPointsState extends State<RedeemPoints> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 SizedBox(height: 1.h),
                 Text(
                   'You have just become a member for a month by spending 250 coins',
                   style: Theme.of(context).textTheme.headline5?.copyWith(
-                    color: Colors.black,
-                    // fontWeight: FontWeight.bold,
-                  ),
+                        color: Colors.black,
+                        // fontWeight: FontWeight.bold,
+                      ),
                 ),
                 SizedBox(height: 1.h),
                 SizedBox(
@@ -744,10 +501,19 @@ class _RedeemPointsState extends State<RedeemPoints> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: (){
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,

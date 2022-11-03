@@ -87,7 +87,7 @@ class OpinionCard extends StatelessWidget {
                         item.author_name ?? "",
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
-                          color: Constance.thirdColor,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

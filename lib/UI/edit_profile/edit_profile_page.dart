@@ -381,114 +381,114 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(
                   height: 1.5.h,
                 ),
-                Text(
-                  'Notification Permission',
-                  style: Theme.of(context).textTheme.headline4?.copyWith(
-                        color: Constance.primaryColor,
-                        // fontSize: 2.h,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(
-                  height: 0.5.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Big Deal',
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
-                            color: Colors.black,
-                            // fontSize: 2.h,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    Switch(
-                      activeColor: Constance.secondaryColor,
-                      onChanged: (bool value) {
-                        setState(() {
-                          big_deal = value;
-                        });
-                      },
-                      value: big_deal,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 0.2.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Guwahati Connect',
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
-                            color: Colors.black,
-                            // fontSize: 2.h,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    Switch(
-                      activeColor: Constance.secondaryColor,
-                      onChanged: (bool value) {
-                        setState(() {
-                          guwahati_connect = value;
-                        });
-                      },
-                      value: guwahati_connect,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 0.2.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Classified',
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
-                            color: Colors.black,
-                            // fontSize: 2.h,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    Switch(
-                      activeColor: Constance.secondaryColor,
-                      onChanged: (bool value) {
-                        setState(() {
-                          classified = value;
-                        });
-                      },
-                      value: classified,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 0.2.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Dark Mode',
-                      style: Theme.of(context).textTheme.headline4?.copyWith(
-                            color: Constance.primaryColor,
-                            // fontSize: 2.h,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    Switch(
-                      activeColor: Constance.secondaryColor,
-                      onChanged: (bool value) {
-                        setState(() {
-                          dark_mode = value;
-                        });
-                      },
-                      value: dark_mode,
-                    ),
-                  ],
-                ),
+                // Text(
+                //   'Notification Permission',
+                //   style: Theme.of(context).textTheme.headline4?.copyWith(
+                //         color: Constance.primaryColor,
+                //         // fontSize: 2.h,
+                //         fontWeight: FontWeight.bold,
+                //       ),
+                // ),
+                // SizedBox(
+                //   height: 0.5.h,
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Text(
+                //       'Big Deal',
+                //       style: Theme.of(context).textTheme.headline5?.copyWith(
+                //             color: Colors.black,
+                //             // fontSize: 2.h,
+                //             // fontWeight: FontWeight.bold,
+                //           ),
+                //     ),
+                //     Switch(
+                //       activeColor: Constance.secondaryColor,
+                //       onChanged: (bool value) {
+                //         setState(() {
+                //           big_deal = value;
+                //         });
+                //       },
+                //       value: big_deal,
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(
+                //   height: 0.2.h,
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Text(
+                //       'Guwahati Connect',
+                //       style: Theme.of(context).textTheme.headline5?.copyWith(
+                //             color: Colors.black,
+                //             // fontSize: 2.h,
+                //             // fontWeight: FontWeight.bold,
+                //           ),
+                //     ),
+                //     Switch(
+                //       activeColor: Constance.secondaryColor,
+                //       onChanged: (bool value) {
+                //         setState(() {
+                //           guwahati_connect = value;
+                //         });
+                //       },
+                //       value: guwahati_connect,
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(
+                //   height: 0.2.h,
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Text(
+                //       'Classified',
+                //       style: Theme.of(context).textTheme.headline5?.copyWith(
+                //             color: Colors.black,
+                //             // fontSize: 2.h,
+                //             // fontWeight: FontWeight.bold,
+                //           ),
+                //     ),
+                //     Switch(
+                //       activeColor: Constance.secondaryColor,
+                //       onChanged: (bool value) {
+                //         setState(() {
+                //           classified = value;
+                //         });
+                //       },
+                //       value: classified,
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(
+                //   height: 0.2.h,
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Text(
+                //       'Dark Mode',
+                //       style: Theme.of(context).textTheme.headline4?.copyWith(
+                //             color: Constance.primaryColor,
+                //             // fontSize: 2.h,
+                //             fontWeight: FontWeight.bold,
+                //           ),
+                //     ),
+                //     Switch(
+                //       activeColor: Constance.secondaryColor,
+                //       onChanged: (bool value) {
+                //         setState(() {
+                //           dark_mode = value;
+                //         });
+                //       },
+                //       value: dark_mode,
+                //     ),
+                //   ],
+                // ),
                 SizedBox(
                   height: 1.h,
                 ),
@@ -541,10 +541,19 @@ class _EditProfileState extends State<EditProfile> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: (){
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,

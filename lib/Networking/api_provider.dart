@@ -38,6 +38,7 @@ import '../Model/promoted_deal.dart';
 import '../Model/razorpay_key.dart';
 import '../Model/redeem_details.dart';
 import '../Model/redeem_history.dart';
+import '../Model/referEarnHistory.dart';
 import '../Model/refer_earn_response.dart';
 import '../Model/search_result.dart';
 import '../Model/shop.dart';
@@ -909,6 +910,48 @@ class ApiProvider {
       // 'APP-KEY': ConstanceData.app_key
     });
     var url = "${baseUrl}/app/subscriptions";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("subscriptions response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return MembershipResponse.fromJson(response?.data);
+      } else {
+        debugPrint("subscriptions error: ${response?.data}");
+        return MembershipResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("subscriptions response: ${e.response}");
+      return MembershipResponse.withError(e.message);
+    }
+  }
+
+  Future<MembershipResponse> getActiveMembership() async {
+    // var data = {
+    //   'category': 'opinion',
+    //   'per_page': per_page,
+    //   'page': page,
+    // };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${baseUrl}/app/currently-active-plan";
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
@@ -1932,6 +1975,97 @@ class ApiProvider {
       }
       debugPrint("postPollOfTheWeek error: ${e.response}");
       return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> advertiseWithUs(
+      f_name, l_name, email, mobile, ad_type, feedback) async {
+    var url = "${baseUrl}/app/post-advertise-feedback";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'first_name': f_name,
+      'last_name': l_name,
+      'email': email,
+      'mobile': mobile,
+      'ad_type': ad_type,
+      'feedback': feedback,
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("advertiseWithUs response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("advertiseWithUs error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("advertiseWithUs error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<ReferEarnHistoryResponse> fetchReferEarnHistory() async {
+    var url = "${baseUrl}/app/history-refer-n-earn";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // var data = {
+    //   'first_name': f_name,
+    //   'last_name': l_name,
+    //   'email': email,
+    //   'mobile': mobile,
+    //   'ad_type': ad_type,
+    //   'feedback': feedback,
+    // };
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // data: data,
+        // queryParameters: data,
+      );
+      debugPrint("ReferEarnHistoryResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ReferEarnHistoryResponse.withJson(response?.data);
+      } else {
+        debugPrint("ReferEarnHistoryResponse error: ${response?.data}");
+        return ReferEarnHistoryResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("ReferEarnHistoryResponse error: ${e.response}");
+      return ReferEarnHistoryResponse.withError(e.message);
     }
   }
 

@@ -3,7 +3,7 @@ import 'package:gplusapp/Model/profile.dart';
 
 class GuwahatiConnect {
   int? id, user_id, total_liked, total_disliked, total_comment, status;
-  String? question, updated_at;
+  String? question, updated_at,created_at;
   List<GCAttachment>? attachment;
   Profile? user;
   List<Comment> comments=[];
@@ -24,7 +24,10 @@ class GuwahatiConnect {
     status = json['status'] == null ? 0 : int.parse(json['status'].toString());
     updated_at = json['updated_at'] == null
         ? ""
-        : json['updated_at'].toString().split("T")[0];
+        : '${json['updated_at'].toString().split("T")[0]} ${json['updated_at'].toString().split("T")[1].split('.')[0]}';
+    created_at = json['created_at'] == null
+        ? ""
+        : json['created_at'].toString().split("T")[0];
     //String
     question = json['question'] ?? "";
     attachment = json['attached_files'] == null

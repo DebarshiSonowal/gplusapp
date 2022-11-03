@@ -1,3 +1,4 @@
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
@@ -43,7 +44,17 @@ class _DraftStoryState extends State<DraftStory> {
                   color: Constance.primaryColor,
                   thickness: 0.2.h,
                 ),
-                ListView.separated(
+                data.citizenlist.isEmpty?EmptyWidget(
+                  image: Constance.logoIcon,
+                  title: 'Oops!',
+                  subTitle: 'No stories are submitted yet',
+                  titleTextStyle: Theme.of(context).textTheme.headline3?.copyWith(
+                      color: Constance.primaryColor
+                  ),
+                  subtitleTextStyle:Theme.of(context).textTheme.headline4?.copyWith(
+                      color: Constance.secondaryColor
+                  ),
+                ):ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
@@ -62,94 +73,104 @@ class _DraftStoryState extends State<DraftStory> {
                         width: MediaQuery.of(context).size.width - 7.w,
                         child: Row(
                           children: [
-                            Expanded(
-                              flex: 2,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  GestureDetector(
-                                    onTap:(){
-                                      Navigation.instance.navigate('/viewStoryPage',args: item.id);
-                                    },
-                                    child: Expanded(
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigation.instance.navigate(
+                                        '/viewStoryPage',
+                                        args: item.id);
+                                  },
+                                  child: Text(
+                                    item.title ?? "",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4
+                                        ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            overflow: TextOverflow.ellipsis,
+                                            color: Constance.primaryColor),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 1.h,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigation.instance.navigate(
+                                            '/viewStoryPage',
+                                            args: item.id);
+                                      },
                                       child: Text(
-                                        item.title ?? "",
+                                        item.story ?? "",
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline4
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: Constance.primaryColor),
+                                            .headline6
+                                            ?.copyWith(color: Colors.black),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 1.h,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: GestureDetector(
-                                          onTap:(){
-                                            Navigation.instance.navigate('/viewStoryPage',args: item.id);
+                                    SizedBox(
+                                      width: 20.w,
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigation.instance.navigate(
+                                                '/editCitizenJournalist',
+                                                args: item.id);
                                           },
                                           child: Text(
-                                            item.story ?? "",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Theme.of(context)
+                                            "Edit",
+                                            style: Theme.of(Navigation
+                                                    .instance
+                                                    .navigatorKey
+                                                    .currentContext!)
                                                 .textTheme
-                                                .headline6
-                                                ?.copyWith(color: Colors.black),
+                                                .headline5
+                                                ?.copyWith(
+                                                  color: Colors.black,
+                                                  // fontSize: 2.2.h,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                           ),
                                         ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigation.instance.navigate(
-                                              '/editCitizenJournalist',
-                                              args: item.id);
-                                        },
-                                        child: Text(
-                                          "Edit",
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline5
-                                              ?.copyWith(
-                                                color: Colors.black,
-                                                // fontSize: 2.2.h,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                        SizedBox(
+                                          width: 4.w,
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: 4.w,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          deletePost(item.id);
-                                        },
-                                        child: Text(
-                                          "Delete",
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline5
-                                              ?.copyWith(
-                                                color: Constance.thirdColor,
-                                                // fontSize: 2.2.h,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            deletePost(item.id);
+                                          },
+                                          child: Text(
+                                            "Delete",
+                                            style: Theme.of(Navigation
+                                                    .instance
+                                                    .navigatorKey
+                                                    .currentContext!)
+                                                .textTheme
+                                                .headline5
+                                                ?.copyWith(
+                                                  color: Constance.thirdColor,
+                                                  // fontSize: 2.2.h,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -178,10 +199,19 @@ class _DraftStoryState extends State<DraftStory> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: (){
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,

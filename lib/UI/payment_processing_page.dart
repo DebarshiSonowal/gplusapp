@@ -57,7 +57,17 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: 15.h,
+              height: 5.h,
+            ),
+            SizedBox(
+              height: 12.h,
+              width: 25.w,
+              child: CircularProgressIndicator(
+                strokeWidth: 4.sp,
+              ),
+            ),
+            SizedBox(
+              height: 2.h,
             ),
             Text(
               'Please wait',
@@ -282,10 +292,19 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: (){
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,

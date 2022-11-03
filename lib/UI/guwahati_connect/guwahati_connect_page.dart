@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -115,7 +116,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
       backgroundColor: Colors.white,
       body: SmartRefresher(
         enablePullDown: true,
-        enablePullUp: true,
+        enablePullUp: false,
         header: WaterDropHeader(),
         footer: CustomFooter(
           builder: (BuildContext context, LoadStatus? mode) {
@@ -199,355 +200,390 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                   height: 1.h,
                 ),
                 Consumer<DataProvider>(builder: (context, current, _) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 2.w),
-                    child: ListView.separated(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: current.guwahatiConnect.length,
-                      itemBuilder: (context, count) {
-                        var data = current.guwahatiConnect[count];
-                        bool like = false, dislike = false;
-                        return StatefulBuilder(builder: (context, _) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Card(
-                                elevation: 3,
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 2.w, vertical: 1.h),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                  return current.guwahatiConnect.isEmpty
+                      ? EmptyWidget(
+                          image: Constance.logoIcon,
+                          title: 'Oops!',
+                          subTitle: 'No posts are available yet',
+                          titleTextStyle: Theme.of(context)
+                              .textTheme
+                              .headline3
+                              ?.copyWith(color: Constance.primaryColor),
+                          subtitleTextStyle: Theme.of(context)
+                              .textTheme
+                              .headline4
+                              ?.copyWith(color: Constance.secondaryColor),
+                        )
+                      : Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 2.w),
+                          child: ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: current.guwahatiConnect.length,
+                            itemBuilder: (context, count) {
+                              var data = current.guwahatiConnect[count];
+                              bool like = false, dislike = false;
+                              return StatefulBuilder(builder: (context, _) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Card(
+                                      elevation: 3,
+                                      color: Colors.white,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 2.w, vertical: 1.h),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  data.user?.name ??
-                                                      "GPlus Author",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline3
-                                                      ?.copyWith(
-                                                        color: Constance
-                                                            .primaryColor,
-                                                        fontWeight:
-                                                            FontWeight.bold,
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        data.user?.name ??
+                                                            "GPlus Author",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .headline3
+                                                            ?.copyWith(
+                                                              color: Constance
+                                                                  .primaryColor,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
                                                       ),
-                                                ),
-                                                SizedBox(
-                                                  height: 0.7.h,
-                                                ),
-                                                Text(
-                                                  Jiffy(data.updated_at,
-                                                              "yyyy-MM-dd")
-                                                          .fromNow() ??
-                                                      '${15} mins ago' ??
-                                                      "",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline6
-                                                      ?.copyWith(
-                                                        color: Colors.black45,
-                                                        // fontWeight: FontWeight.bold,
+                                                      SizedBox(
+                                                        height: 0.7.h,
                                                       ),
-                                                ),
-                                              ],
+                                                      Text(
+                                                        Jiffy(data.updated_at,
+                                                                    "yyyy-MM-dd hh:mm:ss")
+                                                                .fromNow() ??
+                                                            '${15} mins ago' ??
+                                                            "",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .headline6
+                                                            ?.copyWith(
+                                                              color: Colors
+                                                                  .black45,
+                                                              // fontWeight: FontWeight.bold,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const Icon(
+                                                    Icons.menu,
+                                                    color: Colors.black,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                            const Icon(
-                                              Icons.menu,
-                                              color: Colors.black,
+                                            data.attachment?.isEmpty ?? false
+                                                ? Container()
+                                                : Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 1.h),
+                                                    child: SizedBox(
+                                                      height: 25.h,
+                                                      width: double.infinity,
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          // Navigation.instance.goBack();
+                                                          (data.attachment?.length ??
+                                                                      1) >
+                                                                  1
+                                                              ? showAllImages(
+                                                                  count)
+                                                              : showThisImage(data
+                                                                      .attachment![
+                                                                          0]
+                                                                      .file_name ??
+                                                                  Constance
+                                                                      .defaultImage);
+                                                        },
+                                                        child: (data.attachment
+                                                                        ?.length ??
+                                                                    1) >
+                                                                1
+                                                            ? getGridBasedOnNumbers(
+                                                                data.attachment)
+                                                            : CachedNetworkImage(
+                                                                placeholder:
+                                                                    (cont, _) {
+                                                                  return Image
+                                                                      .asset(
+                                                                    Constance
+                                                                        .logoIcon,
+                                                                    // color: Colors.black,
+                                                                  );
+                                                                },
+                                                                imageUrl: data
+                                                                        .attachment![
+                                                                            0]
+                                                                        .file_name ??
+                                                                    "",
+                                                                fit: BoxFit
+                                                                    .fitHeight,
+                                                                errorWidget:
+                                                                    (cont, _,
+                                                                        e) {
+                                                                  return Image
+                                                                      .network(
+                                                                    Constance
+                                                                        .defaultImage,
+                                                                    fit: BoxFit
+                                                                        .fitWidth,
+                                                                  );
+                                                                },
+                                                              ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                            SizedBox(
+                                              height: 1.h,
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                      data.attachment?.isEmpty ?? false
-                                          ? Container()
-                                          : Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 1.h),
-                                              child: SizedBox(
-                                                height: 25.h,
-                                                width: double.infinity,
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    // Navigation.instance.goBack();
-                                                    (data.attachment?.length ??
-                                                                1) >
-                                                            1
-                                                        ? showAllImages(count)
-                                                        : showThisImage(data
-                                                                .attachment![0]
-                                                                .file_name ??
-                                                            Constance
-                                                                .defaultImage);
-                                                  },
-                                                  child: (data.attachment
-                                                                  ?.length ??
-                                                              1) >
-                                                          1
-                                                      ? getGridBasedOnNumbers(
-                                                          data.attachment)
-                                                      : CachedNetworkImage(
-                                                          placeholder:
-                                                              (cont, _) {
-                                                            return Image.asset(
-                                                              Constance
-                                                                  .logoIcon,
-                                                              // color: Colors.black,
-                                                            );
-                                                          },
-                                                          imageUrl: data
-                                                                  .attachment![
-                                                                      0]
-                                                                  .file_name ??
-                                                              "",
-                                                          fit: BoxFit.fitHeight,
-                                                          errorWidget:
-                                                              (cont, _, e) {
-                                                            return Image
-                                                                .network(
-                                                              Constance
-                                                                  .defaultImage,
-                                                              fit: BoxFit
-                                                                  .fitWidth,
-                                                            );
-                                                          },
-                                                        ),
+                                            ReadMoreText(
+                                              data.question ?? "",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                    color: Colors.black,
+                                                    // fontWeight: FontWeight.bold,
+                                                  ),
+                                              trimLines: 5,
+                                              colorClickableText:
+                                                  Constance.secondaryColor,
+                                              trimMode: TrimMode.Line,
+                                              trimCollapsedText: 'Show more',
+                                              trimExpandedText: 'Show less',
+                                            ),
+                                            SizedBox(
+                                              height: 1.h,
+                                            ),
+                                            // Text(
+                                            //   "",
+                                            //   style: Theme.of(context)
+                                            //       .textTheme
+                                            //       .headline5
+                                            //       ?.copyWith(
+                                            //         color: Colors.black,
+                                            //         fontWeight: FontWeight.bold,
+                                            //       ),
+                                            // ),
+                                            SizedBox(
+                                              height: 2.h,
+                                              child: Center(
+                                                child: Divider(
+                                                  thickness: 0.05.h,
+                                                  color: Colors.black26,
                                                 ),
                                               ),
                                             ),
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                      ReadMoreText(
-                                        data.question ?? "",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              // fontWeight: FontWeight.bold,
+                                            SizedBox(
+                                              height: 0.5.h,
                                             ),
-                                        trimLines: 5,
-                                        colorClickableText:
-                                            Constance.secondaryColor,
-                                        trimMode: TrimMode.Line,
-                                        trimCollapsedText: 'Show more',
-                                        trimExpandedText: 'Show less',
-                                      ),
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                      // Text(
-                                      //   "",
-                                      //   style: Theme.of(context)
-                                      //       .textTheme
-                                      //       .headline5
-                                      //       ?.copyWith(
-                                      //         color: Colors.black,
-                                      //         fontWeight: FontWeight.bold,
-                                      //       ),
-                                      // ),
-                                      SizedBox(
-                                        height: 2.h,
-                                        child: Center(
-                                          child: Divider(
-                                            thickness: 0.05.h,
-                                            color: Colors.black26,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 0.5.h,
-                                      ),
-                                      Container(
-                                        width: double.infinity,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 1.w),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '${data.total_liked} likes' ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                    color: Colors.black,
-                                                    // fontWeight: FontWeight.bold,
+                                            Container(
+                                              width: double.infinity,
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 1.w),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    '${like ? ((data.total_liked ?? 0) + 1) : data.total_liked} likes' ??
+                                                        "",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline6
+                                                        ?.copyWith(
+                                                          color: Colors.black,
+                                                          // fontWeight: FontWeight.bold,
+                                                        ),
                                                   ),
+                                                  Text(
+                                                    '${dislike ? ((data.total_disliked ?? 0) + 1) : data.total_disliked} dislikes' ??
+                                                        "",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline6
+                                                        ?.copyWith(
+                                                          color: Colors.black,
+                                                          // fontWeight: FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    '${data.total_comment} comments' ??
+                                                        "",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline6
+                                                        ?.copyWith(
+                                                          color: Colors.black,
+                                                          // fontWeight: FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                            Text(
-                                              '${data.total_disliked} dislikes' ??
-                                                  "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                    color: Colors.black,
-                                                    // fontWeight: FontWeight.bold,
-                                                  ),
+                                            SizedBox(
+                                              height: 0.5.h,
                                             ),
-                                            Text(
-                                              '${data.total_comment} comments' ??
-                                                  "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                    color: Colors.black,
-                                                    // fontWeight: FontWeight.bold,
+                                            SizedBox(
+                                              height: 2.h,
+                                              child: Center(
+                                                child: Divider(
+                                                  thickness: 0.05.h,
+                                                  color: Colors.black26,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Material(
+                                                        type: MaterialType
+                                                            .transparency,
+                                                        child: IconButton(
+                                                          onPressed: () {
+                                                            postLike(
+                                                                data.id, 1);
+                                                            _(() {
+                                                              like = !like;
+                                                              if (dislike) {
+                                                                dislike = !like;
+                                                              }
+                                                            });
+                                                            debugPrint(
+                                                                '${like}');
+                                                          },
+                                                          splashRadius: 20.0,
+                                                          splashColor: !like
+                                                              ? Constance
+                                                                  .secondaryColor
+                                                              : Constance
+                                                                  .primaryColor,
+                                                          icon: Icon(
+                                                            Icons.thumb_up,
+                                                            color: like
+                                                                ? Constance
+                                                                    .secondaryColor
+                                                                : Constance
+                                                                    .primaryColor,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Material(
+                                                        type: MaterialType
+                                                            .transparency,
+                                                        child: IconButton(
+                                                          onPressed: () {
+                                                            postLike(
+                                                                data.id, 0);
+                                                            _(() {
+                                                              dislike =
+                                                                  !dislike;
+                                                              if (like) {
+                                                                like = !dislike;
+                                                              }
+                                                            });
+                                                          },
+                                                          splashRadius: 20.0,
+                                                          splashColor: !dislike
+                                                              ? Constance
+                                                                  .secondaryColor
+                                                              : Constance
+                                                                  .primaryColor,
+                                                          icon: Icon(
+                                                            Icons.thumb_down,
+                                                            color: dislike
+                                                                ? Constance
+                                                                    .secondaryColor
+                                                                : Constance
+                                                                    .primaryColor,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Material(
+                                                        type: MaterialType
+                                                            .transparency,
+                                                        child: IconButton(
+                                                          onPressed: () {
+                                                            // setState(() {
+                                                            //   if (expand) {
+                                                            //     expand = false;
+                                                            //   } else {
+                                                            //     expand = true;
+                                                            //   }
+                                                            // });
+                                                            // print(expand);
+                                                            showComments(count);
+                                                          },
+                                                          splashRadius: 20.0,
+                                                          splashColor: Constance
+                                                              .secondaryColor,
+                                                          icon: const Icon(
+                                                            Icons.comment,
+                                                            color: Constance
+                                                                .primaryColor,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 0.5.h,
-                                      ),
-                                      SizedBox(
-                                        height: 2.h,
-                                        child: Center(
-                                          child: Divider(
-                                            thickness: 0.05.h,
-                                            color: Colors.black26,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Material(
-                                                  type:
-                                                      MaterialType.transparency,
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      postLike(data.id, 1);
-                                                      _(() {
-                                                        like = !like;
-                                                        if (dislike) {
-                                                          dislike = !like;
-                                                        }
-                                                      });
-                                                      debugPrint('${like}');
-                                                    },
-                                                    splashRadius: 20.0,
-                                                    splashColor: !like
-                                                        ? Constance
-                                                            .secondaryColor
-                                                        : Constance
-                                                            .primaryColor,
-                                                    icon: Icon(
-                                                      Icons.thumb_up,
-                                                      color: like
-                                                          ? Constance
-                                                              .secondaryColor
-                                                          : Constance
-                                                              .primaryColor,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Material(
-                                                  type:
-                                                      MaterialType.transparency,
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      postLike(data.id, 0);
-                                                      _(() {
-                                                        dislike = !dislike;
-                                                        if (like) {
-                                                          like = !dislike;
-                                                        }
-                                                      });
-                                                    },
-                                                    splashRadius: 20.0,
-                                                    splashColor: !dislike
-                                                        ? Constance
-                                                            .secondaryColor
-                                                        : Constance
-                                                            .primaryColor,
-                                                    icon: Icon(
-                                                      Icons.thumb_down,
-                                                      color: dislike
-                                                          ? Constance
-                                                              .secondaryColor
-                                                          : Constance
-                                                              .primaryColor,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Material(
-                                                  type:
-                                                      MaterialType.transparency,
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      // setState(() {
-                                                      //   if (expand) {
-                                                      //     expand = false;
-                                                      //   } else {
-                                                      //     expand = true;
-                                                      //   }
-                                                      // });
-                                                      // print(expand);
-                                                      showComments(count);
-                                                    },
-                                                    splashRadius: 20.0,
-                                                    splashColor: Constance
-                                                        .secondaryColor,
-                                                    icon: const Icon(
-                                                      Icons.comment,
-                                                      color: Constance
-                                                          .primaryColor,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
+                                );
+                              });
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 3.w, vertical: 1.h),
+                                child: Divider(
+                                  thickness: 0.07.h,
+                                  color: Colors.black,
                                 ),
-                              ),
-                            ],
-                          );
-                        });
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 3.w, vertical: 1.h),
-                          child: Divider(
-                            thickness: 0.07.h,
-                            color: Colors.black,
+                              );
+                            },
                           ),
                         );
-                      },
-                    ),
-                  );
-                })
+                }),
+                SizedBox(
+                  height: 15.h,
+                ),
               ],
             ),
           ),
@@ -558,10 +594,19 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: (){
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
@@ -681,7 +726,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
     final response =
         await ApiProvider.instance.postLike(id, is_like, 'guwahati-connect');
     if (response.success ?? false) {
-      Fluttertoast.showToast(msg: response.message ?? "Post Liked");
+      // Fluttertoast.showToast(msg: response.message ?? "Post Liked");
       // fetchGuwahatiConnect();
     } else {
       showError("Something went wrong");

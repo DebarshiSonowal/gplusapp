@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +48,17 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                       thickness: 0.4.sp,
                     ),
                   ),
-                  ListView.separated(
+                  data.citizenlist.isEmpty?EmptyWidget(
+                    image: Constance.logoIcon,
+                    title: 'Oops!',
+                    subTitle: 'No stories are submitted yet',
+                    titleTextStyle: Theme.of(context).textTheme.headline3?.copyWith(
+                        color: Constance.primaryColor
+                    ),
+                    subtitleTextStyle:Theme.of(context).textTheme.headline4?.copyWith(
+                        color: Constance.secondaryColor
+                    ),
+                  ):ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.vertical,
@@ -171,10 +182,19 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
   }
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: (){
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,

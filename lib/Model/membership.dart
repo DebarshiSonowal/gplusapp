@@ -1,7 +1,12 @@
 class Membership {
   int? id, status, free_coupons, discount_in, referral_points;
   double? base_price, discount, discount_value, price_after_discount;
-  String? name, duration, plan_type, bg_color;
+  String? name,
+      duration,
+      plan_type,
+      bg_color,
+      plan_active_date,
+      plan_expiry_date;
 
   Membership.fromJson(json) {
     //int
@@ -33,6 +38,8 @@ class Membership {
     duration = json['duration'] ?? "";
     plan_type = json['plan_type'] ?? "";
     bg_color = json['bg_color'] ?? "";
+    plan_active_date = json['plan_active_date'] ?? "";
+    plan_expiry_date = json['plan_expiry_date'] ?? "";
   }
 }
 
@@ -45,7 +52,7 @@ class MembershipResponse {
     success = json['success'].toString() == 'true' ? true : false;
     message = json['message'] ?? "Something Went Wrong";
     membership =
-        (json['data'] as List).map((e) => Membership.fromJson(e)).toList();
+        (json['result'] as List).map((e) => Membership.fromJson(e)).toList();
   }
 
   MembershipResponse.withError(msg) {

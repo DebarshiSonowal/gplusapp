@@ -107,7 +107,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigation.instance.navigate('/profile');
+
                         },
                         child: Text(
                           'View Profile',
@@ -868,7 +868,11 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 splashColor: Constance.secondaryColor,
                 radius: 15.h,
                 onTap: () {
-                  Navigation.instance.navigate('/beamember');
+                  if (data.profile==null) {
+                    Navigation.instance.navigate('/beamember');
+                  } else {
+                    Navigation.instance.navigate('/profile');
+                  }
                 },
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 1.0.h),
@@ -882,7 +886,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         width: 2.w,
                       ),
                       Text(
-                        'Be a member',
+                        data.profile==null?'Be a member':'Membership Info',
                         style: Theme.of(context).textTheme.headline4?.copyWith(
                               color: Constance.secondaryColor,
                               // fontSize: 14.sp,
@@ -1101,51 +1105,22 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.gear,
-                          color: Constance.secondaryColor,
-                          size: 2.5.h,
-                        ),
-                        SizedBox(
-                          width: 3.5.w,
-                        ),
-                        Text(
-                          'Settings',
-                          style:
-                              Theme.of(context).textTheme.headline4?.copyWith(
-                                    color: Colors.white,
-                                    // fontSize: 14.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    InkWell(
-                      splashColor: Constance.secondaryColor,
-                      radius: 15.h,
-                      onTap: () async {
-                        final FirebaseAuth _auth = FirebaseAuth.instance;
-                        await _auth.signOut();
-                        Storage.instance.logout();
-                        Navigation.instance.navigateAndRemoveUntil('/login');
+                    GestureDetector(
+                      onTap: (){
+                        Navigation.instance.navigate('/settingsPage');
                       },
                       child: Row(
                         children: [
-                          const Icon(
-                            Icons.exit_to_app,
+                          Icon(
+                            FontAwesomeIcons.gear,
                             color: Constance.secondaryColor,
-                            // size: 2.h,
+                            size: 2.5.h,
                           ),
                           SizedBox(
-                            width: 2.w,
+                            width: 3.5.w,
                           ),
                           Text(
-                            'Logout',
+                            'Settings',
                             style:
                                 Theme.of(context).textTheme.headline4?.copyWith(
                                       color: Colors.white,
@@ -1156,6 +1131,40 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         ],
                       ),
                     ),
+                    // SizedBox(
+                    //   height: 1.5.h,
+                    // ),
+                    // InkWell(
+                    //   splashColor: Constance.secondaryColor,
+                    //   radius: 15.h,
+                    //   onTap: () async {
+                    //     final FirebaseAuth _auth = FirebaseAuth.instance;
+                    //     await _auth.signOut();
+                    //     Storage.instance.logout();
+                    //     Navigation.instance.navigateAndRemoveUntil('/login');
+                    //   },
+                    //   child: Row(
+                    //     children: [
+                    //       const Icon(
+                    //         Icons.exit_to_app,
+                    //         color: Constance.secondaryColor,
+                    //         // size: 2.h,
+                    //       ),
+                    //       SizedBox(
+                    //         width: 2.w,
+                    //       ),
+                    //       Text(
+                    //         'Logout',
+                    //         style:
+                    //             Theme.of(context).textTheme.headline4?.copyWith(
+                    //                   color: Colors.white,
+                    //                   // fontSize: 14.sp,
+                    //                   fontWeight: FontWeight.bold,
+                    //                 ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     SizedBox(
                       height: 1.5.h,
                     ),
@@ -1171,10 +1180,19 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: (){
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,

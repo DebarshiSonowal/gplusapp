@@ -60,14 +60,14 @@ class _StoryPageState extends State<StoryPage> {
                 : Column(
                     children: [
                       Container(
-                        height: 25.h,
+                        height: 29.h,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           // borderRadius: BorderRadius.all(
                           //   // Radius.circular(10),
                           // ),
                           image: DecorationImage(
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                             image: CachedNetworkImageProvider(
                               data.selectedArticle?.image_file_name ??
                                   'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
@@ -77,7 +77,7 @@ class _StoryPageState extends State<StoryPage> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 5.w, vertical: 2.h),
+                            horizontal: 5.w, vertical: 1.h),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -225,22 +225,9 @@ class _StoryPageState extends State<StoryPage> {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                           /* SizedBox(
                               height: 1.5.h,
-                            ),
-                            // Text(
-                            //   data.selectedArticle?.description
-                            //           ?.split('</p>')[1]
-                            //           .trim() ??
-                            //       "",
-                            //   style: Theme.of(context)
-                            //       .textTheme
-                            //       .headline5
-                            //       ?.copyWith(
-                            //         color: Colors.black45,
-                            //         // fontWeight: FontWeight.bold,
-                            //       ),
-                            // ),
+                            ),*/
                             Html(
                               data: data.selectedArticle?.description?.trim() ??
                                   "",
@@ -693,10 +680,19 @@ class _StoryPageState extends State<StoryPage> {
       //   },
       //   icon: Icon(Icons.menu),
       // ),
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: (){
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,

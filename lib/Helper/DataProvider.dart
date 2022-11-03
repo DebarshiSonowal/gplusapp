@@ -21,6 +21,7 @@ import 'package:gplusapp/Model/top_picks.dart';
 import 'package:gplusapp/Model/video_news.dart';
 import 'package:gplusapp/UI/citizen_journalist/citizen_journalist_page.dart';
 import 'package:gplusapp/UI/others/contact_us_page.dart';
+import '../Model/referEarnHistory.dart';
 import '../Model/search_result.dart' as search;
 import '../Model/contact_us.dart';
 import '../Model/guwahati_connect.dart';
@@ -53,6 +54,7 @@ class DataProvider extends ChangeNotifier {
   List<ClassifiedCategory> classified_category = [];
   List<Locality> locality = [];
   ReferEarn? referEarn;
+  List<ReferEarnHistory> referHistory = [];
   Article? selectedArticle;
   Opinion? opinion;
   AboutUs? aboutUs;
@@ -68,6 +70,11 @@ class DataProvider extends ChangeNotifier {
 
   setCitizenJournalist(List<CitizenJournalist> list) {
     citizenlist = list;
+    notifyListeners();
+  }
+
+  setReferEarnHistory(List<ReferEarnHistory> list) {
+    referHistory = list;
     notifyListeners();
   }
 

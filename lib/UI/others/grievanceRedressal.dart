@@ -5,11 +5,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
 
 class GrieveanceRedressal extends StatefulWidget {
@@ -192,10 +194,19 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
       //   },
       //   icon: Icon(Icons.menu),
       // ),
-      title: Image.asset(
-        Constance.logoIcon,
-        fit: BoxFit.fill,
-        scale: 2,
+      title: GestureDetector(
+        onTap: () {
+          Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
@@ -1454,8 +1465,9 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
             height: 2.7.h,
           ),
           GestureDetector(
-            onTap: (){
-              _launchUrl(Uri.parse('mailto:selfregulatorybody@digipubindia.in?subject=Grievance Redressal'));
+            onTap: () {
+              _launchUrl(Uri.parse(
+                  'mailto:selfregulatorybody@digipubindia.in?subject=Grievance Redressal'));
             },
             child: RichText(
               text: TextSpan(
@@ -1548,6 +1560,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
     }
     return true;
   }
+
   Future<void> _launchUrl(_url) async {
     if (!await launchUrl(_url)) {
       throw 'Could not launch $_url';
