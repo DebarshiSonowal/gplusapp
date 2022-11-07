@@ -45,7 +45,7 @@ class _FilterPageState extends State<FilterPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
@@ -126,8 +126,12 @@ class _FilterPageState extends State<FilterPage> {
                               child: CheckboxListTile(
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
-                                checkColor: Colors.black,
-                                activeColor: Colors.grey.shade300,
+                                checkColor: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                                activeColor: Storage.instance.isDarkMode
+                                    ? Colors.black
+                                    : Colors.grey.shade300,
                                 // tileColor: Colors.grey,
                                 value: _map[current.id] ?? false,
                                 onChanged: (value) => setState(() {
@@ -138,7 +142,10 @@ class _FilterPageState extends State<FilterPage> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline5
-                                      ?.copyWith(color: Colors.black),
+                                      ?.copyWith(
+                                          color: Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
                                 ),
                               ),
                             );

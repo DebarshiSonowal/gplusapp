@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -23,7 +24,9 @@ class _NotificationPageState extends State<NotificationPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.grey.shade200,
+        color: Storage.instance.isDarkMode
+            ? Colors.black
+            :Colors.grey.shade200,
         padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
         child: ListView.separated(
           shrinkWrap: true,
@@ -129,6 +132,20 @@ class _NotificationPageState extends State<NotificationPage> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 }

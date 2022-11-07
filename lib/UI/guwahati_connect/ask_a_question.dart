@@ -12,6 +12,7 @@ import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 
 class AskAQuestionPage extends StatefulWidget {
@@ -51,7 +52,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black :Colors.white,
         padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
         child: SingleChildScrollView(
           child: Column(
@@ -62,7 +63,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                 child: Text(
                   'Ask A Question',
                   style: Theme.of(context).textTheme.headline2?.copyWith(
-                      color: Constance.primaryColor,
+                      color: Storage.instance.isDarkMode ? Colors.white :Constance.primaryColor,
                       fontWeight: FontWeight.bold),
                 ),
               ),
@@ -78,11 +79,13 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
                 minLines: 15,
+
                 textAlign: TextAlign.start,
                 textAlignVertical: TextAlignVertical.top,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
+                  floatingLabelBehavior:FloatingLabelBehavior.never,
                   labelText: 'Ask a question',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
@@ -97,14 +100,14 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
               ),
               Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.attach_file,
-                    color: Colors.black,
+                    color: Storage.instance.isDarkMode ? Constance.secondaryColor :Colors.black,
                   ),
                   Text(
                     'Add more attachments',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Colors.black,
+                          color: Storage.instance.isDarkMode ? Colors.white :Colors.black,
                           // fontSize: 1.6.h,
                         ),
                   ),
@@ -213,6 +216,20 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 

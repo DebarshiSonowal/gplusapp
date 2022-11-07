@@ -6,6 +6,7 @@ import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 
 class DraftStory extends StatefulWidget {
@@ -23,7 +24,7 @@ class _DraftStoryState extends State<DraftStory> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return SingleChildScrollView(
@@ -33,7 +34,9 @@ class _DraftStoryState extends State<DraftStory> {
                 Text(
                   'Drafts',
                   style: Theme.of(context).textTheme.headline1?.copyWith(
-                        color: Constance.primaryColor,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Constance.primaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
@@ -41,66 +44,51 @@ class _DraftStoryState extends State<DraftStory> {
                   height: 1.h,
                 ),
                 Divider(
-                  color: Constance.primaryColor,
+                  color: Storage.instance.isDarkMode
+                      ? Colors.white
+                      : Constance.primaryColor,
                   thickness: 0.2.h,
                 ),
-                data.citizenlist.isEmpty?EmptyWidget(
-                  image: Constance.logoIcon,
-                  title: 'Oops!',
-                  subTitle: 'No stories are submitted yet',
-                  titleTextStyle: Theme.of(context).textTheme.headline3?.copyWith(
-                      color: Constance.primaryColor
-                  ),
-                  subtitleTextStyle:Theme.of(context).textTheme.headline4?.copyWith(
-                      color: Constance.secondaryColor
-                  ),
-                ):ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (cont, count) {
-                      var item = data.citizenlist[count];
-                      return Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 3.w, vertical: 2.h),
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                          color: Colors.white,
-                        ),
-                        height: 12.h,
-                        width: MediaQuery.of(context).size.width - 7.w,
-                        child: Row(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                SizedBox(
+                  height: 1.h,
+                ),
+                data.citizenlist.isEmpty
+                    ? EmptyWidget(
+                        image: Constance.logoIcon,
+                        title: 'Oops!',
+                        subTitle: 'No stories are submitted yet',
+                        titleTextStyle: Theme.of(context)
+                            .textTheme
+                            .headline3
+                            ?.copyWith(color: Constance.primaryColor),
+                        subtitleTextStyle: Theme.of(context)
+                            .textTheme
+                            .headline4
+                            ?.copyWith(color: Constance.secondaryColor),
+                      )
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (cont, count) {
+                          var item = data.citizenlist[count];
+                          return Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 3.w, vertical: 2.h),
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.black
+                                  : Colors.white,
+                            ),
+                            height: 12.h,
+                            width: MediaQuery.of(context).size.width - 7.w,
+                            child: Row(
                               children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigation.instance.navigate(
-                                        '/viewStoryPage',
-                                        args: item.id);
-                                  },
-                                  child: Text(
-                                    item.title ?? "",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline4
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            overflow: TextOverflow.ellipsis,
-                                            color: Constance.primaryColor),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     GestureDetector(
                                       onTap: () {
@@ -109,62 +97,103 @@ class _DraftStoryState extends State<DraftStory> {
                                             args: item.id);
                                       },
                                       child: Text(
-                                        item.story ?? "",
+                                        item.title ?? "",
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline6
-                                            ?.copyWith(color: Colors.black),
+                                            .headline4
+                                            ?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                overflow: TextOverflow.ellipsis,
+                                                color: Storage
+                                                        .instance.isDarkMode
+                                                    ? Colors.white
+                                                    : Constance.primaryColor),
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 20.w,
+                                      height: 1.h,
                                     ),
                                     Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
                                         GestureDetector(
                                           onTap: () {
                                             Navigation.instance.navigate(
-                                                '/editCitizenJournalist',
+                                                '/viewStoryPage',
                                                 args: item.id);
                                           },
                                           child: Text(
-                                            "Edit",
-                                            style: Theme.of(Navigation
-                                                    .instance
-                                                    .navigatorKey
-                                                    .currentContext!)
+                                            item.story ?? "",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: Theme.of(context)
                                                 .textTheme
-                                                .headline5
+                                                .headline6
                                                 ?.copyWith(
-                                                  color: Colors.black,
-                                                  // fontSize: 2.2.h,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                                    color: Storage
+                                                            .instance.isDarkMode
+                                                        ? Colors.white70
+                                                        : Colors.black),
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 4.w,
+                                          width: 20.w,
                                         ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            deletePost(item.id);
-                                          },
-                                          child: Text(
-                                            "Delete",
-                                            style: Theme.of(Navigation
-                                                    .instance
-                                                    .navigatorKey
-                                                    .currentContext!)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                                  color: Constance.thirdColor,
-                                                  // fontSize: 2.2.h,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
+                                        Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigation.instance.navigate(
+                                                    '/editCitizenJournalist',
+                                                    args: item.id);
+                                              },
+                                              child: Text(
+                                                "Edit",
+                                                style: Theme.of(Navigation
+                                                        .instance
+                                                        .navigatorKey
+                                                        .currentContext!)
+                                                    .textTheme
+                                                    .headline5
+                                                    ?.copyWith(
+                                                      color: Storage.instance
+                                                              .isDarkMode
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      // fontSize: 2.2.h,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 4.w,
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                deletePost(item.id);
+                                              },
+                                              child: Text(
+                                                "Delete",
+                                                style: Theme.of(Navigation
+                                                        .instance
+                                                        .navigatorKey
+                                                        .currentContext!)
+                                                    .textTheme
+                                                    .headline5
+                                                    ?.copyWith(
+                                                      color:
+                                                          Constance.thirdColor,
+                                                      // fontSize: 2.2.h,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -172,23 +201,23 @@ class _DraftStoryState extends State<DraftStory> {
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                    separatorBuilder: (cont, inde) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 3.w),
-                        child: SizedBox(
-                          height: 1.h,
-                          child: Divider(
-                            color: Colors.black,
-                            thickness: 0.3.sp,
-                          ),
-                        ),
-                      );
-                    },
-                    itemCount: data.citizenlist.length),
+                          );
+                        },
+                        separatorBuilder: (cont, inde) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 3.w),
+                            child: SizedBox(
+                              height: 1.h,
+                              child: Divider(
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                                thickness: 0.3.sp,
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: data.citizenlist.length),
               ],
             ),
           );
@@ -200,10 +229,10 @@ class _DraftStoryState extends State<DraftStory> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -215,6 +244,20 @@ class _DraftStoryState extends State<DraftStory> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 

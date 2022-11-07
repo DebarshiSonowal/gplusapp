@@ -38,7 +38,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     // );
     return Consumer<DataProvider>(builder: (context, data, _) {
       return Drawer(
-        backgroundColor: Constance.primaryColor,
+        backgroundColor: Storage.instance.isDarkMode?Colors.black:Constance.primaryColor,
         child: Padding(
           padding: EdgeInsets.only(left: 2.w, right: 2.w),
           child: ListView(
@@ -164,43 +164,49 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     SizedBox(
                       height: 1.5.h,
                     ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 8.w,
-                        ),
-                        SizedBox(
-                          width: 45.w,
-                          child: Text(
-                            data.profile?.addresses
-                                        .where((element) =>
-                                            element.is_primary == 1)
-                                        .isEmpty ??
-                                    false
-                                ? ""
-                                : data.profile?.addresses
-                                        .where((element) =>
-                                            element.is_primary == 1)
-                                        .first
-                                        .address ??
-                                    '',
-                            overflow: TextOverflow.ellipsis,
-                            style:
-                                Theme.of(context).textTheme.headline6?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 11.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigation.instance
+                            .navigate('/editSavedAddresses');
+                      },
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 8.w,
                           ),
-                        ),
-                        SizedBox(
-                          width: 2.w,
-                        ),
-                        const Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.white,
-                        ),
-                      ],
+                          SizedBox(
+                            width: 45.w,
+                            child: Text(
+                              data.profile?.addresses
+                                          .where((element) =>
+                                              element.is_primary == 1)
+                                          .isEmpty ??
+                                      false
+                                  ? ""
+                                  : data.profile?.addresses
+                                          .where((element) =>
+                                              element.is_primary == 1)
+                                          .first
+                                          .address ??
+                                      '',
+                              overflow: TextOverflow.ellipsis,
+                              style:
+                                  Theme.of(context).textTheme.headline6?.copyWith(
+                                        color: Colors.white,
+                                        fontSize: 11.sp,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 2.w,
+                          ),
+                          const Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

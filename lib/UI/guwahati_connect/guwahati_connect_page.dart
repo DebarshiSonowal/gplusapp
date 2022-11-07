@@ -113,7 +113,8 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
         ),
       ),
       bottomNavigationBar: CustomNavigationBar(current),
-      backgroundColor: Colors.white,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       body: SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
@@ -143,7 +144,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          color: Colors.white,
+          // color: Colors.white,
           padding: EdgeInsets.symmetric(vertical: 2.h),
           child: SingleChildScrollView(
             child: Column(
@@ -161,14 +162,14 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                           children: [
                             Icon(
                               FontAwesomeIcons.radio,
-                              color: Colors.black,
+                              color: Constance.secondaryColor,
                               size: 6.h,
                             ),
                           ],
                         ),
                       ),
                       SizedBox(
-                        width: 1.w,
+                        width: 2.w,
                       ),
                       Expanded(
                         flex: 5,
@@ -179,7 +180,9 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                               .textTheme
                               .headline2
                               ?.copyWith(
-                                  color: Constance.primaryColor,
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Constance.primaryColor,
                                   fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -229,7 +232,9 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                   children: [
                                     Card(
                                       elevation: 3,
-                                      color: Colors.white,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.black
+                                          : Colors.white,
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 2.w, vertical: 1.h),
@@ -256,8 +261,12 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                                             .textTheme
                                                             .headline3
                                                             ?.copyWith(
-                                                              color: Constance
-                                                                  .primaryColor,
+                                                              color: Storage
+                                                                      .instance
+                                                                      .isDarkMode
+                                                                  ? Colors.white
+                                                                  : Constance
+                                                                      .primaryColor,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
@@ -276,8 +285,13 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                                             .textTheme
                                                             .headline6
                                                             ?.copyWith(
-                                                              color: Colors
-                                                                  .black45,
+                                                              color: Storage
+                                                                      .instance
+                                                                      .isDarkMode
+                                                                  ? Colors
+                                                                      .white70
+                                                                  : Colors
+                                                                      .black45,
                                                               // fontWeight: FontWeight.bold,
                                                             ),
                                                       ),
@@ -361,7 +375,10 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                                   .textTheme
                                                   .headline5
                                                   ?.copyWith(
-                                                    color: Colors.black,
+                                                    color: Storage
+                                                            .instance.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
                                                     // fontWeight: FontWeight.bold,
                                                   ),
                                               trimLines: 5,
@@ -389,7 +406,11 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                               child: Center(
                                                 child: Divider(
                                                   thickness: 0.05.h,
-                                                  color: Colors.black26,
+                                                  color: Storage
+                                                      .instance
+                                                      .isDarkMode
+                                                      ? Colors.white70
+                                                      :Colors.black26,
                                                 ),
                                               ),
                                             ),
@@ -414,7 +435,11 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                                         .textTheme
                                                         .headline6
                                                         ?.copyWith(
-                                                          color: Colors.black,
+                                                          color:Storage
+                                                              .instance
+                                                              .isDarkMode
+                                                              ? Colors.white
+                                                              : Colors.black,
                                                           // fontWeight: FontWeight.bold,
                                                         ),
                                                   ),
@@ -425,7 +450,11 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                                         .textTheme
                                                         .headline6
                                                         ?.copyWith(
-                                                          color: Colors.black,
+                                                          color: Storage
+                                                              .instance
+                                                              .isDarkMode
+                                                              ? Colors.white
+                                                              :Colors.black,
                                                           // fontWeight: FontWeight.bold,
                                                         ),
                                                   ),
@@ -436,7 +465,11 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                                         .textTheme
                                                         .headline6
                                                         ?.copyWith(
-                                                          color: Colors.black,
+                                                          color: Storage
+                                                              .instance
+                                                              .isDarkMode
+                                                              ? Colors.white
+                                                              :Colors.black,
                                                           // fontWeight: FontWeight.bold,
                                                         ),
                                                   ),
@@ -451,7 +484,11 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                               child: Center(
                                                 child: Divider(
                                                   thickness: 0.05.h,
-                                                  color: Colors.black26,
+                                                  color: Storage
+                                                      .instance
+                                                      .isDarkMode
+                                                      ? Colors.white70
+                                                      :Colors.black26,
                                                 ),
                                               ),
                                             ),
@@ -493,7 +530,11 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                                             color: like
                                                                 ? Constance
                                                                     .secondaryColor
-                                                                : Constance
+                                                                : Storage
+                                                                .instance
+                                                                .isDarkMode
+                                                                ? Colors.white
+                                                                :Constance
                                                                     .primaryColor,
                                                           ),
                                                         ),
@@ -524,6 +565,10 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                                             color: dislike
                                                                 ? Constance
                                                                     .secondaryColor
+                                                                :Storage
+                                                                .instance
+                                                                .isDarkMode
+                                                                ? Colors.white
                                                                 : Constance
                                                                     .primaryColor,
                                                           ),
@@ -547,9 +592,13 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                                           splashRadius: 20.0,
                                                           splashColor: Constance
                                                               .secondaryColor,
-                                                          icon: const Icon(
+                                                          icon:  Icon(
                                                             Icons.comment,
-                                                            color: Constance
+                                                            color: Storage
+                                                                .instance
+                                                                .isDarkMode
+                                                                ? Colors.white
+                                                                :Constance
                                                                 .primaryColor,
                                                           ),
                                                         ),
@@ -574,7 +623,11 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                     horizontal: 3.w, vertical: 1.h),
                                 child: Divider(
                                   thickness: 0.07.h,
-                                  color: Colors.black,
+                                  color: Storage
+                                      .instance
+                                      .isDarkMode
+                                      ? Colors.white
+                                      :Colors.black,
                                 ),
                               );
                             },
@@ -595,10 +648,10 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -913,12 +966,17 @@ for an unparalleled publication, that people call their''',
 
   void showComments(count) {
     scaffoldKey.currentState?.showBottomSheet(
+      backgroundColor: Colors.transparent,
       (context) {
         return StatefulBuilder(builder: (context, _) {
           return Consumer<DataProvider>(builder: (context, data, __) {
             return Card(
               elevation: 3,
-              color: Colors.grey.shade200,
+              color: Storage
+                  .instance
+                  .isDarkMode
+                  ? Colors.white
+                  :Colors.grey.shade200,
               shape: RoundedRectangleBorder(
                 // side: BorderSide(color: Colors.white70, width: 1),
                 borderRadius: BorderRadius.circular(10),
@@ -938,7 +996,10 @@ for an unparalleled publication, that people call their''',
                             "Comments",
                             style:
                                 Theme.of(context).textTheme.headline3?.copyWith(
-                                      color: Constance.primaryColor,
+                                      color: Storage
+                                          .instance
+                                          .isDarkMode
+                                          ?Colors.black:Constance.primaryColor,
                                       fontWeight: FontWeight.bold,
                                     ),
                           ),
@@ -975,7 +1036,10 @@ for an unparalleled publication, that people call their''',
                                                   .headline5
                                                   ?.copyWith(
                                                     color:
-                                                        Constance.primaryColor,
+                                                    Storage
+                                                        .instance
+                                                        .isDarkMode
+                                                        ?Colors.black:Constance.primaryColor,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                             ),
@@ -1040,9 +1104,12 @@ for an unparalleled publication, that people call their''',
                                                     splashRadius: 20.0,
                                                     splashColor: Constance
                                                         .secondaryColor,
-                                                    icon: const Icon(
+                                                    icon: Icon(
                                                       Icons.thumb_up,
-                                                      color: Constance
+                                                      color: Storage
+                                                          .instance
+                                                          .isDarkMode
+                                                          ?Colors.black:Constance
                                                           .primaryColor,
                                                     ),
                                                   ),

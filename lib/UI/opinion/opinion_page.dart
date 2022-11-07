@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +59,8 @@ class _OpinionPageState extends State<OpinionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       appBar: buildAppBar(),
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
@@ -101,14 +103,18 @@ class _OpinionPageState extends State<OpinionPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          color: Constance.thirdColor,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.fifthColor,
                           padding: EdgeInsets.symmetric(
                               vertical: 1.h, horizontal: 5.w),
                           child: Row(
                             children: [
                               Icon(
                                 Icons.newspaper,
-                                color: Colors.white,
+                                color: Storage.instance.isDarkMode
+                                    ? Constance.secondaryColor
+                                    : Colors.white,
                                 size: 4.h,
                               ),
                               Text(
@@ -118,7 +124,9 @@ class _OpinionPageState extends State<OpinionPage> {
                                     .textTheme
                                     .headline3
                                     ?.copyWith(
-                                      color: Colors.white,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.black
+                                          : Colors.white,
                                       // fontSize: 2.2.h,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -163,7 +171,7 @@ class _OpinionPageState extends State<OpinionPage> {
                               Navigation.instance.navigate('/opinionDetails',
                                   args: data.opinions[0].seo_name?.trim());
                             } else {
-                              Constance.showMembershipPrompt(context);
+                              Constance.showMembershipPrompt(context, () {});
                             }
                           },
                           child: Padding(
@@ -176,7 +184,9 @@ class _OpinionPageState extends State<OpinionPage> {
                                   .textTheme
                                   .headline3
                                   ?.copyWith(
-                                    color: Constance.primaryColor,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor,
                                     // fontSize: 2.2.h,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -198,7 +208,9 @@ class _OpinionPageState extends State<OpinionPage> {
                                     .textTheme
                                     .headline5
                                     ?.copyWith(
-                                      color: Constance.thirdColor,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.fifthColor,
                                       // fontSize: 2.2.h,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -242,17 +254,20 @@ class _OpinionPageState extends State<OpinionPage> {
                                         '/opinionDetails',
                                         args: item.seo_name?.trim());
                                   } else {
-                                    Constance.showMembershipPrompt(context);
+                                    Constance.showMembershipPrompt(
+                                        context, () {});
                                   }
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 3.w, vertical: 2.h),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
                                       Radius.circular(5),
                                     ),
-                                    color: Colors.white,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.black
+                                        : Colors.white,
                                   ),
                                   height: 20.h,
                                   width:
@@ -296,7 +311,9 @@ class _OpinionPageState extends State<OpinionPage> {
                                                   .textTheme
                                                   .headline6
                                                   ?.copyWith(
-                                                      color: Colors.black),
+                                                      color: Storage.instance.isDarkMode
+                                                          ? Colors.white
+                                                          :Colors.black),
                                             ),
                                           ],
                                         ),
@@ -322,7 +339,9 @@ class _OpinionPageState extends State<OpinionPage> {
                                                             FontWeight.bold,
                                                         overflow: TextOverflow
                                                             .ellipsis,
-                                                        color: Constance
+                                                        color: Storage.instance.isDarkMode
+                                                            ? Colors.white
+                                                            :Constance
                                                             .primaryColor),
                                               ),
                                             ),
@@ -338,7 +357,9 @@ class _OpinionPageState extends State<OpinionPage> {
                                                   .textTheme
                                                   .headline5
                                                   ?.copyWith(
-                                                    color: Constance.thirdColor,
+                                                    color: Storage.instance.isDarkMode
+                                                        ? Colors.white
+                                                        :Constance.fifthColor,
                                                     // fontSize: 2.2.h,
                                                     fontWeight: FontWeight.bold,
                                                   ),
@@ -357,7 +378,9 @@ class _OpinionPageState extends State<OpinionPage> {
                                 child: SizedBox(
                                   height: 1.h,
                                   child: Divider(
-                                    color: Colors.black,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        :Colors.black,
                                     thickness: 0.3.sp,
                                   ),
                                 ),
@@ -386,10 +409,10 @@ class _OpinionPageState extends State<OpinionPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -401,6 +424,20 @@ class _OpinionPageState extends State<OpinionPage> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 

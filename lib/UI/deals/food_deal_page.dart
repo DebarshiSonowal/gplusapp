@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -42,7 +43,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return Column(
             children: [
@@ -54,7 +55,11 @@ class _FoodDealPageState extends State<FoodDealPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 5, vertical: 4),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Constance.secondaryColor),
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.transparent,
+                        border: Border.all(
+                            color: Constance.secondaryColor, width: 0.5.h),
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: CachedNetworkImage(
@@ -81,7 +86,9 @@ class _FoodDealPageState extends State<FoodDealPage> {
                     Text(
                       '${data.category.firstWhere((element) => element.id == widget.id).name}',
                       style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Constance.primaryColor,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Constance.primaryColor,
                             fontSize: 3.h,
                             fontWeight: FontWeight.bold,
                           ),
@@ -133,12 +140,13 @@ class _FoodDealPageState extends State<FoodDealPage> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () async{
-                        final result = await Navigation.instance.navigate('/filterPage');
-                        if(result!=''){
-                        setState(() {
-                          locality = result;
-                        });
+                      onTap: () async {
+                        final result =
+                            await Navigation.instance.navigate('/filterPage');
+                        if (result != '') {
+                          setState(() {
+                            locality = result;
+                          });
                           fetchCategories();
                         }
                       },
@@ -208,7 +216,9 @@ class _FoodDealPageState extends State<FoodDealPage> {
                                     .textTheme
                                     .headline6
                                     ?.copyWith(
-                                      color: Colors.black,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                       fontSize: 2.2.h,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -222,7 +232,9 @@ class _FoodDealPageState extends State<FoodDealPage> {
                                     .textTheme
                                     .headline6
                                     ?.copyWith(
-                                      color: Colors.grey.shade800,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.grey.shade800,
                                       fontSize:
                                           1.5.h, // fontWeight: FontWeight.bold,
                                     ),
@@ -233,19 +245,18 @@ class _FoodDealPageState extends State<FoodDealPage> {
                             txt: "View",
                             onTap: () {
                               if (Provider.of<DataProvider>(
-                                  Navigation.instance.navigatorKey.currentContext ??
-                                      context,
-                                  listen: false)
-                                  .profile
-                                  ?.is_plan_active ??
+                                          Navigation.instance.navigatorKey
+                                                  .currentContext ??
+                                              context,
+                                          listen: false)
+                                      .profile
+                                      ?.is_plan_active ??
                                   false) {
                                 Navigation.instance.navigate('/categorySelect',
                                     args: current.id!);
                               } else {
-                                Constance.showMembershipPrompt(
-                                    context);
+                                Constance.showMembershipPrompt(context, () {});
                               }
-
                             },
                           ),
                         ),
@@ -263,10 +274,10 @@ class _FoodDealPageState extends State<FoodDealPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -278,6 +289,20 @@ class _FoodDealPageState extends State<FoodDealPage> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 
@@ -327,8 +352,8 @@ class _FoodDealPageState extends State<FoodDealPage> {
                           onChanged: (String? value) {
                             _(() {
                               setState(() {
-                                _value = value?? "";
-                                order_by=_value;
+                                _value = value ?? "";
+                                order_by = _value;
                               });
                             });
                             fetchCategories();
@@ -361,7 +386,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
                             _(() {
                               setState(() {
                                 _value = value ?? "";
-                                order_by=_value;
+                                order_by = _value;
                               });
                               fetchCategories();
                             });
@@ -412,6 +437,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
           Navigation.instance.goBack();
         });
   }
+
   Future<void> secureScreen() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }

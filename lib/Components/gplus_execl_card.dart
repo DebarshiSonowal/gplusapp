@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:gplusapp/Model/opinion.dart';
 
 import '../Helper/Constance.dart';
+import '../Helper/Storage.dart';
 
 class GPlusExecCard extends StatelessWidget {
   const GPlusExecCard({
@@ -20,18 +21,18 @@ class GPlusExecCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
-        side: const BorderSide(
+        side:BorderSide(
           width: 0.5,
-          color: Colors.black26,
+          color: Storage.instance.isDarkMode ? Colors.white70 :Colors.black26,
         ),
       ),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(
+        decoration:  BoxDecoration(
+          borderRadius: const BorderRadius.all(
             Radius.circular(5),
           ),
-          color: Colors.white,
+          color:Storage.instance.isDarkMode ? Colors.black : Colors.white,
         ),
         height: 10.h,
         width: MediaQuery.of(context).size.width - 7.w,
@@ -71,7 +72,7 @@ class GPlusExecCard extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .headline6
-                        ?.copyWith(color: Colors.black),
+                        ?.copyWith(color: Storage.instance.isDarkMode ? Colors.white :Colors.black),
                   ),
                 ],
               ),
@@ -91,7 +92,7 @@ class GPlusExecCard extends StatelessWidget {
                           // fontSize: 2.2.h,
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,
-                          color: Constance.primaryColor),
+                          color: Storage.instance.isDarkMode ? Colors.white :Constance.primaryColor),
                     ),
                   ),
                   SizedBox(
@@ -102,7 +103,7 @@ class GPlusExecCard extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .headline6
-                        ?.copyWith(color: Colors.black),
+                        ?.copyWith(color: Storage.instance.isDarkMode ? Colors.white :Colors.black),
                   ),
                 ],
               ),

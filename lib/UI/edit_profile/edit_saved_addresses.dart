@@ -11,6 +11,7 @@ import 'package:sizer/sizer.dart';
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 
@@ -51,7 +52,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
         child: SingleChildScrollView(
           child: Column(
@@ -65,7 +66,9 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                   Text(
                     'Location',
                     style: Theme.of(context).textTheme.headline2?.copyWith(
-                        color: Constance.primaryColor,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Constance.primaryColor,
                         fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
@@ -86,25 +89,33 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                 width: double.infinity,
                 child: Center(
                   child: TextField(
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline5
-                        ?.copyWith(color: Colors.black),
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black),
+                    cursorColor: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
                     decoration: InputDecoration(
                       labelText: "Search",
                       labelStyle: Theme.of(context)
                           .textTheme
                           .headline5
-                          ?.copyWith(color: Colors.black),
+                          ?.copyWith(
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black),
                       focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.blue,
                           width: 2.0,
                         ),
                       ),
-                      enabledBorder: const OutlineInputBorder(
+                      enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Colors.black54,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white70
+                              : Colors.black54,
                           width: 2.0,
                         ),
                       ),
@@ -125,7 +136,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
               ),
               predictions.isEmpty
                   ? Container()
-                  : SizedBox(
+                  : const SizedBox(
                       height: 10,
                     ),
               predictions.isEmpty
@@ -146,7 +157,9 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                             predictions[index].description ?? "",
                             style:
                                 Theme.of(context).textTheme.headline6?.copyWith(
-                                      color: Colors.black,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                           ),
                           onTap: () async {
@@ -167,7 +180,8 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
               SizedBox(
                 height: 1.h,
                 child: Divider(
-                  color: Colors.black,
+                  color:
+                      Storage.instance.isDarkMode ? Colors.white : Colors.black,
                   thickness: 0.4.sp,
                 ),
               ),
@@ -196,7 +210,9 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                           'Current Location',
                           style:
                               Theme.of(context).textTheme.headline4?.copyWith(
-                                    color: Colors.black,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -207,7 +223,9 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                           'Using GPS',
                           style:
                               Theme.of(context).textTheme.headline4?.copyWith(
-                                    color: Colors.black38,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black38,
                                     // fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -222,7 +240,8 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
               SizedBox(
                 height: 1.h,
                 child: Divider(
-                  color: Colors.black,
+                  color:
+                      Storage.instance.isDarkMode ? Colors.white : Colors.black,
                   thickness: 0.4.sp,
                 ),
               ),
@@ -258,13 +277,17 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                                       .textTheme
                                       .headline3
                                       ?.copyWith(
-                                        color: Colors.black,
+                                        color: Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
                                         fontWeight: FontWeight.bold,
                                       ),
                                 ),
                                 Icon(
                                   Icons.edit,
-                                  color: Colors.black,
+                                  color: Storage.instance.isDarkMode
+                                      ? Constance.secondaryColor
+                                      : Colors.black,
                                   size: 3.h,
                                 ),
                               ],
@@ -279,7 +302,9 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                                   .textTheme
                                   .headline6
                                   ?.copyWith(
-                                    color: Colors.black,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        :Colors.black,
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -296,7 +321,9 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                           SizedBox(
                             height: 1.h,
                             child: Divider(
-                              color: Colors.black,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  :Colors.black,
                               thickness: 0.4.sp,
                             ),
                           ),
@@ -318,10 +345,10 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -333,6 +360,20 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 
@@ -398,7 +439,6 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
     //     locationName);
     addAddress(address);
     Navigation.instance.goBack();
-
   }
 
   void showError(String msg) {

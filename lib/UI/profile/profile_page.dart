@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode?Colors.black:Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return data.memberships.isNotEmpty
@@ -35,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Text(
                       'My Account',
                       style: Theme.of(context).textTheme.headline3?.copyWith(
-                          color: Constance.secondaryColor,
+                          color: Storage.instance.isDarkMode?Colors.white:Constance.secondaryColor,
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(

@@ -9,6 +9,7 @@ import 'package:sizer/sizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 import '../Menu/berger_menu_member_page.dart';
@@ -60,7 +61,8 @@ class _VideoReportState extends State<VideoReport> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       appBar: buildAppBar(),
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
@@ -95,7 +97,7 @@ class _VideoReportState extends State<VideoReport> {
             return Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              color: Colors.white,
+              color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
               // padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
               child: data.video_news.isNotEmpty
                   ? SingleChildScrollView(
@@ -106,7 +108,7 @@ class _VideoReportState extends State<VideoReport> {
                             alignment: Alignment.bottomCenter,
                             children: [
                               Container(
-                                height: 30.h,
+                                height: 35.h,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: const BorderRadius.all(
@@ -126,7 +128,10 @@ class _VideoReportState extends State<VideoReport> {
                                   gradient: LinearGradient(
                                       begin: Alignment.topCenter,
                                       end: Alignment.bottomCenter,
-                                      colors: [Colors.transparent, Colors.black]),
+                                      colors: [
+                                        Colors.transparent,
+                                        Colors.black
+                                      ]),
                                 ),
                                 padding: EdgeInsets.symmetric(horizontal: 5.w),
                                 child: Column(
@@ -152,7 +157,8 @@ class _VideoReportState extends State<VideoReport> {
                                           ),
                                           GestureDetector(
                                             onTap: () {
-                                              if (data.profile?.is_plan_active ??
+                                              if (data.profile
+                                                      ?.is_plan_active ??
                                                   false) {
                                                 Navigation.instance.navigate(
                                                     '/videoPlayer',
@@ -160,7 +166,9 @@ class _VideoReportState extends State<VideoReport> {
                                                         .youtube_id);
                                               } else {
                                                 Constance.showMembershipPrompt(
-                                                    context);
+                                                    context, () {
+                                                  setState(() {});
+                                                });
                                               }
                                             },
                                             child: Text(
@@ -231,29 +239,29 @@ class _VideoReportState extends State<VideoReport> {
                                 }
                                 return GestureDetector(
                                   onTap: () {
-                                    if (data.profile
-                                        ?.is_plan_active ??
-                                        false) {
+                                    if (data.profile?.is_plan_active ?? false) {
                                       Navigation.instance.navigate(
                                           '/videoPlayer',
                                           args: item.youtube_id);
                                     } else {
-                                      Constance
-                                          .showMembershipPrompt(
-                                          context);
+                                      Constance.showMembershipPrompt(
+                                          context, () {});
                                     }
                                   },
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 4.w, vertical: 1.5.h),
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(
                                         Radius.circular(5),
                                       ),
-                                      color: Colors.white,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.black
+                                          : Colors.white,
                                     ),
                                     // height: 5.h,
-                                    width: MediaQuery.of(context).size.width - 7.w,
+                                    width:
+                                        MediaQuery.of(context).size.width - 7.w,
                                     child: Row(
                                       children: [
                                         Column(
@@ -268,7 +276,8 @@ class _VideoReportState extends State<VideoReport> {
                                                   height: 12.h,
                                                   child: ClipRRect(
                                                     borderRadius:
-                                                        BorderRadius.circular(5.0),
+                                                        BorderRadius.circular(
+                                                            5.0),
                                                     child: CachedNetworkImage(
                                                       fit: BoxFit.fill,
                                                       imageUrl:
@@ -280,9 +289,11 @@ class _VideoReportState extends State<VideoReport> {
                                                           // color: Colors.black,
                                                         );
                                                       },
-                                                      errorWidget: (cont, _, e) {
+                                                      errorWidget:
+                                                          (cont, _, e) {
                                                         return Image.network(
-                                                          Constance.defaultImage,
+                                                          Constance
+                                                              .defaultImage,
                                                           fit: BoxFit.fitWidth,
                                                         );
                                                       },
@@ -291,9 +302,10 @@ class _VideoReportState extends State<VideoReport> {
                                                 ),
                                                 Container(
                                                   width: 40.w,
-                                                  decoration: const BoxDecoration(
-                                                    color:
-                                                        Constance.secondaryColor,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Constance
+                                                        .secondaryColor,
                                                     borderRadius:
                                                         BorderRadius.only(
                                                       bottomLeft:
@@ -308,7 +320,8 @@ class _VideoReportState extends State<VideoReport> {
                                                   child: Row(
                                                     // mainAxisSize: MainAxisSize.min,
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment.center,
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       const Icon(
                                                         Icons.play_arrow,
@@ -323,7 +336,8 @@ class _VideoReportState extends State<VideoReport> {
                                                             .textTheme
                                                             .headline5
                                                             ?.copyWith(
-                                                              color: Colors.white,
+                                                              color:
+                                                                  Colors.white,
                                                               // fontSize: 2.2.h,
                                                               // fontWeight: FontWeight.bold,
                                                             ),
@@ -348,7 +362,11 @@ class _VideoReportState extends State<VideoReport> {
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline6
-                                                  ?.copyWith(color: Colors.black),
+                                                  ?.copyWith(
+                                                      color: Storage.instance
+                                                              .isDarkMode
+                                                          ? Colors.white
+                                                          : Colors.black),
                                             ),
                                           ],
                                         ),
@@ -370,11 +388,15 @@ class _VideoReportState extends State<VideoReport> {
                                                     .headline4
                                                     ?.copyWith(
                                                         // fontSize: 2.2.h,
-                                                        fontWeight: FontWeight.bold,
-                                                        overflow:
-                                                            TextOverflow.ellipsis,
-                                                        color:
-                                                            Constance.primaryColor),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        color: Storage.instance
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : Constance
+                                                                .primaryColor),
                                               ),
                                               SizedBox(
                                                 height: 7.h,
@@ -401,7 +423,9 @@ class _VideoReportState extends State<VideoReport> {
                                 return SizedBox(
                                   height: 1.h,
                                   child: Divider(
-                                    color: Colors.black,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
                                     thickness: 0.3.sp,
                                   ),
                                 );
@@ -429,10 +453,10 @@ class _VideoReportState extends State<VideoReport> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -444,6 +468,20 @@ class _VideoReportState extends State<VideoReport> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 

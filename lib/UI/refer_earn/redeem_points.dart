@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 
 class RedeemPoints extends StatefulWidget {
@@ -18,22 +19,78 @@ class _RedeemPointsState extends State<RedeemPoints> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       appBar: buildAppBar(),
-      body: Consumer<DataProvider>(
-        builder: (context,data,_) {
-          return Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 1.h,
-              horizontal: 7.w,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 3.w),
+      body: Consumer<DataProvider>(builder: (context, data, _) {
+        return Container(
+          padding: EdgeInsets.symmetric(
+            vertical: 1.h,
+            horizontal: 7.w,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 3.w),
+                  decoration: const BoxDecoration(
+                    color: Color(0xff001f34),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(7.0),
+                      bottomRight: Radius.circular(7.0),
+                      topLeft: Radius.circular(7.0),
+                      bottomLeft: Radius.circular(7.0),
+                    ),
+                  ),
+                  width: double.infinity,
+                  height: 7.h,
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.wallet,
+                        color: Constance.secondaryColor,
+                        size: 4.h,
+                      ),
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                      Text(
+                        'Coin Balance',
+                        style: Theme.of(Navigation
+                                .instance.navigatorKey.currentContext!)
+                            .textTheme
+                            .headline5
+                            ?.copyWith(
+                              color: Colors.white,
+                              // fontSize: 11.sp,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        '${data.referEarn?.coin_balance ?? 0}',
+                        style: Theme.of(Navigation
+                                .instance.navigatorKey.currentContext!)
+                            .textTheme
+                            .headline3
+                            ?.copyWith(
+                              color: Colors.white,
+                              // fontSize: 11.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Card(
+                  color: Constance.primaryColor,
+                  child: Container(
+                    width: double.infinity,
                     decoration: const BoxDecoration(
-                      color: Color(0xff001f34),
+                      // color: Color(0xff001f34),
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(7.0),
                         bottomRight: Radius.circular(7.0),
@@ -41,35 +98,16 @@ class _RedeemPointsState extends State<RedeemPoints> {
                         bottomLeft: Radius.circular(7.0),
                       ),
                     ),
-                    width: double.infinity,
-                    height: 7.h,
-                    child: Row(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          Icons.wallet,
-                          color: Constance.secondaryColor,
-                          size: 4.h,
-                        ),
-                        SizedBox(
-                          width: 5.w,
-                        ),
                         Text(
-                          'Coin Balance',
-                          style: Theme.of(
-                                  Navigation.instance.navigatorKey.currentContext!)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(
-                                color: Colors.white,
-                                // fontSize: 11.sp,
-                                // fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        const Spacer(),
-                        Text(
-                          '${data.referEarn?.coin_balance??0}',
-                          style: Theme.of(
-                                  Navigation.instance.navigatorKey.currentContext!)
+                          'Redeem points',
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(Navigation
+                                  .instance.navigatorKey.currentContext!)
                               .textTheme
                               .headline3
                               ?.copyWith(
@@ -78,153 +116,127 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Divider(
+                          color: Constance.secondaryColor,
+                          thickness: 0.1.h,
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        ListView.separated(
+                          shrinkWrap: true,
+                          itemBuilder: (cont, count) {
+                            var current = data.referEarn?.plans[count];
+                            return Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      current?.name ?? '1 Month Subscription',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.start,
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline6
+                                          ?.copyWith(
+                                            color: Colors.white,
+                                            // fontSize: 11.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    Text(
+                                      '${current?.referral_points ?? 50} points',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.start,
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline6
+                                          ?.copyWith(
+                                            color: Colors.white,
+                                            // fontSize: 11.sp,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                                const Spacer(),
+                                CustomButton(
+                                    txt: 'Spend Coin',
+                                    onTap: () {
+                                      confirm_Redeem();
+                                    }),
+                              ],
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  height: 1.h,
+                                ),
+                                Divider(
+                                  color: Constance.secondaryColor,
+                                  thickness: 0.1.h,
+                                ),
+                              ],
+                            );
+                          },
+                          itemCount: data.referEarn?.plans.length ?? 0,
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  Card(
-                    color: Constance.primaryColor,
-                    child: Container(
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        // color: Color(0xff001f34),
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(7.0),
-                          bottomRight: Radius.circular(7.0),
-                          topLeft: Radius.circular(7.0),
-                          bottomLeft: Radius.circular(7.0),
-                        ),
-                      ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Redeem points',
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(Navigation
-                                    .instance.navigatorKey.currentContext!)
-                                .textTheme
-                                .headline3
-                                ?.copyWith(
-                                  color: Colors.white,
-                                  // fontSize: 11.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                          SizedBox(
-                            height: 1.h,
-                          ),
-                          Divider(
-                            color: Constance.secondaryColor,
-                            thickness: 0.1.h,
-                          ),
-                          SizedBox(
-                            height: 1.h,
-                          ),
-                          ListView.separated(
-                            shrinkWrap: true,
-                            itemBuilder: (cont, count) {
-                              var current = data.referEarn?.plans[count];
-                              return Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        current?.name??'1 Month Subscription',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline6
-                                            ?.copyWith(
-                                              color: Colors.white,
-                                              // fontSize: 11.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                      Text(
-                                        '${current?.referral_points??50} points',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline6
-                                            ?.copyWith(
-                                              color: Colors.white,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  CustomButton(
-                                      txt: 'Spend Coin',
-                                      onTap: () {
-                                        confirm_Redeem();
-                                      }),
-                                ],
-                              );
-                            },
-                            separatorBuilder: (BuildContext context, int index) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(
-                                    height: 1.h,
-                                  ),
-                                  Divider(
-                                    color: Constance.secondaryColor,
-                                    thickness: 0.1.h,
-                                  ),
-                                ],
-                              );
-                            }, itemCount: data.referEarn?.plans.length??0,
-                          ),
-                          SizedBox(
-                            height: 1.h,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  Card(
-                    color: Colors.white,
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Card(
+                  color: Colors.white,
+                  child: Container(
+                    margin: EdgeInsets.all(0.2.h),
+                    color: Storage.instance.isDarkMode
+                        ? Colors.black
+                        : Colors.white,
                     child: ExpansionTile(
-                      collapsedIconColor: Colors.black,
-                      iconColor: Colors.black,
+                      collapsedIconColor: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
+                      iconColor: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
                       title: Text(
                         'History',
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(
-                                Navigation.instance.navigatorKey.currentContext!)
+                        style: Theme.of(Navigation
+                                .instance.navigatorKey.currentContext!)
                             .textTheme
                             .headline3
                             ?.copyWith(
-                              color: Colors.black,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
                               // fontSize: 11.sp,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
                       children: [
                         Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Divider(
                             color: Constance.secondaryColor,
                             thickness: 0.1.h,
@@ -238,12 +250,11 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 4.w, vertical: 1.h),
                                 child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           current.is_subscription == 1
@@ -251,33 +262,34 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                               : 'Referral',
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.start,
-                                          style: Theme.of(Navigation
-                                              .instance
-                                              .navigatorKey
-                                              .currentContext!)
+                                          style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
-                                            color: Colors.black,
-                                            // fontSize: 11.sp,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                                color:
+                                                    Storage.instance.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                // fontSize: 11.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                         Text(
-                                          '${current.is_credit==1?'+':'-'}${current.points ?? '250'} points',
+                                          '${current.is_credit == 1 ? '+' : '-'}${current.points ?? '250'} points',
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.start,
-                                          style: Theme.of(Navigation
-                                              .instance
-                                              .navigatorKey
-                                              .currentContext!)
+                                          style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
                                               .textTheme
                                               .headline6
                                               ?.copyWith(
-                                            color: current.is_credit==1?Colors.green:Constance.thirdColor,
-                                            // fontSize: 11.sp,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
+                                                color: current.is_credit == 1
+                                                    ? Colors.green
+                                                    : Constance.thirdColor,
+                                                // fontSize: 11.sp,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                       ],
                                     ),
@@ -288,14 +300,16 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.start,
                                       style: Theme.of(Navigation.instance
-                                          .navigatorKey.currentContext!)
+                                              .navigatorKey.currentContext!)
                                           .textTheme
                                           .headline6
                                           ?.copyWith(
-                                        color: Colors.black,
-                                        // fontSize: 11.sp,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
+                                            color: Storage.instance.isDarkMode
+                                                ? Colors.white
+                                                :Colors.black,
+                                            // fontSize: 11.sp,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -308,8 +322,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
                             },
                             itemCount: data.referHistory.length),
                         Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Divider(
                             color: Constance.secondaryColor,
                             thickness: 0.1.h,
@@ -324,15 +337,17 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                 'See More',
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.start,
-                                style: Theme.of(Navigation.instance
-                                    .navigatorKey.currentContext!)
+                                style: Theme.of(Navigation
+                                        .instance.navigatorKey.currentContext!)
                                     .textTheme
                                     .headline4
                                     ?.copyWith(
-                                  color: Constance.secondaryColor,
-                                  // fontSize: 11.sp,
-                                  // fontWeight: FontWeight.bold,
-                                ),
+                                      color:Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.secondaryColor,
+                                      // fontSize: 11.sp,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
                               ),
                             ],
                           ),
@@ -343,12 +358,12 @@ class _RedeemPointsState extends State<RedeemPoints> {
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }),
     );
   }
 
@@ -502,10 +517,10 @@ class _RedeemPointsState extends State<RedeemPoints> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -516,7 +531,21 @@ class _RedeemPointsState extends State<RedeemPoints> {
         ),
       ),
       centerTitle: true,
-      backgroundColor: Constance.primaryColor,
+      backgroundColor: Constance.primaryColor, actions: [
+      IconButton(
+        onPressed: () {
+          Navigation.instance.navigate('/notification');
+        },
+        icon: Icon(Icons.notifications),
+      ),
+      IconButton(
+        onPressed: () {
+          Navigation.instance.navigate('/search');
+        },
+        icon: Icon(Icons.search),
+      ),
+    ],
+
     );
   }
 }

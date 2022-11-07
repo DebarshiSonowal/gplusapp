@@ -7,6 +7,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 
 class SearchPage extends StatefulWidget {
@@ -38,7 +39,7 @@ class _SearchPageState extends State<SearchPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return Column(
@@ -54,25 +55,27 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                   border: Border.all(
                       width: 1, //                   <--- border width here
-                      color: Colors.black26),
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white70
+                          : Colors.black26),
                 ),
                 // color: Colors.black,
                 // height: 5.h,
                 child: Center(
                   child: TextField(
                     toolbarOptions: const ToolbarOptions(
-                        copy:false,
-                        paste: false,
-                        cut: false,
-                        selectAll: false
-                      //by default all are disabled 'false'
-                    ),
+                        copy: false, paste: false, cut: false, selectAll: false
+                        //by default all are disabled 'false'
+                        ),
                     controller: _searchQueryController,
                     autofocus: true,
                     decoration: InputDecoration(
                       hintText: "Search",
                       border: InputBorder.none,
-                      hintStyle: const TextStyle(color: Colors.black26),
+                      hintStyle: TextStyle(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black26),
                       suffixIcon: IconButton(
                         onPressed: () {
                           if (_searchQueryController.text.isNotEmpty) {
@@ -81,16 +84,22 @@ class _SearchPageState extends State<SearchPage> {
                             showError('Enter something to search');
                           }
                         },
-                        icon: const Icon(Icons.search),
+                        icon: Icon(
+                          Icons.search,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                       ),
                     ),
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline4
-                        ?.copyWith(color: Colors.black),
-                    onChanged: (query) => {
-
-                    },
+                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black),
+                    cursorColor: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
+                    onChanged: (query) => {},
                   ),
                 ),
               ),
@@ -100,7 +109,8 @@ class _SearchPageState extends State<SearchPage> {
               SizedBox(
                 height: 1.h,
                 child: Divider(
-                  color: Colors.black,
+                  color:
+                      Storage.instance.isDarkMode ? Colors.white : Colors.black,
                   thickness: 0.4.sp,
                 ),
               ),
@@ -120,17 +130,19 @@ class _SearchPageState extends State<SearchPage> {
                       child: Container(
                         height: 5.h,
                         color: selected == 0
-                            ? Colors.black
+                            ? Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black
                             : Constance.secondaryColor,
                         child: Center(
                           child: Text(
                             'News',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline4
-                                ?.copyWith(
+                            style:
+                                Theme.of(context).textTheme.headline4?.copyWith(
                                     color: selected == 0
-                                        ? Colors.white
+                                        ? Storage.instance.isDarkMode
+                                            ? Colors.black
+                                            : Colors.white
                                         : Colors.black),
                           ),
                         ),
@@ -147,17 +159,21 @@ class _SearchPageState extends State<SearchPage> {
                       },
                       child: Container(
                         height: 5.h,
-                        color: selected == 0
-                            ? Constance.secondaryColor
-                            : Colors.black,
+                        color: selected == 1
+                            ? Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black
+                            : Constance.secondaryColor,
                         child: Center(
                           child: Text(
                             'Others',
                             style:
                                 Theme.of(context).textTheme.headline4?.copyWith(
-                                      color: selected == 0
-                                          ? Colors.black
-                                          : Colors.white,
+                                      color: selected == 1
+                                          ? Storage.instance.isDarkMode
+                                              ? Colors.black
+                                              : Colors.white
+                                          : Colors.black,
                                     ),
                           ),
                         ),
@@ -172,7 +188,9 @@ class _SearchPageState extends State<SearchPage> {
               SizedBox(
                 height: 1.h,
                 child: Divider(
-                  color: Colors.black,
+                  color:Storage.instance.isDarkMode
+                      ? Colors.white
+                      : Colors.black,
                   thickness: 0.4.sp,
                 ),
               ),
@@ -195,11 +213,13 @@ class _SearchPageState extends State<SearchPage> {
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               horizontal: 3.w, vertical: 2.h),
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
                               Radius.circular(5),
                             ),
-                            color: Colors.white,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.black
+                                :Colors.white,
                           ),
                           height: 20.h,
                           width: MediaQuery.of(context).size.width - 7.w,
@@ -235,7 +255,9 @@ class _SearchPageState extends State<SearchPage> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline6
-                                          ?.copyWith(color: Colors.black),
+                                          ?.copyWith(color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          :Colors.black),
                                     ),
                                   ],
                                 ),
@@ -258,7 +280,9 @@ class _SearchPageState extends State<SearchPage> {
                                             ?.copyWith(
                                                 fontWeight: FontWeight.bold,
                                                 overflow: TextOverflow.ellipsis,
-                                                color: Constance.primaryColor),
+                                                color: Storage.instance.isDarkMode
+                                                    ? Colors.white
+                                                    :Constance.primaryColor),
                                       ),
                                     ),
                                     SizedBox(
@@ -290,7 +314,9 @@ class _SearchPageState extends State<SearchPage> {
                         child: SizedBox(
                           height: 1.h,
                           child: Divider(
-                            color: Colors.black,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                :Colors.black,
                             thickness: 0.3.sp,
                           ),
                         ),
@@ -308,10 +334,10 @@ class _SearchPageState extends State<SearchPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },

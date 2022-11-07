@@ -13,6 +13,7 @@ import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Helper/Storage.dart';
 import '../../Model/citizen_journalist.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
@@ -57,7 +58,7 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
         child: SingleChildScrollView(
           child: Column(
@@ -68,7 +69,9 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                 child: Text(
                   'Submitted a story',
                   style: Theme.of(context).textTheme.headline2?.copyWith(
-                      color: Constance.primaryColor,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Constance.primaryColor,
                       fontWeight: FontWeight.bold),
                 ),
               ),
@@ -80,7 +83,9 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                 child: Text(
                   title,
                   style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
                         // fontSize: 1.6.h,
                       ),
                 ),
@@ -91,7 +96,9 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
               Text(
                 desc,
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Colors.black,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
                       // fontSize: 1.6.h,
                     ),
               ),
@@ -100,14 +107,18 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
               ),
               Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.attach_file,
-                    color: Colors.black,
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Colors.black,
                   ),
                   Text(
                     'Add more attachments',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Colors.black,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
                           // fontSize: 1.6.h,
                         ),
                   ),
@@ -137,16 +148,16 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                           ),
                         )
                       : Container(
-                    height: 8.h,
-                    width: 20.w,
-                    color: Colors.grey.shade200,
-                    child: Center(
-                      child: Image.network(
-                        images[pos].file_name ?? "",
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
+                          height: 8.h,
+                          width: 20.w,
+                          color: Colors.grey.shade200,
+                          child: Center(
+                            child: Image.network(
+                              images[pos].file_name ?? "",
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
                 ),
               ),
               SizedBox(
@@ -184,10 +195,10 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -199,10 +210,22 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
-
-
 
   Future<void> getProfileImage(int index) async {
     final pickedFile = await _picker.pickImage(
@@ -296,8 +319,6 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
     );
   }
 
-
-
   fetchDetails() async {
     setState(() {
       local = Provider.of<DataProvider>(
@@ -307,7 +328,7 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
           .where((element) => element.id == widget.id)
           .first;
       title = local?.title ?? "";
-      desc= local?.story ?? "";
+      desc = local?.story ?? "";
       // attachements.add(File(''));
       images = local?.attach_files ?? [];
     });

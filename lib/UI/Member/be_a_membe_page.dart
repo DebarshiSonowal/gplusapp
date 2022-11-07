@@ -12,6 +12,7 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/Storage.dart';
 import '../../Model/razorpay_key.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
@@ -115,7 +116,9 @@ class _BeAMemberState extends State<BeAMember> {
           return Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            color: Colors.white,
+            color: Storage.instance.isDarkMode
+                ? Colors.black
+                :Colors.white,
             padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
             child: SingleChildScrollView(
               child: Column(
@@ -124,7 +127,9 @@ class _BeAMemberState extends State<BeAMember> {
                   Text(
                     'Hello ${data.profile?.name}',
                     style: Theme.of(context).textTheme.headline4?.copyWith(
-                          color: Colors.black,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              :Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -145,7 +150,9 @@ class _BeAMemberState extends State<BeAMember> {
                     'when an unknown printer took a galley of type'
                     ' and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Colors.black,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              :Colors.black,
                           // fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -310,7 +317,9 @@ class _BeAMemberState extends State<BeAMember> {
                   Text(
                     'Benefits of being a member',
                     style: Theme.of(context).textTheme.headline4?.copyWith(
-                          color: Colors.black,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              :Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -333,8 +342,10 @@ class _BeAMemberState extends State<BeAMember> {
                                 height: 1.h,
                                 width: 1.h,
                                 margin: EdgeInsets.only(top: 1.h),
-                                decoration: const BoxDecoration(
-                                  color: Colors.black,
+                                decoration:  BoxDecoration(
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      :Colors.black,
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -352,7 +363,9 @@ class _BeAMemberState extends State<BeAMember> {
                                             .textTheme
                                             .headline5
                                             ?.copyWith(
-                                              color: Colors.black,
+                                              color: Storage.instance.isDarkMode
+                                                  ? Colors.white
+                                                  :Colors.black,
                                               // fontWeight: FontWeight.bold,
                                             ),
                                       ),
@@ -394,6 +407,20 @@ class _BeAMemberState extends State<BeAMember> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 

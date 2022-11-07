@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 
 class AboutUsPage extends StatefulWidget {
@@ -22,7 +23,9 @@ class _AboutUsPageState extends State<AboutUsPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode
+            ? Colors.black
+            :Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
         child: Consumer<DataProvider>(
           builder: (context,data,_) {
@@ -43,7 +46,9 @@ class _AboutUsPageState extends State<AboutUsPage> {
                       Text(
                         'About Us',
                         style: Theme.of(context).textTheme.headline2?.copyWith(
-                            color: Constance.primaryColor,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                :Constance.primaryColor,
                             fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -54,7 +59,9 @@ class _AboutUsPageState extends State<AboutUsPage> {
                   SizedBox(
                     height: 1.h,
                     child: Divider(
-                      color: Colors.black,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          :Colors.black,
                       thickness: 0.4.sp,
                     ),
                   ),
@@ -81,7 +88,9 @@ class _AboutUsPageState extends State<AboutUsPage> {
                       '#': Style(
                         // fontSize: FontSize(_counterValue),
                         // maxLines: 20,
-                        color: Colors.black,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            :Colors.black,
                         // textOverflow: TextOverflow.ellipsis,
                       ),
                     },

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
@@ -62,7 +63,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      backgroundColor: Colors.white,
+      backgroundColor: Storage.instance.isDarkMode?Colors.black:Colors.white,
       body: SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
@@ -92,7 +93,9 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          color: Colors.white,
+          color: Storage.instance.isDarkMode
+              ? Colors.white
+              : Constance.primaryColor,
           padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
           child: Consumer<DataProvider>(builder: (context, current, _) {
             return Column(

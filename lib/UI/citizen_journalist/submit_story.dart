@@ -14,6 +14,7 @@ import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
@@ -53,7 +54,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
         child: SingleChildScrollView(
           child: Column(
@@ -64,7 +65,9 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                 child: Text(
                   'Submit a story',
                   style: Theme.of(context).textTheme.headline2?.copyWith(
-                      color: Constance.primaryColor,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Constance.primaryColor,
                       fontWeight: FontWeight.bold),
                 ),
               ),
@@ -81,6 +84,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   filled: true,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
                   fillColor: Colors.white,
                   labelText: 'Enter the title',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
@@ -105,14 +109,25 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                 minLines: 10,
                 decoration: InputDecoration(
                   filled: true,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
                   fillColor: Colors.white,
                   labelText: 'Enter the details',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
                         // fontSize: 1.5.h,
                       ),
-                  border: const OutlineInputBorder(),
-                  enabledBorder: const OutlineInputBorder(),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black),
+                  ),
                 ),
               ),
               SizedBox(
@@ -120,14 +135,18 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
               ),
               Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.attach_file,
-                    color: Colors.black,
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Colors.black,
                   ),
                   Text(
                     'Add more attachments',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Colors.black,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
                           // fontSize: 1.6.h,
                         ),
                   ),
@@ -223,10 +242,10 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -238,6 +257,20 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 

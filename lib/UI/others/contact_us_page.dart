@@ -9,6 +9,7 @@ import 'package:sizer/sizer.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
@@ -38,7 +39,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return Column(
@@ -57,7 +58,9 @@ class _ContactUsPageState extends State<ContactUsPage> {
                   Text(
                     'Contact Us',
                     style: Theme.of(context).textTheme.headline2?.copyWith(
-                        color: Constance.primaryColor,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Constance.primaryColor,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -95,9 +98,11 @@ class _ContactUsPageState extends State<ContactUsPage> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.location_on,
-                    color: Colors.black,
+                    color: Storage.instance.isDarkMode
+                        ? Constance.secondaryColor
+                        : Colors.black,
                   ),
                   SizedBox(
                     width: 4.w,
@@ -111,7 +116,9 @@ class _ContactUsPageState extends State<ContactUsPage> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Colors.black,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                       ),
                     ),
@@ -124,9 +131,11 @@ class _ContactUsPageState extends State<ContactUsPage> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.edit,
-                    color: Colors.black,
+                    color: Storage.instance.isDarkMode
+                        ? Constance.secondaryColor
+                        : Colors.black,
                   ),
                   SizedBox(
                     width: 4.w,
@@ -140,7 +149,9 @@ class _ContactUsPageState extends State<ContactUsPage> {
                           // overflow: TextOverflow.clip,
                           style:
                               Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.black,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
                                   ),
                         ),
                         Text(
@@ -148,7 +159,9 @@ class _ContactUsPageState extends State<ContactUsPage> {
                           // overflow: TextOverflow.clip,
                           style:
                               Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.black,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        :Colors.black,
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -163,9 +176,11 @@ class _ContactUsPageState extends State<ContactUsPage> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.phone,
-                    color: Colors.black,
+                    color: Storage.instance.isDarkMode
+                        ? Constance.secondaryColor
+                        :Colors.black,
                   ),
                   SizedBox(
                     width: 4.w,
@@ -184,7 +199,9 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             // overflow: TextOverflow.clip,
                             style:
                                 Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Colors.black,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          :Colors.black,
                                     ),
                           ),
                           Text(
@@ -192,7 +209,9 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             // overflow: TextOverflow.clip,
                             style:
                                 Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Colors.black,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          :Colors.black,
                                       fontWeight: FontWeight.bold,
                                     ),
                           ),
@@ -208,9 +227,11 @@ class _ContactUsPageState extends State<ContactUsPage> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.email,
-                    color: Colors.black,
+                    color: Storage.instance.isDarkMode
+                        ? Constance.secondaryColor
+                        :Colors.black,
                   ),
                   SizedBox(
                     width: 4.w,
@@ -229,15 +250,19 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             // overflow: TextOverflow.clip,
                             style:
                                 Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Colors.black,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          :Colors.black,
                                     ),
                           ),
                           Text(
-                            data.contactUs?.email ??'info@g-plus.in',
+                            data.contactUs?.email ?? 'info@g-plus.in',
                             // overflow: TextOverflow.clip,
                             style:
                                 Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Colors.black,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          :Colors.black,
                                       fontWeight: FontWeight.bold,
                                     ),
                           ),
@@ -263,10 +288,10 @@ class _ContactUsPageState extends State<ContactUsPage> {
       //   icon: Icon(Icons.menu),
       // ),
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },

@@ -13,6 +13,7 @@ import '../../Components/custom_button.dart';
 import '../../Components/slider_home.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 
 class ClassifiedDetails extends StatefulWidget {
@@ -42,7 +43,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(vertical: 1.h),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return SingleChildScrollView(
@@ -105,117 +106,106 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                             }),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              FontAwesomeIcons.solidHeart,
-                              color: Colors.grey.shade400,
-                            )),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: data.selectedClassified!.attach_files!
-                              .asMap()
-                              .entries
-                              .map((entry) {
-                            return GestureDetector(
-                              onTap: () => _controller.animateToPage(entry.key),
-                              child: Container(
-                                width: 12.0,
-                                height: 12.0,
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 4.0),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: (Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white
-                                            : Colors.white)
-                                        .withOpacity(
-                                            _current == entry.key ? 0.9 : 0.4)),
-                              ),
-                            );
-                          }).toList(),
+                    Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.transparent, Colors.black],
                         ),
-                        PopupMenuButton<int>(
-                          itemBuilder: (BuildContext context) =>
-                              <PopupMenuItem<int>>[
-                            PopupMenuItem<int>(
-                              value: 1,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.edit,
-                                    color: Colors.black,
-                                  ),
-                                  SizedBox(
-                                    width: 2.w,
-                                  ),
-                                  Text(
-                                    'Edit',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline6
-                                        ?.copyWith(color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            PopupMenuItem<int>(
-                              value: 2,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.delete,
-                                    color: Colors.black,
-                                  ),
-                                  SizedBox(
-                                    width: 2.w,
-                                  ),
-                                  Text(
-                                    'Delete',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline6
-                                        ?.copyWith(color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            PopupMenuItem<int>(
-                              value: 3,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.rocket,
-                                    color: Colors.black,
-                                  ),
-                                  SizedBox(
-                                    width: 2.w,
-                                  ),
-                                  Text(
-                                    'Boost',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline6
-                                        ?.copyWith(color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                          onSelected: (int value) {
-                            setState(() {});
-                          },
-                          color: Colors.white,
-                          icon: const Icon(
-                            Icons.menu,
-                            color: Colors.white,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                FontAwesomeIcons.solidHeart,
+                                color: Colors.grey.shade400,
+                              )),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: data.selectedClassified!.attach_files!
+                                .asMap()
+                                .entries
+                                .map((entry) {
+                              return GestureDetector(
+                                onTap: () => _controller.animateToPage(entry.key),
+                                child: Container(
+                                  width: 12.0,
+                                  height: 12.0,
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 4.0),
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: (Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? Colors.white
+                                              : Colors.white)
+                                          .withOpacity(
+                                              _current == entry.key ? 0.8 : 0.4)),
+                                ),
+                              );
+                            }).toList(),
                           ),
-                        ),
-                      ],
+                          PopupMenuButton<int>(
+                            color:Constance.secondaryColor,
+                            itemBuilder: (BuildContext context) =>
+                                <PopupMenuItem<int>>[
+                              PopupMenuItem<int>(
+                                value: 1,
+                                child: Row(
+                                  children: [
+                                     const Icon(
+                                      Icons.edit,
+                                      color: Colors.black,
+                                    ),
+                                    SizedBox(
+                                      width: 2.w,
+                                    ),
+                                    Text(
+                                      'Edit',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6
+                                          ?.copyWith(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem<int>(
+                                value: 2,
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.delete,
+                                      color: Colors.black,
+                                    ),
+                                    SizedBox(
+                                      width: 2.w,
+                                    ),
+                                    Text(
+                                      'Delete',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6
+                                          ?.copyWith(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                            onSelected: (int value) {
+                              setState(() {});
+                            },
+                            // color: Colors.white,
+                            icon: const Icon(
+                              Icons.menu,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ]),
                 ),
@@ -227,7 +217,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                   child: Text(
                     data.selectedClassified?.title ?? '2BHK for Rent',
                     style: Theme.of(context).textTheme.headline2?.copyWith(
-                        color: Constance.primaryColor,
+                        color: Storage.instance.isDarkMode ? Colors.white :Constance.primaryColor,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -239,7 +229,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                   child: Text(
                     'Posted by ${data.selectedClassified?.user?.name ?? "Anonymous"}',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Colors.black,
+                          color: Storage.instance.isDarkMode ? Colors.white70 :Colors.black,
                           // fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -265,9 +255,9 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(
+                       Icon(
                         Icons.location_on,
-                        color: Colors.black,
+                        color: Storage.instance.isDarkMode ? Constance.secondaryColor :Colors.black,
                       ),
                       SizedBox(
                         width: 4.w,
@@ -281,7 +271,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                             // overflow: TextOverflow.clip,
                             style:
                                 Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Colors.black,
+                                      color: Storage.instance.isDarkMode ? Colors.white :Colors.black,
                                     ),
                           ),
                         ),
@@ -299,7 +289,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                     children: [
                       Icon(
                         Icons.remove_red_eye,
-                        color: Colors.black,
+                        color: Storage.instance.isDarkMode ? Constance.secondaryColor :Colors.black,
                       ),
                       SizedBox(
                         width: 4.w,
@@ -312,7 +302,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                             // overflow: TextOverflow.clip,
                             style:
                                 Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Colors.black,
+                                      color: Storage.instance.isDarkMode ? Colors.white :Colors.black,
                                     ),
                           ),
                         ),
@@ -329,7 +319,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                             ' It has survived not only five centuries, but also the leap into electronic typesetting,'
                             ' remaining essentially unchanged',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Colors.black,
+                          color: Storage.instance.isDarkMode ? Colors.white70 :Colors.black,
                           // fontWeight: FontWeight.bold,
                         ),
                     trimLines: 5,

@@ -82,7 +82,8 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
       appBar: buildAppBar(),
       key: scaffoldKey,
       drawer: BergerMenuMemPage(),
-      backgroundColor: Colors.white,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           checkIt();
@@ -127,7 +128,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
           return Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            color: Colors.white,
+            // color: Colors.white,
             padding: EdgeInsets.symmetric(vertical: 1.h),
             child: SingleChildScrollView(
               child: Column(
@@ -164,7 +165,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                   FontAwesomeIcons.list,
                                   color: selected == 1
                                       ? Colors.black
-                                      : Colors.white,
+                                      : Storage.instance.isDarkMode ? Constance.secondaryColor :Colors.white,
                                 ),
                                 SizedBox(
                                   width: 1.w,
@@ -177,7 +178,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                       ?.copyWith(
                                         color: selected == 1
                                             ? Colors.black
-                                            : Colors.white,
+                                            : Storage.instance.isDarkMode ? Colors.black :Colors.white,
                                         fontSize: 2.h,
                                         // fontWeight: FontWeight.bold,
                                       ),
@@ -192,66 +193,14 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                             child: Container(
                               height: double.infinity,
                               width: 0.5.w,
-                              color: Colors.white,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.black
+                                  : Colors.white,
                             ),
                           ),
                         ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     setState(() {
-                        //       selected = 2;
-                        //     });
-                        //     fetchClassified(result);
-                        //   },
-                        //   child: Container(
-                        //     padding: EdgeInsets.symmetric(
-                        //       vertical: 1.h,
-                        //       horizontal: 3.w,
-                        //     ),
-                        //     color: selected == 2
-                        //         ? Constance.secondaryColor
-                        //         : Constance.forthColor,
-                        //     child: Row(
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       children: [
-                        //         Icon(
-                        //           FontAwesomeIcons.solidHeart,
-                        //           color: selected == 2
-                        //               ? Colors.black
-                        //               : Colors.white,
-                        //         ),
-                        //         SizedBox(
-                        //           width: 1.w,
-                        //         ),
-                        //         Text(
-                        //           'Favourites',
-                        //           style: Theme.of(context)
-                        //               .textTheme
-                        //               .headline6
-                        //               ?.copyWith(
-                        //                 color: selected == 2
-                        //                     ? Colors.black
-                        //                     : Colors.white,
-                        //                 fontSize: 2.h,
-                        //                 // fontWeight: FontWeight.bold,
-                        //               ),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   width: 2.w,
-                        //   child: Center(
-                        //     child: Container(
-                        //       height: double.infinity,
-                        //       width: 0.5.w,
-                        //       color: Colors.white,
-                        //     ),
-                        //   ),
-                        // ),
                         GestureDetector(
-                          onTap: () async{
+                          onTap: () async {
                             // setState(() {
                             //   selected = 3;
                             // });
@@ -259,7 +208,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                             var result = await Navigation.instance.navigate(
                               '/classifiedMyListDetails',
                             );
-                            if(result==null){
+                            if (result == null) {
                               fetchClassified('');
                             }
                           },
@@ -271,7 +220,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                             ),
                             color: selected == 3
                                 ? Constance.secondaryColor
-                                : Constance.forthColor,
+                                : Storage.instance.isDarkMode ? Colors.white :Constance.forthColor,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -279,7 +228,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                   FontAwesomeIcons.person,
                                   color: selected == 3
                                       ? Colors.black
-                                      : Colors.white,
+                                      : Storage.instance.isDarkMode ? Constance.secondaryColor :Colors.white,
                                 ),
                                 SizedBox(
                                   width: 1.w,
@@ -292,7 +241,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                       ?.copyWith(
                                         color: selected == 3
                                             ? Colors.black
-                                            : Colors.white,
+                                            : Storage.instance.isDarkMode ? Colors.black :Colors.white,
                                         fontSize: 2.h,
                                         // fontWeight: FontWeight.bold,
                                       ),
@@ -311,7 +260,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                     padding: EdgeInsets.symmetric(horizontal: 3.w),
                     child: Divider(
                       thickness: 0.07.h,
-                      color: Colors.black,
+                      color: Storage.instance.isDarkMode ? Colors.white :Colors.black,
                     ),
                   ),
                   Padding(
@@ -428,69 +377,65 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                                   ),
                                                 ),
                                                 LikeButton(
-                                                        size: 2.5.h,
-                                                        onTap: (val) async {
-                                                          setAsFavourite(
-                                                              current.id,
-                                                              'classified');
-                                                          _(() {
-                                                            like = !like;
-                                                          });
-                                                          return like;
-                                                        },
-                                                        circleColor:
-                                                            const CircleColor(
-                                                          start: Colors.red,
-                                                          end: Colors.black87,
-                                                        ),
-                                                        bubblesColor:
-                                                            const BubblesColor(
-                                                          dotPrimaryColor:
-                                                              Color(0xff33b5e5),
-                                                          dotSecondaryColor:
-                                                              Color(0xff0099cc),
-                                                        ),
-                                                        likeBuilder:
-                                                            (bool isLiked) {
-                                                          return Icon(
-                                                            like
-                                                                ? FontAwesomeIcons
-                                                                    .solidHeart
-                                                                : FontAwesomeIcons
-                                                                    .heart,
-                                                            color: like
-                                                                ? Constance
-                                                                    .thirdColor
-                                                                : Colors.grey,
-                                                            size: 3.h,
-                                                          );
-                                                        },
-                                                        likeCount: 665,
-                                                        countBuilder:
-                                                            (int? count,
-                                                                bool isLiked,
-                                                                String text) {
-                                                          var color = like
-                                                              ? Colors
-                                                                  .deepPurpleAccent
-                                                              : Colors.grey;
-                                                          Widget result;
-                                                          if (count == 0) {
-                                                            result = Text(
-                                                              "",
-                                                              style: TextStyle(
-                                                                  color: color),
-                                                            );
-                                                          } else {
-                                                            result = Text(
-                                                              '',
-                                                              style: TextStyle(
-                                                                  color: color),
-                                                            );
-                                                          }
-                                                          return result;
-                                                        },
-                                                      ),
+                                                  size: 2.5.h,
+                                                  onTap: (val) async {
+                                                    setAsFavourite(current.id,
+                                                        'classified');
+                                                    _(() {
+                                                      like = !like;
+                                                    });
+                                                    return like;
+                                                  },
+                                                  circleColor:
+                                                      const CircleColor(
+                                                    start: Colors.red,
+                                                    end: Colors.black87,
+                                                  ),
+                                                  bubblesColor:
+                                                      const BubblesColor(
+                                                    dotPrimaryColor:
+                                                        Color(0xff33b5e5),
+                                                    dotSecondaryColor:
+                                                        Color(0xff0099cc),
+                                                  ),
+                                                  likeBuilder: (bool isLiked) {
+                                                    return Icon(
+                                                      like
+                                                          ? FontAwesomeIcons
+                                                              .solidHeart
+                                                          : FontAwesomeIcons
+                                                              .heart,
+                                                      color: like
+                                                          ? Constance.thirdColor
+                                                          : Colors.grey,
+                                                      size: 3.h,
+                                                    );
+                                                  },
+                                                  likeCount: 665,
+                                                  countBuilder: (int? count,
+                                                      bool isLiked,
+                                                      String text) {
+                                                    var color = like
+                                                        ? Colors
+                                                            .deepPurpleAccent
+                                                        : Colors.grey;
+                                                    Widget result;
+                                                    if (count == 0) {
+                                                      result = Text(
+                                                        "",
+                                                        style: TextStyle(
+                                                            color: color),
+                                                      );
+                                                    } else {
+                                                      result = Text(
+                                                        '',
+                                                        style: TextStyle(
+                                                            color: color),
+                                                      );
+                                                    }
+                                                    return result;
+                                                  },
+                                                ),
                                               ],
                                             ),
                                           ),

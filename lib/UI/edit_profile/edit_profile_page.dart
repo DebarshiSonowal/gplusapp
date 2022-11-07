@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Model/profile.dart';
 import 'package:gplusapp/Model/topick.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
@@ -77,7 +78,7 @@ class _EditProfileState extends State<EditProfile> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.all(6.w),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return SingleChildScrollView(
@@ -88,7 +89,9 @@ class _EditProfileState extends State<EditProfile> {
                 Text(
                   'Change Personal Details',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
-                        color: Constance.primaryColor,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Constance.primaryColor,
                         // fontSize: 2.5.h,
                         fontWeight: FontWeight.bold,
                       ),
@@ -96,67 +99,112 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(
                   height: 1.5.h,
                 ),
-                TextFormField(
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.black,
-                        // fontSize: 1.6.h,
-                      ),
-                  controller: first_name,
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Enter First Name',
-                    labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                Container(
+                  padding: !Storage.instance.isDarkMode
+                      ? EdgeInsets.all(0)
+                      : EdgeInsets.symmetric(vertical: 0.5.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: TextFormField(
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
                           color: Colors.black,
-                          // fontSize: 1.5.h,
+                          // fontSize: 1.6.h,
                         ),
-                    border: const OutlineInputBorder(),
-                    enabledBorder: const OutlineInputBorder(),
+                    controller: first_name,
+                    keyboardType: TextInputType.name,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Enter First Name',
+                      labelStyle:
+                          Theme.of(context).textTheme.headline6?.copyWith(
+                                color: Colors.black,
+                                // fontSize: 1.5.h,
+                              ),
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)),
+                      border: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)),
+                      enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)),
+                    ),
                   ),
                 ),
                 SizedBox(
                   height: 1.5.h,
                 ),
-                TextFormField(
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.black,
-                        // fontSize: 1.6.h,
-                      ),
-                  controller: last_name,
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Enter Last Name',
-                    labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                Container(
+                  padding: !Storage.instance.isDarkMode
+                      ? EdgeInsets.all(0)
+                      : EdgeInsets.symmetric(vertical: 0.5.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: TextFormField(
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
                           color: Colors.black,
-                          // fontSize: 1.5.h,
+                          // fontSize: 1.6.h,
                         ),
-                    border: const OutlineInputBorder(),
-                    enabledBorder: const OutlineInputBorder(),
+                    controller: last_name,
+                    keyboardType: TextInputType.name,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Enter Last Name',
+                      labelStyle:
+                          Theme.of(context).textTheme.headline6?.copyWith(
+                                color: Colors.black,
+                                // fontSize: 1.5.h,
+                              ),
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)),
+                      border: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)),
+                      enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)),
+                    ),
                   ),
                 ),
                 SizedBox(
                   height: 1.5.h,
                 ),
-                TextFormField(
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.black,
-                        // fontSize: 1.6.h,
-                      ),
-                  controller: email,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Enter Email',
-                    labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                Container(
+                  padding: !Storage.instance.isDarkMode
+                      ? EdgeInsets.all(0)
+                      : EdgeInsets.symmetric(vertical: 0.5.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: TextFormField(
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
                           color: Colors.black,
-                          // fontSize: 1.5.h,
+                          // fontSize: 1.6.h,
                         ),
-                    border: const OutlineInputBorder(),
-                    enabledBorder: const OutlineInputBorder(),
+                    controller: email,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Enter Email',
+                      labelStyle:
+                          Theme.of(context).textTheme.headline6?.copyWith(
+                                color: Colors.black,
+                                // fontSize: 1.5.h,
+                              ),
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)),
+                      border: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)),
+                      enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white)),
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -167,7 +215,9 @@ class _EditProfileState extends State<EditProfile> {
                     Text(
                       'Location',
                       style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                            color: Constance.primaryColor,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Constance.primaryColor,
                             // fontSize: 2.5.h,
                             fontWeight: FontWeight.bold,
                           ),
@@ -206,14 +256,18 @@ class _EditProfileState extends State<EditProfile> {
                       Text(
                         address,
                         style: Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Constance.primaryColor,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  :Constance.primaryColor,
                               // fontSize: 2.h,
                               // fontWeight: FontWeight.bold,
                             ),
                       ),
-                      const Icon(
+                      Icon(
                         Icons.arrow_forward_ios,
-                        color: Constance.primaryColor,
+                        color: Storage.instance.isDarkMode
+                            ? Constance.secondaryColor
+                            :Constance.primaryColor,
                       ),
                     ],
                   ),
@@ -224,7 +278,9 @@ class _EditProfileState extends State<EditProfile> {
                 Text(
                   'Change your News interests',
                   style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                        color: Constance.primaryColor,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            :Constance.primaryColor,
                         // fontSize: 2.h,
                         fontWeight: FontWeight.bold,
                       ),
@@ -235,7 +291,9 @@ class _EditProfileState extends State<EditProfile> {
                 Text(
                   'Geographical',
                   style: Theme.of(context).textTheme.headline4?.copyWith(
-                        color: Constance.primaryColor,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            :Constance.primaryColor,
                         // fontSize: 2.h,
                         fontWeight: FontWeight.bold,
                       ),
@@ -308,7 +366,9 @@ class _EditProfileState extends State<EditProfile> {
                 Text(
                   'Topical',
                   style: Theme.of(context).textTheme.headline4?.copyWith(
-                        color: Constance.primaryColor,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            :Constance.primaryColor,
                         // fontSize: 2.h,
                         fontWeight: FontWeight.bold,
                       ),
@@ -542,10 +602,10 @@ class _EditProfileState extends State<EditProfile> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -557,6 +617,20 @@ class _EditProfileState extends State<EditProfile> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 

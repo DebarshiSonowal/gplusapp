@@ -43,6 +43,7 @@ import '../Model/refer_earn_response.dart';
 import '../Model/search_result.dart';
 import '../Model/shop.dart';
 import '../Model/shop_category.dart';
+import '../Model/swtich_status.dart';
 import '../Model/top_picks.dart';
 import '../Model/topick.dart';
 import '../Model/video_news.dart';
@@ -1291,6 +1292,83 @@ class ApiProvider {
     }
   }
 
+  Future<GenericResponse> setSwitch(val, type) async {
+    var url = "${baseUrl}/update-switch";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'type': type,
+      'value': val,
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("Swtich set response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("Swtich set error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("Swtich set error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<SwitchStatusResponse> getSwitchStatus() async {
+    var url = "${baseUrl}/get-switch";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("Switch get response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return SwitchStatusResponse.fromJson(response?.data);
+      } else {
+        debugPrint("Switch get error: ${response?.data}");
+        return SwitchStatusResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("Switch get error: ${e.response}");
+      return SwitchStatusResponse.withError(e.message);
+    }
+  }
+
   Future<RazorpayResponse> fetchRazorpay() async {
     var url = "${baseUrl}/payment-gateway";
     BaseOptions option =
@@ -2108,6 +2186,49 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postLike error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> addBookmark(bookmark_for_id, type) async {
+    var url = "${baseUrl}/app/bookmark";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'bookmark_for_id': bookmark_for_id,
+      'type': type,
+    };
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("addBookmark response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("addBookmark error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("addBookmark error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
   }

@@ -8,6 +8,7 @@ import 'package:sizer/sizer.dart';
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 
 class AuthorPage extends StatefulWidget {
@@ -23,7 +24,8 @@ class _AuthorPageState extends State<AuthorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       appBar: buildAppBar(),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
@@ -76,7 +78,9 @@ class _AuthorPageState extends State<AuthorPage> {
                               .textTheme
                               .headline3
                               ?.copyWith(
-                                color: Colors.black,
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
                                 // fontSize: 11.sp,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -89,26 +93,34 @@ class _AuthorPageState extends State<AuthorPage> {
                               .textTheme
                               .headline5
                               ?.copyWith(
-                                color: Colors.black,
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
                                 // fontSize: 11.sp,
                                 // fontWeight: FontWeight.bold,
                               ),
                         ),
                         Row(
-                          children: const [
+                          children:  [
                             Icon(
                               FontAwesomeIcons.facebookSquare,
-                              color: Constance.primaryColor,
+                              color: Storage.instance.isDarkMode
+                                  ? Constance.secondaryColor
+                                  : Constance.primaryColor,
                               size: 30,
                             ),
                             Icon(
                               FontAwesomeIcons.instagramSquare,
-                              color: Constance.primaryColor,
+                              color: Storage.instance.isDarkMode
+                                  ? Constance.secondaryColor
+                                  : Constance.primaryColor,
                               size: 30,
                             ),
                             Icon(
                               FontAwesomeIcons.twitterSquare,
-                              color: Constance.primaryColor,
+                              color: Storage.instance.isDarkMode
+                                  ? Constance.secondaryColor
+                                  : Constance.primaryColor,
                               size: 30,
                             ),
                           ],
@@ -125,7 +137,7 @@ class _AuthorPageState extends State<AuthorPage> {
                 height: 5.h,
               ),
               Text(
-               'It is a long established fact that a reader will be '
+                'It is a long established fact that a reader will be '
                 'distracted by the readable content of a page when '
                 'looking at its layout. The point of using Lorem Ipsum '
                 'is that it has a more-or-less normal distribution of letters, '
@@ -138,7 +150,7 @@ class _AuthorPageState extends State<AuthorPage> {
                         .textTheme
                         .headline4
                         ?.copyWith(
-                          color: Colors.black,
+                          color:Storage.instance.isDarkMode ? Colors.white : Colors.black,
                           // fontSize: 11.sp,
                           // fontWeight: FontWeight.bold,
                         ),
@@ -178,10 +190,10 @@ class _AuthorPageState extends State<AuthorPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -193,6 +205,20 @@ class _AuthorPageState extends State<AuthorPage> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 

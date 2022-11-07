@@ -184,7 +184,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                   args:
                                       '${data.home_toppicks[0].categories?.first.seo_name},${data.home_toppicks[0].seo_name}');
                             } else {
-                              Constance.showMembershipPrompt(context);
+                              Constance.showMembershipPrompt(context,(){});
                             }
                           },
                           child: Text(
@@ -234,7 +234,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                         args:
                                             '${item.categories?.first.seo_name},${item.seo_name}');
                                   } else {
-                                    Constance.showMembershipPrompt(context);
+                                    Constance.showMembershipPrompt(context,(){});
                                   }
                                 },
                                 child: Container(

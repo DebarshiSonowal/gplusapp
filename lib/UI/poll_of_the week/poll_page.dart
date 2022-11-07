@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -16,7 +17,11 @@ class PollPage extends StatefulWidget {
   State<PollPage> createState() => _PollPageState();
 }
 
+bool showing = false;
+
 class _PollPageState extends State<PollPage> {
+  String? _poll = Constance.pollWeek[0];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,160 +29,187 @@ class _PollPageState extends State<PollPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
+        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding:
-                EdgeInsets.symmetric(horizontal: 5.w),
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
                 child: Row(
-                  mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Poll of the week',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline3
-                          ?.copyWith(
-                        fontSize: 16.sp,
-                        color: Constance.primaryColor,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.headline3?.copyWith(
+                            fontSize: 16.sp,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Constance.primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     IconButton(
                       onPressed: () {},
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.share,
-                        color: Colors.black,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
                       ),
                     ),
                   ],
                 ),
               ),
               ListView.separated(
-                shrinkWrap: true,
+                  shrinkWrap: true,
                   itemBuilder: (context, count) {
                     int current = 0;
                     int random = 0;
                     String _poll = Constance.pollWeek[0];
-                    return StatefulBuilder(
-                      builder: (context,_) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.w),
-                              child: Text(
-                                data.pollOfTheWeek?.title ?? 'Poll of the week',
-                                style: Theme.of(context).textTheme.headline3?.copyWith(
-                                      fontSize: 13.sp,
-                                      color: Constance.primaryColor,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
+                    return StatefulBuilder(builder: (context, _) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5.w),
+                            child: Text(
+                              data.pollOfTheWeek?.title ?? 'Poll of the week',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline3
+                                  ?.copyWith(
+                                    fontSize: 13.sp,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white70
+                                        : Constance.primaryColor,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                             ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            Container(
-                              child: ListView.separated(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  scrollDirection: Axis.vertical,
-                                  itemBuilder: (cont, count) {
-                                    return Stack(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 2.w, vertical: 1.h),
-                                          child: LinearPercentIndicator(
-                                            barRadius: const Radius.circular(5),
-                                            width: 80.w,
-                                            lineHeight: 5.h,
-                                            percent: getOption(count, data) / 100,
-                                            center: const Text(
-                                              "",
-                                              style: TextStyle(fontSize: 12.0),
-                                            ),
-                                            // trailing: Icon(Icons.mood),
-                                            linearStrokeCap: LinearStrokeCap.roundAll,
-                                            backgroundColor: Colors.white,
-                                            progressColor: Constance.secondaryColor,
+                          ),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                          Container(
+                            child: ListView.separated(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                itemBuilder: (cont, count) {
+                                  var item = data.pollOfTheWeek;
+                                  // var value =
+                                  //     Constance.pollValue[count];
+                                  return Stack(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 2.w, vertical: 1.h),
+                                        child: LinearPercentIndicator(
+                                          barRadius: const Radius.circular(5),
+                                          width: 80.w,
+                                          lineHeight: 5.h,
+                                          percent: data.pollOfTheWeek
+                                                      ?.is_polled ==
+                                                  'false'
+                                              ? 0
+                                              : (getOption(count, data) / 100),
+                                          center: const Text(
+                                            "",
+                                            style: TextStyle(fontSize: 12.0),
                                           ),
+                                          // trailing: Icon(Icons.mood),
+                                          linearStrokeCap:
+                                              LinearStrokeCap.roundAll,
+                                          backgroundColor: Colors.white,
+                                          progressColor:
+                                              Constance.secondaryColor,
                                         ),
-                                        Theme(
-                                          data: ThemeData(
-                                            unselectedWidgetColor: Colors.grey.shade900,
-                                            backgroundColor: Colors.grey.shade200,
-                                          ),
-                                          child: RadioListTile(
-                                            controlAffinity:
-                                                ListTileControlAffinity.leading,
-                                            selected:
-                                                _poll == getOptionName(count, data)
-                                                    ? true
-                                                    : false,
-                                            tileColor: Colors.grey.shade300,
-                                            selectedTileColor: Colors.black,
-                                            value: getOptionName(count, data),
-                                            activeColor: Colors.black,
-                                            groupValue: _poll,
-                                            onChanged: (val) {
-                                              if (data.profile?.is_plan_active ??
-                                                  false) {
-                                               _(() {
-                                                  _poll = getOptionName(count, data);
+                                      ),
+                                      Theme(
+                                        data: ThemeData(
+                                          unselectedWidgetColor:
+                                              Colors.grey.shade900,
+                                          backgroundColor: Colors.grey.shade200,
+                                        ),
+                                        child: RadioListTile(
+                                          controlAffinity:
+                                              ListTileControlAffinity.leading,
+                                          selected: _poll ==
+                                                  getOptionName(count, data)
+                                              ? true
+                                              : false,
+                                          tileColor: Colors.grey.shade300,
+                                          selectedTileColor: Colors.black,
+                                          value: getOptionName(count, data),
+                                          activeColor: Colors.black,
+                                          groupValue: _poll,
+                                          onChanged: (val) {
+                                            if (data.profile?.is_plan_active ??
+                                                false) {
+                                              setState(() {
+                                                _poll =
+                                                    getOptionName(count, data);
+                                              });
+                                              postPollOfTheWeek(
+                                                  data.pollOfTheWeek?.id,
+                                                  _poll);
+                                            } else {
+                                              setState(() {
+                                                showing = true;
+                                              });
+                                              Constance.showMembershipPrompt(
+                                                  context, () {
+                                                setState(() {
+                                                  showing = false;
                                                 });
-                                                postPollOfTheWeek(
-                                                    data.pollOfTheWeek?.id, _poll);
-                                              } else {
-                                                Constance.showMembershipPrompt(context);
-                                              }
-                                            },
-                                            title: Text(
-                                              getOptionName(count, data),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                            secondary: Text(
-                                              '${getOption(count, data)}%',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5
-                                                  ?.copyWith(
-                                                      color: Colors.black,
-                                                      fontSize: 1.7.h
-                                                      // fontWeight: FontWeight.bold,
-                                                      ),
-                                            ),
+                                              });
+                                            }
+                                          },
+                                          title: Text(
+                                            getOptionName(count, data),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                ?.copyWith(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          secondary: Text(
+                                            item?.is_polled == 'false'
+                                                ? ''
+                                                : '${getOption(count, data)}%',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline5
+                                                ?.copyWith(
+                                                    color: Storage
+                                                            .instance.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                    fontSize: 1.7.h
+                                                    // fontWeight: FontWeight.bold,
+                                                    ),
                                           ),
                                         ),
-                                      ],
-                                    );
-                                  },
-                                  separatorBuilder: (cont, inde) {
-                                    return SizedBox(
-                                      width: 10.w,
-                                    );
-                                  },
-                                  itemCount: 3),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                          ],
-                        );
-                      }
-                    );
+                                      ),
+                                    ],
+                                  );
+                                },
+                                separatorBuilder: (cont, inde) {
+                                  return SizedBox(
+                                    width: 10.w,
+                                  );
+                                },
+                                itemCount: 3),
+                          ),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                        ],
+                      );
+                    });
                   },
                   separatorBuilder: (context, count) {
                     return SizedBox(
@@ -191,6 +223,7 @@ class _PollPageState extends State<PollPage> {
       ),
     );
   }
+
   getOption(int count, data) {
     switch (count) {
       case 0:
@@ -229,10 +262,10 @@ class _PollPageState extends State<PollPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -260,17 +293,30 @@ class _PollPageState extends State<PollPage> {
       ],
     );
   }
+
   void fetchPoll() async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getPollOfTheWeek();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setPollOfTheWeek(response.pollOfTheWeek!);
       Navigation.instance.goBack();
-    }else{
+    } else {
       Navigation.instance.goBack();
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      _poll = Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .pollOfTheWeek
+          ?.is_polled!;
+    });
   }
 }

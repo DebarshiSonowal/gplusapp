@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Model/opinion.dart';
 import 'package:gplusapp/Model/top_picks.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
@@ -43,18 +45,29 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int current = 0;
+  int current = 0, currentPage = 0;
   int random = 0;
   String _poll = Constance.pollWeek[0];
 
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
+  bool showing = false;
+
+  final _listController = PageController(keepPage: true, viewportFraction: 0.8);
+
+  @override
+  void dispose() {
+    super.dispose();
+    _listController.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
     // secureScreen();
     Future.delayed(Duration.zero, () => fetchProfile());
+
     fetchHome();
     fetchOpinion();
     fetchGPlusExcl();
@@ -62,7 +75,11 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchToppicks();
     fetchAds();
     askPermissions();
-
+    // Future.delayed(
+    //     const Duration(seconds: 15),
+    //         () => _listController.addListener(() {
+    //       setState(() {});
+    //     }));
     Future.delayed(
         Duration.zero,
         () => Provider.of<DataProvider>(
@@ -106,8 +123,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.grey.shade100,
       appBar: buildAppBar(),
+      floatingActionButtonLocation: showing
+          ? FloatingActionButtonLocation.miniStartFloat
+          : FloatingActionButtonLocation.miniEndFloat,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
         onPressed: () {
@@ -205,7 +227,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Container(
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width,
-                      color: Colors.grey.shade100,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.black
+                          : Colors.grey.shade100,
                       child: SingleChildScrollView(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -214,88 +238,88 @@ class _HomeScreenState extends State<HomeScreen> {
                             data.profile?.is_plan_active ?? false
                                 ? Container()
                                 : Container(
-                              width: double.infinity,
-                              height: 20.h,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 2.h, horizontal: 8.w),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigation.instance
-                                      .navigate('/bigdealpage');
-                                  Provider.of<DataProvider>(
-                                      Navigation.instance.navigatorKey
-                                          .currentContext ??
-                                          context,
-                                      listen: false)
-                                      .setCurrent(1);
-                                },
-                                child: Card(
-                                  color: Constance.thirdColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(10),
-                                  ),
-                                  child: Container(
+                                    width: double.infinity,
+                                    height: 20.h,
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 4.w, vertical: 0.5.h),
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Center(
-                                            child: Text(
-                                              'Big Deals\nand Offers',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline3
-                                                  ?.copyWith(
-                                                  color: Colors.white,
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .bold),
+                                        vertical: 2.h, horizontal: 8.w),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigation.instance
+                                            .navigate('/bigdealpage');
+                                        Provider.of<DataProvider>(
+                                                Navigation.instance.navigatorKey
+                                                        .currentContext ??
+                                                    context,
+                                                listen: false)
+                                            .setCurrent(1);
+                                      },
+                                      child: Card(
+                                        color: Constance.thirdColor,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 4.w, vertical: 0.5.h),
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
                                             ),
                                           ),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Center(
+                                                  child: Text(
+                                                    'Big Deals\nand Offers',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline3
+                                                        ?.copyWith(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                  child: Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: Colors.white,
+                                                  ),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                    Radius.circular(5),
+                                                  ),
+                                                ),
+                                                child: Center(
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:
+                                                        Constance.kfc_offer,
+                                                    placeholder: (cont, _) {
+                                                      return Image.asset(
+                                                        Constance.logoIcon,
+                                                        // color: Colors.black,
+                                                      );
+                                                    },
+                                                    errorWidget: (cont, _, e) {
+                                                      return Image.network(
+                                                        Constance.defaultImage,
+                                                        fit: BoxFit.fitWidth,
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              )),
+                                            ],
+                                          ),
                                         ),
-                                        Expanded(
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Colors.white,
-                                                ),
-                                                borderRadius:
-                                                const BorderRadius.all(
-                                                  Radius.circular(5),
-                                                ),
-                                              ),
-                                              child: Center(
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                  Constance.kfc_offer,
-                                                  placeholder: (cont, _) {
-                                                    return Image.asset(
-                                                      Constance.logoIcon,
-                                                      // color: Colors.black,
-                                                    );
-                                                  },
-                                                  errorWidget: (cont, _, e) {
-                                                    return Image.network(
-                                                      Constance.defaultImage,
-                                                      fit: BoxFit.fitWidth,
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            )),
-                                      ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ),
                             Container(
                               height: 25.h,
                               width: double.infinity,
@@ -307,17 +331,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Padding(
                                     padding:
-                                    EdgeInsets.symmetric(horizontal: 5.w),
+                                        EdgeInsets.symmetric(horizontal: 5.w),
                                     child: Text(
                                       'Suggested for you',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline3
                                           ?.copyWith(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.sp,
-                                      ),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16.sp,
+                                          ),
                                     ),
                                   ),
                                   SizedBox(
@@ -334,9 +358,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         itemBuilder: (cont, count) {
                                           var item = data.home_toppicks[count];
                                           if ((data.home_toppicks.length > 4
-                                              ? 3
-                                              : data.home_toppicks.length -
-                                              1) ==
+                                                  ? 3
+                                                  : data.home_toppicks.length -
+                                                      1) ==
                                               count) {
                                             return Container(
                                               padding: EdgeInsets.symmetric(
@@ -355,11 +379,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       .textTheme
                                                       .headline3
                                                       ?.copyWith(
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                    FontWeight.bold,
-                                                    fontSize: 10.sp,
-                                                  ),
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 10.sp,
+                                                      ),
                                                 ),
                                               ),
                                             );
@@ -367,16 +391,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                             return GestureDetector(
                                               onTap: () {
                                                 if (data.profile
-                                                    ?.is_plan_active ??
+                                                        ?.is_plan_active ??
                                                     false) {
                                                   Navigation.instance.navigate(
                                                       '/story',
                                                       args:
-                                                      '${item.categories?.first.seo_name},${item.seo_name}');
+                                                          '${item.categories?.first.seo_name},${item.seo_name}');
                                                 } else {
+                                                  setState(() {
+                                                    showing = true;
+                                                  });
                                                   Constance
                                                       .showMembershipPrompt(
-                                                      context);
+                                                          context, () {
+                                                    setState(() {
+                                                      showing = false;
+                                                    });
+                                                  });
                                                 }
                                               },
                                               child: ToppicksCard(item: item),
@@ -416,10 +447,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .textTheme
                                               .headline3
                                               ?.copyWith(
-                                            fontSize: 12.sp,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                                fontSize: 12.sp,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                       ),
                                     ],
@@ -443,7 +474,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: CachedNetworkImage(
                                           fit: BoxFit.fitWidth,
                                           imageUrl: data.ads[random]
-                                              .image_file_name ??
+                                                  .image_file_name ??
                                               '',
                                           placeholder: (cont, _) {
                                             return Image.asset(
@@ -485,17 +516,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Padding(
                                     padding:
-                                    EdgeInsets.symmetric(horizontal: 5.w),
+                                        EdgeInsets.symmetric(horizontal: 5.w),
                                     child: Text(
                                       'G Plus Exclusive',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline3
                                           ?.copyWith(
-                                        fontSize: 16.sp,
-                                        color: Constance.primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                            fontSize: 16.sp,
+                                            color: Storage.instance.isDarkMode
+                                                ? Colors.white
+                                                : Constance.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
                                   ),
                                   SizedBox(
@@ -507,20 +540,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                           scrollDirection: Axis.horizontal,
                                           itemBuilder: (cont, count) {
                                             var item =
-                                            data.home_exclusive[count];
+                                                data.home_exclusive[count];
                                             return GestureDetector(
                                               onTap: () {
                                                 if (data.profile
-                                                    ?.is_plan_active ??
+                                                        ?.is_plan_active ??
                                                     false) {
                                                   Navigation.instance.navigate(
                                                       '/story',
                                                       args:
-                                                      '${'exclusive-news'},${item.seo_name}');
+                                                          '${'exclusive-news'},${item.seo_name}');
                                                 } else {
+                                                  setState(() {
+                                                    showing = true;
+                                                  });
                                                   Constance
                                                       .showMembershipPrompt(
-                                                      context);
+                                                          context, () {
+                                                    setState(() {
+                                                      showing = false;
+                                                    });
+                                                  });
                                                 }
                                               },
                                               child: GPlusExecCard(item: item),
@@ -532,10 +572,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             );
                                           },
                                           itemCount:
-                                          (data.home_exclusive.length > 3
-                                              ? 3
-                                              : data
-                                              .home_exclusive.length)),
+                                              (data.home_exclusive.length > 3
+                                                  ? 3
+                                                  : data
+                                                      .home_exclusive.length)),
                                     ),
                                   ),
                                   SizedBox(
@@ -548,21 +588,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Navigation.instance
                                             .navigate('/exclusivePage');
                                       } else {
-                                        Constance.showMembershipPrompt(context);
+                                        setState(() {
+                                          showing = true;
+                                        });
+                                        Constance.showMembershipPrompt(context,
+                                            () {
+                                          setState(() {
+                                            showing = false;
+                                          });
+                                        });
                                       }
                                     },
                                     child: Padding(
                                       padding:
-                                      EdgeInsets.symmetric(horizontal: 5.w),
+                                          EdgeInsets.symmetric(horizontal: 5.w),
                                       child: Text(
                                         'Read More',
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline5
                                             ?.copyWith(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                              color: Storage.instance.isDarkMode
+                                                  ? Colors.white
+                                                  : Constance.primaryColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ),
                                   ),
@@ -593,17 +643,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Padding(
                                     padding:
-                                    EdgeInsets.symmetric(horizontal: 5.w),
+                                        EdgeInsets.symmetric(horizontal: 5.w),
                                     child: Text(
                                       'Video reports',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline3
                                           ?.copyWith(
-                                        fontSize: 16.sp,
-                                        color: Constance.primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                            fontSize: 16.sp,
+                                            color: Storage.instance.isDarkMode
+                                                ? Colors.white
+                                                : Constance.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
                                   ),
                                   SizedBox(
@@ -619,15 +671,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                           return GestureDetector(
                                               onTap: () {
                                                 if (data.profile
-                                                    ?.is_plan_active ??
+                                                        ?.is_plan_active ??
                                                     false) {
                                                   Navigation.instance.navigate(
                                                       '/videoPlayer',
                                                       args: item.youtube_id);
                                                 } else {
+                                                  setState(() {
+                                                    showing = true;
+                                                  });
                                                   Constance
                                                       .showMembershipPrompt(
-                                                      context);
+                                                          context, () {
+                                                    setState(() {
+                                                      showing = false;
+                                                    });
+                                                  });
                                                 }
                                               },
                                               child: VideoCard(item: item));
@@ -651,21 +710,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Navigation.instance
                                             .navigate('/videoReport');
                                       } else {
-                                        Constance.showMembershipPrompt(context);
+                                        setState(() {
+                                          showing = true;
+                                        });
+                                        Constance.showMembershipPrompt(context,
+                                            () {
+                                          setState(() {
+                                            showing = false;
+                                          });
+                                        });
                                       }
                                     },
                                     child: Padding(
                                       padding:
-                                      EdgeInsets.symmetric(horizontal: 5.w),
+                                          EdgeInsets.symmetric(horizontal: 5.w),
                                       child: Text(
                                         'View All',
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline5
                                             ?.copyWith(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                              color: Storage.instance.isDarkMode
+                                                  ? Colors.white
+                                                  : Constance.primaryColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ),
                                   ),
@@ -693,10 +762,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Padding(
                                     padding:
-                                    EdgeInsets.symmetric(horizontal: 5.w),
+                                        EdgeInsets.symmetric(horizontal: 5.w),
                                     child: Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           'Poll of the week',
@@ -704,16 +773,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .textTheme
                                               .headline3
                                               ?.copyWith(
-                                            fontSize: 16.sp,
-                                            color: Constance.primaryColor,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                                fontSize: 16.sp,
+                                                color: Storage
+                                                        .instance.isDarkMode
+                                                    ? Colors.white
+                                                    : Constance.primaryColor,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                         IconButton(
                                           onPressed: () {},
                                           icon: Icon(
                                             Icons.share,
-                                            color: Colors.black,
+                                            color: Storage.instance.isDarkMode
+                                                ? Colors.white
+                                                : Constance.primaryColor,
                                           ),
                                         ),
                                       ],
@@ -724,7 +798,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   Padding(
                                     padding:
-                                    EdgeInsets.symmetric(horizontal: 5.w),
+                                        EdgeInsets.symmetric(horizontal: 5.w),
                                     child: Text(
                                       data.pollOfTheWeek?.title ??
                                           'Poll of the week',
@@ -732,10 +806,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .textTheme
                                           .headline3
                                           ?.copyWith(
-                                        fontSize: 13.sp,
-                                        color: Constance.primaryColor,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
+                                            fontSize: 13.sp,
+                                            color: Storage.instance.isDarkMode
+                                                ? Colors.white
+                                                : Constance.primaryColor,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
                                     ),
                                   ),
                                   SizedBox(
@@ -745,10 +821,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: ListView.separated(
                                         shrinkWrap: true,
                                         physics:
-                                        const NeverScrollableScrollPhysics(),
+                                            const NeverScrollableScrollPhysics(),
                                         scrollDirection: Axis.vertical,
                                         itemBuilder: (cont, count) {
-                                          // var item = Constance.pollWeek[count];
+                                          var item = data.pollOfTheWeek;
                                           // var value =
                                           //     Constance.pollValue[count];
                                           return Stack(
@@ -759,12 +835,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     vertical: 1.h),
                                                 child: LinearPercentIndicator(
                                                   barRadius:
-                                                  const Radius.circular(5),
+                                                      const Radius.circular(5),
                                                   width: 80.w,
                                                   lineHeight: 5.h,
-                                                  percent:
-                                                  getOption(count, data) /
-                                                      100,
+                                                  percent: data.pollOfTheWeek
+                                                              ?.is_polled ==
+                                                          'false'
+                                                      ? 0
+                                                      : (getOption(
+                                                              count, data) /
+                                                          100),
                                                   center: const Text(
                                                     "",
                                                     style: TextStyle(
@@ -772,39 +852,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   ),
                                                   // trailing: Icon(Icons.mood),
                                                   linearStrokeCap:
-                                                  LinearStrokeCap.roundAll,
+                                                      LinearStrokeCap.roundAll,
                                                   backgroundColor: Colors.white,
                                                   progressColor:
-                                                  Constance.secondaryColor,
+                                                      Constance.secondaryColor,
                                                 ),
                                               ),
                                               Theme(
                                                 data: ThemeData(
                                                   unselectedWidgetColor:
-                                                  Colors.grey.shade900,
+                                                      Colors.grey.shade900,
                                                   backgroundColor:
-                                                  Colors.grey.shade200,
+                                                      Colors.grey.shade200,
                                                 ),
                                                 child: RadioListTile(
                                                   controlAffinity:
-                                                  ListTileControlAffinity
-                                                      .leading,
+                                                      ListTileControlAffinity
+                                                          .leading,
                                                   selected: _poll ==
-                                                      getOptionName(
-                                                          count, data)
+                                                          getOptionName(
+                                                              count, data)
                                                       ? true
                                                       : false,
                                                   tileColor:
-                                                  Colors.grey.shade300,
+                                                      Colors.grey.shade300,
                                                   selectedTileColor:
-                                                  Colors.black,
+                                                      Colors.black,
                                                   value: getOptionName(
                                                       count, data),
                                                   activeColor: Colors.black,
                                                   groupValue: _poll,
                                                   onChanged: (val) {
                                                     if (data.profile
-                                                        ?.is_plan_active ??
+                                                            ?.is_plan_active ??
                                                         false) {
                                                       setState(() {
                                                         _poll = getOptionName(
@@ -815,9 +895,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               ?.id,
                                                           _poll);
                                                     } else {
+                                                      setState(() {
+                                                        showing = true;
+                                                      });
                                                       Constance
                                                           .showMembershipPrompt(
-                                                          context);
+                                                              context, () {
+                                                        setState(() {
+                                                          showing = false;
+                                                        });
+                                                      });
                                                     }
                                                   },
                                                   title: Text(
@@ -826,21 +913,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         .textTheme
                                                         .headline6
                                                         ?.copyWith(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                      FontWeight.bold,
-                                                    ),
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                   ),
                                                   secondary: Text(
-                                                    '${getOption(count, data)}%',
+                                                    item?.is_polled == 'false'
+                                                        ? ''
+                                                        : '${getOption(count, data)}%',
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .headline5
                                                         ?.copyWith(
-                                                        color: Colors.black,
-                                                        fontSize: 1.7.h
-                                                      // fontWeight: FontWeight.bold,
-                                                    ),
+                                                            color: Storage
+                                                                    .instance
+                                                                    .isDarkMode
+                                                                ? Colors.white
+                                                                : Colors.black,
+                                                            fontSize: 1.7.h
+                                                            // fontWeight: FontWeight.bold,
+                                                            ),
                                                   ),
                                                 ),
                                               ),
@@ -863,16 +956,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                     },
                                     child: Padding(
                                       padding:
-                                      EdgeInsets.symmetric(horizontal: 5.w),
+                                          EdgeInsets.symmetric(horizontal: 5.w),
                                       child: Text(
                                         'View All',
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline5
                                             ?.copyWith(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                              color: Storage.instance.isDarkMode
+                                                  ? Colors.white
+                                                  : Constance.primaryColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ),
                                   ),
@@ -889,7 +984,141 @@ class _HomeScreenState extends State<HomeScreen> {
                                 thickness: 0.1.h,
                               ),
                             ),
-
+                            SizedBox(
+                              height: 1.h,
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 40.h,
+                              child: PageView.builder(
+                                  controller: _listController,
+                                  // shrinkWrap: true,
+                                  onPageChanged: (index) {
+                                    setState(() {
+                                      currentPage = index;
+                                    });
+                                  },
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: data.home_albums.length,
+                                  itemBuilder: (cont, index) {
+                                    var current = data.home_albums[index];
+                                    return Container(
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(20),
+                                        ),
+                                      ),
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 3.w),
+                                      width: 70.w,
+                                      child: Stack(
+                                        alignment: Alignment.bottomCenter,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(20),
+                                            ),
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  current.image_file_name ?? "",
+                                              width: double.infinity,
+                                              // height:55.h,
+                                              height: 40.h,
+                                              fit: BoxFit.fill,
+                                              // filterQuality: FilterQuality.low,
+                                              placeholder: (cont, _) {
+                                                return Image.asset(
+                                                  Constance.logoIcon,
+                                                  // color: Colors.black,
+                                                );
+                                              },
+                                              errorWidget: (cont, _, e) {
+                                                return Image.network(
+                                                  Constance.defaultImage,
+                                                  fit: BoxFit.fitWidth,
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                          Container(
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(20),
+                                              ),
+                                              gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    Colors.transparent,
+                                                    Colors.black
+                                                  ]),
+                                            ),
+                                            // color: Colors.black.withOpacity(0.5),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 3.h, horizontal: 2.w),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  current.title ??
+                                                      'Big Deals\nand Offers',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline4
+                                                      ?.copyWith(
+                                                          color: Colors
+                                                              .grey.shade200,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  height: 0.5.h,
+                                                ),
+                                                Text(
+                                                  "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline6
+                                                      ?.copyWith(
+                                                        color: Colors.white,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                            ),
+                            data.home_albums.isNotEmpty
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      for (int i = 0;
+                                          i < data.home_albums.length;
+                                          i++)
+                                        Container(
+                                          width: 2.w,
+                                          height: 2.h,
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 4.0),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: i == currentPage
+                                                ? Constance.secondaryColor
+                                                : Colors.grey.shade800,
+                                          ),
+                                        ),
+                                    ],
+                                  )
+                                : Container(),
+                            SizedBox(
+                              height: 1.h,
+                            ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8.w),
                               child: Divider(
@@ -908,17 +1137,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Padding(
                                     padding:
-                                    EdgeInsets.symmetric(horizontal: 5.w),
+                                        EdgeInsets.symmetric(horizontal: 5.w),
                                     child: Text(
                                       'Opinion',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline3
                                           ?.copyWith(
-                                        fontSize: 16.sp,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                            fontSize: 16.sp,
+                                            color: Storage.instance.isDarkMode
+                                                ? Colors.white
+                                                : Constance.fifthColor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
                                   ),
                                   SizedBox(
@@ -926,7 +1157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   Container(
                                     padding:
-                                    EdgeInsets.symmetric(horizontal: 7.w),
+                                        EdgeInsets.symmetric(horizontal: 7.w),
                                     child: ListView.separated(
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
@@ -936,15 +1167,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                         return GestureDetector(
                                             onTap: () {
                                               if (data.profile
-                                                  ?.is_plan_active ??
+                                                      ?.is_plan_active ??
                                                   false) {
                                                 Navigation.instance.navigate(
                                                     '/opinionDetails',
                                                     args:
-                                                    item.seo_name?.trim());
+                                                        item.seo_name?.trim());
                                               } else {
+                                                setState(() {
+                                                  showing = true;
+                                                });
                                                 Constance.showMembershipPrompt(
-                                                    context);
+                                                    context, () {
+                                                  setState(() {
+                                                    showing = false;
+                                                  });
+                                                });
                                               }
                                             },
                                             child: OpinionCard(item: item));
@@ -955,9 +1193,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         );
                                       },
                                       itemCount: (data.latestOpinions.length > 3
-                                          ? data.latestOpinions.length /
-                                          3.toInt()
-                                          : data.latestOpinions.length)
+                                              ? data.latestOpinions.length /
+                                                  3.toInt()
+                                              : data.latestOpinions.length)
                                           .toInt(),
                                     ),
                                   ),
@@ -971,7 +1209,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Navigation.instance
                                             .navigate('/opinionPage');
                                       } else {
-                                        Constance.showMembershipPrompt(context);
+                                        setState(() {
+                                          showing = true;
+                                        });
+                                        Constance.showMembershipPrompt(context,
+                                            () {
+                                          setState(() {
+                                            showing = false;
+                                          });
+                                        });
                                       }
 
                                       // Navigation.instance
@@ -979,16 +1225,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                     },
                                     child: Padding(
                                       padding:
-                                      EdgeInsets.symmetric(horizontal: 5.w),
+                                          EdgeInsets.symmetric(horizontal: 5.w),
                                       child: Text(
                                         'Read More',
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline5
                                             ?.copyWith(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                              color: Storage.instance.isDarkMode
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ),
                                   ),
@@ -1012,10 +1260,10 @@ class _HomeScreenState extends State<HomeScreen> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -1081,6 +1329,11 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setPollOfTheWeek(response.pollOfTheWeek!);
+      if(response.pollOfTheWeek?.is_polled!='false'){
+        setState(() {
+          _poll = response.pollOfTheWeek?.is_polled??"";
+        });
+      }
     }
   }
 

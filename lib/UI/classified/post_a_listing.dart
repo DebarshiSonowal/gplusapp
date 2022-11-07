@@ -13,6 +13,7 @@ import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
@@ -65,7 +66,7 @@ class _PostAListingState extends State<PostAListing> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
         child: SingleChildScrollView(
           child: Column(
@@ -74,7 +75,10 @@ class _PostAListingState extends State<PostAListing> {
               Text(
                 'Post a story',
                 style: Theme.of(context).textTheme.headline2?.copyWith(
-                    color: Constance.primaryColor, fontWeight: FontWeight.bold),
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
+                    fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 2.h,
@@ -82,13 +86,18 @@ class _PostAListingState extends State<PostAListing> {
               Text(
                 'Category',
                 style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Constance.primaryColor, fontWeight: FontWeight.bold),
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
+                    fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 0.3.h,
               ),
               Consumer<DataProvider>(builder: (context, data, _) {
                 return DropdownButton(
+                  dropdownColor:
+                      Storage.instance.isDarkMode ? Colors.black : Colors.white,
                   // Initial Value
                   value: selectedCategory,
 
@@ -105,7 +114,9 @@ class _PostAListingState extends State<PostAListing> {
                                   .textTheme
                                   .headline4
                                   ?.copyWith(
-                                    color: Constance.primaryColor,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white70
+                                        : Constance.primaryColor,
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -123,13 +134,18 @@ class _PostAListingState extends State<PostAListing> {
               Text(
                 'Add your locality',
                 style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Constance.primaryColor, fontWeight: FontWeight.bold),
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
+                    fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 0.3.h,
               ),
               Consumer<DataProvider>(builder: (context, data, _) {
                 return DropdownButton(
+                  dropdownColor:
+                      Storage.instance.isDarkMode ? Colors.black : Colors.white,
                   // Initial Value
                   value: selectedLocality,
 
@@ -146,7 +162,7 @@ class _PostAListingState extends State<PostAListing> {
                                   .textTheme
                                   .headline4
                                   ?.copyWith(
-                                    color: Constance.primaryColor,
+                                    color: Storage.instance.isDarkMode ? Colors.white70 :Constance.primaryColor,
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -174,6 +190,7 @@ class _PostAListingState extends State<PostAListing> {
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   filled: true,
+                  floatingLabelBehavior:FloatingLabelBehavior.never,
                   fillColor: Colors.white,
                   labelText: 'Enter the title',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
@@ -198,6 +215,7 @@ class _PostAListingState extends State<PostAListing> {
                 minLines: 10,
                 decoration: InputDecoration(
                   filled: true,
+                  floatingLabelBehavior:FloatingLabelBehavior.never,
                   fillColor: Colors.white,
                   labelText: 'Enter the details',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
@@ -213,14 +231,14 @@ class _PostAListingState extends State<PostAListing> {
               ),
               Row(
                 children: [
-                  const Icon(
+                   Icon(
                     Icons.attach_file,
-                    color: Colors.black,
+                    color: Storage.instance.isDarkMode ? Constance.secondaryColor :Colors.black,
                   ),
                   Text(
                     'Add more attachments',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Colors.black,
+                          color: Storage.instance.isDarkMode ? Colors.white :Colors.black,
                           // fontSize: 1.6.h,
                         ),
                   ),
@@ -254,38 +272,38 @@ class _PostAListingState extends State<PostAListing> {
                           ),
                         )
                       : Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      Container(
-                        height: 8.h,
-                        width: 20.w,
-                        color: Colors.grey.shade200,
-                        child: Center(
-                          child: Image.file(
-                            attachements[pos],
-                            fit: BoxFit.fill,
-                          ),
+                          alignment: Alignment.topRight,
+                          children: [
+                            Container(
+                              height: 8.h,
+                              width: 20.w,
+                              color: Colors.grey.shade200,
+                              child: Center(
+                                child: Image.file(
+                                  attachements[pos],
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  attachements.removeAt(pos);
+                                });
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                color: Colors.white,
+                                child: Icon(
+                                  Icons.remove,
+                                  color: Constance.thirdColor,
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            attachements.removeAt(pos);
-                          });
-                        },
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          color: Colors.white,
-                          child: Icon(
-                            Icons.remove,
-                            color: Constance.thirdColor,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
                 ),
               ),
               SizedBox(
@@ -294,7 +312,7 @@ class _PostAListingState extends State<PostAListing> {
               Text(
                 'Add Price',
                 style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Constance.primaryColor, fontWeight: FontWeight.bold),
+                    color: Storage.instance.isDarkMode ? Colors.white :Constance.primaryColor, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 0.5.h,
@@ -309,6 +327,7 @@ class _PostAListingState extends State<PostAListing> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   filled: true,
+                  floatingLabelBehavior:FloatingLabelBehavior.never,
                   fillColor: Colors.white,
                   labelText: 'Enter the price',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
@@ -332,8 +351,9 @@ class _PostAListingState extends State<PostAListing> {
                         price.text.isNotEmpty) {
                       postClassified(selectedCategory, selectedLocality,
                           title.text, desc.text, price.text, attachements);
-                    }else{
-                      showError("Title, Description and Price is mandatory to post");
+                    } else {
+                      showError(
+                          "Title, Description and Price is mandatory to post");
                     }
                   },
                   txt: 'Go ahead',
@@ -356,10 +376,10 @@ class _PostAListingState extends State<PostAListing> {
       //   icon: Icon(Icons.menu),
       // ),
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -622,5 +642,4 @@ class _PostAListingState extends State<PostAListing> {
           Navigation.instance.goBack();
         });
   }
-
 }

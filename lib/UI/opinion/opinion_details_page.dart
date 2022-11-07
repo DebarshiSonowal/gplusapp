@@ -13,6 +13,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
@@ -49,7 +50,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return SingleChildScrollView(
             child: data.opinion == null
@@ -113,7 +114,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   .textTheme
                                   .headline3
                                   ?.copyWith(
-                                    color: Constance.primaryColor,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor,
                                     // fontSize: 2.2.h,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -128,7 +131,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   .textTheme
                                   .headline5
                                   ?.copyWith(
-                                    color: Colors.black,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
                                     // fontSize: 2.2.h,
                                     // fontWeight: FontWeight.bold,
                                   ),
@@ -154,12 +159,16 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     splashRadius: 20.0,
                                     splashColor: !like
                                         ? Constance.secondaryColor
-                                        : Constance.primaryColor,
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
                                     icon: Icon(
                                       Icons.thumb_up,
                                       color: like
                                           ? Constance.secondaryColor
-                                          : Constance.primaryColor,
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -181,12 +190,16 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     splashRadius: 20.0,
                                     splashColor: !dislike
                                         ? Constance.secondaryColor
-                                        : Constance.primaryColor,
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
                                     icon: Icon(
                                       Icons.thumb_down,
                                       color: dislike
                                           ? Constance.secondaryColor
-                                          : Constance.primaryColor,
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -199,9 +212,11 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     onPressed: () {},
                                     splashRadius: 20.0,
                                     splashColor: Constance.secondaryColor,
-                                    icon: const Icon(
+                                    icon: Icon(
                                       Icons.share,
-                                      color: Constance.primaryColor,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -230,7 +245,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                 '#': Style(
                                   // fontSize: FontSize(_counterValue),
                                   // maxLines: 20,
-                                  color: Colors.black,
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      :Colors.black,
                                   // textOverflow: TextOverflow.ellipsis,
                                 ),
                               },
@@ -242,19 +259,19 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                               children: [
                                 Container(
                                   color: Constance.secondaryColor,
-                                  padding: EdgeInsets.symmetric(vertical: 0.2.h,horizontal: 1.w),
-                                  margin:
-                                  EdgeInsets.symmetric(horizontal: 2.w),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 0.2.h, horizontal: 1.w),
+                                  margin: EdgeInsets.symmetric(horizontal: 2.w),
                                   child: Text(
                                     'Ad',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline3
                                         ?.copyWith(
-                                      fontSize: 12.sp,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                          fontSize: 12.sp,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
                                 ),
                               ],
@@ -269,7 +286,8 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 2.w,),
+                                    horizontal: 2.w,
+                                  ),
                                   child: CachedNetworkImage(
                                     fit: BoxFit.fill,
                                     imageUrl:
@@ -322,7 +340,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                               height: 1.5.h,
                             ),
                             Divider(
-                              color: Colors.black,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  :Colors.black,
                               thickness: 0.07.h,
                             ),
                             SizedBox(
@@ -345,12 +365,16 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     splashRadius: 20.0,
                                     splashColor: !like
                                         ? Constance.secondaryColor
-                                        : Constance.primaryColor,
+                                        : Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        :Constance.primaryColor,
                                     icon: Icon(
                                       Icons.thumb_up,
                                       color: like
                                           ? Constance.secondaryColor
-                                          : Constance.primaryColor,
+                                          : Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          :Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -372,12 +396,16 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     splashRadius: 20.0,
                                     splashColor: !dislike
                                         ? Constance.secondaryColor
-                                        : Constance.primaryColor,
+                                        : Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        :Constance.primaryColor,
                                     icon: Icon(
                                       Icons.thumb_down,
                                       color: dislike
                                           ? Constance.secondaryColor
-                                          : Constance.primaryColor,
+                                          : Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          :Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -390,9 +418,11 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     onPressed: () {},
                                     splashRadius: 20.0,
                                     splashColor: Constance.secondaryColor,
-                                    icon: const Icon(
+                                    icon:  Icon(
                                       Icons.share,
-                                      color: Constance.primaryColor,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          :Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -414,7 +444,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   .textTheme
                                   .headline3
                                   ?.copyWith(
-                                      color: Constance.primaryColor,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          :Constance.primaryColor,
                                       fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
@@ -429,7 +461,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                       .textTheme
                                       .headline5
                                       ?.copyWith(
-                                        color: Colors.black,
+                                        color: Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            :Colors.black,
                                         // fontSize: 2.2.h,
                                         // fontWeight: FontWeight.bold,
                                       ),
@@ -440,7 +474,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                 Container(
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: Colors
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          :Colors
                                           .black26, //                   <--- border color
                                       // width: 5.0,
                                     ),
@@ -450,21 +486,28 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                         ),
                                   ),
                                   padding:
-                                      EdgeInsets.symmetric(horizontal: 1.w),
+                                      EdgeInsets.symmetric(horizontal: 1.5.w),
                                   child: DropdownButton(
                                     isExpanded: false,
+                                    dropdownColor: !Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        :Colors.black,
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline5
                                         ?.copyWith(
-                                          color: Constance.primaryColor,
+                                          color: Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              :Constance.primaryColor,
                                         ),
                                     underline: SizedBox.shrink(),
                                     // Initial Value
                                     value: dropdownvalue,
 
                                     // Down Arrow Icon
-                                    icon: const Icon(Icons.keyboard_arrow_down),
+                                    icon: Icon(Icons.keyboard_arrow_down,color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        :Colors.black,),
 
                                     // Array list of items
                                     items: categories.map((String items) {
@@ -504,11 +547,13 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 3.w, vertical: 2.h),
-                                        decoration: const BoxDecoration(
+                                        decoration:  BoxDecoration(
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(5),
                                           ),
-                                          color: Colors.white,
+                                          color: Storage.instance.isDarkMode
+                                              ? Colors.black
+                                              :Colors.white,
                                         ),
                                         height: 20.h,
                                         width:
@@ -548,9 +593,6 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                                     height: 1.h,
                                                   ),
                                                   Text(
-                                                    // item.publish_date
-                                                    //         ?.split(" ")[0] ??
-                                                    //     "",
                                                     Jiffy(
                                                             item.publish_date
                                                                         ?.split(
@@ -564,7 +606,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                                         .headline6
                                                         ?.copyWith(
                                                             color:
-                                                                Colors.black),
+                                                            Storage.instance.isDarkMode
+                                                                ? Colors.white
+                                                                :Colors.black),
                                                   ),
                                                 ],
                                               ),
@@ -592,7 +636,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
-                                                              color: Constance
+                                                              color: Storage.instance.isDarkMode
+                                                                  ? Colors.white
+                                                                  :Constance
                                                                   .primaryColor),
                                                     ),
                                                   ),
@@ -607,7 +653,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                                         .headline6
                                                         ?.copyWith(
                                                             color:
-                                                                Colors.black),
+                                                            Storage.instance.isDarkMode
+                                                                ? Colors.white
+                                                                : Colors.black),
                                                   ),
                                                 ],
                                               ),
@@ -627,7 +675,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     return SizedBox(
                                       height: 1.h,
                                       child: Divider(
-                                        color: Colors.black,
+                                        color:Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
                                         thickness: 0.3.sp,
                                       ),
                                     );
@@ -657,10 +707,10 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
       //   icon: Icon(Icons.menu),
       // ),
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },

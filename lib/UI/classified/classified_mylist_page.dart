@@ -20,7 +20,7 @@ import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 import '../Menu/berger_menu_member_page.dart';
 
-class ClassifiedMyList extends  StatefulWidget {
+class ClassifiedMyList extends StatefulWidget {
   const ClassifiedMyList({Key? key}) : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
   var current = 0;
   var selected = 2;
   final RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
   String result = '';
   final controller = TextEditingController();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -60,8 +60,8 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
         .getClassified(getCategory(selected), result, controller.text);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setClassified(response.classifieds ?? []);
       _refreshController.refreshCompleted();
     } else {
@@ -82,7 +82,8 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
       appBar: buildAppBar(),
       key: scaffoldKey,
       // drawer: BergerMenuMemPage(),
-      backgroundColor: Colors.white,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           checkIt();
@@ -91,9 +92,9 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
         label: Text(
           "Post a listing",
           style: Theme.of(context).textTheme.headline5?.copyWith(
-            color: Colors.black,
-            // fontWeight: FontWeight.bold,
-          ),
+                color: Colors.black,
+                // fontWeight: FontWeight.bold,
+              ),
         ),
       ),
       body: SmartRefresher(
@@ -127,7 +128,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
           return Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            color: Colors.white,
+            // color: Colors.white,
             padding: EdgeInsets.symmetric(vertical: 1.h),
             child: SingleChildScrollView(
               child: Column(
@@ -157,7 +158,9 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                             ),
                             color: selected == 1
                                 ? Constance.secondaryColor
-                                : Constance.forthColor,
+                                : Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Constance.forthColor,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -165,7 +168,9 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                                   FontAwesomeIcons.list,
                                   color: selected == 1
                                       ? Colors.black
-                                      : Colors.white,
+                                      : Storage.instance.isDarkMode
+                                          ? Constance.secondaryColor
+                                          : Colors.white,
                                 ),
                                 SizedBox(
                                   width: 1.w,
@@ -176,12 +181,14 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                                       .textTheme
                                       .headline6
                                       ?.copyWith(
-                                    color: selected == 1
-                                        ? Colors.black
-                                        : Colors.white,
-                                    fontSize: 2.h,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                                        color: selected == 1
+                                            ? Colors.black
+                                            : Storage.instance.isDarkMode
+                                                ? Colors.black
+                                                : Colors.white,
+                                        fontSize: 2.h,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                               ],
                             ),
@@ -193,7 +200,9 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                             child: Container(
                               height: double.infinity,
                               width: 0.5.w,
-                              color: Colors.white,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.black
+                                  : Colors.white,
                             ),
                           ),
                         ),
@@ -247,7 +256,9 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                             child: Container(
                               height: double.infinity,
                               width: 0.5.w,
-                              color: Colors.white,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.black
+                                  : Colors.white,
                             ),
                           ),
                         ),
@@ -266,15 +277,19 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                             ),
                             color: selected == 2
                                 ? Constance.secondaryColor
-                                : Constance.forthColor,
+                                : Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Constance.forthColor,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  FontAwesomeIcons.heart,
+                                  FontAwesomeIcons.solidHeart,
                                   color: selected == 2
                                       ? Colors.black
-                                      : Colors.white,
+                                      : Storage.instance.isDarkMode
+                                          ? Constance.secondaryColor
+                                          : Colors.white,
                                 ),
                                 SizedBox(
                                   width: 1.w,
@@ -285,12 +300,14 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                                       .textTheme
                                       .headline6
                                       ?.copyWith(
-                                    color: selected == 2
-                                        ? Colors.black
-                                        : Colors.white,
-                                    fontSize: 2.h,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                                        color: selected == 2
+                                            ? Colors.black
+                                            : Storage.instance.isDarkMode
+                                                ? Colors.black
+                                                : Colors.white,
+                                        fontSize: 2.h,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                               ],
                             ),
@@ -354,353 +371,355 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                   ),
                   data.classified.isEmpty
                       ? EmptyWidget(
-                    image: Constance.logoIcon,
-                    title: 'Oops!',
-                    subTitle: 'No posts are available yet',
-                    titleTextStyle: Theme.of(context)
-                        .textTheme
-                        .headline3
-                        ?.copyWith(color: Constance.primaryColor),
-                    subtitleTextStyle: Theme.of(context)
-                        .textTheme
-                        .headline4
-                        ?.copyWith(color: Constance.secondaryColor),
-                  )
+                          image: Constance.logoIcon,
+                          title: 'Oops!',
+                          subTitle: 'No posts are available',
+                          titleTextStyle:
+                              Theme.of(context).textTheme.headline3?.copyWith(
+                                    color: Constance.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                          subtitleTextStyle:
+                              Theme.of(context).textTheme.headline3?.copyWith(
+                                    color: Constance.secondaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        )
                       : Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 5.w, vertical: 1.h),
-                    child: ListView.separated(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: data.classified.length,
-                      itemBuilder: (cont, count) {
-                        var current = data.classified[count];
-                        bool like = selected == 2 ? true : false;
-                        return StatefulBuilder(builder: (context, _) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigation.instance.navigate(
-                                  '/classifiedDetails',
-                                  args: current.id);
-                            },
-                            child: Card(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                  color: Colors.grey.shade900,
-                                  width: 0.2,
-                                ),
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(9.0),
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .spaceBetween,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 5.w, vertical: 1.h),
+                          child: ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: data.classified.length,
+                            itemBuilder: (cont, count) {
+                              var current = data.classified[count];
+                              bool like = selected == 2 ? true : false;
+                              return StatefulBuilder(builder: (context, _) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigation.instance.navigate(
+                                        '/classifiedDetails',
+                                        args: current.id);
+                                  },
+                                  child: Card(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        color: Colors.grey.shade900,
+                                        width: 0.2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(9.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
-                                            width: 70.w,
-                                            child: Text(
-                                              current.title ?? "",
-                                              overflow:
-                                              TextOverflow.ellipsis,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline3
-                                                  ?.copyWith(
-                                                  color: Constance
-                                                      .primaryColor,
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .bold),
+                                            width: double.infinity,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                SizedBox(
+                                                  width: 70.w,
+                                                  child: Text(
+                                                    current.title ?? "",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline3
+                                                        ?.copyWith(
+                                                            color: Constance
+                                                                .primaryColor,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                  ),
+                                                ),
+                                                selected == 3
+                                                    ? PopupMenuButton<int>(
+                                                        itemBuilder: (BuildContext
+                                                                context) =>
+                                                            <
+                                                                PopupMenuItem<
+                                                                    int>>[
+                                                          PopupMenuItem<int>(
+                                                            value: 1,
+                                                            child: Row(
+                                                              children: [
+                                                                const Icon(
+                                                                  Icons.edit,
+                                                                  color: Colors
+                                                                      .black,
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 2.w,
+                                                                ),
+                                                                Text(
+                                                                  'Edit',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .headline6
+                                                                      ?.copyWith(
+                                                                          color:
+                                                                              Colors.black),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          PopupMenuItem<int>(
+                                                            value: 2,
+                                                            child: Row(
+                                                              children: [
+                                                                const Icon(
+                                                                  Icons.delete,
+                                                                  color: Colors
+                                                                      .black,
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 2.w,
+                                                                ),
+                                                                Text(
+                                                                  'Delete',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .headline6
+                                                                      ?.copyWith(
+                                                                          color:
+                                                                              Colors.black),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          PopupMenuItem<int>(
+                                                            value: 3,
+                                                            child: Row(
+                                                              children: [
+                                                                const Icon(
+                                                                  Icons.rocket,
+                                                                  color: Colors
+                                                                      .black,
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 2.w,
+                                                                ),
+                                                                Text(
+                                                                  'Boost',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .headline6
+                                                                      ?.copyWith(
+                                                                          color:
+                                                                              Colors.black),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                        onSelected:
+                                                            (int value) {
+                                                          setState(() {});
+                                                        },
+                                                        color: Colors.white,
+                                                        icon: const Icon(
+                                                          Icons.menu,
+                                                          color: Colors.black,
+                                                        ),
+                                                      )
+                                                    : LikeButton(
+                                                        size: 2.5.h,
+                                                        onTap: (val) async {
+                                                          setAsFavourite(
+                                                              current.id,
+                                                              'classified');
+                                                          _(() {
+                                                            like = !like;
+                                                          });
+                                                          return like;
+                                                        },
+                                                        circleColor:
+                                                            const CircleColor(
+                                                          start: Colors.red,
+                                                          end: Colors.black87,
+                                                        ),
+                                                        bubblesColor:
+                                                            const BubblesColor(
+                                                          dotPrimaryColor:
+                                                              Color(0xff33b5e5),
+                                                          dotSecondaryColor:
+                                                              Color(0xff0099cc),
+                                                        ),
+                                                        likeBuilder:
+                                                            (bool isLiked) {
+                                                          return Icon(
+                                                            like
+                                                                ? FontAwesomeIcons
+                                                                    .solidHeart
+                                                                : FontAwesomeIcons
+                                                                    .heart,
+                                                            color: like
+                                                                ? Constance
+                                                                    .thirdColor
+                                                                : Colors.grey,
+                                                            size: 3.h,
+                                                          );
+                                                        },
+                                                        likeCount: 665,
+                                                        countBuilder:
+                                                            (int? count,
+                                                                bool isLiked,
+                                                                String text) {
+                                                          var color = like
+                                                              ? Colors
+                                                                  .deepPurpleAccent
+                                                              : Colors.grey;
+                                                          Widget result;
+                                                          if (count == 0) {
+                                                            result = Text(
+                                                              "",
+                                                              style: TextStyle(
+                                                                  color: color),
+                                                            );
+                                                          } else {
+                                                            result = Text(
+                                                              '',
+                                                              style: TextStyle(
+                                                                  color: color),
+                                                            );
+                                                          }
+                                                          return result;
+                                                        },
+                                                      ),
+                                              ],
                                             ),
                                           ),
-                                          selected == 3
-                                              ? PopupMenuButton<int>(
-                                            itemBuilder: (BuildContext
-                                            context) =>
-                                            <
-                                                PopupMenuItem<
-                                                    int>>[
-                                              PopupMenuItem<int>(
-                                                value: 1,
-                                                child: Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.edit,
-                                                      color: Colors
-                                                          .black,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 2.w,
-                                                    ),
-                                                    Text(
-                                                      'Edit',
-                                                      style: Theme.of(
-                                                          context)
-                                                          .textTheme
-                                                          .headline6
-                                                          ?.copyWith(
-                                                          color:
-                                                          Colors.black),
-                                                    ),
-                                                  ],
+                                          current.price == null ||
+                                                  current.price == 0
+                                              ? Container()
+                                              : SizedBox(
+                                                  height: 0.5.h,
                                                 ),
-                                              ),
-                                              PopupMenuItem<int>(
-                                                value: 2,
-                                                child: Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.delete,
-                                                      color: Colors
-                                                          .black,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 2.w,
-                                                    ),
-                                                    Text(
-                                                      'Delete',
-                                                      style: Theme.of(
-                                                          context)
-                                                          .textTheme
-                                                          .headline6
-                                                          ?.copyWith(
-                                                          color:
-                                                          Colors.black),
-                                                    ),
-                                                  ],
+                                          current.price == null
+                                              ? Container()
+                                              : Text(
+                                                  'Rs:${current.price}' ?? '0',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline3
+                                                      ?.copyWith(
+                                                          color: Constance
+                                                              .thirdColor,
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                 ),
+                                          SizedBox(
+                                            height: 1.h,
+                                          ),
+                                          ReadMoreText(
+                                            current.description ?? "",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline5
+                                                ?.copyWith(
+                                                  color: Colors.black,
+                                                  // fontWeight: FontWeight.bold,
+                                                ),
+                                            trimLines: 3,
+                                            colorClickableText:
+                                                Constance.secondaryColor,
+                                            trimMode: TrimMode.Line,
+                                            trimCollapsedText: 'Show more',
+                                            trimExpandedText: 'Show less',
+                                          ),
+                                          SizedBox(
+                                            height: 1.h,
+                                          ),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const Icon(
+                                                Icons.remove_red_eye,
+                                                color: Colors.black,
                                               ),
-                                              PopupMenuItem<int>(
-                                                value: 3,
-                                                child: Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.rocket,
-                                                      color: Colors
-                                                          .black,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 2.w,
-                                                    ),
-                                                    Text(
-                                                      'Boost',
-                                                      style: Theme.of(
-                                                          context)
-                                                          .textTheme
-                                                          .headline6
-                                                          ?.copyWith(
-                                                          color:
-                                                          Colors.black),
-                                                    ),
-                                                  ],
+                                              SizedBox(
+                                                width: 4.w,
+                                              ),
+                                              Expanded(
+                                                child: SizedBox(
+                                                  height: 5.h,
+                                                  child: Text(
+                                                    '${current.total_views} views',
+                                                    // overflow: TextOverflow.clip,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline5
+                                                        ?.copyWith(
+                                                          color: Colors.black,
+                                                        ),
+                                                  ),
                                                 ),
                                               ),
                                             ],
-                                            onSelected:
-                                                (int value) {
-                                              setState(() {});
-                                            },
-                                            color: Colors.white,
-                                            icon: const Icon(
-                                              Icons.menu,
-                                              color: Colors.black,
-                                            ),
-                                          )
-                                              : LikeButton(
-                                            size: 2.5.h,
-                                            onTap: (val) async {
-                                              setAsFavourite(
-                                                  current.id,
-                                                  'classified');
-                                              _(() {
-                                                like = !like;
-                                              });
-                                              return like;
-                                            },
-                                            circleColor:
-                                            const CircleColor(
-                                              start: Colors.red,
-                                              end: Colors.black87,
-                                            ),
-                                            bubblesColor:
-                                            const BubblesColor(
-                                              dotPrimaryColor:
-                                              Color(0xff33b5e5),
-                                              dotSecondaryColor:
-                                              Color(0xff0099cc),
-                                            ),
-                                            likeBuilder:
-                                                (bool isLiked) {
-                                              return Icon(
-                                                like
-                                                    ? FontAwesomeIcons
-                                                    .solidHeart
-                                                    : FontAwesomeIcons
-                                                    .heart,
-                                                color: like
-                                                    ? Constance
-                                                    .thirdColor
-                                                    : Colors.grey,
-                                                size: 3.h,
-                                              );
-                                            },
-                                            likeCount: 665,
-                                            countBuilder:
-                                                (int? count,
-                                                bool isLiked,
-                                                String text) {
-                                              var color = like
-                                                  ? Colors
-                                                  .deepPurpleAccent
-                                                  : Colors.grey;
-                                              Widget result;
-                                              if (count == 0) {
-                                                result = Text(
-                                                  "",
-                                                  style: TextStyle(
-                                                      color: color),
-                                                );
-                                              } else {
-                                                result = Text(
-                                                  '',
-                                                  style: TextStyle(
-                                                      color: color),
-                                                );
-                                              }
-                                              return result;
-                                            },
                                           ),
+                                          // SizedBox(
+                                          //   height: 0.4.h,
+                                          // ),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const Icon(
+                                                Icons.location_on,
+                                                color: Colors.black,
+                                              ),
+                                              SizedBox(
+                                                width: 4.w,
+                                              ),
+                                              Expanded(
+                                                child: SizedBox(
+                                                  height: 5.h,
+                                                  child: Text(
+                                                    current.locality?.name ??
+                                                        'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
+                                                    // overflow: TextOverflow.clip,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline5
+                                                        ?.copyWith(
+                                                          color: Colors.black,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          // SizedBox(
+                                          //   height: 1.h,
+                                          // ),
                                         ],
                                       ),
                                     ),
-                                    current.price == null ||
-                                        current.price == 0
-                                        ? Container()
-                                        : SizedBox(
-                                      height: 0.5.h,
-                                    ),
-                                    current.price == null
-                                        ? Container()
-                                        : Text(
-                                      'Rs:${current.price}' ?? '0',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline3
-                                          ?.copyWith(
-                                          color: Constance
-                                              .thirdColor,
-                                          fontWeight:
-                                          FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      height: 1.h,
-                                    ),
-                                    ReadMoreText(
-                                      current.description ?? "",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline5
-                                          ?.copyWith(
-                                        color: Colors.black,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
-                                      trimLines: 3,
-                                      colorClickableText:
-                                      Constance.secondaryColor,
-                                      trimMode: TrimMode.Line,
-                                      trimCollapsedText: 'Show more',
-                                      trimExpandedText: 'Show less',
-                                    ),
-                                    SizedBox(
-                                      height: 1.h,
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        const Icon(
-                                          Icons.remove_red_eye,
-                                          color: Colors.black,
-                                        ),
-                                        SizedBox(
-                                          width: 4.w,
-                                        ),
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: 5.h,
-                                            child: Text(
-                                              '${current.total_views} views',
-                                              // overflow: TextOverflow.clip,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5
-                                                  ?.copyWith(
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    // SizedBox(
-                                    //   height: 0.4.h,
-                                    // ),
-                                    Row(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        const Icon(
-                                          Icons.location_on,
-                                          color: Colors.black,
-                                        ),
-                                        SizedBox(
-                                          width: 4.w,
-                                        ),
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: 5.h,
-                                            child: Text(
-                                              current.locality?.name ??
-                                                  'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
-                                              // overflow: TextOverflow.clip,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5
-                                                  ?.copyWith(
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    // SizedBox(
-                                    //   height: 1.h,
-                                    // ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        });
-                      },
-                      separatorBuilder:
-                          (BuildContext context, int index) {
-                        return SizedBox(
-                          height: 1.h,
-                        );
-                      },
-                    ),
-                  ),
+                                  ),
+                                );
+                              });
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return SizedBox(
+                                height: 1.h,
+                              );
+                            },
+                          ),
+                        ),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -717,10 +736,10 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -767,9 +786,9 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
           title: Text(
             'Post your listing',
             style: Theme.of(context).textTheme.headline1?.copyWith(
-              color: Constance.secondaryColor,
-              fontWeight: FontWeight.bold,
-            ),
+                  color: Constance.secondaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           content: Container(
             padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
@@ -788,17 +807,17 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                 Text(
                   'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 SizedBox(height: 1.h),
                 Text(
                   'Posting made easy! All you have to do is log in and click the “Post a Listing” button at the corner',
                   style: Theme.of(context).textTheme.headline5?.copyWith(
-                    color: Colors.black,
-                    // fontWeight: FontWeight.bold,
-                  ),
+                        color: Colors.black,
+                        // fontWeight: FontWeight.bold,
+                      ),
                 ),
                 // SizedBox(height: 1.h),
                 // Text(
@@ -831,8 +850,8 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
         .getClassified(getCategory(selected), result, controller.text);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setClassified(response.classifieds ?? []);
 
       Navigation.instance.goBack();
@@ -880,10 +899,10 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
 
   void checkIt() async {
     if (Provider.of<DataProvider>(
-        Navigation.instance.navigatorKey.currentContext ?? context,
-        listen: false)
-        .profile
-        ?.is_plan_active ??
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .profile
+            ?.is_plan_active ??
         false) {
       final resp = await Navigation.instance.navigate('/postClassified');
       if (resp == null) {
@@ -891,7 +910,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
       }
     } else {
       scaffoldKey.currentState?.showBottomSheet(
-            (context) {
+        (context) {
           return Consumer<DataProvider>(builder: (context, data, _) {
             return StatefulBuilder(builder: (context, _) {
               return Container(
@@ -926,10 +945,10 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                     Text(
                       'Oops!',
                       style: Theme.of(context).textTheme.headline1?.copyWith(
-                        color: Constance.secondaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 34.sp,
-                      ),
+                            color: Constance.secondaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 34.sp,
+                          ),
                     ),
                     SizedBox(
                       height: 1.h,
@@ -937,9 +956,9 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                     Text(
                       'Sorry ${data.profile?.name}',
                       style: Theme.of(context).textTheme.headline4?.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     SizedBox(
                       height: 3.h,
@@ -952,9 +971,9 @@ metropolitan city is growing leaps and bounds, and
 for its unparalleled pace of growth, comes the need
 for an unparalleled publication, that people call their''',
                       style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black,
-                        // fontWeight: FontWeight.bold,
-                      ),
+                            color: Colors.black,
+                            // fontWeight: FontWeight.bold,
+                          ),
                     ),
                     SizedBox(
                       height: 2.h,
@@ -962,9 +981,9 @@ for an unparalleled publication, that people call their''',
                     Text(
                       'Do you want to be a member?',
                       style: Theme.of(context).textTheme.headline4?.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     SizedBox(
                       height: 1.h,

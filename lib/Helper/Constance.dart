@@ -24,8 +24,10 @@ class Constance {
   static const secondaryColor = Color(0xffFCBD14);
   static const thirdColor = Color(0xffD03830);
   static const forthColor = Color(0xff001f34);
+  static const fifthColor = Color(0xff1d1d1d);
   static const logoIcon = 'assets/images/logo.png';
-  static const defaultImage = 'http://gplus.shecure.co.in/public/web/images/logo.png';
+  static const defaultImage =
+      'http://gplus.shecure.co.in/public/web/images/logo.png';
   static const googleApiKey = "AIzaSyAOniov-vDxU0pIg--OvkCeEsN7iK2Eozo";
   static var listPagesViewModel = [
     PageViewModel(
@@ -365,7 +367,7 @@ of Guwahati - living, rising and growing with the city.
  
   ''';
 
-  static showMembershipPrompt(context) {
+  static showMembershipPrompt(context, function) {
     showBottomSheet<void>(
         context: context,
         backgroundColor: Colors.grey.shade100,
@@ -483,6 +485,10 @@ for an unparalleled publication, that people call their''',
               );
             });
           });
-        });
+        }).closed.whenComplete(() {
+      //do whatever you want after closing the bottom sheet
+      function();
+    });
+    ;
   }
 }

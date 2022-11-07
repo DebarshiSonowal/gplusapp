@@ -7,6 +7,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 
 class AdvertiseWithUsPage extends StatefulWidget {
@@ -48,7 +49,7 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return SingleChildScrollView(
@@ -60,7 +61,9 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                   ' form. Any section left blank or anonymous* or fake'
                   ' submissions will not be accepted',
                   style: Theme.of(context).textTheme.headline4?.copyWith(
-                        color: Colors.black87,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black87,
                       ),
                 ),
                 SizedBox(
@@ -76,7 +79,9 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                     border: Border.all(
                         width: 1,
                         //                   <--- border width here
-                        color: Colors.black26),
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white70
+                            : Colors.black26),
                   ),
                   // color: Colors.black,
                   // height: 5.h,
@@ -84,15 +89,21 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                     child: TextField(
                       controller: _first_name,
                       autofocus: true,
-                      decoration: const InputDecoration(
+                      cursorColor: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Constance.primaryColor,
+                      decoration: InputDecoration(
                         hintText: "Please Enter First Name",
                         border: InputBorder.none,
-                        hintStyle: TextStyle(color: Colors.black26),
+                        hintStyle: TextStyle(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white70
+                                : Colors.black26),
                       ),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline5
-                          ?.copyWith(color: Colors.black),
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black),
                       onChanged: (query) => {},
                     ),
                   ),
@@ -110,7 +121,9 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                     border: Border.all(
                         width: 1,
                         //                   <--- border width here
-                        color: Colors.black26),
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white70
+                            : Colors.black26),
                   ),
                   // color: Colors.black,
                   // height: 5.h,
@@ -118,15 +131,21 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                     child: TextField(
                       controller: _last_name,
                       autofocus: true,
-                      decoration: const InputDecoration(
+                      cursorColor: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Constance.primaryColor,
+                      decoration: InputDecoration(
                         hintText: "Please Enter Last Name",
                         border: InputBorder.none,
-                        hintStyle: TextStyle(color: Colors.black26),
+                        hintStyle: TextStyle(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white70
+                                : Colors.black26),
                       ),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline5
-                          ?.copyWith(color: Colors.black),
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black),
                       onChanged: (query) => {},
                     ),
                   ),
@@ -144,7 +163,9 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                     border: Border.all(
                         width: 1,
                         //                   <--- border width here
-                        color: Colors.black26),
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white70
+                            : Colors.black26),
                   ),
                   // color: Colors.black,
                   // height: 5.h,
@@ -152,15 +173,21 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                     child: TextField(
                       controller: _email,
                       autofocus: true,
-                      decoration: const InputDecoration(
+                      cursorColor: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Constance.primaryColor,
+                      decoration: InputDecoration(
                         hintText: "Please Enter Email",
                         border: InputBorder.none,
-                        hintStyle: TextStyle(color: Colors.black26),
+                        hintStyle: TextStyle(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white70
+                                : Colors.black26),
                       ),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline5
-                          ?.copyWith(color: Colors.black),
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black),
                       onChanged: (query) => {},
                     ),
                   ),
@@ -178,7 +205,9 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                     border: Border.all(
                         width: 1,
                         //                   <--- border width here
-                        color: Colors.black26),
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white70
+                            : Colors.black26),
                   ),
                   // color: Colors.black,
                   // height: 5.h,
@@ -186,15 +215,21 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                     child: TextField(
                       controller: _mobile,
                       autofocus: true,
-                      decoration: const InputDecoration(
+                      cursorColor: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Constance.primaryColor,
+                      decoration: InputDecoration(
                         hintText: "Please Enter Mobile No.",
                         border: InputBorder.none,
-                        hintStyle: TextStyle(color: Colors.black26),
+                        hintStyle: TextStyle(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white70
+                                : Colors.black26),
                       ),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline5
-                          ?.copyWith(color: Colors.black),
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black),
                       onChanged: (query) => {},
                     ),
                   ),
@@ -212,17 +247,22 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                     border: Border.all(
                         width: 1,
                         //                   <--- border width here
-                        color: Colors.black26),
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white70
+                            : Colors.black26),
                   ),
                   // color: Colors.black,
                   // height: 5.h,
                   child: Center(
                     child: DropdownButton(
                       isExpanded: true,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline5
-                          ?.copyWith(color: Colors.black),
+                      dropdownColor: Storage.instance.isDarkMode
+                          ? Colors.black
+                          : Colors.white,
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black),
                       // Initial Value
                       value: selected,
 
@@ -259,7 +299,9 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                     border: Border.all(
                         width: 1,
                         //                   <--- border width here
-                        color: Colors.black26),
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white70
+                            : Colors.black26),
                   ),
                   // color: Colors.black,
                   // height: 5.h,
@@ -267,17 +309,23 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                     child: TextField(
                       controller: _feedback,
                       autofocus: true,
-                      decoration: const InputDecoration(
+                      cursorColor: Storage.instance.isDarkMode
+                          ? Colors.white
+                          :Constance.primaryColor,
+                      decoration: InputDecoration(
                         hintText: "Text your feedback here",
                         border: InputBorder.none,
-                        hintStyle: TextStyle(color: Colors.black26),
+                        hintStyle: TextStyle(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white70
+                                : Colors.black26),
                       ),
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline5
-                          ?.copyWith(color: Colors.black),
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black),
                       onChanged: (query) => {},
                     ),
                   ),
@@ -310,6 +358,7 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
       ),
     );
   }
+
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",
@@ -319,13 +368,14 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
           Navigation.instance.goBack();
         });
   }
+
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -357,12 +407,13 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
   void submit(String text, String text2, String text3, String text4,
       String selected, String text5) async {
     Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.advertiseWithUs(text,text2,text3,text4,selected,text5);
-    if(response.success??false){
+    final response = await ApiProvider.instance
+        .advertiseWithUs(text, text2, text3, text4, selected, text5);
+    if (response.success ?? false) {
       Navigation.instance.goBack();
-    }else{
+    } else {
       Navigation.instance.goBack();
-      showError(response.message??"Something went wrong");
+      showError(response.message ?? "Something went wrong");
     }
   }
 }

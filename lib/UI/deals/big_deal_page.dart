@@ -84,7 +84,8 @@ class _BigDealPageState extends State<BigDealPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      backgroundColor: Colors.white,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       drawer: BergerMenuMemPage(),
       body: SmartRefresher(
         enablePullDown: true,
@@ -115,47 +116,12 @@ class _BigDealPageState extends State<BigDealPage> {
         // onLoading: _onLoading,
         child: WillPopScope(
           onWillPop: () async {
-            // Dialogs.materialDialog(
-            //     msg: 'Are you sure ? you want to exit',
-            //     title: "Exit",
-            //     color: Colors.white,
-            //     context: context,
-            //     titleStyle:
-            //     Theme.of(context).textTheme.headline2!.copyWith(
-            //       color: Colors.black,
-            //     ),
-            //     msgStyle:
-            //     Theme.of(context).textTheme.headline5!.copyWith(
-            //       color: Colors.black,
-            //     ),
-            //     actions: [
-            //       IconsOutlineButton(
-            //         onPressed: () {
-            //           Navigation.instance.goBack();
-            //         },
-            //         text: 'Cancel',
-            //         iconData: Icons.cancel_outlined,
-            //         textStyle: TextStyle(color: Colors.grey),
-            //         iconColor: Colors.grey,
-            //       ),
-            //       IconsButton(
-            //         onPressed: () {
-            //           SystemChannels.platform
-            //               .invokeMethod('SystemNavigator.pop');
-            //         },
-            //         text: 'Exit',
-            //         iconData: Icons.exit_to_app,
-            //         color: Constance.thirdColor,
-            //         textStyle: TextStyle(color: Colors.white),
-            //         iconColor: Colors.white,
-            //       ),
-            //     ]);
             return true;
           },
           child: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            color: Colors.white,
+            color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
             padding: EdgeInsets.symmetric(vertical: 2.h),
             child: Consumer<DataProvider>(builder: (context, current, _) {
               return current.deals.isNotEmpty || current.category.isNotEmpty
@@ -174,7 +140,9 @@ class _BigDealPageState extends State<BigDealPage> {
                                         .textTheme
                                         .headline3
                                         ?.copyWith(
-                                            color: Constance.primaryColor,
+                                            color: Storage.instance.isDarkMode
+                                                ? Colors.white
+                                                : Constance.primaryColor,
                                             fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -212,7 +180,7 @@ class _BigDealPageState extends State<BigDealPage> {
                                                 args: data.id);
                                           } else {
                                             Constance.showMembershipPrompt(
-                                                context);
+                                                context, () {});
                                           }
                                         },
                                         child: SizedBox(
@@ -224,7 +192,9 @@ class _BigDealPageState extends State<BigDealPage> {
                                               borderRadius:
                                                   BorderRadius.circular(5.0),
                                             ),
-                                            color: Colors.white,
+                                            color: Storage.instance.isDarkMode
+                                                ? Colors.black
+                                                : Colors.white,
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -283,8 +253,13 @@ class _BigDealPageState extends State<BigDealPage> {
                                                             .textTheme
                                                             .headline4
                                                             ?.copyWith(
-                                                                color: Colors
-                                                                    .black,
+                                                                color: Storage
+                                                                        .instance
+                                                                        .isDarkMode
+                                                                    ? Colors
+                                                                        .black
+                                                                    : Colors
+                                                                        .white,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold),
@@ -299,8 +274,12 @@ class _BigDealPageState extends State<BigDealPage> {
                                                             .textTheme
                                                             .headline5
                                                             ?.copyWith(
-                                                              color:
-                                                                  Colors.black,
+                                                              color: Storage
+                                                                      .instance
+                                                                      .isDarkMode
+                                                                  ? Colors.black
+                                                                  : Colors
+                                                                      .white,
                                                               // fontWeight: FontWeight.bold
                                                             ),
                                                       ),
@@ -347,7 +326,9 @@ class _BigDealPageState extends State<BigDealPage> {
                                   .textTheme
                                   .headline4
                                   ?.copyWith(
-                                      color: Constance.primaryColor,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
                                       fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -403,8 +384,9 @@ class _BigDealPageState extends State<BigDealPage> {
                                                     .textTheme
                                                     .headline6
                                                     ?.copyWith(
-                                                      color: Constance
-                                                          .primaryColor,
+                                                  color: Storage.instance.isDarkMode
+                                                      ? Colors.white
+                                                      : Constance.primaryColor,
                                                       // fontSize: 1.7.h,
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -446,10 +428,14 @@ class _BigDealPageState extends State<BigDealPage> {
                                                     vertical: 1.h),
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
+                                                    width: 0.3.h,
                                                       color: Constance
                                                           .secondaryColor),
                                                   borderRadius:
                                                       BorderRadius.circular(5),
+                                                  color: Storage.instance.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.transparent,
                                                 ),
                                                 child: Image.network(
                                                   e.image_file_name ?? "",
@@ -465,8 +451,9 @@ class _BigDealPageState extends State<BigDealPage> {
                                                     .textTheme
                                                     .headline6
                                                     ?.copyWith(
-                                                      color: Constance
-                                                          .primaryColor,
+                                                  color: Storage.instance.isDarkMode
+                                                      ? Colors.white
+                                                      : Constance.primaryColor,
                                                       // fontSize: 1.7.h,
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -522,14 +509,16 @@ class _BigDealPageState extends State<BigDealPage> {
                                       ),
                                 ),
                                 children: [
-                                  current.history.isEmpty?Container():Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: Divider(
-                                      color: Constance.secondaryColor,
-                                      thickness: 0.1.h,
-                                    ),
-                                  ),
+                                  current.history.isEmpty
+                                      ? Container()
+                                      : Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Divider(
+                                            color: Constance.secondaryColor,
+                                            thickness: 0.1.h,
+                                          ),
+                                        ),
                                   ListView.separated(
                                     shrinkWrap: true,
                                     itemBuilder: (cont, count) {
@@ -689,36 +678,43 @@ class _BigDealPageState extends State<BigDealPage> {
                                     },
                                     itemCount: current.history.length,
                                   ),
-                                  current.history.isEmpty?Container():Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: Divider(
-                                      color: Constance.secondaryColor,
-                                      thickness: 0.1.h,
-                                    ),
-                                  ),
-                                  current.history.isEmpty?Container():Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 4.w, vertical: 1.h),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          'See More',
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.start,
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline4
-                                              ?.copyWith(
-                                                color: Constance.secondaryColor,
-                                                // fontSize: 11.sp,
-                                                // fontWeight: FontWeight.bold,
-                                              ),
+                                  current.history.isEmpty
+                                      ? Container()
+                                      : Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Divider(
+                                            color: Constance.secondaryColor,
+                                            thickness: 0.1.h,
+                                          ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                  current.history.isEmpty
+                                      ? Container()
+                                      : Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 4.w, vertical: 1.h),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                'See More',
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.start,
+                                                style: Theme.of(Navigation
+                                                        .instance
+                                                        .navigatorKey
+                                                        .currentContext!)
+                                                    .textTheme
+                                                    .headline4
+                                                    ?.copyWith(
+                                                      color: Constance
+                                                          .secondaryColor,
+                                                      // fontSize: 11.sp,
+                                                      // fontWeight: FontWeight.bold,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                 ],
                               ),
                             ),
@@ -746,10 +742,10 @@ class _BigDealPageState extends State<BigDealPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },

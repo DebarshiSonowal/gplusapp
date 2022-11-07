@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,8 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       appBar: buildAppBar(),
       body: Container(
         height: double.infinity,
@@ -40,9 +42,11 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                         children: [
                           Container(
                             padding: EdgeInsets.all(2.h),
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Constance.primaryColor,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Constance.primaryColor,
                             ),
                             child: const Icon(
                               Icons.announcement,
@@ -59,7 +63,9 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                 .textTheme
                                 .headline1
                                 ?.copyWith(
-                                  color: Constance.primaryColor,
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Constance.primaryColor,
                                   // fontSize: 11.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -144,7 +150,9 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                             .textTheme
                             .headline5
                             ?.copyWith(
-                              color: Colors.black,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
                               // fontSize: 11.sp,
                               // fontWeight: FontWeight.bold,
                             ),
@@ -158,7 +166,9 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                         decoration: BoxDecoration(
                           // color: Color(0xff001f34),
                           border: Border.all(
-                            color: Colors.black26,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                :Colors.black26,
                           ),
                           borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(7.0),
@@ -183,7 +193,9 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                     .textTheme
                                     .headline6
                                     ?.copyWith(
-                                      color: Colors.black,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          :Colors.black,
                                       // fontSize: 11.sp,
                                       // fontWeight: FontWeight.bold,
                                     ),
@@ -204,9 +216,11 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                   );
                                 });
                               },
-                              child: const Icon(
+                              child: Icon(
                                 Icons.copy,
-                                color: Colors.black,
+                                color:Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
                               ),
                             ),
                           ],
@@ -542,7 +556,8 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                         ),
                                         const Spacer(),
                                         Text(
-                                          Jiffy(current.updated_at, "yyyy-MM-dd")
+                                          Jiffy(current.updated_at,
+                                                  "yyyy-MM-dd")
                                               .format("dd/MM/yyyy"),
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.start,
@@ -628,6 +643,20 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 

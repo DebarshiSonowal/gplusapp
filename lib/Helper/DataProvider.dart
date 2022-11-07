@@ -17,6 +17,7 @@ import 'package:gplusapp/Model/redeem_history.dart';
 import 'package:gplusapp/Model/refer_earn_response.dart';
 import 'package:gplusapp/Model/search_result.dart';
 import 'package:gplusapp/Model/shop_category.dart';
+import 'package:gplusapp/Model/swtich_status.dart';
 import 'package:gplusapp/Model/top_picks.dart';
 import 'package:gplusapp/Model/video_news.dart';
 import 'package:gplusapp/UI/citizen_journalist/citizen_journalist_page.dart';
@@ -67,6 +68,7 @@ class DataProvider extends ChangeNotifier {
   List<search.SearchResult> searchlist = [];
   Classified? selectedClassified;
   List<Shop> shops = [];
+  SwitchStatus? status;
 
   setCitizenJournalist(List<CitizenJournalist> list) {
     citizenlist = list;
@@ -263,6 +265,11 @@ class DataProvider extends ChangeNotifier {
 
   setCurrent(int i) {
     currentIndex = i;
+    notifyListeners();
+  }
+
+  void setSwitch(SwitchStatus? val) {
+    status = val;
     notifyListeners();
   }
 }

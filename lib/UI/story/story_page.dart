@@ -14,6 +14,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_html/flutter_html.dart';
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
@@ -52,7 +53,7 @@ class _StoryPageState extends State<StoryPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return SingleChildScrollView(
             child: data.selectedArticle == null
@@ -116,7 +117,9 @@ class _StoryPageState extends State<StoryPage> {
                                   .textTheme
                                   .headline3
                                   ?.copyWith(
-                                    color: Constance.primaryColor,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor,
                                     // fontSize: 2.2.h,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -136,7 +139,9 @@ class _StoryPageState extends State<StoryPage> {
                                     .textTheme
                                     .headline5
                                     ?.copyWith(
-                                      color: Colors.black,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                       // fontSize: 2.2.h,
                                       // fontWeight: FontWeight.bold,
                                     ),
@@ -163,12 +168,16 @@ class _StoryPageState extends State<StoryPage> {
                                     splashRadius: 20.0,
                                     splashColor: !like
                                         ? Constance.secondaryColor
-                                        : Constance.primaryColor,
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
                                     icon: Icon(
                                       Icons.thumb_up,
                                       color: like
                                           ? Constance.secondaryColor
-                                          : Constance.primaryColor,
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -190,17 +199,37 @@ class _StoryPageState extends State<StoryPage> {
                                     splashRadius: 20.0,
                                     splashColor: !dislike
                                         ? Constance.secondaryColor
-                                        : Constance.primaryColor,
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
                                     icon: Icon(
                                       Icons.thumb_down,
                                       color: dislike
                                           ? Constance.secondaryColor
-                                          : Constance.primaryColor,
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
                                 SizedBox(
                                   width: 2.w,
+                                ),
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    splashRadius: 20.0,
+                                    splashColor: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.secondaryColor,
+                                    icon: Icon(
+                                      Icons.bookmark,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                    ),
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 2.w,
@@ -216,16 +245,20 @@ class _StoryPageState extends State<StoryPage> {
                                           : '${data.selectedArticle?.web_url}');
                                     },
                                     splashRadius: 20.0,
-                                    splashColor: Constance.secondaryColor,
-                                    icon: const Icon(
+                                    splashColor: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.secondaryColor,
+                                    icon: Icon(
                                       Icons.share,
-                                      color: Constance.primaryColor,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                           /* SizedBox(
+                            /* SizedBox(
                               height: 1.5.h,
                             ),*/
                             Html(
@@ -236,7 +269,9 @@ class _StoryPageState extends State<StoryPage> {
                                 '#': Style(
                                   // fontSize: FontSize(_counterValue),
                                   // maxLines: 20,
-                                  color: Colors.black,
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
                                   // textOverflow: TextOverflow.ellipsis,
                                 ),
                               },
@@ -352,12 +387,16 @@ class _StoryPageState extends State<StoryPage> {
                                     splashRadius: 20.0,
                                     splashColor: !like
                                         ? Constance.secondaryColor
-                                        : Constance.primaryColor,
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
                                     icon: Icon(
                                       Icons.thumb_up,
                                       color: like
                                           ? Constance.secondaryColor
-                                          : Constance.primaryColor,
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -379,17 +418,35 @@ class _StoryPageState extends State<StoryPage> {
                                     splashRadius: 20.0,
                                     splashColor: !dislike
                                         ? Constance.secondaryColor
-                                        : Constance.primaryColor,
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
                                     icon: Icon(
                                       Icons.thumb_down,
                                       color: dislike
                                           ? Constance.secondaryColor
-                                          : Constance.primaryColor,
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
                                 SizedBox(
                                   width: 2.w,
+                                ),
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    splashRadius: 20.0,
+                                    splashColor: Constance.secondaryColor,
+                                    icon: Icon(
+                                      Icons.bookmark,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                    ),
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 2.w,
@@ -406,9 +463,11 @@ class _StoryPageState extends State<StoryPage> {
                                     },
                                     splashRadius: 20.0,
                                     splashColor: Constance.secondaryColor,
-                                    icon: const Icon(
+                                    icon: Icon(
                                       Icons.share,
-                                      color: Constance.primaryColor,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -418,7 +477,9 @@ class _StoryPageState extends State<StoryPage> {
                               height: 1.5.h,
                             ),
                             Divider(
-                              color: Colors.black,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  :Colors.black,
                               thickness: 0.07.h,
                             ),
                             SizedBox(
@@ -430,7 +491,9 @@ class _StoryPageState extends State<StoryPage> {
                                   .textTheme
                                   .headline3
                                   ?.copyWith(
-                                      color: Constance.primaryColor,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
                                       fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
@@ -445,7 +508,9 @@ class _StoryPageState extends State<StoryPage> {
                                       .textTheme
                                       .headline5
                                       ?.copyWith(
-                                        color: Colors.black,
+                                        color: Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
                                         // fontSize: 2.2.h,
                                         // fontWeight: FontWeight.bold,
                                       ),
@@ -456,8 +521,10 @@ class _StoryPageState extends State<StoryPage> {
                                 Container(
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: Colors
-                                          .black26, //                   <--- border color
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white70
+                                          : Colors
+                                              .black26, //                   <--- border color
                                       // width: 5.0,
                                     ),
                                     borderRadius: const BorderRadius.all(
@@ -466,22 +533,26 @@ class _StoryPageState extends State<StoryPage> {
                                         ),
                                   ),
                                   padding:
-                                      EdgeInsets.symmetric(horizontal: 1.w),
+                                      EdgeInsets.symmetric(horizontal: 1.5.w),
                                   child: DropdownButton(
+                                    dropdownColor: Colors.black,
                                     isExpanded: false,
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline5
                                         ?.copyWith(
-                                          color: Constance.primaryColor,
+                                          color: Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
                                         ),
                                     underline: SizedBox.shrink(),
                                     // Initial Value
                                     value: dropdownvalue,
 
                                     // Down Arrow Icon
-                                    icon: const Icon(Icons.keyboard_arrow_down),
-
+                                    icon: Icon(Icons.keyboard_arrow_down,color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        :Colors.black,),
                                     // Array list of items
                                     items: categories.map((String items) {
                                       return DropdownMenuItem(
@@ -517,11 +588,13 @@ class _StoryPageState extends State<StoryPage> {
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 3.w, vertical: 2.h),
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(
                                             Radius.circular(5),
                                           ),
-                                          color: Colors.white,
+                                          color: Storage.instance.isDarkMode
+                                              ? Colors.black
+                                              : Colors.white,
                                         ),
                                         height: 20.h,
                                         width:
@@ -575,8 +648,11 @@ class _StoryPageState extends State<StoryPage> {
                                                         .textTheme
                                                         .headline6
                                                         ?.copyWith(
-                                                            color:
-                                                                Colors.black),
+                                                            color: Storage
+                                                                    .instance
+                                                                    .isDarkMode
+                                                                ? Colors.white
+                                                                : Colors.black),
                                                   ),
                                                 ],
                                               ),
@@ -604,8 +680,12 @@ class _StoryPageState extends State<StoryPage> {
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
-                                                              color: Constance
-                                                                  .primaryColor),
+                                                              color: Storage
+                                                                      .instance
+                                                                      .isDarkMode
+                                                                  ? Colors.white
+                                                                  : Constance
+                                                                      .primaryColor),
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -618,8 +698,11 @@ class _StoryPageState extends State<StoryPage> {
                                                         .textTheme
                                                         .headline6
                                                         ?.copyWith(
-                                                            color:
-                                                                Colors.black),
+                                                            color: Storage
+                                                                    .instance
+                                                                    .isDarkMode
+                                                                ? Colors.white
+                                                                : Colors.black),
                                                   ),
                                                 ],
                                               ),
@@ -639,7 +722,9 @@ class _StoryPageState extends State<StoryPage> {
                                     return SizedBox(
                                       height: 1.h,
                                       child: Divider(
-                                        color: Colors.black,
+                                        color:Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
                                         thickness: 0.3.sp,
                                       ),
                                     );
@@ -652,10 +737,12 @@ class _StoryPageState extends State<StoryPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                CustomButton(txt: 'Load More', onTap: (){
-                                  page++;
-                                  fetchContent();
-                                }),
+                                CustomButton(
+                                    txt: 'Load More',
+                                    onTap: () {
+                                      page++;
+                                      fetchContent();
+                                    }),
                               ],
                             ),
                             SizedBox(
@@ -681,10 +768,10 @@ class _StoryPageState extends State<StoryPage> {
       //   icon: Icon(Icons.menu),
       // ),
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -805,6 +892,13 @@ class _StoryPageState extends State<StoryPage> {
     } else {
       showError("Something went wrong");
     }
+  }
+
+  void addBookmark(bookmark_for_id, type) async {
+    final response =
+        await ApiProvider.instance.addBookmark(bookmark_for_id, type);
+    if (response.success ?? false) {
+    } else {}
   }
 
   void showError(String msg) {

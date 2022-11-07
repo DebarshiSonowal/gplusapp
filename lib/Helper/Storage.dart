@@ -49,6 +49,10 @@ class Storage {
     await sharedpreferences.setBool("isCitizenJournalist", true);
   }
 
+  Future<void> setDarkMode(bool selected) async {
+    await sharedpreferences.setBool("dark", selected);
+  }
+
   Future<void> setGuwahatiConnect() async {
     await sharedpreferences.setBool("isGuwahatiConnect", true);
   }
@@ -64,6 +68,8 @@ class Storage {
   get isBigDeal => sharedpreferences.getBool("isBigDeal") ?? false;
 
   get isLoggedIn => sharedpreferences.getBool("isLoggedIn") ?? false;
+
+  get isDarkMode => sharedpreferences.getBool("dark") ?? false;
 
   get isOnBoarding => sharedpreferences.getBool("isOnBoarding") ?? false;
 

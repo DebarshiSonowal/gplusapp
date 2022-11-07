@@ -62,28 +62,33 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 listen: false)
             .home_weekly
             .indexWhere((element) => element.youtube_id == widget.youtube_id);
-        _controller = YoutubePlayerController(
-          initialVideoId: widget.youtube_id,
-          flags: const YoutubePlayerFlags(
-            autoPlay: false,
-            mute: false,
-          ),
-        );
+        // _controller = YoutubePlayerController(
+        //   initialVideoId: widget.youtube_id,
+        //   flags: const YoutubePlayerFlags(
+        //     autoPlay: false,
+        //     mute: false,
+        //   ),
+        // );
         currentId = widget.youtube_id;
       });
-      controller.addListener(() {
-        Future.delayed(Duration.zero, () {
-          setState(() {
-            _controller?.load(Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ??
-                    context,
-                listen: false)
-                .home_weekly[controller.page?.ceil() ?? 0]
-                .youtube_id ??
-                "");
-          });
-        });
-      });
+      // controller.addListener(() {
+      //   Future.delayed(Duration.zero, () {
+      //     print(Provider.of<DataProvider>(
+      //         Navigation.instance.navigatorKey.currentContext ??
+      //             context,
+      //         listen: false)
+      //         .home_weekly[controller.page?.ceil() ?? 0].title);
+      //     setState(() {
+      //       _controller?.load(Provider.of<DataProvider>(
+      //           Navigation.instance.navigatorKey.currentContext ??
+      //               context,
+      //           listen: false)
+      //           .home_weekly[controller.page?.ceil() ?? 0]
+      //           .youtube_id ??
+      //           "");
+      //     });
+      //   });
+      // });
       // _controller = PodPlayerController(
       //   playVideoFrom: PlayVideoFrom.network(
       //     'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
@@ -133,7 +138,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           child: Padding(
                             padding: EdgeInsets.only(top: 7.h, bottom: 15.h),
                             child: YoutubePlayer(
-                              controller: _controller!,
+                              controller: _controller = YoutubePlayerController(
+                                initialVideoId: current.youtube_id!,
+                                flags: const YoutubePlayerFlags(
+                                  autoPlay: false,
+                                  mute: false,
+                                ),
+                              ),
                               showVideoProgressIndicator: true,
                               aspectRatio: 2 / 3,
                               // videoProgressIndicatorColor: Colors.amber,
@@ -142,10 +153,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                 handleColor: Colors.amberAccent,
                               ),
                               onReady: () {
-                                print('resd');
+                                print('R12345&d');
                                 // _controller
                                 //     .addListener(() {});
-                                _controller!.play();
+                                // _controller!.play();
+                                setState(() {
+                                  _controller!.play();
+                                });
                               },
                             ),
                           ),
@@ -268,6 +282,17 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                   setState(() {
                     page = count;
                   });
+                Future.delayed(Duration(seconds: 2),(){
+                  setState(() {
+                    currentId = Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                        .home_weekly[count]
+                        .youtube_id!;
+
+                  });
+                });
                 },
               ),
             );

@@ -7,6 +7,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
@@ -93,7 +94,7 @@ class _NewsFromState extends State<NewsFrom> {
           return Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            color: Colors.white,
+            color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
             padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
             child: data.news_from.isNotEmpty
                 ? SingleChildScrollView(
@@ -114,7 +115,9 @@ class _NewsFromState extends State<NewsFrom> {
                                   .textTheme
                                   .headline3
                                   ?.copyWith(
-                                    color: Constance.primaryColor,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor,
                                     // fontSize: 2.2.h,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -128,7 +131,7 @@ class _NewsFromState extends State<NewsFrom> {
                           height: 30.h,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
+                            borderRadius: const BorderRadius.all(
                               Radius.circular(10),
                             ),
                             image: DecorationImage(
@@ -174,7 +177,7 @@ class _NewsFromState extends State<NewsFrom> {
                                   args:
                                       '${widget.categ},${data.news_from[0].seo_name}');
                             } else {
-                              Constance.showMembershipPrompt(context);
+                              Constance.showMembershipPrompt(context, () {});
                             }
                           },
                           child: Text(
@@ -185,7 +188,9 @@ class _NewsFromState extends State<NewsFrom> {
                                 .textTheme
                                 .headline3
                                 ?.copyWith(
-                                  color: Constance.primaryColor,
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Constance.primaryColor,
                                   // fontSize: 2.2.h,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -201,13 +206,17 @@ class _NewsFromState extends State<NewsFrom> {
                               .textTheme
                               .headline5
                               ?.copyWith(
-                                color: Colors.black,
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
                                 // fontSize: 2.2.h,
                                 // fontWeight: FontWeight.bold,
                               ),
                         ),
                         Divider(
-                          color: Colors.black,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
                           thickness: 0.5.sp,
                         ),
                         ListView.separated(
@@ -224,17 +233,20 @@ class _NewsFromState extends State<NewsFrom> {
                                           args:
                                               '${widget.categ},${item.seo_name}');
                                     } else {
-                                      Constance.showMembershipPrompt(context);
+                                      Constance.showMembershipPrompt(
+                                          context, () {});
                                     }
                                   },
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 3.w, vertical: 2.h),
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(
                                         Radius.circular(5),
                                       ),
-                                      color: Colors.white,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.black
+                                          : Colors.white,
                                     ),
                                     height: 20.h,
                                     width:
@@ -284,7 +296,10 @@ class _NewsFromState extends State<NewsFrom> {
                                                     .textTheme
                                                     .headline6
                                                     ?.copyWith(
-                                                        color: Colors.black),
+                                                        color: Storage.instance
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : Colors.black),
                                               ),
                                             ],
                                           ),
@@ -310,8 +325,12 @@ class _NewsFromState extends State<NewsFrom> {
                                                               FontWeight.bold,
                                                           overflow: TextOverflow
                                                               .ellipsis,
-                                                          color: Constance
-                                                              .primaryColor),
+                                                          color: Storage
+                                                                  .instance
+                                                                  .isDarkMode
+                                                              ? Colors.white
+                                                              : Constance
+                                                                  .primaryColor),
                                                 ),
                                               ),
                                               SizedBox(
@@ -324,7 +343,10 @@ class _NewsFromState extends State<NewsFrom> {
                                                     .textTheme
                                                     .headline6
                                                     ?.copyWith(
-                                                        color: Colors.black),
+                                                        color: Storage.instance
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : Colors.black),
                                               ),
                                             ],
                                           ),
@@ -344,7 +366,8 @@ class _NewsFromState extends State<NewsFrom> {
                                 return SizedBox(
                                   height: 1.h,
                                   child: Divider(
-                                    color: Colors.black,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white:Colors.black,
                                     thickness: 0.3.sp,
                                   ),
                                 );
@@ -374,10 +397,10 @@ class _NewsFromState extends State<NewsFrom> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -389,6 +412,20 @@ class _NewsFromState extends State<NewsFrom> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 

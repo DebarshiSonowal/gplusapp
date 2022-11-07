@@ -8,7 +8,8 @@ class PollOfTheWeek {
       as_title,
       as_option1,
       as_option2,
-      as_option3;
+      as_option3,
+      is_polled;
   double? percent1, percent2, percent3;
 
   PollOfTheWeek.fromJson(json) {
@@ -33,6 +34,7 @@ class PollOfTheWeek {
     as_option1 = json['as_option1'] ?? "";
     as_option2 = json['as_option2'] ?? "";
     as_option3 = json['as_option3'] ?? "";
+    is_polled = json['is_polled'].toString() ?? "";
 
     //double
     percent1 = json['percent1'] == null

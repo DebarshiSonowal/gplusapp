@@ -9,6 +9,7 @@ import 'package:sizer/sizer.dart';
 import '../Components/alert.dart';
 import '../Helper/Constance.dart';
 import '../Helper/DataProvider.dart';
+import '../Helper/Storage.dart';
 import '../Model/razorpay_key.dart';
 import '../Navigation/Navigate.dart';
 import '../Networking/api_provider.dart';
@@ -51,7 +52,7 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -64,6 +65,9 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
               width: 25.w,
               child: CircularProgressIndicator(
                 strokeWidth: 4.sp,
+                color: Storage.instance.isDarkMode
+                    ? Colors.white
+                    : Constance.primaryColor,
               ),
             ),
             SizedBox(
@@ -73,7 +77,9 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
               'Please wait',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline1?.copyWith(
-                    color: Constance.primaryColor,
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
                     fontWeight: FontWeight.bold,
                   ),
             ),
@@ -84,7 +90,9 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
               'Your payment is being processed',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline3?.copyWith(
-                    color: Constance.secondaryColor,
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white70
+                        : Constance.secondaryColor,
                     fontWeight: FontWeight.bold,
                   ),
             ),
@@ -204,27 +212,29 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
       showError(response1.message ?? "Something went wrong");
     }
   }
+
   void fetchProfile() async {
     // Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getprofile();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setProfile(response.profile!);
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setMyTopicks(response.topicks);
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setMyGeoTopicks(response.geoTopicks);
       // Navigation.instance.goBack();
     } else {
       // Navigation.instance.goBack();
     }
   }
+
   void showDialogBox() {
     showDialog(
       context: context,
@@ -293,10 +303,10 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },

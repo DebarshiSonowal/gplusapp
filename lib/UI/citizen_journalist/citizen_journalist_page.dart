@@ -7,6 +7,7 @@ import '../../Components/NavigationBar.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
@@ -37,7 +38,8 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       appBar: buildAppBar(),
       drawer: BergerMenuMemPage(),
       bottomNavigationBar: CustomNavigationBar(current),
@@ -72,7 +74,9 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
               Text(
                 'Hello ${Provider.of<DataProvider>(context).profile?.name ?? ""}',
                 style: Theme.of(context).textTheme.headline2?.copyWith(
-                      color: Colors.black,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -87,7 +91,9 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
                         ' vigilant through G Plus ‘Citizen Journalist’ programme – an empowering platform for '
                         'citizens to raise their voice.',
                 style: Theme.of(context).textTheme.headline4?.copyWith(
-                      color: Colors.black,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white70
+                          : Colors.black,
                       // fontWeight: FontWeight.bold,
                     ),
               ),
@@ -132,6 +138,13 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.black),
+                    side: MaterialStateProperty.all(
+                      BorderSide(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.transparent,
+                      ),
+                    ),
                   ),
                   onPressed: () {
                     // Navigation.instance.goBack();
@@ -156,10 +169,10 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },

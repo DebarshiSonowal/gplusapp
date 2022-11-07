@@ -66,7 +66,7 @@ class OpinionCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style:
                             Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Colors.black,
+                              color: Constance.fifthColor,
                               // fontWeight:
                               //     FontWeight.bold,
                             ),
@@ -87,7 +87,7 @@ class OpinionCard extends StatelessWidget {
                         item.author_name ?? "",
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
-                          color: Colors.black,
+                          color: Constance.fifthColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -98,7 +98,7 @@ class OpinionCard extends StatelessWidget {
                             .format("dd/MM/yyyy"),
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
-                          color: Colors.black,
+                          color: Constance.fifthColor,
                           // fontWeight: FontWeight.bold,
                         ),
                       ),
