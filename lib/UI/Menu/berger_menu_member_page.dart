@@ -803,24 +803,29 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 1.0.h),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.bookmark,
-                      color: Constance.secondaryColor,
-                    ),
-                    SizedBox(
-                      width: 2.w,
-                    ),
-                    Text(
-                      'Bookmarks',
-                      style: Theme.of(context).textTheme.headline4?.copyWith(
-                            color: Colors.white,
-                            // fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ],
+                child: GestureDetector(
+                  onTap: (){
+                    Navigation.instance.navigate('/bookmarks');
+                  },
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.bookmark,
+                        color: Constance.secondaryColor,
+                      ),
+                      SizedBox(
+                        width: 2.w,
+                      ),
+                      Text(
+                        'Bookmarks',
+                        style: Theme.of(context).textTheme.headline4?.copyWith(
+                              color: Colors.white,
+                              // fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const Divider(

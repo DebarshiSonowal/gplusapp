@@ -13,6 +13,7 @@ import '../Authentication/terms&conditions_page.dart';
 import '../Authentication/verifyotp_page.dart';
 import '../Components/FadeTransitionBuilder.dart';
 import '../Components/loading_dialog.dart';
+import '../Components/story_view.dart';
 import '../Components/video_player_screen.dart';
 import '../OnBoarding/on_boarding_page.dart';
 import '../UI/Member/be_a_membe_page.dart';
@@ -25,6 +26,7 @@ import '../UI/citizen_journalist/citizen_journalist_page.dart';
 import '../UI/citizen_journalist/draft_story.dart';
 import '../UI/citizen_journalist/edit_story.dart';
 import '../UI/citizen_journalist/view_story_page.dart';
+import '../UI/edit_profile/edit_address_page.dart';
 import '../UI/guwahati_connect/all_images_page.dart';
 import '../UI/guwahati_connect/ask_a_question.dart';
 import '../UI/guwahati_connect/guwahati_connect_page.dart';
@@ -46,6 +48,7 @@ import '../UI/news_from/news_from.dart';
 import '../UI/opinion/opinion_page.dart';
 import '../UI/others/about_us_page.dart';
 import '../UI/others/advertise_with_us_page.dart';
+import '../UI/others/bookmarks_page.dart';
 import '../UI/others/contact_us_page.dart';
 import '../UI/others/grievanceRedressal.dart';
 import '../UI/others/privacy_policy_page.dart';
@@ -125,6 +128,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '/notification':
       return FadeTransitionPageRouteBuilder(page: NotificationPage());
+      case '/bookmarks':
+      return FadeTransitionPageRouteBuilder(page: BookmarksPage());
     case '/beamember':
       return FadeTransitionPageRouteBuilder(page: BeAMember());
     case '/exclusivePage':
@@ -157,6 +162,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/authorPage':
       return FadeTransitionPageRouteBuilder(
           page: AuthorPage(settings.arguments as int));
+case '/storyviewPage':
+      return FadeTransitionPageRouteBuilder(
+          page: StoryViewPage(settings.arguments as int));
 
     case '/classified':
       return FadeTransitionPageRouteBuilder(page: ClassifiedPage());
@@ -169,6 +177,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/classifiedDetails':
       return FadeTransitionPageRouteBuilder(
           page: ClassifiedDetails(settings.arguments as int));
+    case '/editAddress':
+      return FadeTransitionPageRouteBuilder(
+          page: EditAddressPage(settings.arguments as int));
     case '/classifiedMyListDetails':
       return FadeTransitionPageRouteBuilder(page: ClassifiedMyList());
     case '/citizenJournalist':

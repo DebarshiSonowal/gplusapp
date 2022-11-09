@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:gplusapp/Model/bookmark_item.dart';
 import 'package:gplusapp/Model/profile.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:http/http.dart' as http;
@@ -2102,6 +2103,86 @@ class ApiProvider {
     }
   }
 
+  Future<GenericResponse> postFeedback(feedback) async {
+    var url = "${baseUrl}/app/post-feedback";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'comment': feedback,
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("feedback response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("feedback error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("feedback error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> deactiveAccount() async {
+    var url = "${baseUrl}/app/deactive-user";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // var data = {
+    //   'comment': feedback,
+    // };
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        // data: data,
+        // queryParameters: data,
+      );
+      debugPrint("deactiveAccount response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("deactiveAccount error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("deactiveAccount error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
   Future<ReferEarnHistoryResponse> fetchReferEarnHistory() async {
     var url = "${baseUrl}/app/history-refer-n-earn";
     BaseOptions option =
@@ -2230,6 +2311,49 @@ class ApiProvider {
       }
       debugPrint("addBookmark error: ${e.response}");
       return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<BookmarkItemsResponse> fetchBookmarks() async {
+    var url = "${baseUrl}/app/bookmark";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // var data = {
+    //   'bookmark_for_id': bookmark_for_id,
+    //   'type': type,
+    // };
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // data: data,
+        // queryParameters: data,
+      );
+      debugPrint("BookmarkItems response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return BookmarkItemsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("BookmarkItems error: ${response?.data}");
+        return BookmarkItemsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("BookmarkItems error: ${e.response}");
+      return BookmarkItemsResponse.withError(e.message);
     }
   }
 
@@ -2406,6 +2530,50 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("citizen-journalist-delete error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> deleteGuwhatiConnect(id) async {
+    var url = "${baseUrl}/app/guwahati-connect-delete/${id}";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // var data = {
+    //   'comment_for_id': comment_for_id,
+    //   'comment_for': comment_for,
+    //   'comment': comment,
+    // };
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        // data: data,
+        // queryParameters: data,
+      );
+      debugPrint("guwahati-connect-delete response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("guwahati-connect-delete error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("guwahati-connect-delete error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
   }
@@ -2649,6 +2817,64 @@ class ApiProvider {
     debugPrint(url.toString());
     FormData data = FormData.fromMap({
       'question': question,
+    });
+    for (int i = 0; i < files.length; i++) {
+      var type = lookupMimeType(files[i].path, headerBytes: [0xFF, 0xD8])!;
+      MultipartFile file = await MultipartFile.fromFile(
+        files[i].path,
+        filename: files[i].path.split("/").last,
+        contentType:
+            MediaType(type.split('/').first, type.split('/').last), //important
+      );
+      // data[''] = file;
+      data.files.add(MapEntry('attachment_list[${i}][file_data]', file));
+      data.fields.add(MapEntry('attachment_list[${i}][file_type]', type));
+    }
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data.fields));
+    print(data.fields);
+    // debugPrint(jsonEncode(data.files));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("postguwahati-connect response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("postguwahati-connect error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("postguwahati-connect error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> updateGuwahatiConnect(
+      id, question, List<File> files, prev_attachments) async {
+    var url = "${baseUrl}/app/guwahati-connect/${id}";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    FormData data = FormData.fromMap({
+      'question': question,
+      'prev_attachment_ids': prev_attachments,
     });
     for (int i = 0; i < files.length; i++) {
       var type = lookupMimeType(files[i].path, headerBytes: [0xFF, 0xD8])!;

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
@@ -314,6 +315,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
                     labelText: 'Enter the Feedback',
                     labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
                           color: Colors.black54,
@@ -328,7 +330,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 SizedBox(
                   width: double.infinity,
-                  child: CustomButton(txt: 'Submit', onTap: () {}),
+                  child: CustomButton(
+                      txt: 'Submit',
+                      onTap: () {
+                        if (_controller.text.isNotEmpty) {
+                          postFeedBack(_controller.text);
+                          _controller.text = "";
+                        } else {
+                          showError("Enter something");
+                        }
+                      }),
                 ),
                 SizedBox(
                   height: 1.h,
@@ -395,7 +406,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       )),
                       backgroundColor: MaterialStateProperty.all(Colors.white),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      deactivateAccount();
+                    },
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -494,14 +507,37 @@ class _SettingsPageState extends State<SettingsPage> {
         big_deal = response.status?.deal ?? false;
         classified = response.status?.classified ?? false;
         guwahati_connect = response.status?.connect ?? false;
-        // dark_mode = response.status?.dark ?? false;
-        dark_mode = true;
+        dark_mode = response.status?.dark ?? false;
+        // dark_mode = true;
         Storage.instance.setDarkMode(dark_mode);
       });
       Navigation.instance.goBack();
     } else {
       Navigation.instance.goBack();
       showError(response.msg ?? "Something went wrong");
+    }
+  }
+
+  void postFeedBack(String text) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.postFeedback(text);
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      Fluttertoast.showToast(msg: "Feedback posted successfully");
+    } else {
+      Navigation.instance.goBack();
+      showError(response.message ?? "Something went wrong");
+    }
+  }
+
+  void deactivateAccount() async {
+    final response = await ApiProvider.instance.deactiveAccount();
+    if(response.success??false){
+      Navigation.instance.goBack();
+      Fluttertoast.showToast(msg: "Account deactivation request is received");
+    }else{
+      Navigation.instance.goBack();
+      showError(response.message ?? "Something went wrong");
     }
   }
 }

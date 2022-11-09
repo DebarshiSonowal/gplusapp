@@ -4,6 +4,7 @@ import 'package:gplusapp/Model/about_us.dart';
 import 'package:gplusapp/Model/address.dart';
 import 'package:gplusapp/Model/advertise.dart';
 import 'package:gplusapp/Model/article.dart';
+import 'package:gplusapp/Model/bookmark_item.dart';
 import 'package:gplusapp/Model/citizen_journalist.dart';
 import 'package:gplusapp/Model/classified.dart';
 import 'package:gplusapp/Model/classified_category.dart';
@@ -69,9 +70,15 @@ class DataProvider extends ChangeNotifier {
   Classified? selectedClassified;
   List<Shop> shops = [];
   SwitchStatus? status;
+  List<BookmarkItem> bookmarks = [];
 
   setCitizenJournalist(List<CitizenJournalist> list) {
     citizenlist = list;
+    notifyListeners();
+  }
+
+  setBookmarkItems(List<BookmarkItem> list) {
+    bookmarks = list;
     notifyListeners();
   }
 

@@ -1002,94 +1002,104 @@ class _HomeScreenState extends State<HomeScreen> {
                                   itemCount: data.home_albums.length,
                                   itemBuilder: (cont, index) {
                                     var current = data.home_albums[index];
-                                    return Container(
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(20),
-                                        ),
-                                      ),
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 3.w),
-                                      width: 70.w,
-                                      child: Stack(
-                                        alignment: Alignment.bottomCenter,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(20),
-                                            ),
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                                  current.image_file_name ?? "",
-                                              width: double.infinity,
-                                              // height:55.h,
-                                              height: 40.h,
-                                              fit: BoxFit.fill,
-                                              // filterQuality: FilterQuality.low,
-                                              placeholder: (cont, _) {
-                                                return Image.asset(
-                                                  Constance.logoIcon,
-                                                  // color: Colors.black,
-                                                );
-                                              },
-                                              errorWidget: (cont, _, e) {
-                                                return Image.network(
-                                                  Constance.defaultImage,
-                                                  fit: BoxFit.fitWidth,
-                                                );
-                                              },
-                                            ),
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigation.instance.navigate(
+                                            '/storyviewPage',
+                                            args: index);
+                                      },
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(20),
                                           ),
-                                          Container(
-                                            decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.all(
+                                        ),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 3.w),
+                                        width: 70.w,
+                                        child: Stack(
+                                          alignment: Alignment.bottomCenter,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.all(
                                                 Radius.circular(20),
                                               ),
-                                              gradient: LinearGradient(
-                                                  begin: Alignment.topCenter,
-                                                  end: Alignment.bottomCenter,
-                                                  colors: [
-                                                    Colors.transparent,
-                                                    Colors.black
-                                                  ]),
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    current.image_file_name ??
+                                                        "",
+                                                width: double.infinity,
+                                                // height:55.h,
+                                                height: 40.h,
+                                                fit: BoxFit.fill,
+                                                // filterQuality: FilterQuality.low,
+                                                placeholder: (cont, _) {
+                                                  return Image.asset(
+                                                    Constance.logoIcon,
+                                                    // color: Colors.black,
+                                                  );
+                                                },
+                                                errorWidget: (cont, _, e) {
+                                                  return Image.network(
+                                                    Constance.defaultImage,
+                                                    fit: BoxFit.fitWidth,
+                                                  );
+                                                },
+                                              ),
                                             ),
-                                            // color: Colors.black.withOpacity(0.5),
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 3.h, horizontal: 2.w),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(
-                                                  current.title ??
-                                                      'Big Deals\nand Offers',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline4
-                                                      ?.copyWith(
-                                                          color: Colors
-                                                              .grey.shade200,
-                                                          fontWeight:
-                                                              FontWeight.bold),
+                                            Container(
+                                              decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(20),
                                                 ),
-                                                SizedBox(
-                                                  height: 0.5.h,
-                                                ),
-                                                Text(
-                                                  "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline6
-                                                      ?.copyWith(
-                                                        color: Colors.white,
-                                                      ),
-                                                ),
-                                              ],
+                                                gradient: LinearGradient(
+                                                    begin: Alignment.topCenter,
+                                                    end: Alignment.bottomCenter,
+                                                    colors: [
+                                                      Colors.transparent,
+                                                      Colors.black
+                                                    ]),
+                                              ),
+                                              // color: Colors.black.withOpacity(0.5),
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 3.h,
+                                                  horizontal: 2.w),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    current.title ??
+                                                        'Big Deals\nand Offers',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline4
+                                                        ?.copyWith(
+                                                            color: Colors
+                                                                .grey.shade200,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 0.5.h,
+                                                  ),
+                                                  Text(
+                                                    "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline6
+                                                        ?.copyWith(
+                                                          color: Colors.white,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     );
                                   }),
@@ -1329,9 +1339,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setPollOfTheWeek(response.pollOfTheWeek!);
-      if(response.pollOfTheWeek?.is_polled!='false'){
+      if (response.pollOfTheWeek?.is_polled != 'false') {
         setState(() {
-          _poll = response.pollOfTheWeek?.is_polled??"";
+          _poll = response.pollOfTheWeek?.is_polled ?? "";
         });
       }
     }

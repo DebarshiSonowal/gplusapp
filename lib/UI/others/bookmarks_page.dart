@@ -1,49 +1,53 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
-import 'package:gplusapp/Helper/Storage.dart';
+import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Navigation/Navigate.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
-import '../../Helper/DataProvider.dart';
-import '../../Navigation/Navigate.dart';
-import '../../Networking/api_provider.dart';
-import '../Menu/berger_menu_member_page.dart';
+import '../../Helper/Storage.dart';
 
-class ExclusivePage extends StatefulWidget {
-  const ExclusivePage({Key? key}) : super(key: key);
+class BookmarksPage extends StatefulWidget {
+  const BookmarksPage({Key? key}) : super(key: key);
 
   @override
-  State<ExclusivePage> createState() => _ExclusivePageState();
+  State<BookmarksPage> createState() => _BookmarksPageState();
 }
 
-class _ExclusivePageState extends State<ExclusivePage> {
+class _BookmarksPageState extends State<BookmarksPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  @override
-  void initState() {
-    super.initState();
-    fetchGplus();
-    // secureScreen();
-  }
-
   void _onRefresh() async {
     // monitor network fetch
-    final response = await ApiProvider.instance.getArticle('exclusive-news');
+    final response = await ApiProvider.instance.fetchBookmarks();
     if (response.success ?? false) {
+      // Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
-          .setHomeExecl(response.articles ?? []);
+          .setBookmarkItems(response.bookmarks);
       _refreshController.refreshCompleted();
     } else {
       _refreshController.refreshFailed();
+      // showError(response.message ?? "Something went wrong");
     }
+    // final response = await ApiProvider.instance.getArticle('exclusive-news');
+    // if (response.success ?? false) {
+    //   Provider.of<DataProvider>(
+    //           Navigation.instance.navigatorKey.currentContext ?? context,
+    //           listen: false)
+    //       .setHomeExecl(response.articles ?? []);
+    //   _refreshController.refreshCompleted();
+    // } else {
+    //   _refreshController.refreshFailed();
+    // }
     // if failed,use refreshFailed()
   }
 
@@ -98,7 +102,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
             width: MediaQuery.of(context).size.width,
             color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
             padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-            child: data.home_exclusive.isNotEmpty
+            child: data.bookmarks.isNotEmpty
                 ? SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,12 +110,12 @@ class _ExclusivePageState extends State<ExclusivePage> {
                         Row(
                           children: [
                             Icon(
-                              Icons.star,
+                              Icons.bookmark,
                               color: Constance.secondaryColor,
                               size: 4.h,
                             ),
                             Text(
-                              'GPlus Exclusive',
+                              'Bookmarks',
                               style: Theme.of(Navigation
                                       .instance.navigatorKey.currentContext!)
                                   .textTheme
@@ -133,13 +137,13 @@ class _ExclusivePageState extends State<ExclusivePage> {
                           height: 30.h,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
+                            borderRadius: const BorderRadius.all(
                               Radius.circular(10),
                             ),
                             image: DecorationImage(
                               fit: BoxFit.fill,
                               image: CachedNetworkImageProvider(
-                                data.home_exclusive[0].image_file_name ??
+                                data.bookmarks[0].image_file_name ??
                                     'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
                               ),
                             ),
@@ -156,13 +160,13 @@ class _ExclusivePageState extends State<ExclusivePage> {
                             if (data.profile?.is_plan_active ?? false) {
                               Navigation.instance.navigate('/story',
                                   args:
-                                      '${'exclusive-news'},${data.home_exclusive[0].seo_name}');
+                                      '${'exclusive-news'},${data.bookmarks[0].seo_name}');
                             } else {
                               Constance.showMembershipPrompt(context, () {});
                             }
                           },
                           child: Text(
-                            data.home_exclusive[0].title ??
+                            data.bookmarks[0].title ??
                                 'It is a long established fact that a reader will be distracted by the readable content of a',
                             style: Theme.of(Navigation
                                     .instance.navigatorKey.currentContext!)
@@ -181,19 +185,23 @@ class _ExclusivePageState extends State<ExclusivePage> {
                           height: 2.h,
                         ),
                         Text(
-                          '${data.home_exclusive[0].author_name}, ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                          '${data.bookmarks[0].author_name}, ${Jiffy(data.bookmarks[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
                           style: Theme.of(Navigation
                                   .instance.navigatorKey.currentContext!)
                               .textTheme
                               .headline5
                               ?.copyWith(
-                                color: Storage.instance.isDarkMode? Colors.white:Colors.black,
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
                                 // fontSize: 2.2.h,
                                 // fontWeight: FontWeight.bold,
                               ),
                         ),
                         Divider(
-                          color: Storage.instance.isDarkMode? Colors.white:Colors.black,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
                           thickness: 0.5.sp,
                         ),
                         ListView.separated(
@@ -201,14 +209,14 @@ class _ExclusivePageState extends State<ExclusivePage> {
                           physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           itemBuilder: (cont, count) {
-                            var item = data.home_exclusive[count];
+                            var item = data.bookmarks[count];
                             if (count != 0) {
                               return GestureDetector(
                                 onTap: () {
                                   if (data.profile?.is_plan_active ?? false) {
                                     Navigation.instance.navigate('/story',
                                         args:
-                                            '${'exclusive-news'},${item.seo_name}');
+                                            '${item.cat_seo_name},${item.seo_name}');
                                   } else {
                                     Constance.showMembershipPrompt(
                                         context, () {});
@@ -270,7 +278,10 @@ class _ExclusivePageState extends State<ExclusivePage> {
                                                   .textTheme
                                                   .headline6
                                                   ?.copyWith(
-                                                      color: Storage.instance.isDarkMode? Colors.white:Colors.black),
+                                                      color: Storage.instance
+                                                              .isDarkMode
+                                                          ? Colors.white
+                                                          : Colors.black),
                                             ),
                                           ],
                                         ),
@@ -296,8 +307,11 @@ class _ExclusivePageState extends State<ExclusivePage> {
                                                             FontWeight.bold,
                                                         overflow: TextOverflow
                                                             .ellipsis,
-                                                        color: Storage.instance.isDarkMode? Colors.white:Constance
-                                                            .primaryColor),
+                                                        color: Storage.instance
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : Constance
+                                                                .primaryColor),
                                               ),
                                             ),
                                             SizedBox(
@@ -309,7 +323,10 @@ class _ExclusivePageState extends State<ExclusivePage> {
                                                   .textTheme
                                                   .headline6
                                                   ?.copyWith(
-                                                      color: Storage.instance.isDarkMode? Colors.white:Colors.black),
+                                                      color: Storage.instance
+                                                              .isDarkMode
+                                                          ? Colors.white
+                                                          : Colors.black),
                                             ),
                                           ],
                                         ),
@@ -329,13 +346,15 @@ class _ExclusivePageState extends State<ExclusivePage> {
                               return SizedBox(
                                 height: 1.h,
                                 child: Divider(
-                                  color: Storage.instance.isDarkMode? Colors.white:Colors.black,
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
                                   thickness: 0.3.sp,
                                 ),
                               );
                             }
                           },
-                          itemCount: data.home_exclusive.length,
+                          itemCount: data.bookmarks.length,
                         ),
                         SizedBox(
                           height: 10.h,
@@ -390,20 +409,34 @@ class _ExclusivePageState extends State<ExclusivePage> {
     );
   }
 
-  void fetchGplus() async {
-    final response = await ApiProvider.instance.getArticle('exclusive-news');
+  void fetchBookmarks() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.fetchBookmarks();
     if (response.success ?? false) {
+      Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
-          .setHomeExecl(response.articles ?? []);
-      // _refreshController.refreshCompleted();
+          .setBookmarkItems(response.bookmarks);
     } else {
-      // _refreshController.refreshFailed();
+      Navigation.instance.goBack();
+      showError(response.message ?? "Something went wrong");
     }
   }
 
-  Future<void> secureScreen() async {
-    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () => fetchBookmarks());
   }
 }

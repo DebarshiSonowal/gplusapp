@@ -283,12 +283,17 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                 ),
-                                Icon(
-                                  Icons.edit,
-                                  color: Storage.instance.isDarkMode
-                                      ? Constance.secondaryColor
-                                      : Colors.black,
-                                  size: 3.h,
+                                GestureDetector(
+                                  onTap: (){
+                                    Navigation.instance.navigate('/editAddress',args: count);
+                                  },
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: Storage.instance.isDarkMode
+                                        ? Constance.secondaryColor
+                                        : Colors.black,
+                                    size: 3.h,
+                                  ),
                                 ),
                               ],
                             ),

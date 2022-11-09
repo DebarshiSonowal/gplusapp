@@ -218,7 +218,10 @@ class _StoryPageState extends State<StoryPage> {
                                 Material(
                                   type: MaterialType.transparency,
                                   child: IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      addBookmark(
+                                          data.selectedArticle?.id, 'news');
+                                    },
                                     splashRadius: 20.0,
                                     splashColor: Storage.instance.isDarkMode
                                         ? Colors.white
@@ -437,7 +440,10 @@ class _StoryPageState extends State<StoryPage> {
                                 Material(
                                   type: MaterialType.transparency,
                                   child: IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      addBookmark(
+                                          data.selectedArticle?.id, 'news');
+                                    },
                                     splashRadius: 20.0,
                                     splashColor: Constance.secondaryColor,
                                     icon: Icon(
@@ -479,7 +485,7 @@ class _StoryPageState extends State<StoryPage> {
                             Divider(
                               color: Storage.instance.isDarkMode
                                   ? Colors.white
-                                  :Colors.black,
+                                  : Colors.black,
                               thickness: 0.07.h,
                             ),
                             SizedBox(
@@ -550,9 +556,12 @@ class _StoryPageState extends State<StoryPage> {
                                     value: dropdownvalue,
 
                                     // Down Arrow Icon
-                                    icon: Icon(Icons.keyboard_arrow_down,color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        :Colors.black,),
+                                    icon: Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
                                     // Array list of items
                                     items: categories.map((String items) {
                                       return DropdownMenuItem(
@@ -722,7 +731,7 @@ class _StoryPageState extends State<StoryPage> {
                                     return SizedBox(
                                       height: 1.h,
                                       child: Divider(
-                                        color:Storage.instance.isDarkMode
+                                        color: Storage.instance.isDarkMode
                                             ? Colors.white
                                             : Colors.black,
                                         thickness: 0.3.sp,
@@ -895,10 +904,16 @@ class _StoryPageState extends State<StoryPage> {
   }
 
   void addBookmark(bookmark_for_id, type) async {
+    Navigation.instance.navigate('/loadingDialog');
     final response =
         await ApiProvider.instance.addBookmark(bookmark_for_id, type);
     if (response.success ?? false) {
-    } else {}
+      Navigation.instance.goBack();
+      Fluttertoast.showToast(msg: "Bookmark added successfully");
+    } else {
+      Navigation.instance.goBack();
+      showError(response.message ?? "Something went wrong");
+    }
   }
 
   void showError(String msg) {
