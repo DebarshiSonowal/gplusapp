@@ -5,13 +5,14 @@ import 'locality.dart';
 import 'profile.dart';
 
 class Classified {
-  int? id, user_id, classified_category_id, locality_id, status,total_views;
+  int? id, user_id, classified_category_id, locality_id, status, total_views;
   double? price;
   CategoryName? categoryName;
   String? title, description;
   Locality? locality;
   List<AttachFile>? attach_files;
   Profile? user;
+  bool? is_post_by_me;
 
   Classified.fromJson(json) {
     id = json['id'] ?? 0;
@@ -31,6 +32,7 @@ class Classified {
     //double
     price = json['price'] == null ? 0 : double.parse(json['price'].toString());
 
+    is_post_by_me = json['is_post_by_me'] ?? false;
     //Category
     categoryName = CategoryName.fromJson(json['category']);
 
@@ -41,7 +43,7 @@ class Classified {
         : (json['attached_files'] as List)
             .map((e) => AttachFile.fromJson(e))
             .toList();
-    if(json['user']!=null){
+    if (json['user'] != null) {
       user = Profile.fromJson(json['user']);
     }
     title = json['title'] ?? "";

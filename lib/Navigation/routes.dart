@@ -87,7 +87,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/editProfile':
       return FadeTransitionPageRouteBuilder(page: EditProfile());
     case '/editSavedAddresses':
-      return FadeTransitionPageRouteBuilder(page: EditSavedAddresses());
+      return FadeTransitionPageRouteBuilder(
+          page: EditSavedAddresses(
+        which: settings.arguments as int,
+      ));
 
     case '/profile':
       return FadeTransitionPageRouteBuilder(page: ProfilePage());
@@ -128,7 +131,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '/notification':
       return FadeTransitionPageRouteBuilder(page: NotificationPage());
-      case '/bookmarks':
+    case '/bookmarks':
       return FadeTransitionPageRouteBuilder(page: BookmarksPage());
     case '/beamember':
       return FadeTransitionPageRouteBuilder(page: BeAMember());
@@ -162,7 +165,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/authorPage':
       return FadeTransitionPageRouteBuilder(
           page: AuthorPage(settings.arguments as int));
-case '/storyviewPage':
+    case '/storyviewPage':
       return FadeTransitionPageRouteBuilder(
           page: StoryViewPage(settings.arguments as int));
 

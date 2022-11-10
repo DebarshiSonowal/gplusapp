@@ -177,20 +177,28 @@ class _BigDealPageState extends State<BigDealPage> {
                                               false) {
                                             Navigation.instance.navigate(
                                                 '/categorySelect',
-                                                args: data.id);
+                                                args: data.vendor_id);
                                           } else {
                                             Constance.showMembershipPrompt(
                                                 context, () {});
                                           }
                                         },
-                                        child: SizedBox(
+                                        child: Container(
                                           height: 30.h,
                                           width: 60.w,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Storage.instance.isDarkMode?Colors.white:Colors.transparent,
+                                            ),
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
                                           child: Card(
                                             elevation: 3,
                                             shape: RoundedRectangleBorder(
+
                                               borderRadius:
-                                                  BorderRadius.circular(5.0),
+                                                  BorderRadius.circular(5.0,),
+
                                             ),
                                             color: Storage.instance.isDarkMode
                                                 ? Colors.black
@@ -207,7 +215,8 @@ class _BigDealPageState extends State<BigDealPage> {
                                                               .only(
                                                         topRight:
                                                             Radius.circular(
-                                                                5.0),
+                                                                5.0,
+                                                            ),
                                                         bottomRight:
                                                             Radius.circular(
                                                                 5.0),
@@ -219,7 +228,7 @@ class _BigDealPageState extends State<BigDealPage> {
                                                                 5.0),
                                                       ),
                                                       image: DecorationImage(
-                                                        fit: BoxFit.contain,
+                                                        fit: BoxFit.fill,
                                                         image: CachedNetworkImageProvider(
                                                             data.vendor
                                                                     ?.image_file_name ??
@@ -257,9 +266,9 @@ class _BigDealPageState extends State<BigDealPage> {
                                                                         .instance
                                                                         .isDarkMode
                                                                     ? Colors
-                                                                        .black
+                                                                        .white
                                                                     : Colors
-                                                                        .white,
+                                                                        .black,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold),
@@ -277,9 +286,9 @@ class _BigDealPageState extends State<BigDealPage> {
                                                               color: Storage
                                                                       .instance
                                                                       .isDarkMode
-                                                                  ? Colors.black
+                                                                  ? Colors.white
                                                                   : Colors
-                                                                      .white,
+                                                                      .black,
                                                               // fontWeight: FontWeight.bold
                                                             ),
                                                       ),

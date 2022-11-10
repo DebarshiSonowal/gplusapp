@@ -501,6 +501,88 @@ class ApiProvider {
       return AddressResponse.withError(e.message);
     }
   }
+  Future<AddressResponse> updateAddress(address, lat, lang,id,title) async {
+    var data = {
+      'address': address,
+      'latitude': lat,
+      'longitude': lang,
+      'title': title,
+    };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${baseUrl}/address/${id}";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+      );
+      debugPrint("address response: ${response?.headers}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return AddressResponse.fromJson(response?.data);
+      } else {
+        debugPrint("address error: ${response?.data}");
+        return AddressResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("address response: ${e.response} ${e.response?.headers}");
+      return AddressResponse.withError(e.message);
+    }
+  }
+
+  Future<AddressResponse> deleteAddress(id) async {
+    // var data = {
+    //   'address': address,
+    //   'latitude': lat,
+    //   'longitude': lang,
+    // };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${baseUrl}/address-delete/${id}";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        // data: data,
+      );
+      debugPrint("address delete response: ${response?.headers}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return AddressResponse.fromJson(response?.data);
+      } else {
+        debugPrint("address delete error: ${response?.data}");
+        return AddressResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("address delete response: ${e.response} ${e.response?.headers}");
+      return AddressResponse.withError(e.message);
+    }
+  }
 
   Future<ArticleDetailsResponse> getArticleDetails(categ_name, slug) async {
     // var data = {

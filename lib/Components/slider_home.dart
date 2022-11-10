@@ -10,6 +10,10 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class HomeBannerPage extends StatefulWidget {
+  final Function beforeItem;
+  final Function changeItem;
+
+  const HomeBannerPage(this.beforeItem,this.changeItem);
   @override
   State<StatefulWidget> createState() {
     return _CarouselWithIndicatorState();
@@ -45,7 +49,8 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                           args:
                               '${current.first_cat_name?.seo_name},${current.seo_name}');
                     } else {
-                      Constance.showMembershipPrompt(context, () {});
+                      widget.beforeItem();
+                      Constance.showMembershipPrompt(context, widget.changeItem);
                     }
                   },
                   child: Container(

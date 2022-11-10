@@ -38,7 +38,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     // );
     return Consumer<DataProvider>(builder: (context, data, _) {
       return Drawer(
-        backgroundColor: Storage.instance.isDarkMode?Colors.black:Constance.primaryColor,
+        backgroundColor:
+            Storage.instance.isDarkMode ? Colors.black : Constance.primaryColor,
         child: Padding(
           padding: EdgeInsets.only(left: 2.w, right: 2.w),
           child: ListView(
@@ -83,23 +84,21 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                           SizedBox(
                             width: 1.5.w,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigation.instance.navigate('/editProfile');
-                            },
-                            child: Text(
-                              'Change',
-                              style: Theme.of(Navigation
-                                      .instance.navigatorKey.currentContext!)
-                                  .textTheme
-                                  .headline6
-                                  ?.copyWith(
-                                    color: Constance.secondaryColor,
-                                    fontSize: 11.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ),
+                          // GestureDetector(
+                          //
+                          //   child: Text(
+                          //     'Change',
+                          //     style: Theme.of(Navigation
+                          //             .instance.navigatorKey.currentContext!)
+                          //         .textTheme
+                          //         .headline6
+                          //         ?.copyWith(
+                          //           color: Constance.secondaryColor,
+                          //           fontSize: 11.sp,
+                          //           fontWeight: FontWeight.bold,
+                          //         ),
+                          //   ),
+                          // ),
                         ],
                       ),
                       SizedBox(
@@ -107,7 +106,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       ),
                       GestureDetector(
                         onTap: () {
-
+                          Navigation.instance.navigate('/editProfile');
                         },
                         child: Text(
                           'View Profile',
@@ -165,9 +164,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       height: 1.5.h,
                     ),
                     GestureDetector(
-                      onTap: (){
-                        Navigation.instance
-                            .navigate('/editSavedAddresses');
+                      onTap: () {
+                        Navigation.instance.navigate('/editSavedAddresses',args: 1);
                       },
                       child: Row(
                         children: [
@@ -190,12 +188,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                           .address ??
                                       '',
                               overflow: TextOverflow.ellipsis,
-                              style:
-                                  Theme.of(context).textTheme.headline6?.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 11.sp,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 11.sp,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ),
                           SizedBox(
@@ -756,7 +756,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             InkWell(
                               splashColor: Constance.secondaryColor,
                               radius: 15.h,
-                              onTap: (){
+                              onTap: () {
                                 Navigation.instance.navigate('/videoReport');
                               },
                               child: Row(
@@ -804,8 +804,20 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 1.0.h),
                 child: GestureDetector(
-                  onTap: (){
-                    Navigation.instance.navigate('/bookmarks');
+                  onTap: () {
+                    if (Provider.of<DataProvider>(
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .profile
+                            ?.is_plan_active ??
+                        false) {
+                      Navigation.instance.navigate('/bookmarks');
+                      // showError("Oops! You are not a member yet");
+                    } else {
+                      showError("Oops! You are not a member yet");
+                    }
                   },
                   child: Row(
                     children: [
@@ -844,6 +856,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                           ?.is_plan_active ??
                       false) {
                     downloadEpaper();
+                    // showError("Oops! You are not a member yet");
                   } else {
                     showError("Oops! You are not a member yet");
                   }
@@ -879,10 +892,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 splashColor: Constance.secondaryColor,
                 radius: 15.h,
                 onTap: () {
-                  if (data.profile==null) {
-                    Navigation.instance.navigate('/beamember');
-                  } else {
+                  if (data.profile?.is_plan_active ?? false) {
                     Navigation.instance.navigate('/profile');
+                  } else {
+                    Navigation.instance.navigate('/beamember');
                   }
                 },
                 child: Padding(
@@ -897,7 +910,9 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         width: 2.w,
                       ),
                       Text(
-                        data.profile==null?'Be a member':'Membership Info',
+                        (data.profile?.is_plan_active ?? false)
+                            ? 'Membership Info'
+                            : 'Be a member',
                         style: Theme.of(context).textTheme.headline4?.copyWith(
                               color: Constance.secondaryColor,
                               // fontSize: 14.sp,
@@ -950,7 +965,6 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     InkWell(
                       splashColor: Constance.secondaryColor,
                       radius: 15.h,
@@ -1094,16 +1108,15 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                           Text(
                             'Advertise with us',
                             style:
-                            Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Colors.white,
-                              // fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
+                                Theme.of(context).textTheme.headline4?.copyWith(
+                                      color: Colors.white,
+                                      // fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                           ),
                         ],
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -1117,7 +1130,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigation.instance.navigate('/settingsPage');
                       },
                       child: Row(
@@ -1192,10 +1205,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -1263,7 +1276,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
 
   void showError(String msg) {
     AlertX.instance.showAlert(
-        title: "Error",
+        title: "Not Subscribed",
         msg: msg,
         positiveButtonText: "Done",
         positiveButtonPressed: () {

@@ -96,20 +96,23 @@ class _DraftStoryState extends State<DraftStory> {
                                             '/viewStoryPage',
                                             args: item.id);
                                       },
-                                      child: Text(
-                                        item.title ?? "",
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: Storage
-                                                        .instance.isDarkMode
-                                                    ? Colors.white
-                                                    : Constance.primaryColor),
+                                      child: SizedBox(
+                                        width: 20.w,
+                                        child: Text(
+                                          item.title ?? "",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline4
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  color: Storage
+                                                          .instance.isDarkMode
+                                                      ? Colors.white
+                                                      : Constance.primaryColor),
+                                        ),
                                       ),
                                     ),
                                     SizedBox(

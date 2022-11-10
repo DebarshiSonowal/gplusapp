@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
@@ -174,7 +176,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                 CustomButton(
                                     txt: 'Spend Coin',
                                     onTap: () {
-                                      confirm_Redeem();
+                                      confirm_Redeem(current?.id);
                                     }),
                               ],
                             );
@@ -306,7 +308,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                           ?.copyWith(
                                             color: Storage.instance.isDarkMode
                                                 ? Colors.white
-                                                :Colors.black,
+                                                : Colors.black,
                                             // fontSize: 11.sp,
                                             // fontWeight: FontWeight.bold,
                                           ),
@@ -342,7 +344,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                     .textTheme
                                     .headline4
                                     ?.copyWith(
-                                      color:Storage.instance.isDarkMode
+                                      color: Storage.instance.isDarkMode
                                           ? Colors.white
                                           : Constance.secondaryColor,
                                       // fontSize: 11.sp,
@@ -367,7 +369,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
     );
   }
 
-  void confirm_Redeem() {
+  void confirm_Redeem(id) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -382,7 +384,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
           ),
           backgroundColor: Colors.white,
           title: Text(
-            'Hello Jonathan!',
+            'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context).profile?.name}',
             style: Theme.of(context).textTheme.headline3?.copyWith(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -430,7 +432,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
                       txt: 'Go Ahead',
                       onTap: () {
                         Navigation.instance.goBack();
-                        success();
+                        redeemByCoin(id);
                       }),
                 ),
                 SizedBox(
@@ -531,21 +533,61 @@ class _RedeemPointsState extends State<RedeemPoints> {
         ),
       ),
       centerTitle: true,
-      backgroundColor: Constance.primaryColor, actions: [
-      IconButton(
-        onPressed: () {
-          Navigation.instance.navigate('/notification');
-        },
-        icon: Icon(Icons.notifications),
-      ),
-      IconButton(
-        onPressed: () {
-          Navigation.instance.navigate('/search');
-        },
-        icon: Icon(Icons.search),
-      ),
-    ],
-
+      backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero,()=>fetchReferEarn());
+  }
+
+  void redeemByCoin(id) async{
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.createOrder(id, 1);
+    if(response.success??false){
+      Navigation.instance.goBack();
+      success();
+    }else{
+      Navigation.instance.goBack();
+      showError("Something went wrong");
+    }
+  }
+  void fetchReferEarn() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getReferAndEarn();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setReferEarn(response.data!);
+      Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
+    }
+  }
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }

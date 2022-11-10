@@ -7,6 +7,7 @@ class Membership {
       bg_color,
       plan_active_date,
       plan_expiry_date;
+  bool? is_currently_active;
 
   Membership.fromJson(json) {
     //int
@@ -32,6 +33,8 @@ class Membership {
     price_after_discount = json['price_after_discount'] == null
         ? 0
         : double.parse(json['price_after_discount'].toString());
+
+    is_currently_active = json['is_currently_active'] ?? false;
 
     //String
     name = json['name'] ?? "";

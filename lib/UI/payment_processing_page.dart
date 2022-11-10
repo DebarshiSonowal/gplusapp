@@ -266,7 +266,7 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'You are now a member of Gplus community',
+                  'You are now a member of G Plus community',
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontWeight: FontWeight.bold,
@@ -278,8 +278,7 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
                   child: CustomButton(
                       txt: 'Close',
                       onTap: () {
-                        Navigation.instance.goBack();
-                        Navigation.instance.goBack();
+                       Navigation.instance.navigate('/');
                       }),
                 ),
               ],

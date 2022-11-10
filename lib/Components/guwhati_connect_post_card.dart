@@ -23,9 +23,10 @@ class GuwahatiConnectPostCard extends StatelessWidget {
   final _searchQueryController = TextEditingController();
   final void Function() fetchGuwahatiConnect;
   final Function(int, int) postLike;
+  final Function(int) showing;
 
   GuwahatiConnectPostCard(this.data, this.count, this.like, this.dislike,
-      this.scaffoldKey, this.fetchGuwahatiConnect, this.postLike);
+      this.scaffoldKey, this.fetchGuwahatiConnect, this.postLike, this.showing);
 
   @override
   Widget build(BuildContext context) {
@@ -54,61 +55,65 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                       ),
-                      PopupMenuButton<int>(
-
-                        color: Constance.secondaryColor,
-                        itemBuilder: (BuildContext context) =>
-                            <PopupMenuItem<int>>[
-                          PopupMenuItem<int>(
-                            value: 1,
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.edit,
-                                  color: Colors.black,
-                                ),
-                                SizedBox(
-                                  width: 2.w,
-                                ),
-                                Text(
-                                  'Edit',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      ?.copyWith(color: Colors.black),
-                                ),
-                              ],
+                      AbsorbPointer(
+                        absorbing: (data.is_post_by_me ?? false) ? false : true,
+                        child: PopupMenuButton<int>(
+                          color: Constance.secondaryColor,
+                          itemBuilder: (BuildContext scontext) =>
+                              <PopupMenuItem<int>>[
+                            PopupMenuItem<int>(
+                              value: 1,
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.edit,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    width: 2.w,
+                                  ),
+                                  Text(
+                                    'Edit',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        ?.copyWith(color: Colors.black),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          PopupMenuItem<int>(
-                            value: 2,
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.delete,
-                                  color: Colors.black,
-                                ),
-                                SizedBox(
-                                  width: 2.w,
-                                ),
-                                Text(
-                                  'Delete',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      ?.copyWith(color: Colors.black),
-                                ),
-                              ],
+                            PopupMenuItem<int>(
+                              value: 2,
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.delete,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    width: 2.w,
+                                  ),
+                                  Text(
+                                    'Delete',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        ?.copyWith(color: Colors.black),
+                                  ),
+                                ],
+                              ),
                             ),
+                          ],
+                          onSelected: (int value) {
+                            // setState(() {});
+                          },
+                          // color: Colors.white,
+                          icon: Icon(
+                            Icons.menu,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Constance.primaryColor,
                           ),
-                        ],
-                        onSelected: (int value) {
-                          // setState(() {});
-                        },
-                        // color: Colors.white,
-                        icon: const Icon(
-                          Icons.menu,
-                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -282,7 +287,6 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                             type: MaterialType.transparency,
                             child: IconButton(
                               onPressed: () {
-
                                 showComments(count);
                               },
                               splashRadius: 20.0,
@@ -321,246 +325,279 @@ class GuwahatiConnectPostCard extends StatelessWidget {
   }
 
   void showComments(count) {
-    scaffoldKey.currentState?.showBottomSheet(
-      backgroundColor: Colors.transparent,
-      (context) {
-        return StatefulBuilder(builder: (context, _) {
-          return Consumer<DataProvider>(builder: (context, data, __) {
-            return Card(
-              elevation: 3,
-              color: Storage.instance.isDarkMode
-                  ? Colors.white
-                  : Colors.grey.shade200,
-              shape: RoundedRectangleBorder(
-                // side: BorderSide(color: Colors.white70, width: 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.only(top: 3.h),
-                height: 70.h,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+    showing(0);
+    scaffoldKey.currentState
+        ?.showBottomSheet(
+          backgroundColor: Colors.transparent,
+          enableDrag: true,
+          (context) {
+            return StatefulBuilder(builder: (context, _) {
+              return Consumer<DataProvider>(builder: (context, data, __) {
+                return Card(
+                  elevation: 3,
+                  color: Storage.instance.isDarkMode
+                      ? Colors.white
+                      : Colors.grey.shade200,
+                  shape: RoundedRectangleBorder(
+                    // side: BorderSide(color: Colors.white70, width: 1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.only(top: 1.h),
+                    height: 70.h,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            "Comments",
-                            style:
-                                Theme.of(context).textTheme.headline3?.copyWith(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  Navigation.instance.goBack();
+                                },
+                                icon: Icon(
+                                  Icons.menu,
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.black
+                                      : Constance.primaryColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Comments",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline3
+                                    ?.copyWith(
                                       color: Storage.instance.isDarkMode
                                           ? Colors.black
                                           : Constance.primaryColor,
                                       fontWeight: FontWeight.bold,
                                     ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 55.h,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5.w),
-                          child: ListView.builder(
-                              // physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount:
-                                  data.guwahatiConnect[count].comments.length,
-                              itemBuilder: (cont, ind) {
-                                var current =
-                                    data.guwahatiConnect[count].comments[ind];
-                                return SizedBox(
-                                  height: 16.h,
-                                  width: 40.w,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              current.name ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5
-                                                  ?.copyWith(
-                                                    color: Storage
-                                                            .instance.isDarkMode
-                                                        ? Colors.black
-                                                        : Constance
-                                                            .primaryColor,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                            // Icon(
-                                            //   Icons.menu,
-                                            //   color: Colors.black,
-                                            // ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                      Row(
+                          SizedBox(
+                            height: 55.h,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5.w),
+                              child: ListView.builder(
+                                  // physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: data
+                                      .guwahatiConnect[count].comments.length,
+                                  itemBuilder: (cont, ind) {
+                                    var current = data
+                                        .guwahatiConnect[count].comments[ind];
+                                    return SizedBox(
+                                      height: 16.h,
+                                      width: 40.w,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
                                         children: [
-                                          Text(
-                                            current.comment ?? "",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                ?.copyWith(
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                      // Text(
-                                      //   "",
-                                      //   style: Theme.of(context)
-                                      //       .textTheme
-                                      //       .headline5
-                                      //       ?.copyWith(
-                                      //         color: Colors.black,
-                                      //         fontWeight: FontWeight.bold,
-                                      //       ),
-                                      // ),
-                                      // SizedBox(
-                                      //   height: 1.h,
-                                      // ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Row(
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                Material(
-                                                  type:
-                                                      MaterialType.transparency,
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      postCommentLike(
-                                                          current.id, 1);
-                                                    },
-                                                    splashRadius: 20.0,
-                                                    splashColor: Constance
-                                                        .secondaryColor,
-                                                    icon: Icon(
-                                                      Icons.thumb_up,
-                                                      color: Storage.instance
-                                                              .isDarkMode
-                                                          ? Colors.black
-                                                          : Constance
-                                                              .primaryColor,
+                                                Text(
+                                                  current.name ?? "",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline5
+                                                      ?.copyWith(
+                                                        color: Storage.instance
+                                                                .isDarkMode
+                                                            ? Colors.black
+                                                            : Constance
+                                                                .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                                // Icon(
+                                                //   Icons.menu,
+                                                //   color: Colors.black,
+                                                // ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 1.h,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                current.comment ?? "",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6
+                                                    ?.copyWith(
+                                                      color: Colors.black,
+                                                      // fontWeight: FontWeight.bold,
                                                     ),
-                                                  ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 1.h,
+                                          ),
+                                          // Text(
+                                          //   "",
+                                          //   style: Theme.of(context)
+                                          //       .textTheme
+                                          //       .headline5
+                                          //       ?.copyWith(
+                                          //         color: Colors.black,
+                                          //         fontWeight: FontWeight.bold,
+                                          //       ),
+                                          // ),
+                                          // SizedBox(
+                                          //   height: 1.h,
+                                          // ),
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Material(
+                                                      type: MaterialType
+                                                          .transparency,
+                                                      child: IconButton(
+                                                        onPressed: () {
+                                                          postCommentLike(
+                                                              current.id, 1);
+                                                        },
+                                                        splashRadius: 20.0,
+                                                        splashColor: Constance
+                                                            .secondaryColor,
+                                                        icon: Icon(
+                                                          Icons.thumb_up,
+                                                          color: Storage
+                                                                  .instance
+                                                                  .isDarkMode
+                                                              ? Colors.black
+                                                              : Constance
+                                                                  .primaryColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Row(
-                                          // mainAxisAlignment:
-                                          //     MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '${current.like_count} likes' ??
-                                                  "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                          ),
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: Row(
+                                              // mainAxisAlignment:
+                                              //     MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '${current.like_count} likes' ??
+                                                      "",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline6
+                                                      ?.copyWith(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
+                                          ),
+
+                                          SizedBox(
+                                            height: 1.h,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 2.w),
+                            child: GestureDetector(
+                              onTap: () {},
+                              child: Card(
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 5.w, vertical: 0.5.h),
+                                  child: TextField(
+                                    controller: _searchQueryController,
+                                    autofocus: false,
+                                    decoration: InputDecoration(
+                                      hintText: "Write a comment",
+                                      border: InputBorder.none,
+                                      hintStyle: const TextStyle(
+                                          color: Colors.black26),
+                                      suffixIcon: IconButton(
+                                        onPressed: () {
+                                          if (_searchQueryController
+                                              .text.isNotEmpty) {
+                                            // search(_searchQueryController.text);
+                                            _(() {
+                                              postComment(
+                                                  data.guwahatiConnect[count]
+                                                      .id,
+                                                  'guwahati-connect',
+                                                  _searchQueryController.text);
+                                            });
+                                          } else {
+                                            showError(
+                                                'Enter something to search');
+                                          }
+                                        },
+                                        icon: const Icon(
+                                          Icons.send,
+                                          color: Colors.black,
                                         ),
                                       ),
-
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 2.w),
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Card(
-                            color: Colors.white,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 5.w, vertical: 0.5.h),
-                              child: TextField(
-                                controller: _searchQueryController,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  hintText: "Write a comment",
-                                  border: InputBorder.none,
-                                  hintStyle:
-                                      const TextStyle(color: Colors.black26),
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      if (_searchQueryController
-                                          .text.isNotEmpty) {
-                                        // search(_searchQueryController.text);
-                                        _(() {
-                                          postComment(
-                                              data.guwahatiConnect[count].id,
-                                              'guwahati-connect',
-                                              _searchQueryController.text);
-                                        });
-                                      } else {
-                                        showError('Enter something to search');
-                                      }
-                                    },
-                                    icon: const Icon(
-                                      Icons.send,
-                                      color: Colors.black,
                                     ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4
+                                        ?.copyWith(color: Colors.black),
+                                    onChanged: (query) => {},
                                   ),
                                 ),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline4
-                                    ?.copyWith(color: Colors.black),
-                                onChanged: (query) => {},
                               ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            );
-          });
+                );
+              });
+            });
+          },
+        )
+        .closed
+        .then((value) {
+          showing(1);
         });
-      },
-    );
   }
 
   void postCommentLike(id, is_like) async {

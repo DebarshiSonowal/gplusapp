@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../Components/NavigationBar.dart';
+import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Components/slider_home.dart';
 import '../../Helper/Constance.dart';
@@ -29,6 +31,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
   var current = 4;
   int _current = 0;
   final CarouselController _controller = CarouselController();
+  bool like = false;
 
   @override
   void initState() {
@@ -118,10 +121,18 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                setAsFavourite(
+                                    data.selectedClassified?.id, 'classified');
+                                setState(() {
+                                  like = !like;
+                                });
+                              },
                               icon: Icon(
                                 FontAwesomeIcons.solidHeart,
-                                color: Colors.grey.shade400,
+                                color: like
+                                    ? Constance.secondaryColor
+                                    : Colors.grey.shade400,
                               )),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -130,7 +141,8 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                                 .entries
                                 .map((entry) {
                               return GestureDetector(
-                                onTap: () => _controller.animateToPage(entry.key),
+                                onTap: () =>
+                                    _controller.animateToPage(entry.key),
                                 child: Container(
                                   width: 12.0,
                                   height: 12.0,
@@ -142,21 +154,22 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                                                   Brightness.dark
                                               ? Colors.white
                                               : Colors.white)
-                                          .withOpacity(
-                                              _current == entry.key ? 0.8 : 0.4)),
+                                          .withOpacity(_current == entry.key
+                                              ? 0.8
+                                              : 0.4)),
                                 ),
                               );
                             }).toList(),
                           ),
-                          PopupMenuButton<int>(
-                            color:Constance.secondaryColor,
+                         ( data.selectedClassified?.is_post_by_me??false)?PopupMenuButton<int>(
+                            color: Constance.secondaryColor,
                             itemBuilder: (BuildContext context) =>
                                 <PopupMenuItem<int>>[
                               PopupMenuItem<int>(
                                 value: 1,
                                 child: Row(
                                   children: [
-                                     const Icon(
+                                    const Icon(
                                       Icons.edit,
                                       color: Colors.black,
                                     ),
@@ -203,7 +216,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                               Icons.menu,
                               color: Colors.white,
                             ),
-                          ),
+                          ):Container(),
                         ],
                       ),
                     ),
@@ -217,7 +230,9 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                   child: Text(
                     data.selectedClassified?.title ?? '2BHK for Rent',
                     style: Theme.of(context).textTheme.headline2?.copyWith(
-                        color: Storage.instance.isDarkMode ? Colors.white :Constance.primaryColor,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Constance.primaryColor,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -229,7 +244,9 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                   child: Text(
                     'Posted by ${data.selectedClassified?.user?.name ?? "Anonymous"}',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Storage.instance.isDarkMode ? Colors.white70 :Colors.black,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white70
+                              : Colors.black,
                           // fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -255,9 +272,11 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Icon(
+                      Icon(
                         Icons.location_on,
-                        color: Storage.instance.isDarkMode ? Constance.secondaryColor :Colors.black,
+                        color: Storage.instance.isDarkMode
+                            ? Constance.secondaryColor
+                            : Colors.black,
                       ),
                       SizedBox(
                         width: 4.w,
@@ -271,7 +290,9 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                             // overflow: TextOverflow.clip,
                             style:
                                 Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Storage.instance.isDarkMode ? Colors.white :Colors.black,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                           ),
                         ),
@@ -289,7 +310,9 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                     children: [
                       Icon(
                         Icons.remove_red_eye,
-                        color: Storage.instance.isDarkMode ? Constance.secondaryColor :Colors.black,
+                        color: Storage.instance.isDarkMode
+                            ? Constance.secondaryColor
+                            : Colors.black,
                       ),
                       SizedBox(
                         width: 4.w,
@@ -302,7 +325,9 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                             // overflow: TextOverflow.clip,
                             style:
                                 Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Storage.instance.isDarkMode ? Colors.white :Colors.black,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                           ),
                         ),
@@ -319,7 +344,9 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                             ' It has survived not only five centuries, but also the leap into electronic typesetting,'
                             ' remaining essentially unchanged',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Storage.instance.isDarkMode ? Colors.white70 :Colors.black,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white70
+                              : Colors.black,
                           // fontWeight: FontWeight.bold,
                         ),
                     trimLines: 5,
@@ -342,9 +369,16 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                               txt:
                                   'Call ${data.selectedClassified?.user?.name ?? "Anonymous"}',
                               onTap: () {
+                                if (data.profile?.is_plan_active ?? false) {
+                                  _launchUrl(Uri.parse(
+                                      'tel:${data.selectedClassified?.user?.mobile}'));
+                                } else {
+                                  Constance.showMembershipPrompt(
+                                      context, () {
+
+                                  });
+                                }
                                 // showDialogBox();
-                                _launchUrl(Uri.parse(
-                                    'tel:${data.selectedClassified?.user?.mobile}'));
                               }),
                         ),
                       ),
@@ -490,5 +524,24 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
     } else {
       Navigation.instance.goBack();
     }
+  }
+
+  void setAsFavourite(int? id, String type) async {
+    final response = await ApiProvider.instance.setAsFavourite(id, type);
+    if (response.success ?? false) {
+      Fluttertoast.showToast(msg: "Added to favourites");
+    } else {
+      showError("Something went wrong");
+    }
+  }
+
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Not Subscribed",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }

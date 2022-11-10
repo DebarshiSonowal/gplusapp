@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
@@ -28,6 +31,13 @@ class _EditAddressPageState extends State<EditAddressPage> {
   );
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
+  String locationName = '';
+  double lat = 0, lang = 0;
+
+  final _textFieldController = TextEditingController();
+
+  String title = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,96 +48,132 @@ class _EditAddressPageState extends State<EditAddressPage> {
           width: MediaQuery.of(context).size.width,
           color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
           padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 0.h),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 60.h,
-                width: double.infinity,
-                child: GoogleMap(
-                  indoorViewEnabled: true,
-                  mapType: MapType.normal,
-                  markers: markers.values.toSet(),
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(
-                      double.parse(
-                          data.addresses![widget.count].latitude.toString()),
-                      double.parse(
-                          data.addresses![widget.count].longitude.toString()),
-                    ),
-                    zoom: 14.4746,
-                  ),
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                    final marker = Marker(
-                      markerId:
-                          MarkerId(data.addresses![widget.count].title ?? ""),
-                      position: LatLng(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 60.h,
+                  width: double.infinity,
+                  child: GoogleMap(
+                    indoorViewEnabled: true,
+                    mapType: MapType.normal,
+                    markers: markers.values.toSet(),
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(
                         double.parse(
                             data.addresses![widget.count].latitude.toString()),
                         double.parse(
                             data.addresses![widget.count].longitude.toString()),
                       ),
-                      // icon: BitmapDescriptor.,
-                      infoWindow: InfoWindow(
-                        title: data.addresses![widget.count].title ?? 'title',
-                        snippet:
-                            data.addresses![widget.count].address ?? 'address',
-                      ),
-                    );
-
-                    setState(() {
-                      markers[MarkerId(data.addresses![widget.count].title ?? "")] = marker;
-                    });
-                  },
-                  onLongPress: (loc){
-                    final marker = Marker(
-                      markerId:
-                      MarkerId("new Location"),
-                      position: loc,
-                      // icon: BitmapDescriptor.,
-                      infoWindow: InfoWindow(
-                        title: data.addresses![widget.count].title ?? 'title',
-                        snippet:
-                        data.addresses![widget.count].address ?? 'address',
-                      ),
-                    );
-
-                    setState(() {
-                      markers[MarkerId('place_name')] = marker;
-                    });
-                  },
-                ),
-              ),
-              Container(
-                color:
-                    Storage.instance.isDarkMode ? Colors.black : Colors.white,
-                width: double.infinity,
-                height: 30.h,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 4.w,
-                  vertical: 1.5.h,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Select Location',
-                      // overflow: TextOverflow.clip,
-                      style: Theme.of(context).textTheme.headline2?.copyWith(
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      zoom: 14.4746,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${data.addresses![widget.count].title}',
-                          // overflow: TextOverflow.clip,
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller.complete(controller);
+                      final marker = Marker(
+                        markerId:
+                            MarkerId(data.addresses![widget.count].title ?? ""),
+                        position: LatLng(
+                          double.parse(data.addresses![widget.count].latitude
+                              .toString()),
+                          double.parse(data.addresses![widget.count].longitude
+                              .toString()),
+                        ),
+                        // icon: BitmapDescriptor.,
+                        infoWindow: InfoWindow(
+                          title: data.addresses![widget.count].title ?? 'title',
+                          snippet: data.addresses![widget.count].address ??
+                              'address',
+                        ),
+                      );
+
+                      setState(() {
+                        markers[MarkerId(
+                                data.addresses![widget.count].title ?? "")] =
+                            marker;
+                      });
+                    },
+                    onLongPress: (loc) {
+                      final marker = Marker(
+                        markerId: MarkerId("new Location"),
+                        position: loc,
+                        // icon: BitmapDescriptor.,
+                        infoWindow: InfoWindow(
+                          title: data.addresses![widget.count].title ?? 'title',
+                          snippet: data.addresses![widget.count].address ??
+                              'address',
+                        ),
+                      );
+
+                      setState(() {
+                        markers.clear();
+                        markers[MarkerId('place_name')] = marker;
+                        lat = loc.latitude;
+                        lang = loc.longitude;
+                      });
+                      getAddress(loc.latitude, loc.longitude);
+                    },
+                  ),
+                ),
+                Container(
+                  color:
+                      Storage.instance.isDarkMode ? Colors.black : Colors.white,
+                  width: double.infinity,
+                  height: 30.h,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 4.w,
+                    vertical: 1.5.h,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Select Location',
+                        // overflow: TextOverflow.clip,
+                        style: Theme.of(context).textTheme.headline2?.copyWith(
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${title == "" ? data.addresses![widget.count].title : title}',
+                            // overflow: TextOverflow.clip,
+                            style:
+                                Theme.of(context).textTheme.headline4?.copyWith(
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _displayTextInputDialog(context);
+                            },
+                            child: Text(
+                              'change',
+                              // overflow: TextOverflow.clip,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Constance.thirdColor,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Flexible(
+                        child: Text(
+                          '${locationName == "" ? data.addresses![widget.count].address : locationName}',
+                          overflow: TextOverflow.ellipsis,
                           style:
                               Theme.of(context).textTheme.headline4?.copyWith(
                                     color: Storage.instance.isDarkMode
@@ -136,41 +182,42 @@ class _EditAddressPageState extends State<EditAddressPage> {
                                     // fontWeight: FontWeight.bold,
                                   ),
                         ),
-                        Text(
-                          'change',
-                          // overflow: TextOverflow.clip,
-                          style:
-                              Theme.of(context).textTheme.headline4?.copyWith(
-                                    color: Constance.thirdColor,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                        width: double.infinity,
+                        child: CustomButton(
+                          txt: 'Confirm Location',
+                          onTap: () {
+                            if (lat != 0 ||
+                                lang != 0 ||
+                                locationName != "" ||
+                                title != "") {
+                              updateNewAddress(
+                                  locationName == ""
+                                      ? data.addresses![widget.count].address
+                                      : locationName,
+                                  lat == 0
+                                      ? data.addresses![widget.count].latitude
+                                      : lat,
+                                  lang == 0
+                                      ? data.addresses![widget.count].longitude
+                                      : lang,
+                                  data.addresses![widget.count].id,
+                                  title == ""
+                                      ? data.addresses![widget.count].title
+                                      : title);
+                            } else {
+                              showError("Must change Location");
+                            }
+                          },
                         ),
-                      ],
-                    ),
-                    Flexible(
-                      child: Text(
-                        '${data.addresses![widget.count].address}',
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
-                              // fontWeight: FontWeight.bold,
-                            ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                      width: double.infinity,
-                      child: CustomButton(
-                        txt: 'Confirm Location',
-                        onTap: () {},
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       }),
@@ -210,5 +257,111 @@ class _EditAddressPageState extends State<EditAddressPage> {
         ),
       ],
     );
+  }
+
+  Future<void> _displayTextInputDialog(BuildContext context) async {
+    String valueText = "";
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor:
+                !Storage.instance.isDarkMode ? Colors.white : Colors.black,
+            title: Text(
+              'Enter the title of the location',
+              style: Theme.of(context).textTheme.headline4?.copyWith(
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Colors.black,
+                  ),
+            ),
+            content: TextField(
+              cursorColor:
+                  Storage.instance.isDarkMode ? Colors.white : Colors.black,
+              onChanged: (value) {
+                setState(() {
+                  valueText = value;
+                });
+              },
+              controller: _textFieldController,
+              style: Theme.of(context).textTheme.headline4?.copyWith(
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Colors.black,
+                  ),
+              decoration: InputDecoration(
+                hintText: "Enter a name",
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                color: Colors.red,
+                textColor: Colors.white,
+                child: Text('CANCEL'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              FlatButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: Text('OK'),
+                onPressed: () {
+                  setState(() {
+                    title = valueText;
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> getAddress(latitude, longitude) async {
+    Navigation.instance.navigate('/loadingDialog');
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(latitude, longitude);
+    Placemark place = placemarks[0];
+    String street = place.street ?? "";
+    String thoroughfare = place.thoroughfare ?? "";
+    String locality = place.locality ?? "";
+    String subLocality = place.subLocality ?? "";
+    String state = place.subAdministrativeArea ?? "";
+    String pincode = place.postalCode ?? "";
+    String address =
+        "${(street.isEmpty) ? "" : "$street, "}${(thoroughfare.isEmpty) ? "" : "$thoroughfare, "}${(locality.isEmpty) ? "" : "$locality, "}${(subLocality.isEmpty) ? "" : "$subLocality, "}${(state.isEmpty) ? "" : "$state, "}${(pincode.isEmpty) ? "" : "$pincode."}";
+    locationName = address;
+    print('city pincode ${pincode}  ${street}');
+    // setState(() {});
+    // Navigator.pop(Navigation.instance.navigatorKey.currentContext ?? context,
+    //     locationName);
+
+    Navigation.instance.goBack();
+  }
+
+  void updateNewAddress(add, lat, lang, id,title) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response =
+        await ApiProvider.instance.updateAddress(add, lat, lang, id,title);
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
+      showError("Something went wrong");
+    }
+  }
+
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
   }
 }

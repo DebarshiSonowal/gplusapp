@@ -3,6 +3,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
+import '../Helper/Storage.dart';
 import '../Model/opinion.dart';
 
 class OpinionCard extends StatelessWidget {
@@ -18,16 +19,16 @@ class OpinionCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
-        side: BorderSide(width: 0.5, color: Constance.primaryColor),
+        side: BorderSide(width: 0.5,  color: Storage.instance.isDarkMode ? Colors.white : Constance.primaryColor),
       ),
       child: Container(
         // padding: EdgeInsets.symmetric(
         //     horizontal: 3.w, vertical: 2.h),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(
             Radius.circular(5),
           ),
-          color: Colors.white,
+          color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         ),
         height: 12.h,
         width: MediaQuery.of(context).size.width - 7.w,
@@ -38,21 +39,21 @@ class OpinionCard extends StatelessWidget {
                 flex: 4,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
+                  decoration:  BoxDecoration(
+                    borderRadius: const BorderRadius.all(
                       Radius.circular(5),
                     ),
                     border: Border(
                       top:
-                      BorderSide(width: 0.5, color: Constance.primaryColor),
+                          BorderSide(width: 0.5,  color: Storage.instance.isDarkMode ? Colors.white : Constance.primaryColor),
                       bottom:
-                      BorderSide(width: 0.5, color: Constance.primaryColor),
+                          BorderSide(width: 0.5,  color: Storage.instance.isDarkMode ? Colors.white :Constance.primaryColor),
                       right:
-                      BorderSide(width: 0.5, color: Constance.primaryColor),
+                          BorderSide(width: 0.5,  color: Storage.instance.isDarkMode ? Colors.white :Constance.primaryColor),
                       left:
-                      BorderSide(width: 0.5, color: Constance.primaryColor),
+                          BorderSide(width: 0.5, color: Storage.instance.isDarkMode ? Colors.white : Constance.primaryColor),
                     ),
-                    color: Colors.white,
+                    color: Storage.instance.isDarkMode ? Colors.black :Colors.white,
                   ),
                   child: Center(
                     child: Row(
@@ -65,11 +66,11 @@ class OpinionCard extends StatelessWidget {
                             textAlign: TextAlign.start,
                             overflow: TextOverflow.ellipsis,
                             style:
-                            Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Constance.fifthColor,
-                              // fontWeight:
-                              //     FontWeight.bold,
-                            ),
+                                Theme.of(context).textTheme.headline5?.copyWith(
+                                  color: Storage.instance.isDarkMode ? Colors.white : Constance.fifthColor,
+                                      // fontWeight:
+                                      //     FontWeight.bold,
+                                    ),
                           ),
                         ),
                       ],
@@ -87,20 +88,20 @@ class OpinionCard extends StatelessWidget {
                         item.author_name ?? "",
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
-                          color: Constance.fifthColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                          color: Storage.instance.isDarkMode ? Colors.white :Constance.fifthColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       Text(
                         // item.publish_date?.split(" ")[0] ?? "",
                         Jiffy(item.publish_date?.split(" ")[0] ?? "",
-                            "yyyy-MM-dd")
+                                "yyyy-MM-dd")
                             .format("dd/MM/yyyy"),
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
-                          color: Constance.fifthColor,
-                          // fontWeight: FontWeight.bold,
-                        ),
+                          color: Storage.instance.isDarkMode ? Colors.white :Constance.fifthColor,
+                              // fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),

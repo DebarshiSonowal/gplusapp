@@ -3,10 +3,11 @@ import 'package:gplusapp/Model/profile.dart';
 
 class GuwahatiConnect {
   int? id, user_id, total_liked, total_disliked, total_comment, status;
-  String? question, updated_at,created_at;
+  String? question, updated_at, created_at;
   List<GCAttachment>? attachment;
   Profile? user;
-  List<Comment> comments=[];
+  bool? is_post_by_me;
+  List<Comment> comments = [];
 
   GuwahatiConnect.fromJson(json) {
     id = json['id'] ?? 0;
@@ -32,17 +33,19 @@ class GuwahatiConnect {
     question = json['question'] ?? "";
     attachment = json['attached_files'] == null
         ? []
-        : (json['attached_files'] as List).map((e) => GCAttachment.fromJson(e)).toList();
+        : (json['attached_files'] as List)
+            .map((e) => GCAttachment.fromJson(e))
+            .toList();
     comments = json['comments'] == null
         ? []
         : (json['comments'] as List).map((e) => Comment.fromJson(e)).toList();
     //other
+    is_post_by_me = json['is_post_by_me'] ?? false;
     try {
       user = Profile.fromJson(json['user']);
     } catch (e) {
       print(e);
     }
-
   }
 }
 

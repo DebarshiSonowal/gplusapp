@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
@@ -23,11 +24,13 @@ class AllImagePage extends StatefulWidget {
 
 class _AllImagePageState extends State<AllImagePage> {
   bool like = false, dislike = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      backgroundColor: Colors.white,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           padding: EdgeInsets.only(top: 2.h),
@@ -40,56 +43,61 @@ class _AllImagePageState extends State<AllImagePage> {
                   // height: 30.h,
                   width: double.infinity,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 2.w, vertical: 1.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
                           width: double.infinity,
                           child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    data.guwahatiConnect[widget.id].user?.name ??
+                                    data.guwahatiConnect[widget.id].user
+                                            ?.name ??
                                         "GPlus Author",
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline3
                                         ?.copyWith(
-                                      color: Constance
-                                          .primaryColor,
-                                      fontWeight:
-                                      FontWeight.bold,
-                                    ),
+                                          color: Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
                                   SizedBox(
                                     height: 0.7.h,
                                   ),
                                   Text(
-                                    Jiffy(data.guwahatiConnect[widget.id].updated_at,
-                                        "yyyy-MM-dd")
-                                        .fromNow() ??
+                                    Jiffy(
+                                                data.guwahatiConnect[widget.id]
+                                                    .updated_at,
+                                                "yyyy-MM-dd")
+                                            .fromNow() ??
                                         '${15} mins ago' ??
                                         "",
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline6
                                         ?.copyWith(
-                                      color: Colors.black45,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
+                                          color: Storage.instance.isDarkMode
+                                              ? Colors.white70
+                                              : Colors.black45,
+                                          // fontWeight: FontWeight.bold,
+                                        ),
                                   ),
                                 ],
                               ),
-                              const Icon(
+                              Icon(
                                 Icons.menu,
-                                color: Colors.black,
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
                               ),
                             ],
                           ),
@@ -99,16 +107,15 @@ class _AllImagePageState extends State<AllImagePage> {
                         ),
                         ReadMoreText(
                           data.guwahatiConnect[widget.id].question ?? "",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(
-                            color: Colors.black,
-                            // fontWeight: FontWeight.bold,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.headline5?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                           trimLines: 5,
-                          colorClickableText:
-                          Constance.secondaryColor,
+                          colorClickableText: Constance.secondaryColor,
                           trimMode: TrimMode.Line,
                           trimCollapsedText: 'Show more',
                           trimExpandedText: 'Show less',
@@ -116,158 +123,8 @@ class _AllImagePageState extends State<AllImagePage> {
                         SizedBox(
                           height: 1.h,
                         ),
-                        SizedBox(
-                          height: 2.h,
-                          child: Center(
-                            child: Divider(
-                              thickness: 0.05.h,
-                              color: Colors.black26,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 0.5.h,
-                        ),
-                        Container(
-                          width: double.infinity,
-                          padding:
-                          EdgeInsets.symmetric(horizontal: 1.w),
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment:
-                            CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${data.guwahatiConnect[widget.id].total_liked} likes' ?? "",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                  color: Colors.black,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '${data.guwahatiConnect[widget.id].total_disliked} dislikes' ??
-                                    "",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                  color: Colors.black,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '${data.guwahatiConnect[widget.id].total_comment} comments' ??
-                                    "",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                  color: Colors.black,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 0.5.h,
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                          child: Center(
-                            child: Divider(
-                              thickness: 0.05.h,
-                              color: Colors.black26,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment:
-                            CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  Material(
-                                    type: MaterialType.transparency,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        postLike(data.guwahatiConnect[widget.id].id, 1);
-                                        setState(() {
-                                          like = !like;
-                                          if (dislike) {
-                                            dislike = !like;
-                                          }
-                                        });
-                                        debugPrint('${like}');
-                                      },
-                                      splashRadius: 20.0,
-                                      splashColor: !like
-                                          ? Constance.secondaryColor
-                                          : Constance.primaryColor,
-                                      icon: Icon(
-                                        Icons.thumb_up,
-                                        color: like
-                                            ? Constance
-                                            .secondaryColor
-                                            : Constance
-                                            .primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                  Material(
-                                    type: MaterialType.transparency,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        postLike(data.guwahatiConnect[widget.id].id, 0);
-                                        setState(() {
-                                          dislike = !dislike;
-                                          if (like) {
-                                            like = !dislike;
-                                          }
-                                        });
-                                      },
-                                      splashRadius: 20.0,
-                                      splashColor: !dislike
-                                          ? Constance.secondaryColor
-                                          : Constance.primaryColor,
-                                      icon: Icon(
-                                        Icons.thumb_down,
-                                        color: dislike
-                                            ? Constance
-                                            .secondaryColor
-                                            : Constance
-                                            .primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                  Material(
-                                    type: MaterialType.transparency,
-                                    child: IconButton(
-                                      onPressed: () {
-                                      },
-                                      splashRadius: 20.0,
-                                      splashColor:
-                                      Constance.secondaryColor,
-                                      icon: const Icon(
-                                        Icons.comment,
-                                        color:
-                                        Constance.primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
+
+
                       ],
                     ),
                   ),
@@ -276,9 +133,11 @@ class _AllImagePageState extends State<AllImagePage> {
                   primary: false,
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: data.guwahatiConnect[widget.id].attachment?.length ?? 1,
+                  itemCount:
+                      data.guwahatiConnect[widget.id].attachment?.length ?? 1,
                   itemBuilder: (context, count) {
-                    var current = data.guwahatiConnect[widget.id].attachment![count];
+                    var current =
+                        data.guwahatiConnect[widget.id].attachment![count];
                     return GestureDetector(
                       onTap: () {
                         Navigation.instance.navigate('/viewImage',
@@ -287,7 +146,8 @@ class _AllImagePageState extends State<AllImagePage> {
                       child: Container(
                         height: 40.h,
                         width: double.infinity,
-                        padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 1.w, vertical: 1.h),
                         child: CachedNetworkImage(
                           placeholder: (cont, _) {
                             return Image.asset(
@@ -315,6 +175,168 @@ class _AllImagePageState extends State<AllImagePage> {
                     );
                   },
                 ),
+                SizedBox(
+                  height: 2.h,
+                  child: Center(
+                    child: Divider(
+                      thickness: 0.05.h,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white70
+                          : Colors.black26,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 0.5.h,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: 1.w),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${data.guwahatiConnect[widget.id].total_liked} likes' ??
+                            "",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            ?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      // Text(
+                      //   '${data.guwahatiConnect[widget.id].total_disliked} dislikes' ??
+                      //       "",
+                      //   style: Theme.of(context)
+                      //       .textTheme
+                      //       .headline6
+                      //       ?.copyWith(
+                      //     color: Storage.instance.isDarkMode?Colors.white:Colors.black,
+                      //     // fontWeight: FontWeight.bold,
+                      //   ),
+                      // ),
+                      Text(
+                        '${data.guwahatiConnect[widget.id].total_comment} comments' ??
+                            "",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            ?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 0.5.h,
+                ),
+                SizedBox(
+                  height: 2.h,
+                  child: Center(
+                    child: Divider(
+                      thickness: 0.05.h,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white70
+                          : Colors.black26,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        children: [
+                          Material(
+                            type: MaterialType.transparency,
+                            child: IconButton(
+                              onPressed: () {
+                                postLike(
+                                    data.guwahatiConnect[widget.id].id,
+                                    1);
+                                setState(() {
+                                  like = !like;
+                                  if (dislike) {
+                                    dislike = !like;
+                                  }
+                                });
+                                debugPrint('${like}');
+                              },
+                              splashRadius: 20.0,
+                              splashColor: !like
+                                  ? Constance.secondaryColor
+                                  : Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Constance.primaryColor,
+                              icon: Icon(
+                                Icons.thumb_up,
+                                color: like
+                                    ? Constance.secondaryColor
+                                    : Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Constance.primaryColor,
+                              ),
+                            ),
+                          ),
+                          // Material(
+                          //   type: MaterialType.transparency,
+                          //   child: IconButton(
+                          //     onPressed: () {
+                          //       postLike(data.guwahatiConnect[widget.id].id, 0);
+                          //       setState(() {
+                          //         dislike = !dislike;
+                          //         if (like) {
+                          //           like = !dislike;
+                          //         }
+                          //       });
+                          //     },
+                          //     splashRadius: 20.0,
+                          //     splashColor: !dislike
+                          //         ? Constance.secondaryColor
+                          //         : Constance.primaryColor,
+                          //     icon: Icon(
+                          //       Icons.thumb_down,
+                          //       color: dislike
+                          //           ? Constance
+                          //           .secondaryColor
+                          //           : Constance
+                          //           .primaryColor,
+                          //     ),
+                          //   ),
+                          // ),
+                          Material(
+                            type: MaterialType.transparency,
+                            child: IconButton(
+                              onPressed: () {},
+                              splashRadius: 20.0,
+                              splashColor: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Constance.secondaryColor,
+                              icon: Icon(
+                                Icons.comment,
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Constance.primaryColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+
               ],
             ),
           ),
@@ -322,9 +344,10 @@ class _AllImagePageState extends State<AllImagePage> {
       }),
     );
   }
+
   void postLike(id, is_like) async {
     final response =
-    await ApiProvider.instance.postLike(id, is_like, 'guwahati-connect');
+        await ApiProvider.instance.postLike(id, is_like, 'guwahati-connect');
     if (response.success ?? false) {
       Fluttertoast.showToast(msg: response.message ?? "Post Liked");
       // fetchGuwahatiConnect();
@@ -332,6 +355,7 @@ class _AllImagePageState extends State<AllImagePage> {
       showError("Something went wrong");
     }
   }
+
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",
@@ -341,13 +365,14 @@ class _AllImagePageState extends State<AllImagePage> {
           Navigation.instance.goBack();
         });
   }
+
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },

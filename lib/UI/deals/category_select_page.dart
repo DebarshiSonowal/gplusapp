@@ -94,7 +94,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           color: Storage.instance.isDarkMode
-              ? Colors.white
+              ? Colors.black
               : Constance.primaryColor,
           padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
           child: Consumer<DataProvider>(builder: (context, current, _) {
@@ -128,7 +128,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                 Text(
                   current.details?.shop_name ?? 'The Looks Salon',
                   style: Theme.of(context).textTheme.headline2?.copyWith(
-                      color: Colors.black, fontWeight: FontWeight.bold),
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white:Colors.black, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 2.h,
@@ -145,7 +146,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                         child: Container(
                           height: 5.h,
                           color: selected == 0
-                              ? Colors.black
+                              ? Storage.instance.isDarkMode
+                              ? Colors.white:Colors.black
                               : Constance.secondaryColor,
                           child: Center(
                             child: Text(
@@ -155,7 +157,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                                   .headline4
                                   ?.copyWith(
                                       color: selected == 0
-                                          ? Colors.white
+                                          ? Storage.instance.isDarkMode
+                                          ? Colors.black:Colors.white
                                           : Colors.black),
                             ),
                           ),
@@ -173,7 +176,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                           height: 5.h,
                           color: selected == 0
                               ? Constance.secondaryColor
-                              : Colors.black,
+                              : Storage.instance.isDarkMode
+                              ? Colors.white:Colors.black,
                           child: Center(
                             child: Text(
                               'Details',
@@ -183,7 +187,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                                   ?.copyWith(
                                     color: selected == 0
                                         ? Colors.black
-                                        : Colors.white,
+                                        : Storage.instance.isDarkMode
+                                        ? Colors.black:Colors.white,
                                   ),
                             ),
                           ),
@@ -234,7 +239,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
             children: [
               Icon(
                 Icons.location_on,
-                color: Colors.black,
+                color: Storage.instance.isDarkMode
+                    ? Constance.secondaryColor:Colors.black,
               ),
               SizedBox(
                 width: 4.w,
@@ -247,7 +253,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                         'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
                     // overflow: TextOverflow.clip,
                     style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Colors.black,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white:Colors.black,
                         ),
                   ),
                 ),
@@ -262,7 +269,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
             children: [
               Icon(
                 Icons.phone,
-                color: Colors.black,
+                color: Storage.instance.isDarkMode
+                    ? Constance.secondaryColor:Colors.black,
               ),
               SizedBox(
                 width: 4.w,
@@ -272,7 +280,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   '+91${current.details?.mobile.toString() ?? '7838372617'}',
                   // overflow: TextOverflow.clip,
                   style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white:Colors.black,
                       ),
                 ),
               ),
@@ -291,7 +300,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   children: [
                     Icon(
                       Icons.alarm,
-                      color: Colors.black,
+                      color: Storage.instance.isDarkMode
+                          ? Constance.secondaryColor:Colors.black,
                     ),
                   ],
                 ),
@@ -306,7 +316,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                       'Open Now',
                       // overflow: TextOverflow.clip,
                       style: Theme.of(context).textTheme.headline5?.copyWith(
-                            color: Colors.black,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white:Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
                     ),
@@ -324,7 +335,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                           '',
                       // overflow: TextOverflow.clip,
                       style: Theme.of(context).textTheme.headline5?.copyWith(
-                            color: Colors.black,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white:Colors.black,
                             // fontWeight: FontWeight.bold,
                           ),
                     ),
@@ -376,7 +388,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
             children: [
               Icon(
                 FontAwesomeIcons.clipboard,
-                color: Colors.black,
+                color: Storage.instance.isDarkMode
+                    ? Constance.secondaryColor:Colors.black,
               ),
               SizedBox(
                 width: 4.w,
@@ -388,7 +401,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                     'Tanning Salon . Beauty Supply Shop . Hair Salon',
                     // overflow: TextOverflow.clip,
                     style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Colors.black,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white:Colors.black,
                         ),
                   ),
                 ),
@@ -421,7 +435,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                         data?.description ?? "",
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Colors.black,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white:Colors.black,
                             ),
                       ),
                     ],

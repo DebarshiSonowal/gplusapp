@@ -43,6 +43,8 @@ class _PostAListingState extends State<PostAListing> {
 
   final ImagePicker _picker = ImagePicker();
 
+
+
   List<File> attachements = [];
 
   @override
@@ -491,15 +493,18 @@ class _PostAListingState extends State<PostAListing> {
   }
 
   Future<void> getProfileImage(int index) async {
-    final pickedFile = await _picker.pickImage(
-        source: (index == 0) ? ImageSource.camera : ImageSource.gallery);
+    final pickedFile = await _picker.pickMultiImage(
+        // source: (index == 0) ? ImageSource.camera : ImageSource.gallery
+    );
     if (pickedFile != null) {
       setState(() {
         // profileImage = File(pickedFile.path);
-        print(pickedFile.path);
-        attachements.add(
-          File(pickedFile.path),
-        );
+        print(pickedFile);
+       for(var i in pickedFile){
+         attachements.add(
+           File(i.path),
+         );
+       }
       });
     }
   }

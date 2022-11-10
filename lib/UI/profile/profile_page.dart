@@ -145,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               );
                             })
-                        : Container(
+                        : SizedBox(
                       height: 40.h,
                       child: Center(
                         child: Text(
@@ -156,6 +156,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
                     ),
                   ],
                 )

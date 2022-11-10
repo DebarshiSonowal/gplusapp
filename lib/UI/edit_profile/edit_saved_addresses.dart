@@ -16,7 +16,9 @@ import '../../Navigation/Navigate.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 
 class EditSavedAddresses extends StatefulWidget {
-  const EditSavedAddresses({Key? key}) : super(key: key);
+  final int which;
+
+  const EditSavedAddresses({super.key, required this.which});
 
   @override
   State<EditSavedAddresses> createState() => _EditSavedAddressesState();
@@ -89,6 +91,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                 width: double.infinity,
                 child: Center(
                   child: TextField(
+                    controller: _searchQueryController,
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Storage.instance.isDarkMode
                             ? Colors.white
@@ -283,17 +286,39 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                 ),
-                                GestureDetector(
-                                  onTap: (){
-                                    Navigation.instance.navigate('/editAddress',args: count);
-                                  },
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Storage.instance.isDarkMode
-                                        ? Constance.secondaryColor
-                                        : Colors.black,
-                                    size: 3.h,
-                                  ),
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        final result = await Navigation.instance
+                                            .navigate('/editAddress',
+                                                args: count);
+                                        if(result==null){
+                                          fetchAddress();
+                                        }
+                                      },
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: Storage.instance.isDarkMode
+                                            ? Constance.secondaryColor
+                                            : Colors.black,
+                                        size: 3.h,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 2.w,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        deleteAddress(current.id!);
+                                      },
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: Constance.thirdColor,
+                                        size: 3.h,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -309,7 +334,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                                   ?.copyWith(
                                     color: Storage.instance.isDarkMode
                                         ? Colors.white
-                                        :Colors.black,
+                                        : Colors.black,
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -328,7 +353,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                             child: Divider(
                               color: Storage.instance.isDarkMode
                                   ? Colors.white
-                                  :Colors.black,
+                                  : Colors.black,
                               thickness: 0.4.sp,
                             ),
                           ),
@@ -509,6 +534,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
   }
 
   void addAddress(String? address) async {
+    Navigation.instance.navigate('/loadingDialog');
     final response =
         await ApiProvider.instance.postAddress(address, latitude, longitude);
     if (response.success ?? false) {
@@ -516,8 +542,12 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setAddressess(response.addresses);
-      Navigator.of(context).pop(response.addresses.last.id);
+      Navigation.instance.goBack();
+      if (widget.which==0) {
+        Navigator.of(context).pop(response.addresses.last.id);
+      }
     } else {
+      Navigation.instance.goBack();
       showError("Something went wrong");
     }
   }
@@ -529,6 +559,11 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
     latitude = locations[0].latitude ?? 0;
     longitude = locations[0].longitude ?? 0;
     addAddress(address);
+    setState(() {
+      predictions=[];
+      _searchQueryController.text="";
+    });
+
   }
 
   showLoaderDialog(BuildContext context) {
@@ -559,5 +594,16 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
         return alert;
       },
     );
+  }
+
+  void deleteAddress(int i) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.deleteAddress(i);
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      fetchAddress();
+    } else {
+      Navigation.instance.goBack();
+    }
   }
 }

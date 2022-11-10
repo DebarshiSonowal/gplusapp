@@ -320,15 +320,18 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
   }
 
   Future<void> getProfileImage(int index) async {
-    final pickedFile = await _picker.pickImage(
-        source: (index == 0) ? ImageSource.camera : ImageSource.gallery);
+    final pickedFile = await _picker.pickMultiImage(
+      // source: (index == 0) ? ImageSource.camera : ImageSource.gallery
+    );
     if (pickedFile != null) {
       setState(() {
         // profileImage = File(pickedFile.path);
-        print(pickedFile.path);
-        attachements.add(
-          File(pickedFile.path),
-        );
+        print(pickedFile);
+        for(var i in pickedFile){
+          attachements.add(
+            File(i.path),
+          );
+        }
       });
     }
   }
@@ -341,11 +344,30 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
       print("post success ${response.success} ${response.message}");
       Fluttertoast.showToast(msg: "Posted successfully");
       Navigation.instance.goBack();
-      Navigation.instance.goBack();
+      fetchGuwahatiConnect();
     } else {
       print("post failed ${response.success} ${response.message}");
       Navigation.instance.goBack();
       showError(response.message ?? "Something went wrong");
+    }
+  }
+
+  void fetchGuwahatiConnect() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getGuwahatiConnect();
+    if (response.success ?? false) {
+      // setGuwahatiConnect
+      Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setGuwahatiConnect(response.posts);
+    } else {
+      Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setGuwahatiConnect(response.posts);
     }
   }
 

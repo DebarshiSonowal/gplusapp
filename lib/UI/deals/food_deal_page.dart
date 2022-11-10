@@ -253,7 +253,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
                                       ?.is_plan_active ??
                                   false) {
                                 Navigation.instance.navigate('/categorySelect',
-                                    args: current.id!);
+                                    args: current.vendor_id!);
                               } else {
                                 Constance.showMembershipPrompt(context, () {});
                               }

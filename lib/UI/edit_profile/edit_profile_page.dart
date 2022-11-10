@@ -124,6 +124,7 @@ class _EditProfileState extends State<EditProfile> {
                                 color: Colors.black,
                                 // fontSize: 1.5.h,
                               ),
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
                       focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white)),
                       border: const OutlineInputBorder(
@@ -161,6 +162,7 @@ class _EditProfileState extends State<EditProfile> {
                                 color: Colors.black,
                                 // fontSize: 1.5.h,
                               ),
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
                       focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white)),
                       border: const OutlineInputBorder(
@@ -198,6 +200,7 @@ class _EditProfileState extends State<EditProfile> {
                                 color: Colors.black,
                                 // fontSize: 1.5.h,
                               ),
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
                       focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white)),
                       border: const OutlineInputBorder(
@@ -234,7 +237,7 @@ class _EditProfileState extends State<EditProfile> {
                 GestureDetector(
                   onTap: () async {
                     final response = await Navigation.instance
-                        .navigate('/editSavedAddresses');
+                        .navigate('/editSavedAddresses',args: 0);
                     if (response != null) {
                       setState(() {
                         address = Provider.of<DataProvider>(
@@ -258,7 +261,7 @@ class _EditProfileState extends State<EditProfile> {
                         style: Theme.of(context).textTheme.headline5?.copyWith(
                               color: Storage.instance.isDarkMode
                                   ? Colors.white
-                                  :Constance.primaryColor,
+                                  : Constance.primaryColor,
                               // fontSize: 2.h,
                               // fontWeight: FontWeight.bold,
                             ),
@@ -267,7 +270,7 @@ class _EditProfileState extends State<EditProfile> {
                         Icons.arrow_forward_ios,
                         color: Storage.instance.isDarkMode
                             ? Constance.secondaryColor
-                            :Constance.primaryColor,
+                            : Constance.primaryColor,
                       ),
                     ],
                   ),
@@ -280,7 +283,7 @@ class _EditProfileState extends State<EditProfile> {
                   style: Theme.of(context).textTheme.subtitle2?.copyWith(
                         color: Storage.instance.isDarkMode
                             ? Colors.white
-                            :Constance.primaryColor,
+                            : Constance.primaryColor,
                         // fontSize: 2.h,
                         fontWeight: FontWeight.bold,
                       ),
@@ -293,7 +296,7 @@ class _EditProfileState extends State<EditProfile> {
                   style: Theme.of(context).textTheme.headline4?.copyWith(
                         color: Storage.instance.isDarkMode
                             ? Colors.white
-                            :Constance.primaryColor,
+                            : Constance.primaryColor,
                         // fontSize: 2.h,
                         fontWeight: FontWeight.bold,
                       ),
@@ -368,7 +371,7 @@ class _EditProfileState extends State<EditProfile> {
                   style: Theme.of(context).textTheme.headline4?.copyWith(
                         color: Storage.instance.isDarkMode
                             ? Colors.white
-                            :Constance.primaryColor,
+                            : Constance.primaryColor,
                         // fontSize: 2.h,
                         fontWeight: FontWeight.bold,
                       ),
