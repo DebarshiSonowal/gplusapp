@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -83,10 +84,11 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                 child: Text(
                   title,
                   style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
-                        // fontSize: 1.6.h,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
+                      fontWeight: FontWeight.bold
+                      // fontSize: 1.6.h,
                       ),
                 ),
               ),
@@ -114,7 +116,7 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                         : Colors.black,
                   ),
                   Text(
-                    'Add more attachments',
+                    'Attachments',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Storage.instance.isDarkMode
                               ? Colors.white
@@ -147,39 +149,36 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                             ),
                           ),
                         )
-                      : Container(
-                          height: 8.h,
-                          width: 20.w,
-                          color: Colors.grey.shade200,
-                          child: Center(
-                            child: Image.network(
-                              images[pos].file_name ?? "",
-                              fit: BoxFit.fill,
+                      : GestureDetector(
+                          onTap: () {
+                            Navigation.instance.navigate('/viewImage',
+                                args: images[pos].file_name);
+                          },
+                          child: Container(
+                            height: 8.h,
+                            width: 20.w,
+                            color: Colors.grey.shade200,
+                            child: Center(
+                              child: Image.network(
+                                images[pos].file_name ?? "",
+                                fit: BoxFit.fill,
+                              ),
                             ),
                           ),
                         ),
                 ),
               ),
               SizedBox(
-                height: 1.h,
+                height: 2.h,
               ),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: List.generate(
-                  (attachements.length ?? 0),
-                  (pos) => Container(
-                    height: 8.h,
-                    width: 20.w,
-                    color: Colors.grey.shade200,
-                    child: Center(
-                      child: Image.file(
-                        attachements[pos],
-                        fit: BoxFit.fill,
-                      ),
+              Text(
+                'Posted on ${Jiffy(local?.created_at ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white70
+                          : Colors.black,
+                      // fontSize: 1.6.h,
                     ),
-                  ),
-                ),
               ),
               SizedBox(
                 height: 5.h,
@@ -228,16 +227,25 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
   }
 
   Future<void> getProfileImage(int index) async {
-    final pickedFile = await _picker.pickImage(
-        source: (index == 0) ? ImageSource.camera : ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        // profileImage = File(pickedFile.path);
-        print(pickedFile.path);
-        attachements.add(
-          File(pickedFile.path),
-        );
-      });
+    if (index == 0) {
+      final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        setState(() {
+          var profileImage = File(pickedFile.path);
+          attachements.add(profileImage);
+        });
+      }
+    } else {
+      final pickedFile = await _picker.pickMultiImage();
+      if (pickedFile != null) {
+        setState(() {
+          for (var i in pickedFile) {
+            attachements.add(
+              File(i.path),
+            );
+          }
+        });
+      }
     }
   }
 

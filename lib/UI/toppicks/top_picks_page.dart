@@ -100,7 +100,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
           return Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            color: Colors.white,
+            color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
             padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
             child: data.home_exclusive.isNotEmpty
                 ? SingleChildScrollView(
@@ -121,7 +121,9 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                   .textTheme
                                   .headline3
                                   ?.copyWith(
-                                    color: Constance.primaryColor,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor,
                                     // fontSize: 2.2.h,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -132,7 +134,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
                           height: 1.h,
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5.w),
+                          padding: EdgeInsets.symmetric(horizontal: 0.w),
                           child: Container(
                             height: 30.h,
                             width: double.infinity,
@@ -184,7 +186,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                   args:
                                       '${data.home_toppicks[0].categories?.first.seo_name},${data.home_toppicks[0].seo_name}');
                             } else {
-                              Constance.showMembershipPrompt(context,(){});
+                              Constance.showMembershipPrompt(context, () {});
                             }
                           },
                           child: Text(
@@ -195,7 +197,9 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                 .textTheme
                                 .headline3
                                 ?.copyWith(
-                                  color: Constance.primaryColor,
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Constance.primaryColor,
                                   // fontSize: 2.2.h,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -205,13 +209,15 @@ class _TopPicksPageState extends State<TopPicksPage> {
                           height: 2.h,
                         ),
                         Text(
-                          '${data.home_toppicks[0].author_name??"GPlus Admin"}, ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                          '${data.home_toppicks[0].author_name ?? "GPlus Admin"}, ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
                           style: Theme.of(Navigation
                                   .instance.navigatorKey.currentContext!)
                               .textTheme
                               .headline5
                               ?.copyWith(
-                                color: Colors.black,
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
                                 // fontSize: 2.2.h,
                                 // fontWeight: FontWeight.bold,
                               ),
@@ -234,17 +240,20 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                         args:
                                             '${item.categories?.first.seo_name},${item.seo_name}');
                                   } else {
-                                    Constance.showMembershipPrompt(context,(){});
+                                    Constance.showMembershipPrompt(
+                                        context, () {});
                                   }
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 3.w, vertical: 2.h),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
+                                      horizontal: 3.w, vertical: 1.h),
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
                                       Radius.circular(5),
                                     ),
-                                    color: Colors.white,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.black
+                                        : Colors.white,
                                   ),
                                   height: 20.h,
                                   width:
@@ -256,26 +265,26 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Expanded(
-                                              child: CachedNetworkImage(
-                                                imageUrl:
-                                                    item.image_file_name ?? '',
-                                                fit: BoxFit.fill,
-                                                placeholder: (cont, _) {
-                                                  return Image.asset(
-                                                    Constance.logoIcon,
-                                                    // color: Colors.black,
-                                                  );
-                                                },
-                                                errorWidget: (cont, _, e) {
-                                                  // print(e);
-                                                  print(_);
-                                                  return Image.asset(
-                                                    Constance.logoIcon,
-                                                    // color: Colors.black,
-                                                  );
-                                                },
-                                              ),
+                                            CachedNetworkImage(
+                                              height: 15.h,
+                                              width: 45.w,
+                                              imageUrl:
+                                                  item.image_file_name ?? '',
+                                              fit: BoxFit.fill,
+                                              placeholder: (cont, _) {
+                                                return Image.asset(
+                                                  Constance.logoIcon,
+                                                  // color: Colors.black,
+                                                );
+                                              },
+                                              errorWidget: (cont, _, e) {
+                                                // print(e);
+                                                print(_);
+                                                return Image.asset(
+                                                  Constance.logoIcon,
+                                                  // color: Colors.black,
+                                                );
+                                              },
                                             ),
                                             SizedBox(
                                               height: 1.h,
@@ -294,16 +303,19 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                                   .textTheme
                                                   .headline6
                                                   ?.copyWith(
-                                                      color: Colors.black),
+                                                      color: Storage.instance
+                                                              .isDarkMode
+                                                          ? Colors.white
+                                                          : Colors.black),
                                             ),
                                           ],
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 5.w,
+                                        width: 4.w,
                                       ),
                                       Expanded(
-                                        flex: 2,
+                                        flex: 1,
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -320,8 +332,11 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                                             FontWeight.bold,
                                                         overflow: TextOverflow
                                                             .ellipsis,
-                                                        color: Constance
-                                                            .primaryColor),
+                                                        color: Storage.instance
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : Constance
+                                                                .primaryColor),
                                               ),
                                             ),
                                             SizedBox(
@@ -333,7 +348,10 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                                   .textTheme
                                                   .headline6
                                                   ?.copyWith(
-                                                      color: Colors.black),
+                                                      color: Storage.instance
+                                                              .isDarkMode
+                                                          ? Colors.white
+                                                          : Colors.black),
                                             ),
                                           ],
                                         ),
@@ -353,7 +371,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
                               return SizedBox(
                                 height: 1.h,
                                 child: Divider(
-                                  color: Colors.black,
+                                  color:  Storage.instance.isDarkMode?Colors.white:Colors.black,
                                   thickness: 0.3.sp,
                                 ),
                               );
@@ -382,10 +400,10 @@ class _TopPicksPageState extends State<TopPicksPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },

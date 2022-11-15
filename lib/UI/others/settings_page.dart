@@ -480,6 +480,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final response = await ApiProvider.instance.setSwitch(val, type);
     if (response.success ?? false) {
       fetchSwitchStatus();
+      Navigation.instance.navigateAndRemoveUntil('/main');
     } else {
       showError(response.message ?? "Something went wrong");
     }

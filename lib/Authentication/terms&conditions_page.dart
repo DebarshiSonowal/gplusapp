@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
+import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -11,7 +12,6 @@ import '../Helper/DataProvider.dart';
 class TermsAndConditions extends StatefulWidget {
   final int mobile;
 
-
   TermsAndConditions(this.mobile);
 
   @override
@@ -20,6 +20,16 @@ class TermsAndConditions extends StatefulWidget {
 
 class _TermsAndConditionsState extends State<TermsAndConditions> {
   bool agreed = false;
+
+  String terms = Constance.terms;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      fetchTermsandCondition();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +60,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical, //.horizontal
                 child: Text(
-                  Constance.terms,
+                  terms,
                   overflow: TextOverflow.clip,
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
@@ -109,11 +119,10 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                 txt: 'continue',
                 onTap: () {
                   if (agreed) {
-                    Navigation.instance
-                        .navigateAndReplace('/personaldetails',args: widget.mobile);
+                    Navigation.instance.navigateAndReplace('/personaldetails',
+                        args: widget.mobile);
                   } else {
-                    showError(
-                        'You have to agree to our terms and conditions');
+                    showError('You have to agree to our terms and conditions');
                   }
                 },
               ),
@@ -130,10 +139,10 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -156,5 +165,18 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  void fetchTermsandCondition() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getTerms();
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      setState(() {
+        terms = response.desc ?? "";
+      });
+    } else {
+      Navigation.instance.goBack();
+    }
   }
 }

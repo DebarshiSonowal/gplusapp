@@ -16,7 +16,7 @@ class DealDetails {
       image_file_name,
       address,
       opening_time,
-      closing_time;
+      closing_time,services;
   double? latitude, longitude;
   List<Coupon>? coupons;
 
@@ -50,6 +50,7 @@ class DealDetails {
 
     //String
     image_file_name = json['image_file_name'] ?? "";
+    services = json['services'] ?? "";
     code = json['code'] ?? "";
     shop_name = json['shop_name'] ?? "";
     contact_name = json['contact_name'] ?? "";

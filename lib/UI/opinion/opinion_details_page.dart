@@ -255,7 +255,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             SizedBox(
                               height: 1.5.h,
                             ),
-                            Row(
+                            data.ads.isNotEmpty?Row(
                               children: [
                                 Container(
                                   color: Constance.secondaryColor,
@@ -275,8 +275,8 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   ),
                                 ),
                               ],
-                            ),
-                            SizedBox(
+                            ):Container(),
+                            data.ads.isNotEmpty?SizedBox(
                               // height: 10.h,
                               width: double.infinity,
                               child: GestureDetector(
@@ -307,7 +307,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   ),
                                 ),
                               ),
-                            ),
+                            ):Container(),
                             SizedBox(
                               height: 1.5.h,
                             ),

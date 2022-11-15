@@ -97,7 +97,7 @@ class _DraftStoryState extends State<DraftStory> {
                                             args: item.id);
                                       },
                                       child: SizedBox(
-                                        width: 20.w,
+                                        width: 40.w,
                                         child: Text(
                                           item.title ?? "",
                                           maxLines: 1,
@@ -107,7 +107,8 @@ class _DraftStoryState extends State<DraftStory> {
                                               .headline4
                                               ?.copyWith(
                                                   fontWeight: FontWeight.bold,
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   color: Storage
                                                           .instance.isDarkMode
                                                       ? Colors.white
@@ -128,22 +129,25 @@ class _DraftStoryState extends State<DraftStory> {
                                                 '/viewStoryPage',
                                                 args: item.id);
                                           },
-                                          child: Text(
-                                            item.story ?? "",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                ?.copyWith(
-                                                    color: Storage
-                                                            .instance.isDarkMode
-                                                        ? Colors.white70
-                                                        : Colors.black),
+                                          child: SizedBox(
+                                            width: 40.w,
+                                            child: Text(
+                                              item.story ?? "",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  ?.copyWith(
+                                                      color: Storage.instance
+                                                              .isDarkMode
+                                                          ? Colors.white70
+                                                          : Colors.black),
+                                            ),
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 20.w,
+                                          width: 15.w,
                                         ),
                                         Row(
                                           children: [
@@ -269,6 +273,17 @@ class _DraftStoryState extends State<DraftStory> {
     super.initState();
     Future.delayed(Duration.zero, () => fetchDrafts());
   }
+
+
+  // @override
+  // void dispose() {
+  //   Provider.of<DataProvider>(
+  //       Navigation.instance.navigatorKey.currentContext ?? context,
+  //       listen: false)
+  //       .setCitizenJournalist([]);
+  //   super.dispose();
+  //
+  // }
 
   deletePost(id) async {
     Navigation.instance.navigate('/loadingDialog');

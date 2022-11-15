@@ -357,6 +357,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
                               });
                             });
                             fetchCategories();
+                            Navigation.instance.goBack();
                             print(_value);
                           },
                           activeColor: Constance.primaryColor,
@@ -389,6 +390,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
                                 order_by = _value;
                               });
                               fetchCategories();
+                              Navigation.instance.goBack();
                             });
                           },
                           activeColor: Constance.primaryColor,

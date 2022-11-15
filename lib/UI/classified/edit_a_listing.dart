@@ -1,12 +1,9 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gplusapp/Helper/DataProvider.dart';
-import 'package:gplusapp/Model/attach_file.dart';
-import 'package:gplusapp/Model/citizen_journalist.dart';
-import 'package:gplusapp/Model/profile.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -15,33 +12,49 @@ import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
+import '../../Model/attach_file.dart';
+import '../../Model/guwahati_connect.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
-class EditStory extends StatefulWidget {
-  final int id;
-
-  EditStory(this.id);
+class EditAListingPost extends StatefulWidget {
+  // final int id;
+  //
+  // const EditAListingPost(this.id);
 
   @override
-  State<EditStory> createState() => _EditStoryState();
+  State<EditAListingPost> createState() => _EditAListingPostState();
 }
 
-class _EditStoryState extends State<EditStory> {
-  var title = TextEditingController();
-  CitizenJournalist? local;
-  var desc = TextEditingController();
+class _EditAListingPostState extends State<EditAListingPost> {
+  final title = TextEditingController();
+
+  final desc = TextEditingController();
+
+  final price = TextEditingController();
 
   var current = 3;
+
+  var category = [
+    'Vehicles',
+    'House',
+  ];
+  var selectedCategory = '';
+  var selectedLocality = '';
+  var locality = ['Rukminigaon', 'Khanapara', 'Beltola', ''];
+
   final ImagePicker _picker = ImagePicker();
+  List<AttachFile> images = [];
   List<File> attachements = [];
-  List<CJAttachment> images = [];
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () => fetchDetails());
+    Future.delayed(Duration.zero, () {
+      fetchClassified();
+    });
   }
 
   @override
@@ -49,13 +62,13 @@ class _EditStoryState extends State<EditStory> {
     super.dispose();
     title.dispose();
     desc.dispose();
+    price.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -65,17 +78,113 @@ class _EditStoryState extends State<EditStory> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.w),
-                child: Text(
-                  'Edit a story',
-                  style: Theme.of(context).textTheme.headline2?.copyWith(
-                      color: Storage.instance.isDarkMode
-                          ? Colors.white
-                          : Constance.primaryColor,
-                      fontWeight: FontWeight.bold),
-                ),
+              Text(
+                'Post a story',
+                style: Theme.of(context).textTheme.headline2?.copyWith(
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
+                    fontWeight: FontWeight.bold),
               ),
+              SizedBox(
+                height: 2.h,
+              ),
+              Text(
+                'Category',
+                style: Theme.of(context).textTheme.headline4?.copyWith(
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 0.3.h,
+              ),
+              Consumer<DataProvider>(builder: (context, data, _) {
+                return DropdownButton(
+                  dropdownColor:
+                      Storage.instance.isDarkMode ? Colors.black : Colors.white,
+                  // Initial Value
+                  value: selectedCategory,
+
+                  // Down Arrow Icon
+                  icon: const Icon(Icons.keyboard_arrow_down),
+
+                  // Array list of items
+                  items: data.classified_category
+                      .map((e) => DropdownMenuItem(
+                            value: e.id.toString(),
+                            child: Text(
+                              e.title ?? "",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white70
+                                        : Constance.primaryColor,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ))
+                      .toList(),
+                  // After selecting the desired option,it will
+                  // change button value to selected value
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedCategory = newValue!;
+                    });
+                  },
+                );
+              }),
+              Text(
+                'Add your locality',
+                style: Theme.of(context).textTheme.headline4?.copyWith(
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 0.3.h,
+              ),
+              Consumer<DataProvider>(builder: (context, data, _) {
+                return DropdownButton(
+                  dropdownColor:
+                      Storage.instance.isDarkMode ? Colors.black : Colors.white,
+                  // Initial Value
+                  value: selectedLocality,
+
+                  // Down Arrow Icon
+                  icon: const Icon(Icons.keyboard_arrow_down),
+
+                  // Array list of items
+                  items: data.locality
+                      .map((e) => DropdownMenuItem(
+                            value: e.id.toString(),
+                            child: Text(
+                              e.name ?? "",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white70
+                                        : Constance.primaryColor,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ))
+                      .toList(),
+                  // After selecting the desired option,it will
+                  // change button value to selected value
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedLocality = newValue!;
+                    });
+                  },
+                );
+              }),
               SizedBox(
                 height: 2.h,
               ),
@@ -85,12 +194,12 @@ class _EditStoryState extends State<EditStory> {
                       // fontSize: 1.6.h,
                     ),
                 controller: title,
-                // maxLines: 2,
+                maxLines: 1,
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Colors.white,
                   floatingLabelBehavior: FloatingLabelBehavior.never,
+                  fillColor: Colors.white,
                   labelText: 'Enter the title',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
@@ -114,8 +223,8 @@ class _EditStoryState extends State<EditStory> {
                 minLines: 10,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Colors.white,
                   floatingLabelBehavior: FloatingLabelBehavior.never,
+                  fillColor: Colors.white,
                   labelText: 'Enter the details',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
@@ -133,7 +242,7 @@ class _EditStoryState extends State<EditStory> {
                   Icon(
                     Icons.attach_file,
                     color: Storage.instance.isDarkMode
-                        ? Colors.white
+                        ? Constance.secondaryColor
                         : Colors.black,
                   ),
                   Text(
@@ -195,7 +304,7 @@ class _EditStoryState extends State<EditStory> {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 color: Colors.white,
-                                child: Icon(
+                                child: const Icon(
                                   Icons.remove,
                                   color: Constance.thirdColor,
                                 ),
@@ -257,77 +366,84 @@ class _EditStoryState extends State<EditStory> {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 color: Colors.white,
-                                child: const Icon(
+                                child: Icon(
                                   Icons.remove,
                                   color: Constance.thirdColor,
                                 ),
                               ),
-                            ),
+                            )
                           ],
                         ),
                 ),
               ),
               SizedBox(
-                height: 5.h,
+                height: 2.h,
+              ),
+              Text(
+                'Add Price',
+                style: Theme.of(context).textTheme.headline4?.copyWith(
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
+                    fontWeight: FontWeight.bold),
               ),
               SizedBox(
-                height: 5.h,
-                width: double.infinity,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      height: 5.h,
-                      width: 40.w,
-                      child: CustomButton(
-                        onTap: () {
-                          // showDialogBox();
-                          if (title.text.isNotEmpty && desc.text.isNotEmpty) {
-                            postStory(widget.id, 1);
-                          } else {
-                            showError(
-                                "Title and Description is mandatory to post");
-                          }
-                        },
-                        txt: 'Submit',
-                      ),
+                height: 0.5.h,
+              ),
+              TextFormField(
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                      color: Colors.black,
+                      // fontSize: 1.6.h,
                     ),
-                    SizedBox(
-                      height: 5.h,
-                      width: 40.w,
-                      child: CustomButton(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
-                        fcolor: Storage.instance.isDarkMode
-                            ? Colors.black
-                            : Colors.white,
-                        onTap: () {
-                          // showDialogBox();
-                          if (title.text.isNotEmpty && desc.text.isNotEmpty) {
-                            postStory(widget.id, 0);
-                          } else {
-                            showError(
-                                "Title and Description is mandatory to post");
-                          }
-                        },
-                        txt: 'Save as draft',
+                controller: price,
+                maxLines: 1,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  filled: true,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  fillColor: Colors.white,
+                  labelText: 'Enter the price',
+                  labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Colors.black,
+                        // fontSize: 1.5.h,
                       ),
-                    ),
-                  ],
+                  border: const OutlineInputBorder(),
+                  enabledBorder: const OutlineInputBorder(),
                 ),
               ),
-              // SizedBox(
-              //   width: double.infinity,
-              //   child: CustomButton(
-              //     onTap: () {
-              //       // showDialogBox();
-              //       postStory(widget.id,0);
-              //     },
-              //     txt: 'Submit',
-              //   ),
-              // ),
+              SizedBox(
+                height: 2.h,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: CustomButton(
+                  onTap: () {
+                    // showDialogBox();
+                    if (title.text.isNotEmpty &&
+                        desc.text.isNotEmpty &&
+                        price.text.isNotEmpty) {
+                      updateClassified(
+                          selectedCategory,
+                          selectedLocality,
+                          title.text,
+                          desc.text,
+                          price.text,
+                          attachements,
+                          Provider.of<DataProvider>(
+                                  Navigation.instance.navigatorKey
+                                          .currentContext ??
+                                      context,
+                                  listen: false)
+                              .selectedClassified
+                              ?.id);
+                    } else {
+                      showError(
+                          "Title, Description and Price is mandatory to post");
+                    }
+                  },
+                  txt: 'Go ahead',
+                ),
+              ),
             ],
           ),
         ),
@@ -338,6 +454,12 @@ class _EditStoryState extends State<EditStory> {
 
   AppBar buildAppBar() {
     return AppBar(
+      // leading: IconButton(
+      //   onPressed: () {
+      //     Navigation.instance.navigate('/bergerMenuMem');
+      //   },
+      //   icon: Icon(Icons.menu),
+      // ),
       title: GestureDetector(
         onTap: () {
           Provider.of<DataProvider>(
@@ -356,15 +478,11 @@ class _EditStoryState extends State<EditStory> {
       backgroundColor: Constance.primaryColor,
       actions: [
         IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/notification');
-          },
+          onPressed: () {},
           icon: Icon(Icons.notifications),
         ),
         IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/search');
-          },
+          onPressed: () {},
           icon: Icon(Icons.search),
         ),
       ],
@@ -459,10 +577,7 @@ class _EditStoryState extends State<EditStory> {
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      final pickedFile = await _picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 70,
-      );
+      final pickedFile = await _picker.pickImage(source: ImageSource.camera,imageQuality: 70,);
       if (pickedFile != null) {
         setState(() {
           var profileImage = File(pickedFile.path);
@@ -470,9 +585,7 @@ class _EditStoryState extends State<EditStory> {
         });
       }
     } else {
-      final pickedFile = await _picker.pickMultiImage(
-        imageQuality: 70,
-      );
+      final pickedFile = await _picker.pickMultiImage(imageQuality: 70,);
       if (pickedFile != null) {
         setState(() {
           for (var i in pickedFile) {
@@ -521,7 +634,7 @@ class _EditStoryState extends State<EditStory> {
                   size: 15.h,
                 ),
                 Text(
-                  'Hello ${Provider.of<DataProvider>(context).profile?.name ?? ""}',
+                  'Hello Jonathan!',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -563,49 +676,98 @@ class _EditStoryState extends State<EditStory> {
     );
   }
 
-  void postStory(id, is_story_submit) async {
-    Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.editCitizenJournalist(
-        id, title.text, desc.text, attachements, is_story_submit);
-    if (response.success ?? false) {
-      Fluttertoast.showToast(msg: "Posted successfully");
-      Navigation.instance.goBack();
-      fetchDrafts();
-      Navigation.instance.goBack();
-    } else {
-      Navigation.instance.goBack();
-      showError(response.message ?? "Something went wrong");
-    }
+  void setClassified() async {
+    setState(() {
+      title.text = Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .selectedClassified
+              ?.title ??
+          "";
+      desc.text = Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .selectedClassified
+              ?.description ??
+          "";
+      price.text = (Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext ??
+                          context,
+                      listen: false)
+                  .selectedClassified
+                  ?.price ??
+              0)
+          .toString();
+      images.addAll(Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .selectedClassified
+              ?.attach_files ??
+          []);
+    });
   }
 
-  fetchDrafts() async {
+  void fetchClassified() async {
+    // showLoaderDialog(context);
     Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.getCitizenJournalistDraft();
+    final response = await ApiProvider.instance.getClassifiedCategory();
     if (response.success ?? false) {
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .setCitizenJournalist(response.posts);
-      // Fluttertoast.showToast(msg: "G successfully");
       Navigation.instance.goBack();
+      print(response.categories);
+      setState(() {
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .setClassifiedCategory(response.categories ?? []);
+        selectedCategory = (Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                    .selectedClassified
+                    ?.categoryName
+                    ?.id ??
+                0)
+            .toString();
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .setLocality(response.localities ?? []);
+        selectedLocality = (Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                    .selectedClassified
+                    ?.locality
+                    ?.id ??
+                0)
+            .toString();
+      });
+
+      setClassified();
     } else {
       Navigation.instance.goBack();
+      showError("Something went wrong");
+      // setClassified();
     }
   }
 
   fetchDetails() async {
-    setState(() {
-      local = Provider.of<DataProvider>(
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getClassifiedDetails(
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .selectedClassified
+            ?.id);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
-          .citizenlist
-          .where((element) => element.id == widget.id)
-          .first;
-      title.text = local?.title ?? "";
-      desc.text = local?.story ?? "";
-      // attachements.add(File(''));
-      images.addAll(local?.attach_files ?? []);
-    });
+          .setClassifiedDetails(response.classifieds!);
+      Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
+    }
   }
 
   void showError(String msg) {
@@ -616,5 +778,41 @@ class _EditStoryState extends State<EditStory> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  void updateClassified(classified_category_id, locality_id, title, description,
+      price, List<File> files, id) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final reponse = await ApiProvider.instance.updateClassified(
+        classified_category_id,
+        locality_id,
+        title,
+        description,
+        price,
+        files,
+        getComaSeparated(images),
+        id);
+    if (reponse.success ?? false) {
+      Fluttertoast.showToast(msg: "Posted successfully");
+      Navigation.instance.goBack();
+      fetchClassified();
+      fetchDetails();
+      Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
+      showError("Something went wrong");
+    }
+  }
+
+  String getComaSeparated(List<dynamic> list) {
+    String temp = "";
+    for (int i = 0; i < list.length; i++) {
+      if (i == 0) {
+        temp = '${list[i].id.toString()},';
+      } else {
+        temp += '${list[i].id.toString()},';
+      }
+    }
+    return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
 }

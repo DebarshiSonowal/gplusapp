@@ -1,11 +1,12 @@
 import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:gplusapp/Model/guwahati_connect.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
@@ -13,27 +14,44 @@ import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
+import '../../Model/citizen_journalist.dart';
 import '../../Navigation/Navigate.dart';
+import '../../Networking/api_provider.dart';
 
-class AskAQuestionPage extends StatefulWidget {
-  const AskAQuestionPage({Key? key}) : super(key: key);
+class EditAskAQuestionPage extends StatefulWidget {
+  final int id;
+
+  const EditAskAQuestionPage(this.id);
 
   @override
-  State<AskAQuestionPage> createState() => _AskAQuestionPageState();
+  State<EditAskAQuestionPage> createState() => _EditAskAQuestionPageState();
 }
 
-class _AskAQuestionPageState extends State<AskAQuestionPage> {
-  // var title = TextEditingController();
-
+class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
   final desc = TextEditingController();
 
   var current = 3;
   final ImagePicker _picker = ImagePicker();
   List<File> attachements = [];
+  List<GCAttachment> images = [];
 
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, () {
+      desc.text = Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,listen: false)
+              .guwahatiConnect[widget.id]
+              .question ??
+          "";
+
+      setState(() {
+        images.addAll(Provider.of<DataProvider>(
+            Navigation.instance.navigatorKey.currentContext ?? context,listen: false)
+            .guwahatiConnect[widget.id]
+            .attachment!);
+      });
+    });
   }
 
   @override
@@ -60,7 +78,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5.w),
                 child: Text(
-                  'Ask A Question',
+                  'Edit Question',
                   style: Theme.of(context).textTheme.headline2?.copyWith(
                       color: Storage.instance.isDarkMode
                           ? Colors.white
@@ -124,6 +142,64 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                 spacing: 8,
                 runSpacing: 8,
                 children: List.generate(
+                  (images.length ?? 0),
+                  (pos) => (pos == images.length)
+                      ? GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: 8.h,
+                            width: 20.w,
+                            color: Colors.grey.shade200,
+                            child: const Center(
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            Container(
+                              height: 8.h,
+                              width: 20.w,
+                              color: Colors.grey.shade200,
+                              child: Center(
+                                child: Image.network(
+                                  images[pos].file_name ?? "",
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  attachements.removeAt(pos);
+                                });
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                color: Colors.white,
+                                child: const Icon(
+                                  Icons.remove,
+                                  color: Constance.thirdColor,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                ),
+              ),
+              SizedBox(
+                height: 1.h,
+              ),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: List.generate(
                   (attachements.length ?? 0) + 1,
                   (pos) => (pos == attachements.length)
                       ? GestureDetector(
@@ -169,7 +245,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 color: Colors.white,
-                                child: Icon(
+                                child: const Icon(
                                   Icons.remove,
                                   color: Constance.thirdColor,
                                 ),
@@ -188,7 +264,11 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                   onTap: () {
                     // showDialogBox();
                     if (desc.text.isNotEmpty) {
-                      postQuestion();
+                      updateQuestion(Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,listen: false)
+                          .guwahatiConnect[widget.id]
+                          .id!);
                     } else {}
                   },
                   txt: 'Submit',
@@ -238,7 +318,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
   }
 
   void showPhotoBottomSheet(Function(int) getImage) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
     BuildContext? context = Navigation.instance.navigatorKey.currentContext;
@@ -325,10 +405,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      final pickedFile = await _picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 70,
-      );
+      final pickedFile = await _picker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
         setState(() {
           var profileImage = File(pickedFile.path);
@@ -336,9 +413,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
         });
       }
     } else {
-      final pickedFile = await _picker.pickMultiImage(
-        imageQuality: 70,
-      );
+      final pickedFile = await _picker.pickMultiImage();
       if (pickedFile != null) {
         setState(() {
           for (var i in pickedFile) {
@@ -351,13 +426,13 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
     }
   }
 
-  void postQuestion() async {
+  void updateQuestion(id) async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance
-        .postGuwhahatiConnect(desc.text, attachements);
+        .updateGuwahatiConnect(id, desc.text, attachements, getComaSeparated(images));
     if (response.success ?? false) {
       print("post success ${response.success} ${response.message}");
-      Fluttertoast.showToast(msg: "Your post has been submitted for review");
+      Fluttertoast.showToast(msg: "Posted successfully");
       Navigation.instance.goBack();
       fetchGuwahatiConnect();
       Navigation.instance.goBack();
@@ -367,7 +442,17 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
       showError(response.message ?? "Something went wrong");
     }
   }
-
+  String getComaSeparated(List<dynamic> list) {
+    String temp = "";
+    for (int i = 0; i < list.length; i++) {
+      if (i == 0) {
+        temp = '${list[i].id.toString()},';
+      } else {
+        temp += '${list[i].id.toString()},';
+      }
+    }
+    return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
+  }
   void fetchGuwahatiConnect() async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getGuwahatiConnect();

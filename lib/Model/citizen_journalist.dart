@@ -2,7 +2,7 @@ import 'attach_file.dart';
 
 class CitizenJournalist {
   int? id, user_id, status;
-  String? title, story;
+  String? title, story,created_at;
   List<CJAttachment>? attach_files;
 
   CitizenJournalist.fromJson(json) {
@@ -13,7 +13,9 @@ class CitizenJournalist {
 
     title = json['title'] ?? "";
     story = json['story'] ?? "";
-
+   created_at = json['created_at'] == null
+        ? ""
+        : json['created_at'].toString().split("T")[0];
     attach_files = json['attached_files'] == null
         ? []
         : (json['attached_files'] as List)

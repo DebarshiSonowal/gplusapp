@@ -637,7 +637,7 @@ class _BigDealPageState extends State<BigDealPage> {
                                                     height: 0.5.h,
                                                   ),
                                                   Text(
-                                                    'From: ${Jiffy(data.plan_active_date.toString().split('T')[0] ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                                                    'From: ${Jiffy(data.valid_from.toString().split('T')[0] ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     textAlign: TextAlign.start,
@@ -657,7 +657,7 @@ class _BigDealPageState extends State<BigDealPage> {
                                                     height: 0.5.h,
                                                   ),
                                                   Text(
-                                                    'To: ${Jiffy(data.plan_expiry_date.toString().split('T')[0] ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                                                    'To: ${Jiffy(data.valid_to.toString().split('T')[0] ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     textAlign: TextAlign.start,

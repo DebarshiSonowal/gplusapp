@@ -48,6 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 3), () {
       print('LOGGEDIN');
       if (Storage.instance.isLoggedIn) {
+        fetchSwitchStatus();
         fetchProfile();
 
       // } else if (Storage.instance.isOnBoarding) {
@@ -57,6 +58,20 @@ class _SplashScreenState extends State<SplashScreen> {
         // Navigation.instance.navigateAndRemoveUntil('/onboarding');
       }
     });
+  }
+  void fetchSwitchStatus() async {
+    final response = await ApiProvider.instance.getSwitchStatus();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setSwitch(response.status);
+      setState(() {
+        Storage.instance.setDarkMode(response.status?.dark ?? false);
+      });
+    } else {
+
+    }
   }
   void fetchProfile() async {
     print('object profile');

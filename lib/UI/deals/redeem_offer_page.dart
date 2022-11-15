@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -34,7 +35,7 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Storage.instance.isDarkMode?Colors.black:Colors.white,
         // padding: EdgeInsets.symmetric(vertical: 2.h),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return Stack(
@@ -48,11 +49,11 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
                   children: [
                     Container(
                       width: double.infinity,
-                      height: 25.h,
+                      height: 35.h,
                       // color: Colors.black,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          fit: BoxFit.contain,
+                          fit: BoxFit.fill,
                           image: CachedNetworkImageProvider(
                             data.details?.image_file_name ??
                                 Constance.salonImage,
@@ -69,7 +70,7 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
               ),
               Container(
                 // height: 200,
-                width: 80.w,
+                width: 90.w,
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -78,7 +79,7 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
                         padding: EdgeInsets.symmetric(
                             horizontal: 5.w, vertical: 2.h),
                         // height: 35.h,
-                        width: 80.w,
+                        width: 90.w,
                         decoration: const BoxDecoration(
                           color: Constance.secondaryColor,
                           borderRadius: BorderRadius.all(
@@ -188,7 +189,7 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
                               height: 1.h,
                             ),
                             Text(
-                              '* The offer expires of ${Jiffy(data.redeemDetails?.plan_expiry_date ?? "0000-00-00", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                              '* The offer expires of ${Jiffy(data.redeemDetails?.valid_to ?? "0000-00-00", "yyyy-MM-dd").format("dd/MM/yyyy")}',
                               style: Theme.of(context)
                                   .textTheme
                                   .headline6
@@ -204,7 +205,7 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
                         height: 2.h,
                       ),
                       SizedBox(
-                        width: 80.w,
+                        width: 90.w,
                         child: Card(
                           elevation: 2,
                           shape: RoundedRectangleBorder(
@@ -252,7 +253,7 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
                         height: 2.h,
                       ),
                       SizedBox(
-                        width: 80.w,
+                        width: 90.w,
                         child: Card(
                           elevation: 2,
                           shape: RoundedRectangleBorder(

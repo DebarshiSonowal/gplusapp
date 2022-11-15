@@ -31,6 +31,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   PageController controller = PageController(initialPage: 0);
   int page = 0;
   String currentId = '';
+ List<YoutubePlayerController> _controllers = [];
 
   // PodPlayerController? _controller;
   @override
@@ -45,6 +46,19 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
+        _controllers = Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .home_weekly
+            .map<YoutubePlayerController>(
+              (videoId) => YoutubePlayerController(
+                initialVideoId: videoId.youtube_id!,
+                flags: const YoutubePlayerFlags(
+                  autoPlay: false,
+                ),
+              ),
+            )
+            .toList();
         // itemScrollController.jumpTo(
         //     index: Provider.of<DataProvider>(
         //             Navigation.instance.navigatorKey.currentContext ?? context,
@@ -57,6 +71,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 listen: false)
             .home_weekly
             .indexWhere((element) => element.youtube_id == widget.youtube_id));
+
         page = Provider.of<DataProvider>(
                 Navigation.instance.navigatorKey.currentContext ?? context,
                 listen: false)
@@ -117,7 +132,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             return Container(
               padding: EdgeInsets.only(top: 0.h),
               child: PageView.builder(
-                itemCount: data.home_weekly.length,
+                itemCount: _controllers.length,
                 scrollDirection: Axis.horizontal,
                 controller: controller,
                 itemBuilder: (BuildContext context, int index) {
@@ -138,13 +153,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           child: Padding(
                             padding: EdgeInsets.only(top: 7.h, bottom: 15.h),
                             child: YoutubePlayer(
-                              controller: _controller = YoutubePlayerController(
-                                initialVideoId: current.youtube_id!,
-                                flags: const YoutubePlayerFlags(
-                                  autoPlay: false,
-                                  mute: false,
-                                ),
-                              ),
+                              // controller: _controller = YoutubePlayerController(
+                              //   initialVideoId: current.youtube_id!,
+                              //   flags: const YoutubePlayerFlags(
+                              //     autoPlay: false,
+                              //     mute: false,
+                              //   ),
+                              // ),
+                              controller: _controllers[index],
                               showVideoProgressIndicator: true,
                               aspectRatio: 2 / 3,
                               // videoProgressIndicatorColor: Colors.amber,
@@ -158,7 +174,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                 //     .addListener(() {});
                                 // _controller!.play();
                                 setState(() {
-                                  _controller!.play();
+                                  _controllers[index].play();
                                 });
                               },
                             ),
@@ -282,17 +298,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                   setState(() {
                     page = count;
                   });
-                Future.delayed(Duration(seconds: 2),(){
-                  setState(() {
-                    currentId = Provider.of<DataProvider>(
-                        Navigation.instance.navigatorKey.currentContext ??
-                            context,
-                        listen: false)
-                        .home_weekly[count]
-                        .youtube_id!;
-
+                  Future.delayed(Duration(seconds: 2), () {
+                    setState(() {
+                      currentId = Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .home_weekly[count]
+                          .youtube_id!;
+                    });
                   });
-                });
                 },
               ),
             );

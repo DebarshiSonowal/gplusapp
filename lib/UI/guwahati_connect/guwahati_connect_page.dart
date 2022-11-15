@@ -229,8 +229,10 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                                   data, count, like, dislike, scaffoldKey, () {
                                 fetchGuwahatiConnect();
                               }, (id, val) {
-                                setState(() {
-                                  postLike(id, val);
+                                postLike(id, val, () {
+                                  setState(() {
+                                    like = !like;
+                                  });
                                 });
                               }, (id) {
                                 if (id == 0) {
@@ -401,12 +403,13 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
     }
   }
 
-  void postLike(id, is_like) async {
+  void postLike(id, is_like, like_changed) async {
     final response =
         await ApiProvider.instance.postLike(id, is_like, 'guwahati-connect');
     if (response.success ?? false) {
       // Fluttertoast.showToast(msg: response.message ?? "Post Liked");
       // fetchGuwahatiConnect();
+      like_changed();
     } else {
       showError("Something went wrong");
     }

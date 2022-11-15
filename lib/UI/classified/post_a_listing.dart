@@ -43,8 +43,6 @@ class _PostAListingState extends State<PostAListing> {
 
   final ImagePicker _picker = ImagePicker();
 
-
-
   List<File> attachements = [];
 
   @override
@@ -164,7 +162,9 @@ class _PostAListingState extends State<PostAListing> {
                                   .textTheme
                                   .headline4
                                   ?.copyWith(
-                                    color: Storage.instance.isDarkMode ? Colors.white70 :Constance.primaryColor,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white70
+                                        : Constance.primaryColor,
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -192,7 +192,7 @@ class _PostAListingState extends State<PostAListing> {
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   filled: true,
-                  floatingLabelBehavior:FloatingLabelBehavior.never,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
                   fillColor: Colors.white,
                   labelText: 'Enter the title',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
@@ -217,7 +217,7 @@ class _PostAListingState extends State<PostAListing> {
                 minLines: 10,
                 decoration: InputDecoration(
                   filled: true,
-                  floatingLabelBehavior:FloatingLabelBehavior.never,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
                   fillColor: Colors.white,
                   labelText: 'Enter the details',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
@@ -233,14 +233,18 @@ class _PostAListingState extends State<PostAListing> {
               ),
               Row(
                 children: [
-                   Icon(
+                  Icon(
                     Icons.attach_file,
-                    color: Storage.instance.isDarkMode ? Constance.secondaryColor :Colors.black,
+                    color: Storage.instance.isDarkMode
+                        ? Constance.secondaryColor
+                        : Colors.black,
                   ),
                   Text(
                     'Add more attachments',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Storage.instance.isDarkMode ? Colors.white :Colors.black,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
                           // fontSize: 1.6.h,
                         ),
                   ),
@@ -314,7 +318,10 @@ class _PostAListingState extends State<PostAListing> {
               Text(
                 'Add Price',
                 style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Storage.instance.isDarkMode ? Colors.white :Constance.primaryColor, fontWeight: FontWeight.bold),
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
+                    fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 0.5.h,
@@ -329,7 +336,7 @@ class _PostAListingState extends State<PostAListing> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   filled: true,
-                  floatingLabelBehavior:FloatingLabelBehavior.never,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
                   fillColor: Colors.white,
                   labelText: 'Enter the price',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
@@ -493,19 +500,30 @@ class _PostAListingState extends State<PostAListing> {
   }
 
   Future<void> getProfileImage(int index) async {
-    final pickedFile = await _picker.pickMultiImage(
-        // source: (index == 0) ? ImageSource.camera : ImageSource.gallery
-    );
-    if (pickedFile != null) {
-      setState(() {
-        // profileImage = File(pickedFile.path);
-        print(pickedFile);
-       for(var i in pickedFile){
-         attachements.add(
-           File(i.path),
-         );
-       }
-      });
+    if (index == 0) {
+      final pickedFile = await _picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 70,
+      );
+      if (pickedFile != null) {
+        setState(() {
+          var profileImage = File(pickedFile.path);
+          attachements.add(profileImage);
+        });
+      }
+    } else {
+      final pickedFile = await _picker.pickMultiImage(
+        imageQuality: 70,
+      );
+      if (pickedFile != null) {
+        setState(() {
+          for (var i in pickedFile) {
+            attachements.add(
+              File(i.path),
+            );
+          }
+        });
+      }
     }
   }
 

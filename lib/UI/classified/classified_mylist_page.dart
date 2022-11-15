@@ -29,7 +29,7 @@ class ClassifiedMyList extends StatefulWidget {
 
 class _ClassifiedMyListState extends State<ClassifiedMyList> {
   var current = 0;
-  var selected = 2;
+  var selected = 3;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   String result = '';
@@ -145,7 +145,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                           onTap: () {
                             // showSortByOption();
                             setState(() {
-                              selected = 1;
+                              selected = 3;
                             });
                             fetchClassified(result);
                             // getFilter();
@@ -156,7 +156,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                               vertical: 1.h,
                               horizontal: 5.w,
                             ),
-                            color: selected == 1
+                            color: selected == 3
                                 ? Constance.secondaryColor
                                 : Storage.instance.isDarkMode
                                     ? Colors.white
@@ -166,7 +166,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                               children: [
                                 Icon(
                                   FontAwesomeIcons.list,
-                                  color: selected == 1
+                                  color: selected == 3
                                       ? Colors.black
                                       : Storage.instance.isDarkMode
                                           ? Constance.secondaryColor
@@ -181,7 +181,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                                       .textTheme
                                       .headline6
                                       ?.copyWith(
-                                        color: selected == 1
+                                        color: selected == 3
                                             ? Colors.black
                                             : Storage.instance.isDarkMode
                                                 ? Colors.black
@@ -498,39 +498,18 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                                                               ],
                                                             ),
                                                           ),
-                                                          PopupMenuItem<int>(
-                                                            value: 3,
-                                                            child: Row(
-                                                              children: [
-                                                                const Icon(
-                                                                  Icons.rocket,
-                                                                  color: Colors
-                                                                      .black,
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 2.w,
-                                                                ),
-                                                                Text(
-                                                                  'Boost',
-                                                                  style: Theme.of(
-                                                                          context)
-                                                                      .textTheme
-                                                                      .headline6
-                                                                      ?.copyWith(
-                                                                          color:
-                                                                              Colors.black),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
                                                         ],
                                                         onSelected:
                                                             (int value) {
-                                                          setState(() {});
+                                                              if (value == 1) {
+                                                                updateClassified(current.id);
+                                                              } else {
+                                                                deleteClassified(current.id);
+                                                              }
                                                         },
                                                         color: Colors.white,
                                                         icon: const Icon(
-                                                          Icons.menu,
+                                                          Icons.more_horiz,
                                                           color: Colors.black,
                                                         ),
                                                       )
@@ -881,7 +860,8 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
   void setAsFavourite(int? id, String type) async {
     final response = await ApiProvider.instance.setAsFavourite(id, type);
     if (response.success ?? false) {
-      Fluttertoast.showToast(msg: "Added to favourites");
+      Fluttertoast.showToast(msg: "Favourite Changed");
+      fetchClassified(result);
     } else {
       showError("Something went wrong");
     }
@@ -1032,7 +1012,21 @@ for an unparalleled publication, that people call their''',
       );
     }
   }
+  void updateClassified(id) {
+    Navigation.instance.navigate('/editingAListing');
+  }
 
+  void deleteClassified(id) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.deleteClassified(id);
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
+      showError(response.message ?? "Something went wrong");
+    }
+  }
   Future<void> secureScreen() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }

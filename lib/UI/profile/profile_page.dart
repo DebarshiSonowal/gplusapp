@@ -30,138 +30,140 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return data.memberships.isNotEmpty
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'My Account',
-                      style: Theme.of(context).textTheme.headline3?.copyWith(
-                          color: Storage.instance.isDarkMode?Colors.white:Constance.secondaryColor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 3.h,
-                    ),
-                    data.profile?.is_plan_active ?? false
-                        ? ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: data.memberships.length,
-                            itemBuilder: (cont, count) {
-                              var current = data.memberships[count];
-                              return Card(
-                                color: Constance.primaryColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 1.5.h, horizontal: 4.w),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        count == 0
-                                            ? 'Present Plan'
-                                            : 'Upcoming Plan',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                              color: Colors.white,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      SizedBox(
-                                        height: 1.5.h,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'Rs ${current.base_price ?? '999'}/',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline1
-                                                ?.copyWith(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                          Text(
-                                            current.duration?.split(' ')[1] ??
-                                                "month",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline4
-                                                ?.copyWith(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 1.5.h,
-                                      ),
-                                      Text(
-                                        'expires on ${Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6
-                                            ?.copyWith(
-                                              color: Colors.white,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      SizedBox(
-                                        height: 2.h,
-                                      ),
-                                      Text(
-                                        '${Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd").fromNow().substring(2)} left',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4
-                                            ?.copyWith(
-                                              color: Colors.white,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      SizedBox(
-                                        height: 5.h,
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: CustomButton(
-                                          txt: 'Buy next membership term',
-                                          onTap: () {
-                                            Navigation.instance
-                                                .navigate('/beamember');
-                                          },
-                                        ),
-                                      ),
-                                    ],
+              ? SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'My Account',
+                        style: Theme.of(context).textTheme.headline3?.copyWith(
+                            color: Storage.instance.isDarkMode?Colors.white:Constance.secondaryColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 3.h,
+                      ),
+                      data.profile?.is_plan_active ?? false
+                          ? ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: data.memberships.length,
+                              itemBuilder: (cont, count) {
+                                var current = data.memberships[count];
+                                return Card(
+                                  color: Constance.primaryColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                ),
-                              );
-                            })
-                        : SizedBox(
-                      height: 40.h,
-                      child: Center(
-                        child: Text(
-                          'Oops! Looks like you are not a member',
-                          style: Theme.of(context).textTheme.headline3?.copyWith(
-                              color: Constance.primaryColor,
-                              // fontWeight: FontWeight.bold,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 1.5.h, horizontal: 4.w),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          count == 0
+                                              ? 'Present Plan'
+                                              : 'Upcoming Plan',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline5
+                                              ?.copyWith(
+                                                color: Colors.white,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                        SizedBox(
+                                          height: 1.5.h,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Rs ${current.base_price ?? '999'}/',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline1
+                                                  ?.copyWith(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                            Text(
+                                              current.duration?.split(' ')[1] ??
+                                                  "month",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline4
+                                                  ?.copyWith(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 1.5.h,
+                                        ),
+                                        Text(
+                                          'expires on ${Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(
+                                                color: Colors.white,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                        SizedBox(
+                                          height: 2.h,
+                                        ),
+                                        Text(
+                                          '${Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd").fromNow().substring(2)} left',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline4
+                                              ?.copyWith(
+                                                color: Colors.white,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                        SizedBox(
+                                          height: 5.h,
+                                        ),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: CustomButton(
+                                            txt: 'Buy next membership term',
+                                            onTap: () {
+                                              Navigation.instance
+                                                  .navigate('/beamember');
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              })
+                          : SizedBox(
+                        height: 40.h,
+                        child: Center(
+                          child: Text(
+                            'Oops! Looks like you are not a member',
+                            style: Theme.of(context).textTheme.headline3?.copyWith(
+                                color: Constance.primaryColor,
+                                // fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                  ],
-                )
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                    ],
+                  ),
+              )
               : Container();
         }),
       ),

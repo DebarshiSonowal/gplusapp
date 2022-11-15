@@ -282,7 +282,7 @@ class _StoryPageState extends State<StoryPage> {
                             SizedBox(
                               height: 1.5.h,
                             ),
-                            Row(
+                            data.ads.isNotEmpty?Row(
                               children: [
                                 Container(
                                   color: Constance.secondaryColor,
@@ -302,8 +302,8 @@ class _StoryPageState extends State<StoryPage> {
                                   ),
                                 ),
                               ],
-                            ),
-                            SizedBox(
+                            ):Container(),
+                            data.ads.isNotEmpty?SizedBox(
                               // height: 10.h,
                               width: double.infinity,
                               child: GestureDetector(
@@ -334,7 +334,7 @@ class _StoryPageState extends State<StoryPage> {
                                   ),
                                 ),
                               ),
-                            ),
+                            ):Container(),
                             SizedBox(
                               height: 1.5.h,
                             ),

@@ -11,7 +11,7 @@ class RedeemDetails {
       plan_id,
       status;
   bool? is_percent, is_one_time;
-  String? plan_active_date, plan_expiry_date, title, description, code;
+  String? valid_from, valid_to, title, description, code;
 
   RedeemDetails.fromJson(json) {
     id = json['id'] ?? 0;
@@ -42,8 +42,8 @@ class RedeemDetails {
         : (json['is_one_time'].toString() == '1' ? true : false);
 
     //String
-    plan_active_date = json['plan_active_date'] ?? "";
-    plan_expiry_date = json['plan_expiry_date'] ?? "";
+    valid_from = json['valid_from'] ?? "";
+    valid_to = json['valid_to'] ?? "";
     title = json['title'] ?? "";
     description = json['description'] ?? "";
     code = json['code'] ?? "";

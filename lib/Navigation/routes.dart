@@ -26,9 +26,11 @@ import '../UI/citizen_journalist/citizen_journalist_page.dart';
 import '../UI/citizen_journalist/draft_story.dart';
 import '../UI/citizen_journalist/edit_story.dart';
 import '../UI/citizen_journalist/view_story_page.dart';
+import '../UI/classified/edit_a_listing.dart';
 import '../UI/edit_profile/edit_address_page.dart';
 import '../UI/guwahati_connect/all_images_page.dart';
 import '../UI/guwahati_connect/ask_a_question.dart';
+import '../UI/guwahati_connect/edit_ask_a_question.dart';
 import '../UI/guwahati_connect/guwahati_connect_page.dart';
 import '../UI/citizen_journalist/stories_submitted.dart';
 import '../UI/citizen_journalist/submit_story.dart';
@@ -195,6 +197,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           page: ViewStoryPage(settings.arguments as int));
     case '/postClassified':
       return FadeTransitionPageRouteBuilder(page: PostAListing());
+    case '/editingAListing':
+      return FadeTransitionPageRouteBuilder(page: EditAListingPost());
     case '/guwahatiConnects':
       return FadeTransitionPageRouteBuilder(page: GuwahatiConnectPage());
     case '/allImagesPage':
@@ -202,6 +206,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           page: AllImagePage(settings.arguments as int));
     case '/askAQuestion':
       return FadeTransitionPageRouteBuilder(page: AskAQuestionPage());
+    case '/editAskAQuestion':
+      return FadeTransitionPageRouteBuilder(
+          page: EditAskAQuestionPage(settings.arguments as int));
     case '/search':
       return FadeTransitionPageRouteBuilder(page: SearchPage());
     case '/aboutUs':

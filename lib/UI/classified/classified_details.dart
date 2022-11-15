@@ -161,62 +161,68 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                               );
                             }).toList(),
                           ),
-                         ( data.selectedClassified?.is_post_by_me??false)?PopupMenuButton<int>(
-                            color: Constance.secondaryColor,
-                            itemBuilder: (BuildContext context) =>
-                                <PopupMenuItem<int>>[
-                              PopupMenuItem<int>(
-                                value: 1,
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.edit,
-                                      color: Colors.black,
+                          (data.selectedClassified?.is_post_by_me ?? false)
+                              ? PopupMenuButton<int>(
+                                  color: Constance.secondaryColor,
+                                  itemBuilder: (BuildContext context) =>
+                                      <PopupMenuItem<int>>[
+                                    PopupMenuItem<int>(
+                                      value: 1,
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.edit,
+                                            color: Colors.black,
+                                          ),
+                                          SizedBox(
+                                            width: 2.w,
+                                          ),
+                                          Text(
+                                            'Edit',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                ?.copyWith(color: Colors.black),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    SizedBox(
-                                      width: 2.w,
-                                    ),
-                                    Text(
-                                      'Edit',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          ?.copyWith(color: Colors.black),
+                                    PopupMenuItem<int>(
+                                      value: 2,
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.delete,
+                                            color: Colors.black,
+                                          ),
+                                          SizedBox(
+                                            width: 2.w,
+                                          ),
+                                          Text(
+                                            'Delete',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                ?.copyWith(color: Colors.black),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
-                                ),
-                              ),
-                              PopupMenuItem<int>(
-                                value: 2,
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.delete,
-                                      color: Colors.black,
-                                    ),
-                                    SizedBox(
-                                      width: 2.w,
-                                    ),
-                                    Text(
-                                      'Delete',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          ?.copyWith(color: Colors.black),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                            onSelected: (int value) {
-                              setState(() {});
-                            },
-                            // color: Colors.white,
-                            icon: const Icon(
-                              Icons.menu,
-                              color: Colors.white,
-                            ),
-                          ):Container(),
+                                  onSelected: (int value) {
+                                    if (value == 1) {
+                                      updateClassified(widget.id);
+                                    } else {
+                                      deleteClassified(widget.id);
+                                    }
+                                  },
+                                  // color: Colors.white,
+                                  icon: const Icon(
+                                    Icons.more_vert,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Container(),
                         ],
                       ),
                     ),
@@ -374,9 +380,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                                       'tel:${data.selectedClassified?.user?.mobile}'));
                                 } else {
                                   Constance.showMembershipPrompt(
-                                      context, () {
-
-                                  });
+                                      context, () {});
                                 }
                                 // showDialogBox();
                               }),
@@ -543,5 +547,21 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  void updateClassified(id) {
+    Navigation.instance.navigate('/editingAListing');
+  }
+
+  void deleteClassified(id) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.deleteClassified(id);
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
+      showError(response.message ?? "Something went wrong");
+    }
   }
 }

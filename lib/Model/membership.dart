@@ -21,9 +21,7 @@ class Membership {
     price_after_discount = json['price_after_discount'] == null
         ? 0
         : double.parse(json['price_after_discount'].toString());
-    base_price = json['base_price'] == null
-        ? 0
-        : double.parse(json['base_price'].toString());
+    base_price = double.parse(json['price']);
     discount = json['discount'] == null
         ? 0
         : double.parse(json['discount'].toString());

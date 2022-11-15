@@ -218,17 +218,45 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                 height: 5.h,
               ),
               SizedBox(
+                height: 5.h,
                 width: double.infinity,
-                child: CustomButton(
-                  onTap: () {
-                    // showDialogBox();
-                    if (title.text.isNotEmpty && desc.text.isNotEmpty) {
-                      postStory();
-                    } else {
-                      showError("Title and Description is mandatory to post");
-                    }
-                  },
-                  txt: 'Submit',
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      height: 5.h,
+                      width: 40.w,
+                      child: CustomButton(
+                        onTap: () {
+                          // showDialogBox();
+                          if (title.text.isNotEmpty && desc.text.isNotEmpty) {
+                            postStory(1);
+                          } else {
+                            showError("Title and Description is mandatory to post");
+                          }
+                        },
+                        txt: 'Submit',
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5.h,
+                      width: 40.w,
+                      child: CustomButton(
+                        color:Storage.instance.isDarkMode?Colors.white:Colors.black,
+                        fcolor: Storage.instance.isDarkMode?Colors.black:Colors.white,
+                        onTap: () {
+                          // showDialogBox();
+                          if (title.text.isNotEmpty && desc.text.isNotEmpty) {
+                            postStory(0);
+                          } else {
+                            showError("Title and Description is mandatory to post");
+                          }
+                        },
+                        txt: 'Save as draft',
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -361,20 +389,32 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
   }
 
   Future<void> getProfileImage(int index) async {
-    final pickedFile = await _picker.pickMultiImage(
-      // source: (index == 0) ? ImageSource.camera : ImageSource.gallery
-    );
-    if (pickedFile != null) {
-      setState(() {
-        // profileImage = File(pickedFile.path);
-        print(pickedFile);
-        for(var i in pickedFile){
-          attachements.add(
-            File(i.path),
-          );
-        }
-      });
+    if(index==0){
+      final pickedFile = await _picker.pickImage(
+        source: ImageSource.camera,imageQuality: 70,
+      );
+      if (pickedFile != null) {
+        setState(() {
+          var profileImage = File(pickedFile.path);
+          attachements.add(profileImage);
+        });
+      }
+    }else{
+      final pickedFile = await _picker.pickMultiImage(
+        imageQuality: 70,
+      );
+      if (pickedFile != null) {
+        setState(() {
+          for (var i in pickedFile) {
+            attachements.add(
+              File(i.path),
+            );
+          }
+        });
+      }
     }
+
+
   }
 
   void showDialogBox() {
@@ -455,10 +495,10 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
     );
   }
 
-  void postStory() async {
+  void postStory(is_story_submit) async {
     Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance
-        .postCitizenJournalist(title.text, desc.text, attachements);
+    final response = await ApiProvider.instance.postCitizenJournalist(
+        title.text, desc.text, attachements, is_story_submit);
     if (response.success ?? false) {
       Fluttertoast.showToast(msg: "Posted successfully");
       Navigation.instance.goBack();

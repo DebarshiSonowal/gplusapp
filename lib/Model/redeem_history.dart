@@ -11,7 +11,7 @@ class RedeemHistory {
       plan_id,
       status;
   bool? is_percent, is_one_time;
-  String? plan_active_date, plan_expiry_date, title, description, code, date;
+  String? valid_from, valid_to, title, description, code, date;
   Vendor? vendor;
 
   RedeemHistory.fromJson(json) {
@@ -43,8 +43,8 @@ class RedeemHistory {
         : (json['is_one_time'].toString() == '1' ? true : false);
 
     //String
-    plan_active_date = json['plan_active_date'] ?? "";
-    plan_expiry_date = json['plan_expiry_date'] ?? "";
+    valid_from = json['valid_from'] ?? "";
+    valid_to = json['valid_to'] ?? "";
     date = json['updated_at'] ?? "";
     title = json['title'] ?? "";
     description = json['description'] ?? "";

@@ -217,9 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Padding(
           padding: EdgeInsets.only(top: 0.3.h),
           child: Consumer<DataProvider>(builder: (context, data, _) {
-            return data.ads.isEmpty
-                ? Container()
-                : WillPopScope(
+            return WillPopScope(
                     onWillPop: () async {
                       showExitDialog();
                       return false;
@@ -438,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: 1.h,
                             ),
-                            Container(
+                            data.ads.isNotEmpty?Container(
                               margin: EdgeInsets.symmetric(horizontal: 1.w),
                               padding: EdgeInsets.symmetric(vertical: 1.h),
                               child: Column(
@@ -504,7 +502,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ],
                               ),
-                            ),
+                            ):Container(),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8.w),
                               child: Divider(
@@ -1001,6 +999,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: double.infinity,
                               height: 40.h,
                               child: PageView.builder(
+                                // allowImplicitScrolling: true,
                                   controller: _listController,
                                   // shrinkWrap: true,
                                   onPageChanged: (index) {

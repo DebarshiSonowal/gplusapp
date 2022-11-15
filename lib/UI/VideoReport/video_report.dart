@@ -105,7 +105,7 @@ class _VideoReportState extends State<VideoReport> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Stack(
-                            alignment: Alignment.bottomCenter,
+                            alignment: Alignment.bottomLeft,
                             children: [
                               Container(
                                 height: 35.h,
@@ -126,12 +126,10 @@ class _VideoReportState extends State<VideoReport> {
                               Container(
                                 decoration: const BoxDecoration(
                                   gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Colors.transparent,
-                                        Colors.black
-                                      ]),
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [Colors.transparent, Colors.black],
+                                  ),
                                 ),
                                 padding: EdgeInsets.symmetric(horizontal: 5.w),
                                 child: Column(

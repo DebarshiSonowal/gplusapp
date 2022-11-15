@@ -144,7 +144,7 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                                             ),
                                           ),
                                           Text(
-                                            "Approved",
+                                            item.status==0?"Pending":"Approved",
                                             style: Theme.of(Navigation
                                                     .instance
                                                     .navigatorKey
@@ -242,5 +242,14 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () => fetchDrafts());
+  }
+  @override
+  void dispose() {
+
+    super.dispose();
+    // Provider.of<DataProvider>(
+    //     Navigation.instance.navigatorKey.currentContext ?? context,
+    //     listen: false)
+    //     .setCitizenJournalist([]);
   }
 }

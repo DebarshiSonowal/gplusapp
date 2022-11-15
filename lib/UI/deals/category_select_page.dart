@@ -63,7 +63,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      backgroundColor: Storage.instance.isDarkMode?Colors.black:Colors.white,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       body: SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
@@ -93,9 +94,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          color: Storage.instance.isDarkMode
-              ? Colors.black
-              : Constance.primaryColor,
+          color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
           padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
           child: Consumer<DataProvider>(builder: (context, current, _) {
             return Column(
@@ -105,21 +104,24 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
-                        placeholder: (cont, _) {
-                          return Image.asset(
-                            Constance.logoIcon,
-                            // color: Colors.black,
-                          );
-                        },
-                        errorWidget: (cont, _, e) {
-                          return Image.network(
-                            Constance.defaultImage,
-                            fit: BoxFit.fitWidth,
-                          );
-                        },
-                        height: 30.h,
-                        imageUrl: current.details?.image_file_name ??
-                            Constance.salonImage),
+                      placeholder: (cont, _) {
+                        return Image.asset(
+                          Constance.logoIcon,
+                          // color: Colors.black,
+                        );
+                      },
+                      errorWidget: (cont, _, e) {
+                        return Image.network(
+                          Constance.defaultImage,
+                          fit: BoxFit.fitWidth,
+                        );
+                      },
+                      height: 30.h,
+                      width: double.infinity,
+                      imageUrl: current.details?.image_file_name ??
+                          Constance.salonImage,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -129,7 +131,9 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   current.details?.shop_name ?? 'The Looks Salon',
                   style: Theme.of(context).textTheme.headline2?.copyWith(
                       color: Storage.instance.isDarkMode
-                          ? Colors.white:Colors.black, fontWeight: FontWeight.bold),
+                          ? Colors.white
+                          : Colors.black,
+                      fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 2.h,
@@ -147,18 +151,20 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                           height: 5.h,
                           color: selected == 0
                               ? Storage.instance.isDarkMode
-                              ? Colors.white:Colors.black
-                              : Constance.secondaryColor,
+                                  ? Constance.secondaryColor
+                                  : Colors.black
+                              : Colors.white,
                           child: Center(
                             child: Text(
-                              'Offer',
+                              'Details',
                               style: Theme.of(context)
                                   .textTheme
                                   .headline4
                                   ?.copyWith(
                                       color: selected == 0
                                           ? Storage.instance.isDarkMode
-                                          ? Colors.black:Colors.white
+                                              ? Colors.black
+                                              : Colors.white
                                           : Colors.black),
                             ),
                           ),
@@ -175,12 +181,13 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                         child: Container(
                           height: 5.h,
                           color: selected == 0
-                              ? Constance.secondaryColor
+                              ? Colors.white
                               : Storage.instance.isDarkMode
-                              ? Colors.white:Colors.black,
+                                  ? Constance.secondaryColor
+                                  : Colors.black,
                           child: Center(
                             child: Text(
-                              'Details',
+                              'Offer',
                               style: Theme.of(context)
                                   .textTheme
                                   .headline4
@@ -188,7 +195,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                                     color: selected == 0
                                         ? Colors.black
                                         : Storage.instance.isDarkMode
-                                        ? Colors.black:Colors.white,
+                                            ? Colors.black
+                                            : Colors.white,
                                   ),
                             ),
                           ),
@@ -209,10 +217,10 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -224,6 +232,20 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
       ),
       centerTitle: true,
       backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search');
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
     );
   }
 
@@ -240,7 +262,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
               Icon(
                 Icons.location_on,
                 color: Storage.instance.isDarkMode
-                    ? Constance.secondaryColor:Colors.black,
+                    ? Constance.secondaryColor
+                    : Colors.black,
               ),
               SizedBox(
                 width: 4.w,
@@ -254,7 +277,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                     // overflow: TextOverflow.clip,
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Storage.instance.isDarkMode
-                              ? Colors.white:Colors.black,
+                              ? Colors.white
+                              : Colors.black,
                         ),
                   ),
                 ),
@@ -270,7 +294,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
               Icon(
                 Icons.phone,
                 color: Storage.instance.isDarkMode
-                    ? Constance.secondaryColor:Colors.black,
+                    ? Constance.secondaryColor
+                    : Colors.black,
               ),
               SizedBox(
                 width: 4.w,
@@ -281,7 +306,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   // overflow: TextOverflow.clip,
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Storage.instance.isDarkMode
-                            ? Colors.white:Colors.black,
+                            ? Colors.white
+                            : Colors.black,
                       ),
                 ),
               ),
@@ -301,7 +327,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                     Icon(
                       Icons.alarm,
                       color: Storage.instance.isDarkMode
-                          ? Constance.secondaryColor:Colors.black,
+                          ? Constance.secondaryColor
+                          : Colors.black,
                     ),
                   ],
                 ),
@@ -317,7 +344,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                       // overflow: TextOverflow.clip,
                       style: Theme.of(context).textTheme.headline5?.copyWith(
                             color: Storage.instance.isDarkMode
-                                ? Colors.white:Colors.black,
+                                ? Colors.white
+                                : Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
                     ),
@@ -336,7 +364,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                       // overflow: TextOverflow.clip,
                       style: Theme.of(context).textTheme.headline5?.copyWith(
                             color: Storage.instance.isDarkMode
-                                ? Colors.white:Colors.black,
+                                ? Colors.white
+                                : Colors.black,
                             // fontWeight: FontWeight.bold,
                           ),
                     ),
@@ -389,7 +418,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
               Icon(
                 FontAwesomeIcons.clipboard,
                 color: Storage.instance.isDarkMode
-                    ? Constance.secondaryColor:Colors.black,
+                    ? Constance.secondaryColor
+                    : Colors.black,
               ),
               SizedBox(
                 width: 4.w,
@@ -398,11 +428,13 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                 child: SizedBox(
                   height: 5.h,
                   child: Text(
-                    'Tanning Salon . Beauty Supply Shop . Hair Salon',
+                    current.details?.services ??
+                        'Tanning Salon . Beauty Supply Shop . Hair Salon',
                     // overflow: TextOverflow.clip,
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Storage.instance.isDarkMode
-                              ? Colors.white:Colors.black,
+                              ? Colors.white
+                              : Colors.black,
                         ),
                   ),
                 ),
@@ -436,18 +468,22 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Storage.instance.isDarkMode
-                                  ? Colors.white:Colors.black,
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                       ),
                     ],
                   ),
                 ),
                 trailing: CustomButton(
-                  color: (data?.is_used??false)?Colors.grey:Constance.secondaryColor,
-                  txt: (data?.is_used??false)?'Redeemed':'   Redeem   ',
-                  fcolor: (data?.is_used??false)?Colors.white:Colors.black,
+                  color: (data?.is_used ?? false)
+                      ? Colors.grey
+                      : Constance.secondaryColor,
+                  txt: (data?.is_used ?? false) ? 'Redeemed' : '   Redeem   ',
+                  fcolor:
+                      (data?.is_used ?? false) ? Colors.white : Colors.black,
                   onTap: () {
-                    if (data?.is_used??false) {
+                    if (data?.is_used ?? false) {
                       redeem(widget.id, data?.code);
                     } else {
                       showDialogBox(data?.code);
@@ -487,9 +523,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
           ),
           backgroundColor: Colors.white,
           title: Text(
-            'Hello ${Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false).profile?.name}',
+            'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
             style: Theme.of(context).textTheme.headline3?.copyWith(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -570,11 +604,11 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
               listen: false)
           .setRedeemDetails(response.details!);
       fetchHistory();
-      final response1= await ApiProvider.instance.getDealDetails(widget.id);
+      final response1 = await ApiProvider.instance.getDealDetails(widget.id);
       if (response1.success ?? false) {
         Provider.of<DataProvider>(
-            Navigation.instance.navigatorKey.currentContext ?? context,
-            listen: false)
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
             .setDealDetails(response1.details!);
         // Navigation.instance.goBack();
         // _refreshController.refreshCompleted();
@@ -584,17 +618,19 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
       showError(response.message ?? "Something went wrong");
     }
   }
+
   void fetchHistory() async {
     final response = await ApiProvider.instance.getRedeemHistory();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setRedeemHistory(response.data ?? []);
     } else {
       // _refreshController.refreshFailed();
     }
   }
+
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",
@@ -620,6 +656,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
       Navigation.instance.goBack();
     }
   }
+
   Future<void> secureScreen() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
