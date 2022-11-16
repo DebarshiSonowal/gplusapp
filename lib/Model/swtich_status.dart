@@ -4,16 +4,16 @@ class SwitchStatus {
   SwitchStatus.fromJson(json) {
     deal = json['has_deal_notify_perm'] == null
         ? false
-        : (json['has_deal_notify_perm'] == "0" ? false : true);
+        : (json['has_deal_notify_perm'].toString() == "0" ? false : true);
     connect = json['has_ghy_connect_notify_perm'] == null
         ? false
-        : (json['has_ghy_connect_notify_perm'] == "0" ? false : true);
+        : (json['has_ghy_connect_notify_perm'].toString() == "0" ? false : true);
     classified = json['has_deal_notify_perm'] == null
         ? false
-        : (json['has_classified_notify_perm'] == "0" ? false : true);
+        : (json['has_classified_notify_perm'].toString() == "0" ? false : true);
     dark = json['has_dark_mode_perm'] == null
         ? false
-        : (json['has_dark_mode_perm'] == "0" ? false : true);
+        : (json['has_dark_mode_perm'].toString() == "0" ? false : true);
   }
 }
 

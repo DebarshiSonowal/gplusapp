@@ -151,8 +151,14 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                         )
                       : GestureDetector(
                           onTap: () {
-                            Navigation.instance.navigate('/viewImage',
-                                args: images[pos].file_name);
+                            print(images[pos].file_type);
+                            if (images[pos].file_type.toString().split('/')[0]=="image") {
+                              Navigation.instance.navigate('/viewImage',
+                                                              args: images[pos].file_name);
+                            } else {
+                              // Navigation.instance.navigate('/viewVideo',
+                              //     args: images[pos].file_name);
+                            }
                           },
                           child: Container(
                             height: 8.h,
@@ -162,6 +168,9 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                               child: Image.network(
                                 images[pos].file_name ?? "",
                                 fit: BoxFit.fill,
+                                errorBuilder: (err,cont,st){
+                                  return Image.asset(Constance.logoIcon);
+                                },
                               ),
                             ),
                           ),
@@ -172,7 +181,7 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                 height: 2.h,
               ),
               Text(
-                'Posted on ${Jiffy(local?.created_at ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                'Posted on ${Jiffy(local?.created_at ?? "2020-06-21", "yyyy-MM-dd").format("dd/MM/yyyy")}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
                       color: Storage.instance.isDarkMode
                           ? Colors.white70

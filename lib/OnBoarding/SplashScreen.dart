@@ -45,11 +45,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // secureScreen();
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 1), () {
       print('LOGGEDIN');
       if (Storage.instance.isLoggedIn) {
         fetchSwitchStatus();
-        fetchProfile();
+
 
       // } else if (Storage.instance.isOnBoarding) {
       //   Navigation.instance.navigateAndRemoveUntil('/login');
@@ -69,6 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
       setState(() {
         Storage.instance.setDarkMode(response.status?.dark ?? false);
       });
+      fetchProfile();
     } else {
 
     }

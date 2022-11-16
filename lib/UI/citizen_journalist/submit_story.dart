@@ -190,6 +190,9 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                                 child: Image.file(
                                   attachements[pos],
                                   fit: BoxFit.fill,
+                                  errorBuilder: (err,cont,st){
+                                    return Image.asset(Constance.logoIcon);
+                                  },
                                 ),
                               ),
                             ),
@@ -233,7 +236,8 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                           if (title.text.isNotEmpty && desc.text.isNotEmpty) {
                             postStory(1);
                           } else {
-                            showError("Title and Description is mandatory to post");
+                            showError(
+                                "Title and Description is mandatory to post");
                           }
                         },
                         txt: 'Submit',
@@ -243,14 +247,19 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                       height: 5.h,
                       width: 40.w,
                       child: CustomButton(
-                        color:Storage.instance.isDarkMode?Colors.white:Colors.black,
-                        fcolor: Storage.instance.isDarkMode?Colors.black:Colors.white,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
+                        fcolor: Storage.instance.isDarkMode
+                            ? Colors.black
+                            : Colors.white,
                         onTap: () {
                           // showDialogBox();
                           if (title.text.isNotEmpty && desc.text.isNotEmpty) {
                             postStory(0);
                           } else {
-                            showError("Title and Description is mandatory to post");
+                            showError(
+                                "Title and Description is mandatory to post");
                           }
                         },
                         txt: 'Save as draft',
@@ -315,16 +324,17 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
             return AlertDialog(
                 title: const Center(
                     child: Text(
-                  "Add Photo",
+                  "Add Photo/Video",
                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                 )),
-                contentPadding: const EdgeInsets.only(top: 24, bottom: 30),
+                contentPadding: EdgeInsets.only(top: 24, bottom: 30,left: 2.w,right: 2.w),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+
                         InkWell(
                             onTap: () {
                               Navigation.instance.goBack();
@@ -333,7 +343,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                             child: Column(
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.all(12),
+                                  padding: const EdgeInsets.all(10),
                                   margin: const EdgeInsets.only(bottom: 4),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
@@ -343,17 +353,15 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                const Text(
+                                 Text(
                                   "Camera",
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 8.sp,
                                   ),
                                 ),
                               ],
                             )),
-                        const SizedBox(
-                          width: 42,
-                        ),
+
                         InkWell(
                             onTap: () {
                               Navigation.instance.goBack();
@@ -362,7 +370,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                             child: Column(
                               children: [
                                 Container(
-                                  padding: EdgeInsets.all(12),
+                                  padding: const EdgeInsets.all(10),
                                   margin: EdgeInsets.only(bottom: 4),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
@@ -372,14 +380,67 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   "Gallery",
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 8.sp,
                                   ),
                                 ),
                               ],
                             )),
+                        InkWell(
+                            onTap: () {
+                              Navigation.instance.goBack();
+                              getImage(2);
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  margin: EdgeInsets.only(bottom: 4),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Colors.purple.shade300),
+                                  child: const Icon(
+                                    Icons.videocam,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                            Text(
+                                  "Videocam",
+                                  style: TextStyle(
+                                    fontSize: 8.sp,
+                                  ),
+                                ),
+                              ],
+                            )),
+                        InkWell(
+                            onTap: () {
+                              Navigation.instance.goBack();
+                              getImage(3);
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  margin: EdgeInsets.only(bottom: 4),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Colors.purple.shade300),
+                                  child: const Icon(
+                                    Icons.video_library,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                 Text(
+                                  "Video Roll",
+                                  style: TextStyle(
+                                    fontSize: 8.sp,
+                                  ),
+                                ),
+                              ],
+                            )),
+
                       ],
                     ),
                   ],
@@ -389,9 +450,10 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
   }
 
   Future<void> getProfileImage(int index) async {
-    if(index==0){
+    if (index == 0) {
       final pickedFile = await _picker.pickImage(
-        source: ImageSource.camera,imageQuality: 70,
+        source: ImageSource.camera,
+        imageQuality: 70,
       );
       if (pickedFile != null) {
         setState(() {
@@ -399,7 +461,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
           attachements.add(profileImage);
         });
       }
-    }else{
+    } else if (index == 1) {
       final pickedFile = await _picker.pickMultiImage(
         imageQuality: 70,
       );
@@ -412,9 +474,28 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
           }
         });
       }
+    } else if (index == 2) {
+      final pickedFile = await _picker.pickVideo(
+        source: ImageSource.camera,
+        maxDuration: const Duration(seconds: 30),
+      );
+      if (pickedFile != null) {
+        setState(() {
+          var profileImage = File(pickedFile.path);
+          attachements.add(profileImage);
+        });
+      }
+    }else{
+      final pickedFile = await _picker.pickVideo(
+        source: ImageSource.gallery,
+      );
+      if (pickedFile != null) {
+        setState(() {
+          var profileImage = File(pickedFile.path);
+          attachements.add(profileImage);
+        });
+      }
     }
-
-
   }
 
   void showDialogBox() {

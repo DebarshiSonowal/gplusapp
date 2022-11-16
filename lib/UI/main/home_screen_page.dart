@@ -232,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            HomeBannerPage(() {
+                            data.home_albums.isNotEmpty?HomeBannerPage(() {
                               print('1');
                               setState(() {
                                 showing = true;
@@ -242,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               setState(() {
                                 showing = false;
                               });
-                            }),
+                            }):Container(),
                             data.profile?.is_plan_active ?? false
                                 ? Container()
                                 : Container(

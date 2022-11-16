@@ -150,10 +150,10 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                         child: Container(
                           height: 5.h,
                           color: selected == 0
-                              ? Storage.instance.isDarkMode
-                                  ? Constance.secondaryColor
-                                  : Colors.black
-                              : Colors.white,
+                              ? Constance.secondaryColor
+                              : Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
                           child: Center(
                             child: Text(
                               'Details',
@@ -161,11 +161,12 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                                   .textTheme
                                   .headline4
                                   ?.copyWith(
-                                      color: selected == 0
-                                          ? Storage.instance.isDarkMode
-                                              ? Colors.black
-                                              : Colors.white
-                                          : Colors.black),
+                                    color: selected == 0
+                                        ? Colors.black
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.black
+                                            : Colors.white,
+                                  ),
                             ),
                           ),
                         ),
@@ -180,10 +181,10 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                         },
                         child: Container(
                           height: 5.h,
-                          color: selected == 0
-                              ? Colors.white
+                          color: selected == 1
+                              ? Constance.secondaryColor
                               : Storage.instance.isDarkMode
-                                  ? Constance.secondaryColor
+                                  ? Colors.white
                                   : Colors.black,
                           child: Center(
                             child: Text(
@@ -192,7 +193,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                                   .textTheme
                                   .headline4
                                   ?.copyWith(
-                                    color: selected == 0
+                                    color: selected == 1
                                         ? Colors.black
                                         : Storage.instance.isDarkMode
                                             ? Colors.black
@@ -597,8 +598,10 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   }
 
   void redeem(int id, String? code) async {
+    Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.redeemCupon(id, code);
     if (response.success ?? false) {
+      Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
@@ -615,6 +618,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
       }
       Navigation.instance.navigate('/redeemOfferPage');
     } else {
+      Navigation.instance.goBack();
       showError(response.message ?? "Something went wrong");
     }
   }

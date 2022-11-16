@@ -51,6 +51,7 @@ class Storage {
 
   Future<void> setDarkMode(bool selected) async {
     await sharedpreferences.setBool("dark", selected);
+    print('setDarkMode');
   }
 
   Future<void> setGuwahatiConnect() async {

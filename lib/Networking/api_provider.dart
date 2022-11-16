@@ -53,7 +53,8 @@ class ApiProvider {
   ApiProvider._();
 
   static final ApiProvider instance = ApiProvider._();
-  final String baseUrl = "http://gplus.shecure.co.in/api/v1";
+  // final String baseUrl = "http://gplus.shecure.co.in/api/v1";
+  final String baseUrl = "https://www.guwahatiplus.com/api/v1";
 
   final String baseUrl2 = "http://develop.guwahatiplus.com/api/v1";
   final String homeUrl = "https://www.guwahatiplus.com/api/v1";
@@ -326,7 +327,7 @@ class ApiProvider {
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ProfileResponse.fromJson(response?.data);
       } else {
-        debugPrint("create Profile error: ${response?.data}");
+        debugPrint("create Profile error: ${response?.statusCode} ${response?.data}");
         return ProfileResponse.withError("Something went wrong");
       }
     } on DioError catch (e) {
@@ -335,7 +336,7 @@ class ApiProvider {
         Navigation.instance.navigateAndRemoveUntil('/login');
         showError("Oops! Your session expired. Please Login Again");
       }
-      debugPrint("create Profile error: ${e.response} ${e}");
+      debugPrint("create Profile error: ${e.response?.statusCode??0} ${e.response}");
       return ProfileResponse.withError(e.message);
     }
   }
@@ -2941,7 +2942,8 @@ class ApiProvider {
       'is_story_submit': is_story_submit,
     });
     for (int i = 0; i < files.length; i++) {
-      var type = lookupMimeType(files[i].path, headerBytes: [0xFF, 0xD8])!;
+      var type = lookupMimeType(files[i].path,)!;
+      print(type);
       MultipartFile file = await MultipartFile.fromFile(
         files[i].path,
         filename: files[i].path.split("/").last,

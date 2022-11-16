@@ -64,6 +64,7 @@ import '../UI/opinion/opinion_details_page.dart';
 import '../UI/story/story_page.dart';
 import '../UI/toppicks/top_picks_page.dart';
 import '../UI/view/view_image_page.dart';
+import '../UI/view/view_video_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -109,6 +110,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/viewImage':
       return FadeTransitionPageRouteBuilder(
           page: ViewImagePage(settings.arguments as String));
+ case '/viewVideo':
+      return FadeTransitionPageRouteBuilder(
+          page: ViewVideoPage(settings.arguments as String));
 
     case '/bigdealpage':
       return FadeTransitionPageRouteBuilder(page: BigDealPage());
@@ -198,7 +202,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/postClassified':
       return FadeTransitionPageRouteBuilder(page: PostAListing());
     case '/editingAListing':
-      return FadeTransitionPageRouteBuilder(page: EditAListingPost());
+      return FadeTransitionPageRouteBuilder(page: EditAListingPost(settings.arguments as int));
     case '/guwahatiConnects':
       return FadeTransitionPageRouteBuilder(page: GuwahatiConnectPage());
     case '/allImagesPage':

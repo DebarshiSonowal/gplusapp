@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:like_button/like_button.dart';
+import 'package:material_dialogs/material_dialogs.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
@@ -42,10 +43,11 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
     super.initState();
     // secureScreen();
     Future.delayed(Duration.zero, () {
+      fetchFilters();
       if (!Storage.instance.isClassified) {
         showDialogBox();
       }
-      fetchClassified('');
+      print('init');
     });
     // Future.delayed(
     //     Duration.zero,
@@ -98,8 +100,9 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
               ),
         ),
       ),
-      floatingActionButtonLocation:
-          !showing ? FloatingActionButtonLocation.miniEndFloat : FloatingActionButtonLocation.miniStartFloat,
+      floatingActionButtonLocation: !showing
+          ? FloatingActionButtonLocation.miniEndFloat
+          : FloatingActionButtonLocation.miniStartFloat,
       body: SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
@@ -216,7 +219,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                               '/classifiedMyListDetails',
                             );
                             if (result == null) {
-                              fetchClassified('');
+                              fetchClassified(result);
                             }
                           },
                           child: Container(
@@ -322,19 +325,11 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                     ),
                   ),
                   data.classified.isEmpty
-                      ? EmptyWidget(
-                          image: Constance.logoIcon,
-                          title: 'Oops!',
-                          subTitle: 'No posts are available yet',
-                          titleTextStyle: Theme.of(context)
-                              .textTheme
-                              .headline3
-                              ?.copyWith(color: Constance.primaryColor),
-                          subtitleTextStyle: Theme.of(context)
-                              .textTheme
-                              .headline4
-                              ?.copyWith(color: Constance.secondaryColor),
-                        )
+                      ? Center(
+                    child: Lottie.asset(
+                      Constance.searchingIcon,
+                    ),
+                  )
                       : Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 5.w, vertical: 1.h),
@@ -698,6 +693,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   }
 
   void fetchClassified(result) async {
+    print(result);
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance
         .getClassified(getCategory(selected), result, controller.text);
@@ -759,7 +755,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
         false) {
       final resp = await Navigation.instance.navigate('/postClassified');
       if (resp == null) {
-        fetchClassified("");
+        fetchClassified(result);
       }
     } else {
       setState(() {
@@ -902,5 +898,40 @@ for an unparalleled publication, that people call their''',
 
   Future<void> secureScreen() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
+
+  void fetchFilters() async {
+    final Map<int, bool> _map = {};
+    // await Storage.instance.filters;
+    var selected = (await Storage.instance.filters).toString().split(',');
+    for (var i in selected) {
+      setState(() {
+        Map<int, bool> data = {
+          int.parse(i): true,
+        };
+        _map.addAll(data);
+      });
+    }
+    setState(() {
+      result = getComaSeparated(
+        _map.keys.toList(),
+        _map.values.toList(),
+      );
+    });
+    fetchClassified(result);
+  }
+
+  String getComaSeparated(List<dynamic> list, List<dynamic> list2) {
+    String temp = "";
+    for (int i = 0; i < list.length; i++) {
+      if (list2[i] == true) {
+        if (i == 0) {
+          temp = '${list[i]},';
+        } else {
+          temp += '${list[i]},';
+        }
+      }
+    }
+    return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
 }

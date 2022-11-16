@@ -181,6 +181,9 @@ class _EditStoryState extends State<EditStory> {
                                 child: Image.network(
                                   images[pos].file_name ?? "",
                                   fit: BoxFit.fill,
+                                  errorBuilder: (err,cont,st){
+                                    return Image.asset(Constance.logoIcon);
+                                  },
                                 ),
                               ),
                             ),
@@ -372,7 +375,7 @@ class _EditStoryState extends State<EditStory> {
   }
 
   void showPhotoBottomSheet(Function(int) getImage) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
     BuildContext? context = Navigation.instance.navigatorKey.currentContext;
@@ -384,16 +387,17 @@ class _EditStoryState extends State<EditStory> {
             return AlertDialog(
                 title: const Center(
                     child: Text(
-                  "Add Photo",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                )),
-                contentPadding: const EdgeInsets.only(top: 24, bottom: 30),
+                      "Add Photo/Video",
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                    )),
+                contentPadding: EdgeInsets.only(top: 24, bottom: 30,left: 2.w,right: 2.w),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+
                         InkWell(
                             onTap: () {
                               Navigation.instance.goBack();
@@ -402,7 +406,7 @@ class _EditStoryState extends State<EditStory> {
                             child: Column(
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.all(12),
+                                  padding: const EdgeInsets.all(10),
                                   margin: const EdgeInsets.only(bottom: 4),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
@@ -412,17 +416,15 @@ class _EditStoryState extends State<EditStory> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   "Camera",
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 8.sp,
                                   ),
                                 ),
                               ],
                             )),
-                        const SizedBox(
-                          width: 42,
-                        ),
+
                         InkWell(
                             onTap: () {
                               Navigation.instance.goBack();
@@ -431,7 +433,7 @@ class _EditStoryState extends State<EditStory> {
                             child: Column(
                               children: [
                                 Container(
-                                  padding: EdgeInsets.all(12),
+                                  padding: const EdgeInsets.all(10),
                                   margin: EdgeInsets.only(bottom: 4),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
@@ -441,14 +443,67 @@ class _EditStoryState extends State<EditStory> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   "Gallery",
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 8.sp,
                                   ),
                                 ),
                               ],
                             )),
+                        InkWell(
+                            onTap: () {
+                              Navigation.instance.goBack();
+                              getImage(2);
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  margin: EdgeInsets.only(bottom: 4),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Colors.purple.shade300),
+                                  child: const Icon(
+                                    Icons.videocam,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  "Videocam",
+                                  style: TextStyle(
+                                    fontSize: 8.sp,
+                                  ),
+                                ),
+                              ],
+                            )),
+                        InkWell(
+                            onTap: () {
+                              Navigation.instance.goBack();
+                              getImage(3);
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  margin: EdgeInsets.only(bottom: 4),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Colors.purple.shade300),
+                                  child: const Icon(
+                                    Icons.video_library,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  "Video Roll",
+                                  style: TextStyle(
+                                    fontSize: 8.sp,
+                                  ),
+                                ),
+                              ],
+                            )),
+
                       ],
                     ),
                   ],
@@ -469,7 +524,7 @@ class _EditStoryState extends State<EditStory> {
           attachements.add(profileImage);
         });
       }
-    } else {
+    } else if (index == 1) {
       final pickedFile = await _picker.pickMultiImage(
         imageQuality: 70,
       );
@@ -480,6 +535,27 @@ class _EditStoryState extends State<EditStory> {
               File(i.path),
             );
           }
+        });
+      }
+    } else if (index == 2) {
+      final pickedFile = await _picker.pickVideo(
+        source: ImageSource.camera,
+        maxDuration: const Duration(seconds: 30),
+      );
+      if (pickedFile != null) {
+        setState(() {
+          var profileImage = File(pickedFile.path);
+          attachements.add(profileImage);
+        });
+      }
+    }else{
+      final pickedFile = await _picker.pickVideo(
+        source: ImageSource.gallery,
+      );
+      if (pickedFile != null) {
+        setState(() {
+          var profileImage = File(pickedFile.path);
+          attachements.add(profileImage);
         });
       }
     }

@@ -133,7 +133,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
                           height: 30.h,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
+                            borderRadius: const BorderRadius.all(
                               Radius.circular(10),
                             ),
                             image: DecorationImage(
@@ -216,7 +216,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 3.w, vertical: 2.h),
+                                      horizontal: 3.w, vertical: 1.h),
                                   decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(
                                       Radius.circular(5),
@@ -235,23 +235,23 @@ class _ExclusivePageState extends State<ExclusivePage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Expanded(
-                                              child: CachedNetworkImage(
-                                                imageUrl:
-                                                    item.image_file_name ?? '',
-                                                fit: BoxFit.fill,
-                                                placeholder: (cont, _) {
-                                                  return Image.asset(
-                                                    Constance.logoIcon,
-                                                    // color: Colors.black,
-                                                  );
-                                                },
-                                                errorWidget: (cont, _, e) {
-                                                  // print(e);
-                                                  print(_);
-                                                  return Text(_);
-                                                },
-                                              ),
+                                            CachedNetworkImage(
+                                              height: 15.h,
+                                              width: 45.w,
+                                              imageUrl:
+                                                  item.image_file_name ?? '',
+                                              fit: BoxFit.fill,
+                                              placeholder: (cont, _) {
+                                                return Image.asset(
+                                                  Constance.logoIcon,
+                                                  // color: Colors.black,
+                                                );
+                                              },
+                                              errorWidget: (cont, _, e) {
+                                                // print(e);
+                                                print(_);
+                                                return Text(_);
+                                              },
                                             ),
                                             SizedBox(
                                               height: 1.h,
@@ -276,10 +276,10 @@ class _ExclusivePageState extends State<ExclusivePage> {
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 5.w,
+                                        width: 4.w,
                                       ),
                                       Expanded(
-                                        flex: 2,
+                                        flex: 1,
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,

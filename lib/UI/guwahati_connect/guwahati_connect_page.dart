@@ -52,9 +52,6 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
     // secureScreen();
     Future.delayed(Duration.zero, () {
       fetchGuwahatiConnect();
-      if (!Storage.instance.isGuwahatiConnect) {
-        showDialogBox();
-      }
     });
   }
 
@@ -153,7 +150,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
-                        flex: 4,
+                        flex: 2,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -224,15 +221,14 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                             itemCount: current.guwahatiConnect.length,
                             itemBuilder: (context, count) {
                               var data = current.guwahatiConnect[count];
-                              bool like = false, dislike = false;
+                              bool like = data.is_liked ?? false,
+                                  dislike = false;
                               return GuwahatiConnectPostCard(
                                   data, count, like, dislike, scaffoldKey, () {
                                 fetchGuwahatiConnect();
                               }, (id, val) {
                                 postLike(id, val, () {
-                                  setState(() {
-                                    like = !like;
-                                  });
+                                  like = !like;
                                 });
                               }, (id) {
                                 if (id == 0) {
@@ -394,6 +390,9 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setGuwahatiConnect(response.posts);
+      if (!Storage.instance.isGuwahatiConnect) {
+        showDialogBox();
+      }
     } else {
       Navigation.instance.goBack();
       Provider.of<DataProvider>(

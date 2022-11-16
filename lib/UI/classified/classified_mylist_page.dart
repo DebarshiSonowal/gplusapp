@@ -5,6 +5,7 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:like_button/like_button.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
@@ -370,21 +371,11 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                     ),
                   ),
                   data.classified.isEmpty
-                      ? EmptyWidget(
-                          image: Constance.logoIcon,
-                          title: 'Oops!',
-                          subTitle: 'No posts are available',
-                          titleTextStyle:
-                              Theme.of(context).textTheme.headline3?.copyWith(
-                                    color: Constance.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                          subtitleTextStyle:
-                              Theme.of(context).textTheme.headline3?.copyWith(
-                                    color: Constance.secondaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        )
+                      ? Center(
+                        child: Lottie.asset(
+                            Constance.searchingIcon,
+                          ),
+                      )
                       : Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 5.w, vertical: 1.h),
@@ -501,11 +492,13 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                                                         ],
                                                         onSelected:
                                                             (int value) {
-                                                              if (value == 1) {
-                                                                updateClassified(current.id);
-                                                              } else {
-                                                                deleteClassified(current.id);
-                                                              }
+                                                          if (value == 1) {
+                                                            updateClassified(
+                                                                current.id);
+                                                          } else {
+                                                            deleteClassified(
+                                                                current.id);
+                                                          }
                                                         },
                                                         color: Colors.white,
                                                         icon: const Icon(
@@ -649,9 +642,6 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                                               ),
                                             ],
                                           ),
-                                          // SizedBox(
-                                          //   height: 0.4.h,
-                                          // ),
                                           Row(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -681,9 +671,21 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                                               ),
                                             ],
                                           ),
-                                          // SizedBox(
-                                          //   height: 1.h,
-                                          // ),
+                                          Text(
+                                            getStatusText(current.status!),
+                                            // overflow: TextOverflow.clip,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline5
+                                                ?.copyWith(
+                                                  color: getStatusColour(
+                                                      current.status!),
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          SizedBox(
+                                            height: 1.h,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -1012,22 +1014,48 @@ for an unparalleled publication, that people call their''',
       );
     }
   }
+
   void updateClassified(id) {
-    Navigation.instance.navigate('/editingAListing');
+    Navigation.instance.navigate('/editingAListing', args: id);
   }
 
   void deleteClassified(id) async {
-    Navigation.instance.navigate('/loadingDialog');
+    // Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.deleteClassified(id);
     if (response.success ?? false) {
-      Navigation.instance.goBack();
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
+      Fluttertoast.showToast(msg: "Successfully deleted the post");
+      // Navigation.instance.goBack();
+      fetchClassified('');
     } else {
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
       showError(response.message ?? "Something went wrong");
     }
   }
+
   Future<void> secureScreen() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
+
+  String getStatusText(int i) {
+    switch (i) {
+      case 1:
+        return 'Accepted';
+      case 2:
+        return 'Rejected';
+      default:
+        return 'Pending';
+    }
+  }
+
+  Color getStatusColour(int i) {
+    switch (i) {
+      case 1:
+        return Constance.secondaryColor;
+      case 2:
+        return Constance.thirdColor;
+      default:
+        return Constance.primaryColor;
+    }
   }
 }

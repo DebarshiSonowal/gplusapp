@@ -20,9 +20,10 @@ import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
 class EditAListingPost extends StatefulWidget {
-  // final int id;
+  final int id;
+
   //
-  // const EditAListingPost(this.id);
+  const EditAListingPost(this.id);
 
   @override
   State<EditAListingPost> createState() => _EditAListingPostState();
@@ -53,6 +54,7 @@ class _EditAListingPostState extends State<EditAListingPost> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
+      fetchDetails();
       fetchClassified();
     });
   }
@@ -296,7 +298,7 @@ class _EditAListingPostState extends State<EditAListingPost> {
                             GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  attachements.removeAt(pos);
+                                  print(images.removeAt(pos));
                                 });
                               },
                               child: Card(
@@ -577,7 +579,10 @@ class _EditAListingPostState extends State<EditAListingPost> {
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      final pickedFile = await _picker.pickImage(source: ImageSource.camera,imageQuality: 70,);
+      final pickedFile = await _picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 70,
+      );
       if (pickedFile != null) {
         setState(() {
           var profileImage = File(pickedFile.path);
@@ -585,7 +590,9 @@ class _EditAListingPostState extends State<EditAListingPost> {
         });
       }
     } else {
-      final pickedFile = await _picker.pickMultiImage(imageQuality: 70,);
+      final pickedFile = await _picker.pickMultiImage(
+        imageQuality: 70,
+      );
       if (pickedFile != null) {
         setState(() {
           for (var i in pickedFile) {
@@ -753,12 +760,7 @@ class _EditAListingPostState extends State<EditAListingPost> {
 
   fetchDetails() async {
     Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.getClassifiedDetails(
-        Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .selectedClassified
-            ?.id);
+    final response = await ApiProvider.instance.getClassifiedDetails(widget.id);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
@@ -793,10 +795,11 @@ class _EditAListingPostState extends State<EditAListingPost> {
         getComaSeparated(images),
         id);
     if (reponse.success ?? false) {
+      fetchDetails();
       Fluttertoast.showToast(msg: "Posted successfully");
       Navigation.instance.goBack();
       fetchClassified();
-      fetchDetails();
+
       Navigation.instance.goBack();
     } else {
       Navigation.instance.goBack();

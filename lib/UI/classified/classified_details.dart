@@ -363,7 +363,22 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                   ),
                 ),
                 SizedBox(
-                  height: 3.h,
+                  height: 1.5.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  child: Text(
+                    getStatusText(data.selectedClassified?.status ?? 0),
+                    // overflow: TextOverflow.clip,
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: getStatusColour(
+                              data.selectedClassified?.status ?? 0),
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+                SizedBox(
+                  height: 1.5.h,
                 ),
                 data.selectedClassified?.user == null
                     ? Container()
@@ -550,7 +565,29 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
   }
 
   void updateClassified(id) {
-    Navigation.instance.navigate('/editingAListing');
+    Navigation.instance.navigate('/editingAListing', args: id);
+  }
+
+  String getStatusText(int i) {
+    switch (i) {
+      case 1:
+        return 'Accepted';
+      case 2:
+        return 'Rejected';
+      default:
+        return 'Pending';
+    }
+  }
+
+  Color getStatusColour(int i) {
+    switch (i) {
+      case 1:
+        return Constance.secondaryColor;
+      case 2:
+        return Constance.thirdColor;
+      default:
+        return Constance.primaryColor;
+    }
   }
 
   void deleteClassified(id) async {

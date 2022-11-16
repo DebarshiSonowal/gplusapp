@@ -131,9 +131,9 @@ class _SearchPageState extends State<SearchPage> {
                         height: 5.h,
                         color: selected == 0
                             ? Storage.instance.isDarkMode
-                                ? Colors.white
+                                ? Constance.secondaryColor
                                 : Colors.black
-                            : Constance.secondaryColor,
+                            : Colors.white,
                         child: Center(
                           child: Text(
                             'News',
@@ -161,9 +161,9 @@ class _SearchPageState extends State<SearchPage> {
                         height: 5.h,
                         color: selected == 1
                             ? Storage.instance.isDarkMode
-                                ? Colors.white
+                                ? Constance.secondaryColor
                                 : Colors.black
-                            : Constance.secondaryColor,
+                            : Colors.white,
                         child: Center(
                           child: Text(
                             'Others',
@@ -212,9 +212,9 @@ class _SearchPageState extends State<SearchPage> {
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 3.w, vertical: 2.h),
+                              horizontal: 3.w, vertical: 1.h),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
+                            borderRadius: const BorderRadius.all(
                               Radius.circular(5),
                             ),
                             color: Storage.instance.isDarkMode
@@ -229,23 +229,23 @@ class _SearchPageState extends State<SearchPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                      child: CachedNetworkImage(
-                                        imageUrl: item.image_file_name ?? '',
-                                        fit: BoxFit.fill,
-                                        placeholder: (cont, _) {
-                                          return Image.asset(
-                                            Constance.logoIcon,
-                                            // color: Colors.black,
-                                          );
-                                        },
-                                        errorWidget: (cont, _, e) {
-                                          return Image.network(
-                                            Constance.defaultImage,
-                                            fit: BoxFit.fitWidth,
-                                          );
-                                        },
-                                      ),
+                                    CachedNetworkImage(
+                                      height: 15.h,
+                                      width: 45.w,
+                                      imageUrl: item.image_file_name ?? '',
+                                      fit: BoxFit.fill,
+                                      placeholder: (cont, _) {
+                                        return Image.asset(
+                                          Constance.logoIcon,
+                                          // color: Colors.black,
+                                        );
+                                      },
+                                      errorWidget: (cont, _, e) {
+                                        return Image.network(
+                                          Constance.defaultImage,
+                                          fit: BoxFit.fitWidth,
+                                        );
+                                      },
                                     ),
                                     SizedBox(
                                       height: 1.h,
@@ -263,10 +263,10 @@ class _SearchPageState extends State<SearchPage> {
                                 ),
                               ),
                               SizedBox(
-                                width: 5.w,
+                                width: 4.w,
                               ),
                               Expanded(
-                                flex: 2,
+                                flex: 1,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [

@@ -541,15 +541,16 @@ class _StoryPageState extends State<StoryPage> {
                                   padding:
                                       EdgeInsets.symmetric(horizontal: 1.5.w),
                                   child: DropdownButton(
-                                    dropdownColor: Colors.black,
+                                    dropdownColor: !Storage.instance.isDarkMode
+                                        ? Colors.white:Colors.black,
                                     isExpanded: false,
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline5
                                         ?.copyWith(
-                                          color: Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Constance.primaryColor,
+                                          color: !Storage.instance.isDarkMode
+                                              ? Colors.black
+                                              : Colors.white,
                                         ),
                                     underline: SizedBox.shrink(),
                                     // Initial Value
@@ -596,7 +597,7 @@ class _StoryPageState extends State<StoryPage> {
                                       },
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: 3.w, vertical: 2.h),
+                                            horizontal: 3.w, vertical: 1.h),
                                         decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(5),
@@ -616,27 +617,26 @@ class _StoryPageState extends State<StoryPage> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Expanded(
-                                                    flex: 2,
-                                                    child: CachedNetworkImage(
-                                                      imageUrl:
-                                                          item.image_file_name ??
-                                                              '',
-                                                      fit: BoxFit.fill,
-                                                      placeholder: (cont, _) {
-                                                        return Image.asset(
-                                                          Constance.logoIcon,
-                                                        );
-                                                      },
-                                                      errorWidget:
-                                                          (cont, _, e) {
-                                                        return Image.network(
-                                                          Constance
-                                                              .defaultImage,
-                                                          fit: BoxFit.fitWidth,
-                                                        );
-                                                      },
-                                                    ),
+                                                  CachedNetworkImage(
+                                                    height: 15.h,
+                                                    width: 45.w,
+                                                    imageUrl:
+                                                        item.image_file_name ??
+                                                            '',
+                                                    fit: BoxFit.fill,
+                                                    placeholder: (cont, _) {
+                                                      return Image.asset(
+                                                        Constance.logoIcon,
+                                                      );
+                                                    },
+                                                    errorWidget:
+                                                        (cont, _, e) {
+                                                      return Image.network(
+                                                        Constance
+                                                            .defaultImage,
+                                                        fit: BoxFit.fitWidth,
+                                                      );
+                                                    },
                                                   ),
                                                   SizedBox(
                                                     height: 1.h,
@@ -667,10 +667,10 @@ class _StoryPageState extends State<StoryPage> {
                                               ),
                                             ),
                                             SizedBox(
-                                              width: 5.w,
+                                              width: 4.w,
                                             ),
                                             Expanded(
-                                              flex: 2,
+                                              flex: 1,
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -879,15 +879,18 @@ class _StoryPageState extends State<StoryPage> {
   }
 
   void fetchContent() async {
+    Navigation.instance.navigate('/loadingDialog');
     final response =
         await ApiProvider.instance.getMoreArticle(dropdownvalue, 11, page, 10);
     if (response.success ?? false) {
+      Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setSuggestion(response.articles ?? []);
       // _refreshController.refreshCompleted();
     } else {
+      Navigation.instance.goBack();
       // _refreshController.refreshFailed();
     }
   }

@@ -6,7 +6,7 @@ class GuwahatiConnect {
   String? question, updated_at, created_at;
   List<GCAttachment>? attachment;
   Profile? user;
-  bool? is_post_by_me;
+  bool? is_post_by_me, is_liked;
   List<Comment> comments = [];
 
   GuwahatiConnect.fromJson(json) {
@@ -41,6 +41,7 @@ class GuwahatiConnect {
         : (json['comments'] as List).map((e) => Comment.fromJson(e)).toList();
     //other
     is_post_by_me = json['is_post_by_me'] ?? false;
+    is_liked = json['is_liked'] ?? false;
     try {
       user = Profile.fromJson(json['user']);
     } catch (e) {
