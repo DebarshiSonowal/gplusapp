@@ -30,6 +30,7 @@ import '../Model/guwahati_connect.dart';
 import '../Model/membership.dart';
 import '../Model/redeem_details.dart';
 import '../Model/shop.dart';
+import '../Model/story.dart';
 import '../Model/topick.dart';
 
 class DataProvider extends ChangeNotifier {
@@ -37,6 +38,7 @@ class DataProvider extends ChangeNotifier {
   Profile? profile, author;
 
   List<Opinion> opinions = [];
+  List<Story> stories = [];
   List<Article> home_albums = [],
       home_exclusive = [],
       news_from = [],
@@ -205,6 +207,11 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setStories(List<Story> list) {
+    stories = list;
+    notifyListeners();
+  }
+
   setAds(List<Advertise> list) {
     ads = list;
     notifyListeners();
@@ -219,9 +226,18 @@ class DataProvider extends ChangeNotifier {
     home_exclusive = list;
     notifyListeners();
   }
+  addHomeExecl(List<Article> list) {
+    home_exclusive.addAll(list);
+    notifyListeners();
+  }
 
   setNewsFrom(List<Article> list) {
     news_from = list;
+    notifyListeners();
+  }
+
+  addNewsFrom(List<Article> list) {
+    news_from.addAll(list);
     notifyListeners();
   }
 
@@ -239,9 +255,17 @@ class DataProvider extends ChangeNotifier {
     video_news = list;
     notifyListeners();
   }
-
+  addVideoNews(List<VideoNews> list) {
+    video_news.addAll(list);
+    notifyListeners();
+  }
   setOpinions(List<Opinion> list) {
     opinions = list;
+    notifyListeners();
+  }
+
+  setMoreOpinions(List<Opinion> list) {
+    opinions.addAll(list);
     notifyListeners();
   }
 

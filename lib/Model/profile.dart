@@ -17,7 +17,10 @@ class Profile {
       plan_expiry_date,
       plan_reminder_date,
       referral_code,
-      dob;
+      dob,
+      fb_link,
+      insta_link,
+      twitter_link;
   int? super_admin,
       role_id,
       gender,
@@ -50,6 +53,9 @@ class Profile {
     image_file_name = json['image_file_name'] ?? "";
     plan_active_date = json['plan_active_date'] ?? "";
     plan_expiry_date = json['plan_expiry_date'] ?? "";
+    fb_link = json['fb_link'] ?? "";
+    insta_link = json['insta_link'] ?? "";
+    twitter_link = json['twitter_link'] ?? "";
     // sign_in_count = json['sign_in_count'] ?? "";
     plan_reminder_date = json['plan_reminder_date'] ?? "";
     super_admin = int.parse((json['super_admin'] ?? 0).toString());

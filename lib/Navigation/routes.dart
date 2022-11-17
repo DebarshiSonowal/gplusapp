@@ -157,7 +157,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(
           page: OpinionDetailsPage(settings.arguments as String));
     case '/videoReport':
-      return FadeTransitionPageRouteBuilder(page: VideoReport());
+      return FadeTransitionPageRouteBuilder(page: VideoReport(settings.arguments as String));
 
     case '/contactUs':
       return FadeTransitionPageRouteBuilder(page: ContactUsPage());

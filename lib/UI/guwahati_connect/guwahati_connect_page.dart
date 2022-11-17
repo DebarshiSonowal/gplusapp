@@ -7,6 +7,7 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
@@ -200,18 +201,10 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage> {
                 ),
                 Consumer<DataProvider>(builder: (context, current, _) {
                   return current.guwahatiConnect.isEmpty
-                      ? EmptyWidget(
-                          image: Constance.logoIcon,
-                          title: 'Oops!',
-                          subTitle: 'No posts are available yet',
-                          titleTextStyle: Theme.of(context)
-                              .textTheme
-                              .headline3
-                              ?.copyWith(color: Constance.primaryColor),
-                          subtitleTextStyle: Theme.of(context)
-                              .textTheme
-                              .headline4
-                              ?.copyWith(color: Constance.secondaryColor),
+                      ? Center(
+                          child: Lottie.asset(
+                            Constance.searchingIcon,
+                          ),
                         )
                       : Padding(
                           padding: EdgeInsets.symmetric(horizontal: 2.w),

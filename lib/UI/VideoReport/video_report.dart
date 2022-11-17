@@ -8,6 +8,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../Components/alert.dart';
+import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
@@ -15,7 +16,9 @@ import '../../Networking/api_provider.dart';
 import '../Menu/berger_menu_member_page.dart';
 
 class VideoReport extends StatefulWidget {
-  const VideoReport({Key? key}) : super(key: key);
+  final String category;
+
+  const VideoReport(this.category);
 
   @override
   State<VideoReport> createState() => _VideoReportState();
@@ -24,6 +27,7 @@ class VideoReport extends StatefulWidget {
 class _VideoReportState extends State<VideoReport> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  int page = 1;
 
   @override
   void initState() {
@@ -33,6 +37,9 @@ class _VideoReportState extends State<VideoReport> {
 
   void _onRefresh() async {
     // monitor network fetch
+    setState(() {
+      page = 1;
+    });
     final response = await ApiProvider.instance.getVideoNews();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -160,8 +167,8 @@ class _VideoReportState extends State<VideoReport> {
                                                   false) {
                                                 Navigation.instance.navigate(
                                                     '/videoPlayer',
-                                                    args: data.video_news[0]
-                                                        .youtube_id);
+                                                    args:
+                                                        '${data.video_news[0].youtube_id},${'2'}');
                                               } else {
                                                 Constance.showMembershipPrompt(
                                                     context, () {
@@ -240,7 +247,7 @@ class _VideoReportState extends State<VideoReport> {
                                     if (data.profile?.is_plan_active ?? false) {
                                       Navigation.instance.navigate(
                                           '/videoPlayer',
-                                          args: item.youtube_id);
+                                          args: '${item.youtube_id},${2}');
                                     } else {
                                       Constance.showMembershipPrompt(
                                           context, () {});
@@ -430,6 +437,20 @@ class _VideoReportState extends State<VideoReport> {
                               },
                               itemCount: data.video_news.length),
                           SizedBox(
+                            height: 2.h,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CustomButton(
+                                  txt: 'Load More',
+                                  onTap: () {
+                                    page++;
+                                    fetchMoreData();
+                                  }),
+                            ],
+                          ),
+                          SizedBox(
                             height: 17.h,
                           ),
                         ],
@@ -500,6 +521,20 @@ class _VideoReportState extends State<VideoReport> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setVideoNews(response.videos ?? []);
+      // _refreshController.refreshCompleted();
+    } else {
+      // _refreshController.refreshFailed();
+    }
+  }
+
+  void fetchMoreData() async {
+    final response =
+        await ApiProvider.instance.getVideoMoreNews(widget.category, 10, page);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .addVideoNews(response.videos ?? []);
       // _refreshController.refreshCompleted();
     } else {
       // _refreshController.refreshFailed();

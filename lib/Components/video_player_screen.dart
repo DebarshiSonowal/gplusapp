@@ -15,9 +15,11 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 // import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
-  final String youtube_id;
+  final String input;
 
-  VideoPlayerScreen(this.youtube_id);
+  VideoPlayerScreen(this.input){
+   print(input.toString().split(',')[1]);
+  }
 
   @override
   State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
@@ -29,9 +31,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
   PageController controller = PageController(initialPage: 0);
-  int page = 0;
+  int page = 1;
   String currentId = '';
- List<YoutubePlayerController> _controllers = [];
+  List<YoutubePlayerController> _controllers = [];
 
   // PodPlayerController? _controller;
   @override
@@ -46,10 +48,17 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        _controllers = Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .home_weekly
+        _controllers = (widget.input.toString().split(',')[1] == '1'
+                ? Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                    .home_weekly
+                : Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                    .video_news)
             .map<YoutubePlayerController>(
               (videoId) => YoutubePlayerController(
                 initialVideoId: videoId.youtube_id!,
@@ -66,17 +75,31 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         //         .home_weekly
         //         .indexWhere(
         //             (element) => element.youtube_id == widget.youtube_id));
-        controller.jumpToPage(Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .home_weekly
-            .indexWhere((element) => element.youtube_id == widget.youtube_id));
+        controller.jumpToPage((widget.input.toString().split(',')[1] == '1'
+                ? Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                    .home_weekly
+                : Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                    .video_news)
+            .indexWhere((element) => element.youtube_id == widget.input.toString().split(',')[0]));
 
-        page = Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .home_weekly
-            .indexWhere((element) => element.youtube_id == widget.youtube_id);
+        page = (widget.input.toString().split(',')[1] == '1'
+                ? Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                    .home_weekly
+                : Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                    .video_news)
+            .indexWhere((element) => element.youtube_id ==  widget.input.toString().split(',')[0]);
         // _controller = YoutubePlayerController(
         //   initialVideoId: widget.youtube_id,
         //   flags: const YoutubePlayerFlags(
@@ -84,7 +107,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         //     mute: false,
         //   ),
         // );
-        currentId = widget.youtube_id;
+        currentId = widget.input;
       });
       // controller.addListener(() {
       //   Future.delayed(Duration.zero, () {
@@ -136,7 +159,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 scrollDirection: Axis.horizontal,
                 controller: controller,
                 itemBuilder: (BuildContext context, int index) {
-                  var current = data.home_weekly[index];
+                  var current = (widget.input.toString().split(',')[1] == '1'
+                      ? data.home_weekly
+                      : data.video_news)[index];
                   // _controller = PodPlayerController(
                   //   playVideoFrom: PlayVideoFrom.youtube(
                   //       'https://youtu.be/${current.youtube_id}'),
@@ -212,7 +237,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 1.w),
                                 child: Text(
-                                  "${page + 1} of ${data.home_weekly.length}",
+                                  "${page + 1} of ${(widget.input.toString().split(',')[1] == '1'
+                                      ? data.home_weekly
+                                      : data.video_news).length}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline3
@@ -300,11 +327,17 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                   });
                   Future.delayed(Duration(seconds: 2), () {
                     setState(() {
-                      currentId = Provider.of<DataProvider>(
-                              Navigation.instance.navigatorKey.currentContext ??
-                                  context,
-                              listen: false)
-                          .home_weekly[count]
+                      currentId = (widget.input.toString().split(',')[1] == '1'
+                          ? Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey.currentContext ??
+                              context,
+                          listen: false)
+                          .home_weekly
+                          : Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey.currentContext ??
+                              context,
+                          listen: false)
+                          .video_news)[count]
                           .youtube_id!;
                     });
                   });

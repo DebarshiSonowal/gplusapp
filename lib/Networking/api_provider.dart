@@ -44,6 +44,7 @@ import '../Model/refer_earn_response.dart';
 import '../Model/search_result.dart';
 import '../Model/shop.dart';
 import '../Model/shop_category.dart';
+import '../Model/story.dart';
 import '../Model/swtich_status.dart';
 import '../Model/top_picks.dart';
 import '../Model/topick.dart';
@@ -53,6 +54,7 @@ class ApiProvider {
   ApiProvider._();
 
   static final ApiProvider instance = ApiProvider._();
+
   // final String baseUrl = "http://gplus.shecure.co.in/api/v1";
   final String baseUrl = "https://www.guwahatiplus.com/api/v1";
 
@@ -131,7 +133,7 @@ class ApiProvider {
       'Authorization': 'Bearer ${Storage.instance.token}'
       // 'APP-KEY': ConstanceData.app_key
     });
-    var url = "${baseUrl}/";
+    var url = "${baseUrl}/app/";
     dio = Dio(option);
     debugPrint(url.toString());
     debugPrint(jsonEncode(data));
@@ -327,7 +329,8 @@ class ApiProvider {
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ProfileResponse.fromJson(response?.data);
       } else {
-        debugPrint("create Profile error: ${response?.statusCode} ${response?.data}");
+        debugPrint(
+            "create Profile error: ${response?.statusCode} ${response?.data}");
         return ProfileResponse.withError("Something went wrong");
       }
     } on DioError catch (e) {
@@ -336,7 +339,8 @@ class ApiProvider {
         Navigation.instance.navigateAndRemoveUntil('/login');
         showError("Oops! Your session expired. Please Login Again");
       }
-      debugPrint("create Profile error: ${e.response?.statusCode??0} ${e.response}");
+      debugPrint(
+          "create Profile error: ${e.response?.statusCode ?? 0} ${e.response}");
       return ProfileResponse.withError(e.message);
     }
   }
@@ -406,7 +410,7 @@ class ApiProvider {
         url,
         queryParameters: data,
       );
-      debugPrint("More Article response: ${response?.data}");
+      // debugPrint("More Article response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ArticleResponse.fromJson(response?.data);
       } else {
@@ -743,6 +747,44 @@ class ApiProvider {
     }
   }
 
+  Future<StoryResponse> getStories() async {
+    // var data = {
+    //   // 'mobile': mobile,
+    // };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${homeUrl}/app/get-stories";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+      );
+      debugPrint("StoryResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return StoryResponse.fromJson(response?.data);
+      } else {
+        debugPrint("StoryResponse error: ${response?.data}");
+        return StoryResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("StoryResponse response: ${e.response}");
+      return StoryResponse.withError(e.message);
+    }
+  }
+
   Future<VideoNewsResponse> getWeekly() async {
     // var data = {
     //   // 'mobile': mobile,
@@ -983,6 +1025,47 @@ class ApiProvider {
     }
   }
 
+  Future<MoreVideoNewsResponse> getVideoMoreNews(categ, per_page, page) async {
+    var data = {
+      'category': categ,
+      'per_page': per_page,
+      'page': page,
+    };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${homeUrl}/video/${categ}";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        queryParameters: data
+      );
+      debugPrint("video-news response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return MoreVideoNewsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("video-news error: ${response?.data}");
+        return MoreVideoNewsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("video-news response: ${e.response}");
+      return MoreVideoNewsResponse.withError(e.message);
+    }
+  }
+
   Future<MembershipResponse> getMembership() async {
     // var data = {
     //   'category': 'opinion',
@@ -1219,6 +1302,7 @@ class ApiProvider {
       return GenericMsgResponse.withError(e.message);
     }
   }
+
   Future<GenericMsgResponse> getTerms() async {
     var url = "${baseUrl}/user-security-msg";
     BaseOptions option =
@@ -2942,7 +3026,9 @@ class ApiProvider {
       'is_story_submit': is_story_submit,
     });
     for (int i = 0; i < files.length; i++) {
-      var type = lookupMimeType(files[i].path,)!;
+      var type = lookupMimeType(
+        files[i].path,
+      )!;
       print(type);
       MultipartFile file = await MultipartFile.fromFile(
         files[i].path,

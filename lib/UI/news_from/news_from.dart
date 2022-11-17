@@ -5,6 +5,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
+import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
@@ -24,6 +25,8 @@ class _NewsFromState extends State<NewsFrom> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
+  int skip=5;
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +34,9 @@ class _NewsFromState extends State<NewsFrom> {
   }
 
   void _onRefresh() async {
+    setState(() {
+      skip=10;
+    });
     // monitor network fetch
     final response = await ApiProvider.instance.getArticle(widget.categ);
     if (response.success ?? false) {
@@ -373,11 +379,23 @@ class _NewsFromState extends State<NewsFrom> {
                                 );
                               }
                             },
-                            itemCount: data.news_from.length > 5
-                                ? 5
-                                : data.news_from.length),
+                            itemCount: data.news_from.length),
                         SizedBox(
-                          height: 10.h,
+                          height:2.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomButton(
+                                txt: 'Load More',
+                                onTap: () {
+                                  skip = skip*2;
+                                  fetchMoreContent();
+                                }),
+                          ],
+                        ),
+                        SizedBox(
+                          height:15.h,
                         ),
                       ],
                     ),
@@ -432,7 +450,22 @@ class _NewsFromState extends State<NewsFrom> {
   String capitalize(String str) {
     return "${str[0].toUpperCase()}${str.substring(1).toLowerCase()}";
   }
-
+  void fetchMoreContent() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response =
+    await ApiProvider.instance.getMoreArticle(widget.categ, 5, 1, skip);
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .addNewsFrom(response.articles ?? []);
+      // _refreshController.refreshCompleted();
+    } else {
+      Navigation.instance.goBack();
+      // _refreshController.refreshFailed();
+    }
+  }
   void fetchContent() async {
     final response = await ApiProvider.instance.getArticle(widget.categ);
     if (response.success ?? false) {

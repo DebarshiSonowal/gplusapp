@@ -905,12 +905,16 @@ for an unparalleled publication, that people call their''',
     // await Storage.instance.filters;
     var selected = (await Storage.instance.filters).toString().split(',');
     for (var i in selected) {
-      setState(() {
-        Map<int, bool> data = {
-          int.parse(i): true,
-        };
-        _map.addAll(data);
-      });
+      try {
+        setState(() {
+                Map<int, bool> data = {
+                  int.parse(i): true,
+                };
+                _map.addAll(data);
+              });
+      } catch (e) {
+        print(e);
+      }
     }
     setState(() {
       result = getComaSeparated(

@@ -720,7 +720,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                               splashColor: Constance.secondaryColor,
                               radius: 15.h,
                               onTap: () {
-                                Navigation.instance.navigate('/videoReport');
+                                Navigation.instance.navigate('/videoReport',args: 'news');
                               },
                               child: Row(
                                 children: [
@@ -757,7 +757,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                               splashColor: Constance.secondaryColor,
                               radius: 15.h,
                               onTap: () {
-                                Navigation.instance.navigate('/videoReport');
+                                Navigation.instance.navigate('/videoReport',args: 'featured');
                               },
                               child: Row(
                                 children: [

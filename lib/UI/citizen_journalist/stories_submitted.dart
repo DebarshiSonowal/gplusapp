@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../../Helper/Constance.dart';
@@ -50,19 +51,10 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                   ),
                 ),
                 data.citizenlist.isEmpty
-                    ? EmptyWidget(
-                        image: Constance.logoIcon,
-                        title: 'Oops!',
-                        subTitle: 'No stories are submitted yet',
-                        titleTextStyle: Theme.of(context)
-                            .textTheme
-                            .headline3
-                            ?.copyWith(color: Constance.primaryColor),
-                        subtitleTextStyle: Theme.of(context)
-                            .textTheme
-                            .headline4
-                            ?.copyWith(color: Constance.secondaryColor),
-                      )
+                    ? Center(
+                    child: Lottie.asset(
+                      Constance.searchingIcon,
+                    ),)
                     : ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),

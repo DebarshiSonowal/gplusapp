@@ -26,7 +26,7 @@ class _StoryViewPageState extends State<StoryViewPage> {
         color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return StoryView(
-            storyItems: data.home_albums
+            storyItems: data.stories
                 .map((e) => StoryItem.pageImage(
                       url: e.image_file_name ?? "",
                       controller: StoryController(),

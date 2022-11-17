@@ -5,6 +5,7 @@ class Article {
 
   String? title,
       author_name,
+
       seo_name,
       publish_date,
       description,

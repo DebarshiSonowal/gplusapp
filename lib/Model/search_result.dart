@@ -57,9 +57,9 @@ class SearchResultResponse {
   SearchResultResponse.fromJson(json) {
     success = json['success'] ?? false;
     message = json['message'] ?? "Something went wrong";
-    data = json['result']['data'] == null
+    data = json['result'] == null
         ? []
-        : (json['result']['data'] as List).map((e) => SearchResult.fromJson(e)).toList();
+        : (json['result'] as List).map((e) => SearchResult.fromJson(e)).toList();
   }
 
   SearchResultResponse.withError(msg) {

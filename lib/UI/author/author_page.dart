@@ -47,13 +47,14 @@ class _AuthorPageState extends State<AuthorPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
+                      flex: 2,
                       child: Container(
                         // padding: EdgeInsets.all(2.h),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Constance.primaryColor,
                           image: DecorationImage(
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fill,
                             image: CachedNetworkImageProvider(
                               data.author?.image_file_name ??
                                   "https://images.unsplash.com/photo-1587590834224-3247f65be147?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
@@ -64,26 +65,29 @@ class _AuthorPageState extends State<AuthorPage> {
                       ),
                     ),
                     SizedBox(
-                      width: 10.w,
+                      width: 5.w,
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Spacer(),
-                        Text(
-                          data.author?.name ?? 'Joan Rivers',
-                          style: Theme.of(Navigation
-                                  .instance.navigatorKey.currentContext!)
-                              .textTheme
-                              .headline3
-                              ?.copyWith(
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
-                                // fontSize: 11.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
+                        SizedBox(
+                          width: 50.w,
+                          child: Text(
+                            data.author?.name ?? 'Joan Rivers',
+                            style: Theme.of(Navigation
+                                    .instance.navigatorKey.currentContext!)
+                                .textTheme
+                                .headline3
+                                ?.copyWith(
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
+                                  // fontSize: 11.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
                         ),
                         Spacer(),
                         Text(

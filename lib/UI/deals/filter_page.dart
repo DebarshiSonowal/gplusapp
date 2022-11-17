@@ -221,7 +221,9 @@ class _FilterPageState extends State<FilterPage> {
           onTap: () {
             setState(() {
               _map.clear();
+              Storage.instance.setFilter('');
             });
+            Navigator.pop(context, '');
           },
           child: Padding(
             padding: const EdgeInsets.only(right: 10.0),

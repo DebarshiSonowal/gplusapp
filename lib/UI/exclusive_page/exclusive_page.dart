@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
@@ -25,6 +26,8 @@ class _ExclusivePageState extends State<ExclusivePage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
+  int skip=10;
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +36,9 @@ class _ExclusivePageState extends State<ExclusivePage> {
   }
 
   void _onRefresh() async {
+    setState(() {
+      skip=10;
+    });
     // monitor network fetch
     final response = await ApiProvider.instance.getArticle('exclusive-news');
     if (response.success ?? false) {
@@ -338,7 +344,21 @@ class _ExclusivePageState extends State<ExclusivePage> {
                           itemCount: data.home_exclusive.length,
                         ),
                         SizedBox(
-                          height: 10.h,
+                          height: 2.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomButton(
+                                txt: 'Load More',
+                                onTap: () {
+                                  skip = skip*2;
+                                  fetchMoreContent();
+                                }),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 15.h,
                         ),
                       ],
                     ),
@@ -402,7 +422,22 @@ class _ExclusivePageState extends State<ExclusivePage> {
       // _refreshController.refreshFailed();
     }
   }
-
+  void fetchMoreContent() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response =
+    await ApiProvider.instance.getMoreArticle('exclusive-news', 5, 1, skip);
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .addHomeExecl(response.articles ?? []);
+      // _refreshController.refreshCompleted();
+    } else {
+      Navigation.instance.goBack();
+      // _refreshController.refreshFailed();
+    }
+  }
   Future<void> secureScreen() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }

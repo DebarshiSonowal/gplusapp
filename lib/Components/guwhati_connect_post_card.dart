@@ -33,308 +33,311 @@ class GuwahatiConnectPostCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        StatefulBuilder(
-          builder: (context,_) {
-            return Card(
-              elevation: 3,
-              color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            data.user?.name ?? "GPlus Author",
-                            style: Theme.of(context).textTheme.headline3?.copyWith(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Constance.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                          (data.is_post_by_me ?? false)
-                              ? PopupMenuButton<int>(
-                                  color: Constance.secondaryColor,
-                                  itemBuilder: (BuildContext context) =>
-                                      <PopupMenuItem<int>>[
-                                    PopupMenuItem<int>(
-                                      value: 1,
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.edit,
-                                            color: Colors.black,
-                                          ),
-                                          SizedBox(
-                                            width: 2.w,
-                                          ),
-                                          Text(
-                                            'Edit',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                ?.copyWith(color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    PopupMenuItem<int>(
-                                      value: 2,
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.delete,
-                                            color: Colors.black,
-                                          ),
-                                          SizedBox(
-                                            width: 2.w,
-                                          ),
-                                          Text(
-                                            'Delete',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                ?.copyWith(color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                  onSelected: (int value) {
-                                    // setState(() {});
-                                    switch (value) {
-                                      case 2:
-                                        deletePost(data.id!);
-                                        break;
-                                      default:
-                                        Navigation.instance.navigate(
-                                            '/editAskAQuestion',
-                                            args: count);
-                                        break;
-                                    }
-                                  },
-                                  // color: Colors.white,
-                                  icon: Icon(
-                                    Icons.more_vert,
+        StatefulBuilder(builder: (context, _) {
+          return Card(
+            elevation: 3,
+            color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          data.user?.name ?? "GPlus Author",
+                          style:
+                              Theme.of(context).textTheme.headline3?.copyWith(
                                     color: Storage.instance.isDarkMode
                                         ? Colors.white
                                         : Constance.primaryColor,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                )
-                              : Container(),
-                        ],
-                      ),
-                    ),
-                    data.attachment?.isEmpty ?? false
-                        ? Container()
-                        : Padding(
-                            padding: EdgeInsets.symmetric(vertical: 1.h),
-                            child: SizedBox(
-                              // height: 35.h,
-                              width: double.infinity,
-                              child: GestureDetector(
-                                onTap: () {
-                                  // Navigation.instance.goBack();
-                                  (data.attachment?.length ?? 1) > 1
-                                      ? showAllImages(count)
-                                      : showThisImage(
-                                          data.attachment![0].file_name ??
-                                              Constance.defaultImage);
+                        ),
+                        (data.is_post_by_me ?? false)
+                            ? PopupMenuButton<int>(
+                                color: Constance.secondaryColor,
+                                itemBuilder: (BuildContext context) =>
+                                    <PopupMenuItem<int>>[
+                                  PopupMenuItem<int>(
+                                    value: 1,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.edit,
+                                          color: Colors.black,
+                                        ),
+                                        SizedBox(
+                                          width: 2.w,
+                                        ),
+                                        Text(
+                                          'Edit',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  PopupMenuItem<int>(
+                                    value: 2,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.delete,
+                                          color: Colors.black,
+                                        ),
+                                        SizedBox(
+                                          width: 2.w,
+                                        ),
+                                        Text(
+                                          'Delete',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                onSelected: (int value) {
+                                  // setState(() {});
+                                  switch (value) {
+                                    case 2:
+                                      deletePost(data.id!);
+                                      break;
+                                    default:
+                                      Navigation.instance.navigate(
+                                          '/editAskAQuestion',
+                                          args: count);
+                                      break;
+                                  }
                                 },
-                                child: (data.attachment?.length ?? 1) > 1
-                                    ? getGridBasedOnNumbers(
-                                        data.attachment, context)
-                                    : CachedNetworkImage(
-                                        placeholder: (cont, _) {
-                                          return Image.asset(
-                                            Constance.logoIcon,
-                                            // color: Colors.black,
-                                          );
-                                        },
-                                        imageUrl:
-                                            data.attachment![0].file_name ?? "",
-                                        fit: BoxFit.fill,
-                                        errorWidget: (cont, _, e) {
-                                          return Image.network(
-                                            Constance.defaultImage,
-                                            fit: BoxFit.fitWidth,
-                                          );
-                                        },
-                                      ),
-                              ),
+                                // color: Colors.white,
+                                icon: Icon(
+                                  Icons.more_vert,
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Constance.primaryColor,
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  ),
+                  data.attachment?.isEmpty ?? false
+                      ? Container()
+                      : Padding(
+                          padding: EdgeInsets.symmetric(vertical: 1.h),
+                          child: SizedBox(
+                            // height: 35.h,
+                            width: double.infinity,
+                            child: GestureDetector(
+                              onTap: () {
+                                // Navigation.instance.goBack();
+                                (data.attachment?.length ?? 1) > 1
+                                    ? showAllImages(count)
+                                    : showThisImage(
+                                        data.attachment![0].file_name ??
+                                            Constance.defaultImage);
+                              },
+                              child: (data.attachment?.length ?? 1) > 1
+                                  ? getGridBasedOnNumbers(
+                                      data.attachment, context)
+                                  : CachedNetworkImage(
+                                      placeholder: (cont, _) {
+                                        return Image.asset(
+                                          Constance.logoIcon,
+                                          // color: Colors.black,
+                                        );
+                                      },
+                                      imageUrl:
+                                          data.attachment![0].file_name ?? "",
+                                      fit: BoxFit.fill,
+                                      errorWidget: (cont, _, e) {
+                                        return Image.network(
+                                          Constance.defaultImage,
+                                          fit: BoxFit.fitWidth,
+                                        );
+                                      },
+                                    ),
                             ),
                           ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    ReadMoreText(
-                      data.question ?? "",
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                      trimLines: 5,
-                      colorClickableText: Constance.secondaryColor,
-                      trimMode: TrimMode.Line,
-                      trimCollapsedText: 'Show more',
-                      trimExpandedText: 'Show less',
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    // SizedBox(
-                    //   height: 2.h,
-                    //   child: Center(
-                    //     child: Divider(
-                    //       thickness: 0.05.h,
-                    //       color: Storage.instance.isDarkMode
-                    //           ? Colors.white70
-                    //           : Colors.black26,
-                    //     ),
-                    //   ),
-                    // ),
-                    SizedBox(
-                      height: 0.5.h,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(horizontal: 1.w),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                '${like ? ((data.total_liked ?? 0) + 1) : data.total_liked} likes' ??
-                                    "",
-                                style:
-                                    Theme.of(context).textTheme.headline6?.copyWith(
-                                          color: Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Colors.black,
-                                          // fontWeight: FontWeight.bold,
-                                        ),
-                              ),
-                            ],
-                          ),
-                          // Text(
-                          //   '${dislike ? ((data.total_disliked ?? 0) + 1) : data.total_disliked} dislikes' ??
-                          //       "",
-                          //   style: Theme.of(context).textTheme.headline6?.copyWith(
-                          //         color: Storage.instance.isDarkMode
-                          //             ? Colors.white
-                          //             : Colors.black,
-                          //         // fontWeight: FontWeight.bold,
-                          //       ),
-                          // ),
-                          Text(
-                            '${data.total_comment} comments' ?? "",
-                            style: Theme.of(context).textTheme.headline6?.copyWith(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // SizedBox(
-                    //   height: 0.5.h,
-                    // ),
-                    // SizedBox(
-                    //   height: 2.h,
-                    //   child: Center(
-                    //     child: Divider(
-                    //       thickness: 0.05.h,
-                    //       color: Storage.instance.isDarkMode
-                    //           ? Colors.white70
-                    //           : Colors.black26,
-                    //     ),
-                    //   ),
-                    // ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              Material(
-                                type: MaterialType.transparency,
-                                child: IconButton(
-                                  onPressed: () {
-                                    postLike(data.id!, 1);
-                                    _((){
-                                      like = !like;
-                                      if (dislike) {
-                                        dislike = !like;
-                                      }
-                                    });
-                                    debugPrint('${like}');
-                                  },
-                                  splashRadius: 20.0,
-                                  splashColor: !like
-                                      ? Constance.secondaryColor
-                                      : Constance.primaryColor,
-                                  icon: Icon(
-                                    Icons.thumb_up,
-                                    color: like
-                                        ? Constance.secondaryColor
-                                        : Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Constance.primaryColor,
-                                  ),
-                                ),
-                              ),
-                              Material(
-                                type: MaterialType.transparency,
-                                child: IconButton(
-                                  onPressed: () {
-                                    showComments(count,context);
-                                  },
-                                  splashRadius: 20.0,
-                                  splashColor: Constance.secondaryColor,
-                                  icon: Icon(
-                                    Icons.comment,
+                        ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  ReadMoreText(
+                    data.question ?? "",
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                    trimLines: 5,
+                    colorClickableText: Constance.secondaryColor,
+                    trimMode: TrimMode.Line,
+                    trimCollapsedText: 'Show more',
+                    trimExpandedText: 'Show less',
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  // SizedBox(
+                  //   height: 2.h,
+                  //   child: Center(
+                  //     child: Divider(
+                  //       thickness: 0.05.h,
+                  //       color: Storage.instance.isDarkMode
+                  //           ? Colors.white70
+                  //           : Colors.black26,
+                  //     ),
+                  //   ),
+                  // ),
+                  SizedBox(
+                    height: 0.5.h,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 1.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '${like ? ((data.total_liked ?? 0) + 1) : data.total_liked} likes' ??
+                                  "",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
                                     color: Storage.instance.isDarkMode
                                         ? Colors.white
-                                        : Constance.primaryColor,
+                                        : Colors.black,
+                                    // fontWeight: FontWeight.bold,
                                   ),
+                            ),
+                          ],
+                        ),
+                        // Text(
+                        //   '${dislike ? ((data.total_disliked ?? 0) + 1) : data.total_disliked} dislikes' ??
+                        //       "",
+                        //   style: Theme.of(context).textTheme.headline6?.copyWith(
+                        //         color: Storage.instance.isDarkMode
+                        //             ? Colors.white
+                        //             : Colors.black,
+                        //         // fontWeight: FontWeight.bold,
+                        //       ),
+                        // ),
+                        Text(
+                          '${data.total_comment} comments' ?? "",
+                          style:
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // SizedBox(
+                  //   height: 0.5.h,
+                  // ),
+                  // SizedBox(
+                  //   height: 2.h,
+                  //   child: Center(
+                  //     child: Divider(
+                  //       thickness: 0.05.h,
+                  //       color: Storage.instance.isDarkMode
+                  //           ? Colors.white70
+                  //           : Colors.black26,
+                  //     ),
+                  //   ),
+                  // ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Material(
+                              type: MaterialType.transparency,
+                              child: IconButton(
+                                onPressed: () {
+                                  postLike(data.id!, 1);
+                                  _(() {
+                                    like = !like;
+                                    if (dislike) {
+                                      dislike = !like;
+                                    }
+                                  });
+                                  debugPrint('${like}');
+                                },
+                                splashRadius: 20.0,
+                                splashColor: !like
+                                    ? Constance.secondaryColor
+                                    : Constance.primaryColor,
+                                icon: Icon(
+                                  Icons.thumb_up,
+                                  color: like
+                                      ? Constance.secondaryColor
+                                      : Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
                                 ),
                               ),
-                            ],
-                          ),
-                          Text(
-                            Jiffy(data.updated_at, "yyyy-MM-dd hh:mm:ss")
-                                    .fromNow() ??
-                                '${15} mins ago' ??
-                                "",
-                            style: Theme.of(context).textTheme.headline6?.copyWith(
+                            ),
+                            Material(
+                              type: MaterialType.transparency,
+                              child: IconButton(
+                                onPressed: () {
+                                  showComments(count, context);
+                                },
+                                splashRadius: 20.0,
+                                splashColor: Constance.secondaryColor,
+                                icon: Icon(
+                                  Icons.comment,
                                   color: Storage.instance.isDarkMode
-                                      ? Colors.white70
-                                      : Colors.black45,
-                                  // fontWeight: FontWeight.bold,
+                                      ? Colors.white
+                                      : Constance.primaryColor,
                                 ),
-                          ),
-                        ],
-                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          Jiffy(data.updated_at, "yyyy-MM-dd hh:mm:ss")
+                                  .fromNow() ??
+                              '${15} mins ago' ??
+                              "",
+                          style:
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white70
+                                        : Colors.black45,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            );
-          }
-        ),
+            ),
+          );
+        }),
       ],
     );
   }
@@ -345,6 +348,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
       backgroundColor: Colors.transparent,
       enableDrag: false,
       isDismissible: true,
+      isScrollControlled: true,
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, _) {
@@ -362,11 +366,13 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                 width: double.infinity,
                 padding: EdgeInsets.only(top: 1.h),
                 height: 70.h,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 5.h,
+                      width: double.infinity,
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
@@ -382,207 +388,215 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Row(
+                    ),
+                    SizedBox(
+                      height: 5.h,
+                      width: double.infinity,
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             "Comments",
-                            style:
-                                Theme.of(context).textTheme.headline3?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.black
-                                          : Constance.primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline3
+                                ?.copyWith(
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.black
+                                      : Constance.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 35.h,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5.w),
-                          child: ListView.builder(
-                              // physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount:
-                                  data.guwahatiConnect[count].comments.length,
-                              itemBuilder: (cont, ind) {
-                                var current =
-                                    data.guwahatiConnect[count].comments[ind];
-                                return SizedBox(
-                                  height: 16.h,
-                                  width: 40.w,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              current.name ?? "",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5
-                                                  ?.copyWith(
-                                                    color: Storage
-                                                            .instance.isDarkMode
-                                                        ? Colors.black
-                                                        : Constance
-                                                            .primaryColor,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                            // Icon(
-                                            //   Icons.menu,
-                                            //   color: Colors.black,
-                                            // ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                      Row(
+                    ),
+                    Expanded(
+                      // height: 35.h,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: ListView.builder(
+                            // physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount:
+                                data.guwahatiConnect[count].comments.length,
+                            itemBuilder: (cont, ind) {
+                              var current =
+                                  data.guwahatiConnect[count].comments[ind];
+                              return SizedBox(
+                                height: 16.h,
+                                width: 40.w,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            current.comment ?? "",
+                                            current.name ?? "",
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .headline6
+                                                .headline5
                                                 ?.copyWith(
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
+                                                  color: Storage
+                                                          .instance.isDarkMode
+                                                      ? Colors.black
+                                                      : Constance
+                                                          .primaryColor,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
+                                          ),
+                                          // Icon(
+                                          //   Icons.menu,
+                                          //   color: Colors.black,
+                                          // ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          current.comment ?? "",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(
+                                                color: Colors.black,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    // Text(
+                                    //   "",
+                                    //   style: Theme.of(context)
+                                    //       .textTheme
+                                    //       .headline5
+                                    //       ?.copyWith(
+                                    //         color: Colors.black,
+                                    //         fontWeight: FontWeight.bold,
+                                    //       ),
+                                    // ),
+                                    // SizedBox(
+                                    //   height: 1.h,
+                                    // ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Material(
+                                                type:
+                                                    MaterialType.transparency,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    postCommentLike(
+                                                        current.id, 1);
+                                                  },
+                                                  splashRadius: 20.0,
+                                                  splashColor: Constance
+                                                      .secondaryColor,
+                                                  icon: Icon(
+                                                    Icons.thumb_up,
+                                                    color: current.is_liked
+                                                        ? Constance
+                                                            .secondaryColor
+                                                        : Constance
+                                                            .primaryColor,
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                '${current.like_count} likes' ??
+                                                    "",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6
+                                                    ?.copyWith(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                      // Text(
-                                      //   "",
-                                      //   style: Theme.of(context)
-                                      //       .textTheme
-                                      //       .headline5
-                                      //       ?.copyWith(
-                                      //         color: Colors.black,
-                                      //         fontWeight: FontWeight.bold,
-                                      //       ),
-                                      // ),
-                                      // SizedBox(
-                                      //   height: 1.h,
-                                      // ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Material(
-                                                  type:
-                                                      MaterialType.transparency,
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      postCommentLike(
-                                                          current.id, 1);
-                                                    },
-                                                    splashRadius: 20.0,
-                                                    splashColor: Constance
-                                                        .secondaryColor,
-                                                    icon: Icon(
-                                                      Icons.thumb_up,
-                                                      color: Storage.instance
-                                                              .isDarkMode
-                                                          ? Colors.black
-                                                          : Constance
-                                                              .primaryColor,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${current.like_count} likes' ??
-                                                      "",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline6
-                                                      ?.copyWith(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-
-                                      SizedBox(
-                                        height: 1.h,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 2.w),
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Card(
-                            color: Colors.white,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 5.w, vertical: 0.5.h),
-                              child: TextField(
-                                controller: _searchQueryController,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  hintText: "Write a comment",
-                                  border: InputBorder.none,
-                                  hintStyle:
-                                      const TextStyle(color: Colors.black26),
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      if (_searchQueryController
-                                          .text.isNotEmpty) {
-                                        // search(_searchQueryController.text);
-                                        _(() {
-                                          postComment(
-                                              data.guwahatiConnect[count].id,
-                                              'guwahati-connect',
-                                              _searchQueryController.text);
-                                        });
-                                      } else {
-                                        showError('Enter something to search');
-                                      }
-                                    },
-                                    icon: const Icon(
-                                      Icons.send,
-                                      color: Colors.black,
                                     ),
+
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                      ),
+                    ),
+                    Container(
+                      height: 8.h,
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 2.w),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Card(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 5.w, vertical: 0.5.h),
+                            child: TextField(
+                              controller: _searchQueryController,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                hintText: "Write a comment",
+                                border: InputBorder.none,
+                                hintStyle:
+                                    const TextStyle(color: Colors.black26),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    if (_searchQueryController
+                                        .text.isNotEmpty) {
+                                      // search(_searchQueryController.text);
+                                      _(() {
+                                        postComment(
+                                            data.guwahatiConnect[count].id,
+                                            'guwahati-connect',
+                                            _searchQueryController.text);
+                                      });
+                                    } else {
+                                      showError('Enter something to search');
+                                    }
+                                  },
+                                  icon: const Icon(
+                                    Icons.send,
+                                    color: Colors.black,
                                   ),
                                 ),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline4
-                                    ?.copyWith(color: Colors.black),
-                                onChanged: (query) => {},
                               ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(color: Colors.black),
+                              onChanged: (query) => {},
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             );

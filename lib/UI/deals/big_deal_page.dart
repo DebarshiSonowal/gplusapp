@@ -547,65 +547,74 @@ class _BigDealPageState extends State<BigDealPage> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    data.title ?? '25% OFF',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.start,
-                                                    style: Theme.of(Navigation
-                                                            .instance
-                                                            .navigatorKey
-                                                            .currentContext!)
-                                                        .textTheme
-                                                        .headline5
-                                                        ?.copyWith(
-                                                          color: Colors.black,
-                                                          // fontSize: 11.sp,
-                                                          // fontWeight: FontWeight.bold,
-                                                        ),
+                                                  SizedBox(
+                                                    width:40.w,
+                                                    child: Text(
+                                                      data.title ?? '25% OFF',
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      textAlign: TextAlign.start,
+                                                      style: Theme.of(Navigation
+                                                              .instance
+                                                              .navigatorKey
+                                                              .currentContext!)
+                                                          .textTheme
+                                                          .headline5
+                                                          ?.copyWith(
+                                                            color: Colors.black,
+                                                            // fontSize: 11.sp,
+                                                            // fontWeight: FontWeight.bold,
+                                                          ),
+                                                    ),
                                                   ),
                                                   SizedBox(
                                                     height: 0.5.h,
                                                   ),
-                                                  Text(
-                                                    data.vendor?.shop_name ??
-                                                        "",
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.start,
-                                                    style: Theme.of(Navigation
-                                                            .instance
-                                                            .navigatorKey
-                                                            .currentContext!)
-                                                        .textTheme
-                                                        .headline4
-                                                        ?.copyWith(
-                                                          color: Colors.black,
-                                                          // fontSize: 11.sp,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
+                                                  SizedBox(
+                                                    width: 40.w,
+                                                    child: Text(
+                                                      data.vendor?.shop_name ??
+                                                          "",
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      textAlign: TextAlign.start,
+                                                      style: Theme.of(Navigation
+                                                              .instance
+                                                              .navigatorKey
+                                                              .currentContext!)
+                                                          .textTheme
+                                                          .headline4
+                                                          ?.copyWith(
+                                                            color: Colors.black,
+                                                            // fontSize: 11.sp,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                    ),
                                                   ),
                                                   SizedBox(
                                                     height: 0.5.h,
                                                   ),
-                                                  Text(
-                                                    data.vendor?.address ??
-                                                        'RGB road, Zoo tiniali',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.start,
-                                                    style: Theme.of(Navigation
-                                                            .instance
-                                                            .navigatorKey
-                                                            .currentContext!)
-                                                        .textTheme
-                                                        .headline5
-                                                        ?.copyWith(
-                                                          color: Colors.black,
-                                                          // fontSize: 11.sp,
-                                                          // fontWeight: FontWeight.bold,
-                                                        ),
+                                                  SizedBox(
+                                                    width: 40.w,
+                                                    child: Text(
+                                                      data.vendor?.address ??
+                                                          'RGB road, Zoo tiniali',
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      textAlign: TextAlign.start,
+                                                      style: Theme.of(Navigation
+                                                              .instance
+                                                              .navigatorKey
+                                                              .currentContext!)
+                                                          .textTheme
+                                                          .headline5
+                                                          ?.copyWith(
+                                                            color: Colors.black,
+                                                            // fontSize: 11.sp,
+                                                            // fontWeight: FontWeight.bold,
+                                                          ),
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -614,24 +623,27 @@ class _BigDealPageState extends State<BigDealPage> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    '${data.code ?? '8486'}',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.start,
-                                                    style: Theme.of(Navigation
-                                                            .instance
-                                                            .navigatorKey
-                                                            .currentContext!)
-                                                        .textTheme
-                                                        .headline5
-                                                        ?.copyWith(
-                                                          color: Colors
-                                                              .grey.shade800,
-                                                          // fontSize: 11.sp,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
+                                                  SizedBox(
+                                                    width: 40.w,
+                                                    child: Text(
+                                                      '${data.code ?? '8486'}',
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      textAlign: TextAlign.start,
+                                                      style: Theme.of(Navigation
+                                                              .instance
+                                                              .navigatorKey
+                                                              .currentContext!)
+                                                          .textTheme
+                                                          .headline5
+                                                          ?.copyWith(
+                                                            color: Colors
+                                                                .grey.shade800,
+                                                            // fontSize: 11.sp,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                    ),
                                                   ),
                                                   SizedBox(
                                                     height: 0.5.h,

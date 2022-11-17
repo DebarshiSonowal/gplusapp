@@ -10,6 +10,7 @@ class Comment {
       dislike_count;
   String? commentable_type, comment,name;
   User? user;
+  bool is_liked=false;
 
   Comment.fromJson(json) {
     id = json['id'] ?? 0;
@@ -30,6 +31,7 @@ class Comment {
         : int.parse(json['commentable_id'].toString());
     comment = json['comment']??"";
     name = json['name']??"";
+    is_liked = json['is_liked']??false;
     try {
       user = User.fromJson(json['user']);
     } catch (e) {

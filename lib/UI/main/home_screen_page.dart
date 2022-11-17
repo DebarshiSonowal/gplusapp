@@ -63,31 +63,31 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    // secureScreen();
-    Future.delayed(Duration.zero, () => fetchProfile());
-
-    fetchHome();
-    fetchOpinion();
-    fetchGPlusExcl();
-    fetchPoll();
-    fetchToppicks();
-    fetchAds();
-    askPermissions();
-    // Future.delayed(
-    //     const Duration(seconds: 15),
-    //         () => _listController.addListener(() {
-    //       setState(() {});
-    //     }));
-    Future.delayed(
-        Duration.zero,
-        () => Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .setCurrent(0));
-    showPopUp();
-  }
+    void initState() {
+      super.initState();
+      // secureScreen();
+      Future.delayed(Duration.zero, () => fetchProfile());
+      fetchStories();
+      fetchHome();
+      fetchOpinion();
+      fetchGPlusExcl();
+      fetchPoll();
+      fetchToppicks();
+      fetchAds();
+      askPermissions();
+      // Future.delayed(
+      //     const Duration(seconds: 15),
+      //         () => _listController.addListener(() {
+      //       setState(() {});
+      //     }));
+      Future.delayed(
+          Duration.zero,
+          () => Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .setCurrent(0));
+      showPopUp();
+    }
 
   void _onRefresh() async {
     // monitor network fetch
@@ -683,7 +683,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     false) {
                                                   Navigation.instance.navigate(
                                                       '/videoPlayer',
-                                                      args: item.youtube_id);
+                                                      args: '${item.youtube_id},${1}');
                                                 } else {
                                                   setState(() {
                                                     showing = true;
@@ -716,7 +716,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       if (data.profile?.is_plan_active ??
                                           false) {
                                         Navigation.instance
-                                            .navigate('/videoReport');
+                                            .navigate('/videoReport',args: 'news');
                                       } else {
                                         setState(() {
                                           showing = true;
@@ -1008,9 +1008,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     });
                                   },
                                   scrollDirection: Axis.horizontal,
-                                  itemCount: data.home_albums.length,
+                                  itemCount: data.stories.length,
                                   itemBuilder: (cont, index) {
-                                    var current = data.home_albums[index];
+                                    var current = data.stories[index];
                                     return GestureDetector(
                                       onTap: () {
                                         Navigation.instance.navigate(
@@ -1095,15 +1095,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   SizedBox(
                                                     height: 0.5.h,
                                                   ),
-                                                  Text(
-                                                    "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .headline6
-                                                        ?.copyWith(
-                                                          color: Colors.white,
-                                                        ),
-                                                  ),
+                                                  // Text(
+                                                  //   "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
+                                                  //   style: Theme.of(context)
+                                                  //       .textTheme
+                                                  //       .headline6
+                                                  //       ?.copyWith(
+                                                  //         color: Colors.white,
+                                                  //       ),
+                                                  // ),
                                                 ],
                                               ),
                                             ),
@@ -1113,12 +1113,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     );
                                   }),
                             ),
-                            data.home_albums.isNotEmpty
+                            data.stories.isNotEmpty
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       for (int i = 0;
-                                          i < data.home_albums.length;
+                                          i < data.stories.length;
                                           i++)
                                         Container(
                                           width: 2.w,
@@ -1622,5 +1622,14 @@ for an unparalleled publication, that people call their''',
 
   Future<void> secureScreen() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
+
+  void fetchStories() async{
+    final response = await ApiProvider.instance.getStories();
+    if(response.success??false){
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false).setStories(response.stories);
+    }
   }
 }

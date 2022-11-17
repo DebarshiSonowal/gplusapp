@@ -31,10 +31,10 @@ class _StoryPageState extends State<StoryPage> {
   int random = 0;
   var categories = ['international', 'assam', 'guwahati', 'india'];
   var dropdownvalue = 'international';
-  WebViewController? _controller;
+  // WebViewController? _controller;
   bool like = false, dislike = false;
 
-  int page = 1;
+  int skip = 10;
 
   @override
   void initState() {
@@ -575,6 +575,7 @@ class _StoryPageState extends State<StoryPage> {
                                     onChanged: (String? newValue) {
                                       setState(() {
                                         dropdownvalue = newValue!;
+                                        skip = 10;
                                       });
                                       fetchContent();
                                     },
@@ -749,7 +750,7 @@ class _StoryPageState extends State<StoryPage> {
                                 CustomButton(
                                     txt: 'Load More',
                                     onTap: () {
-                                      page++;
+                                      skip = skip*2;
                                       fetchContent();
                                     }),
                               ],
@@ -881,7 +882,7 @@ class _StoryPageState extends State<StoryPage> {
   void fetchContent() async {
     Navigation.instance.navigate('/loadingDialog');
     final response =
-        await ApiProvider.instance.getMoreArticle(dropdownvalue, 11, page, 10);
+        await ApiProvider.instance.getMoreArticle(dropdownvalue, 11, 1, skip);
     if (response.success ?? false) {
       Navigation.instance.goBack();
       Provider.of<DataProvider>(

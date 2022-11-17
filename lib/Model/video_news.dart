@@ -59,3 +59,23 @@ class VideoNewsResponse {
   }
 
 }
+class MoreVideoNewsResponse {
+  bool? success;
+  String? message;
+  List<VideoNews>? videos;
+
+  MoreVideoNewsResponse.fromJson(json) {
+    success = json['success'].toString() == 'true' ? true : false;
+    message = json['message'] ?? "Something Went Wrong";
+    videos = json['data']['data'] == null
+        ? []
+        : (json['data']['data'] as List)
+        .map((e) => VideoNews.fromJson(e))
+        .toList();
+  }
+  MoreVideoNewsResponse.withError(msg){
+    success = false;
+    message = msg??"Something Went Wrong";
+  }
+
+}

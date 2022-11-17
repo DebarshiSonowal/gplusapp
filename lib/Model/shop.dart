@@ -11,6 +11,12 @@ class Shop {
       total_blocked,
       balance,
       plan_id,
+      mobile,
+      city_id,
+      pin_code,
+      locality_id,
+      alt_mobile,
+      shop_type_id,
       status;
   String? code,
       title,
@@ -19,8 +25,12 @@ class Shop {
       description,
       plan_active_date,
       plan_expiry_date,
-      created_by;
-  Vendor? vendor;
+      created_by,
+      image_file_name,
+      shop_name,
+      address;
+
+  // Vendor? vendor;
 
   Shop.fromJson(json) {
     id = json['id'] ?? 0;
@@ -47,7 +57,23 @@ class Shop {
         json['balance'] == null ? 0 : int.parse(json['balance'].toString());
     plan_id =
         json['plan_id'] == null ? 0 : int.parse(json['plan_id'].toString());
-
+    mobile = json['mobile'] == null ? 0 : int.parse(json['mobile'].toString());
+    city_id =
+        json['city_id'] == null ? 0 : int.parse(json['city_id'].toString());
+    pin_code =
+        json['pin_code'] == null ? 0 : int.parse(json['pin_code'].toString());
+    locality_id = json['locality_id'] == null
+        ? 0
+        : int.parse(json['locality_id'].toString());
+    alt_mobile = json['alt_mobile'] == null
+        ? 0
+        : int.parse(json['alt_mobile'].toString());
+    shop_type_id = json['shop_type_id'] == null
+        ? 0
+        : int.parse(json['shop_type_id'].toString());
+    image_file_name = json['image_file_name'] ?? "";
+    shop_name = json['shop_name'] ?? "";
+    address = json['address'] ?? "";
     //String
     code = json['code'] ?? "";
     title = json['title'] ?? "";
@@ -58,7 +84,7 @@ class Shop {
     plan_expiry_date = json['plan_expiry_date'] ?? "";
     created_by = json['created_by'] ?? "";
 
-    vendor = Vendor.fromJson(json['vendor']);
+    // vendor = Vendor.fromJson(json['vendor']);
   }
 }
 

@@ -191,7 +191,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
                             child: CachedNetworkImage(
                               // height: 6.h,
                               width: 16.w,
-                              imageUrl: current.vendor?.image_file_name ?? "",
+                              imageUrl: current.image_file_name ?? "",
                               placeholder: (cont, _) {
                                 return Image.asset(
                                   Constance.logoIcon,
@@ -210,34 +210,43 @@ class _FoodDealPageState extends State<FoodDealPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                current.title ?? "",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontSize: 2.2.h,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                              SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  current.shop_name ?? "",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      ?.copyWith(
+                                        color: Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontSize: 2.2.h,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
                               ),
                               SizedBox(
                                 height: 0.5.h,
                               ),
-                              Text(
-                                current.vendor?.address ?? "",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Colors.grey.shade800,
-                                      fontSize:
-                                          1.5.h, // fontWeight: FontWeight.bold,
-                                    ),
+                              SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  current.address ?? "",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      ?.copyWith(
+                                        color: Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Colors.grey.shade800,
+                                        fontSize: 1.5
+                                            .h, // fontWeight: FontWeight.bold,
+                                      ),
+                                ),
                               ),
                             ],
                           ),
@@ -253,7 +262,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
                                       ?.is_plan_active ??
                                   false) {
                                 Navigation.instance.navigate('/categorySelect',
-                                    args: current.vendor_id!);
+                                    args: current.id);
                               } else {
                                 Constance.showMembershipPrompt(context, () {});
                               }

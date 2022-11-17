@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
@@ -27,7 +28,9 @@ class _OpinionPageState extends State<OpinionPage> {
 
   void _onRefresh() async {
     // monitor network fetch
-    page_no = 1;
+    setState(() {
+      page_no = 1;
+    });
     final response = await ApiProvider.instance.getOpinion(11, page_no);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -311,9 +314,10 @@ class _OpinionPageState extends State<OpinionPage> {
                                                   .textTheme
                                                   .headline6
                                                   ?.copyWith(
-                                                      color: Storage.instance.isDarkMode
+                                                      color: Storage.instance
+                                                              .isDarkMode
                                                           ? Colors.white
-                                                          :Colors.black),
+                                                          : Colors.black),
                                             ),
                                           ],
                                         ),
@@ -339,10 +343,11 @@ class _OpinionPageState extends State<OpinionPage> {
                                                             FontWeight.bold,
                                                         overflow: TextOverflow
                                                             .ellipsis,
-                                                        color: Storage.instance.isDarkMode
+                                                        color: Storage.instance
+                                                                .isDarkMode
                                                             ? Colors.white
-                                                            :Constance
-                                                            .primaryColor),
+                                                            : Constance
+                                                                .primaryColor),
                                               ),
                                             ),
                                             SizedBox(
@@ -357,9 +362,10 @@ class _OpinionPageState extends State<OpinionPage> {
                                                   .textTheme
                                                   .headline5
                                                   ?.copyWith(
-                                                    color: Storage.instance.isDarkMode
+                                                    color: Storage
+                                                            .instance.isDarkMode
                                                         ? Colors.white
-                                                        :Constance.fifthColor,
+                                                        : Constance.fifthColor,
                                                     // fontSize: 2.2.h,
                                                     fontWeight: FontWeight.bold,
                                                   ),
@@ -380,17 +386,30 @@ class _OpinionPageState extends State<OpinionPage> {
                                   child: Divider(
                                     color: Storage.instance.isDarkMode
                                         ? Colors.white
-                                        :Colors.black,
+                                        : Colors.black,
                                     thickness: 0.3.sp,
                                   ),
                                 ),
                               );
                             },
                             itemCount: data.opinions.length),
-                        // SizedBox(
-                        //   height: 1.h,
-                        //
-                        // ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomButton(
+                                txt: 'Load More',
+                                onTap: () {
+                                  page_no++;
+                                  fetchMoreOpinions();
+                                }),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
                       ],
                     ),
                   )
@@ -454,6 +473,18 @@ class _OpinionPageState extends State<OpinionPage> {
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
           .setOpinions(response.opinion ?? []);
+      // _refreshController.refreshCompleted();
+    } else {
+      // _refreshController.refreshFailed();
+    }
+  }
+  void fetchMoreOpinions() async {
+    final response = await ApiProvider.instance.getOpinion(11, page_no);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
+          .setMoreOpinions(response.opinion ?? []);
       // _refreshController.refreshCompleted();
     } else {
       // _refreshController.refreshFailed();
