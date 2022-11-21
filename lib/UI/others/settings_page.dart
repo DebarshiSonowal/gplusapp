@@ -479,8 +479,8 @@ class _SettingsPageState extends State<SettingsPage> {
   updateSwitch(val, type) async {
     final response = await ApiProvider.instance.setSwitch(val, type);
     if (response.success ?? false) {
-      fetchSwitchStatus();
-      Navigation.instance.navigateAndRemoveUntil('/main');
+      fetchSwitchStatusAfter();
+
     } else {
       showError(response.message ?? "Something went wrong");
     }
@@ -513,6 +513,29 @@ class _SettingsPageState extends State<SettingsPage> {
         Storage.instance.setDarkMode(dark_mode);
       });
       Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
+      showError(response.msg ?? "Something went wrong");
+    }
+  }
+  void fetchSwitchStatusAfter() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getSwitchStatus();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setSwitch(response.status);
+      setState(() {
+        big_deal = response.status?.deal ?? false;
+        classified = response.status?.classified ?? false;
+        guwahati_connect = response.status?.connect ?? false;
+        dark_mode = response.status?.dark ?? false;
+        // dark_mode = true;
+        Storage.instance.setDarkMode(dark_mode);
+      });
+      Navigation.instance.goBack();
+      Navigation.instance.navigateAndRemoveUntil('/main');
     } else {
       Navigation.instance.goBack();
       showError(response.msg ?? "Something went wrong");

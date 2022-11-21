@@ -256,15 +256,19 @@ class _EditProfileState extends State<EditProfile> {
                   },
                   child: Row(
                     children: [
-                      Text(
-                        address,
-                        style: Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Constance.primaryColor,
-                              // fontSize: 2.h,
-                              // fontWeight: FontWeight.bold,
-                            ),
+                      SizedBox(
+                        width:70.w,
+                        child: Text(
+                          address,
+                          overflow: TextOverflow.clip,
+                          style: Theme.of(context).textTheme.headline5?.copyWith(
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Constance.primaryColor,
+                                // fontSize: 2.h,
+                                // fontWeight: FontWeight.bold,
+                              ),
+                        ),
                       ),
                       Icon(
                         Icons.arrow_forward_ios,

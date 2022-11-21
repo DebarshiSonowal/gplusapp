@@ -245,6 +245,10 @@ class DataProvider extends ChangeNotifier {
     suggestion = list;
     notifyListeners();
   }
+  addSuggestion(List<Article> list) {
+    suggestion.addAll(list);
+    notifyListeners();
+  }
 
   setVideoWeekly(List<VideoNews> list) {
     home_weekly = list;

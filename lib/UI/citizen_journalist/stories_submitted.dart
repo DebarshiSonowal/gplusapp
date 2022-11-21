@@ -52,9 +52,10 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                 ),
                 data.citizenlist.isEmpty
                     ? Center(
-                    child: Lottie.asset(
-                      Constance.searchingIcon,
-                    ),)
+                        child: Lottie.asset(
+                          Constance.searchingIcon,
+                        ),
+                      )
                     : ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -136,7 +137,7 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                                             ),
                                           ),
                                           Text(
-                                            item.status==0?"Pending":"Approved",
+                                            getStatusText(item.status),
                                             style: Theme.of(Navigation
                                                     .instance
                                                     .navigatorKey
@@ -235,13 +236,26 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
     super.initState();
     Future.delayed(Duration.zero, () => fetchDrafts());
   }
+
   @override
   void dispose() {
-
     super.dispose();
     // Provider.of<DataProvider>(
     //     Navigation.instance.navigatorKey.currentContext ?? context,
     //     listen: false)
     //     .setCitizenJournalist([]);
+  }
+
+  String getStatusText(int? status) {
+    switch (status) {
+      case 1:
+        return "Authenticity Check";
+      case 2:
+        return "Published";
+      case 3:
+        return "Rejected";
+      default:
+        return "Pending";
+    }
   }
 }

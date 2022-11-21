@@ -679,7 +679,7 @@ class _StoryPageState extends State<StoryPage> {
                                                   Expanded(
                                                     child: Text(
                                                       item.title ?? "",
-                                                      maxLines: 3,
+                                                      maxLines: 4,
                                                       style: Theme.of(context)
                                                           .textTheme
                                                           .headline4
@@ -888,7 +888,7 @@ class _StoryPageState extends State<StoryPage> {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
-          .setSuggestion(response.articles ?? []);
+          .addSuggestion(response.articles ?? []);
       // _refreshController.refreshCompleted();
     } else {
       Navigation.instance.goBack();

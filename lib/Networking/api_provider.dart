@@ -606,7 +606,7 @@ class ApiProvider {
     var url = "${homeUrl}/${categ_name}/${slug}";
     dio = Dio(option);
     debugPrint(url.toString());
-    // debugPrint(jsonEncode(data));
+    debugPrint('${categ_name}');
 
     try {
       Response? response = await dio?.get(
@@ -2625,7 +2625,7 @@ class ApiProvider {
     };
     //attachment_list[0][file_data]
     //attachment_list[0][file_type]
-    // debugPrint(jsonEncode(data));
+    debugPrint(jsonEncode(data));
 
     try {
       Response? response = await dio?.post(

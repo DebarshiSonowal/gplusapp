@@ -26,6 +26,21 @@ class _AllImagePageState extends State<AllImagePage> {
   bool like = false, dislike = false;
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        like = Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ?? context,
+                    listen: false)
+                .guwahatiConnect[widget.id]
+                .is_liked ??
+            false;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
@@ -94,7 +109,7 @@ class _AllImagePageState extends State<AllImagePage> {
                                 ],
                               ),
                               Icon(
-                                Icons.menu,
+                                Icons.more_vert,
                                 color: Storage.instance.isDarkMode
                                     ? Colors.white
                                     : Colors.black,
@@ -123,8 +138,6 @@ class _AllImagePageState extends State<AllImagePage> {
                         SizedBox(
                           height: 1.h,
                         ),
-
-
                       ],
                     ),
                   ),
@@ -171,7 +184,14 @@ class _AllImagePageState extends State<AllImagePage> {
                     return SizedBox(
                       height: 4.h,
                       width: double.infinity,
-                      // color: Colors.grey.shade200,
+                      child: Center(
+                        child: Divider(
+                          thickness: 0.1.h,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                      ),
                     );
                   },
                 ),
@@ -199,15 +219,12 @@ class _AllImagePageState extends State<AllImagePage> {
                       Text(
                         '${data.guwahatiConnect[widget.id].total_liked} likes' ??
                             "",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            ?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
-                          // fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                              // fontWeight: FontWeight.bold,
+                            ),
                       ),
                       // Text(
                       //   '${data.guwahatiConnect[widget.id].total_disliked} dislikes' ??
@@ -223,15 +240,12 @@ class _AllImagePageState extends State<AllImagePage> {
                       Text(
                         '${data.guwahatiConnect[widget.id].total_comment} comments' ??
                             "",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            ?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
-                          // fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                              // fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -262,9 +276,7 @@ class _AllImagePageState extends State<AllImagePage> {
                             type: MaterialType.transparency,
                             child: IconButton(
                               onPressed: () {
-                                postLike(
-                                    data.guwahatiConnect[widget.id].id,
-                                    1);
+                                postLike(data.guwahatiConnect[widget.id].id, 1);
                                 setState(() {
                                   like = !like;
                                   if (dislike) {
@@ -277,15 +289,15 @@ class _AllImagePageState extends State<AllImagePage> {
                               splashColor: !like
                                   ? Constance.secondaryColor
                                   : Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Constance.primaryColor,
+                                      ? Colors.white
+                                      : Constance.primaryColor,
                               icon: Icon(
                                 Icons.thumb_up,
                                 color: like
                                     ? Constance.secondaryColor
                                     : Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Constance.primaryColor,
+                                        ? Colors.white
+                                        : Constance.primaryColor,
                               ),
                             ),
                           ),
@@ -336,7 +348,6 @@ class _AllImagePageState extends State<AllImagePage> {
                     ],
                   ),
                 ),
-
               ],
             ),
           ),

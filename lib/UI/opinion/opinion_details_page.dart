@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../Components/alert.dart';
+import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
@@ -32,7 +33,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   var dropdownvalue = 'international';
   WebViewController? _controller;
   bool like = false, dislike = false;
-
+  int page=1;
   @override
   void initState() {
     super.initState();
@@ -521,6 +522,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     onChanged: (String? newValue) {
                                       setState(() {
                                         dropdownvalue = newValue!;
+                                        page=1;
                                       });
                                       fetchContent();
                                     },
@@ -546,9 +548,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                       },
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: 3.w, vertical: 2.h),
+                                            horizontal: 3.w, vertical: 1.h),
                                         decoration:  BoxDecoration(
-                                          borderRadius: BorderRadius.all(
+                                          borderRadius: const BorderRadius.all(
                                             Radius.circular(5),
                                           ),
                                           color: Storage.instance.isDarkMode
@@ -566,28 +568,27 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Expanded(
-                                                    flex: 2,
-                                                    child: CachedNetworkImage(
-                                                      imageUrl:
-                                                          item.image_file_name ??
-                                                              '',
-                                                      fit: BoxFit.fill,
-                                                      placeholder: (cont, _) {
-                                                        return Image.asset(
-                                                          Constance.logoIcon,
-                                                          // color: Colors.black,
-                                                        );
-                                                      },
-                                                      errorWidget:
-                                                          (cont, _, e) {
-                                                        return Image.network(
-                                                          Constance
-                                                              .defaultImage,
-                                                          fit: BoxFit.fitWidth,
-                                                        );
-                                                      },
-                                                    ),
+                                                  CachedNetworkImage(
+                                                    height: 15.h,
+                                                    width: 45.w,
+                                                    imageUrl:
+                                                        item.image_file_name ??
+                                                            '',
+                                                    fit: BoxFit.fill,
+                                                    placeholder: (cont, _) {
+                                                      return Image.asset(
+                                                        Constance.logoIcon,
+                                                        // color: Colors.black,
+                                                      );
+                                                    },
+                                                    errorWidget:
+                                                        (cont, _, e) {
+                                                      return Image.network(
+                                                        Constance
+                                                            .defaultImage,
+                                                        fit: BoxFit.fitWidth,
+                                                      );
+                                                    },
                                                   ),
                                                   SizedBox(
                                                     height: 1.h,
@@ -617,7 +618,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                               width: 5.w,
                                             ),
                                             Expanded(
-                                              flex: 2,
+                                              flex: 1,
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -685,7 +686,21 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                 },
                                 itemCount: data.opinions.length),
                             SizedBox(
-                              height: 4.h,
+                              height: 2.h,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CustomButton(
+                                    txt: 'Load More',
+                                    onTap: () {
+                                      page++;
+                                      fetchContent();
+                                    }),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 2.h,
                             ),
                           ],
                         ),
@@ -771,7 +786,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   }
 
   void fetchContent() async {
-    final response = await ApiProvider.instance.getOpinion(5, 1);
+    final response = await ApiProvider.instance.getOpinion(5, page);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,

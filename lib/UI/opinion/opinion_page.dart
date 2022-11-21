@@ -151,7 +151,7 @@ class _OpinionPageState extends State<OpinionPage> {
                               height: 30.h,
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
+                                borderRadius: const BorderRadius.all(
                                   Radius.circular(10),
                                 ),
                                 image: DecorationImage(

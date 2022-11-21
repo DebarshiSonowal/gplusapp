@@ -271,11 +271,11 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
               ),
               Expanded(
                 child: SizedBox(
-                  height: 5.h,
+                  // height: 5.h,
                   child: Text(
                     current.details?.address ??
                         'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
-                    // overflow: TextOverflow.clip,
+                    overflow: TextOverflow.clip,
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Storage.instance.isDarkMode
                               ? Colors.white

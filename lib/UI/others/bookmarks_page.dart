@@ -160,7 +160,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                             if (data.profile?.is_plan_active ?? false) {
                               Navigation.instance.navigate('/story',
                                   args:
-                                      '${'exclusive-news'},${data.bookmarks[0].seo_name}');
+                                      '${data.bookmarks[0].cat_seo_name},${data.bookmarks[0].seo_name}');
                             } else {
                               Constance.showMembershipPrompt(context, () {});
                             }

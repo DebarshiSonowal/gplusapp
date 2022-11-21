@@ -30,7 +30,7 @@ class OpinionCard extends StatelessWidget {
           ),
           color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         ),
-        height: 12.h,
+        height: 14.h,
         width: MediaQuery.of(context).size.width - 7.w,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +62,7 @@ class OpinionCard extends StatelessWidget {
                           width: 70.w,
                           child: Text(
                             item.title ?? "",
-                            maxLines: 3,
+                            maxLines: 2,
                             textAlign: TextAlign.start,
                             overflow: TextOverflow.ellipsis,
                             style:
