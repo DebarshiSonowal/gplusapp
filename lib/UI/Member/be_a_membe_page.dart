@@ -1,21 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
-import '../../Model/razorpay_key.dart';
 import '../../Navigation/Navigate.dart';
-import '../Menu/berger_menu_member_page.dart';
 
 class BeAMember extends StatefulWidget {
   const BeAMember({Key? key}) : super(key: key);

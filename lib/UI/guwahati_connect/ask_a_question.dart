@@ -1,11 +1,12 @@
 import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
@@ -169,7 +170,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 color: Colors.white,
-                                child: Icon(
+                                child: const Icon(
                                   Icons.remove,
                                   color: Constance.thirdColor,
                                 ),
@@ -183,6 +184,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                 height: 5.h,
               ),
               SizedBox(
+                height:5.h,
                 width: double.infinity,
                 child: CustomButton(
                   onTap: () {
@@ -225,20 +227,20 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
           onPressed: () {
             Navigation.instance.navigate('/notification');
           },
-          icon: Icon(Icons.notifications),
+          icon: const Icon(Icons.notifications),
         ),
         IconButton(
           onPressed: () {
             Navigation.instance.navigate('/search');
           },
-          icon: Icon(Icons.search),
+          icon: const Icon(Icons.search),
         ),
       ],
     );
   }
 
   void showPhotoBottomSheet(Function(int) getImage) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
     BuildContext? context = Navigation.instance.navigatorKey.currentContext;

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
@@ -93,9 +93,10 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                     ),
                     style: Theme.of(context).textTheme.headline4?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black),
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                     cursorColor: Storage.instance.isDarkMode
                         ? Colors.white
                         : Constance.primaryColor,
@@ -130,20 +131,19 @@ class _SearchPageState extends State<SearchPage> {
                       child: Container(
                         height: 5.h,
                         color: selected == 0
-                            ? Storage.instance.isDarkMode
-                                ? Constance.secondaryColor
-                                : Colors.black
-                            : Colors.white,
+                            ? Constance.secondaryColor
+                            : Colors.black,
                         child: Center(
                           child: Text(
                             'News',
                             style:
                                 Theme.of(context).textTheme.headline4?.copyWith(
-                                    color: selected == 0
-                                        ? Storage.instance.isDarkMode
-                                            ? Colors.black
-                                            : Colors.white
-                                        : Colors.black),
+                                      color: selected == 0
+                                          ? Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black
+                                          : Colors.white,
+                                    ),
                           ),
                         ),
                       ),
@@ -160,10 +160,8 @@ class _SearchPageState extends State<SearchPage> {
                       child: Container(
                         height: 5.h,
                         color: selected == 1
-                            ? Storage.instance.isDarkMode
-                                ? Constance.secondaryColor
-                                : Colors.black
-                            : Colors.white,
+                            ? Constance.secondaryColor
+                            : Colors.black,
                         child: Center(
                           child: Text(
                             'Others',
@@ -171,9 +169,9 @@ class _SearchPageState extends State<SearchPage> {
                                 Theme.of(context).textTheme.headline4?.copyWith(
                                       color: selected == 1
                                           ? Storage.instance.isDarkMode
-                                              ? Colors.black
-                                              : Colors.white
-                                          : Colors.black,
+                                              ? Colors.white
+                                              : Colors.black
+                                          : Colors.white,
                                     ),
                           ),
                         ),
@@ -188,9 +186,8 @@ class _SearchPageState extends State<SearchPage> {
               SizedBox(
                 height: 1.h,
                 child: Divider(
-                  color:Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black,
+                  color:
+                      Storage.instance.isDarkMode ? Colors.white : Colors.black,
                   thickness: 0.4.sp,
                 ),
               ),
@@ -219,7 +216,7 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                             color: Storage.instance.isDarkMode
                                 ? Colors.black
-                                :Colors.white,
+                                : Colors.white,
                           ),
                           height: 20.h,
                           width: MediaQuery.of(context).size.width - 7.w,
@@ -255,9 +252,10 @@ class _SearchPageState extends State<SearchPage> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline6
-                                          ?.copyWith(color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          :Colors.black),
+                                          ?.copyWith(
+                                              color: Storage.instance.isDarkMode
+                                                  ? Colors.white
+                                                  : Colors.black),
                                     ),
                                   ],
                                 ),
@@ -280,16 +278,17 @@ class _SearchPageState extends State<SearchPage> {
                                             ?.copyWith(
                                                 fontWeight: FontWeight.bold,
                                                 overflow: TextOverflow.ellipsis,
-                                                color: Storage.instance.isDarkMode
+                                                color: Storage
+                                                        .instance.isDarkMode
                                                     ? Colors.white
-                                                    :Constance.primaryColor),
+                                                    : Constance.primaryColor),
                                       ),
                                     ),
                                     SizedBox(
                                       height: 1.h,
                                     ),
                                     Text(
-                                      item.author_name ?? "GPlus News",
+                                      item.author_name ?? "G Plus News",
                                       style: Theme.of(Navigation.instance
                                               .navigatorKey.currentContext!)
                                           .textTheme
@@ -316,7 +315,7 @@ class _SearchPageState extends State<SearchPage> {
                           child: Divider(
                             color: Storage.instance.isDarkMode
                                 ? Colors.white
-                                :Colors.black,
+                                : Colors.black,
                             thickness: 0.3.sp,
                           ),
                         ),

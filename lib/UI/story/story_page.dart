@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
@@ -10,9 +11,9 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter_html/flutter_html.dart';
+
 import '../../Components/alert.dart';
+import '../../Components/suggestion_card.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
@@ -31,6 +32,7 @@ class _StoryPageState extends State<StoryPage> {
   int random = 0;
   var categories = ['international', 'assam', 'guwahati', 'india'];
   var dropdownvalue = 'international';
+
   // WebViewController? _controller;
   bool like = false, dislike = false;
 
@@ -61,7 +63,7 @@ class _StoryPageState extends State<StoryPage> {
                 : Column(
                     children: [
                       Container(
-                        height: 29.h,
+                        height: 39.h,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           // borderRadius: BorderRadius.all(
@@ -133,7 +135,7 @@ class _StoryPageState extends State<StoryPage> {
                                     args: data.selectedArticle?.author);
                               },
                               child: Text(
-                                '${data.selectedArticle?.author_name ?? "GPlus"}, ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                                '${data.selectedArticle?.author_name ?? "G Plus"}, ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
                                 style: Theme.of(Navigation
                                         .instance.navigatorKey.currentContext!)
                                     .textTheme
@@ -282,59 +284,65 @@ class _StoryPageState extends State<StoryPage> {
                             SizedBox(
                               height: 1.5.h,
                             ),
-                            data.ads.isNotEmpty?Row(
-                              children: [
-                                Container(
-                                  color: Constance.secondaryColor,
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 0.2.h, horizontal: 1.w),
-                                  margin: EdgeInsets.symmetric(horizontal: 2.w),
-                                  child: Text(
-                                    'Ad',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline3
-                                        ?.copyWith(
-                                          fontSize: 12.sp,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
+                            data.ads.isNotEmpty
+                                ? Row(
+                                    children: [
+                                      Container(
+                                        color: Constance.secondaryColor,
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 0.2.h, horizontal: 1.w),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 2.w),
+                                        child: Text(
+                                          'Ad',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline3
+                                              ?.copyWith(
+                                                fontSize: 12.sp,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
-                                  ),
-                                ),
-                              ],
-                            ):Container(),
-                            data.ads.isNotEmpty?SizedBox(
-                              // height: 10.h,
-                              width: double.infinity,
-                              child: GestureDetector(
-                                onTap: () {
-                                  _launchUrl(Uri.parse(
-                                      data.ads[random].link.toString()));
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 2.w,
-                                  ),
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit.fill,
-                                    imageUrl:
-                                        data.ads[random].image_file_name ?? '',
-                                    placeholder: (cont, _) {
-                                      return Image.asset(
-                                        Constance.logoIcon,
-                                        // color: Colors.black,
-                                      );
-                                    },
-                                    errorWidget: (cont, _, e) {
-                                      return Image.network(
-                                        Constance.defaultImage,
-                                        fit: BoxFit.fitWidth,
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ):Container(),
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
+                            data.ads.isNotEmpty
+                                ? SizedBox(
+                                    // height: 10.h,
+                                    width: double.infinity,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _launchUrl(Uri.parse(
+                                            data.ads[random].link.toString()));
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 2.w,
+                                        ),
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.fill,
+                                          imageUrl: data.ads[random]
+                                                  .image_file_name ??
+                                              '',
+                                          placeholder: (cont, _) {
+                                            return Image.asset(
+                                              Constance.logoIcon,
+                                              // color: Colors.black,
+                                            );
+                                          },
+                                          errorWidget: (cont, _, e) {
+                                            return Image.network(
+                                              Constance.defaultImage,
+                                              fit: BoxFit.fitWidth,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
                             SizedBox(
                               height: 1.5.h,
                             ),
@@ -542,7 +550,8 @@ class _StoryPageState extends State<StoryPage> {
                                       EdgeInsets.symmetric(horizontal: 1.5.w),
                                   child: DropdownButton(
                                     dropdownColor: !Storage.instance.isDarkMode
-                                        ? Colors.white:Colors.black,
+                                        ? Colors.white
+                                        : Colors.black,
                                     isExpanded: false,
                                     style: Theme.of(context)
                                         .textTheme
@@ -583,164 +592,7 @@ class _StoryPageState extends State<StoryPage> {
                                 ),
                               ],
                             ),
-                            ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (cont, count) {
-                                  var item = data.suggestion[count];
-                                  if (count != 0) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        Navigation.instance.navigate('/story',
-                                            args:
-                                                '$dropdownvalue,${item.seo_name}');
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 3.w, vertical: 1.h),
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(5),
-                                          ),
-                                          color: Storage.instance.isDarkMode
-                                              ? Colors.black
-                                              : Colors.white,
-                                        ),
-                                        height: 20.h,
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                7.w,
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  CachedNetworkImage(
-                                                    height: 15.h,
-                                                    width: 45.w,
-                                                    imageUrl:
-                                                        item.image_file_name ??
-                                                            '',
-                                                    fit: BoxFit.fill,
-                                                    placeholder: (cont, _) {
-                                                      return Image.asset(
-                                                        Constance.logoIcon,
-                                                      );
-                                                    },
-                                                    errorWidget:
-                                                        (cont, _, e) {
-                                                      return Image.network(
-                                                        Constance
-                                                            .defaultImage,
-                                                        fit: BoxFit.fitWidth,
-                                                      );
-                                                    },
-                                                  ),
-                                                  SizedBox(
-                                                    height: 1.h,
-                                                  ),
-                                                  Text(
-                                                    // item.publish_date
-                                                    //         ?.split(" ")[0] ??
-                                                    //     "",
-                                                    Jiffy(
-                                                            item.publish_date
-                                                                        ?.split(
-                                                                            " ")[
-                                                                    0] ??
-                                                                "",
-                                                            "yyyy-MM-dd")
-                                                        .format("dd/MM/yyyy"),
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .headline6
-                                                        ?.copyWith(
-                                                            color: Storage
-                                                                    .instance
-                                                                    .isDarkMode
-                                                                ? Colors.white
-                                                                : Colors.black),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 4.w,
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      item.title ?? "",
-                                                      maxLines: 4,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .headline4
-                                                          ?.copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              color: Storage
-                                                                      .instance
-                                                                      .isDarkMode
-                                                                  ? Colors.white
-                                                                  : Constance
-                                                                      .primaryColor),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 1.h,
-                                                  ),
-                                                  Text(
-                                                    item.author_name ??
-                                                        "GPlus News",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .headline6
-                                                        ?.copyWith(
-                                                            color: Storage
-                                                                    .instance
-                                                                    .isDarkMode
-                                                                ? Colors.white
-                                                                : Colors.black),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    return Container();
-                                  }
-                                },
-                                separatorBuilder: (cont, inde) {
-                                  if (inde == 0) {
-                                    return Container();
-                                  } else {
-                                    return SizedBox(
-                                      height: 1.h,
-                                      child: Divider(
-                                        color: Storage.instance.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black,
-                                        thickness: 0.3.sp,
-                                      ),
-                                    );
-                                  }
-                                },
-                                itemCount: data.suggestion.length),
+                            suggestion_list_view(data, context),
                             SizedBox(
                               height: 2.h,
                             ),
@@ -750,8 +602,8 @@ class _StoryPageState extends State<StoryPage> {
                                 CustomButton(
                                     txt: 'Load More',
                                     onTap: () {
-                                      skip = skip*2;
-                                      fetchContent();
+                                      skip = skip * 2;
+                                      fetchMoreContent();
                                     }),
                               ],
                             ),
@@ -767,6 +619,36 @@ class _StoryPageState extends State<StoryPage> {
         }),
       ),
     );
+  }
+
+  ListView suggestion_list_view(DataProvider data, BuildContext context) {
+    return ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        itemBuilder: (cont, count) {
+          var item = data.suggestion[count];
+          if (count != 0) {
+            return SuggestionCard(dropdownvalue: dropdownvalue, item: item);
+          } else {
+            return Container();
+          }
+        },
+        separatorBuilder: (cont, inde) {
+          if (inde == 0) {
+            return Container();
+          } else {
+            return SizedBox(
+              height: 1.h,
+              child: Divider(
+                color:
+                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                thickness: 0.3.sp,
+              ),
+            );
+          }
+        },
+        itemCount: data.suggestion.length);
   }
 
   AppBar buildAppBar() {
@@ -888,6 +770,22 @@ class _StoryPageState extends State<StoryPage> {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
+          .setSuggestion(response.articles ?? []);
+      // _refreshController.refreshCompleted();
+    } else {
+      Navigation.instance.goBack();
+      // _refreshController.refreshFailed();
+    }
+  }
+  void fetchMoreContent() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response =
+    await ApiProvider.instance.getMoreArticle(dropdownvalue, 11, 1, skip);
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .addSuggestion(response.articles ?? []);
       // _refreshController.refreshCompleted();
     } else {
@@ -930,3 +828,5 @@ class _StoryPageState extends State<StoryPage> {
         });
   }
 }
+
+

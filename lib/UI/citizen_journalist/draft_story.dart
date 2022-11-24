@@ -1,11 +1,13 @@
-import 'package:empty_widget/empty_widget.dart';
+// import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
@@ -47,7 +49,7 @@ class _DraftStoryState extends State<DraftStory> {
                 Divider(
                   color: Storage.instance.isDarkMode
                       ? Colors.white
-                      : Constance.primaryColor,
+                      : Constance.forthColor,
                   thickness: 0.2.h,
                 ),
                 SizedBox(
@@ -55,9 +57,10 @@ class _DraftStoryState extends State<DraftStory> {
                 ),
                 data.citizenlist.isEmpty
                     ? Center(
-                  child: Lottie.asset(
-                    Constance.searchingIcon,
-                  ),)
+                        child: Lottie.asset(
+                          Constance.searchingIcon,
+                        ),
+                      )
                     : ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -75,7 +78,7 @@ class _DraftStoryState extends State<DraftStory> {
                                   ? Colors.black
                                   : Colors.white,
                             ),
-                            height: 12.h,
+                            // height: 12.h,
                             width: MediaQuery.of(context).size.width - 7.w,
                             child: Row(
                               children: [
@@ -111,31 +114,52 @@ class _DraftStoryState extends State<DraftStory> {
                                     SizedBox(
                                       height: 1.h,
                                     ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigation.instance.navigate(
+                                            '/viewStoryPage',
+                                            args: item.id);
+                                      },
+                                      child: SizedBox(
+                                        width: 40.w,
+                                        child: Text(
+                                          item.story ?? "",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(
+                                                  color: Storage
+                                                          .instance.isDarkMode
+                                                      ? Colors.white70
+                                                      : Colors.black),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigation.instance.navigate(
-                                                '/viewStoryPage',
-                                                args: item.id);
-                                          },
-                                          child: SizedBox(
-                                            width: 40.w,
-                                            child: Text(
-                                              item.story ?? "",
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Storage.instance
-                                                              .isDarkMode
-                                                          ? Colors.white70
-                                                          : Colors.black),
-                                            ),
+                                        SizedBox(
+                                          width: 40.w,
+                                          child: Text(
+                                            Jiffy(item.created_at ?? "",
+                                                    "yyyy-MM-dd")
+                                                .format("dd/MM/yyyy"),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                ?.copyWith(
+                                                    color: Storage
+                                                            .instance.isDarkMode
+                                                        ? Colors.white70
+                                                        : Colors.black),
                                           ),
                                         ),
                                         SizedBox(
@@ -210,8 +234,8 @@ class _DraftStoryState extends State<DraftStory> {
                               child: Divider(
                                 color: Storage.instance.isDarkMode
                                     ? Colors.white
-                                    : Colors.black,
-                                thickness: 0.3.sp,
+                                    : Constance.forthColor,
+                                thickness: 0.5.sp,
                               ),
                             ),
                           );
@@ -265,7 +289,6 @@ class _DraftStoryState extends State<DraftStory> {
     super.initState();
     Future.delayed(Duration.zero, () => fetchDrafts());
   }
-
 
   // @override
   // void dispose() {

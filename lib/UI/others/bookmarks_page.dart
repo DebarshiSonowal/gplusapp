@@ -318,7 +318,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                               height: 1.h,
                                             ),
                                             Text(
-                                              item.author_name ?? "GPlus News",
+                                              item.author_name ?? "G Plus News",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline6

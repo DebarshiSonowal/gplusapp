@@ -1,4 +1,4 @@
-import 'package:empty_widget/empty_widget.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -13,10 +13,10 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
-import '../../Components/slider_home.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
@@ -310,6 +310,12 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                               width: 2.0,
                             ),
                           ),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              fetchClassified(result);
+                            },
+                            icon: const Icon(Icons.search),
+                          ),
                         ),
                         onChanged: (value) {},
                         onSubmitted: (value) {
@@ -322,15 +328,17 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                     padding: EdgeInsets.symmetric(horizontal: 3.w),
                     child: Divider(
                       thickness: 0.07.h,
-                      color: Colors.black,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
                     ),
                   ),
                   data.classified.isEmpty
                       ? Center(
-                    child: Lottie.asset(
-                      Constance.searchingIcon,
-                    ),
-                  )
+                          child: Lottie.asset(
+                            Constance.searchingIcon,
+                          ),
+                        )
                       : Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 5.w, vertical: 1.h),
@@ -366,224 +374,184 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
 
   StatefulBuilder classified_card(Classified current, bool like) {
     return StatefulBuilder(builder: (context, _) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigation.instance.navigate(
-                                      '/classifiedDetails',
-                                      args: current.id);
-                                },
-                                child: Card(
-                                  color: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      color: Colors.grey.shade900,
-                                      width: 0.2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(15.0),
+      return GestureDetector(
+        onTap: () {
+          Navigation.instance.navigate('/classifiedDetails', args: current.id);
+        },
+        child: Card(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: Colors.grey.shade900,
+              width: 0.2,
+            ),
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(9.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 70.w,
+                        child: Text(
+                          current.title ?? "",
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline3
+                              ?.copyWith(
+                                  color: Constance.primaryColor,
+                                  fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      LikeButton(
+                        size: 2.5.h,
+                        onTap: (val) async {
+                          setAsFavourite(current.id, 'classified');
+                          _(() {
+                            like = !like;
+                          });
+                          return like;
+                        },
+                        circleColor: const CircleColor(
+                          start: Colors.red,
+                          end: Colors.black87,
+                        ),
+                        bubblesColor: const BubblesColor(
+                          dotPrimaryColor: Color(0xff33b5e5),
+                          dotSecondaryColor: Color(0xff0099cc),
+                        ),
+                        likeBuilder: (bool isLiked) {
+                          return Icon(
+                            like
+                                ? FontAwesomeIcons.solidHeart
+                                : FontAwesomeIcons.heart,
+                            color: like ? Constance.thirdColor : Colors.grey,
+                            size: 3.h,
+                          );
+                        },
+                        likeCount: 665,
+                        countBuilder: (int? count, bool isLiked, String text) {
+                          var color =
+                              like ? Colors.deepPurpleAccent : Colors.grey;
+                          Widget result;
+                          if (count == 0) {
+                            result = Text(
+                              "",
+                              style: TextStyle(color: color),
+                            );
+                          } else {
+                            result = Text(
+                              '',
+                              style: TextStyle(color: color),
+                            );
+                          }
+                          return result;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                current.price == null || current.price == 0
+                    ? Container()
+                    : SizedBox(
+                        height: 0.5.h,
+                      ),
+                current.price == null
+                    ? Container()
+                    : Text(
+                        'Rs:${current.price}' ?? '0',
+                        style: Theme.of(context).textTheme.headline3?.copyWith(
+                            color: Constance.thirdColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                ReadMoreText(
+                  current.description ?? "",
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.black,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                  trimLines: 3,
+                  colorClickableText: Constance.secondaryColor,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: 'Show more',
+                  trimExpandedText: 'Show less',
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.remove_red_eye,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      width: 4.w,
+                    ),
+                    Expanded(
+                      child: SizedBox(
+                        height: 5.h,
+                        child: Text(
+                          '${current.total_views} views',
+                          // overflow: TextOverflow.clip,
+                          style:
+                              Theme.of(context).textTheme.headline5?.copyWith(
+                                    color: Colors.black,
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(9.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
-                                            children: [
-                                              SizedBox(
-                                                width: 70.w,
-                                                child: Text(
-                                                  current.title ?? "",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline3
-                                                      ?.copyWith(
-                                                          color: Constance
-                                                              .primaryColor,
-                                                          fontWeight:
-                                                              FontWeight
-                                                                  .bold),
-                                                ),
-                                              ),
-                                              LikeButton(
-                                                size: 2.5.h,
-                                                onTap: (val) async {
-                                                  setAsFavourite(current.id,
-                                                      'classified');
-                                                  _(() {
-                                                    like = !like;
-                                                  });
-                                                  return like;
-                                                },
-                                                circleColor:
-                                                    const CircleColor(
-                                                  start: Colors.red,
-                                                  end: Colors.black87,
-                                                ),
-                                                bubblesColor:
-                                                    const BubblesColor(
-                                                  dotPrimaryColor:
-                                                      Color(0xff33b5e5),
-                                                  dotSecondaryColor:
-                                                      Color(0xff0099cc),
-                                                ),
-                                                likeBuilder: (bool isLiked) {
-                                                  return Icon(
-                                                    like
-                                                        ? FontAwesomeIcons
-                                                            .solidHeart
-                                                        : FontAwesomeIcons
-                                                            .heart,
-                                                    color: like
-                                                        ? Constance.thirdColor
-                                                        : Colors.grey,
-                                                    size: 3.h,
-                                                  );
-                                                },
-                                                likeCount: 665,
-                                                countBuilder: (int? count,
-                                                    bool isLiked,
-                                                    String text) {
-                                                  var color = like
-                                                      ? Colors
-                                                          .deepPurpleAccent
-                                                      : Colors.grey;
-                                                  Widget result;
-                                                  if (count == 0) {
-                                                    result = Text(
-                                                      "",
-                                                      style: TextStyle(
-                                                          color: color),
-                                                    );
-                                                  } else {
-                                                    result = Text(
-                                                      '',
-                                                      style: TextStyle(
-                                                          color: color),
-                                                    );
-                                                  }
-                                                  return result;
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        current.price == null ||
-                                                current.price == 0
-                                            ? Container()
-                                            : SizedBox(
-                                                height: 0.5.h,
-                                              ),
-                                        current.price == null
-                                            ? Container()
-                                            : Text(
-                                                'Rs:${current.price}' ?? '0',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline3
-                                                    ?.copyWith(
-                                                        color: Constance
-                                                            .thirdColor,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                              ),
-                                        SizedBox(
-                                          height: 1.h,
-                                        ),
-                                        ReadMoreText(
-                                          current.description ?? "",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline5
-                                              ?.copyWith(
-                                                color: Colors.black,
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                          trimLines: 3,
-                                          colorClickableText:
-                                              Constance.secondaryColor,
-                                          trimMode: TrimMode.Line,
-                                          trimCollapsedText: 'Show more',
-                                          trimExpandedText: 'Show less',
-                                        ),
-                                        SizedBox(
-                                          height: 1.h,
-                                        ),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Icon(
-                                              Icons.remove_red_eye,
-                                              color: Colors.black,
-                                            ),
-                                            SizedBox(
-                                              width: 4.w,
-                                            ),
-                                            Expanded(
-                                              child: SizedBox(
-                                                height: 5.h,
-                                                child: Text(
-                                                  '${current.total_views} views',
-                                                  // overflow: TextOverflow.clip,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline5
-                                                      ?.copyWith(
-                                                        color: Colors.black,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        // SizedBox(
-                                        //   height: 0.4.h,
-                                        // ),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Icon(
-                                              Icons.location_on,
-                                              color: Colors.black,
-                                            ),
-                                            SizedBox(
-                                              width: 4.w,
-                                            ),
-                                            Expanded(
-                                              child: SizedBox(
-                                                height: 5.h,
-                                                child: Text(
-                                                  current.locality?.name ??
-                                                      'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
-                                                  // overflow: TextOverflow.clip,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline5
-                                                      ?.copyWith(
-                                                        color: Colors.black,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        // SizedBox(
-                                        //   height: 1.h,
-                                        // ),
-                                      ],
-                                    ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                // SizedBox(
+                //   height: 0.4.h,
+                // ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.location_on,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      width: 4.w,
+                    ),
+                    Expanded(
+                      child: SizedBox(
+                        height: 5.h,
+                        child: Text(
+                          current.locality?.name ??
+                              'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
+                          // overflow: TextOverflow.clip,
+                          style:
+                              Theme.of(context).textTheme.headline5?.copyWith(
+                                    color: Colors.black,
                                   ),
-                                ),
-                              );
-                            });
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                // SizedBox(
+                //   height: 1.h,
+                // ),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
   }
 
   AppBar buildAppBar() {
@@ -912,11 +880,11 @@ for an unparalleled publication, that people call their''',
     for (var i in selected) {
       try {
         setState(() {
-                Map<int, bool> data = {
-                  int.parse(i): true,
-                };
-                _map.addAll(data);
-              });
+          Map<int, bool> data = {
+            int.parse(i): true,
+          };
+          _map.addAll(data);
+        });
       } catch (e) {
         print(e);
       }

@@ -1,4 +1,4 @@
-import 'package:empty_widget/empty_widget.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -20,7 +20,6 @@ import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
-import '../Menu/berger_menu_member_page.dart';
 
 class ClassifiedMyList extends StatefulWidget {
   const ClassifiedMyList({Key? key}) : super(key: key);
@@ -208,62 +207,6 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                             ),
                           ),
                         ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     setState(() {
-                        //       selected = 2;
-                        //     });
-                        //     fetchClassified(result);
-                        //   },
-                        //   child: Container(
-                        //     padding: EdgeInsets.symmetric(
-                        //       vertical: 1.h,
-                        //       horizontal: 3.w,
-                        //     ),
-                        //     color: selected == 2
-                        //         ? Constance.secondaryColor
-                        //         : Constance.forthColor,
-                        //     child: Row(
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       children: [
-                        //         Icon(
-                        //           FontAwesomeIcons.solidHeart,
-                        //           color: selected == 2
-                        //               ? Colors.black
-                        //               : Colors.white,
-                        //         ),
-                        //         SizedBox(
-                        //           width: 1.w,
-                        //         ),
-                        //         Text(
-                        //           'Favourites',
-                        //           style: Theme.of(context)
-                        //               .textTheme
-                        //               .headline6
-                        //               ?.copyWith(
-                        //                 color: selected == 2
-                        //                     ? Colors.black
-                        //                     : Colors.white,
-                        //                 fontSize: 2.h,
-                        //                 // fontWeight: FontWeight.bold,
-                        //               ),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
-                        SizedBox(
-                          width: 2.w,
-                          child: Center(
-                            child: Container(
-                              height: double.infinity,
-                              width: 0.5.w,
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.black
-                                  : Colors.white,
-                            ),
-                          ),
-                        ),
                         GestureDetector(
                           onTap: () {
                             setState(() {
@@ -355,6 +298,12 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                               color: Colors.black54,
                               width: 2.0,
                             ),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              fetchClassified(result);
+                            },
+                            icon: const Icon(Icons.search),
                           ),
                         ),
                         onChanged: (value) {},

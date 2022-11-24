@@ -91,9 +91,9 @@ class TopPicksResponse {
   TopPicksResponse.fromJson(json) {
     success = json['success'].toString() == 'true' ? true : false;
     message = json['message'] ?? "Something Went Wrong";
-    toppicks = json['data'] == null
+    toppicks = json['data']['data'] == null
         ? []
-        : (json['data'] as List).map((e) => TopPicks.fromJson(e)).toList();
+        : (json['data']['data'] as List).map((e) => TopPicks.fromJson(e)).toList();
   }
 
   TopPicksResponse.withError(msg) {

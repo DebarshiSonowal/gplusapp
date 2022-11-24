@@ -14,12 +14,11 @@ import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
-import '../../Model/citizen_journalist.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
 class EditAskAQuestionPage extends StatefulWidget {
-  final int id;
+  final String id;
 
   const EditAskAQuestionPage(this.id);
 
@@ -39,17 +38,36 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      desc.text = Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,listen: false)
-              .guwahatiConnect[widget.id]
-              .question ??
-          "";
+      desc.text = int.parse(widget.id.split(",")[0]) == 0
+          ? (Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext ??
+                          context,
+                      listen: false)
+                  .guwahatiConnect[int.parse(widget.id.split(",")[1])]
+                  .question ??
+              "")
+          : (Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext ??
+                          context,
+                      listen: false)
+                  .myGuwahatiConnect[int.parse(widget.id.split(",")[1])]
+                  .question ??
+              "");
 
       setState(() {
-        images.addAll(Provider.of<DataProvider>(
-            Navigation.instance.navigatorKey.currentContext ?? context,listen: false)
-            .guwahatiConnect[widget.id]
-            .attachment!);
+        if (int.parse(widget.id.split(",")[0]) == 0) {
+          images.addAll(Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .guwahatiConnect[int.parse(widget.id.split(",")[1])]
+              .attachment!);
+        } else {
+          images.addAll(Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .myGuwahatiConnect[int.parse(widget.id.split(",")[1])]
+              .attachment!);
+        }
       });
     });
   }
@@ -264,11 +282,23 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
                   onTap: () {
                     // showDialogBox();
                     if (desc.text.isNotEmpty) {
-                      updateQuestion(Provider.of<DataProvider>(
-                              Navigation.instance.navigatorKey.currentContext ??
-                                  context,listen: false)
-                          .guwahatiConnect[widget.id]
-                          .id!);
+                      if (int.parse(widget.id.split(",")[0]) == 0) {
+                        updateQuestion(Provider.of<DataProvider>(
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .guwahatiConnect[int.parse(widget.id.split(",")[1])]
+                            .id!);
+                      } else {
+                        updateQuestion(Provider.of<DataProvider>(
+                            Navigation
+                                .instance.navigatorKey.currentContext ??
+                                context,
+                            listen: false)
+                            .myGuwahatiConnect[int.parse(widget.id.split(",")[1])]
+                            .id!);
+                      }
                     } else {}
                   },
                   txt: 'Submit',
@@ -428,13 +458,14 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
 
   void updateQuestion(id) async {
     Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance
-        .updateGuwahatiConnect(id, desc.text, attachements, getComaSeparated(images));
+    final response = await ApiProvider.instance.updateGuwahatiConnect(
+        id, desc.text, attachements, getComaSeparated(images));
     if (response.success ?? false) {
       print("post success ${response.success} ${response.message}");
       Fluttertoast.showToast(msg: "Posted successfully");
       Navigation.instance.goBack();
       fetchGuwahatiConnect();
+      fetchMyGuwahatiConnect();
       Navigation.instance.goBack();
     } else {
       print("post failed ${response.success} ${response.message}");
@@ -442,6 +473,7 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
       showError(response.message ?? "Something went wrong");
     }
   }
+
   String getComaSeparated(List<dynamic> list) {
     String temp = "";
     for (int i = 0; i < list.length; i++) {
@@ -453,6 +485,7 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
     }
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
+
   void fetchGuwahatiConnect() async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getGuwahatiConnect();
@@ -469,6 +502,24 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setGuwahatiConnect(response.posts);
+    }
+  }
+  void fetchMyGuwahatiConnect() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getMyGuwahatiConnect();
+    if (response.success ?? false) {
+      // setGuwahatiConnect
+      Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setMyGuwahatiConnect(response.posts);
+    } else {
+      Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setMyGuwahatiConnect(response.posts);
     }
   }
 

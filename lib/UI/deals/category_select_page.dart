@@ -8,6 +8,7 @@ import 'package:gplusapp/Helper/Storage.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
@@ -116,7 +117,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                           fit: BoxFit.fitWidth,
                         );
                       },
-                      height: 30.h,
+                      height: 27.h,
                       width: double.infinity,
                       imageUrl: current.details?.image_file_name ??
                           Constance.salonImage,
@@ -149,11 +150,20 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                         },
                         child: Container(
                           height: 5.h,
-                          color: selected == 0
-                              ? Constance.secondaryColor
-                              : Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
+                          decoration: BoxDecoration(
+                            color: selected == 0
+                                ? Constance.secondaryColor
+                                : Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                            // borderRadius: BorderRadius.circular(),
+                            borderRadius: const BorderRadius.only(
+                              // topRight: Radius.circular(5.0),
+                              // bottomRight: Radius.circular(5.0),
+                              topLeft: Radius.circular(5.0),
+                              bottomLeft: Radius.circular(5.0),
+                            ),
+                          ),
                           child: Center(
                             child: Text(
                               'Details',
@@ -180,12 +190,21 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                           });
                         },
                         child: Container(
+                          decoration: BoxDecoration(
+                            color: selected == 1
+                                ? Constance.secondaryColor
+                                : Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                            // borderRadius: BorderRadius.circular(),
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(5.0),
+                              bottomRight: Radius.circular(5.0),
+                              // topLeft: Radius.circular(40.0),
+                              // bottomLeft: Radius.circular(40.0),
+                            ),
+                          ),
                           height: 5.h,
-                          color: selected == 1
-                              ? Constance.secondaryColor
-                              : Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
                           child: Center(
                             child: Text(
                               'Offer',
@@ -341,7 +360,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Open Now',
+                      openStatus(TimeFromString(current.details?.opening_time??"10AM"),TimeFromString(current.details?.closing_time??"11PM")),
                       // overflow: TextOverflow.clip,
                       style: Theme.of(context).textTheme.headline5?.copyWith(
                             color: Storage.instance.isDarkMode
@@ -372,41 +391,6 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                     ),
                   ],
                 ),
-                // SizedBox(
-                //   width: 45.w,
-                //   child: Center(
-                //     child: DropdownButton(
-                //       isExpanded: false,
-                //       // Initial Value
-                //       value: dropdownvalue,
-                //
-                //       // Down Arrow Icon
-                //       icon: const Icon(Icons.keyboard_arrow_down),
-                //
-                //       // Array list of items
-                //       items: items.map((String items) {
-                //         return DropdownMenuItem(
-                //           value: items,
-                //           child: Text(
-                //             items,
-                //             style:
-                //                 Theme.of(context).textTheme.headline5?.copyWith(
-                //                       color: Colors.black,
-                //                       // fontWeight: FontWeight.bold,
-                //                     ),
-                //           ),
-                //         );
-                //       }).toList(),
-                //       // After selecting the desired option,it will
-                //       // change button value to selected value
-                //       onChanged: (String? newValue) {
-                //         setState(() {
-                //           dropdownvalue = newValue!;
-                //         });
-                //       },
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -447,7 +431,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
         return Padding(
           padding: EdgeInsets.symmetric(vertical: 2.h),
           child: ListView.separated(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: current.details?.coupons?.length ?? 0,
             itemBuilder: (cont, count) {
@@ -663,5 +647,23 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
 
   Future<void> secureScreen() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
+
+  String openStatus(opening, closing) {
+    var currentTime = DateTime.now().hour;
+    print(currentTime);
+    if (currentTime >= opening && currentTime <= (closing + 12)) {
+      return 'Open Now';
+    } else {
+      return 'Closed Now';
+    }
+  }
+
+  TimeFromString(String closing_time) {
+    if(closing_time.contains("A")){
+      return int.parse(closing_time.split("A")[0]);
+    }else{
+      return int.parse(closing_time.split("P")[0]);
+    }
   }
 }

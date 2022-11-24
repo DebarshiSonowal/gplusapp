@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/Constance.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
-import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Components/alert.dart';
@@ -69,12 +67,14 @@ class _LoginPageState extends State<LoginPage> {
                 height: 4.h,
               ),
               Padding(
-                padding:const EdgeInsets.symmetric(horizontal: 26.0),
+                padding: const EdgeInsets.symmetric(horizontal: 26.0),
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 0.5.h,horizontal: 1.w),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 0.1.h, horizontal: 1.w),
                   decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(3))),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(3)),
+                  ),
                   child: TextFormField(
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                           color: Colors.black,
@@ -86,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Enter mobile number',
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
                       labelStyle:
                           Theme.of(context).textTheme.headline6?.copyWith(
                                 color: Colors.grey.shade700,
@@ -107,12 +108,13 @@ class _LoginPageState extends State<LoginPage> {
                 child: CustomButton(
                     txt: 'continue',
                     onTap: () {
-
                       // sendOTP(_mobile.text);
                       // Navigation.instance.navigate('/verifyOtp',args: int.parse('8638372157'));
-                      if (_mobile.text.isNotEmpty&&_mobile.text.length==10) {
+                      if (_mobile.text.isNotEmpty &&
+                          _mobile.text.length == 10) {
                         // sendOTP(_mobile.text);
-                        Navigation.instance.navigate('/verifyOtp', args: int.parse(_mobile.text));
+                        Navigation.instance.navigate('/verifyOtp',
+                            args: int.parse(_mobile.text));
                       } else {
                         showError("Enter correct mobile number");
                       }

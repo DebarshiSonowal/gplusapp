@@ -1,10 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
@@ -112,28 +112,48 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                                       SizedBox(
                                         height: 1.h,
                                       ),
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigation.instance.navigate(
+                                                '/viewStoryPage',
+                                                args: item.id);
+                                          },
+                                          child: Text(
+                                            item.story ?? "",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                ?.copyWith(
+                                                    color: Storage
+                                                            .instance.isDarkMode
+                                                        ? Colors.white70
+                                                        : Colors.black),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 1.h,
+                                      ),
                                       Row(
                                         children: [
                                           Expanded(
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                Navigation.instance.navigate(
-                                                    '/viewStoryPage',
-                                                    args: item.id);
-                                              },
-                                              child: Text(
-                                                item.story ?? "",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline6
-                                                    ?.copyWith(
-                                                        color: Storage.instance
-                                                                .isDarkMode
-                                                            ? Colors.white70
-                                                            : Colors.black),
-                                              ),
+                                            child: Text(
+                                              Jiffy(item.created_at ?? "",
+                                                      "yyyy-MM-dd")
+                                                  .format("dd/MM/yyyy"),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  ?.copyWith(
+                                                      color: Storage.instance
+                                                              .isDarkMode
+                                                          ? Colors.white70
+                                                          : Colors.black),
                                             ),
                                           ),
                                           Text(

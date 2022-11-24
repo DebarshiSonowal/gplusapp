@@ -17,7 +17,7 @@ import 'alert.dart';
 
 class GuwahatiConnectPostCard extends StatelessWidget {
   GuwahatiConnect data;
-  int count;
+  int count, type;
   bool like, dislike;
   final GlobalKey<ScaffoldState> scaffoldKey;
   final _searchQueryController = TextEditingController();
@@ -25,8 +25,16 @@ class GuwahatiConnectPostCard extends StatelessWidget {
   final Function(int, int) postLike;
   final Function(int) showing;
 
-  GuwahatiConnectPostCard(this.data, this.count, this.like, this.dislike,
-      this.scaffoldKey, this.fetchGuwahatiConnect, this.postLike, this.showing);
+  GuwahatiConnectPostCard(
+      this.data,
+      this.count,
+      this.like,
+      this.dislike,
+      this.scaffoldKey,
+      this.fetchGuwahatiConnect,
+      this.postLike,
+      this.showing,
+      this.type);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +56,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          data.user?.name ?? "GPlus Author",
+                          data.user?.name ?? "G Plus Author",
                           style:
                               Theme.of(context).textTheme.headline3?.copyWith(
                                     color: Storage.instance.isDarkMode
@@ -114,7 +122,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                     default:
                                       Navigation.instance.navigate(
                                           '/editAskAQuestion',
-                                          args: count);
+                                          args: '${type},${count}');
                                       break;
                                   }
                                 },
@@ -397,15 +405,13 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                         children: [
                           Text(
                             "Comments",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline3
-                                ?.copyWith(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.black
-                                      : Constance.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.headline3?.copyWith(
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.black
+                                          : Constance.primaryColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                           ),
                         ],
                       ),
@@ -443,8 +449,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                                   color: Storage
                                                           .instance.isDarkMode
                                                       ? Colors.black
-                                                      : Constance
-                                                          .primaryColor,
+                                                      : Constance.primaryColor,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                           ),
@@ -499,16 +504,15 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                           Row(
                                             children: [
                                               Material(
-                                                type:
-                                                    MaterialType.transparency,
+                                                type: MaterialType.transparency,
                                                 child: IconButton(
                                                   onPressed: () {
                                                     postCommentLike(
                                                         current.id, 1);
                                                   },
                                                   splashRadius: 20.0,
-                                                  splashColor: Constance
-                                                      .secondaryColor,
+                                                  splashColor:
+                                                      Constance.secondaryColor,
                                                   icon: Icon(
                                                     Icons.thumb_up,
                                                     color: current.is_liked

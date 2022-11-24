@@ -6,14 +6,13 @@ import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
 import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
-import '../Menu/berger_menu_member_page.dart';
 
 class VideoReport extends StatefulWidget {
   final String category;
@@ -211,7 +210,7 @@ class _VideoReportState extends State<VideoReport> {
                                       height: 2.h,
                                     ),
                                     Text(
-                                      'GPlus Admin, ${Jiffy(data.video_news[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                                      'G Plus Admin, ${Jiffy(data.video_news[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
                                       style: Theme.of(Navigation.instance
                                               .navigatorKey.currentContext!)
                                           .textTheme

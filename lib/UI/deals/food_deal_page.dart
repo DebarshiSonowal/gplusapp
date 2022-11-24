@@ -6,9 +6,10 @@ import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
-import '../../Components/custom_button.dart';
+import '../../Components/shop_type_item.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
@@ -53,13 +54,13 @@ class _FoodDealPageState extends State<FoodDealPage> {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 4),
+                          horizontal: 6, vertical: 6),
                       decoration: BoxDecoration(
                         color: Storage.instance.isDarkMode
                             ? Colors.white
                             : Colors.transparent,
                         border: Border.all(
-                            color: Constance.secondaryColor, width: 0.5.h),
+                            color: Constance.secondaryColor, width: 2.sp),
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: CachedNetworkImage(
@@ -97,7 +98,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
                 ),
               ),
               Container(
-                color: Constance.primaryColor,
+                color: Constance.forthColor,
                 height: 5.h,
                 width: double.infinity,
                 child: Row(
@@ -179,98 +180,25 @@ class _FoodDealPageState extends State<FoodDealPage> {
                 height: 1.h,
               ),
               Expanded(
-                child: ListView.builder(
-                    itemCount: data.shops.length,
-                    itemBuilder: (cont, cout) {
-                      var current = data.shops[cout];
-                      return Container(
-                        margin: const EdgeInsets.all(5),
-                        child: ListTile(
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: CachedNetworkImage(
-                              // height: 6.h,
-                              width: 16.w,
-                              imageUrl: current.image_file_name ?? "",
-                              placeholder: (cont, _) {
-                                return Image.asset(
-                                  Constance.logoIcon,
-                                  // color: Colors.black,
-                                );
-                              },
-                              errorWidget: (cont, _, e) {
-                                return Image.network(
-                                  Constance.defaultImage,
-                                  fit: BoxFit.fitWidth,
-                                );
-                              },
-                            ),
-                          ),
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: double.infinity,
-                                child: Text(
-                                  current.shop_name ?? "",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      ?.copyWith(
-                                        color: Storage.instance.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontSize: 2.2.h,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 0.5.h,
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: Text(
-                                  current.address ?? "",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      ?.copyWith(
-                                        color: Storage.instance.isDarkMode
-                                            ? Colors.white
-                                            : Colors.grey.shade800,
-                                        fontSize: 1.5
-                                            .h, // fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          trailing: CustomButton(
-                            txt: "View",
-                            onTap: () {
-                              if (Provider.of<DataProvider>(
-                                          Navigation.instance.navigatorKey
-                                                  .currentContext ??
-                                              context,
-                                          listen: false)
-                                      .profile
-                                      ?.is_plan_active ??
-                                  false) {
-                                Navigation.instance.navigate('/categorySelect',
-                                    args: current.id);
-                              } else {
-                                Constance.showMembershipPrompt(context, () {});
-                              }
-                            },
-                          ),
+                child: ListView.separated(
+                  itemCount: data.shops.length,
+                  itemBuilder: (cont, cout) {
+                    var current = data.shops[cout];
+                    return ShopTypePageItem(current: current);
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 2.w),
+                        child: Divider(
+                          thickness: 0.1.sp,
+                          color: Storage.instance.isDarkMode?Colors.white:Colors.black,
                         ),
-                      );
-                    }),
+                      ),
+                    );
+                  },
+                ),
               )
             ],
           );
@@ -453,3 +381,5 @@ class _FoodDealPageState extends State<FoodDealPage> {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 }
+
+

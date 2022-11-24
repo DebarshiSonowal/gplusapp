@@ -1,23 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../Components/NavigationBar.dart';
-import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
-import '../Menu/berger_menu_member_page.dart';
 
 class TopPicksPage extends StatefulWidget {
   const TopPicksPage({Key? key}) : super(key: key);
@@ -30,6 +24,8 @@ class _TopPicksPageState extends State<TopPicksPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
+  int page=1;
+
   @override
   void initState() {
     super.initState();
@@ -37,8 +33,11 @@ class _TopPicksPageState extends State<TopPicksPage> {
   }
 
   void _onRefresh() async {
+    setState(() {
+      page=1;
+    });
     // monitor network fetch
-    final response = await ApiProvider.instance.getTopPicks();
+    final response = await ApiProvider.instance.getTopPicks(1);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
@@ -139,7 +138,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
                             height: 30.h,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(10),
                               ),
                               image: DecorationImage(
@@ -209,7 +208,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
                           height: 2.h,
                         ),
                         Text(
-                          '${data.home_toppicks[0].author_name ?? "GPlus Admin"}, ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                          '${data.home_toppicks[0].author_name ?? "G Plus Admin"}, ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
                           style: Theme.of(Navigation
                                   .instance.navigatorKey.currentContext!)
                               .textTheme
@@ -260,56 +259,54 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                       MediaQuery.of(context).size.width - 7.w,
                                   child: Row(
                                     children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            CachedNetworkImage(
-                                              height: 15.h,
-                                              width: 45.w,
-                                              imageUrl:
-                                                  item.image_file_name ?? '',
-                                              fit: BoxFit.fill,
-                                              placeholder: (cont, _) {
-                                                return Image.asset(
-                                                  Constance.logoIcon,
-                                                  // color: Colors.black,
-                                                );
-                                              },
-                                              errorWidget: (cont, _, e) {
-                                                // print(e);
-                                                print(_);
-                                                return Image.asset(
-                                                  Constance.logoIcon,
-                                                  // color: Colors.black,
-                                                );
-                                              },
-                                            ),
-                                            SizedBox(
-                                              height: 1.h,
-                                            ),
-                                            Text(
-                                              // item.publish_date
-                                              //         ?.split(" ")[0] ??
-                                              //     "",
-                                              Jiffy(
-                                                      item.date
-                                                              ?.split(" ")[0] ??
-                                                          "",
-                                                      "yyyy-MM-dd")
-                                                  .format("dd/MM/yyyy"),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Storage.instance
-                                                              .isDarkMode
-                                                          ? Colors.white
-                                                          : Colors.black),
-                                            ),
-                                          ],
-                                        ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CachedNetworkImage(
+                                            height: 15.h,
+                                            width: 45.w,
+                                            imageUrl:
+                                                item.image_file_name ?? '',
+                                            fit: BoxFit.fill,
+                                            placeholder: (cont, _) {
+                                              return Image.asset(
+                                                Constance.logoIcon,
+                                                // color: Colors.black,
+                                              );
+                                            },
+                                            errorWidget: (cont, _, e) {
+                                              // print(e);
+                                              print(_);
+                                              return Image.asset(
+                                                Constance.logoIcon,
+                                                // color: Colors.black,
+                                              );
+                                            },
+                                          ),
+                                          SizedBox(
+                                            height: 1.h,
+                                          ),
+                                          Text(
+                                            // item.publish_date
+                                            //         ?.split(" ")[0] ??
+                                            //     "",
+                                            Jiffy(
+                                                    item.date
+                                                            ?.split(" ")[0] ??
+                                                        "",
+                                                    "yyyy-MM-dd")
+                                                .format("dd/MM/yyyy"),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                ?.copyWith(
+                                                    color: Storage.instance
+                                                            .isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black),
+                                          ),
+                                        ],
                                       ),
                                       SizedBox(
                                         width: 4.w,
@@ -319,31 +316,30 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Expanded(
-                                              child: Text(
-                                                item.title ?? "",
-                                                maxLines: 3,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline4
-                                                    ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        color: Storage.instance
-                                                                .isDarkMode
-                                                            ? Colors.white
-                                                            : Constance
-                                                                .primaryColor),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 1.h,
-                                            ),
                                             Text(
-                                              item.author_name ?? "GPlus News",
+                                              item.title ?? "",
+                                              maxLines: 3,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline4
+                                                  ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      overflow: TextOverflow
+                                                          .ellipsis,
+                                                      color: Storage.instance
+                                                              .isDarkMode
+                                                          ? Colors.white
+                                                          : Constance
+                                                              .primaryColor),
+                                            ),
+                                            // SizedBox(
+                                            //   height: 5.h,
+                                            // ),
+                                            Text(
+                                              item.author_name ?? "G Plus News",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline6
@@ -371,13 +367,31 @@ class _TopPicksPageState extends State<TopPicksPage> {
                               return SizedBox(
                                 height: 1.h,
                                 child: Divider(
-                                  color:  Storage.instance.isDarkMode?Colors.white:Colors.black,
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
                                   thickness: 0.3.sp,
                                 ),
                               );
                             }
                           },
                           itemCount: data.home_toppicks.length,
+                        ),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomButton(
+                                txt: 'Load More',
+                                onTap: () {
+                                  setState(() {
+                                    page++;
+                                  });
+                                  fetchMoreToppicks(page);
+                                }),
+                          ],
                         ),
                         SizedBox(
                           height: 10.h,
@@ -419,12 +433,21 @@ class _TopPicksPageState extends State<TopPicksPage> {
   }
 
   void fetchToppicks() async {
-    final response = await ApiProvider.instance.getTopPicks();
+    final response = await ApiProvider.instance.getTopPicks(1);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setHomeTopPicks(response.toppicks ?? []);
+    }
+  }
+  void fetchMoreToppicks(page) async {
+    final response = await ApiProvider.instance.getTopPicks(page);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .addHomeTopPicks(response.toppicks ?? []);
     }
   }
 }

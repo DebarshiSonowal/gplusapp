@@ -3,12 +3,11 @@ import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
-import 'package:sizer/sizer.dart';
-
 import '../../Networking/api_provider.dart';
 
 class ProfilePage extends StatefulWidget {

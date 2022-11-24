@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -19,16 +18,16 @@ import '../../Components/guwhati_connect_post_card.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
-import '../Menu/berger_menu_member_page.dart';
 
-class GuwahatiConnectPage extends StatefulWidget {
-  const GuwahatiConnectPage({Key? key}) : super(key: key);
+class GuwahatiConnectMylistPage extends StatefulWidget {
+  const GuwahatiConnectMylistPage({Key? key}) : super(key: key);
 
   @override
-  State<GuwahatiConnectPage> createState() => _GuwahatiConnectPageState();
+  State<GuwahatiConnectMylistPage> createState() =>
+      _GuwahatiConnectMylistPageState();
 }
 
-class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
+class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
     with SingleTickerProviderStateMixin {
   int current = 2;
   bool showing = false;
@@ -75,21 +74,21 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
 
   void _onRefresh() async {
     // monitor network fetch
-    final response = await ApiProvider.instance.getGuwahatiConnect();
+    final response = await ApiProvider.instance.getMyGuwahatiConnect();
     if (response.success ?? false) {
       // setGuwahatiConnect
       // Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
-          .setGuwahatiConnect(response.posts);
+          .setMyGuwahatiConnect(response.posts);
       _refreshController.refreshCompleted();
     } else {
       // Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
-          .setGuwahatiConnect(response.posts);
+          .setMyGuwahatiConnect(response.posts);
       _refreshController.refreshFailed();
     }
     // if failed,use refreshFailed()
@@ -100,74 +99,8 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
     return Scaffold(
       appBar: buildAppBar(),
       key: scaffoldKey,
-      drawer: BergerMenuMemPage(),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: () {
-      //     checkIt();
-      //     // showDialogBox();
-      //   },
-      //   icon: Icon(Icons.add),
-      //   label: Text(
-      //     "Ask a question",
-      //     style: Theme.of(context).textTheme.headline5?.copyWith(
-      //           color: Colors.black,
-      //           // fontWeight: FontWeight.bold,
-      //         ),
-      //   ),
-      // ),
-      floatingActionButton: FloatingActionBubble(
-        // Menu items
-        items: <Bubble>[
-          // Floating action menu item
-          Bubble(
-            title: "My List",
-            iconColor: Constance.primaryColor,
-            bubbleColor: Colors.white,
-            icon: Icons.list,
-            titleStyle: const TextStyle(
-              fontSize: 16,
-              color: Constance.primaryColor,
-            ),
-            onPress: () {
-              _animationController?.reverse();
-              Navigation.instance.navigate('/guwahatiConnectsMy');
-            },
-          ),
-          // Floating action menu item
-          Bubble(
-            title: "Ask a question",
-            iconColor: Constance.primaryColor,
-            bubbleColor: Colors.white,
-            icon: Icons.question_answer,
-            titleStyle: const TextStyle(
-              fontSize: 16,
-              color: Constance.primaryColor,
-            ),
-            onPress: () {
-              _animationController?.reverse();
-              Navigation.instance.navigate('/askAQuestion');
-            },
-          ),
-        ],
+      // drawer: BergerMenuMemPage(),
 
-        // animation controller
-        animation: _animation!,
-
-        // On pressed change animation state
-        onPress: () => _animationController?.isCompleted ?? false
-            ? _animationController?.reverse()
-            : _animationController?.forward(),
-
-        // Floating Action button Icon color
-        iconColor: Constance.primaryColor,
-
-        // Flaoting Action button Icon
-        iconData: Icons.add,
-        backGroundColor: Colors.white,
-      ),
-      floatingActionButtonLocation: showing
-          ? FloatingActionButtonLocation.miniStartFloat
-          : FloatingActionButtonLocation.miniEndFloat,
       bottomNavigationBar: CustomNavigationBar(current),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
@@ -261,7 +194,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                   height: 1.h,
                 ),
                 Consumer<DataProvider>(builder: (context, current, _) {
-                  return current.guwahatiConnect.isEmpty
+                  return current.myGuwahatiConnect.isEmpty
                       ? Center(
                           child: Lottie.asset(
                             Constance.searchingIcon,
@@ -272,9 +205,9 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                           child: ListView.separated(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: current.guwahatiConnect.length,
+                            itemCount: current.myGuwahatiConnect.length,
                             itemBuilder: (context, count) {
-                              var data = current.guwahatiConnect[count];
+                              var data = current.myGuwahatiConnect[count];
                               bool like = data.is_liked ?? false,
                                   dislike = false;
                               return GuwahatiConnectPostCard(
@@ -294,7 +227,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                                     showing = false;
                                   });
                                 }
-                              }, 0);
+                              }, 1);
                             },
                             separatorBuilder:
                                 (BuildContext context, int index) {
@@ -436,14 +369,14 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
 
   void fetchGuwahatiConnect() async {
     Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.getGuwahatiConnect();
+    final response = await ApiProvider.instance.getMyGuwahatiConnect();
     if (response.success ?? false) {
       // setGuwahatiConnect
       Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
-          .setGuwahatiConnect(response.posts);
+          .setMyGuwahatiConnect(response.posts);
       if (!Storage.instance.isGuwahatiConnect) {
         showDialogBox();
       }
@@ -452,7 +385,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
-          .setGuwahatiConnect(response.posts);
+          .setMyGuwahatiConnect(response.posts);
     }
   }
 

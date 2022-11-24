@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:gplusapp/OnBoarding/SplashScreen.dart';
 import 'package:gplusapp/UI/classified/classified_mylist_page.dart';
 
 import '../Authentication/Signin/login_page.dart';
 import '../Authentication/Signup/signup_page.dart';
-
 import '../Authentication/enter_preferences_page.dart';
 import '../Authentication/location_search_page.dart';
 import '../Authentication/personal_details_page.dart';
@@ -17,7 +15,6 @@ import '../Components/story_view.dart';
 import '../Components/video_player_screen.dart';
 import '../OnBoarding/on_boarding_page.dart';
 import '../UI/Member/be_a_membe_page.dart';
-import '../UI/Menu/berger_menu_member_page.dart';
 import '../UI/Notification/notification_page.dart';
 import '../UI/Search/search_page.dart';
 import '../UI/VideoReport/video_report.dart';
@@ -25,28 +22,30 @@ import '../UI/author/author_page.dart';
 import '../UI/citizen_journalist/citizen_journalist_page.dart';
 import '../UI/citizen_journalist/draft_story.dart';
 import '../UI/citizen_journalist/edit_story.dart';
-import '../UI/citizen_journalist/view_story_page.dart';
-import '../UI/classified/edit_a_listing.dart';
-import '../UI/edit_profile/edit_address_page.dart';
-import '../UI/guwahati_connect/all_images_page.dart';
-import '../UI/guwahati_connect/ask_a_question.dart';
-import '../UI/guwahati_connect/edit_ask_a_question.dart';
-import '../UI/guwahati_connect/guwahati_connect_page.dart';
 import '../UI/citizen_journalist/stories_submitted.dart';
 import '../UI/citizen_journalist/submit_story.dart';
+import '../UI/citizen_journalist/view_story_page.dart';
 import '../UI/classified/classified_details.dart';
 import '../UI/classified/classified_page.dart';
+import '../UI/classified/edit_a_listing.dart';
 import '../UI/classified/post_a_listing.dart';
 import '../UI/deals/big_deal_page.dart';
 import '../UI/deals/category_select_page.dart';
 import '../UI/deals/filter_page.dart';
 import '../UI/deals/food_deal_page.dart';
 import '../UI/deals/redeem_offer_page.dart';
+import '../UI/edit_profile/edit_address_page.dart';
 import '../UI/edit_profile/edit_profile_page.dart';
 import '../UI/edit_profile/edit_saved_addresses.dart';
 import '../UI/exclusive_page/exclusive_page.dart';
+import '../UI/guwahati_connect/all_images_page.dart';
+import '../UI/guwahati_connect/ask_a_question.dart';
+import '../UI/guwahati_connect/edit_ask_a_question.dart';
+import '../UI/guwahati_connect/guwahati_connect_mylist_page.dart';
+import '../UI/guwahati_connect/guwahati_connect_page.dart';
 import '../UI/main/home_screen_page.dart';
 import '../UI/news_from/news_from.dart';
+import '../UI/opinion/opinion_details_page.dart';
 import '../UI/opinion/opinion_page.dart';
 import '../UI/others/about_us_page.dart';
 import '../UI/others/advertise_with_us_page.dart';
@@ -60,11 +59,9 @@ import '../UI/poll_of_the week/poll_page.dart';
 import '../UI/profile/profile_page.dart';
 import '../UI/refer_earn/redeem_points.dart';
 import '../UI/refer_earn/refer&earn.dart';
-import '../UI/opinion/opinion_details_page.dart';
 import '../UI/story/story_page.dart';
 import '../UI/toppicks/top_picks_page.dart';
 import '../UI/view/view_image_page.dart';
-import '../UI/view/view_video_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -110,9 +107,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/viewImage':
       return FadeTransitionPageRouteBuilder(
           page: ViewImagePage(settings.arguments as String));
- case '/viewVideo':
-      return FadeTransitionPageRouteBuilder(
-          page: ViewVideoPage(settings.arguments as String));
+ // case '/viewVideo':
+ //      return FadeTransitionPageRouteBuilder(
+ //          page: ViewVideoPage(settings.arguments as String));
 
     case '/bigdealpage':
       return FadeTransitionPageRouteBuilder(page: BigDealPage());
@@ -205,6 +202,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(page: EditAListingPost(settings.arguments as int));
     case '/guwahatiConnects':
       return FadeTransitionPageRouteBuilder(page: GuwahatiConnectPage());
+      case '/guwahatiConnectsMy':
+      return FadeTransitionPageRouteBuilder(page: GuwahatiConnectMylistPage());
     case '/allImagesPage':
       return FadeTransitionPageRouteBuilder(
           page: AllImagePage(settings.arguments as int));
@@ -212,7 +211,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(page: AskAQuestionPage());
     case '/editAskAQuestion':
       return FadeTransitionPageRouteBuilder(
-          page: EditAskAQuestionPage(settings.arguments as int));
+          page: EditAskAQuestionPage(settings.arguments as String));
     case '/search':
       return FadeTransitionPageRouteBuilder(page: SearchPage());
     case '/aboutUs':

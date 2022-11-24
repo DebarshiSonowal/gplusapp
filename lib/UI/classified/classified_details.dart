@@ -9,10 +9,10 @@ import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
-import '../../Components/slider_home.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
@@ -47,7 +47,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
-        padding: EdgeInsets.symmetric(vertical: 1.h),
+        padding: EdgeInsets.symmetric(vertical: 0.5.h),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return SingleChildScrollView(
             child: Column(
@@ -101,7 +101,8 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                             autoPlay: false,
                             enlargeCenterPage: true,
                             // aspectRatio: 1,
-                            viewportFraction: 0.9,
+                            aspectRatio: 12/9,
+                            viewportFraction: 1,
                             onPageChanged: (index, reason) {
                               setState(() {
                                 _current = index;

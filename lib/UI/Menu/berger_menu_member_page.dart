@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
@@ -8,6 +7,7 @@ import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 
@@ -21,25 +21,10 @@ class BergerMenuMemPage extends StatefulWidget {
 class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    // body: Drawer(
-    //   child: ListView.separated(
-    //       itemBuilder: (cont, count) {
-    //         return getList()[count];
-    //       },
-    //       separatorBuilder: (cont, ind) {
-    //         return Divider(
-    //           color: Colors.teal.shade100,
-    //           thickness: 1.0,
-    //         );
-    //       },
-    //       itemCount: getList().length),
-    // ),
-    // );
     return Consumer<DataProvider>(builder: (context, data, _) {
       return Drawer(
         backgroundColor:
-            Storage.instance.isDarkMode ? Colors.black : Constance.primaryColor,
+            Storage.instance.isDarkMode ? Colors.black : Constance.forthColor,
         child: Padding(
           padding: EdgeInsets.only(left: 2.w, right: 2.w),
           child: ListView(
@@ -165,7 +150,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigation.instance.navigate('/editSavedAddresses',args: 1);
+                        Navigation.instance
+                            .navigate('/editSavedAddresses', args: 1);
                       },
                       child: Row(
                         children: [
@@ -476,7 +462,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             width: 2.w,
                           ),
                           Text(
-                            'GPlus Exclusive',
+                            'G Plus Exclusive',
                             style:
                                 Theme.of(context).textTheme.headline4?.copyWith(
                                       color: Colors.white,
@@ -720,7 +706,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                               splashColor: Constance.secondaryColor,
                               radius: 15.h,
                               onTap: () {
-                                Navigation.instance.navigate('/videoReport',args: 'news');
+                                Navigation.instance
+                                    .navigate('/videoReport', args: 'news');
                               },
                               child: Row(
                                 children: [
@@ -757,7 +744,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                               splashColor: Constance.secondaryColor,
                               radius: 15.h,
                               onTap: () {
-                                Navigation.instance.navigate('/videoReport',args: 'featured');
+                                Navigation.instance
+                                    .navigate('/videoReport', args: 'featured');
                               },
                               child: Row(
                                 children: [

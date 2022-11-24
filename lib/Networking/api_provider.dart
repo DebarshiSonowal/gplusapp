@@ -4,15 +4,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Model/bookmark_item.dart';
 import 'package:gplusapp/Model/profile.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
-import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../Components/alert.dart';
 import '../Model/about_us.dart';
@@ -21,15 +18,14 @@ import '../Model/advertise.dart';
 import '../Model/article.dart';
 import '../Model/article_desc.dart';
 import '../Model/citizen_journalist.dart';
-import '../Model/comment.dart';
-import '../Model/guwahati_connect.dart';
 import '../Model/classified.dart';
 import '../Model/classified_category.dart';
+import '../Model/comment.dart';
 import '../Model/contact_us.dart';
 import '../Model/deal_details.dart';
 import '../Model/e_paper.dart';
 import '../Model/generic_response.dart';
-
+import '../Model/guwahati_connect.dart';
 // import '../Model/login_response.dart';
 import '../Model/membership.dart';
 import '../Model/opinion.dart';
@@ -524,7 +520,7 @@ class ApiProvider {
     var url = "${baseUrl}/address/${id}";
     dio = Dio(option);
     debugPrint(url.toString());
-    // debugPrint(jsonEncode(data));
+    debugPrint(jsonEncode(data));
 
     try {
       Response? response = await dio?.post(
@@ -1044,10 +1040,7 @@ class ApiProvider {
     debugPrint(jsonEncode(data));
 
     try {
-      Response? response = await dio?.get(
-        url,
-        queryParameters: data
-      );
+      Response? response = await dio?.get(url, queryParameters: data);
       debugPrint("video-news response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return MoreVideoNewsResponse.fromJson(response?.data);
@@ -1775,7 +1768,7 @@ class ApiProvider {
     }
   }
 
-  Future<TopPicksResponse> getTopPicks() async {
+  Future<TopPicksResponse> getTopPicks(page) async {
     var url = "${baseUrl}/app/top-picks";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -1786,16 +1779,19 @@ class ApiProvider {
     });
     dio = Dio(option);
     debugPrint(url.toString());
-    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    var data = {
+      'Authorization': 'Bearer ${Storage.instance.token}',
+      'page': page,
+    };
     debugPrint(jsonEncode(data));
 
     try {
       Response? response = await dio?.get(
         url,
-        // queryParameters: data,
+        queryParameters: data,
       );
       // debugPrint("toppicks response: ${response?.data}");
-      debugPrint("toppicks response: ");
+      debugPrint("toppicks response: ${response?.statusCode}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return TopPicksResponse.fromJson(response?.data);
       } else {
@@ -2103,6 +2099,42 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("guwahati-connect error: ${e.response}");
+      return GuwahatiConnectResponse.withError(e.message);
+    }
+  }
+  Future<GuwahatiConnectResponse> getMyGuwahatiConnect() async {
+    var url = "${baseUrl}/app/guwahati-connect/my-list";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("guwahati-connect my response: ");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GuwahatiConnectResponse.fromJson(response?.data);
+      } else {
+        debugPrint("guwahati-connect my error: ${response?.data}");
+        return GuwahatiConnectResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("guwahati-connect my error: ${e.response}");
       return GuwahatiConnectResponse.withError(e.message);
     }
   }

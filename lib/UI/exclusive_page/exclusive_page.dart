@@ -13,7 +13,6 @@ import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
-import '../Menu/berger_menu_member_page.dart';
 
 class ExclusivePage extends StatefulWidget {
   const ExclusivePage({Key? key}) : super(key: key);
@@ -117,7 +116,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
                               size: 4.h,
                             ),
                             Text(
-                              'GPlus Exclusive',
+                              'G Plus Exclusive',
                               style: Theme.of(Navigation
                                       .instance.navigatorKey.currentContext!)
                                   .textTheme
@@ -310,7 +309,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
                                               height: 1.h,
                                             ),
                                             Text(
-                                              item.author_name ?? "GPlus News",
+                                              item.author_name ?? "G Plus News",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline6

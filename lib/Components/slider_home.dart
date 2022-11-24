@@ -1,19 +1,17 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:gplusapp/Helper/Constance.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
-import 'package:gplusapp/Navigation/Navigate.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class HomeBannerPage extends StatefulWidget {
-  final Function beforeItem;
-  final Function changeItem;
+import 'home_slider_card.dart';
 
-  const HomeBannerPage(this.beforeItem,this.changeItem);
+class HomeBannerPage extends StatefulWidget {
+  final Function showNotaMember;
+
+  const HomeBannerPage({required this.showNotaMember});
+
   @override
   State<StatefulWidget> createState() {
     return _CarouselWithIndicatorState();
@@ -42,91 +40,16 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
               itemCount: data.home_albums.length,
               itemBuilder: (BuildContext context, int index, int realIndex) {
                 var current = data.home_albums[index];
-                return GestureDetector(
-                  onTap: () {
-                    if (data.profile?.is_plan_active ?? false) {
-                      Navigation.instance.navigate('/story',
-                          args:
-                              '${current.first_cat_name?.seo_name},${current.seo_name}');
-                    } else {
-                      widget.beforeItem();
-                      Constance.showMembershipPrompt(context, widget.changeItem);
-                    }
-                  },
-                  child: Container(
-                    // height: 45.h,
-                    width: double.infinity,
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: current.image_file_name ?? "",
-                          width: double.infinity,
-                          // height:55.h,
-                          fit: BoxFit.fill,
-                          // filterQuality: FilterQuality.low,
-                          placeholder: (cont, _) {
-                            return Image.asset(
-                              Constance.logoIcon,
-                              // color: Colors.black,
-                            );
-                          },
-                          errorWidget: (cont, _, e) {
-                            return Image.network(
-                              Constance.defaultImage,
-                              fit: BoxFit.fitWidth,
-                            );
-                          },
-                        ),
-                        Container(
-                          width: double.infinity,
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [Colors.transparent, Colors.black],
-                            ),
-                          ),
-                          // color: Colors.black.withOpacity(0.5),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 3.h, horizontal: 2.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                current.title ?? 'Big Deals\nand Offers',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline4
-                                    ?.copyWith(
-                                        color: Colors.grey.shade200,
-                                        fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 0.5.h,
-                              ),
-                              Text(
-                                "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                return HomeSliderItem(
+                  current: current,
+                  data: data,
+                  showNotaMember: () => widget.showNotaMember(),
                 );
               },
               options: CarouselOptions(
                   autoPlay: true,
                   // enlargeCenterPage: true,
-                  // aspectRatio: 15/9,
+                  aspectRatio: 9.7/9,
                   viewportFraction: 1,
                   onPageChanged: (index, reason) {
                     setState(() {
@@ -135,24 +58,39 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                   }),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: data.home_albums.asMap().entries.map((entry) {
-              return GestureDetector(
-                onTap: () => _controller.animateToPage(entry.key),
-                child: Container(
-                  width: 2.w,
-                  height: 2.h,
-                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: (Theme.of(context).brightness == Brightness.dark
-                              ? Colors.white
-                              : Colors.white)
-                          .withOpacity(_current == entry.key ? 0.9 : 0.4)),
-                ),
-              );
-            }).toList(),
+          SizedBox(
+            width: double.infinity,
+            height: 3.h,
+            child: Center(
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: data.home_albums.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var current = data.home_albums[index];
+                  return GestureDetector(
+                    onTap: () => _controller.animateToPage(index),
+                    child: Container(
+                      width: (index < (data.home_albums.length / 2.toInt()))
+                          ? 2.w
+                          : 1.75.w,
+                      height: (index < (data.home_albums.length / 2.toInt()))
+                          ? 2.h
+                          : 1.75.h,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 4.0),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: (Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.white)
+                            .withOpacity(_current == index ? 0.9 : 0.4),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
         ]),
       );

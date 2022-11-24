@@ -1,24 +1,19 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:material_dialogs/material_dialogs.dart';
-import 'package:material_dialogs/widgets/buttons/icon_button.dart';
-import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
+import '../../Components/promoted_deals_item.dart';
+import '../../Components/shop_category_item.dart';
 import '../../Helper/Constance.dart';
-import 'package:sizer/sizer.dart';
-
 import '../../Helper/DataProvider.dart';
 import '../../Networking/api_provider.dart';
 import '../Menu/berger_menu_member_page.dart';
@@ -156,165 +151,14 @@ class _BigDealPageState extends State<BigDealPage> {
                           current.deals.isEmpty
                               ? Container()
                               : SizedBox(
-                                  height: 33.h,
+                                  height: 31.h,
                                   width: double.infinity,
                                   child: ListView.separated(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: current.deals.length,
                                     itemBuilder: (cont, cout) {
                                       var data = current.deals[cout];
-                                      return GestureDetector(
-                                        onTap: () {
-                                          if (Provider.of<DataProvider>(
-                                                      Navigation
-                                                              .instance
-                                                              .navigatorKey
-                                                              .currentContext ??
-                                                          context,
-                                                      listen: false)
-                                                  .profile
-                                                  ?.is_plan_active ??
-                                              false) {
-                                            Navigation.instance.navigate(
-                                                '/categorySelect',
-                                                args: data.vendor_id);
-                                          } else {
-                                            Constance.showMembershipPrompt(
-                                                context, () {});
-                                          }
-                                        },
-                                        child: Container(
-                                          height: 30.h,
-                                          width: 60.w,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Storage.instance.isDarkMode?Colors.white:Colors.transparent,
-                                            ),
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          child: Card(
-                                            elevation: 3,
-                                            shape: RoundedRectangleBorder(
-
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0,),
-
-                                            ),
-                                            color: Storage.instance.isDarkMode
-                                                ? Colors.black
-                                                : Colors.white,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Expanded(
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                              .only(
-                                                        topRight:
-                                                            Radius.circular(
-                                                                5.0,
-                                                            ),
-                                                        bottomRight:
-                                                            Radius.circular(
-                                                                5.0),
-                                                        topLeft:
-                                                            Radius.circular(
-                                                                5.0),
-                                                        bottomLeft:
-                                                            Radius.circular(
-                                                                5.0),
-                                                      ),
-                                                      image: DecorationImage(
-                                                        fit: BoxFit.fill,
-                                                        image: CachedNetworkImageProvider(
-                                                            data.vendor
-                                                                    ?.image_file_name ??
-                                                                "https://source.unsplash.com/user/c_v_r/1900x800",
-                                                            maxWidth: 100),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                // SizedBox(
-                                                //   height: 1.h,
-                                                // ),
-                                                Expanded(
-                                                    child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 4.w,
-                                                      vertical: 1.h),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        data.vendor
-                                                                ?.shop_name ??
-                                                            "",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .headline4
-                                                            ?.copyWith(
-                                                                color: Storage
-                                                                        .instance
-                                                                        .isDarkMode
-                                                                    ? Colors
-                                                                        .white
-                                                                    : Colors
-                                                                        .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 0.5.h,
-                                                      ),
-                                                      Text(
-                                                        data.vendor?.address ??
-                                                            "",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .headline5
-                                                            ?.copyWith(
-                                                              color: Storage
-                                                                      .instance
-                                                                      .isDarkMode
-                                                                  ? Colors.white
-                                                                  : Colors
-                                                                      .black,
-                                                              // fontWeight: FontWeight.bold
-                                                            ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 0.5.h,
-                                                      ),
-                                                      Text(
-                                                        data.title ?? "",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .headline4
-                                                            ?.copyWith(
-                                                                color: Constance
-                                                                    .thirdColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
+                                      return PromotedDealsItem(data: data);
                                     },
                                     separatorBuilder:
                                         (BuildContext context, int index) {
@@ -350,131 +194,13 @@ class _BigDealPageState extends State<BigDealPage> {
                               alignment: WrapAlignment.spaceEvenly,
                               children: expandCateg
                                   ? current.category.map((e) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          // selectedCategory(e.name);
-                                          Navigation.instance.navigate(
-                                              '/fooddealpage',
-                                              args: e.id!);
-                                        },
-                                        child: Container(
-                                          // height: 10.h,
-                                          width: 10.h,
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 1.w, vertical: 0.5.w),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                width: 8.h,
-                                                height: 8.h,
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 2.w,
-                                                    vertical: 1.h),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Constance
-                                                          .secondaryColor),
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                                child: Image.network(
-                                                  e.image_file_name ?? "",
-                                                  // color: Constance.primaryColor,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 0.5.h,
-                                              ),
-                                              Text(
-                                                e.name ?? "",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline6
-                                                    ?.copyWith(
-                                                  color: Storage.instance.isDarkMode
-                                                      ? Colors.white
-                                                      : Constance.primaryColor,
-                                                      // fontSize: 1.7.h,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                              ),
-                                              SizedBox(
-                                                height: 0.5.h,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
+                                      return ShopCategoryItem(e: e,);
                                     }).toList()
                                   : current.category
                                       .sublist(0, 8)
                                       .toList()
                                       .map((e) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          // selectedCategory(e.name);
-                                          Navigation.instance.navigate(
-                                              '/fooddealpage',
-                                              args: e.id!);
-                                        },
-                                        child: Container(
-                                          // height: 10.h,
-                                          width: 10.h,
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 1.w, vertical: 0.5.w),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                width: 8.h,
-                                                height: 8.h,
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 2.w,
-                                                    vertical: 1.h),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                    width: 0.3.h,
-                                                      color: Constance
-                                                          .secondaryColor),
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  color: Storage.instance.isDarkMode
-                                                      ? Colors.white
-                                                      : Colors.transparent,
-                                                ),
-                                                child: Image.network(
-                                                  e.image_file_name ?? "",
-                                                  // color: Constance.primaryColor,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 0.5.h,
-                                              ),
-                                              Text(
-                                                e.name ?? "",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline6
-                                                    ?.copyWith(
-                                                  color: Storage.instance.isDarkMode
-                                                      ? Colors.white
-                                                      : Constance.primaryColor,
-                                                      // fontSize: 1.7.h,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                              ),
-                                              SizedBox(
-                                                height: 0.5.h,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
+                                      return ShopCategoryItem(e: e,);
                                     }).toList(),
                             ),
                           ),
@@ -548,12 +274,13 @@ class _BigDealPageState extends State<BigDealPage> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(
-                                                    width:40.w,
+                                                    width: 40.w,
                                                     child: Text(
                                                       data.title ?? '25% OFF',
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      textAlign: TextAlign.start,
+                                                      textAlign:
+                                                          TextAlign.start,
                                                       style: Theme.of(Navigation
                                                               .instance
                                                               .navigatorKey
@@ -577,7 +304,8 @@ class _BigDealPageState extends State<BigDealPage> {
                                                           "",
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      textAlign: TextAlign.start,
+                                                      textAlign:
+                                                          TextAlign.start,
                                                       style: Theme.of(Navigation
                                                               .instance
                                                               .navigatorKey
@@ -602,7 +330,8 @@ class _BigDealPageState extends State<BigDealPage> {
                                                           'RGB road, Zoo tiniali',
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      textAlign: TextAlign.start,
+                                                      textAlign:
+                                                          TextAlign.start,
                                                       style: Theme.of(Navigation
                                                               .instance
                                                               .navigatorKey
@@ -629,7 +358,8 @@ class _BigDealPageState extends State<BigDealPage> {
                                                       data.code ?? '8486',
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      textAlign: TextAlign.start,
+                                                      textAlign:
+                                                          TextAlign.start,
                                                       style: Theme.of(Navigation
                                                               .instance
                                                               .navigatorKey
@@ -803,19 +533,19 @@ class _BigDealPageState extends State<BigDealPage> {
         builder: (context) {
           return StatefulBuilder(builder: (context, _) {
             return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.only(
-                    topLeft: const Radius.circular(15.0),
-                    topRight: const Radius.circular(15.0)),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    topRight: Radius.circular(15.0)),
               ),
               child: Container(
                 padding: EdgeInsets.only(
                     top: 3.h, right: 10.w, left: 10.w, bottom: 3.h),
-                decoration: new BoxDecoration(
+                decoration: const BoxDecoration(
                     color: Colors.white,
-                    borderRadius: new BorderRadius.only(
-                        topLeft: const Radius.circular(15.0),
-                        topRight: const Radius.circular(15.0))),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15.0),
+                        topRight: Radius.circular(15.0))),
                 child: Wrap(
                   // crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -1068,3 +798,5 @@ class _BigDealPageState extends State<BigDealPage> {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 }
+
+

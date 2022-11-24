@@ -8,7 +8,6 @@ import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
@@ -31,7 +30,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   int random = 0;
   var categories = ['international', 'assam', 'guwahati', 'india'];
   var dropdownvalue = 'international';
-  WebViewController? _controller;
+  // WebViewController? _controller;
   bool like = false, dislike = false;
   int page=1;
   @override
@@ -648,7 +647,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                                   ),
                                                   Text(
                                                     item.author_name ??
-                                                        "GPlus News",
+                                                        "G Plus News",
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .headline6

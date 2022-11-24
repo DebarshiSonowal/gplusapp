@@ -65,7 +65,7 @@ class DataProvider extends ChangeNotifier {
   ContactUs? contactUs;
   PollOfTheWeek? pollOfTheWeek;
   List<Address>? addresses = [];
-  List<GuwahatiConnect> guwahatiConnect = [];
+  List<GuwahatiConnect> guwahatiConnect = [], myGuwahatiConnect = [];
   List<CitizenJournalist> citizenlist = [];
   List<RedeemHistory> history = [];
   List<search.SearchResult> searchlist = [];
@@ -149,6 +149,11 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setMyGuwahatiConnect(List<GuwahatiConnect> list) {
+    myGuwahatiConnect = list;
+    notifyListeners();
+  }
+
   setAddressess(List<Address> list) {
     addresses = list;
     notifyListeners();
@@ -222,10 +227,16 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  addHomeTopPicks(List<TopPicks> list) {
+    home_toppicks.addAll(list);
+    notifyListeners();
+  }
+
   setHomeExecl(List<Article> list) {
     home_exclusive = list;
     notifyListeners();
   }
+
   addHomeExecl(List<Article> list) {
     home_exclusive.addAll(list);
     notifyListeners();
@@ -245,6 +256,7 @@ class DataProvider extends ChangeNotifier {
     suggestion = list;
     notifyListeners();
   }
+
   addSuggestion(List<Article> list) {
     suggestion.addAll(list);
     notifyListeners();
@@ -259,10 +271,12 @@ class DataProvider extends ChangeNotifier {
     video_news = list;
     notifyListeners();
   }
+
   addVideoNews(List<VideoNews> list) {
     video_news.addAll(list);
     notifyListeners();
   }
+
   setOpinions(List<Opinion> list) {
     opinions = list;
     notifyListeners();

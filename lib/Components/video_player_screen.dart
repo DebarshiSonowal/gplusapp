@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cards_reel/cards_reel_view.dart';
-import 'package:flutter_cards_reel/sliver_cards_reel.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
-import 'package:pod_player/pod_player.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-// import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-// import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+
 
 class VideoPlayerScreen extends StatefulWidget {
   final String input;

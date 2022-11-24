@@ -5,6 +5,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
@@ -344,7 +345,7 @@ class _NewsFromState extends State<NewsFrom> {
                                               ),
                                               Text(
                                                 item.author_name ??
-                                                    "GPlus News",
+                                                    "G Plus News",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .headline6

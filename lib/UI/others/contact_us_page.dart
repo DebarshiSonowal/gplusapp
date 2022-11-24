@@ -1,17 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 import 'package:webview_flutter/webview_flutter.dart';
+
+// import 'package:webview_flutter/webview_flutter.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class ContactUsPage extends StatefulWidget {
   const ContactUsPage({Key? key}) : super(key: key);
@@ -388,7 +389,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(26.1764316, 91.7568453),
-      infoWindow: InfoWindow(title: 'GPlus', snippet: '*'),
+      infoWindow: InfoWindow(title: 'G Plus', snippet: '*'),
       onTap: () {},
     );
 

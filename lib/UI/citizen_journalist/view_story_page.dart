@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jiffy/jiffy.dart';
@@ -17,7 +15,6 @@ import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Model/citizen_journalist.dart';
 import '../../Navigation/Navigate.dart';
-import '../../Networking/api_provider.dart';
 
 class ViewStoryPage extends StatefulWidget {
   final int id;

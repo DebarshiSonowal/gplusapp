@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
-
 // import 'package:google_geocoding/google_geocoding.dart';
 import 'package:google_place/google_place.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
-import 'package:geocoding/geocoding.dart' as geo;
 
 class EditSavedAddresses extends StatefulWidget {
   final int which;
@@ -108,9 +108,17 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                               color: Storage.instance.isDarkMode
                                   ? Colors.white
                                   : Colors.black),
-                      focusedBorder: const OutlineInputBorder(
+                      suffixIcon: Icon(
+                        Icons.search,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white70
+                            : Colors.black54,
+                      ),
+                      focusedBorder:  OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Colors.blue,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white70
+                              : Colors.black54,
                           width: 2.0,
                         ),
                       ),
@@ -293,7 +301,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                                         final result = await Navigation.instance
                                             .navigate('/editAddress',
                                                 args: count);
-                                        if(result==null){
+                                        if (result == null) {
                                           fetchAddress();
                                         }
                                       },
@@ -543,7 +551,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
               listen: false)
           .setAddressess(response.addresses);
       Navigation.instance.goBack();
-      if (widget.which==0) {
+      if (widget.which == 0) {
         Navigator.of(context).pop(response.addresses.last.id);
       }
     } else {
@@ -560,10 +568,9 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
     longitude = locations[0].longitude ?? 0;
     addAddress(address);
     setState(() {
-      predictions=[];
-      _searchQueryController.text="";
+      predictions = [];
+      _searchQueryController.text = "";
     });
-
   }
 
   showLoaderDialog(BuildContext context) {

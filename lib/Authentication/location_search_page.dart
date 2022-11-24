@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:google_geocoding/google_geocoding.dart';
 import 'package:google_place/google_place.dart';
-import 'package:google_places_flutter/google_places_flutter.dart';
-import 'package:google_places_flutter/model/prediction.dart';
 import 'package:sizer/sizer.dart';
+
 import '../Helper/Constance.dart';
-import '../Helper/Storage.dart';
 import '../Navigation/Navigate.dart';
 
 class LocationSearchPage extends StatefulWidget {

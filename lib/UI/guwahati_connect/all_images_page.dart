@@ -74,7 +74,7 @@ class _AllImagePageState extends State<AllImagePage> {
                                   Text(
                                     data.guwahatiConnect[widget.id].user
                                             ?.name ??
-                                        "GPlus Author",
+                                        "G Plus Author",
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline3

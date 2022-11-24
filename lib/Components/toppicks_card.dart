@@ -6,17 +6,18 @@ import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
 
-class ToppicksCard extends StatelessWidget {
+class SuggestedForYouCard extends StatelessWidget {
   final TopPicks item;
 
-  const ToppicksCard({super.key, required this.item});
+  const SuggestedForYouCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      // margin: EdgeInsets.symmetric(horizontal: 5.s),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
-        side: BorderSide(
+        side: const BorderSide(
           width: 0.5,
           color: Colors.black,
         ),
@@ -77,23 +78,22 @@ class ToppicksCard extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        item.title ?? "",
-                        maxLines: 4,
-                        style: Theme.of(context).textTheme.headline5?.copyWith(
-                            // fontSize: 2.2.h,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis,
-                            color: Constance.primaryColor),
-                      ),
+                  Center(
+                    child: Text(
+                      item.title ?? "",
+                      maxLines: 4,
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                          // fontSize: 2.2.h,
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
+                          color: Constance.primaryColor),
                     ),
                   ),
-                  SizedBox(
-                    height: 1.5.h,
-                  ),
+                  // SizedBox(
+                  //   height: 1.5.h,
+                  // ),
                   Text(
                     item.author_name??"",
                     style: Theme.of(context)

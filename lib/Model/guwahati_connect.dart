@@ -13,12 +13,12 @@ class GuwahatiConnect {
     id = json['id'] ?? 0;
     user_id =
         json['user_id'] == null ? 0 : int.parse(json['user_id'].toString());
-    total_liked = json['total_liked'] == null
+    total_liked = json['total_liked_post'] == null
         ? 0
-        : int.parse(json['total_liked'].toString());
-    total_disliked = json['total_disliked'] == null
+        : int.parse(json['total_liked_post'].toString());
+    total_disliked = json['total_disliked_post'] == null
         ? 0
-        : int.parse(json['total_disliked'].toString());
+        : int.parse(json['total_disliked_post'].toString());
     total_comment = json['total_comment'] == null
         ? 0
         : int.parse(json['total_comment'].toString());

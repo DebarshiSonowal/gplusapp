@@ -33,7 +33,7 @@ class Constance {
   static const googleApiKey = "AIzaSyAOniov-vDxU0pIg--OvkCeEsN7iK2Eozo";
   static var listPagesViewModel = [
     PageViewModel(
-      title: "GPlus",
+      title: "G Plus",
       body:
           "Here you can write the description of the page, to explain someting...",
       image: const Center(child: Icon(Icons.android)),
@@ -45,7 +45,7 @@ class Constance {
       ),
     ),
     PageViewModel(
-      title: "GPlus",
+      title: "G Plus",
       body:
           "Here you can write the description  of the page 2, to explain someting...",
       image: const Center(child: Icon(Icons.android)),
@@ -57,7 +57,7 @@ class Constance {
       ),
     ),
     PageViewModel(
-      title: "GPlus",
+      title: "G Plus",
       body:
           "Here you can write the description  of the page 2, to explain someting...",
       image: const Center(child: Icon(Icons.android)),
@@ -297,7 +297,7 @@ class Constance {
   static var notifications = [
     MyNotification(
       'This is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout',
-      'GPlus Connect',
+      'G Plus Connect',
       '26-7-2022',
       Icons.connect_without_contact,
     ),
@@ -309,7 +309,7 @@ class Constance {
     ),
     MyNotification(
       'This is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout',
-      'GPlus Connect',
+      'G Plus Connect',
       '26-7-2022',
       Icons.connect_without_contact,
     ),
