@@ -9,8 +9,6 @@ import '../../../Helper/Storage.dart';
 import '../../../Navigation/Navigate.dart';
 import '../../../Networking/api_provider.dart';
 
-
-
 class PollOfTheWeekSection extends StatelessWidget {
   final DataProvider data;
   final Function showNotaMember, update;
@@ -128,7 +126,7 @@ class PollOfTheWeekSection extends StatelessWidget {
                           onChanged: (val) {
                             if (data.profile?.is_plan_active ?? false) {
                               poll = getOptionName(count, data);
-                              update();
+                              // update();
                               postPollOfTheWeek(data.pollOfTheWeek?.id, poll);
                             } else {
                               showNotaMember();
@@ -226,7 +224,7 @@ class PollOfTheWeekSection extends StatelessWidget {
   void postPollOfTheWeek(int? id, String poll) async {
     final response = await ApiProvider.instance.postPollOfTheWeek(id, poll);
     if (response.success ?? false) {
-      Fluttertoast.showToast(msg: "Posted successfully");
+      Fluttertoast.showToast(msg: response.message ?? "Posted successfully");
       update();
     } else {}
   }

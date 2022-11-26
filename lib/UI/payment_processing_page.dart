@@ -190,8 +190,10 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
 
   void _handlePaymentError(PaymentFailureResponse response) {
     // Do something when payment fails
-    print('error ${response.message} ${response.code} ');
-    showError(response.message ?? "Something went wrong");
+    // print('error ${response.message} ${response.code} ');
+    // showError(response.message ?? "Something went wrong");
+    showError(jsonDecode(response.message!)['error']['description'] ?? "Something went wrong");
+    print(jsonDecode(response.message!)['error']['description']);
     // Navigation.instance.goBack();
   }
 
@@ -210,6 +212,7 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
       Navigation.instance.goBack();
       Navigation.instance.goBack();
       showError(response1.message ?? "Something went wrong");
+      // print(jsonDecode(response1.message!)['error']['description']);
     }
   }
 
@@ -295,6 +298,7 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
         msg: msg,
         positiveButtonText: "Done",
         positiveButtonPressed: () {
+          Navigation.instance.goBack();
           Navigation.instance.goBack();
         });
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:gplusapp/Model/membership.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -25,24 +26,27 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Storage.instance.isDarkMode?Colors.black:Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return data.memberships.isNotEmpty
               ? SingleChildScrollView(
-                child: Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'My Account',
                         style: Theme.of(context).textTheme.headline3?.copyWith(
-                            color: Storage.instance.isDarkMode?Colors.white:Constance.secondaryColor,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Constance.secondaryColor,
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 3.h,
                       ),
-                      data.profile?.is_plan_active ?? false
+                      ((data.profile?.is_plan_active ?? false) &&
+                              data.memberships.isNotEmpty)
                           ? ListView.builder(
                               shrinkWrap: true,
                               itemCount: data.memberships.length,
@@ -105,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           height: 1.5.h,
                                         ),
                                         Text(
-                                          'expires on ${Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                                          'expires on ${getExpires(current)}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .headline6
@@ -118,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           height: 2.h,
                                         ),
                                         Text(
-                                          '${Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd").fromNow().substring(2)} left',
+                                          '${getLeft(current)} left',
                                           style: Theme.of(context)
                                               .textTheme
                                               .headline4
@@ -134,9 +138,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                           width: double.infinity,
                                           child: CustomButton(
                                             txt: 'Buy next membership term',
-                                            onTap: () {
-                                              Navigation.instance
+                                            onTap: () async{
+                                             final result= await Navigation.instance
                                                   .navigate('/beamember');
+                                             if(result==null){
+                                               fetch();
+                                             }
                                             },
                                           ),
                                         ),
@@ -146,23 +153,26 @@ class _ProfilePageState extends State<ProfilePage> {
                                 );
                               })
                           : SizedBox(
-                        height: 40.h,
-                        child: Center(
-                          child: Text(
-                            'Oops! Looks like you are not a member',
-                            style: Theme.of(context).textTheme.headline3?.copyWith(
-                                color: Constance.primaryColor,
-                                // fontWeight: FontWeight.bold,
+                              height: 40.h,
+                              child: Center(
+                                child: Text(
+                                  'Oops! Looks like you are not a member',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      ?.copyWith(
+                                        color: Constance.primaryColor,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
                       SizedBox(
                         height: 20.h,
                       ),
                     ],
                   ),
-              )
+                )
               : Container();
         }),
       ),
@@ -178,10 +188,10 @@ class _ProfilePageState extends State<ProfilePage> {
       //   icon: Icon(Icons.menu),
       // ),
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -235,4 +245,24 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     Future.delayed(Duration.zero, () => fetch());
   }
+
+  getExpires(Membership current) {
+    try {
+      return Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd").format("dd/MM/yyyy");
+    } catch (e) {
+      print(e);
+      return "";
+    }
+  }
+
+  getLeft(Membership current) {
+    try {
+      return Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd").format("dd/MM/yyyy");
+    } catch (e) {
+      print(e);
+      return "";
+    }
+  }
+
+
 }

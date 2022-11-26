@@ -92,10 +92,14 @@ class _PostAListingState extends State<PostAListing> {
                     fontWeight: FontWeight.bold),
               ),
               SizedBox(
-                height: 0.3.h,
+                height: 1.h,
               ),
               Consumer<DataProvider>(builder: (context, data, _) {
-                return DropdownButton(
+                return DropdownButtonFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  isExpanded: true,
                   dropdownColor:
                       Storage.instance.isDarkMode ? Colors.black : Colors.white,
                   // Initial Value
@@ -131,6 +135,9 @@ class _PostAListingState extends State<PostAListing> {
                   },
                 );
               }),
+              SizedBox(
+                height: 1.h,
+              ),
               Text(
                 'Add your locality',
                 style: Theme.of(context).textTheme.headline4?.copyWith(
@@ -140,10 +147,15 @@ class _PostAListingState extends State<PostAListing> {
                     fontWeight: FontWeight.bold),
               ),
               SizedBox(
-                height: 0.3.h,
+                height: 1.h,
               ),
               Consumer<DataProvider>(builder: (context, data, _) {
-                return DropdownButton(
+                return DropdownButtonFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  // underline: Container( height: 0.5.sp, color: Constance.primaryColor,),
+                  isExpanded: true,
                   dropdownColor:
                       Storage.instance.isDarkMode ? Colors.black : Colors.white,
                   // Initial Value
@@ -180,7 +192,7 @@ class _PostAListingState extends State<PostAListing> {
                 );
               }),
               SizedBox(
-                height: 2.h,
+                height: 3.h,
               ),
               TextFormField(
                 style: Theme.of(context).textTheme.headline5?.copyWith(

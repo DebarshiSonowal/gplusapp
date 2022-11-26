@@ -25,6 +25,8 @@ class AllImagePage extends StatefulWidget {
 class _AllImagePageState extends State<AllImagePage> {
   bool like = false, dislike = false;
 
+  final _searchQueryController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +40,12 @@ class _AllImagePageState extends State<AllImagePage> {
             false;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _searchQueryController.dispose();
+    super.dispose();
   }
 
   @override
@@ -217,7 +225,7 @@ class _AllImagePageState extends State<AllImagePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        '${data.guwahatiConnect[widget.id].total_liked} likes' ??
+                        '${like ? ((data.guwahatiConnect[widget.id].total_liked ?? 0) + 1) : data.guwahatiConnect[widget.id].total_liked} likes' ??
                             "",
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Storage.instance.isDarkMode
@@ -330,7 +338,9 @@ class _AllImagePageState extends State<AllImagePage> {
                           Material(
                             type: MaterialType.transparency,
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                showComments(widget.id, context);
+                              },
                               splashRadius: 20.0,
                               splashColor: Storage.instance.isDarkMode
                                   ? Colors.white
@@ -354,6 +364,303 @@ class _AllImagePageState extends State<AllImagePage> {
         );
       }),
     );
+  }
+
+  void showComments(count, context) {
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      enableDrag: false,
+      isDismissible: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, _) {
+          return Consumer<DataProvider>(builder: (context, data, __) {
+            return Card(
+              elevation: 3,
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.grey.shade200,
+              shape: RoundedRectangleBorder(
+                // side: BorderSide(color: Colors.white70, width: 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.only(top: 1.h),
+                height: 70.h,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 5.h,
+                      width: double.infinity,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigation.instance.goBack();
+                            },
+                            icon: Icon(
+                              Icons.menu,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.black
+                                  : Constance.primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5.h,
+                      width: double.infinity,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Comments",
+                            style:
+                                Theme.of(context).textTheme.headline3?.copyWith(
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.black
+                                          : Constance.primaryColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      // height: 35.h,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: ListView.builder(
+                            // physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount:
+                                data.guwahatiConnect[count].comments.length,
+                            itemBuilder: (cont, ind) {
+                              var current =
+                                  data.guwahatiConnect[count].comments[ind];
+                              return SizedBox(
+                                height: 16.h,
+                                width: 40.w,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            current.name ?? "",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline5
+                                                ?.copyWith(
+                                                  color: Storage
+                                                          .instance.isDarkMode
+                                                      ? Colors.black
+                                                      : Constance.primaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          // Icon(
+                                          //   Icons.menu,
+                                          //   color: Colors.black,
+                                          // ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          current.comment ?? "",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(
+                                                color: Colors.black,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    // Text(
+                                    //   "",
+                                    //   style: Theme.of(context)
+                                    //       .textTheme
+                                    //       .headline5
+                                    //       ?.copyWith(
+                                    //         color: Colors.black,
+                                    //         fontWeight: FontWeight.bold,
+                                    //       ),
+                                    // ),
+                                    // SizedBox(
+                                    //   height: 1.h,
+                                    // ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Material(
+                                                type: MaterialType.transparency,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    postCommentLike(
+                                                        current.id, 1);
+                                                  },
+                                                  splashRadius: 20.0,
+                                                  splashColor:
+                                                      Constance.secondaryColor,
+                                                  icon: Icon(
+                                                    Icons.thumb_up,
+                                                    color: current.is_liked
+                                                        ? Constance
+                                                            .secondaryColor
+                                                        : Constance
+                                                            .primaryColor,
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                '${current.like_count} likes' ??
+                                                    "",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6
+                                                    ?.copyWith(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                      ),
+                    ),
+                    Container(
+                      height: 8.h,
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 2.w),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Card(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 5.w, vertical: 0.5.h),
+                            child: TextField(
+                              controller: _searchQueryController,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                hintText: "Write a comment",
+                                border: InputBorder.none,
+                                hintStyle:
+                                    const TextStyle(color: Colors.black26),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    if (_searchQueryController
+                                        .text.isNotEmpty) {
+                                      // search(_searchQueryController.text);
+
+                                      if (Provider.of<DataProvider>(
+                                                  Navigation
+                                                          .instance
+                                                          .navigatorKey
+                                                          .currentContext ??
+                                                      context,
+                                                  listen: false)
+                                              .profile
+                                              ?.is_plan_active ??
+                                          false) {
+                                        // Navigation.instance.navigate('/exclusivePage');
+                                        _(() {
+                                          postComment(
+                                              data.guwahatiConnect[count].id,
+                                              'guwahati-connect',
+                                              _searchQueryController.text);
+                                        });
+                                      } else {
+                                        Constance.showMembershipPrompt(
+                                            context, () {});
+                                      }
+                                    } else {
+                                      showError('Enter something to search');
+                                    }
+                                  },
+                                  icon: const Icon(
+                                    Icons.send,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(color: Colors.black),
+                              onChanged: (query) => {},
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          });
+        });
+      },
+    );
+  }
+
+  void postComment(int? id, String s, String text) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.postComment(id, s, text);
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      // fetchGuwahatiConnect();
+      _searchQueryController.text = '';
+    } else {
+      Navigation.instance.goBack();
+    }
+  }
+
+  void postCommentLike(id, is_like) async {
+    final response = await ApiProvider.instance.postCommentLike(id, is_like);
+    if (response.success ?? false) {
+      Fluttertoast.showToast(msg: "Post Liked");
+      // fetchGuwahatiConnect();
+    } else {
+      showError("Something went wrong");
+    }
   }
 
   void postLike(id, is_like) async {

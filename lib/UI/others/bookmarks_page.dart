@@ -223,95 +223,70 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                   }
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 3.w, vertical: 2.h),
+                                  padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
                                   decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(
                                       Radius.circular(5),
                                     ),
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.black
-                                        : Colors.white,
+                                    color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
                                   ),
                                   height: 20.h,
-                                  width:
-                                      MediaQuery.of(context).size.width - 7.w,
+                                  width: MediaQuery.of(context).size.width - 7.w,
                                   child: Row(
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Expanded(
-                                              child: CachedNetworkImage(
-                                                imageUrl:
-                                                    item.image_file_name ?? '',
-                                                fit: BoxFit.fill,
-                                                placeholder: (cont, _) {
-                                                  return Image.asset(
-                                                    Constance.logoIcon,
-                                                    // color: Colors.black,
-                                                  );
-                                                },
-                                                errorWidget: (cont, _, e) {
-                                                  // print(e);
-                                                  print(_);
-                                                  return Text(_);
-                                                },
-                                              ),
+                                            CachedNetworkImage(
+                                              height: 15.h,
+                                              width: 45.w,
+                                              imageUrl: item.image_file_name ?? '',
+                                              fit: BoxFit.fill,
+                                              placeholder: (cont, _) {
+                                                return Image.asset(
+                                                  Constance.logoIcon,
+                                                );
+                                              },
+                                              errorWidget: (cont, _, e) {
+                                                return Image.network(
+                                                  Constance.defaultImage,
+                                                  fit: BoxFit.fitWidth,
+                                                );
+                                              },
                                             ),
                                             SizedBox(
                                               height: 1.h,
                                             ),
                                             Text(
-                                              // item.publish_date
-                                              //         ?.split(" ")[0] ??
-                                              //     "",
-                                              Jiffy(
-                                                      item.publish_date
-                                                              ?.split(" ")[0] ??
-                                                          "",
-                                                      "yyyy-MM-dd")
+                                              Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
                                                   .format("dd/MM/yyyy"),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Storage.instance
-                                                              .isDarkMode
-                                                          ? Colors.white
-                                                          : Colors.black),
+                                              style: Theme.of(context).textTheme.headline6?.copyWith(
+                                                  color: Storage.instance.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black),
                                             ),
                                           ],
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 5.w,
+                                        width: 4.w,
                                       ),
                                       Expanded(
-                                        flex: 2,
+                                        flex: 1,
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: Text(
                                                 item.title ?? "",
-                                                maxLines: 3,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline4
-                                                    ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        color: Storage.instance
-                                                                .isDarkMode
-                                                            ? Colors.white
-                                                            : Constance
-                                                                .primaryColor),
+                                                maxLines: 4,
+                                                style: Theme.of(context).textTheme.headline4?.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    color: Storage.instance.isDarkMode
+                                                        ? Colors.white
+                                                        : Constance.primaryColor),
                                               ),
                                             ),
                                             SizedBox(
@@ -319,14 +294,10 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                             ),
                                             Text(
                                               item.author_name ?? "G Plus News",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Storage.instance
-                                                              .isDarkMode
-                                                          ? Colors.white
-                                                          : Colors.black),
+                                              style: Theme.of(context).textTheme.headline6?.copyWith(
+                                                  color: Storage.instance.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black),
                                             ),
                                           ],
                                         ),

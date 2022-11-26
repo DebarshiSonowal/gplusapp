@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Model/search_result.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -194,134 +195,9 @@ class _SearchPageState extends State<SearchPage> {
               SizedBox(
                 height: 1.5.h,
               ),
-              Expanded(
-                child: ListView.separated(
-                    shrinkWrap: true,
-                    // physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (cont, count) {
-                      var item = data.searchlist[count];
-                      return GestureDetector(
-                        onTap: () {
-                          Navigation.instance.navigate('/story',
-                              args:
-                                  '${item.first_cat_name?.seo_name},${item.seo_name}');
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 3.w, vertical: 1.h),
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(5),
-                            ),
-                            color: Storage.instance.isDarkMode
-                                ? Colors.black
-                                : Colors.white,
-                          ),
-                          height: 20.h,
-                          width: MediaQuery.of(context).size.width - 7.w,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CachedNetworkImage(
-                                      height: 15.h,
-                                      width: 45.w,
-                                      imageUrl: item.image_file_name ?? '',
-                                      fit: BoxFit.fill,
-                                      placeholder: (cont, _) {
-                                        return Image.asset(
-                                          Constance.logoIcon,
-                                          // color: Colors.black,
-                                        );
-                                      },
-                                      errorWidget: (cont, _, e) {
-                                        return Image.network(
-                                          Constance.defaultImage,
-                                          fit: BoxFit.fitWidth,
-                                        );
-                                      },
-                                    ),
-                                    SizedBox(
-                                      height: 1.h,
-                                    ),
-                                    Text(
-                                      item.publish_date?.split(" ")[0] ?? "",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          ?.copyWith(
-                                              color: Storage.instance.isDarkMode
-                                                  ? Colors.white
-                                                  : Colors.black),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: 4.w,
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        item.title ?? "",
-                                        maxLines: 3,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: Storage
-                                                        .instance.isDarkMode
-                                                    ? Colors.white
-                                                    : Constance.primaryColor),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 1.h,
-                                    ),
-                                    Text(
-                                      item.author_name ?? "G Plus News",
-                                      style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
-                                          .textTheme
-                                          .headline5
-                                          ?.copyWith(
-                                            color: Constance.thirdColor,
-                                            // fontSize: 2.2.h,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (cont, inde) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 3.w),
-                        child: SizedBox(
-                          height: 1.h,
-                          child: Divider(
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
-                            thickness: 0.3.sp,
-                          ),
-                        ),
-                      );
-                    },
-                    itemCount: data.searchlist.length),
+              SearchResultWidget(
+                data: data,
+                selected: selected,
               ),
             ],
           );
@@ -353,15 +229,28 @@ class _SearchPageState extends State<SearchPage> {
 
   void search(query, type) async {
     Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.search(query, type);
-    if (response.success ?? false) {
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .setSearchResult(response.data!);
-      Navigation.instance.goBack();
+    if (type == 0) {
+      final response = await ApiProvider.instance.search(query, type);
+      if (response.success ?? false) {
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .setSearchResult(response.data!);
+        Navigation.instance.goBack();
+      } else {
+        Navigation.instance.goBack();
+      }
     } else {
-      Navigation.instance.goBack();
+      final response = await ApiProvider.instance.Otherssearch(query, type);
+      if (response.success ?? false) {
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .setOtherSearchlist(response.data!);
+        Navigation.instance.goBack();
+      } else {
+        Navigation.instance.goBack();
+      }
     }
   }
 
@@ -373,5 +262,289 @@ class _SearchPageState extends State<SearchPage> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+}
+
+class SearchResultWidget extends StatelessWidget {
+  final DataProvider data;
+  final int selected;
+
+  const SearchResultWidget(
+      {super.key, required this.data, required this.selected});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: selected == 0 ? News(context) : Others(context),
+    );
+  }
+
+  ListView Others(BuildContext context) {
+    return ListView.separated(
+        shrinkWrap: true,
+        // physics: const NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        itemBuilder: (cont, count) {
+          var item = data.othersearchlist[count];
+          return GestureDetector(
+            onTap: () {
+              setAction(item, context);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(5),
+                ),
+                color:
+                    Storage.instance.isDarkMode ? Colors.black : Colors.white,
+              ),
+              height: 20.h,
+              width: MediaQuery.of(context).size.width - 7.w,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CachedNetworkImage(
+                          height: 15.h,
+                          width: 45.w,
+                          imageUrl: item.image_file_name ?? '',
+                          fit: BoxFit.fill,
+                          placeholder: (cont, _) {
+                            return Image.asset(
+                              Constance.logoIcon,
+                              // color: Colors.black,
+                            );
+                          },
+                          errorWidget: (cont, _, e) {
+                            return Image.network(
+                              Constance.defaultImage,
+                              fit: BoxFit.fitWidth,
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Text(
+                          item.type ?? "",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6
+                              ?.copyWith(
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 4.w,
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            item.title ?? "",
+                            maxLines: 3,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline4
+                                ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    overflow: TextOverflow.ellipsis,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        // Text(
+                        //   item.author_name ?? "G Plus News",
+                        //   style: Theme.of(Navigation.instance
+                        //       .navigatorKey.currentContext!)
+                        //       .textTheme
+                        //       .headline5
+                        //       ?.copyWith(
+                        //     color: Constance.thirdColor,
+                        //     // fontSize: 2.2.h,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (cont, inde) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 3.w),
+            child: SizedBox(
+              height: 1.h,
+              child: Divider(
+                color:
+                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                thickness: 0.3.sp,
+              ),
+            ),
+          );
+        },
+        itemCount: data.othersearchlist.length);
+  }
+
+  ListView News(BuildContext context) {
+    return ListView.separated(
+        shrinkWrap: true,
+        // physics: const NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        itemBuilder: (cont, count) {
+          var item = data.searchlist[count];
+          return GestureDetector(
+            onTap: () {
+              Navigation.instance.navigate('/story',
+                  args: '${item.first_cat_name?.seo_name},${item.seo_name}');
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(5),
+                ),
+                color:
+                    Storage.instance.isDarkMode ? Colors.black : Colors.white,
+              ),
+              height: 20.h,
+              width: MediaQuery.of(context).size.width - 7.w,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CachedNetworkImage(
+                          height: 15.h,
+                          width: 45.w,
+                          imageUrl: item.image_file_name ?? '',
+                          fit: BoxFit.fill,
+                          placeholder: (cont, _) {
+                            return Image.asset(
+                              Constance.logoIcon,
+                              // color: Colors.black,
+                            );
+                          },
+                          errorWidget: (cont, _, e) {
+                            return Image.network(
+                              Constance.defaultImage,
+                              fit: BoxFit.fitWidth,
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Text(
+                          item.publish_date?.split(" ")[0] ?? "",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6
+                              ?.copyWith(
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 4.w,
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            item.title ?? "",
+                            maxLines: 3,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline4
+                                ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    overflow: TextOverflow.ellipsis,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Text(
+                          item.author_name ?? "G Plus News",
+                          style: Theme.of(Navigation
+                                  .instance.navigatorKey.currentContext!)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(
+                                color: Constance.thirdColor,
+                                // fontSize: 2.2.h,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (cont, inde) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 3.w),
+            child: SizedBox(
+              height: 1.h,
+              child: Divider(
+                color:
+                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                thickness: 0.3.sp,
+              ),
+            ),
+          );
+        },
+        itemCount: data.searchlist.length);
+  }
+
+  void setAction(OthersSearchResult item, context) {
+    switch (item.type) {
+      case 'guwahati-connect':
+        Navigation.instance.navigate('/allImagesPage',
+            args: Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ?? context,
+                    listen: false)
+                .guwahatiConnect
+                .indexWhere((element) => element.id == item.id));
+
+        break;
+      case 'classified':
+        Navigation.instance.navigate('/classifiedDetails', args: item.id);
+        break;
+      case 'vendor':
+        Navigation.instance.navigate('/categorySelect', args: item.id);
+        break;
+    }
   }
 }

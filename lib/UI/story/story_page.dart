@@ -38,6 +38,8 @@ class _StoryPageState extends State<StoryPage> {
 
   int skip = 10;
 
+  bool is_bookmark = false;
+
   @override
   void initState() {
     super.initState();
@@ -135,7 +137,9 @@ class _StoryPageState extends State<StoryPage> {
                                     args: data.selectedArticle?.author);
                               },
                               child: Text(
-                                '${data.selectedArticle?.author_name ?? "G Plus"}, ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                                '${data.selectedArticle?.author_name ?? "G Plus"}, ${
+                                // Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()
+                                Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd/MM/yyyy")}',
                                 style: Theme.of(Navigation
                                         .instance.navigatorKey.currentContext!)
                                     .textTheme
@@ -159,7 +163,7 @@ class _StoryPageState extends State<StoryPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      postLike(data.selectedArticle?.id, 0);
+                                      postLike(data.selectedArticle?.id, 1);
                                       setState(() {
                                         like = !like;
                                         if (dislike) {
@@ -190,7 +194,7 @@ class _StoryPageState extends State<StoryPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      postLike(data.selectedArticle?.id, 1);
+                                      postLike(data.selectedArticle?.id, 0);
                                       setState(() {
                                         dislike = !dislike;
                                         if (like) {
@@ -223,6 +227,9 @@ class _StoryPageState extends State<StoryPage> {
                                     onPressed: () {
                                       addBookmark(
                                           data.selectedArticle?.id, 'news');
+                                      setState(() {
+                                        is_bookmark = !is_bookmark;
+                                      });
                                     },
                                     splashRadius: 20.0,
                                     splashColor: Storage.instance.isDarkMode
@@ -230,9 +237,11 @@ class _StoryPageState extends State<StoryPage> {
                                         : Constance.secondaryColor,
                                     icon: Icon(
                                       Icons.bookmark,
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Constance.primaryColor,
+                                      color: is_bookmark
+                                          ? Constance.secondaryColor
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -267,6 +276,14 @@ class _StoryPageState extends State<StoryPage> {
                               height: 1.5.h,
                             ),*/
                             Html(
+                              onImageError: (Object exception, StackTrace? stackTrace) {
+                                print(exception);
+                              },
+                              onLinkTap: (str, contxt, map, elment) {
+                                // print("${str}");
+                                // print("${elment?.text}");
+                                _launchUrl(Uri.parse(str ?? ""));
+                              },
                               data: data.selectedArticle?.description?.trim() ??
                                   "",
                               shrinkWrap: true,
@@ -451,14 +468,19 @@ class _StoryPageState extends State<StoryPage> {
                                     onPressed: () {
                                       addBookmark(
                                           data.selectedArticle?.id, 'news');
+                                      setState(() {
+                                        is_bookmark = !is_bookmark;
+                                      });
                                     },
                                     splashRadius: 20.0,
                                     splashColor: Constance.secondaryColor,
                                     icon: Icon(
                                       Icons.bookmark,
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Constance.primaryColor,
+                                      color: is_bookmark
+                                          ? Constance.secondaryColor
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -755,6 +777,12 @@ class _StoryPageState extends State<StoryPage> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setArticleDetails(response.article!);
+      print(response.article?.is_liked);
+      setState(() {
+        like = is_liked(response.article?.is_liked ?? -1);
+        dislike = is_disliked(response.article?.is_liked ?? -1);
+        is_bookmark = response.article?.is_bookmark ?? false;
+      });
       Navigation.instance.goBack();
     } else {
       Navigation.instance.goBack();
@@ -772,20 +800,22 @@ class _StoryPageState extends State<StoryPage> {
               listen: false)
           .setSuggestion(response.articles ?? []);
       // _refreshController.refreshCompleted();
+
     } else {
       Navigation.instance.goBack();
       // _refreshController.refreshFailed();
     }
   }
+
   void fetchMoreContent() async {
     Navigation.instance.navigate('/loadingDialog');
     final response =
-    await ApiProvider.instance.getMoreArticle(dropdownvalue, 11, 1, skip);
+        await ApiProvider.instance.getMoreArticle(dropdownvalue, 11, 1, skip);
     if (response.success ?? false) {
       Navigation.instance.goBack();
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .addSuggestion(response.articles ?? []);
       // _refreshController.refreshCompleted();
     } else {
@@ -827,6 +857,18 @@ class _StoryPageState extends State<StoryPage> {
           Navigation.instance.goBack();
         });
   }
+
+  bool is_liked(int i) {
+    if (i == 1) {
+      return true;
+    }
+    return false;
+  }
+
+  bool is_disliked(int i) {
+    if (i == 0) {
+      return true;
+    }
+    return false;
+  }
 }
-
-

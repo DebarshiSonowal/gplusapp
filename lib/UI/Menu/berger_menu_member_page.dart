@@ -753,7 +753,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                     width: 8.w,
                                   ),
                                   Text(
-                                    'Features',
+                                    'Featured',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline6
@@ -882,6 +882,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 onTap: () {
                   if (data.profile?.is_plan_active ?? false) {
                     Navigation.instance.navigate('/profile');
+
                   } else {
                     Navigation.instance.navigate('/beamember');
                   }

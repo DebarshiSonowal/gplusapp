@@ -69,10 +69,26 @@ class DataProvider extends ChangeNotifier {
   List<CitizenJournalist> citizenlist = [];
   List<RedeemHistory> history = [];
   List<search.SearchResult> searchlist = [];
+  List<search.OthersSearchResult> othersearchlist = [];
   Classified? selectedClassified;
   List<Shop> shops = [];
   SwitchStatus? status;
   List<BookmarkItem> bookmarks = [];
+  String citizenJournalist = "", deal = "", classifiedMsg = "";
+
+  setCitizenJournalistText(String txt) {
+    citizenJournalist = txt;
+    notifyListeners();
+  }
+
+  setDealText(String txt) {
+    deal = txt;
+    notifyListeners();
+  }
+  setClassifiedText(String txt) {
+    classifiedMsg = txt;
+    notifyListeners();
+  }
 
   setCitizenJournalist(List<CitizenJournalist> list) {
     citizenlist = list;
@@ -106,6 +122,11 @@ class DataProvider extends ChangeNotifier {
 
   setSearchResult(List<search.SearchResult> list) {
     searchlist = list;
+    notifyListeners();
+  }
+
+  setOtherSearchlist(List<search.OthersSearchResult> list) {
+    othersearchlist = list;
     notifyListeners();
   }
 

@@ -49,6 +49,22 @@ class SearchResult {
   }
 }
 
+class OthersSearchResult {
+  // "id": 1,
+  // "title": "hello testing",
+  // "image_file_name": "http://gplus.shecure.co.in/storage/app/public/guwahati_connect/1/32c53d80fc927c2c111cff53944d5f3b.jpg",
+  // "type": "guwahati-connect"
+  int? id;
+  String? title, image_file_name, type;
+
+  OthersSearchResult.fromJson(json) {
+    id = json['id'] == null ? 0 : int.parse(json['id'].toString());
+    title = json['title'] ?? "";
+    type = json['type'] ?? "";
+    image_file_name = json['image_file_name'] ?? "";
+  }
+}
+
 class SearchResultResponse {
   bool? success;
   String? message;
@@ -59,10 +75,33 @@ class SearchResultResponse {
     message = json['message'] ?? "Something went wrong";
     data = json['result']['data'] == null
         ? []
-        : (json['result']['data'] as List).map((e) => SearchResult.fromJson(e)).toList();
+        : (json['result']['data'] as List)
+            .map((e) => SearchResult.fromJson(e))
+            .toList();
   }
 
   SearchResultResponse.withError(msg) {
+    success = false;
+    message = msg ?? "Something went wrong";
+  }
+}
+
+class OthersSearchResultResponse {
+  bool? success;
+  String? message;
+  List<OthersSearchResult>? data;
+
+  OthersSearchResultResponse.fromJson(json) {
+    success = json['success'] ?? false;
+    message = json['message'] ?? "Something went wrong";
+    data = json['result'] == null
+        ? []
+        : (json['result'] as List)
+            .map((e) => OthersSearchResult.fromJson(e))
+            .toList();
+  }
+
+  OthersSearchResultResponse.withError(msg) {
     success = false;
     message = msg ?? "Something went wrong";
   }

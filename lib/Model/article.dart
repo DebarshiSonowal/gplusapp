@@ -1,11 +1,10 @@
 import 'category_name.dart';
 
 class Article {
-  int? id, is_app, status, view_count, share_count, author;
+  int? id, is_app, status, view_count, share_count, author, is_liked;
 
   String? title,
       author_name,
-
       seo_name,
       publish_date,
       description,
@@ -16,7 +15,7 @@ class Article {
       as_description,
       as_short_description,
       web_url;
-
+  bool is_bookmark = false;
   CategoryName? first_cat_name;
 
   Article.fromJson(json) {
@@ -24,6 +23,8 @@ class Article {
 
     //int
     id = json['id'] == null ? 0 : int.parse(json['id'].toString());
+    is_liked =
+        json['is_liked'] == null ? -1 : int.parse(json['is_liked'].toString());
     is_app = json['is_app'] == null ? 0 : int.parse(json['is_app'].toString());
     status = json['status'] == null ? 1 : int.parse(json['status'].toString());
     author =
@@ -35,6 +36,7 @@ class Article {
         ? 1
         : int.parse(json['share_count'].toString());
 
+    is_bookmark = json['Is_bookmarked'] ?? false;
     //Others
     try {
       first_cat_name = CategoryName.fromJson(json['first_cat_name']);

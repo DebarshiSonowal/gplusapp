@@ -48,7 +48,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   // List of items in our dropdown menu
   var items = [
     'Male',
-    'Women',
+    'Female',
     'Others',
   ];
 

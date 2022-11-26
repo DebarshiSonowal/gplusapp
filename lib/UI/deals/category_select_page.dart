@@ -410,18 +410,15 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                 width: 4.w,
               ),
               Expanded(
-                child: SizedBox(
-                  height: 5.h,
-                  child: Text(
-                    current.details?.services ??
-                        'Tanning Salon . Beauty Supply Shop . Hair Salon',
-                    // overflow: TextOverflow.clip,
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
-                        ),
-                  ),
+                child: Text(
+                  current.details?.services ??
+                      'Tanning Salon . Beauty Supply Shop . Hair Salon',
+                  // overflow: TextOverflow.clip,
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                 ),
               ),
             ],

@@ -34,7 +34,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
   bool showing = false;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
   Animation<double>? _animation;
   AnimationController? _animationController;
   String txt = '''If you have a huge friends’ list, 
@@ -62,9 +62,9 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
     super.initState();
     getText();
     // secureScreen();
-    Future.delayed(Duration.zero, () {
-      fetchGuwahatiConnect();
-    });
+    // Future.delayed(Duration.zero, () {
+    //   fetchGuwahatiConnect();
+    // });
   }
 
   // @override
@@ -115,56 +115,76 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
       //         ),
       //   ),
       // ),
-      floatingActionButton: FloatingActionBubble(
-        // Menu items
-        items: <Bubble>[
-          // Floating action menu item
-          Bubble(
-            title: "My List",
-            iconColor: Constance.primaryColor,
-            bubbleColor: Colors.white,
-            icon: Icons.list,
-            titleStyle: const TextStyle(
-              fontSize: 16,
-              color: Constance.primaryColor,
+      floatingActionButton: !showing
+          ? FloatingActionBubble(
+              // Menu items
+              items: <Bubble>[
+                // Floating action menu item
+                Bubble(
+                  title: "Ask a question",
+                  iconColor: Colors.white,
+                  bubbleColor: Constance.primaryColor,
+                  icon: Icons.question_answer,
+                  titleStyle: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                  onPress: () {
+                    _animationController?.reverse();
+                    if (Provider.of<DataProvider>(
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .profile
+                            ?.is_plan_active ??
+                        false) {
+                      Navigation.instance.navigate('/askAQuestion');
+                    } else {
+                      Constance.showMembershipPrompt(context, () {});
+                    }
+                  },
+                ),
+                Bubble(
+                  title: "My List",
+                  iconColor: Colors.white,
+                  bubbleColor: Constance.primaryColor,
+                  icon: Icons.list,
+                  titleStyle: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                  onPress: () {
+                    _animationController?.reverse();
+                    Navigation.instance.navigate('/guwahatiConnectsMy');
+                  },
+                ),
+                // Floating action menu item
+              ],
+
+              // animation controller
+              animation: _animation!,
+
+              // On pressed change animation state
+              onPress: () => _animationController?.isCompleted ?? false
+                  ? _animationController?.reverse()
+                  : _animationController?.forward(),
+
+              // Floating Action button Icon color
+              iconColor: Colors.white,
+
+              // Flaoting Action button Icon
+              iconData: Icons.add,
+              backGroundColor: Constance.primaryColor,
+            )
+          : FloatingActionButton(
+              onPressed: () {},
+              backgroundColor: Constance.primaryColor,
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
             ),
-            onPress: () {
-              _animationController?.reverse();
-              Navigation.instance.navigate('/guwahatiConnectsMy');
-            },
-          ),
-          // Floating action menu item
-          Bubble(
-            title: "Ask a question",
-            iconColor: Constance.primaryColor,
-            bubbleColor: Colors.white,
-            icon: Icons.question_answer,
-            titleStyle: const TextStyle(
-              fontSize: 16,
-              color: Constance.primaryColor,
-            ),
-            onPress: () {
-              _animationController?.reverse();
-              Navigation.instance.navigate('/askAQuestion');
-            },
-          ),
-        ],
-
-        // animation controller
-        animation: _animation!,
-
-        // On pressed change animation state
-        onPress: () => _animationController?.isCompleted ?? false
-            ? _animationController?.reverse()
-            : _animationController?.forward(),
-
-        // Floating Action button Icon color
-        iconColor: Constance.primaryColor,
-
-        // Flaoting Action button Icon
-        iconData: Icons.add,
-        backGroundColor: Colors.white,
-      ),
       floatingActionButtonLocation: showing
           ? FloatingActionButtonLocation.miniStartFloat
           : FloatingActionButtonLocation.miniEndFloat,
@@ -216,10 +236,13 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Icon(
-                              FontAwesomeIcons.radio,
+                            Image.asset(
+                              Constance.connectIcon,
+                              height: 6.h,
+                              width: 14.w,
+                              fit: BoxFit.fill,
                               color: Constance.secondaryColor,
-                              size: 6.h,
+                              // size: 6.h,
                             ),
                           ],
                         ),
@@ -281,18 +304,34 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                                   data, count, like, dislike, scaffoldKey, () {
                                 fetchGuwahatiConnect();
                               }, (id, val) {
-                                postLike(id, val, () {
-                                  like = !like;
-                                });
-                              }, (id) {
-                                if (id == 0) {
-                                  setState(() {
-                                    showing = true;
+                                if (Provider.of<DataProvider>(
+                                            Navigation.instance.navigatorKey
+                                                    .currentContext ??
+                                                context,
+                                            listen: false)
+                                        .profile
+                                        ?.is_plan_active ??
+                                    false) {
+                                  // Navigation.instance.navigate('/exclusivePage');
+                                  postLike(id, val, () {
+                                    like = !like;
                                   });
                                 } else {
                                   setState(() {
-                                    showing = false;
+                                    showing = true;
                                   });
+                                  Constance.showMembershipPrompt(context, () {
+                                    setState(() {
+                                      showing = false;
+                                    });
+                                  });
+                                }
+                              }, (id) {
+                                if (id == 0) {
+                                } else {
+                                  // setState(() {
+                                  //   showing = true;
+                                  // });
                                 }
                               }, 0);
                             },

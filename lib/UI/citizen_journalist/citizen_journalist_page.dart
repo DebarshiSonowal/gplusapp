@@ -64,10 +64,13 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
               SizedBox(
                 height: 2.h,
               ),
-              Icon(
-                FontAwesomeIcons.radio,
+              Image.asset(
+                Constance.citizenIcon,
+                height: 12.h,
+                width: 28.w,
+                fit: BoxFit.fill,
                 color: Constance.secondaryColor,
-                size: 15.h,
+                // size: 15.h,
               ),
               SizedBox(
                 height: 2.h,
@@ -82,22 +85,17 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
                     ),
               ),
               SizedBox(height: 1.h),
-              Text(
-                txt ??
-                    'Worried about the security in your area, a garbage dump in your locality,'
-                        ' increasing traffic on the roads, potholes, lack of access to water, and several'
-                        ' other issues which fails to reflect in mainstream media? Do you want the authorities'
-                        ' to take notice but you\’re not being heard?'
-                        ' We want to change that. We are passing the baton to you, the citizen. Be active and'
-                        ' vigilant through G Plus ‘Citizen Journalist’ programme – an empowering platform for '
-                        'citizens to raise their voice.',
-                style: Theme.of(context).textTheme.headline4?.copyWith(
-                      color: Storage.instance.isDarkMode
-                          ? Colors.white70
-                          : Colors.black,
-                      // fontWeight: FontWeight.bold,
-                    ),
-              ),
+              Consumer<DataProvider>(builder: (context, data, _) {
+                return Text(
+                  data.citizenJournalist,
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white70
+                            : Colors.black,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                );
+              }),
               // Spacer(),
               SizedBox(
                 height: 2.h,
@@ -108,7 +106,19 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
                 child: CustomButton(
                     txt: 'Submit a Story',
                     onTap: () {
-                      Navigation.instance.navigate('/submitStory');
+                      if (Provider.of<DataProvider>(
+                                  Navigation.instance.navigatorKey
+                                          .currentContext ??
+                                      context,
+                                  listen: false)
+                              .profile
+                              ?.is_plan_active ??
+                          false) {
+                        // Navigation.instance.navigate('/exclusivePage');
+                        Navigation.instance.navigate('/submitStory');
+                      } else {
+                        Constance.showMembershipPrompt(context, () {});
+                      }
                     }),
               ),
               SizedBox(height: 2.h),
@@ -203,15 +213,25 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
   }
 
   fetchText() async {
-    Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.getCitizenText();
-    if (response.success ?? false) {
-      setState(() {
-        txt = response.desc!;
-      });
-      Navigation.instance.goBack();
-    } else {
-      Navigation.instance.goBack();
+    if (Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .citizenJournalist ==
+        "") {
+      Navigation.instance.navigate('/loadingDialog');
+      final response = await ApiProvider.instance.getCitizenText();
+      if (response.success ?? false) {
+        // setState(() {
+        //   txt = response.desc!;
+        // });
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .setCitizenJournalistText(response.desc!);
+        Navigation.instance.goBack();
+      } else {
+        Navigation.instance.goBack();
+      }
     }
   }
 }

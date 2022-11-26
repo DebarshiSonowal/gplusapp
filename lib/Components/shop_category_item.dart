@@ -36,7 +36,9 @@ class ShopCategoryItem extends StatelessWidget {
               ),
               child: Image.network(
                 e.image_file_name ?? "",
-                // color: Constance.primaryColor,
+                color: Storage.instance.isDarkMode
+                    ? Colors.white
+                    : Colors.black,
               ),
             ),
             SizedBox(

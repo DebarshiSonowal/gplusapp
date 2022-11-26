@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -33,7 +32,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   var current = 0;
   var selected = 1;
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
   String result = '';
   final controller = TextEditingController();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -44,7 +43,8 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
     super.initState();
     // secureScreen();
     Future.delayed(Duration.zero, () {
-      fetchFilters();
+      // fetchFilters();
+      fetchDealMsg();
       if (!Storage.instance.isClassified) {
         showDialogBox();
       }
@@ -59,6 +59,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   }
 
   void _onRefresh() async {
+    fetchOnlyFilters();
     // monitor network fetch
     final response = await ApiProvider.instance
         .getClassified(getCategory(selected), result, controller.text);
@@ -634,7 +635,19 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                 ),
                 SizedBox(height: 1.h),
                 Text(
-                  'Posting made easy! All you have to do is log in and click the “Post a Listing” button at the corner',
+                  Provider.of<DataProvider>(
+                                  Navigation.instance.navigatorKey
+                                          .currentContext ??
+                                      context,
+                                  listen: false)
+                              .classifiedMsg ==
+                          ""
+                      ? 'Posting made easy! All you have to do is log in and click the “Post a Listing” button at the corner'
+                      : Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .classifiedMsg,
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontWeight: FontWeight.bold,
@@ -898,6 +911,31 @@ for an unparalleled publication, that people call their''',
     fetchClassified(result);
   }
 
+  void fetchOnlyFilters() async {
+    final Map<int, bool> _map = {};
+    // await Storage.instance.filters;
+    var selected = (await Storage.instance.filters).toString().split(',');
+    for (var i in selected) {
+      try {
+        setState(() {
+          Map<int, bool> data = {
+            int.parse(i): true,
+          };
+          _map.addAll(data);
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
+    setState(() {
+      result = getComaSeparated(
+        _map.keys.toList(),
+        _map.values.toList(),
+      );
+    });
+    // fetchClassified(result);
+  }
+
   String getComaSeparated(List<dynamic> list, List<dynamic> list2) {
     String temp = "";
     for (int i = 0; i < list.length; i++) {
@@ -910,5 +948,19 @@ for an unparalleled publication, that people call their''',
       }
     }
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
+  }
+
+  void fetchDealMsg() async {
+    final response = await ApiProvider.instance.fetchMessages();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setDealText(response.deal ?? "");
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setClassifiedText(response.classified ?? "");
+    }
   }
 }

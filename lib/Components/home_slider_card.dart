@@ -80,12 +80,12 @@ class HomeSliderItem extends StatelessWidget {
                   SizedBox(
                     height: 0.5.h,
                   ),
-                  Text(
-                    "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                          color: Colors.white,
-                        ),
-                  ),
+                  // Text(
+                  //   "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
+                  //   style: Theme.of(context).textTheme.headline6?.copyWith(
+                  //         color: Colors.white,
+                  //       ),
+                  // ),
                 ],
               ),
             ),

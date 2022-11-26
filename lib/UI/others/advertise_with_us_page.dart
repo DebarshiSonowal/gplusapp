@@ -57,7 +57,7 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Please fill out all the details of the Grievance Redressal'
+                  'Please fill out all the details of the Advertise with us'
                   ' form. Any section left blank or anonymous* or fake'
                   ' submissions will not be accepted',
                   style: Theme.of(context).textTheme.headline4?.copyWith(

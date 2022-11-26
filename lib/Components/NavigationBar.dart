@@ -53,45 +53,54 @@ class _NavigationBarState extends State<CustomNavigationBar> {
             color: Constance.secondaryColor,
             overflow: TextOverflow.clip),
         // showUnselectedLabels: true,
-        unselectedLabelStyle: TextStyle(
-            fontSize: 8.sp, color: Colors.white),
+        unselectedLabelStyle: TextStyle(fontSize: 8.sp, color: Colors.white),
         backgroundColor: Constance.primaryColor,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
+            icon: Image.asset(
+              Constance.homeIcon,
+              height: 5.h,
+              width: 6.w,
               color: current == 0 ? Constance.secondaryColor : Colors.white,
             ),
             label: "Home",
             backgroundColor: Constance.primaryColor,
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.local_offer,
+            icon: Image.asset(
+              Constance.bigDealIcon,
+              height: 5.h,
+              width: 6.w,
               color: current == 1 ? Constance.secondaryColor : Colors.white,
             ),
             label: "Big Deal",
             backgroundColor: Constance.primaryColor,
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.radio,
+            icon: Image.asset(
+              Constance.connectIcon,
+              height: 5.h,
+              width: 6.w,
               color: current == 2 ? Constance.secondaryColor : Colors.white,
             ),
             label: "Guwahati Connect",
             backgroundColor: Constance.primaryColor,
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.mic,
+            icon: Image.asset(
+              Constance.citizenIcon,
+              height: 5.h,
+              width: 6.w,
               color: current == 3 ? Constance.secondaryColor : Colors.white,
             ),
             label: "Citizen Journalist",
             backgroundColor: Constance.primaryColor,
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.newspaper,
+            icon: Image.asset(
+              Constance.classifiedIcon,
+              height: 5.h,
+              width: 6.w,
               color: current == 4 ? Constance.secondaryColor : Colors.white,
             ),
             label: "Classified",

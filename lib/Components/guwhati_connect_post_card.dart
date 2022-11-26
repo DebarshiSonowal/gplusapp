@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gplusapp/Model/comment.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
@@ -428,125 +429,8 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                             itemBuilder: (cont, ind) {
                               var current =
                                   data.guwahatiConnect[count].comments[ind];
-                              return SizedBox(
-                                height: 16.h,
-                                width: 40.w,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            current.name ?? "",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5
-                                                ?.copyWith(
-                                                  color: Storage
-                                                          .instance.isDarkMode
-                                                      ? Colors.black
-                                                      : Constance.primaryColor,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                          // Icon(
-                                          //   Icons.menu,
-                                          //   color: Colors.black,
-                                          // ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 1.h,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          current.comment ?? "",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline6
-                                              ?.copyWith(
-                                                color: Colors.black,
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 1.h,
-                                    ),
-                                    // Text(
-                                    //   "",
-                                    //   style: Theme.of(context)
-                                    //       .textTheme
-                                    //       .headline5
-                                    //       ?.copyWith(
-                                    //         color: Colors.black,
-                                    //         fontWeight: FontWeight.bold,
-                                    //       ),
-                                    // ),
-                                    // SizedBox(
-                                    //   height: 1.h,
-                                    // ),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Material(
-                                                type: MaterialType.transparency,
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    postCommentLike(
-                                                        current.id, 1);
-                                                  },
-                                                  splashRadius: 20.0,
-                                                  splashColor:
-                                                      Constance.secondaryColor,
-                                                  icon: Icon(
-                                                    Icons.thumb_up,
-                                                    color: current.is_liked
-                                                        ? Constance
-                                                            .secondaryColor
-                                                        : Constance
-                                                            .primaryColor,
-                                                  ),
-                                                ),
-                                              ),
-                                              Text(
-                                                '${current.like_count} likes' ??
-                                                    "",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline6
-                                                    ?.copyWith(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-
-                                    SizedBox(
-                                      height: 1.h,
-                                    ),
-                                  ],
-                                ),
-                              );
+                              return CommentItem(
+                                  current, context, current.is_liked);
                             }),
                       ),
                     ),
@@ -574,12 +458,28 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                     if (_searchQueryController
                                         .text.isNotEmpty) {
                                       // search(_searchQueryController.text);
-                                      _(() {
-                                        postComment(
-                                            data.guwahatiConnect[count].id,
-                                            'guwahati-connect',
-                                            _searchQueryController.text);
-                                      });
+
+                                      if (Provider.of<DataProvider>(
+                                                  Navigation
+                                                          .instance
+                                                          .navigatorKey
+                                                          .currentContext ??
+                                                      context,
+                                                  listen: false)
+                                              .profile
+                                              ?.is_plan_active ??
+                                          false) {
+                                        // Navigation.instance.navigate('/exclusivePage');
+                                        _(() {
+                                          postComment(
+                                              data.guwahatiConnect[count].id,
+                                              'guwahati-connect',
+                                              _searchQueryController.text);
+                                        });
+                                      } else {
+                                        Constance.showMembershipPrompt(
+                                            context, () {});
+                                      }
                                     } else {
                                       showError('Enter something to search');
                                     }
@@ -609,6 +509,118 @@ class GuwahatiConnectPostCard extends StatelessWidget {
       },
     ).then((value) {
       showing(1);
+      fetchGuwahatiConnect();
+    });
+  }
+
+  StatefulBuilder CommentItem(
+      Comment current, BuildContext context, bool liked) {
+    bool like = liked;
+    return StatefulBuilder(builder: (context, _) {
+      return SizedBox(
+        height: 16.h,
+        width: 40.w,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            SizedBox(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    current.name ?? "",
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.black
+                              : Constance.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  // Icon(
+                  //   Icons.menu,
+                  //   color: Colors.black,
+                  // ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 1.h,
+            ),
+            Row(
+              children: [
+                Text(
+                  current.comment ?? "",
+                  style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Colors.black,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 1.h,
+            ),
+            // Text(
+            //   "",
+            //   style: Theme.of(context)
+            //       .textTheme
+            //       .headline5
+            //       ?.copyWith(
+            //         color: Colors.black,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            // ),
+            // SizedBox(
+            //   height: 1.h,
+            // ),
+            SizedBox(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Material(
+                        type: MaterialType.transparency,
+                        child: IconButton(
+                          onPressed: () {
+                            _(() {
+                              like = !like;
+                            });
+                            postCommentLike(current.id, like ? 1 : 0);
+                          },
+                          splashRadius: 20.0,
+                          splashColor: Constance.secondaryColor,
+                          icon: Icon(
+                            Icons.thumb_up,
+                            color: like
+                                ? Constance.secondaryColor
+                                : Constance.primaryColor,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '${like ? (current.like_count ?? 0 + 1) : current.like_count} likes' ??
+                            "",
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(
+              height: 1.h,
+            ),
+          ],
+        ),
+      );
     });
   }
 
@@ -616,7 +628,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
     final response = await ApiProvider.instance.postCommentLike(id, is_like);
     if (response.success ?? false) {
       Fluttertoast.showToast(msg: "Post Liked");
-      fetchGuwahatiConnect();
+      // fetchGuwahatiConnect();
     } else {
       showError("Something went wrong");
     }

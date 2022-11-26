@@ -78,7 +78,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                                   imageUrl: e.value.file_name ?? "",
                                   width: double.infinity,
                                   // height: 35.h,
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.fitHeight,
                                   // filterQuality: FilterQuality.low,
                                   placeholder: (cont, _) {
                                     return Image.asset(

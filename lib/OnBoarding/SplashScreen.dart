@@ -44,6 +44,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // secureScreen();
+    Future.delayed(Duration.zero,(){
+      fetchDealMsg();
+    });
     Future.delayed(const Duration(seconds: 1), () {
       print('LOGGEDIN');
       if (Storage.instance.isLoggedIn) {
@@ -102,6 +105,19 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       // Navigation.instance.goBack();
       Navigation.instance.navigateAndRemoveUntil('/login');
+    }
+  }
+  void fetchDealMsg() async {
+    final response = await ApiProvider.instance.fetchMessages();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setDealText(response.deal ?? "");
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setClassifiedText(response.classified ?? "");
     }
   }
 }

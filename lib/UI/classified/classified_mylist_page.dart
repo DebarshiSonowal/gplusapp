@@ -32,7 +32,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
   var current = 0;
   var selected = 3;
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
   String result = '';
   final controller = TextEditingController();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -45,7 +45,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
       if (!Storage.instance.isClassified) {
         showDialogBox();
       }
-      fetchClassified('');
+      // fetchClassified('');
     });
     // Future.delayed(
     //     Duration.zero,

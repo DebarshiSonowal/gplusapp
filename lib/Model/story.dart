@@ -7,14 +7,15 @@ class Story {
 //             "created_at": "2022-11-17T05:08:19.000000Z",
 //             "updated_at": "2022-11-17T05:08:19.000000Z"
   int? id, user_id, status;
-  String? title, image_file_name;
+  String? title, image_file_name, web_url;
 
   Story.fromJson(json) {
     id = json['id'] ?? 0;
     user_id = json['user_id'] ?? 0;
     status = json['status'] ?? 0;
-    title = json['title']??"";
-    image_file_name = json['image_file_name']??"";
+    title = json['title'] ?? "";
+    web_url = json['web_url'] ?? "https://guwahatiplus.com/";
+    image_file_name = json['image_file_name'] ?? "";
   }
 }
 
@@ -31,8 +32,8 @@ class StoryResponse {
         : (json['data'] as List).map((e) => Story.fromJson(e)).toList();
   }
 
-  StoryResponse.withError(String s){
-    success =false;
+  StoryResponse.withError(String s) {
+    success = false;
     msg = s;
   }
 }

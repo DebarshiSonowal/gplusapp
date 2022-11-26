@@ -25,7 +25,7 @@ class Membership {
     discount = json['discount'] == null
         ? 0
         : double.parse(json['discount'].toString());
-    discount_value = json['discount_value'] == null 
+    discount_value = json['discount_value'] == null
         ? 0
         : double.parse(json['discount_value'].toString());
     price_after_discount = json['price_after_discount'] == null
@@ -46,17 +46,38 @@ class Membership {
 
 class MembershipResponse {
   bool? success;
-  String? message;
+  String? message, be_a_member, benifit_members;
   List<Membership>? membership;
 
   MembershipResponse.fromJson(json) {
     success = json['success'].toString() == 'true' ? true : false;
     message = json['message'] ?? "Something Went Wrong";
+    // benifit_members = json['content']['benifit_members'] ?? "";
+    // be_a_member = json['content']['be_a_member'] ?? "";
     membership =
         (json['result'] as List).map((e) => Membership.fromJson(e)).toList();
   }
 
   MembershipResponse.withError(msg) {
+    success = false;
+    message = msg ?? "Something Went Wrong";
+  }
+}
+class MembershipResponse2 {
+  bool? success;
+  String? message, be_a_member, benifit_members;
+  List<Membership>? membership;
+
+  MembershipResponse2.fromJson(json) {
+    success = json['success'].toString() == 'true' ? true : false;
+    message = json['message'] ?? "Something Went Wrong";
+    benifit_members = json['content']['benifit_members'] ?? "";
+    be_a_member = json['content']['be_a_member'] ?? "";
+    membership =
+        (json['result'] as List).map((e) => Membership.fromJson(e)).toList();
+  }
+
+  MembershipResponse2.withError(msg) {
     success = false;
     message = msg ?? "Something Went Wrong";
   }

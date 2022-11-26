@@ -26,12 +26,12 @@ class BigDealPage extends StatefulWidget {
 }
 
 class _BigDealPageState extends State<BigDealPage> {
-  String _value = 'Time';
+  String _value = 'Time', deal = "";
   bool expandCateg = false;
   var current = 1;
 
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
 
   void _onRefresh() async {
     // monitor network fetch
@@ -69,7 +69,14 @@ class _BigDealPageState extends State<BigDealPage> {
       } else {
         debugPrint("Here");
       }
-      fetchDeals();
+      if (Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .deal ==
+          "") {
+        fetchDealMsg();
+      }
+      // fetchDeals();
     });
 
     fetchHistory();
@@ -194,13 +201,17 @@ class _BigDealPageState extends State<BigDealPage> {
                               alignment: WrapAlignment.spaceEvenly,
                               children: expandCateg
                                   ? current.category.map((e) {
-                                      return ShopCategoryItem(e: e,);
+                                      return ShopCategoryItem(
+                                        e: e,
+                                      );
                                     }).toList()
                                   : current.category
                                       .sublist(0, 8)
                                       .toList()
                                       .map((e) {
-                                      return ShopCategoryItem(e: e,);
+                                      return ShopCategoryItem(
+                                        e: e,
+                                      );
                                     }).toList(),
                             ),
                           ),
@@ -673,23 +684,35 @@ class _BigDealPageState extends State<BigDealPage> {
                 ),
                 SizedBox(height: 1.h),
                 Text(
-                  'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                  ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                  ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                  ' remaining essentially unchanged',
+                  Provider.of<DataProvider>(
+                                  Navigation.instance.navigatorKey
+                                          .currentContext ??
+                                      context,
+                                  listen: false)
+                              .deal ==
+                          ""
+                      ? 'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
+                          ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+                          ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+                          ' remaining essentially unchanged'
+                      : Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .deal,
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontWeight: FontWeight.bold,
                       ),
                 ),
                 SizedBox(height: 1.h),
-                Text(
-                  'is simply dummy text of the printing and typesetting industry',
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                ),
+                // Text(
+                //   'is simply dummy text of the printing and typesetting industry',
+                //   style: Theme.of(context).textTheme.headline5?.copyWith(
+                //         color: Colors.black,
+                //         // fontWeight: FontWeight.bold,
+                //       ),
+                // ),
                 SizedBox(height: 1.h),
                 SizedBox(
                   width: double.infinity,
@@ -797,6 +820,18 @@ class _BigDealPageState extends State<BigDealPage> {
   Future<void> secureScreen() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
+
+  void fetchDealMsg() async {
+    final response = await ApiProvider.instance.fetchMessages();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setDealText(response.deal ?? "");
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setClassifiedText(response.classified ?? "");
+    }
+  }
 }
-
-

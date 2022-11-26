@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
@@ -22,10 +23,11 @@ class BeAMember extends StatefulWidget {
 class _BeAMemberState extends State<BeAMember> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+
   // final _razorpay = Razorpay();
 
   double tempTotal = 0;
-
+  String be_a_member = "", benifits = "";
   var temp_order_id = "";
 
   @override
@@ -34,7 +36,9 @@ class _BeAMemberState extends State<BeAMember> {
     // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     super.initState();
-    fetch();
+    Future.delayed(Duration.zero,(){
+      fetch();
+    });
   }
 
   @override
@@ -111,9 +115,7 @@ class _BeAMemberState extends State<BeAMember> {
           return Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            color: Storage.instance.isDarkMode
-                ? Colors.black
-                :Colors.white,
+            color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
             padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
             child: SingleChildScrollView(
               child: Column(
@@ -124,7 +126,7 @@ class _BeAMemberState extends State<BeAMember> {
                     style: Theme.of(context).textTheme.headline4?.copyWith(
                           color: Storage.instance.isDarkMode
                               ? Colors.white
-                              :Colors.black,
+                              : Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -142,12 +144,13 @@ class _BeAMemberState extends State<BeAMember> {
                     height: 2.h,
                   ),
                   Text(
-                    'when an unknown printer took a galley of type'
-                    ' and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently',
+                    be_a_member ??
+                        'when an unknown printer took a galley of type'
+                            ' and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Storage.instance.isDarkMode
                               ? Colors.white
-                              :Colors.black,
+                              : Colors.black,
                           // fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -291,7 +294,9 @@ class _BeAMemberState extends State<BeAMember> {
                                     txt: 'Get it',
                                     onTap: () {
                                       // initiateOrder(current.id, 0);
-                                      Navigation.instance.navigate('/paymentProcessing',args: '${current.id},0');
+                                      Navigation.instance.navigate(
+                                          '/paymentProcessing',
+                                          args: '${current.id},0');
                                     },
                                   ),
                                 ),
@@ -314,64 +319,77 @@ class _BeAMemberState extends State<BeAMember> {
                     style: Theme.of(context).textTheme.headline4?.copyWith(
                           color: Storage.instance.isDarkMode
                               ? Colors.white
-                              :Colors.black,
+                              : Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
                   SizedBox(
                     height: 2.5.h,
                   ),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: Constance.benifits.length,
-                      itemBuilder: (cont, count) {
-                        var data = Constance.benifits[count];
-                        return SizedBox(
-                          height: 10.h,
-                          width: double.infinity,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 1.h,
-                                width: 1.h,
-                                margin: EdgeInsets.only(top: 1.h),
-                                decoration:  BoxDecoration(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      :Colors.black,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 1.h,
-                              ),
-                              Expanded(
-                                child: SizedBox(
-                                  height: 10.h,
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        data,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                              color: Storage.instance.isDarkMode
-                                                  ? Colors.white
-                                                  :Colors.black,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
+                  Html(
+                    shrinkWrap: true,
+                    data: benifits ?? '',
+                    style: {
+                      '#': Style(
+                        // fontSize: FontSize(_counterValue),
+
+                        // maxLines: 20,
+                        color: Storage.instance.isDarkMode?Colors.white:Colors.black,
+                        // textOverflow: TextOverflow.ellipsis,
+                      ),
+                    },
+                  ),
+                  // ListView.builder(
+                  //     shrinkWrap: true,
+                  //     physics: const NeverScrollableScrollPhysics(),
+                  //     itemCount: Constance.benifits.length,
+                  //     itemBuilder: (cont, count) {
+                  //       var data = Constance.benifits[count];
+                  //       return SizedBox(
+                  //         height: 10.h,
+                  //         width: double.infinity,
+                  //         child: Row(
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           children: [
+                  //             Container(
+                  //               height: 1.h,
+                  //               width: 1.h,
+                  //               margin: EdgeInsets.only(top: 1.h),
+                  //               decoration: BoxDecoration(
+                  //                 color: Storage.instance.isDarkMode
+                  //                     ? Colors.white
+                  //                     : Colors.black,
+                  //                 shape: BoxShape.circle,
+                  //               ),
+                  //             ),
+                  //             SizedBox(
+                  //               width: 1.h,
+                  //             ),
+                  //             Expanded(
+                  //               child: SizedBox(
+                  //                 height: 10.h,
+                  //                 child: Column(
+                  //                   children: [
+                  //                     Text(
+                  //                       data,
+                  //                       style: Theme.of(context)
+                  //                           .textTheme
+                  //                           .headline5
+                  //                           ?.copyWith(
+                  //                             color: Storage.instance.isDarkMode
+                  //                                 ? Colors.white
+                  //                                 : Colors.black,
+                  //                             // fontWeight: FontWeight.bold,
+                  //                           ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       );
+                  //     }),
                   SizedBox(
                     height: 15.h,
                   ),
@@ -387,10 +405,10 @@ class _BeAMemberState extends State<BeAMember> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -426,6 +444,10 @@ class _BeAMemberState extends State<BeAMember> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setMembership(response.membership ?? []);
+      setState(() {
+        benifits = response.benifit_members ?? "";
+        be_a_member = response.be_a_member ?? "";
+      });
       // _refreshController.refreshCompleted();
     } else {
       Provider.of<DataProvider>(

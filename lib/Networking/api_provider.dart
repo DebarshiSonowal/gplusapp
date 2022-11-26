@@ -26,8 +26,10 @@ import '../Model/deal_details.dart';
 import '../Model/e_paper.dart';
 import '../Model/generic_response.dart';
 import '../Model/guwahati_connect.dart';
+
 // import '../Model/login_response.dart';
 import '../Model/membership.dart';
+import '../Model/message_response.dart';
 import '../Model/opinion.dart';
 import '../Model/order.dart';
 import '../Model/poll_of_the_week.dart';
@@ -154,6 +156,46 @@ class ApiProvider {
       }
       debugPrint("SearchResultResponse response: ${e.response}");
       return SearchResultResponse.withError(e.message);
+    }
+  }
+
+  Future<OthersSearchResultResponse> Otherssearch(search, type) async {
+    var data = {
+      'search': search,
+      'type': type,
+    };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${baseUrl}/app/";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        queryParameters: data,
+      );
+      debugPrint("OthersSearchResultResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return OthersSearchResultResponse.fromJson(response?.data);
+      } else {
+        debugPrint("OthersSearchResultResponse  error: ${response?.data}");
+        return OthersSearchResultResponse.withError("Something went wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("OthersSearchResultResponse response: ${e.response}");
+      return OthersSearchResultResponse.withError(e.message);
     }
   }
 
@@ -361,7 +403,7 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      debugPrint("Article response: ${response?.data}");
+      debugPrint("Article response: ");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ArticleResponse.fromJson(response?.data);
       } else {
@@ -608,7 +650,7 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      debugPrint("Article Details response: ${response?.data}");
+      debugPrint("Article Details response: ");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ArticleDetailsResponse.fromJson(response?.data);
       } else {
@@ -1059,7 +1101,7 @@ class ApiProvider {
     }
   }
 
-  Future<MembershipResponse> getMembership() async {
+  Future<MembershipResponse2> getMembership() async {
     // var data = {
     //   'category': 'opinion',
     //   'per_page': per_page,
@@ -1085,10 +1127,10 @@ class ApiProvider {
       );
       debugPrint("subscriptions response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
-        return MembershipResponse.fromJson(response?.data);
+        return MembershipResponse2.fromJson(response?.data);
       } else {
         debugPrint("subscriptions error: ${response?.data}");
-        return MembershipResponse.withError("Something Went Wrong");
+        return MembershipResponse2.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1097,7 +1139,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("subscriptions response: ${e.response}");
-      return MembershipResponse.withError(e.message);
+      return MembershipResponse2.withError(e.message);
     }
   }
 
@@ -2102,6 +2144,7 @@ class ApiProvider {
       return GuwahatiConnectResponse.withError(e.message);
     }
   }
+
   Future<GuwahatiConnectResponse> getMyGuwahatiConnect() async {
     var url = "${baseUrl}/app/guwahati-connect/my-list";
     BaseOptions option =
@@ -2482,7 +2525,7 @@ class ApiProvider {
     };
     //attachment_list[0][file_data]
     //attachment_list[0][file_type]
-    // debugPrint(jsonEncode(data));
+    debugPrint(jsonEncode(data));
 
     try {
       Response? response = await dio?.post(
@@ -2591,6 +2634,49 @@ class ApiProvider {
       }
       debugPrint("BookmarkItems error: ${e.response}");
       return BookmarkItemsResponse.withError(e.message);
+    }
+  }
+
+  Future<MessageResponse> fetchMessages() async {
+    var url = "${baseUrl}/messages";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // var data = {
+    //   'bookmark_for_id': bookmark_for_id,
+    //   'type': type,
+    // };
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // data: data,
+        // queryParameters: data,
+      );
+      debugPrint("MessageResponse  response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return MessageResponse.fromJson(response?.data);
+      } else {
+        debugPrint("MessageResponse  error: ${response?.data}");
+        return MessageResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("MessageResponse  error: ${e.response}");
+      return MessageResponse.withError(e.message);
     }
   }
 
