@@ -670,11 +670,14 @@ class _BigDealPageState extends State<BigDealPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.local_offer,
+                Image.asset(
+                  Constance.bigDealIcon,
                   color: Constance.secondaryColor,
-                  size: 15.h,
+                  height: 6.h,
+                  width: 14.w,
+                  fit: BoxFit.fill,
                 ),
+                SizedBox(height: 1.h),
                 Text(
                   'Welcome\nto Big Deal!',
                   style: Theme.of(context).textTheme.headline1?.copyWith(

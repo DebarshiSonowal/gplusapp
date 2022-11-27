@@ -621,11 +621,14 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  FontAwesomeIcons.newspaper,
+                Image.asset(
+                  Constance.classifiedIcon,
                   color: Constance.secondaryColor,
-                  size: 15.h,
+                  height: 6.h,
+                  width: 14.w,
+                  fit: BoxFit.fill,
                 ),
+                SizedBox(height: 1.h),
                 Text(
                   'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
