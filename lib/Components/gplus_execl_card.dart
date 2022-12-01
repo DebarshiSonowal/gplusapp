@@ -34,7 +34,7 @@ class GPlusExecCard extends StatelessWidget {
           color:Storage.instance.isDarkMode ? Colors.black : Colors.white,
         ),
         height: 10.h,
-        width: MediaQuery.of(context).size.width - 7.w,
+        width: MediaQuery.of(context).size.width - 9.w,
         child: Row(
           children: [
             Expanded(

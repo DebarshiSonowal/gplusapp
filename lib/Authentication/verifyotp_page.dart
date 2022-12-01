@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/Constance.dart';
@@ -393,6 +394,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
           reponse.profile?.is_new == 1) {
         Navigation.instance.navigate('/terms&conditions', args: widget.number);
       } else {
+        fetchToken();
         Navigation.instance.navigateAndReplace('/main');
         // Navigation.instance.navigate('/terms&conditions', args: widget.number);
       }
@@ -458,5 +460,23 @@ class _VerifyOTPState extends State<VerifyOTP> {
       }
       print("Dekhi 5 sec por por kisu hy ni :/");
     });
+  }
+  void fetchToken() async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    sendToken(fcmToken!);
+    FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
+      // TODO: If necessary send token to application server.
+      sendToken(fcmToken);
+      // Note: This callback is fired at each app startup and whenever a new
+      // token is generated.
+    }).onError((err) {
+      // Error getting token.
+    });
+  }
+
+  void sendToken(String fcmToken) async {
+    final response = await ApiProvider.instance.updateDeviceToken(fcmToken);
+    if (response.success ?? false) {
+    } else {}
   }
 }

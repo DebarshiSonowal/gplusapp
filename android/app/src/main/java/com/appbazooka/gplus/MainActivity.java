@@ -1,4 +1,4 @@
-package com.gplus.flutter.app;
+package com.appbazooka.gplus;
 
 import io.flutter.embedding.android.FlutterActivity;
 

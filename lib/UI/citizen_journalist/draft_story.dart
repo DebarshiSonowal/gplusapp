@@ -313,7 +313,7 @@ class _DraftStoryState extends State<DraftStory> {
   }
 
   fetchDrafts() async {
-    Navigation.instance.navigate('/loadingDialog');
+    // Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getCitizenJournalistDraft();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -321,9 +321,9 @@ class _DraftStoryState extends State<DraftStory> {
               listen: false)
           .setCitizenJournalist(response.posts);
       // Fluttertoast.showToast(msg: "G successfully");
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
     } else {
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
     }
   }
 }

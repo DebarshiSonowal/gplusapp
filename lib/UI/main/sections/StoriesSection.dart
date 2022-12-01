@@ -138,8 +138,16 @@ class _StoriesSectionState extends State<StoriesSection> {
                 children: [
                   for (int i = 0; i < widget.data.stories.length; i++)
                     Container(
-                      width: 2.w,
-                      height: 2.h,
+                      width: (i <= (widget.data.stories.length / 2.toInt()))
+                          ? 2.w
+                          : (i >= (widget.data.stories.length - 2))
+                              ? 1.25.w
+                              : 1.65.w,
+                      height: (i <= (widget.data.stories.length / 2.toInt()))
+                          ? 2.h
+                          : (i >= (widget.data.stories.length - 2))
+                              ? 1.25.w
+                              : 1.65.w,
                       margin: const EdgeInsets.symmetric(
                           vertical: 8.0, horizontal: 4.0),
                       decoration: BoxDecoration(
@@ -155,5 +163,4 @@ class _StoriesSectionState extends State<StoriesSection> {
       ],
     );
   }
-
 }

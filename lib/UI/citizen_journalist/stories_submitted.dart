@@ -206,7 +206,7 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
   }
 
   fetchDrafts() async {
-    Navigation.instance.navigate('/loadingDialog');
+    // Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getCitizenJournalistApproved();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -214,9 +214,9 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
               listen: false)
           .setCitizenJournalist(response.posts);
       // Fluttertoast.showToast(msg: "G successfully");
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
     } else {
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
     }
   }
 

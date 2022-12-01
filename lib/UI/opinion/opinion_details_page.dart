@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,9 +31,11 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   int random = 0;
   var categories = ['international', 'assam', 'guwahati', 'india'];
   var dropdownvalue = 'international';
+
   // WebViewController? _controller;
   bool like = false, dislike = false;
-  int page=1;
+  int page = 1;
+
   @override
   void initState() {
     super.initState();
@@ -54,11 +57,13 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return SingleChildScrollView(
             child: data.opinion == null
-                ? Container()
+                ? Lottie.asset(
+                    Constance.searchingIcon,
+                  )
                 : Column(
                     children: [
                       Container(
-                        height: 25.h,
+                        height: 40.h,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           // borderRadius: BorderRadius.all(
@@ -247,7 +252,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   // maxLines: 20,
                                   color: Storage.instance.isDarkMode
                                       ? Colors.white
-                                      :Colors.black,
+                                      : Colors.black,
                                   // textOverflow: TextOverflow.ellipsis,
                                 ),
                               },
@@ -255,59 +260,65 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             SizedBox(
                               height: 1.5.h,
                             ),
-                            data.ads.isNotEmpty?Row(
-                              children: [
-                                Container(
-                                  color: Constance.secondaryColor,
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 0.2.h, horizontal: 1.w),
-                                  margin: EdgeInsets.symmetric(horizontal: 2.w),
-                                  child: Text(
-                                    'Ad',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline3
-                                        ?.copyWith(
-                                          fontSize: 12.sp,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
+                            data.ads.isNotEmpty
+                                ? Row(
+                                    children: [
+                                      Container(
+                                        color: Constance.secondaryColor,
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 0.2.h, horizontal: 1.w),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 2.w),
+                                        child: Text(
+                                          'Ad',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline3
+                                              ?.copyWith(
+                                                fontSize: 12.sp,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
-                                  ),
-                                ),
-                              ],
-                            ):Container(),
-                            data.ads.isNotEmpty?SizedBox(
-                              // height: 10.h,
-                              width: double.infinity,
-                              child: GestureDetector(
-                                onTap: () {
-                                  _launchUrl(Uri.parse(
-                                      data.ads[random].link.toString()));
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 2.w,
-                                  ),
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit.fill,
-                                    imageUrl:
-                                        data.ads[random].image_file_name ?? '',
-                                    placeholder: (cont, _) {
-                                      return Image.asset(
-                                        Constance.logoIcon,
-                                        // color: Colors.black,
-                                      );
-                                    },
-                                    errorWidget: (cont, _, e) {
-                                      return Image.network(
-                                        Constance.defaultImage,
-                                        fit: BoxFit.fitWidth,
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ):Container(),
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
+                            data.ads.isNotEmpty
+                                ? SizedBox(
+                                    // height: 10.h,
+                                    width: double.infinity,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _launchUrl(Uri.parse(
+                                            data.ads[random].link.toString()));
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 2.w,
+                                        ),
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.fill,
+                                          imageUrl: data.ads[random]
+                                                  .image_file_name ??
+                                              '',
+                                          placeholder: (cont, _) {
+                                            return Image.asset(
+                                              Constance.logoIcon,
+                                              // color: Colors.black,
+                                            );
+                                          },
+                                          errorWidget: (cont, _, e) {
+                                            return Image.network(
+                                              Constance.defaultImage,
+                                              fit: BoxFit.fitWidth,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
                             SizedBox(
                               height: 1.5.h,
                             ),
@@ -342,7 +353,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             Divider(
                               color: Storage.instance.isDarkMode
                                   ? Colors.white
-                                  :Colors.black,
+                                  : Colors.black,
                               thickness: 0.07.h,
                             ),
                             SizedBox(
@@ -366,15 +377,15 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     splashColor: !like
                                         ? Constance.secondaryColor
                                         : Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        :Constance.primaryColor,
+                                            ? Colors.white
+                                            : Constance.primaryColor,
                                     icon: Icon(
                                       Icons.thumb_up,
                                       color: like
                                           ? Constance.secondaryColor
                                           : Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          :Constance.primaryColor,
+                                              ? Colors.white
+                                              : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -397,15 +408,15 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     splashColor: !dislike
                                         ? Constance.secondaryColor
                                         : Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        :Constance.primaryColor,
+                                            ? Colors.white
+                                            : Constance.primaryColor,
                                     icon: Icon(
                                       Icons.thumb_down,
                                       color: dislike
                                           ? Constance.secondaryColor
                                           : Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          :Constance.primaryColor,
+                                              ? Colors.white
+                                              : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -418,11 +429,11 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     onPressed: () {},
                                     splashRadius: 20.0,
                                     splashColor: Constance.secondaryColor,
-                                    icon:  Icon(
+                                    icon: Icon(
                                       Icons.share,
                                       color: Storage.instance.isDarkMode
                                           ? Colors.white
-                                          :Constance.primaryColor,
+                                          : Constance.primaryColor,
                                     ),
                                   ),
                                 ),
@@ -446,89 +457,92 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   ?.copyWith(
                                       color: Storage.instance.isDarkMode
                                           ? Colors.white
-                                          :Constance.primaryColor,
+                                          : Constance.primaryColor,
                                       fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
                               height: 2.h,
                             ),
-                            Row(
-                              children: [
-                                Text(
-                                  'Sort by categories',
-                                  style: Theme.of(Navigation.instance
-                                          .navigatorKey.currentContext!)
-                                      .textTheme
-                                      .headline5
-                                      ?.copyWith(
-                                        color: Storage.instance.isDarkMode
-                                            ? Colors.white
-                                            :Colors.black,
-                                        // fontSize: 2.2.h,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                SizedBox(
-                                  width: 4.w,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          :Colors
-                                          .black26, //                   <--- border color
-                                      // width: 5.0,
-                                    ),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(
-                                            5.0) //                 <--- border radius here
-                                        ),
-                                  ),
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 1.5.w),
-                                  child: DropdownButton(
-                                    isExpanded: false,
-                                    dropdownColor: !Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        :Colors.black,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline5
-                                        ?.copyWith(
-                                          color: Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              :Constance.primaryColor,
-                                        ),
-                                    underline: SizedBox.shrink(),
-                                    // Initial Value
-                                    value: dropdownvalue,
-
-                                    // Down Arrow Icon
-                                    icon: Icon(Icons.keyboard_arrow_down,color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        :Colors.black,),
-
-                                    // Array list of items
-                                    items: categories.map((String items) {
-                                      return DropdownMenuItem(
-                                        value: items,
-                                        child: Text(items),
-                                      );
-                                    }).toList(),
-                                    // After selecting the desired option,it will
-                                    // change button value to selected value
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        dropdownvalue = newValue!;
-                                        page=1;
-                                      });
-                                      fetchContent();
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // Row(
+                            //   children: [
+                            //     Text(
+                            //       'Sort by categories',
+                            //       style: Theme.of(Navigation.instance
+                            //               .navigatorKey.currentContext!)
+                            //           .textTheme
+                            //           .headline5
+                            //           ?.copyWith(
+                            //             color: Storage.instance.isDarkMode
+                            //                 ? Colors.white
+                            //                 : Colors.black,
+                            //             // fontSize: 2.2.h,
+                            //             // fontWeight: FontWeight.bold,
+                            //           ),
+                            //     ),
+                            //     SizedBox(
+                            //       width: 4.w,
+                            //     ),
+                            //     Container(
+                            //       decoration: BoxDecoration(
+                            //         border: Border.all(
+                            //           color: Storage.instance.isDarkMode
+                            //               ? Colors.white
+                            //               : Colors
+                            //                   .black26, //                   <--- border color
+                            //           // width: 5.0,
+                            //         ),
+                            //         borderRadius: const BorderRadius.all(
+                            //             Radius.circular(
+                            //                 5.0) //                 <--- border radius here
+                            //             ),
+                            //       ),
+                            //       padding:
+                            //           EdgeInsets.symmetric(horizontal: 1.5.w),
+                            //       child: DropdownButton(
+                            //         isExpanded: false,
+                            //         dropdownColor: !Storage.instance.isDarkMode
+                            //             ? Colors.white
+                            //             : Colors.black,
+                            //         style: Theme.of(context)
+                            //             .textTheme
+                            //             .headline5
+                            //             ?.copyWith(
+                            //               color: Storage.instance.isDarkMode
+                            //                   ? Colors.white
+                            //                   : Constance.primaryColor,
+                            //             ),
+                            //         underline: SizedBox.shrink(),
+                            //         // Initial Value
+                            //         value: dropdownvalue,
+                            //
+                            //         // Down Arrow Icon
+                            //         icon: Icon(
+                            //           Icons.keyboard_arrow_down,
+                            //           color: Storage.instance.isDarkMode
+                            //               ? Colors.white
+                            //               : Colors.black,
+                            //         ),
+                            //
+                            //         // Array list of items
+                            //         items: categories.map((String items) {
+                            //           return DropdownMenuItem(
+                            //             value: items,
+                            //             child: Text(items),
+                            //           );
+                            //         }).toList(),
+                            //         // After selecting the desired option,it will
+                            //         // change button value to selected value
+                            //         onChanged: (String? newValue) {
+                            //           setState(() {
+                            //             dropdownvalue = newValue!;
+                            //             page = 1;
+                            //           });
+                            //           fetchContent();
+                            //         },
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                             ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
@@ -548,13 +562,13 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 3.w, vertical: 1.h),
-                                        decoration:  BoxDecoration(
+                                        decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(5),
                                           ),
                                           color: Storage.instance.isDarkMode
                                               ? Colors.black
-                                              :Colors.white,
+                                              : Colors.white,
                                         ),
                                         height: 20.h,
                                         width:
@@ -580,11 +594,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                                         // color: Colors.black,
                                                       );
                                                     },
-                                                    errorWidget:
-                                                        (cont, _, e) {
+                                                    errorWidget: (cont, _, e) {
                                                       return Image.network(
-                                                        Constance
-                                                            .defaultImage,
+                                                        Constance.defaultImage,
                                                         fit: BoxFit.fitWidth,
                                                       );
                                                     },
@@ -605,10 +617,11 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                                         .textTheme
                                                         .headline6
                                                         ?.copyWith(
-                                                            color:
-                                                            Storage.instance.isDarkMode
+                                                            color: Storage
+                                                                    .instance
+                                                                    .isDarkMode
                                                                 ? Colors.white
-                                                                :Colors.black),
+                                                                : Colors.black),
                                                   ),
                                                 ],
                                               ),
@@ -636,10 +649,12 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
-                                                              color: Storage.instance.isDarkMode
+                                                              color: Storage
+                                                                      .instance
+                                                                      .isDarkMode
                                                                   ? Colors.white
-                                                                  :Constance
-                                                                  .primaryColor),
+                                                                  : Constance
+                                                                      .primaryColor),
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -652,8 +667,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                                         .textTheme
                                                         .headline6
                                                         ?.copyWith(
-                                                            color:
-                                                            Storage.instance.isDarkMode
+                                                            color: Storage
+                                                                    .instance
+                                                                    .isDarkMode
                                                                 ? Colors.white
                                                                 : Colors.black),
                                                   ),
@@ -675,7 +691,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     return SizedBox(
                                       height: 1.h,
                                       child: Divider(
-                                        color:Storage.instance.isDarkMode
+                                        color: Storage.instance.isDarkMode
                                             ? Colors.white
                                             : Colors.black,
                                         thickness: 0.3.sp,
@@ -694,7 +710,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     txt: 'Load More',
                                     onTap: () {
                                       page++;
-                                      fetchContent();
+                                      fetchMoreContent();
                                     }),
                               ],
                             ),
@@ -791,6 +807,18 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
           .setOpinions(response.opinion ?? []);
+      // _refreshController.refreshCompleted();
+    } else {
+      // _refreshController.refreshFailed();
+    }
+  }
+  void fetchMoreContent() async {
+    final response = await ApiProvider.instance.getOpinion(5, page);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
+          .setMoreOpinions(response.opinion ?? []);
       // _refreshController.refreshCompleted();
     } else {
       // _refreshController.refreshFailed();

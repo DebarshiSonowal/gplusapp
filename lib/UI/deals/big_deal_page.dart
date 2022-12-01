@@ -5,6 +5,7 @@ import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
@@ -487,11 +488,8 @@ class _BigDealPageState extends State<BigDealPage> {
                         ],
                       ),
                     )
-                  : Center(
-                      child: SizedBox(
-                          height: 2.h,
-                          width: 2.h,
-                          child: const CircularProgressIndicator()),
+                  : Lottie.asset(
+                      Constance.searchingIcon,
                     );
             }),
           ),
@@ -728,7 +726,7 @@ class _BigDealPageState extends State<BigDealPage> {
               ],
             ),
           ),
-          actions: [
+          actions: const [
             // FlatButton(
             //   textColor: Colors.black,
             //   onPressed: () {},

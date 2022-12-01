@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
@@ -411,6 +412,12 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
         .advertiseWithUs(text, text2, text3, text4, selected, text5);
     if (response.success ?? false) {
       Navigation.instance.goBack();
+      Fluttertoast.showToast(msg: response.message??"Successfully posted");
+      _first_name.clear();
+      _last_name.clear();
+      _feedback.clear();
+      _email.clear();
+      _mobile.clear();
     } else {
       Navigation.instance.goBack();
       showError(response.message ?? "Something went wrong");

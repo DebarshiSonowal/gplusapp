@@ -34,7 +34,7 @@ class VideoCard extends StatelessWidget {
           color: Constance.secondaryColor,
         ),
         // height: 10.h,
-        width: MediaQuery.of(context).size.width - 8.w,
+        width: MediaQuery.of(context).size.width - 9.w,
         child: Row(
           children: [
             Column(

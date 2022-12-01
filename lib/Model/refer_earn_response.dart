@@ -16,7 +16,7 @@ class ReferEarnResponse {
 }
 
 class ReferEarn {
-  int? subscriber_added_point, coin_balance;
+  int? subscriber_added_point, coin_balance,buying_points;
   String? referral_link;
   List<ReferEarnPlan> plans = [];
 
@@ -41,7 +41,7 @@ class ReferEarn {
 }
 
 class ReferEarnPlan {
-  int? id, referral_points, free_coupons, status, display_order;
+  int? id, referral_points, free_coupons, status, display_order,buying_points;
   double? base_price, discount_value, discount, price_after_discount;
   String? name, duration, plan_type, bg_color;
 
@@ -50,6 +50,9 @@ class ReferEarnPlan {
     referral_points = json['referral_points'] == null
         ? 0
         : int.parse(json['referral_points'].toString());
+    buying_points = json['buying_points'] == null
+        ? 0
+        : int.parse(json['buying_points'].toString());
     free_coupons = json['free_coupons'] == null
         ? 0
         : int.parse(json['free_coupons'].toString());

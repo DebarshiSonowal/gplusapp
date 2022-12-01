@@ -72,15 +72,16 @@ class _LoginPageState extends State<LoginPage> {
                   padding:
                       EdgeInsets.symmetric(vertical: 0.1.h, horizontal: 1.w),
                   decoration: const BoxDecoration(
-                    color: Colors.white,
+                    // color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(3)),
                   ),
                   child: TextFormField(
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                           color: Colors.black,
-                          fontSize: 12.sp,
+                          fontSize: 14.sp,
                         ),
                     controller: _mobile,
+                    textAlignVertical: TextAlignVertical.center,
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                       filled: true,
@@ -90,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                       labelStyle:
                           Theme.of(context).textTheme.headline6?.copyWith(
                                 color: Colors.grey.shade700,
-                                fontSize: 10.sp,
+                                fontSize: 12.sp,
                               ),
                       border: const OutlineInputBorder(),
                       focusedBorder: InputBorder.none,

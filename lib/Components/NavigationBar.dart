@@ -48,12 +48,15 @@ class _NavigationBarState extends State<CustomNavigationBar> {
           }
         },
         showSelectedLabels: true,
+        showUnselectedLabels: true,
         selectedLabelStyle: TextStyle(
-            fontSize: 8.sp,
-            color: Constance.secondaryColor,
-            overflow: TextOverflow.clip),
+          fontSize: 8.sp,
+          color: Constance.secondaryColor,
+          overflow: TextOverflow.clip,
+        ),
         // showUnselectedLabels: true,
-        unselectedLabelStyle: TextStyle(fontSize: 8.sp, color: Colors.white),
+        unselectedLabelStyle: TextStyle(
+            fontSize: 8.sp, color: Colors.white, overflow: TextOverflow.clip),
         backgroundColor: Constance.primaryColor,
         items: [
           BottomNavigationBarItem(
@@ -83,7 +86,7 @@ class _NavigationBarState extends State<CustomNavigationBar> {
               width: 6.w,
               color: current == 2 ? Constance.secondaryColor : Colors.white,
             ),
-            label: "Guwahati Connect",
+            label: " Guwahati\n  Connect",
             backgroundColor: Constance.primaryColor,
           ),
           BottomNavigationBarItem(
@@ -93,7 +96,7 @@ class _NavigationBarState extends State<CustomNavigationBar> {
               width: 6.w,
               color: current == 3 ? Constance.secondaryColor : Colors.white,
             ),
-            label: "Citizen Journalist",
+            label: "   Citizen\nJournalist",
             backgroundColor: Constance.primaryColor,
           ),
           BottomNavigationBarItem(

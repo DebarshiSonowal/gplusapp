@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../Helper/Constance.dart';
@@ -48,7 +49,13 @@ class PollOfTheWeekSection extends StatelessWidget {
                       ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // Share.share(data
+                    //     .selectedArticle?.web_url ==
+                    //     ""
+                    //     ? 'check out our website https://guwahatiplus.com/'
+                    //     : '${data.selectedArticle?.web_url}');
+                  },
                   icon: Icon(
                     Icons.share,
                     color: Storage.instance.isDarkMode

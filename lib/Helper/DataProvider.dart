@@ -206,6 +206,7 @@ class DataProvider extends ChangeNotifier {
   }
 
   setMyGeoTopicks(List<GeoTopick> list) {
+    print("GEO got it ${list.length}");
     mygeoTopicks = list;
     notifyListeners();
   }

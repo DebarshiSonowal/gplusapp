@@ -59,7 +59,7 @@ class VideoReportSection extends StatelessWidget {
                 },
                 separatorBuilder: (cont, inde) {
                   return SizedBox(
-                    width: 10.w,
+                    width: 2.w,
                   );
                 },
                 itemCount:

@@ -5,6 +5,7 @@ import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
@@ -23,7 +24,7 @@ class OpinionPage extends StatefulWidget {
 class _OpinionPageState extends State<OpinionPage> {
   int page_no = 1;
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
 
   void _onRefresh() async {
     // monitor network fetch
@@ -412,11 +413,8 @@ class _OpinionPageState extends State<OpinionPage> {
                       ],
                     ),
                   )
-                : Center(
-                    child: SizedBox(
-                        height: 2.h,
-                        width: 2.h,
-                        child: const CircularProgressIndicator()),
+                : Lottie.asset(
+                    Constance.searchingIcon,
                   ),
           );
         }),
@@ -462,7 +460,7 @@ class _OpinionPageState extends State<OpinionPage> {
   @override
   void initState() {
     super.initState();
-    fetchOpinions();
+    // fetchOpinions();
   }
 
   void fetchOpinions() async {
@@ -477,12 +475,13 @@ class _OpinionPageState extends State<OpinionPage> {
       // _refreshController.refreshFailed();
     }
   }
+
   void fetchMoreOpinions() async {
     final response = await ApiProvider.instance.getOpinion(11, page_no);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext!,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
           .setMoreOpinions(response.opinion ?? []);
       // _refreshController.refreshCompleted();
     } else {

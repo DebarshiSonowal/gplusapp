@@ -19,7 +19,7 @@ import 'alert.dart';
 class GuwahatiConnectPostCard extends StatelessWidget {
   GuwahatiConnect data;
   int count, type;
-  bool like, dislike;
+  bool like, dislike, is_mine;
   final GlobalKey<ScaffoldState> scaffoldKey;
   final _searchQueryController = TextEditingController();
   final void Function() fetchGuwahatiConnect;
@@ -27,15 +27,17 @@ class GuwahatiConnectPostCard extends StatelessWidget {
   final Function(int) showing;
 
   GuwahatiConnectPostCard(
-      this.data,
-      this.count,
-      this.like,
-      this.dislike,
-      this.scaffoldKey,
-      this.fetchGuwahatiConnect,
-      this.postLike,
-      this.showing,
-      this.type);
+    this.data,
+    this.count,
+    this.like,
+    this.dislike,
+    this.scaffoldKey,
+    this.fetchGuwahatiConnect,
+    this.postLike,
+    this.showing,
+    this.type,
+    this.is_mine,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -342,6 +344,18 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                       ],
                     ),
                   ),
+                  is_mine
+                      ? Text(
+                          statusText(data.status!),
+                          style:
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white70
+                                        : Colors.black45,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                        )
+                      : Container(),
                 ],
               ),
             ),
@@ -358,20 +372,27 @@ class GuwahatiConnectPostCard extends StatelessWidget {
       enableDrag: false,
       isDismissible: true,
       isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, _) {
-          return Consumer<DataProvider>(builder: (context, data, __) {
-            return Card(
-              elevation: 3,
-              color: Storage.instance.isDarkMode
-                  ? Colors.white
-                  : Colors.grey.shade200,
-              shape: RoundedRectangleBorder(
-                // side: BorderSide(color: Colors.white70, width: 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Container(
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: StatefulBuilder(builder: (context, _) {
+            return Consumer<DataProvider>(builder: (context, data, __) {
+              return Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(25.0),
+                    // bottomRight: Radius.circular(40.0),
+                    topLeft: Radius.circular(25.0),
+                    // bottomLeft: Radius.circular(40.0),
+                  ),
+                ),
                 width: double.infinity,
                 padding: EdgeInsets.only(top: 1.h),
                 height: 70.h,
@@ -502,10 +523,10 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            );
-          });
-        });
+              );
+            });
+          }),
+        );
       },
     ).then((value) {
       showing(1);
@@ -1126,6 +1147,15 @@ class GuwahatiConnectPostCard extends StatelessWidget {
       fetchGuwahatiConnect();
     } else {
       Navigation.instance.goBack();
+    }
+  }
+
+  String statusText(int status) {
+    switch (status) {
+      case 2:
+        return 'Active';
+      default:
+        return 'Deactivate';
     }
   }
 }

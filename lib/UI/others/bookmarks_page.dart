@@ -5,6 +5,7 @@ import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
@@ -22,7 +23,7 @@ class BookmarksPage extends StatefulWidget {
 
 class _BookmarksPageState extends State<BookmarksPage> {
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
 
   void _onRefresh() async {
     // monitor network fetch
@@ -98,24 +99,76 @@ class _BookmarksPageState extends State<BookmarksPage> {
         onLoading: _onLoading,
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
-            padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-            child: data.bookmarks.isNotEmpty
-                ? SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.bookmark,
-                              color: Constance.secondaryColor,
-                              size: 4.h,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
+              padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+              child: data.bookmarks.isNotEmpty
+                  ? SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.bookmark,
+                                color: Constance.secondaryColor,
+                                size: 4.h,
+                              ),
+                              Text(
+                                'Bookmarks',
+                                style: Theme.of(Navigation
+                                        .instance.navigatorKey.currentContext!)
+                                    .textTheme
+                                    .headline3
+                                    ?.copyWith(
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                      // fontSize: 2.2.h,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                          Container(
+                            height: 30.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: CachedNetworkImageProvider(
+                                  data.bookmarks[0].image_file_name ??
+                                      'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+                                ),
+                              ),
                             ),
-                            Text(
-                              'Bookmarks',
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              if (data.profile?.is_plan_active ?? false) {
+                                Navigation.instance.navigate('/story',
+                                    args:
+                                        '${data.bookmarks[0].cat_seo_name},${data.bookmarks[0].seo_name}');
+                              } else {
+                                Constance.showMembershipPrompt(context, () {});
+                              }
+                            },
+                            child: Text(
+                              data.bookmarks[0].title ??
+                                  'It is a long established fact that a reader will be distracted by the readable content of a',
                               style: Theme.of(Navigation
                                       .instance.navigatorKey.currentContext!)
                                   .textTheme
@@ -128,218 +181,191 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                     fontWeight: FontWeight.bold,
                                   ),
                             ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        Container(
-                          height: 30.h,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: CachedNetworkImageProvider(
-                                data.bookmarks[0].image_file_name ??
-                                    'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-                              ),
-                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            if (data.profile?.is_plan_active ?? false) {
-                              Navigation.instance.navigate('/story',
-                                  args:
-                                      '${data.bookmarks[0].cat_seo_name},${data.bookmarks[0].seo_name}');
-                            } else {
-                              Constance.showMembershipPrompt(context, () {});
-                            }
-                          },
-                          child: Text(
-                            data.bookmarks[0].title ??
-                                'It is a long established fact that a reader will be distracted by the readable content of a',
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Text(
+                            '${data.bookmarks[0].author_name}, ${Jiffy(data.bookmarks[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
                             style: Theme.of(Navigation
                                     .instance.navigatorKey.currentContext!)
                                 .textTheme
-                                .headline3
+                                .headline5
                                 ?.copyWith(
                                   color: Storage.instance.isDarkMode
                                       ? Colors.white
-                                      : Constance.primaryColor,
+                                      : Colors.black,
                                   // fontSize: 2.2.h,
-                                  fontWeight: FontWeight.bold,
+                                  // fontWeight: FontWeight.bold,
                                 ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          '${data.bookmarks[0].author_name}, ${Jiffy(data.bookmarks[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
-                          style: Theme.of(Navigation
-                                  .instance.navigatorKey.currentContext!)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
-                                // fontSize: 2.2.h,
-                                // fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        Divider(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
-                          thickness: 0.5.sp,
-                        ),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (cont, count) {
-                            var item = data.bookmarks[count];
-                            if (count != 0) {
-                              return GestureDetector(
-                                onTap: () {
-                                  if (data.profile?.is_plan_active ?? false) {
-                                    Navigation.instance.navigate('/story',
-                                        args:
-                                            '${item.cat_seo_name},${item.seo_name}');
-                                  } else {
-                                    Constance.showMembershipPrompt(
-                                        context, () {});
-                                  }
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(5),
+                          Divider(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                            thickness: 0.5.sp,
+                          ),
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (cont, count) {
+                              var item = data.bookmarks[count];
+                              if (count != 0) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    if (data.profile?.is_plan_active ?? false) {
+                                      Navigation.instance.navigate('/story',
+                                          args:
+                                              '${item.cat_seo_name},${item.seo_name}');
+                                    } else {
+                                      Constance.showMembershipPrompt(
+                                          context, () {});
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 3.w, vertical: 1.h),
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(5),
+                                      ),
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.black
+                                          : Colors.white,
                                     ),
-                                    color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
-                                  ),
-                                  height: 20.h,
-                                  width: MediaQuery.of(context).size.width - 7.w,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            CachedNetworkImage(
-                                              height: 15.h,
-                                              width: 45.w,
-                                              imageUrl: item.image_file_name ?? '',
-                                              fit: BoxFit.fill,
-                                              placeholder: (cont, _) {
-                                                return Image.asset(
-                                                  Constance.logoIcon,
-                                                );
-                                              },
-                                              errorWidget: (cont, _, e) {
-                                                return Image.network(
-                                                  Constance.defaultImage,
-                                                  fit: BoxFit.fitWidth,
-                                                );
-                                              },
-                                            ),
-                                            SizedBox(
-                                              height: 1.h,
-                                            ),
-                                            Text(
-                                              Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                                                  .format("dd/MM/yyyy"),
-                                              style: Theme.of(context).textTheme.headline6?.copyWith(
-                                                  color: Storage.instance.isDarkMode
-                                                      ? Colors.white
-                                                      : Colors.black),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 4.w,
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                item.title ?? "",
-                                                maxLines: 4,
-                                                style: Theme.of(context).textTheme.headline4?.copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: Storage.instance.isDarkMode
-                                                        ? Colors.white
-                                                        : Constance.primaryColor),
+                                    height: 20.h,
+                                    width:
+                                        MediaQuery.of(context).size.width - 7.w,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              CachedNetworkImage(
+                                                height: 15.h,
+                                                width: 45.w,
+                                                imageUrl:
+                                                    item.image_file_name ?? '',
+                                                fit: BoxFit.fill,
+                                                placeholder: (cont, _) {
+                                                  return Image.asset(
+                                                    Constance.logoIcon,
+                                                  );
+                                                },
+                                                errorWidget: (cont, _, e) {
+                                                  return Image.network(
+                                                    Constance.defaultImage,
+                                                    fit: BoxFit.fitWidth,
+                                                  );
+                                                },
                                               ),
-                                            ),
-                                            SizedBox(
-                                              height: 1.h,
-                                            ),
-                                            Text(
-                                              item.author_name ?? "G Plus News",
-                                              style: Theme.of(context).textTheme.headline6?.copyWith(
-                                                  color: Storage.instance.isDarkMode
-                                                      ? Colors.white
-                                                      : Colors.black),
-                                            ),
-                                          ],
+                                              SizedBox(
+                                                height: 1.h,
+                                              ),
+                                              Text(
+                                                Jiffy(
+                                                        item.publish_date
+                                                                ?.split(
+                                                                    " ")[0] ??
+                                                            "",
+                                                        "yyyy-MM-dd")
+                                                    .format("dd/MM/yyyy"),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6
+                                                    ?.copyWith(
+                                                        color: Storage.instance
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : Colors.black),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(
+                                          width: 4.w,
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  item.title ?? "",
+                                                  maxLines: 4,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline4
+                                                      ?.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          color: Storage
+                                                                  .instance
+                                                                  .isDarkMode
+                                                              ? Colors.white
+                                                              : Constance
+                                                                  .primaryColor),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 1.h,
+                                              ),
+                                              Text(
+                                                item.author_name ??
+                                                    "G Plus News",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6
+                                                    ?.copyWith(
+                                                        color: Storage.instance
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : Colors.black),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
-                          separatorBuilder: (cont, inde) {
-                            if (inde == 0) {
-                              return Container();
-                            } else {
-                              return SizedBox(
-                                height: 1.h,
-                                child: Divider(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  thickness: 0.3.sp,
-                                ),
-                              );
-                            }
-                          },
-                          itemCount: data.bookmarks.length,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                      ],
-                    ),
-                  )
-                : Center(
-                    child: SizedBox(
-                        height: 2.h,
-                        width: 2.h,
-                        child: const CircularProgressIndicator()),
-                  ),
-          );
+                                );
+                              } else {
+                                return Container();
+                              }
+                            },
+                            separatorBuilder: (cont, inde) {
+                              if (inde == 0) {
+                                return Container();
+                              } else {
+                                return SizedBox(
+                                  height: 1.h,
+                                  child: Divider(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    thickness: 0.3.sp,
+                                  ),
+                                );
+                              }
+                            },
+                            itemCount: data.bookmarks.length,
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                        ],
+                      ),
+                    )
+                  : Lottie.asset(
+                    Constance.searchingIcon,
+                  ));
         }),
       ),
     );
@@ -408,6 +434,6 @@ class _BookmarksPageState extends State<BookmarksPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () => fetchBookmarks());
+    // Future.delayed(Duration.zero, () => fetchBookmarks());
   }
 }

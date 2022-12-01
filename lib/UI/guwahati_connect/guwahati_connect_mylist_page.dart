@@ -33,7 +33,7 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
   bool showing = false;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
   Animation<double>? _animation;
   AnimationController? _animationController;
   String txt = '''If you have a huge friends’ list, 
@@ -62,7 +62,10 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
     getText();
     // secureScreen();
     Future.delayed(Duration.zero, () {
-      fetchGuwahatiConnect();
+      // fetchGuwahatiConnect();
+      if (!Storage.instance.isGuwahatiConnect) {
+        showDialogBox();
+      }
     });
   }
 
@@ -227,7 +230,7 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
                                     showing = false;
                                   });
                                 }
-                              }, 1);
+                              }, 1,true);
                             },
                             separatorBuilder:
                                 (BuildContext context, int index) {

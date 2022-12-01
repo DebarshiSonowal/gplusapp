@@ -31,7 +31,7 @@ class SuggestedForYouCard extends StatelessWidget {
           color: Colors.white,
         ),
         height: 10.h,
-        width: MediaQuery.of(context).size.width - 7.w,
+        width: MediaQuery.of(context).size.width - 10.w,
         child: Row(
           children: [
             Expanded(

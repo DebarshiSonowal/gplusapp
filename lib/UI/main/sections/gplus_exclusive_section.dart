@@ -61,7 +61,7 @@ class GPlusExclusiveSection extends StatelessWidget {
                   },
                   separatorBuilder: (cont, inde) {
                     return SizedBox(
-                      width: 10.w,
+                      width: 2.w,
                     );
                   },
                   itemCount: (data.home_exclusive.length > 3

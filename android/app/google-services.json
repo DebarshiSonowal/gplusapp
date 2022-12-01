@@ -1,49 +1,43 @@
 {
   "project_info": {
-    "project_number": "780614858284",
-    "project_id": "gplus-8c9d2",
-    "storage_bucket": "gplus-8c9d2.appspot.com"
+    "project_number": "1048331216720",
+    "firebase_url": "https://gplus-app-9cf2f.firebaseio.com",
+    "project_id": "gplus-app-9cf2f",
+    "storage_bucket": "gplus-app-9cf2f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:780614858284:android:09f0824fb98f6cdddd8389",
+        "mobilesdk_app_id": "1:1048331216720:android:248bed066a64a663",
         "android_client_info": {
-          "package_name": "com.gplus.flutter.app"
+          "package_name": "com.appbazooka.gplus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "780614858284-hqn76je8hh4e94lbkdl4edidokpqaipe.apps.googleusercontent.com",
+          "client_id": "1048331216720-0tgdds2m5austv48a159fgonom9a4h87.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.gplus.flutter.app",
-            "certificate_hash": "8380022215f67f9de75f4dc3f93b7b62247453ac"
+            "package_name": "com.appbazooka.gplus",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
-          "client_id": "780614858284-cdnqhscnmq45f90fbkf9cl0a1d44oodn.apps.googleusercontent.com",
+          "client_id": "1048331216720-r6d24ki8mbi7nqf6e015mqaron6qjtc8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAOniov-vDxU0pIg--OvkCeEsN7iK2Eozo"
+          "current_key": "AIzaSyBSwGrs_l9vnBKU5tdS_1dv2JnKTt-ISdw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "780614858284-cdnqhscnmq45f90fbkf9cl0a1d44oodn.apps.googleusercontent.com",
+              "client_id": "1048331216720-r6d24ki8mbi7nqf6e015mqaron6qjtc8.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "780614858284-58vhs23fk0qqns35i1smmonsgepbcdo2.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.gplus.app.gplusapp"
-              }
             }
           ]
         }

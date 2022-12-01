@@ -646,7 +646,7 @@ class _AllImagePageState extends State<AllImagePage> {
     final response = await ApiProvider.instance.postComment(id, s, text);
     if (response.success ?? false) {
       Navigation.instance.goBack();
-      // fetchGuwahatiConnect();
+      fetchGuwahatiConnect();
       _searchQueryController.text = '';
     } else {
       Navigation.instance.goBack();
@@ -717,5 +717,26 @@ class _AllImagePageState extends State<AllImagePage> {
         ),
       ],
     );
+  }
+  void fetchGuwahatiConnect() async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getGuwahatiConnect();
+    if (response.success ?? false) {
+      // setGuwahatiConnect
+      Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setGuwahatiConnect(response.posts);
+      if (!Storage.instance.isGuwahatiConnect) {
+        // showDialogBox();
+      }
+    } else {
+      Navigation.instance.goBack();
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setGuwahatiConnect(response.posts);
+    }
   }
 }

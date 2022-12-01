@@ -158,7 +158,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                       height: 1.h,
                                     ),
                                     Text(
-                                      '${current?.referral_points ?? 50} points',
+                                      '${current?.buying_points ?? 50} points',
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.start,
                                       style: Theme.of(Navigation.instance

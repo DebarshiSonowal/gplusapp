@@ -237,7 +237,7 @@ class _EditProfileState extends State<EditProfile> {
                 GestureDetector(
                   onTap: () async {
                     final response = await Navigation.instance
-                        .navigate('/editSavedAddresses',args: 0);
+                        .navigate('/editSavedAddresses', args: 0);
                     if (response != null) {
                       setState(() {
                         address = Provider.of<DataProvider>(
@@ -257,17 +257,18 @@ class _EditProfileState extends State<EditProfile> {
                   child: Row(
                     children: [
                       SizedBox(
-                        width:70.w,
+                        width: 70.w,
                         child: Text(
                           address,
                           overflow: TextOverflow.clip,
-                          style: Theme.of(context).textTheme.headline5?.copyWith(
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Constance.primaryColor,
-                                // fontSize: 2.h,
-                                // fontWeight: FontWeight.bold,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.headline5?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor,
+                                    // fontSize: 2.h,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ),
                       Icon(
@@ -566,6 +567,7 @@ class _EditProfileState extends State<EditProfile> {
                     txt: 'Save & Continue',
                     onTap: () {
                       saveDetails();
+
                       // Navigation.instance.navigateAndReplace('/enterPreferences');
                     },
                   ),
@@ -589,14 +591,15 @@ class _EditProfileState extends State<EditProfile> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setProfile(response.profile!);
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .setMyTopicks(response.topicks);
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .setMyGeoTopicks(response.geoTopicks);
+      // Provider.of<DataProvider>(
+      //         Navigation.instance.navigatorKey.currentContext ?? context,
+      //         listen: false)
+      //     .setMyTopicks(response.topicks);
+      // Provider.of<DataProvider>(
+      //         Navigation.instance.navigatorKey.currentContext ?? context,
+      //         listen: false)
+      //     .setMyGeoTopicks(response.geoTopicks);
+      initalizeTheList();
       Navigation.instance.goBack();
       setData(response.profile!);
       selGeo = response.geoTopicks;
@@ -780,26 +783,28 @@ class _EditProfileState extends State<EditProfile> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setGeoTopicks(response.geoTopicks);
-      for (var i in Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .mygeoTopicks) {
-        for (var j in response.geoTopicks) {
-          if (i.id == j.id) {
-            selGeo.add(j);
-          }
-        }
-      }
-      for (var i in Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .mytopicks) {
-        for (var j in response.topicks) {
-          if (i.id == j.id) {
-            selTop.add(j);
-          }
-        }
-      }
+
+      // for (var i in response.geoTopicks) {
+      //   print(i.id);
+      //   for (var j in Provider.of<DataProvider>(
+      //           Navigation.instance.navigatorKey.currentContext ?? context,
+      //           listen: false)
+      //       .mygeoTopicks) {
+      //     if (i.id == j.id) {
+      //       selGeo.add(j);
+      //     }
+      //   }
+      // }
+      // for (var i in Provider.of<DataProvider>(
+      //         Navigation.instance.navigatorKey.currentContext ?? context,
+      //         listen: false)
+      //     .mytopicks) {
+      //   for (var j in response.topicks) {
+      //     if (i.id == j.id) {
+      //       selTop.add(j);
+      //     }
+      //   }
+      // }
     } else {
       // Navigation.instance.goBack();
       showError("Something went wrong");
@@ -823,5 +828,30 @@ class _EditProfileState extends State<EditProfile> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  void initalizeTheList() {
+    setState(() {
+      selTop = Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .mytopicks;
+      selGeo = Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .mygeoTopicks;
+      print(Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .mytopicks
+          .length);
+      print(Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .mygeoTopicks
+          .length);
+    });
+
+
   }
 }

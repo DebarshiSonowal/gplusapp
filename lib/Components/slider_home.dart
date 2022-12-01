@@ -49,7 +49,7 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
               options: CarouselOptions(
                   autoPlay: true,
                   // enlargeCenterPage: true,
-                  aspectRatio: 9.7 / 9,
+                  aspectRatio: 10 / 9,
                   viewportFraction: 1,
                   onPageChanged: (index, reason) {
                     setState(() {
@@ -71,16 +71,16 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                   return GestureDetector(
                     onTap: () => _controller.animateToPage(index),
                     child: Container(
-                      width: (index == (data.home_albums.length / 2.toInt()))
+                      width: (index <= (data.home_albums.length / 2.toInt()))
                           ? 2.w
-                          : (index == (data.home_albums.length / 4.toInt()))
-                              ? 1.85.w
+                          : (index >= (data.home_albums.length-2))
+                              ? 1.25.w
                               : 1.65.w,
-                      height: (index == (data.home_albums.length / 2.toInt()))
+                      height: (index <= (data.home_albums.length / 2.toInt()))
                           ? 2.h
-                          : (index == (data.home_albums.length / 4.toInt()))
-                              ? 1.85.w
-                              : 1.65.h,
+                          : (index >= (data.home_albums.length-2))
+                              ? 1.25.w
+                              : 1.65.w,
                       margin: const EdgeInsets.symmetric(
                           vertical: 8.0, horizontal: 4.0),
                       decoration: BoxDecoration(

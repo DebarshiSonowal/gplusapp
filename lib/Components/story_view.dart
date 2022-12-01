@@ -91,25 +91,23 @@ class _StoryViewPageState extends State<StoryViewPage> {
                         width: 30.w,
                         height: 4.h,
 
-                        child: Expanded(
-                          child: CustomButton(
-                            txt: "Shop Now",
-                            size: 12.sp,
-                            onTap: () {
-                              if (current != null) {
-                                _launchUrl(Uri.parse(Provider.of<DataProvider>(
-                                    Navigation.instance.navigatorKey
-                                        .currentContext ??
-                                        context,
-                                    listen: false)
-                                    .stories[storyItems.indexOf(current!)]
-                                    .web_url ??
-                                    "https://guwahatiplus.com/"));
-                              } else {
-                                _launchUrl(Uri.parse("https://guwahatiplus.com/"));
-                              }
-                            },
-                          ),
+                        child: CustomButton(
+                          txt: "Shop Now",
+                          size: 12.sp,
+                          onTap: () {
+                            if (current != null) {
+                              _launchUrl(Uri.parse(Provider.of<DataProvider>(
+                                  Navigation.instance.navigatorKey
+                                      .currentContext ??
+                                      context,
+                                  listen: false)
+                                  .stories[storyItems.indexOf(current!)]
+                                  .web_url ??
+                                  "https://guwahatiplus.com/"));
+                            } else {
+                              _launchUrl(Uri.parse("https://guwahatiplus.com/"));
+                            }
+                          },
                         ),
                       ),
                     ),
