@@ -92,7 +92,7 @@ class _StoryViewPageState extends State<StoryViewPage> {
                         height: 4.h,
 
                         child: CustomButton(
-                          txt: "Shop Now",
+                          txt: "Click here",
                           size: 12.sp,
                           onTap: () {
                             if (current != null) {

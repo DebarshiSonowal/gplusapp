@@ -417,7 +417,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 0.5.h),
                 child: CachedNetworkImage(
-                  fit: BoxFit.fitWidth,
+                  height: 7.h,
+                  fit: BoxFit.fill,
                   imageUrl: data.ads[random].image_file_name ?? '',
                   placeholder: (cont, _) {
                     return Image.asset(

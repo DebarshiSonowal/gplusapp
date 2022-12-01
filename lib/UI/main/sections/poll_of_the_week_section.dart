@@ -48,21 +48,21 @@ class PollOfTheWeekSection extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    // Share.share(data
-                    //     .selectedArticle?.web_url ==
-                    //     ""
-                    //     ? 'check out our website https://guwahatiplus.com/'
-                    //     : '${data.selectedArticle?.web_url}');
-                  },
-                  icon: Icon(
-                    Icons.share,
-                    color: Storage.instance.isDarkMode
-                        ? Colors.white
-                        : Constance.primaryColor,
-                  ),
-                ),
+                // IconButton(
+                //   onPressed: () {
+                //     // Share.share(data
+                //     //     .selectedArticle?.web_url ==
+                //     //     ""
+                //     //     ? 'check out our website https://guwahatiplus.com/'
+                //     //     : '${data.selectedArticle?.web_url}');
+                //   },
+                //   icon: Icon(
+                //     Icons.share,
+                //     color: Storage.instance.isDarkMode
+                //         ? Colors.white
+                //         : Constance.primaryColor,
+                //   ),
+                // ),
               ],
             ),
           ),

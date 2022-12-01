@@ -181,7 +181,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                   width: 1.w,
                                 ),
                                 Text(
-                                  'List by',
+                                  'Filter by',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline6

@@ -5,6 +5,7 @@ import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Components/custom_button.dart';
@@ -235,7 +236,10 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                         width: double.infinity,
                         child: CustomButton(
                           txt: 'Send to us',
-                          onTap: () {},
+                          onTap: () {
+                            Share.share("Hello I welcome you to G Plus. Join me and download their app using my referral code ${data.referEarn?.referral_link
+                                ?.split('/')[3]}");
+                          },
                         ),
                       ),
                       SizedBox(

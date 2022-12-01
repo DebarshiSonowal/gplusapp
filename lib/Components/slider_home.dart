@@ -49,7 +49,7 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
               options: CarouselOptions(
                   autoPlay: true,
                   // enlargeCenterPage: true,
-                  aspectRatio: 10 / 9,
+                  aspectRatio: 10.5 / 9,
                   viewportFraction: 1,
                   onPageChanged: (index, reason) {
                     setState(() {
@@ -73,12 +73,12 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                     child: Container(
                       width: (index <= (data.home_albums.length / 2.toInt()))
                           ? 2.w
-                          : (index >= (data.home_albums.length-2))
+                          : (index >= (data.home_albums.length - 2))
                               ? 1.25.w
                               : 1.65.w,
                       height: (index <= (data.home_albums.length / 2.toInt()))
                           ? 2.h
-                          : (index >= (data.home_albums.length-2))
+                          : (index >= (data.home_albums.length - 2))
                               ? 1.25.w
                               : 1.65.w,
                       margin: const EdgeInsets.symmetric(

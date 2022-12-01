@@ -96,7 +96,7 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                                             overflow: TextOverflow.ellipsis,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .headline4
+                                                .headline5
                                                 ?.copyWith(
                                                     fontWeight: FontWeight.bold,
                                                     overflow:

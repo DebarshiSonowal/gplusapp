@@ -1152,10 +1152,12 @@ class GuwahatiConnectPostCard extends StatelessWidget {
 
   String statusText(int status) {
     switch (status) {
+      case 1:
+        return 'Accepted';
       case 2:
-        return 'Active';
+        return 'Rejected';
       default:
-        return 'Deactivate';
+        return 'Pending';
     }
   }
 }
