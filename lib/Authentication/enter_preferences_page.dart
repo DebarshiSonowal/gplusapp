@@ -274,7 +274,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
           .setProfile(reponse.profile!);
       Navigation.instance.navigateAndReplace('/main');
     } else {
-      showError(reponse.msg ?? "Something went wrong");
+      // showError(reponse.msg ?? "Something went wrong");
     }
   }
 

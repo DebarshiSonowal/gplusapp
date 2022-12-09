@@ -157,67 +157,7 @@ class _BeAMemberState extends State<BeAMember> {
                   SizedBox(
                     height: 2.h,
                   ),
-                  // Card(
-                  //   color: Color(0xff011727),
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(8),
-                  //   ),
-                  //   child: Padding(
-                  //     padding:
-                  //         EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 4.w),
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       mainAxisSize: MainAxisSize.min,
-                  //       children: [
-                  //         Text(
-                  //           'Get the Monthly Subscription',
-                  //           style:
-                  //               Theme.of(context).textTheme.headline5?.copyWith(
-                  //                     color: Colors.white,
-                  //                     // fontWeight: FontWeight.bold,
-                  //                   ),
-                  //         ),
-                  //         SizedBox(
-                  //           height: 1.5.h,
-                  //         ),
-                  //         Row(
-                  //           children: [
-                  //             Text(
-                  //               'Rs 99/',
-                  //               style: Theme.of(context)
-                  //                   .textTheme
-                  //                   .headline1
-                  //                   ?.copyWith(
-                  //                     color: Colors.white,
-                  //                     fontWeight: FontWeight.bold,
-                  //                   ),
-                  //             ),
-                  //             Text(
-                  //               'month',
-                  //               style: Theme.of(context)
-                  //                   .textTheme
-                  //                   .headline4
-                  //                   ?.copyWith(
-                  //                     color: Colors.white,
-                  //                     fontWeight: FontWeight.bold,
-                  //                   ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         SizedBox(
-                  //           height: 1.5.h,
-                  //         ),
-                  //         SizedBox(
-                  //           width: double.infinity,
-                  //           child: CustomButton(
-                  //             txt: 'Get it',
-                  //             onTap: () {},
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
+
                   ListView.separated(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
@@ -339,57 +279,7 @@ class _BeAMemberState extends State<BeAMember> {
                       ),
                     },
                   ),
-                  // ListView.builder(
-                  //     shrinkWrap: true,
-                  //     physics: const NeverScrollableScrollPhysics(),
-                  //     itemCount: Constance.benifits.length,
-                  //     itemBuilder: (cont, count) {
-                  //       var data = Constance.benifits[count];
-                  //       return SizedBox(
-                  //         height: 10.h,
-                  //         width: double.infinity,
-                  //         child: Row(
-                  //           crossAxisAlignment: CrossAxisAlignment.start,
-                  //           children: [
-                  //             Container(
-                  //               height: 1.h,
-                  //               width: 1.h,
-                  //               margin: EdgeInsets.only(top: 1.h),
-                  //               decoration: BoxDecoration(
-                  //                 color: Storage.instance.isDarkMode
-                  //                     ? Colors.white
-                  //                     : Colors.black,
-                  //                 shape: BoxShape.circle,
-                  //               ),
-                  //             ),
-                  //             SizedBox(
-                  //               width: 1.h,
-                  //             ),
-                  //             Expanded(
-                  //               child: SizedBox(
-                  //                 height: 10.h,
-                  //                 child: Column(
-                  //                   children: [
-                  //                     Text(
-                  //                       data,
-                  //                       style: Theme.of(context)
-                  //                           .textTheme
-                  //                           .headline5
-                  //                           ?.copyWith(
-                  //                             color: Storage.instance.isDarkMode
-                  //                                 ? Colors.white
-                  //                                 : Colors.black,
-                  //                             // fontWeight: FontWeight.bold,
-                  //                           ),
-                  //                     ),
-                  //                   ],
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       );
-                  //     }),
+
                   SizedBox(
                     height: 15.h,
                   ),

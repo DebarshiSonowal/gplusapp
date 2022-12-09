@@ -80,6 +80,25 @@ class ArticleResponse {
   }
 }
 
+class CategoryArticleResponse {
+  bool? success;
+  String? message;
+  List<Article>? articles;
+
+  CategoryArticleResponse.fromJson(json) {
+    success = json['success'].toString() == 'true' ? true : false;
+    message = json['message'] ?? "Something Went Wrong";
+    articles = json['data']['data'] == null
+        ? []
+        : (json['data']['data'] as List).map((e) => Article.fromJson(e)).toList();
+  }
+
+  CategoryArticleResponse.withError(msg) {
+    success = false;
+    message = msg ?? "Something Went Wrong";
+  }
+}
+
 class ArticleDetailsResponse {
   bool? success;
   String? message;

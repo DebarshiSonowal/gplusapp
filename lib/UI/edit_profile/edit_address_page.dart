@@ -294,20 +294,36 @@ class _EditAddressPageState extends State<EditAddressPage> {
               ),
             ),
             actions: <Widget>[
-              FlatButton(
-                color: Colors.red,
-                textColor: Colors.white,
-                child: Text('CANCEL'),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  // textColor: Colors.white,
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .headline4
+                      ?.copyWith(color: Colors.white),
+                  fixedSize: const Size.fromWidth(100),
+                  padding: const EdgeInsets.all(10),
+                ),
+                child: const Text('CANCEL'),
                 onPressed: () {
                   setState(() {
                     Navigator.pop(context);
                   });
                 },
               ),
-              FlatButton(
-                color: Colors.green,
-                textColor: Colors.white,
-                child: Text('OK'),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  // textColor: Colors.white,
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .headline4
+                      ?.copyWith(color: Colors.white),
+                  fixedSize: const Size.fromWidth(100),
+                  padding: const EdgeInsets.all(10),
+                ),
+                child: const Text('OK'),
                 onPressed: () {
                   setState(() {
                     title = valueText;
@@ -342,10 +358,10 @@ class _EditAddressPageState extends State<EditAddressPage> {
     Navigation.instance.goBack();
   }
 
-  void updateNewAddress(add, lat, lang, id,title) async {
+  void updateNewAddress(add, lat, lang, id, title) async {
     Navigation.instance.navigate('/loadingDialog');
     final response =
-        await ApiProvider.instance.updateAddress(add, lat, lang, id,title);
+        await ApiProvider.instance.updateAddress(add, lat, lang, id, title);
     if (response.success ?? false) {
       Navigation.instance.goBack();
       Navigation.instance.goBack();

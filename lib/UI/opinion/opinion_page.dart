@@ -205,7 +205,7 @@ class _OpinionPageState extends State<OpinionPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                data.opinions[0].author_name ?? 'G Plus Admin',
+                                data.opinions[0].user?.name ?? 'G Plus Admin',
                                 style: Theme.of(Navigation
                                         .instance.navigatorKey.currentContext!)
                                     .textTheme
@@ -354,7 +354,7 @@ class _OpinionPageState extends State<OpinionPage> {
                                               height: 1.h,
                                             ),
                                             Text(
-                                              item.author_name ?? "G Plus News",
+                                              item.user?.name ?? "G Plus News",
                                               style: Theme.of(Navigation
                                                       .instance
                                                       .navigatorKey

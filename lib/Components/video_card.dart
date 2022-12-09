@@ -122,7 +122,7 @@ class VideoCard extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .headline6
-                      ?.copyWith(color: Colors.black),
+                      ?.copyWith(color: Colors.black54),
                 ),
               ],
             ),

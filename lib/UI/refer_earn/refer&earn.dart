@@ -235,7 +235,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                         height: 5.h,
                         width: double.infinity,
                         child: CustomButton(
-                          txt: 'Send to us',
+                          txt: 'Send invite',
                           onTap: () {
                             Share.share("Hello I welcome you to G Plus. Join me and download their app using my referral code ${data.referEarn?.referral_link
                                 ?.split('/')[3]}");

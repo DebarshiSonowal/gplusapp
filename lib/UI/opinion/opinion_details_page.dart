@@ -130,7 +130,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                               height: 1.h,
                             ),
                             Text(
-                              '${data.opinion?.author_name ?? "GPlus"}, ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                              '${data.opinion?.user?.name ?? "GPlus"}, ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
                               style: Theme.of(Navigation
                                       .instance.navigatorKey.currentContext!)
                                   .textTheme

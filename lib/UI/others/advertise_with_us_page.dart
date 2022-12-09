@@ -58,9 +58,9 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Please fill out all the details of the Advertise with us'
-                  ' form. Any section left blank or anonymous* or fake'
-                  ' submissions will not be accepted',
+                  'Please fill out all the details below'
+                  'so that we can understand your requirements'
+                  'and get in touch with you at the earliest',
                   style: Theme.of(context).textTheme.headline4?.copyWith(
                         color: Storage.instance.isDarkMode
                             ? Colors.white

@@ -58,6 +58,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
               (videoId) => YoutubePlayerController(
                 initialVideoId: videoId.youtube_id!,
                 flags: const YoutubePlayerFlags(
+                  // hideThumbnail: true,
                   autoPlay: false,
                 ),
               ),
@@ -148,7 +149,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           ),
           child: Consumer<DataProvider>(builder: (context, data, _) {
             return Container(
-              padding: EdgeInsets.only(top: 0.h),
+              padding: EdgeInsets.only(top: 0.h,),
               child: PageView.builder(
                 itemCount: _controllers.length,
                 scrollDirection: Axis.horizontal,
@@ -168,10 +169,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     children: [
                       Center(
                         child: SizedBox(
+                          // color: Colors.white,
                           height: 70.h,
                           width: double.infinity,
                           child: Padding(
-                            padding: EdgeInsets.only(top: 7.h, bottom: 15.h),
+                            padding: EdgeInsets.only(top: 7.h, bottom: 15.h,),
                             child: YoutubePlayer(
                               // controller: _controller = YoutubePlayerController(
                               //   initialVideoId: current.youtube_id!,
@@ -182,14 +184,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               // ),
                               controller: _controllers[index],
                               showVideoProgressIndicator: true,
-                              aspectRatio: 2 / 3,
+                              // aspectRatio: 16 / 10,
                               // videoProgressIndicatorColor: Colors.amber,
                               progressColors: const ProgressBarColors(
                                 playedColor: Colors.amber,
                                 handleColor: Colors.amberAccent,
                               ),
                               onReady: () {
-                                print('R12345&d');
+                                // print('R12345&d');
                                 // _controller
                                 //     .addListener(() {});
                                 // _controller!.play();

@@ -96,7 +96,7 @@ class ApiProvider {
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'Authorization': 'Bearer ${Storage.instance.token}'
       // 'APP-KEY': ConstanceData.app_key
     });
     var url = "${baseUrl}/app/login";
@@ -421,6 +421,52 @@ class ApiProvider {
     }
   }
 
+  Future<CategoryArticleResponse> getCategoryArticle(categ_name, page_no) async {
+    // var data = {
+    //   // 'mobile': mobile,
+    // };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${homeUrl}/topic/${categ_name}";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'page': page_no,
+      'per_page': 8,
+    };
+    debugPrint(jsonEncode(data));
+    debugPrint(jsonEncode({
+      'Authorization': 'Bearer ${Storage.instance.token}'
+    }));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        queryParameters: data,
+      );
+      debugPrint("topics/${categ_name} Article response: ");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return CategoryArticleResponse.fromJson(response?.data);
+      } else {
+        debugPrint("topics/${categ_name} Article error: ${response?.data}");
+        return CategoryArticleResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("topics/${categ_name} Article response: ${e.response}");
+      return CategoryArticleResponse.withError(e.message);
+    }
+  }
+
   Future<ArticleResponse> getMoreArticle(
       categ_name, per_page, page, skip) async {
     // var data = {
@@ -667,7 +713,44 @@ class ApiProvider {
       return ArticleDetailsResponse.withError(e.message);
     }
   }
+  Future<ArticleDetailsResponse> getCategoryArticleDetails(categ_name, slug) async {
+    // var data = {
+    //   // 'mobile': mobile,
+    // };
+    BaseOptions option =
+    BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    // var url = "${homeUrl}/${categ_name}/${slug}";
+    var url = "${homeUrl}/topic/${categ_name}/${slug}";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    debugPrint('${categ_name}');
 
+    try {
+      Response? response = await dio?.get(
+        url,
+      );
+      debugPrint("topic/${categ_name}/${slug} Details response: ");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ArticleDetailsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("topic/${categ_name}/${slug} error: ${response?.data}");
+        return ArticleDetailsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("topic/${categ_name}/${slug} Details response: ${e.response}");
+      return ArticleDetailsResponse.withError(e.message);
+    }
+  }
   Future<OpinionResponse> getOpinion(per_page, page) async {
     var data = {
       'category': 'opinion',

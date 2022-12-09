@@ -50,13 +50,13 @@ class _NavigationBarState extends State<CustomNavigationBar> {
         showSelectedLabels: true,
         showUnselectedLabels: true,
         selectedLabelStyle: TextStyle(
-          fontSize: 8.sp,
+          fontSize: 7.sp,
           color: Constance.secondaryColor,
           overflow: TextOverflow.clip,
         ),
         // showUnselectedLabels: true,
         unselectedLabelStyle: TextStyle(
-            fontSize: 8.sp, color: Colors.white, overflow: TextOverflow.clip),
+            fontSize: 7.sp, color: Colors.white, overflow: TextOverflow.clip),
         backgroundColor: Constance.primaryColor,
         items: [
           BottomNavigationBarItem(
@@ -66,7 +66,7 @@ class _NavigationBarState extends State<CustomNavigationBar> {
               width: 6.w,
               color: current == 0 ? Constance.secondaryColor : Colors.white,
             ),
-            label: "Home",
+            label: " Home\n ",
             backgroundColor: Constance.primaryColor,
           ),
           BottomNavigationBarItem(
@@ -76,7 +76,7 @@ class _NavigationBarState extends State<CustomNavigationBar> {
               width: 6.w,
               color: current == 1 ? Constance.secondaryColor : Colors.white,
             ),
-            label: "Big Deal",
+            label: " Big Deal\n ",
             backgroundColor: Constance.primaryColor,
           ),
           BottomNavigationBarItem(
@@ -106,7 +106,7 @@ class _NavigationBarState extends State<CustomNavigationBar> {
               width: 6.w,
               color: current == 4 ? Constance.secondaryColor : Colors.white,
             ),
-            label: "Classified",
+            label: " Classified\n ",
             backgroundColor: Constance.primaryColor,
           ),
         ],

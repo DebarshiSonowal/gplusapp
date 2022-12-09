@@ -20,18 +20,18 @@ class GPlusExecCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
-        side:BorderSide(
+        side: BorderSide(
           width: 0.5,
-          color: Storage.instance.isDarkMode ? Colors.white70 :Colors.black26,
+          color: Storage.instance.isDarkMode ? Colors.white70 : Colors.black26,
         ),
       ),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(
             Radius.circular(5),
           ),
-          color:Storage.instance.isDarkMode ? Colors.black : Colors.white,
+          color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         ),
         height: 10.h,
         width: MediaQuery.of(context).size.width - 9.w,
@@ -68,10 +68,10 @@ class GPlusExecCard extends StatelessWidget {
                   Text(
                     Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
                         .format("dd/MM/yyyy"),
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(color: Storage.instance.isDarkMode ? Colors.white :Colors.black),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black54),
                   ),
                 ],
               ),
@@ -91,18 +91,20 @@ class GPlusExecCard extends StatelessWidget {
                           // fontSize: 2.2.h,
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,
-                          color: Storage.instance.isDarkMode ? Colors.white :Constance.primaryColor),
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor),
                     ),
                   ),
                   SizedBox(
                     height: 1.5.h,
                   ),
                   Text(
-                    item.author_name??"",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(color: Storage.instance.isDarkMode ? Colors.white :Colors.black),
+                    item.author_name ?? "",
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black54),
                   ),
                 ],
               ),

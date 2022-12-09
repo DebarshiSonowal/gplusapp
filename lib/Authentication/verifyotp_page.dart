@@ -50,12 +50,11 @@ class _VerifyOTPState extends State<VerifyOTP> {
   void initState() {
     super.initState();
 
-    PhoneVerificationCompleted verificationCompleted =
-        (PhoneAuthCredential phoneAuthCredential) async {
+    verificationCompleted(PhoneAuthCredential phoneAuthCredential) async {
       await _auth.signInWithCredential(phoneAuthCredential);
 
       // showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
-    };
+    }
     Future.delayed(Duration.zero, () {
       phoneSignIn(phoneNumber: widget.number.toString());
     });
@@ -283,7 +282,9 @@ class _VerifyOTPState extends State<VerifyOTP> {
             codeSent: _onCodeSent,
             codeAutoRetrievalTimeout: _onCodeTimeout)
         .onError((error, stackTrace) {
-      print(error);
+      print('error ${error} ${stackTrace}');
+    }).then((value) => {
+      print('sent')
     });
   }
 

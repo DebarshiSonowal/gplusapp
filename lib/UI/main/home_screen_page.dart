@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'dart:io' show Platform;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -187,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
-        header: WaterDropHeader(),
+        header: const WaterDropHeader(),
         footer: CustomFooter(
           builder: (BuildContext context, LoadStatus? mode) {
             Widget body;
@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
             } else {
               body = const Text("No more Data");
             }
-            return Container(
+            return SizedBox(
               height: 55.0,
               child: Center(child: body),
             );
@@ -367,9 +367,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         },
                       ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
+                      getSpace(),
                     ],
                   ),
                 ),
@@ -567,9 +565,12 @@ class _HomeScreenState extends State<HomeScreen> {
     var status = await Permission.location.status;
     if (status.isDenied) {
       if (await Permission.location.request().isGranted) {
+        debugPrint("We got location permissions");
       } else {
-        // showError("We require storage permissions");
+        debugPrint("We require location permissions");
       }
+    } else {
+      debugPrint("We got location permissions already");
     }
   }
 
@@ -761,6 +762,18 @@ for an unparalleled publication, that people call their''',
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setStories(response.stories);
+    }
+  }
+
+  getSpace() {
+    if (Platform.isAndroid) {
+      return SizedBox(
+        height: 20.h,
+      );
+    } else if (Platform.isIOS) {
+      return SizedBox(
+        height: 30.h,
+      );
     }
   }
 }

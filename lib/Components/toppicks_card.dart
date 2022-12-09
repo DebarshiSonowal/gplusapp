@@ -67,7 +67,7 @@ class SuggestedForYouCard extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .headline6
-                        ?.copyWith(color: Colors.black),
+                        ?.copyWith(color: Colors.black87),
                   ),
                 ],
               ),
@@ -99,7 +99,7 @@ class SuggestedForYouCard extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .headline6
-                        ?.copyWith(color: Colors.black),
+                        ?.copyWith(color: Colors.black87),
                   ),
                 ],
               ),

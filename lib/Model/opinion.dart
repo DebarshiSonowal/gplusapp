@@ -59,7 +59,7 @@ class Opinion {
 
     //String
     title = json['title'] ?? "";
-    author_name = json['author_name'] ?? "G Plus Admin";
+    author_name = json['author_name'] ?? "Anonymous";
     publish_date = json['publish_date'] ?? "";
     tags = json['tags'] ?? "";
     seo_name = json['seo_name'] ?? "";

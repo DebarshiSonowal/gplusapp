@@ -19,7 +19,11 @@ class OpinionCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
-        side: BorderSide(width: 0.5,  color: Storage.instance.isDarkMode ? Colors.white : Constance.primaryColor),
+        side: BorderSide(
+            width: 0.5,
+            color: Storage.instance.isDarkMode
+                ? Colors.white
+                : Constance.primaryColor),
       ),
       child: Container(
         // padding: EdgeInsets.symmetric(
@@ -39,21 +43,35 @@ class OpinionCard extends StatelessWidget {
                 flex: 4,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
-                  decoration:  BoxDecoration(
+                  decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(
                       Radius.circular(5),
                     ),
                     border: Border(
-                      top:
-                          BorderSide(width: 0.5,  color: Storage.instance.isDarkMode ? Colors.white : Constance.primaryColor),
-                      bottom:
-                          BorderSide(width: 0.5,  color: Storage.instance.isDarkMode ? Colors.white :Constance.primaryColor),
-                      right:
-                          BorderSide(width: 0.5,  color: Storage.instance.isDarkMode ? Colors.white :Constance.primaryColor),
-                      left:
-                          BorderSide(width: 0.5, color: Storage.instance.isDarkMode ? Colors.white : Constance.primaryColor),
+                      top: BorderSide(
+                          width: 0.5,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor),
+                      bottom: BorderSide(
+                          width: 0.5,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor),
+                      right: BorderSide(
+                          width: 0.5,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor),
+                      left: BorderSide(
+                          width: 0.5,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor),
                     ),
-                    color: Storage.instance.isDarkMode ? Colors.black :Colors.white,
+                    color: Storage.instance.isDarkMode
+                        ? Colors.black
+                        : Colors.white,
                   ),
                   child: Center(
                     child: Row(
@@ -67,7 +85,9 @@ class OpinionCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style:
                                 Theme.of(context).textTheme.headline5?.copyWith(
-                                  color: Storage.instance.isDarkMode ? Colors.white : Constance.fifthColor,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.fifthColor,
                                       // fontWeight:
                                       //     FontWeight.bold,
                                     ),
@@ -85,10 +105,12 @@ class OpinionCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        item.author_name ?? "",
+                        item.user?.name ?? "",
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
-                          color: Storage.instance.isDarkMode ? Colors.white :Constance.fifthColor,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Constance.fifthColor,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -99,7 +121,9 @@ class OpinionCard extends StatelessWidget {
                             .format("dd/MM/yyyy"),
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
-                          color: Storage.instance.isDarkMode ? Colors.white :Constance.fifthColor,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black54,
                               // fontWeight: FontWeight.bold,
                             ),
                       ),

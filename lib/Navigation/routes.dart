@@ -19,6 +19,8 @@ import '../UI/Notification/notification_page.dart';
 import '../UI/Search/search_page.dart';
 import '../UI/VideoReport/video_report.dart';
 import '../UI/author/author_page.dart';
+import '../UI/category/category_details.dart';
+import '../UI/category/category_page.dart';
 import '../UI/citizen_journalist/citizen_journalist_page.dart';
 import '../UI/citizen_journalist/draft_story.dart';
 import '../UI/citizen_journalist/edit_story.dart';
@@ -128,6 +130,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/story':
       return FadeTransitionPageRouteBuilder(
           page: StoryPage(settings.arguments as String));
+      case '/categoryStory':
+      return FadeTransitionPageRouteBuilder(
+          page: CategoryDetails(slug:settings.arguments as String));
     case '/paymentProcessing':
       return FadeTransitionPageRouteBuilder(
           page: PaymentProcessingPage(settings.arguments as String));
@@ -146,6 +151,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(
         page: NewsFrom(
           settings.arguments as String,
+        ),
+      );
+      case '/category':
+      return FadeTransitionPageRouteBuilder(
+        page:CategoryPage(
+           categ: settings.arguments as String,
         ),
       );
     case '/opinionPage':

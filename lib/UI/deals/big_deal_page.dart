@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:gplusapp/Components/custom_button.dart';
+import 'package:gplusapp/Components/history_section.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
-
+import 'dart:io' show Platform;
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
 import '../../Components/promoted_deals_item.dart';
@@ -149,33 +149,7 @@ class _BigDealPageState extends State<BigDealPage> {
                                             fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                          current.deals.isEmpty
-                              ? SizedBox(
-                                  height: 6.h,
-                                )
-                              : SizedBox(
-                                  height: 2.h,
-                                ),
-                          current.deals.isEmpty
-                              ? Container()
-                              : SizedBox(
-                                  height: 31.h,
-                                  width: double.infinity,
-                                  child: ListView.separated(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: current.deals.length,
-                                    itemBuilder: (cont, cout) {
-                                      var data = current.deals[cout];
-                                      return PromotedDealsItem(data: data);
-                                    },
-                                    separatorBuilder:
-                                        (BuildContext context, int index) {
-                                      return SizedBox(
-                                        width: 2.h,
-                                      );
-                                    },
-                                  ),
-                                ),
+                          promotedDealsSection(current),
                           SizedBox(
                             height: 2.h,
                           ),
@@ -235,256 +209,10 @@ class _BigDealPageState extends State<BigDealPage> {
                                         }),
                                   ),
                                 ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            child: Card(
-                              color: Colors.white,
-                              child: ExpansionTile(
-                                collapsedIconColor: Colors.black,
-                                iconColor: Colors.black,
-                                title: Text(
-                                  'History',
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(Navigation.instance
-                                          .navigatorKey.currentContext!)
-                                      .textTheme
-                                      .headline3
-                                      ?.copyWith(
-                                        color: Colors.black,
-                                        // fontSize: 11.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                children: [
-                                  current.history.isEmpty
-                                      ? Container()
-                                      : Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Divider(
-                                            color: Constance.secondaryColor,
-                                            thickness: 0.1.h,
-                                          ),
-                                        ),
-                                  ListView.separated(
-                                    shrinkWrap: true,
-                                    itemBuilder: (cont, count) {
-                                      var data = current.history[count];
-                                      return GestureDetector(
-                                        onTap: () {
-                                          redeem(data.vendor_id!, data.code);
-                                        },
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 4.w, vertical: 1.h),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                    width: 40.w,
-                                                    child: Text(
-                                                      data.title ?? '25% OFF',
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: Theme.of(Navigation
-                                                              .instance
-                                                              .navigatorKey
-                                                              .currentContext!)
-                                                          .textTheme
-                                                          .headline5
-                                                          ?.copyWith(
-                                                            color: Colors.black,
-                                                            // fontSize: 11.sp,
-                                                            // fontWeight: FontWeight.bold,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 0.5.h,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 40.w,
-                                                    child: Text(
-                                                      data.vendor?.shop_name ??
-                                                          "",
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: Theme.of(Navigation
-                                                              .instance
-                                                              .navigatorKey
-                                                              .currentContext!)
-                                                          .textTheme
-                                                          .headline4
-                                                          ?.copyWith(
-                                                            color: Colors.black,
-                                                            // fontSize: 11.sp,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 0.5.h,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 40.w,
-                                                    child: Text(
-                                                      data.vendor?.address ??
-                                                          'RGB road, Zoo tiniali',
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: Theme.of(Navigation
-                                                              .instance
-                                                              .navigatorKey
-                                                              .currentContext!)
-                                                          .textTheme
-                                                          .headline5
-                                                          ?.copyWith(
-                                                            color: Colors.black,
-                                                            // fontSize: 11.sp,
-                                                            // fontWeight: FontWeight.bold,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              const Spacer(),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                    width: 40.w,
-                                                    child: Text(
-                                                      data.code ?? '8486',
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: Theme.of(Navigation
-                                                              .instance
-                                                              .navigatorKey
-                                                              .currentContext!)
-                                                          .textTheme
-                                                          .headline5
-                                                          ?.copyWith(
-                                                            color: Colors
-                                                                .grey.shade800,
-                                                            // fontSize: 11.sp,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 0.5.h,
-                                                  ),
-                                                  Text(
-                                                    'From: ${Jiffy(data.valid_from.toString().split('T')[0] ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.start,
-                                                    style: Theme.of(Navigation
-                                                            .instance
-                                                            .navigatorKey
-                                                            .currentContext!)
-                                                        .textTheme
-                                                        .headline5
-                                                        ?.copyWith(
-                                                          color: Colors.black,
-                                                          // fontSize: 11.sp,
-                                                          // fontWeight: FontWeight.bold,
-                                                        ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 0.5.h,
-                                                  ),
-                                                  Text(
-                                                    'To: ${Jiffy(data.valid_to.toString().split('T')[0] ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.start,
-                                                    style: Theme.of(Navigation
-                                                            .instance
-                                                            .navigatorKey
-                                                            .currentContext!)
-                                                        .textTheme
-                                                        .headline5
-                                                        ?.copyWith(
-                                                          color: Colors.black,
-                                                          // fontSize: 11.sp,
-                                                          // fontWeight: FontWeight.bold,
-                                                        ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    separatorBuilder: (cont, count) {
-                                      return SizedBox(
-                                        height: 1.h,
-                                      );
-                                    },
-                                    itemCount: current.history.length,
-                                  ),
-                                  current.history.isEmpty
-                                      ? Container()
-                                      : Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Divider(
-                                            color: Constance.secondaryColor,
-                                            thickness: 0.1.h,
-                                          ),
-                                        ),
-                                  current.history.isEmpty
-                                      ? Container()
-                                      : Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 4.w, vertical: 1.h),
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                'See More',
-                                                overflow: TextOverflow.ellipsis,
-                                                textAlign: TextAlign.start,
-                                                style: Theme.of(Navigation
-                                                        .instance
-                                                        .navigatorKey
-                                                        .currentContext!)
-                                                    .textTheme
-                                                    .headline4
-                                                    ?.copyWith(
-                                                      color: Constance
-                                                          .secondaryColor,
-                                                      // fontSize: 11.sp,
-                                                      // fontWeight: FontWeight.bold,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                ],
-                              ),
-                            ),
+                          HistorySection(
+                            current: current,
                           ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
+                          getSpace(),
                         ],
                       ),
                     )
@@ -497,6 +225,18 @@ class _BigDealPageState extends State<BigDealPage> {
       ),
       bottomNavigationBar: CustomNavigationBar(current),
     );
+  }
+
+  getSpace() {
+    if (Platform.isAndroid) {
+      return SizedBox(
+        height: 20.h,
+      );
+    } else if (Platform.isIOS) {
+      return SizedBox(
+        height: 30.h,
+      );
+    }
   }
 
   AppBar buildAppBar() {
@@ -834,5 +574,38 @@ class _BigDealPageState extends State<BigDealPage> {
               listen: false)
           .setClassifiedText(response.classified ?? "");
     }
+  }
+
+  Widget promotedDealsSection(current) {
+    return Column(
+      children: [
+        current.deals.isEmpty
+            ? SizedBox(
+                height: 6.h,
+              )
+            : SizedBox(
+                height: 2.h,
+              ),
+        current.deals.isEmpty
+            ? Container()
+            : SizedBox(
+                height: 31.h,
+                width: double.infinity,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: current.deals.length,
+                  itemBuilder: (cont, cout) {
+                    var data = current.deals[cout];
+                    return PromotedDealsItem(data: data);
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(
+                      width: 2.h,
+                    );
+                  },
+                ),
+              ),
+      ],
+    );
   }
 }

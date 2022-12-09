@@ -61,22 +61,22 @@ class PromotedDealsItem extends StatelessWidget {
                       topRight: Radius.circular(
                         10.0,
                       ),
-                      bottomRight: Radius.circular(
-                        10.0,
-                      ),
+                      // bottomRight: Radius.circular(
+                      //   10.0,
+                      // ),
                       topLeft: Radius.circular(
                         10.0,
                       ),
-                      bottomLeft: Radius.circular(
-                        10.0,
-                      ),
+                      // bottomLeft: Radius.circular(
+                      //   10.0,
+                      // ),
                     ),
                     image: DecorationImage(
                       fit: BoxFit.fill,
                       image: CachedNetworkImageProvider(
-                          data.vendor?.image_file_name ??
-                              "https://source.unsplash.com/user/c_v_r/1900x800",
-                          maxWidth: 100),
+                        data.vendor?.image_file_name ??
+                            "https://source.unsplash.com/user/c_v_r/1900x800",
+                      ),
                     ),
                   ),
                 ),
@@ -85,47 +85,55 @@ class PromotedDealsItem extends StatelessWidget {
               //   height: 1.h,
               // ),
               Expanded(
-                flex: 2,
+                  flex: 2,
                   child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data.vendor?.shop_name ?? "",
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
-                          fontWeight: FontWeight.bold),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data.vendor?.shop_name ?? "",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontWeight: FontWeight.bold),
+                        ),
+                        // SizedBox(
+                        //   height: 0.5.h,
+                        // ),
+                        Text(
+                          data.vendor?.address ?? "",
+                          style:
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    // fontWeight: FontWeight.bold
+                                  ),
+                        ),
+                        // SizedBox(
+                        //   height: 0.5.h,
+                        // ),
+                        Text(
+                          data.title ?? "",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(
+                                  color: Constance.thirdColor,
+                                  fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    // SizedBox(
-                    //   height: 0.5.h,
-                    // ),
-                    Text(
-                      data.vendor?.address ?? "",
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
-                            // fontWeight: FontWeight.bold
-                          ),
-                    ),
-                    // SizedBox(
-                    //   height: 0.5.h,
-                    // ),
-                    Text(
-                      data.title ?? "",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.thirdColor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              )),
+                  )),
             ],
           ),
         ),
