@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -707,7 +708,18 @@ class _AllImagePageState extends State<AllImagePage> {
           onPressed: () {
             Navigation.instance.navigate('/notification');
           },
-          icon: Icon(Icons.notifications),
+          icon: Consumer<DataProvider>(builder: (context, data, _) {
+            return Badge(
+              badgeColor: Constance.secondaryColor,
+              badgeContent: Text(
+                '${data.notifications.length}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Constance.thirdColor,
+                ),
+              ),
+              child: const Icon(Icons.notifications),
+            );
+          }),
         ),
         IconButton(
           onPressed: () {

@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -443,8 +444,21 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
       backgroundColor: Constance.primaryColor,
       actions: [
         IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.notifications),
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Consumer<DataProvider>(builder: (context, data, _) {
+            return Badge(
+              badgeColor: Constance.secondaryColor,
+              badgeContent: Text(
+                '${data.notifications.length}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Constance.thirdColor,
+                ),
+              ),
+              child: const Icon(Icons.notifications),
+            );
+          }),
         ),
         IconButton(
           onPressed: () {},

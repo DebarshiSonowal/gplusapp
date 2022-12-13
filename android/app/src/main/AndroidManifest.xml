@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.appbazooka.gplus">
-<!--com.gplus.app.gplusapp-->
+    <!--com.gplus.app.gplusapp-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -38,9 +38,9 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"
-            android:usesCleartextTraffic="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
+            android:usesCleartextTraffic="true"
             android:windowSoftInputMode="adjustResize">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
@@ -62,7 +62,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-               <meta-data android:name="com.google.android.geo.API_KEY"
-                   android:value="AIzaSyAOniov-vDxU0pIg--OvkCeEsN7iK2Eozo"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBSwGrs_l9vnBKU5tdS_1dv2JnKTt-ISdw" />
     </application>
 </manifest>

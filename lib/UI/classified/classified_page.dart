@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -15,6 +16,8 @@ import 'package:sizer/sizer.dart';
 
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
+import '../../Components/classified_card.dart';
+import '../../Components/classified_popup.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
@@ -350,7 +353,8 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                             itemBuilder: (cont, count) {
                               var current = data.classified[count];
                               bool like = selected == 2 ? true : false;
-                              return classified_card(current, like);
+                              return ClassifiedCard(
+                                  current: current, like: like);
                             },
                             separatorBuilder:
                                 (BuildContext context, int index) {
@@ -371,188 +375,6 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
       ),
       bottomNavigationBar: CustomNavigationBar(current),
     );
-  }
-
-  StatefulBuilder classified_card(Classified current, bool like) {
-    return StatefulBuilder(builder: (context, _) {
-      return GestureDetector(
-        onTap: () {
-          Navigation.instance.navigate('/classifiedDetails', args: current.id);
-        },
-        child: Card(
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              color: Colors.grey.shade900,
-              width: 0.2,
-            ),
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(9.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 70.w,
-                        child: Text(
-                          current.title ?? "",
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline3
-                              ?.copyWith(
-                                  color: Constance.primaryColor,
-                                  fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      LikeButton(
-                        size: 2.5.h,
-                        onTap: (val) async {
-                          setAsFavourite(current.id, 'classified');
-                          _(() {
-                            like = !like;
-                          });
-                          return like;
-                        },
-                        circleColor: const CircleColor(
-                          start: Colors.red,
-                          end: Colors.black87,
-                        ),
-                        bubblesColor: const BubblesColor(
-                          dotPrimaryColor: Color(0xff33b5e5),
-                          dotSecondaryColor: Color(0xff0099cc),
-                        ),
-                        likeBuilder: (bool isLiked) {
-                          return Icon(
-                            like
-                                ? FontAwesomeIcons.solidHeart
-                                : FontAwesomeIcons.heart,
-                            color: like ? Constance.thirdColor : Colors.grey,
-                            size: 3.h,
-                          );
-                        },
-                        likeCount: 665,
-                        countBuilder: (int? count, bool isLiked, String text) {
-                          var color =
-                              like ? Colors.deepPurpleAccent : Colors.grey;
-                          Widget result;
-                          if (count == 0) {
-                            result = Text(
-                              "",
-                              style: TextStyle(color: color),
-                            );
-                          } else {
-                            result = Text(
-                              '',
-                              style: TextStyle(color: color),
-                            );
-                          }
-                          return result;
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                current.price == null || current.price == 0
-                    ? Container()
-                    : SizedBox(
-                        height: 0.5.h,
-                      ),
-                current.price == null
-                    ? Container()
-                    : Text(
-                        'Rs:${current.price}' ?? '0',
-                        style: Theme.of(context).textTheme.headline3?.copyWith(
-                            color: Constance.thirdColor,
-                            fontWeight: FontWeight.bold),
-                      ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                ReadMoreText(
-                  current.description ?? "",
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                  trimLines: 3,
-                  colorClickableText: Constance.secondaryColor,
-                  trimMode: TrimMode.Line,
-                  trimCollapsedText: 'Show more',
-                  trimExpandedText: 'Show less',
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.black,
-                    ),
-                    SizedBox(
-                      width: 4.w,
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 5.h,
-                        child: Text(
-                          '${current.total_views} views',
-                          // overflow: TextOverflow.clip,
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.black,
-                                  ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                // SizedBox(
-                //   height: 0.4.h,
-                // ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      Icons.location_on,
-                      color: Colors.black,
-                    ),
-                    SizedBox(
-                      width: 4.w,
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 5.h,
-                        child: Text(
-                          current.locality?.name ??
-                              'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
-                          // overflow: TextOverflow.clip,
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.black,
-                                  ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                // SizedBox(
-                //   height: 1.h,
-                // ),
-              ],
-            ),
-          ),
-        ),
-      );
-    });
   }
 
   AppBar buildAppBar() {
@@ -578,7 +400,18 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
           onPressed: () {
             Navigation.instance.navigate('/notification');
           },
-          icon: Icon(Icons.notifications),
+          icon: Consumer<DataProvider>(builder: (context, data, _) {
+            return Badge(
+              badgeColor: Constance.secondaryColor,
+              badgeContent: Text(
+                '${data.notifications.length}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Constance.thirdColor,
+                ),
+              ),
+              child: const Icon(Icons.notifications),
+            );
+          }),
         ),
         IconButton(
           onPressed: () {
@@ -753,119 +586,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
       scaffoldKey.currentState
           ?.showBottomSheet(
             (context) {
-              return Consumer<DataProvider>(builder: (context, data, _) {
-                return StatefulBuilder(builder: (context, _) {
-                  return Container(
-                    padding: EdgeInsets.only(
-                        top: 1.h, right: 5.w, left: 5.w, bottom: 1.h),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(15.0),
-                        topRight: Radius.circular(15.0),
-                      ),
-                    ),
-                    width: double.infinity,
-                    // height: 50.h,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigation.instance.goBack();
-                              },
-                              icon: const Icon(Icons.close),
-                              color: Colors.black,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          'Oops!',
-                          style:
-                              Theme.of(context).textTheme.headline1?.copyWith(
-                                    color: Constance.secondaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 34.sp,
-                                  ),
-                        ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        Text(
-                          'Sorry ${data.profile?.name}',
-                          style:
-                              Theme.of(context).textTheme.headline4?.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        SizedBox(
-                          height: 3.h,
-                        ),
-                        Text(
-                          '''Projected to be a smart city by 2025, Guwahati is a
-major port on the banks of Brahmaputra, the capital
-of Assam and the urban hub of the North East. This
-metropolitan city is growing leaps and bounds, and 
-for its unparalleled pace of growth, comes the need
-for an unparalleled publication, that people call their''',
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.black,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          'Do you want to be a member?',
-                          style:
-                              Theme.of(context).textTheme.headline4?.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: CustomButton(
-                                txt: 'Yes, take me there',
-                                onTap: () {
-                                  Navigation.instance.navigate('/beamember');
-                                },
-                                size: 12.sp,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5.w,
-                            ),
-                            Flexible(
-                              child: CustomButton(
-                                txt: '''No, I don't want it''',
-                                onTap: () {
-                                  Navigation.instance.goBack();
-                                },
-                                color: Colors.black,
-                                size: 12.sp,
-                                fcolor: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                });
-              });
+              return const ClassifiedPopUp();
             },
             // context: context,
             backgroundColor: Colors.grey.shade100,

@@ -30,6 +30,7 @@ import '../Model/guwahati_connect.dart';
 // import '../Model/login_response.dart';
 import '../Model/membership.dart';
 import '../Model/message_response.dart';
+import '../Model/notification_in_device.dart';
 import '../Model/opinion.dart';
 import '../Model/order.dart';
 import '../Model/poll_of_the_week.dart';
@@ -61,32 +62,6 @@ class ApiProvider {
   final String path = "/books";
 
   Dio? dio;
-
-  // Future<LoginResponse> login(mobile) async {
-  //   var data = {
-  //     'mobile': mobile,
-  //   };
-  //
-  //   var url = "$baseUrl/login";
-  //   dio = Dio(option);
-  //   debugPrint(url.toString());
-  //   debugPrint(jsonEncode(data));
-  //
-  //   try {
-  //     Response? response = await dio?.post(url, data: jsonEncode(data));
-  //     debugPrint("login response: ${response?.data}");
-  //     if (response?.statusCode == 200 || response?.statusCode == 201) {
-  //       return LoginResponse.fromJson(response?.data);
-  //     } else {
-  //       debugPrint("login error: ${response?.data}");
-  //       return LoginResponse.withError(
-  //           response?.data['message'] ?? "Something went wrong");
-  //     }
-  //   } on DioError catch (e) {
-  //     debugPrint("login response: ${e.response}");
-  //     return LoginResponse.withError(e.message.toString());
-  //   }
-  // }
 
   Future<LoginResponse> login(mobile) async {
     var data = {
@@ -310,23 +285,23 @@ class ApiProvider {
   }
 
   Future<ProfileResponse> createProfile(
-    address_id,
-    mobile,
-    f_name,
-    l_name,
-    email,
-    dob,
-    address,
-    longitude,
-    latitude,
-    topic_ids,
-    geo_ids,
-    has_deal_notify_perm,
-    has_ghy_connect_notify_perm,
-    has_classified_notify_perm,
-    gender,
-    referal,
-  ) async {
+      address_id,
+      mobile,
+      f_name,
+      l_name,
+      email,
+      dob,
+      address,
+      longitude,
+      latitude,
+      topic_ids,
+      geo_ids,
+      has_deal_notify_perm,
+      has_ghy_connect_notify_perm,
+      has_classified_notify_perm,
+      gender,
+      referal,
+      is_new) async {
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',
@@ -355,6 +330,7 @@ class ApiProvider {
       'has_ghy_connect_notify_perm': has_ghy_connect_notify_perm,
       'has_classified_notify_perm': has_classified_notify_perm,
       'referred_by_code': referal,
+      'is_new': is_new
     };
     var url = "${baseUrl}/profile";
     dio = Dio(option);
@@ -421,7 +397,8 @@ class ApiProvider {
     }
   }
 
-  Future<CategoryArticleResponse> getCategoryArticle(categ_name, page_no) async {
+  Future<CategoryArticleResponse> getCategoryArticle(
+      categ_name, page_no) async {
     // var data = {
     //   // 'mobile': mobile,
     // };
@@ -440,9 +417,8 @@ class ApiProvider {
       'per_page': 8,
     };
     debugPrint(jsonEncode(data));
-    debugPrint(jsonEncode({
-      'Authorization': 'Bearer ${Storage.instance.token}'
-    }));
+    debugPrint(
+        jsonEncode({'Authorization': 'Bearer ${Storage.instance.token}'}));
 
     try {
       Response? response = await dio?.get(
@@ -713,12 +689,14 @@ class ApiProvider {
       return ArticleDetailsResponse.withError(e.message);
     }
   }
-  Future<ArticleDetailsResponse> getCategoryArticleDetails(categ_name, slug) async {
+
+  Future<ArticleDetailsResponse> getCategoryArticleDetails(
+      categ_name, slug) async {
     // var data = {
     //   // 'mobile': mobile,
     // };
     BaseOptions option =
-    BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer ${Storage.instance.token}'
@@ -751,6 +729,7 @@ class ApiProvider {
       return ArticleDetailsResponse.withError(e.message);
     }
   }
+
   Future<OpinionResponse> getOpinion(per_page, page) async {
     var data = {
       'category': 'opinion',
@@ -906,6 +885,44 @@ class ApiProvider {
     }
   }
 
+  Future<NotificationInDeviceResponse> getNotifications() async {
+    // var data = {
+    //   // 'mobile': mobile,
+    // };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${homeUrl}/app/notifications/unread";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+      );
+      debugPrint("getNotifications response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return NotificationInDeviceResponse.fromJson(response?.data);
+      } else {
+        debugPrint("getNotifications error: ${response?.data}");
+        return NotificationInDeviceResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("StoryResponse response: ${e.response}");
+      return NotificationInDeviceResponse.withError(e.message);
+    }
+  }
+
   Future<VideoNewsResponse> getWeekly() async {
     // var data = {
     //   // 'mobile': mobile,
@@ -998,7 +1015,7 @@ class ApiProvider {
       'Authorization': 'Bearer ${Storage.instance.token}'
       // 'APP-KEY': ConstanceData.app_key
     });
-    var url = "${homeUrl}/opinion/opinion/${slug}";
+    var url = "${homeUrl}/opinion/editorials/${slug}";
     dio = Dio(option);
     debugPrint(url.toString());
     // debugPrint(jsonEncode(data));
@@ -1615,6 +1632,46 @@ class ApiProvider {
     }
   }
 
+  Future<GenericResponse> notificationRead(id) async {
+    var url = "${baseUrl}/app/notifications/read";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'id': id,
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("notifications/read response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("notifications/read error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("notifications/read error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
   Future<GenericResponse> setAsFavourite(id, type) async {
     var url = "${baseUrl}/app/favourite";
     BaseOptions option =
@@ -2122,6 +2179,80 @@ class ApiProvider {
 
   Future<AboutUsResponse> getAboutUs() async {
     var url = "${baseUrl}/app/pages/about";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("AboutUsResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return AboutUsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("AboutUsResponse error: ${response?.data}");
+        return AboutUsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("AboutUsResponse response: ${e.response}");
+      return AboutUsResponse.withError(e.message);
+    }
+  }
+
+  Future<AboutUsResponse> getTermsConditions() async {
+    var url = "${baseUrl}/app/pages/terms-n-conditions";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("AboutUsResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return AboutUsResponse.fromJson(response?.data);
+      } else {
+        debugPrint("AboutUsResponse error: ${response?.data}");
+        return AboutUsResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("AboutUsResponse response: ${e.response}");
+      return AboutUsResponse.withError(e.message);
+    }
+  }
+
+  Future<AboutUsResponse> getRefundPolicy() async {
+    var url = "${baseUrl}/app/pages/refund-policy";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',

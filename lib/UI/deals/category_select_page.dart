@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -257,7 +258,18 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
           onPressed: () {
             Navigation.instance.navigate('/notification');
           },
-          icon: Icon(Icons.notifications),
+          icon: Consumer<DataProvider>(builder: (context, data, _) {
+            return Badge(
+              badgeColor: Constance.secondaryColor,
+              badgeContent: Text(
+                '${data.notifications.length}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Constance.thirdColor,
+                ),
+              ),
+              child: const Icon(Icons.notifications),
+            );
+          }),
         ),
         IconButton(
           onPressed: () {
@@ -277,7 +289,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
             height: 2.h,
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Icon(
                 Icons.location_on,
@@ -295,7 +308,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                     current.details?.address ??
                         'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
                     overflow: TextOverflow.clip,
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                    style: Theme.of(context).textTheme.headline4?.copyWith(
                           color: Storage.instance.isDarkMode
                               ? Colors.white
                               : Colors.black,
@@ -309,7 +322,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
             height: 1.h,
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Icon(
                 Icons.phone,
@@ -324,7 +338,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                 child: Text(
                   '+91${current.details?.mobile.toString() ?? '7838372617'}',
                   // overflow: TextOverflow.clip,
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
                         color: Storage.instance.isDarkMode
                             ? Colors.white
                             : Colors.black,
@@ -339,7 +353,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
           SizedBox(
             height: 4.h,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -362,7 +377,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                     Text(
                       openStatus(TimeFromString(current.details?.opening_time??"10AM"),TimeFromString(current.details?.closing_time??"11PM")),
                       // overflow: TextOverflow.clip,
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                      style: Theme.of(context).textTheme.headline4?.copyWith(
                             color: Storage.instance.isDarkMode
                                 ? Colors.white
                                 : Colors.black,
@@ -398,7 +413,8 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
             height: 2.h,
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Icon(
                 FontAwesomeIcons.clipboard,
@@ -414,7 +430,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   current.details?.services ??
                       'Tanning Salon . Beauty Supply Shop . Hair Salon',
                   // overflow: TextOverflow.clip,
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
                         color: Storage.instance.isDarkMode
                             ? Colors.white
                             : Colors.black,
@@ -441,9 +457,13 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                     children: [
                       Text(
                         data?.title ?? "",
+                        // overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline3?.copyWith(
                             color: Constance.thirdColor,
                             fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 1.5.h,
                       ),
                       Text(
                         data?.description ?? "",

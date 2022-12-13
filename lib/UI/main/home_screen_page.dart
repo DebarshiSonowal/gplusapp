@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:io' show Platform;
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchToppicks();
     fetchAds();
     askPermissions();
+    fetchNotification();
     // Future.delayed(
     //     const Duration(seconds: 15),
     //         () => _listController.addListener(() {
@@ -462,13 +464,24 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             Navigation.instance.navigate('/notification');
           },
-          icon: Icon(Icons.notifications),
+          icon: Consumer<DataProvider>(builder: (context, data, _) {
+            return Badge(
+              badgeColor: Constance.secondaryColor,
+              badgeContent: Text(
+                '${data.notifications.length}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                      color: Constance.thirdColor,
+                    ),
+              ),
+              child: const Icon(Icons.notifications),
+            );
+          }),
         ),
         IconButton(
           onPressed: () {
             Navigation.instance.navigate('/search');
           },
-          icon: Icon(Icons.search),
+          icon: const Icon(Icons.search),
         ),
       ],
     );
@@ -776,4 +789,13 @@ for an unparalleled publication, that people call their''',
       );
     }
   }
+}
+
+void fetchNotification() async {
+  final response = await ApiProvider.instance.getNotifications();
+  if (response.success ?? false) {
+    Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext!,
+            listen: false)
+        .setNotificationInDevice(response.notification);
+  } else {}
 }

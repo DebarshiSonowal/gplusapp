@@ -66,7 +66,7 @@ class HistorySection extends StatelessWidget {
                           CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              width: 40.w,
+                              width: 44.w,
                               child: Text(
                                 data.title ?? '25% OFF',
                                 overflow:
@@ -90,7 +90,7 @@ class HistorySection extends StatelessWidget {
                               height: 0.5.h,
                             ),
                             SizedBox(
-                              width: 40.w,
+                              width: 44.w,
                               child: Text(
                                 data.vendor?.shop_name ??
                                     "",
@@ -142,16 +142,16 @@ class HistorySection extends StatelessWidget {
                         const Spacer(),
                         Column(
                           crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                          CrossAxisAlignment.end,
                           children: [
                             SizedBox(
-                              width: 40.w,
+                              width: 30.w,
                               child: Text(
                                 data.code ?? '8486',
                                 overflow:
                                 TextOverflow.ellipsis,
                                 textAlign:
-                                TextAlign.start,
+                                TextAlign.end,
                                 style: Theme.of(Navigation
                                     .instance
                                     .navigatorKey

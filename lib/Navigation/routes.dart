@@ -55,7 +55,9 @@ import '../UI/others/bookmarks_page.dart';
 import '../UI/others/contact_us_page.dart';
 import '../UI/others/grievanceRedressal.dart';
 import '../UI/others/privacy_policy_page.dart';
+import '../UI/others/refund_policy_page.dart';
 import '../UI/others/settings_page.dart';
+import '../UI/others/terms_conditions_page.dart';
 import '../UI/payment_processing_page.dart';
 import '../UI/poll_of_the week/poll_page.dart';
 import '../UI/profile/profile_page.dart';
@@ -109,9 +111,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/viewImage':
       return FadeTransitionPageRouteBuilder(
           page: ViewImagePage(settings.arguments as String));
- // case '/viewVideo':
- //      return FadeTransitionPageRouteBuilder(
- //          page: ViewVideoPage(settings.arguments as String));
+    // case '/viewVideo':
+    //      return FadeTransitionPageRouteBuilder(
+    //          page: ViewVideoPage(settings.arguments as String));
 
     case '/bigdealpage':
       return FadeTransitionPageRouteBuilder(page: BigDealPage());
@@ -130,9 +132,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/story':
       return FadeTransitionPageRouteBuilder(
           page: StoryPage(settings.arguments as String));
-      case '/categoryStory':
+    case '/categoryStory':
       return FadeTransitionPageRouteBuilder(
-          page: CategoryDetails(slug:settings.arguments as String));
+          page: CategoryDetails(slug: settings.arguments as String));
     case '/paymentProcessing':
       return FadeTransitionPageRouteBuilder(
           page: PaymentProcessingPage(settings.arguments as String));
@@ -153,10 +155,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           settings.arguments as String,
         ),
       );
-      case '/category':
+    case '/category':
       return FadeTransitionPageRouteBuilder(
-        page:CategoryPage(
-           categ: settings.arguments as String,
+        page: CategoryPage(
+          categ: settings.arguments as String,
         ),
       );
     case '/opinionPage':
@@ -165,7 +167,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(
           page: OpinionDetailsPage(settings.arguments as String));
     case '/videoReport':
-      return FadeTransitionPageRouteBuilder(page: VideoReport(settings.arguments as String));
+      return FadeTransitionPageRouteBuilder(
+          page: VideoReport(settings.arguments as String));
 
     case '/contactUs':
       return FadeTransitionPageRouteBuilder(page: ContactUsPage());
@@ -210,10 +213,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/postClassified':
       return FadeTransitionPageRouteBuilder(page: PostAListing());
     case '/editingAListing':
-      return FadeTransitionPageRouteBuilder(page: EditAListingPost(settings.arguments as int));
+      return FadeTransitionPageRouteBuilder(
+          page: EditAListingPost(settings.arguments as int));
     case '/guwahatiConnects':
       return FadeTransitionPageRouteBuilder(page: GuwahatiConnectPage());
-      case '/guwahatiConnectsMy':
+    case '/guwahatiConnectsMy':
       return FadeTransitionPageRouteBuilder(page: GuwahatiConnectMylistPage());
     case '/allImagesPage':
       return FadeTransitionPageRouteBuilder(
@@ -227,6 +231,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(page: SearchPage());
     case '/aboutUs':
       return FadeTransitionPageRouteBuilder(page: AboutUsPage());
+    case '/refundPolicy':
+      return FadeTransitionPageRouteBuilder(page: ReturnPolicyPage());
+    case '/termsConditions':
+      return FadeTransitionPageRouteBuilder(page: TermsConditionsPage());
     case '/privacy':
       return FadeTransitionPageRouteBuilder(page: PrivacyPolicyPage());
     case '/grieveanceRedressal':

@@ -1,6 +1,9 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Helper/Constance.dart';
+import '../Helper/DataProvider.dart';
 import '../Navigation/Navigate.dart';
 
 class CustomAppBar extends StatelessWidget {
@@ -21,7 +24,18 @@ class CustomAppBar extends StatelessWidget {
           onPressed: () {
             Navigation.instance.navigate('/notification');
           },
-          icon: Icon(Icons.notifications),
+          icon: Consumer<DataProvider>(builder: (context, data, _) {
+            return Badge(
+              badgeColor: Constance.secondaryColor,
+              badgeContent: Text(
+                '${data.notifications.length}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Constance.thirdColor,
+                ),
+              ),
+              child: const Icon(Icons.notifications),
+            );
+          }),
         ),
         IconButton(
           onPressed: () {

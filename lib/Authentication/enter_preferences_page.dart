@@ -229,10 +229,10 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -249,28 +249,28 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
 
   void signUp() async {
     final reponse = await ApiProvider.instance.createProfile(
-      '0',
-      Storage.instance.signUpdata?.mobile,
-      Storage.instance.signUpdata?.f_name,
-      Storage.instance.signUpdata?.l_name,
-      Storage.instance.signUpdata?.email,
-      Storage.instance.signUpdata?.dob,
-      Storage.instance.signUpdata?.address,
-      Storage.instance.signUpdata?.longitude,
-      Storage.instance.signUpdata?.latitude,
-      getComaSeparated(selTop),
-      getComaSeparated(selGeo),
-      0,
-      0,
-      0,
-      Storage.instance.signUpdata?.gender,
-      Storage.instance.signUpdata?.refer,
-    );
+        '0',
+        Storage.instance.signUpdata?.mobile,
+        Storage.instance.signUpdata?.f_name,
+        Storage.instance.signUpdata?.l_name,
+        Storage.instance.signUpdata?.email,
+        Storage.instance.signUpdata?.dob,
+        Storage.instance.signUpdata?.address,
+        Storage.instance.signUpdata?.longitude,
+        Storage.instance.signUpdata?.latitude,
+        getComaSeparated(selTop),
+        getComaSeparated(selGeo),
+        0,
+        0,
+        0,
+        Storage.instance.signUpdata?.gender,
+        Storage.instance.signUpdata?.refer,
+        1);
     if (reponse.success ?? false) {
       // setPreferences();
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setProfile(reponse.profile!);
       Navigation.instance.navigateAndReplace('/main');
     } else {

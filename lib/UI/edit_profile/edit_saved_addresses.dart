@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
+
 // import 'package:google_geocoding/google_geocoding.dart';
 import 'package:google_place/google_place.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
@@ -40,7 +44,11 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
   @override
   void initState() {
     // String apiKey = DotEnv().env['API_KEY'];
-    googlePlace = GooglePlace(Constance.googleApiKey);
+
+    googlePlace = GooglePlace(Platform.isAndroid
+        ? Constance.googleApiKey
+        : Constance.googleApiKeyIos);
+
     super.initState();
     Future.delayed(Duration.zero, () {
       fetchAddress();
@@ -114,7 +122,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                             ? Colors.white70
                             : Colors.black54,
                       ),
-                      focusedBorder:  OutlineInputBorder(
+                      focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Storage.instance.isDarkMode
                               ? Colors.white70
@@ -403,7 +411,18 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
           onPressed: () {
             Navigation.instance.navigate('/notification');
           },
-          icon: Icon(Icons.notifications),
+          icon: Consumer<DataProvider>(builder: (context, data, _) {
+            return Badge(
+              badgeColor: Constance.secondaryColor,
+              badgeContent: Text(
+                '${data.notifications.length}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Constance.thirdColor,
+                ),
+              ),
+              child: const Icon(Icons.notifications),
+            );
+          }),
         ),
         IconButton(
           onPressed: () {
@@ -422,6 +441,8 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
         predictions = result.predictions!;
       });
       // addAddress();
+    } else {
+      print(result);
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Model/search_result.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -454,14 +455,15 @@ class SearchResultWidget extends StatelessWidget {
                           height: 1.h,
                         ),
                         Text(
-                          item.publish_date?.split(" ")[0] ?? "",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6
-                              ?.copyWith(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black),
+                          Jiffy(item.publish_date?.split(" ")[0] ?? "",
+                                  "yyyy-MM-dd")
+                              .format("dd/MM/yyyy"),
+                          style:
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black54,
+                                  ),
                         ),
                       ],
                     ),
@@ -478,15 +480,14 @@ class SearchResultWidget extends StatelessWidget {
                           child: Text(
                             item.title ?? "",
                             maxLines: 3,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline4
-                                ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    overflow: TextOverflow.ellipsis,
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Constance.primaryColor),
+                            style:
+                                Theme.of(context).textTheme.headline4?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                    ),
                           ),
                         ),
                         SizedBox(
@@ -499,9 +500,11 @@ class SearchResultWidget extends StatelessWidget {
                               .textTheme
                               .headline5
                               ?.copyWith(
-                                color: Constance.thirdColor,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black54,
                                 // fontSize: 2.2.h,
-                                fontWeight: FontWeight.bold,
+                                // fontWeight: FontWeight.bold,
                               ),
                         ),
                       ],

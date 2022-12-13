@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -129,19 +130,25 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             SizedBox(
                               height: 1.h,
                             ),
-                            Text(
-                              '${data.opinion?.user?.name ?? "GPlus"}, ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
-                              style: Theme.of(Navigation
-                                      .instance.navigatorKey.currentContext!)
-                                  .textTheme
-                                  .headline5
-                                  ?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    // fontSize: 2.2.h,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigation.instance.navigate('/authorPage',
+                                    args: data.opinion?.user?.id);
+                              },
+                              child: Text(
+                                '${data.opinion?.user?.name ?? "GPlus"}, ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                                style: Theme.of(Navigation
+                                        .instance.navigatorKey.currentContext!)
+                                    .textTheme
+                                    .headline5
+                                    ?.copyWith(
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                      // fontSize: 2.2.h,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                              ),
                             ),
 
                             SizedBox(
@@ -757,7 +764,18 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
           onPressed: () {
             Navigation.instance.navigate('/notification');
           },
-          icon: Icon(Icons.notifications),
+          icon: Consumer<DataProvider>(builder: (context, data, _) {
+            return Badge(
+              badgeColor: Constance.secondaryColor,
+              badgeContent: Text(
+                '${data.notifications.length}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Constance.thirdColor,
+                ),
+              ),
+              child: const Icon(Icons.notifications),
+            );
+          }),
         ),
         IconButton(
           onPressed: () {
@@ -797,6 +815,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
       Navigation.instance.goBack();
     } else {
       Navigation.instance.goBack();
+      Navigation.instance.goBack();
     }
   }
 
@@ -812,12 +831,13 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
       // _refreshController.refreshFailed();
     }
   }
+
   void fetchMoreContent() async {
     final response = await ApiProvider.instance.getOpinion(5, page);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext!,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
           .setMoreOpinions(response.opinion ?? []);
       // _refreshController.refreshCompleted();
     } else {

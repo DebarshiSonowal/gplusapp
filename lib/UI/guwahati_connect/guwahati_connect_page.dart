@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:badges/badges.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -248,10 +249,10 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                         ),
                       ),
                       SizedBox(
-                        width: 2.w,
+                        width: 4.w,
                       ),
                       Expanded(
-                        flex: 5,
+                        flex: 3,
                         child: Text(
                           'Guwahati Connect',
                           overflow: TextOverflow.clip,
@@ -385,7 +386,18 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
           onPressed: () {
             Navigation.instance.navigate('/notification');
           },
-          icon: Icon(Icons.notifications),
+          icon: Consumer<DataProvider>(builder: (context, data, _) {
+            return Badge(
+              badgeColor: Constance.secondaryColor,
+              badgeContent: Text(
+                '${data.notifications.length}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Constance.thirdColor,
+                ),
+              ),
+              child: const Icon(Icons.notifications),
+            );
+          }),
         ),
         IconButton(
           onPressed: () {

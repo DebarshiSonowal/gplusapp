@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_place/google_place.dart';
@@ -22,7 +24,11 @@ class _LocationSearchPageState extends State<LocationSearchPage> {
   @override
   void initState() {
     // String apiKey = DotEnv().env['API_KEY'];
-    googlePlace = GooglePlace(Constance.googleApiKey);
+    if (Platform.isAndroid) {
+      googlePlace = GooglePlace(Constance.googleApiKey);
+    } else {
+      googlePlace = GooglePlace(Constance.googleApiKeyIos);
+    }
     super.initState();
   }
 

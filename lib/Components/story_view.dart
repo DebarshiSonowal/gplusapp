@@ -23,6 +23,7 @@ class StoryViewPage extends StatefulWidget {
 class _StoryViewPageState extends State<StoryViewPage> {
   var controller = StoryController();
   StoryItem? current;
+  int index = 0;
   List<StoryItem> storyItems = [];
 
   @override
@@ -67,6 +68,7 @@ class _StoryViewPageState extends State<StoryViewPage> {
                       controller: controller,
                       onStoryShow: (s) {
                         current = s;
+                        index = storyItems.indexOf(s);
                       },
                       onComplete: () => Navigation.instance.goBack(),
                       onVerticalSwipeComplete: (direction) {
@@ -85,32 +87,54 @@ class _StoryViewPageState extends State<StoryViewPage> {
                       }),
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 12.h),
-                      child: SizedBox(
-                        width: 30.w,
-                        height: 4.h,
-
-                        child: CustomButton(
-                          txt: "Click here",
-                          size: 12.sp,
-                          onTap: () {
-                            if (current != null) {
-                              _launchUrl(Uri.parse(Provider.of<DataProvider>(
-                                  Navigation.instance.navigatorKey
-                                      .currentContext ??
-                                      context,
-                                  listen: false)
-                                  .stories[storyItems.indexOf(current!)]
-                                  .web_url ??
-                                  "https://guwahatiplus.com/"));
-                            } else {
-                              _launchUrl(Uri.parse("https://guwahatiplus.com/"));
-                            }
-                          },
-                        ),
-                      ),
-                    ),
+                    child: Provider.of<DataProvider>(
+                                    Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                        context,
+                                    listen: false)
+                                .stories[index]
+                                .btn_text ==
+                            ""
+                        ? Container()
+                        : Padding(
+                            padding: EdgeInsets.only(bottom: 12.h),
+                            child: SizedBox(
+                              width: 30.w,
+                              height: 4.h,
+                              child: CustomButton(
+                                color: Color(int.parse(
+                                    '0xff${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).stories[index].btn_color?.substring(1)}')),
+                                txt: Provider.of<DataProvider>(
+                                            Navigation.instance.navigatorKey
+                                                    .currentContext ??
+                                                context,
+                                            listen: false)
+                                        .stories[index]
+                                        .btn_text ??
+                                    "Click here",
+                                size: 12.sp,
+                                onTap: () {
+                                  if (current != null) {
+                                    _launchUrl(Uri.parse(
+                                        Provider.of<DataProvider>(
+                                                    Navigation
+                                                            .instance
+                                                            .navigatorKey
+                                                            .currentContext ??
+                                                        context,
+                                                    listen: false)
+                                                .stories[storyItems
+                                                    .indexOf(current!)]
+                                                .web_url ??
+                                            "https://guwahatiplus.com/"));
+                                  } else {
+                                    _launchUrl(
+                                        Uri.parse("https://guwahatiplus.com/"));
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
                   ),
                 ],
               )

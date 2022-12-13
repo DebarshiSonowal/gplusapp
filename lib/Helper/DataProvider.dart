@@ -23,6 +23,7 @@ import 'package:gplusapp/Model/top_picks.dart';
 import 'package:gplusapp/Model/video_news.dart';
 import 'package:gplusapp/UI/citizen_journalist/citizen_journalist_page.dart';
 import 'package:gplusapp/UI/others/contact_us_page.dart';
+import '../Model/notification_in_device.dart';
 import '../Model/referEarnHistory.dart';
 import '../Model/search_result.dart' as search;
 import '../Model/contact_us.dart';
@@ -36,7 +37,7 @@ import '../Model/topick.dart';
 class DataProvider extends ChangeNotifier {
   int currentIndex = 0;
   Profile? profile, author;
-
+  List<NotificationInDevice> notifications = [];
   List<Opinion> opinions = [];
   List<Story> stories = [];
   List<Article> home_albums = [],
@@ -85,6 +86,7 @@ class DataProvider extends ChangeNotifier {
     deal = txt;
     notifyListeners();
   }
+
   setClassifiedText(String txt) {
     classifiedMsg = txt;
     notifyListeners();
@@ -92,6 +94,11 @@ class DataProvider extends ChangeNotifier {
 
   setCitizenJournalist(List<CitizenJournalist> list) {
     citizenlist = list;
+    notifyListeners();
+  }
+
+  setNotificationInDevice(List<NotificationInDevice> list) {
+    notifications = list;
     notifyListeners();
   }
 

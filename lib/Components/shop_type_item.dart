@@ -24,10 +24,12 @@ class ShopTypePageItem extends StatelessWidget {
       margin: const EdgeInsets.all(5),
       child: ListTile(
         leading: ClipRRect(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(50),
           child: CachedNetworkImage(
             // height: 6.h,
-            width: 16.w,
+            height: 14.h,
+            width: 14.w,
+            fit: BoxFit.fill,
             imageUrl: current.image_file_name ?? "",
             placeholder: (cont, _) {
               return Image.asset(
@@ -63,7 +65,7 @@ class ShopTypePageItem extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 0.5.h,
+              height: 1.5.h,
             ),
             SizedBox(
               width: double.infinity,

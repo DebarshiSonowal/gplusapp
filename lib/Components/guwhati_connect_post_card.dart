@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gplusapp/Components/three_images_widget.dart';
+import 'package:gplusapp/Components/two_image_widget.dart';
 import 'package:gplusapp/Model/comment.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +17,10 @@ import '../Model/guwahati_connect.dart';
 import '../Navigation/Navigate.dart';
 import '../Networking/api_provider.dart';
 import 'alert.dart';
+import 'comment_item.dart';
+import 'comment_ui.dart';
+import 'four_images_widget.dart';
+import 'multiple_image_widget.dart';
 
 class GuwahatiConnectPostCard extends StatelessWidget {
   GuwahatiConnect data;
@@ -25,6 +31,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
   final void Function() fetchGuwahatiConnect;
   final Function(int, int) postLike;
   final Function(int) showing;
+  final ScrollController _controller = ScrollController();
 
   GuwahatiConnectPostCard(
     this.data,
@@ -38,6 +45,16 @@ class GuwahatiConnectPostCard extends StatelessWidget {
     this.type,
     this.is_mine,
   );
+
+  void _scrollDown() {
+    Future.delayed(const Duration(seconds: 1), () {
+      _controller.animateTo(
+        _controller.position.maxScrollExtent,
+        duration: const Duration(seconds: 1),
+        curve: Curves.fastOutSlowIn,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -200,17 +217,6 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                   SizedBox(
                     height: 1.h,
                   ),
-                  // SizedBox(
-                  //   height: 2.h,
-                  //   child: Center(
-                  //     child: Divider(
-                  //       thickness: 0.05.h,
-                  //       color: Storage.instance.isDarkMode
-                  //           ? Colors.white70
-                  //           : Colors.black26,
-                  //     ),
-                  //   ),
-                  // ),
                   SizedBox(
                     height: 0.5.h,
                   ),
@@ -238,16 +244,6 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        // Text(
-                        //   '${dislike ? ((data.total_disliked ?? 0) + 1) : data.total_disliked} dislikes' ??
-                        //       "",
-                        //   style: Theme.of(context).textTheme.headline6?.copyWith(
-                        //         color: Storage.instance.isDarkMode
-                        //             ? Colors.white
-                        //             : Colors.black,
-                        //         // fontWeight: FontWeight.bold,
-                        //       ),
-                        // ),
                         Text(
                           '${data.total_comment} comments' ?? "",
                           style:
@@ -261,20 +257,6 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // SizedBox(
-                  //   height: 0.5.h,
-                  // ),
-                  // SizedBox(
-                  //   height: 2.h,
-                  //   child: Center(
-                  //     child: Divider(
-                  //       thickness: 0.05.h,
-                  //       color: Storage.instance.isDarkMode
-                  //           ? Colors.white70
-                  //           : Colors.black26,
-                  //     ),
-                  //   ),
-                  // ),
                   SizedBox(
                     width: double.infinity,
                     child: Row(
@@ -367,6 +349,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
 
   void showComments(count, context) {
     showing(0);
+    _scrollDown();
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
       enableDrag: false,
@@ -379,269 +362,16 @@ class GuwahatiConnectPostCard extends StatelessWidget {
       ),
       context: context,
       builder: (BuildContext context) {
-        return Padding(
-          padding: MediaQuery.of(context).viewInsets,
-          child: StatefulBuilder(builder: (context, _) {
-            return Consumer<DataProvider>(builder: (context, data, __) {
-              return Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(25.0),
-                    // bottomRight: Radius.circular(40.0),
-                    topLeft: Radius.circular(25.0),
-                    // bottomLeft: Radius.circular(40.0),
-                  ),
-                ),
-                width: double.infinity,
-                padding: EdgeInsets.only(top: 1.h),
-                height: 70.h,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      height: 5.h,
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigation.instance.goBack();
-                            },
-                            icon: Icon(
-                              Icons.menu,
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.black
-                                  : Constance.primaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Comments",
-                            style:
-                                Theme.of(context).textTheme.headline3?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.black
-                                          : Constance.primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      // height: 35.h,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.w),
-                        child: ListView.builder(
-                            // physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount:
-                                data.guwahatiConnect[count].comments.length,
-                            itemBuilder: (cont, ind) {
-                              var current =
-                                  data.guwahatiConnect[count].comments[ind];
-                              return CommentItem(
-                                  current, context, current.is_liked);
-                            }),
-                      ),
-                    ),
-                    Container(
-                      height: 8.h,
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(horizontal: 2.w),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Card(
-                          color: Colors.white,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 5.w, vertical: 0.5.h),
-                            child: TextField(
-                              controller: _searchQueryController,
-                              autofocus: false,
-                              decoration: InputDecoration(
-                                hintText: "Write a comment",
-                                border: InputBorder.none,
-                                hintStyle:
-                                    const TextStyle(color: Colors.black26),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    if (_searchQueryController
-                                        .text.isNotEmpty) {
-                                      // search(_searchQueryController.text);
-
-                                      if (Provider.of<DataProvider>(
-                                                  Navigation
-                                                          .instance
-                                                          .navigatorKey
-                                                          .currentContext ??
-                                                      context,
-                                                  listen: false)
-                                              .profile
-                                              ?.is_plan_active ??
-                                          false) {
-                                        // Navigation.instance.navigate('/exclusivePage');
-                                        _(() {
-                                          postComment(
-                                              data.guwahatiConnect[count].id,
-                                              'guwahati-connect',
-                                              _searchQueryController.text);
-                                        });
-                                      } else {
-                                        Constance.showMembershipPrompt(
-                                            context, () {});
-                                      }
-                                    } else {
-                                      showError('Enter something to search');
-                                    }
-                                  },
-                                  icon: const Icon(
-                                    Icons.send,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4
-                                  ?.copyWith(color: Colors.black),
-                              onChanged: (query) => {},
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            });
-          }),
+        return CommentUI(
+          count: count,
+          controller: _controller,
+          searchQueryController: _searchQueryController,
+          fetchGuwahatiConnect: () => fetchGuwahatiConnect(),
         );
       },
     ).then((value) {
       showing(1);
       fetchGuwahatiConnect();
-    });
-  }
-
-  StatefulBuilder CommentItem(
-      Comment current, BuildContext context, bool liked) {
-    bool like = liked;
-    return StatefulBuilder(builder: (context, _) {
-      return SizedBox(
-        height: 16.h,
-        width: 40.w,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    current.name ?? "",
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.black
-                              : Constance.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  // Icon(
-                  //   Icons.menu,
-                  //   color: Colors.black,
-                  // ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 1.h,
-            ),
-            Row(
-              children: [
-                Text(
-                  current.comment ?? "",
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.black,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 1.h,
-            ),
-            // Text(
-            //   "",
-            //   style: Theme.of(context)
-            //       .textTheme
-            //       .headline5
-            //       ?.copyWith(
-            //         color: Colors.black,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            // ),
-            // SizedBox(
-            //   height: 1.h,
-            // ),
-            SizedBox(
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Material(
-                        type: MaterialType.transparency,
-                        child: IconButton(
-                          onPressed: () {
-                            _(() {
-                              like = !like;
-                            });
-                            postCommentLike(current.id, like ? 1 : 0);
-                          },
-                          splashRadius: 20.0,
-                          splashColor: Constance.secondaryColor,
-                          icon: Icon(
-                            Icons.thumb_up,
-                            color: like
-                                ? Constance.secondaryColor
-                                : Constance.primaryColor,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        '${like ? (current.like_count ?? 0 + 1) : current.like_count} likes' ??
-                            "",
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            SizedBox(
-              height: 1.h,
-            ),
-          ],
-        ),
-      );
     });
   }
 
@@ -688,296 +418,11 @@ class GuwahatiConnectPostCard extends StatelessWidget {
   getGridBasedOnNumbers(List<GCAttachment>? attachment, BuildContext context) {
     switch (attachment?.length) {
       case 2:
-        return StaggeredGrid.count(
-          crossAxisCount: 4,
-          mainAxisSpacing: 4,
-          crossAxisSpacing: 4,
-          children: [
-            StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 2,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
-                decoration: BoxDecoration(
-                  border: Border(
-                    right: BorderSide(
-                      //                   <--- left side
-                      color: Colors.grey.shade200,
-                      width: 3.0,
-                    ),
-                    // top: BorderSide( //                    <--- top side
-                    //   color: Colors.white,
-                    //   width: 3.0,
-                    // ),
-                  ),
-                ),
-                child: CachedNetworkImage(
-                  width: double.infinity,
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  imageUrl: (attachment![0].file_name) ?? "",
-                  fit: BoxFit.fill,
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              ),
-            ),
-            StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 2,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
-                child: CachedNetworkImage(
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  imageUrl: (attachment[1].file_name) ?? "",
-                  fit: BoxFit.fitHeight,
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
-        );
+        return TwoImagesWidget(attachment: attachment ?? []);
       case 3:
-        return StaggeredGrid.count(
-          crossAxisCount: 4,
-          mainAxisSpacing: 4,
-          crossAxisSpacing: 4,
-          children: [
-            StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      //                   <--- left side
-                      color: Colors.grey.shade200,
-                      width: 3.0,
-                    ),
-                  ),
-                ),
-                child: CachedNetworkImage(
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  imageUrl: (attachment![0].file_name) ?? "",
-                  fit: BoxFit.fitHeight,
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              ),
-            ),
-            StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 2,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
-                decoration: BoxDecoration(
-                  border: Border(
-                    left: BorderSide(
-                      //                   <--- left side
-                      color: Colors.grey.shade200,
-                      width: 3.0,
-                    ),
-                    // top: BorderSide( //                    <--- top side
-                    //   color: Colors.white,
-                    //   width: 3.0,
-                    // ),
-                  ),
-                ),
-                child: CachedNetworkImage(
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  imageUrl: (attachment[1].file_name) ?? "",
-                  fit: BoxFit.fitHeight,
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              ),
-            ),
-            StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
-                decoration: const BoxDecoration(
-                  border: Border(),
-                ),
-                child: CachedNetworkImage(
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  imageUrl: (attachment[2].file_name) ?? "",
-                  fit: BoxFit.fitHeight,
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
-        );
+        return ThreeImagesWidget(attachment: attachment ?? []);
       case 4:
-        return StaggeredGrid.count(
-          crossAxisCount: 4,
-          mainAxisSpacing: 4,
-          crossAxisSpacing: 4,
-          children: [
-            StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
-                decoration: BoxDecoration(
-                  border: Border(
-                    right: BorderSide(
-                      //                   <--- left side
-                      color: Colors.grey.shade200,
-                      width: 3.0,
-                    ),
-                  ),
-                ),
-                child: CachedNetworkImage(
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  imageUrl: (attachment![0].file_name) ?? "",
-                  fit: BoxFit.fitHeight,
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              ),
-            ),
-            StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
-                child: CachedNetworkImage(
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  imageUrl: (attachment![1].file_name) ?? "",
-                  fit: BoxFit.fitHeight,
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              ),
-            ),
-            StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
-                decoration: BoxDecoration(
-                  border: Border(
-                    right: BorderSide(
-                      //                   <--- left side
-                      color: Colors.grey.shade200,
-                      width: 3.0,
-                    ),
-                  ),
-                ),
-                child: CachedNetworkImage(
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  imageUrl: (attachment[2].file_name) ?? "",
-                  fit: BoxFit.fitHeight,
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              ),
-            ),
-            StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
-                decoration: const BoxDecoration(
-                  border: Border(),
-                ),
-                child: CachedNetworkImage(
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  imageUrl: (attachment[3].file_name) ?? "",
-                  fit: BoxFit.fitHeight,
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
-        );
+        return FourImagesWidget(attachment: attachment ?? []);
       case 1:
         return CachedNetworkImage(
           placeholder: (cont, _) {
@@ -996,145 +441,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
           },
         );
       default:
-        return StaggeredGrid.count(
-          crossAxisCount: 4,
-          mainAxisSpacing: 4,
-          crossAxisSpacing: 4,
-          children: [
-            StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
-                decoration: BoxDecoration(
-                  border: Border(
-                    right: BorderSide(
-                      //                   <--- left side
-                      color: Colors.grey.shade200,
-                      width: 3.0,
-                    ),
-                  ),
-                ),
-                child: CachedNetworkImage(
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  imageUrl: (attachment![0].file_name) ?? "",
-                  fit: BoxFit.fitHeight,
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              ),
-            ),
-            StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
-                child: CachedNetworkImage(
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  imageUrl: (attachment[1].file_name) ?? "",
-                  fit: BoxFit.fitHeight,
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              ),
-            ),
-            StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
-                decoration: BoxDecoration(
-                  border: Border(
-                    right: BorderSide(
-                      //                   <--- left side
-                      color: Colors.grey.shade200,
-                      width: 3.0,
-                    ),
-                    // top: BorderSide( //                    <--- top side
-                    //   color: Colors.white,
-                    //   width: 3.0,
-                    // ),
-                  ),
-                ),
-                child: CachedNetworkImage(
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  imageUrl: (attachment[2].file_name) ?? "",
-                  fit: BoxFit.fitHeight,
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              ),
-            ),
-            StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 1.w),
-                decoration: const BoxDecoration(
-                  border: Border(),
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Opacity(
-                      opacity: 0.3,
-                      child: CachedNetworkImage(
-                        placeholder: (cont, _) {
-                          return Image.asset(
-                            Constance.logoIcon,
-                            // color: Colors.black,
-                          );
-                        },
-                        imageUrl: (attachment[3].file_name) ?? "",
-                        fit: BoxFit.fitHeight,
-                        errorWidget: (cont, _, e) {
-                          return Image.network(
-                            Constance.defaultImage,
-                            fit: BoxFit.fitWidth,
-                          );
-                        },
-                      ),
-                    ),
-                    Text(
-                      "View ${attachment.length - 4} More",
-                      style: Theme.of(context).textTheme.headline4?.copyWith(
-                            color: Constance.primaryColor,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        );
+        return MultipleImageWidget(attachment: attachment ?? []);
     }
   }
 
@@ -1161,3 +468,114 @@ class GuwahatiConnectPostCard extends StatelessWidget {
     }
   }
 }
+
+//  StatefulBuilder CommentItem(
+//       Comment current, BuildContext context, bool liked) {
+//     bool like = liked;
+//     return StatefulBuilder(builder: (context, _) {
+//       return SizedBox(
+//         height: 16.h,
+//         width: 40.w,
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.end,
+//           children: [
+//             SizedBox(
+//               width: double.infinity,
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   Text(
+//                     current.name ?? "",
+//                     style: Theme.of(context).textTheme.headline5?.copyWith(
+//                       color: Storage.instance.isDarkMode
+//                           ? Colors.black
+//                           : Constance.primaryColor,
+//                       fontWeight: FontWeight.bold,
+//                     ),
+//                   ),
+//                   // Icon(
+//                   //   Icons.menu,
+//                   //   color: Colors.black,
+//                   // ),
+//                 ],
+//               ),
+//             ),
+//             SizedBox(
+//               height: 1.h,
+//             ),
+//             Row(
+//               children: [
+//                 Text(
+//                   current.comment ?? "",
+//                   style: Theme.of(context).textTheme.headline6?.copyWith(
+//                     color: Colors.black,
+//                     // fontWeight: FontWeight.bold,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//             SizedBox(
+//               height: 1.h,
+//             ),
+//             // Text(
+//             //   "",
+//             //   style: Theme.of(context)
+//             //       .textTheme
+//             //       .headline5
+//             //       ?.copyWith(
+//             //         color: Colors.black,
+//             //         fontWeight: FontWeight.bold,
+//             //       ),
+//             // ),
+//             // SizedBox(
+//             //   height: 1.h,
+//             // ),
+//             SizedBox(
+//               width: double.infinity,
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 crossAxisAlignment: CrossAxisAlignment.center,
+//                 children: [
+//                   Row(
+//                     children: [
+//                       Material(
+//                         type: MaterialType.transparency,
+//                         child: IconButton(
+//                           onPressed: () {
+//                             _(() {
+//                               like = !like;
+//                             });
+//                             postCommentLike(current.id, like ? 1 : 0);
+//                           },
+//                           splashRadius: 20.0,
+//                           splashColor: Constance.secondaryColor,
+//                           icon: Icon(
+//                             Icons.thumb_up,
+//                             color: like
+//                                 ? Constance.secondaryColor
+//                                 : Constance.primaryColor,
+//                           ),
+//                         ),
+//                       ),
+//                       Text(
+//                         '${like ? (current.like_count ?? 0 + 1) : current.like_count} likes' ??
+//                             "",
+//                         style: Theme.of(context).textTheme.headline6?.copyWith(
+//                           color: Colors.black,
+//                           fontWeight: FontWeight.bold,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ),
+//
+//             SizedBox(
+//               height: 1.h,
+//             ),
+//           ],
+//         ),
+//       );
+//     });
+//   }

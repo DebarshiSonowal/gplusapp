@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -12,6 +13,7 @@ import 'package:sizer/sizer.dart';
 import 'dart:io' show Platform;
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
+import '../../Components/promoted_deal.dart';
 import '../../Components/promoted_deals_item.dart';
 import '../../Components/shop_category_item.dart';
 import '../../Helper/Constance.dart';
@@ -141,15 +143,18 @@ class _BigDealPageState extends State<BigDealPage> {
                                     'Promoted Deals',
                                     style: Theme.of(context)
                                         .textTheme
-                                        .headline3
+                                        .headline2
                                         ?.copyWith(
-                                            color: Storage.instance.isDarkMode
-                                                ? Colors.white
-                                                : Constance.primaryColor,
-                                            fontWeight: FontWeight.bold),
+                                          color: Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
                                 ),
-                          promotedDealsSection(current),
+                          PromotedDeal(
+                            current: current,
+                          ),
                           SizedBox(
                             height: 2.h,
                           ),
@@ -159,12 +164,13 @@ class _BigDealPageState extends State<BigDealPage> {
                               'Categories',
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline4
+                                  .headline3
                                   ?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Constance.primaryColor,
-                                      fontWeight: FontWeight.bold),
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ),
                           SizedBox(
@@ -262,7 +268,18 @@ class _BigDealPageState extends State<BigDealPage> {
           onPressed: () {
             Navigation.instance.navigate('/notification');
           },
-          icon: Icon(Icons.notifications),
+          icon: Consumer<DataProvider>(builder: (context, data, _) {
+            return Badge(
+              badgeColor: Constance.secondaryColor,
+              badgeContent: Text(
+                '${data.notifications.length}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Constance.thirdColor,
+                ),
+              ),
+              child: const Icon(Icons.notifications),
+            );
+          }),
         ),
         IconButton(
           onPressed: () {
@@ -574,38 +591,5 @@ class _BigDealPageState extends State<BigDealPage> {
               listen: false)
           .setClassifiedText(response.classified ?? "");
     }
-  }
-
-  Widget promotedDealsSection(current) {
-    return Column(
-      children: [
-        current.deals.isEmpty
-            ? SizedBox(
-                height: 6.h,
-              )
-            : SizedBox(
-                height: 2.h,
-              ),
-        current.deals.isEmpty
-            ? Container()
-            : SizedBox(
-                height: 31.h,
-                width: double.infinity,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: current.deals.length,
-                  itemBuilder: (cont, cout) {
-                    var data = current.deals[cout];
-                    return PromotedDealsItem(data: data);
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      width: 2.h,
-                    );
-                  },
-                ),
-              ),
-      ],
-    );
   }
 }

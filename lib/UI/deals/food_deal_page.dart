@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -49,7 +50,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
           return Column(
             children: [
               Padding(
-                padding: EdgeInsets.all(7.w),
+                padding: EdgeInsets.all(5.w),
                 child: Row(
                   children: [
                     Container(
@@ -116,7 +117,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
                             color: Colors.white,
                           ),
                           SizedBox(
-                            width: 1.w,
+                            width: 2.w,
                           ),
                           Text(
                             'Sort by',
@@ -155,11 +156,11 @@ class _FoodDealPageState extends State<FoodDealPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Icon(
-                            FontAwesomeIcons.filter,
+                            FontAwesomeIcons.sliders,
                             color: Colors.white,
                           ),
                           SizedBox(
-                            width: 1.w,
+                            width: 2.w,
                           ),
                           Text(
                             'Filter by',
@@ -192,7 +193,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 2.w),
                         child: Divider(
-                          thickness: 0.1.sp,
+                          thickness: 0.2.sp,
                           color: Storage.instance.isDarkMode?Colors.white:Colors.black,
                         ),
                       ),
@@ -231,7 +232,18 @@ class _FoodDealPageState extends State<FoodDealPage> {
           onPressed: () {
             Navigation.instance.navigate('/notification');
           },
-          icon: Icon(Icons.notifications),
+          icon: Consumer<DataProvider>(builder: (context, data, _) {
+            return Badge(
+              badgeColor: Constance.secondaryColor,
+              badgeContent: Text(
+                '${data.notifications.length}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Constance.thirdColor,
+                ),
+              ),
+              child: const Icon(Icons.notifications),
+            );
+          }),
         ),
         IconButton(
           onPressed: () {

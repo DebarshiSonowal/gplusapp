@@ -38,7 +38,7 @@ class ShopCategoryItem extends StatelessWidget {
                 e.image_file_name ?? "",
                 color: Storage.instance.isDarkMode
                     ? Colors.white
-                    : Colors.black,
+                    : Constance.primaryColor,
               ),
             ),
             SizedBox(
@@ -49,7 +49,7 @@ class ShopCategoryItem extends StatelessWidget {
               style: Theme.of(context).textTheme.headline6?.copyWith(
                 color: Storage.instance.isDarkMode
                     ? Colors.white
-                    : Constance.primaryColor,
+                    : Colors.black54,
                 // fontSize: 1.7.h,
                 fontWeight: FontWeight.bold,
               ),

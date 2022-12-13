@@ -34,7 +34,7 @@ class PromotedDealsItem extends StatelessWidget {
       },
       child: Container(
         // height: 30.h,
-        width: 60.w,
+        width: 53.w,
         decoration: BoxDecoration(
           border: Border.all(
             color:
