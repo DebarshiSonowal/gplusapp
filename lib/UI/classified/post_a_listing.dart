@@ -38,8 +38,8 @@ class _PostAListingState extends State<PostAListing> {
     'Vehicles',
     'House',
   ];
-  var selectedCategory = '';
-  var selectedLocality = '';
+  var selectedCategory;
+  var selectedLocality;
   var locality = ['Rukminigaon', 'Khanapara', 'Beltola', ''];
 
   final ImagePicker _picker = ImagePicker();
@@ -129,7 +129,7 @@ class _PostAListingState extends State<PostAListing> {
                       .toList(),
                   // After selecting the desired option,it will
                   // change button value to selected value
-                  onChanged: (String? newValue) {
+                  onChanged: ( newValue) {
                     setState(() {
                       selectedCategory = newValue!;
                     });
@@ -185,7 +185,7 @@ class _PostAListingState extends State<PostAListing> {
                       .toList(),
                   // After selecting the desired option,it will
                   // change button value to selected value
-                  onChanged: (String? newValue) {
+                  onChanged: ( newValue) {
                     setState(() {
                       selectedLocality = newValue!;
                     });
@@ -642,12 +642,12 @@ class _PostAListingState extends State<PostAListing> {
                 Navigation.instance.navigatorKey.currentContext ?? context,
                 listen: false)
             .setClassifiedCategory(response.categories ?? []);
-        selectedCategory = response.categories![0].id.toString();
+        // selectedCategory = response.categories![0].id.toString();
         Provider.of<DataProvider>(
                 Navigation.instance.navigatorKey.currentContext ?? context,
                 listen: false)
             .setLocality(response.localities ?? []);
-        selectedLocality = response.localities![0].id.toString();
+        // selectedLocality = response.localities![0].id.toString();
       });
     } else {
       setState(() {
@@ -655,12 +655,12 @@ class _PostAListingState extends State<PostAListing> {
                 Navigation.instance.navigatorKey.currentContext ?? context,
                 listen: false)
             .setClassifiedCategory(response.categories ?? []);
-        selectedCategory = response.categories![0].id.toString();
+        // selectedCategory = response.categories![0].id.toString();
         Provider.of<DataProvider>(
                 Navigation.instance.navigatorKey.currentContext ?? context,
                 listen: false)
             .setLocality(response.localities ?? []);
-        selectedLocality = response.localities![0].id.toString();
+        // selectedLocality = response.localities![0].id.toString();
       });
       // Navigation.instance.goBack();
       // showError("Something went wrong");

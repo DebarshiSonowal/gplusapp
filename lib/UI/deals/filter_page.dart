@@ -160,8 +160,8 @@ class _FilterPageState extends State<FilterPage> {
                         .where((element) => element == true)
                         .isNotEmpty
                 ? Container(
-                    margin: EdgeInsets.only(bottom: 2.h),
-                    width: 80.w,
+                    margin: EdgeInsets.only(bottom: 2.h,left: 45.w),
+                    width: 40.w,
                     height: 5.h,
                     child: CustomButton(
                       txt: 'Done',

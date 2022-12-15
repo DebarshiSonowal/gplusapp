@@ -34,7 +34,15 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () => fetchText());
+    Future.delayed(Duration.zero, () {
+      if (Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .citizenJournalist ==
+          "") {
+        fetchText();
+      }
+    });
   }
 
   @override
@@ -207,8 +215,8 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );

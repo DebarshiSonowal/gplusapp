@@ -770,8 +770,8 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -849,7 +849,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
     final response =
         await ApiProvider.instance.postLike(id, is_like, 'opinion');
     if (response.success ?? false) {
-      Fluttertoast.showToast(msg: "Post Liked");
+      Fluttertoast.showToast(msg: response.message ?? "Post Liked");
       // fetchDetails();
     } else {
       showError("Something went wrong");

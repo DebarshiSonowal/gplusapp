@@ -26,7 +26,7 @@ class VideoReportSection extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.w),
             child: Text(
-              'Video reports',
+              'Videos Of The Week',
               style: Theme.of(context).textTheme.headline3?.copyWith(
                 fontSize: 16.sp,
                 color: Storage.instance.isDarkMode

@@ -14,7 +14,7 @@ class SuggestedForYou extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return data.home_toppicks.isEmpty?Container():Container(
-      height: 27.h,
+      height: 30.h,
       width: double.infinity,
       color: Constance.secondaryColor,
       padding: EdgeInsets.symmetric(vertical: 2.h),
@@ -25,7 +25,7 @@ class SuggestedForYou extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.w),
             child: Text(
-              'Suggested for you',
+              'Top Picks For You',
               style: Theme.of(context)
                   .textTheme
                   .headline3

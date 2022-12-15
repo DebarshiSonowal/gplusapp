@@ -30,7 +30,7 @@ class SuggestedForYouCard extends StatelessWidget {
           ),
           color: Colors.white,
         ),
-        height: 10.h,
+        height: 12.h,
         width: MediaQuery.of(context).size.width - 10.w,
         child: Row(
           children: [
@@ -82,9 +82,9 @@ class SuggestedForYouCard extends StatelessWidget {
                 children: [
                   Center(
                     child: Text(
-                      item.title ?? "",
-                      maxLines: 4,
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                      item.title ?? "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient.",
+                      maxLines: 8,
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
                           // fontSize: 2.2.h,
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,

@@ -72,18 +72,19 @@ class _StoryViewPageState extends State<StoryViewPage> {
                       },
                       onComplete: () => Navigation.instance.goBack(),
                       onVerticalSwipeComplete: (direction) {
-                        if (current != null) {
-                          _launchUrl(Uri.parse(Provider.of<DataProvider>(
-                                      Navigation.instance.navigatorKey
-                                              .currentContext ??
-                                          context,
-                                      listen: false)
-                                  .stories[storyItems.indexOf(current!)]
-                                  .web_url ??
-                              "https://guwahatiplus.com/"));
-                        } else {
-                          _launchUrl(Uri.parse("https://guwahatiplus.com/"));
-                        }
+                        Navigation.instance.goBack();
+                        // if (current != null) {
+                        //   _launchUrl(Uri.parse(Provider.of<DataProvider>(
+                        //               Navigation.instance.navigatorKey
+                        //                       .currentContext ??
+                        //                   context,
+                        //               listen: false)
+                        //           .stories[storyItems.indexOf(current!)]
+                        //           .web_url ??
+                        //       "https://guwahatiplus.com/"));
+                        // } else {
+                        //   _launchUrl(Uri.parse("https://guwahatiplus.com/"));
+                        // }
                       }),
                   Align(
                     alignment: Alignment.bottomCenter,

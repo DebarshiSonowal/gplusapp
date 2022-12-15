@@ -44,7 +44,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int current = 0, currentPage = 0;
   int random = 0;
-
+  final ScrollController controller = ScrollController();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -86,6 +86,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 listen: false)
             .setCurrent(0));
     showPopUp();
+    controller.addListener(() {
+      if (controller.position.atEdge) {
+        bool isTop = controller.position.pixels == 0;
+        if (isTop) {
+          _refreshController.requestRefresh();
+        } else {
+          // print('At the bottom');
+        }
+      }
+    });
   }
 
   void _onRefresh() async {
@@ -125,22 +135,22 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.grey.shade100,
       appBar: buildAppBar(),
-      floatingActionButtonLocation: showing
-          ? FloatingActionButtonLocation.miniStartFloat
-          : FloatingActionButtonLocation.miniEndFloat,
-      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
-        onPressed: () {
-          _launchUrl(
-              Uri.parse('whatsapp://send?phone=919365974702&text=Hi+G+Plus!'));
-        },
-        child: Icon(
-          FontAwesomeIcons.whatsapp,
-          color: Colors.white,
-          size: 22.sp,
-        ),
-      ),
+      // floatingActionButtonLocation: showing
+      //     ? FloatingActionButtonLocation.miniStartFloat
+      //     : FloatingActionButtonLocation.miniEndFloat,
+      // floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.green,
+      //   onPressed: () {
+      //     _launchUrl(
+      //         Uri.parse('whatsapp://send?phone=919365974702&text=Hi+G+Plus!'));
+      //   },
+      //   child: Icon(
+      //     FontAwesomeIcons.whatsapp,
+      //     color: Colors.white,
+      //     size: 22.sp,
+      //   ),
+      // ),
       drawer: BergerMenuMemPage(),
       body: OfflineBuilder(
         connectivityBuilder: (
@@ -185,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Padding HomeScreenBody() {
     return Padding(
-      padding: EdgeInsets.only(top: 0.1.h),
+      padding: EdgeInsets.only(top: 0.h),
       child: SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
@@ -214,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefresh: _onRefresh,
         onLoading: _onLoading,
         child: Padding(
-          padding: EdgeInsets.only(top: 0.3.h),
+          padding: EdgeInsets.only(top: 0.h),
           child: Consumer<DataProvider>(builder: (context, data, _) {
             return WillPopScope(
               onWillPop: () async {
@@ -228,6 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? Colors.black
                     : Colors.grey.shade100,
                 child: SingleChildScrollView(
+                  controller: controller,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

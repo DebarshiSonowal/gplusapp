@@ -34,7 +34,7 @@ class OpinionCard extends StatelessWidget {
           ),
           color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         ),
-        height: 14.h,
+        height: 10.h,
         width: MediaQuery.of(context).size.width - 7.w,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,6 +85,7 @@ class OpinionCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style:
                                 Theme.of(context).textTheme.headline5?.copyWith(
+                                      fontSize: 11.sp,
                                       color: Storage.instance.isDarkMode
                                           ? Colors.white
                                           : Constance.fifthColor,
@@ -111,7 +112,7 @@ class OpinionCard extends StatelessWidget {
                               color: Storage.instance.isDarkMode
                                   ? Colors.white
                                   : Constance.fifthColor,
-                              fontWeight: FontWeight.bold,
+                              // fontWeight: FontWeight.bold,
                             ),
                       ),
                       Text(

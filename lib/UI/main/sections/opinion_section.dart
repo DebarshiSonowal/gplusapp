@@ -66,6 +66,7 @@ class OpinionSection extends StatelessWidget {
               separatorBuilder: (cont, inde) {
                 return SizedBox(
                   width: 10.w,
+                  height: 1.h,
                 );
               },
               itemCount: (data.latestOpinions.length > 3

@@ -39,7 +39,7 @@ class PollOfTheWeekSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Poll of the week',
+                  'Poll Of The Week',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
                         fontSize: 16.sp,
                         color: Storage.instance.isDarkMode
@@ -174,26 +174,26 @@ class PollOfTheWeekSection extends StatelessWidget {
                 },
                 itemCount: 3),
           ),
-          SizedBox(
-            height: 1.h,
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigation.instance.navigate('/pollPage');
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.w),
-              child: Text(
-                'View All',
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Storage.instance.isDarkMode
-                          ? Colors.white
-                          : Constance.primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ),
-          ),
+          // SizedBox(
+          //   height: 1.h,
+          // ),
+          // GestureDetector(
+          //   onTap: () {
+          //     Navigation.instance.navigate('/pollPage');
+          //   },
+          //   child: Padding(
+          //     padding: EdgeInsets.symmetric(horizontal: 5.w),
+          //     child: Text(
+          //       'View All',
+          //       style: Theme.of(context).textTheme.headline5?.copyWith(
+          //             color: Storage.instance.isDarkMode
+          //                 ? Colors.white
+          //                 : Constance.primaryColor,
+          //             fontWeight: FontWeight.bold,
+          //           ),
+          //     ),
+          //   ),
+          // ),
           SizedBox(
             height: 1.h,
           ),

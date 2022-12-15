@@ -874,7 +874,7 @@ class _StoryPageState extends State<StoryPage> {
     await ApiProvider.instance.addBookmark(bookmark_for_id, type);
     if (response.success ?? false) {
       Navigation.instance.goBack();
-      Fluttertoast.showToast(msg: "Bookmark added successfully");
+      Fluttertoast.showToast(msg: response.message??"Bookmark added successfully");
     } else {
       Navigation.instance.goBack();
       showError(response.message ?? "Something went wrong");

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:gplusapp/Model/opinion.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
@@ -12,6 +13,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Components/custom_button.dart';
+import '../../Components/opinion_page_item.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 
@@ -26,6 +28,7 @@ class _OpinionPageState extends State<OpinionPage> {
   int page_no = 1;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: true);
+  final ScrollController controller = ScrollController();
 
   void _onRefresh() async {
     // monitor network fetch
@@ -98,10 +101,11 @@ class _OpinionPageState extends State<OpinionPage> {
           return Container(
             height: MediaQuery.of(context).size.height - 6.h,
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.only(top: 1.h, bottom: 4.h),
+            padding: EdgeInsets.only(top: 0.h, bottom: 4.h),
             // color: Colors.grey.shade200,
             child: data.opinions.isNotEmpty
                 ? SingleChildScrollView(
+                    controller: controller,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,147 +255,33 @@ class _OpinionPageState extends State<OpinionPage> {
                             scrollDirection: Axis.vertical,
                             itemBuilder: (cont, count) {
                               var item = data.opinions[count];
-                              return GestureDetector(
-                                onTap: () {
-                                  if (data.profile?.is_plan_active ?? false) {
-                                    Navigation.instance.navigate(
-                                        '/opinionDetails',
-                                        args: item.seo_name?.trim());
-                                  } else {
-                                    Constance.showMembershipPrompt(
-                                        context, () {});
-                                  }
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 3.w, vertical: 1.h),
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(5),
-                                    ),
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.black
-                                        : Colors.white,
-                                  ),
-                                  height: 20.h,
-                                  width:
-                                      MediaQuery.of(context).size.width - 7.w,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            CachedNetworkImage(
-                                              height: 15.h,
-                                              width: 45.w,
-                                              imageUrl:
-                                                  item.image_file_name ?? '',
-                                              fit: BoxFit.fill,
-                                              placeholder: (cont, _) {
-                                                return Image.asset(
-                                                  Constance.logoIcon,
-                                                  // color: Colors.black,
-                                                );
-                                              },
-                                              errorWidget: (cont, _, e) {
-                                                return Image.network(
-                                                  Constance.defaultImage,
-                                                  fit: BoxFit.fitWidth,
-                                                );
-                                              },
-                                            ),
-                                            SizedBox(
-                                              height: 1.h,
-                                            ),
-                                            Text(
-                                              Jiffy(
-                                                      item.publish_date
-                                                          ?.split(" ")[0],
-                                                      "yyyy-MM-dd")
-                                                  .format("dd/MM/yyyy"),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Storage.instance
-                                                              .isDarkMode
-                                                          ? Colors.white
-                                                          : Colors.black),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 4.w,
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                item.title ?? "",
-                                                maxLines: 3,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline4
-                                                    ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        color: Storage.instance
-                                                                .isDarkMode
-                                                            ? Colors.white
-                                                            : Constance
-                                                                .primaryColor),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 1.h,
-                                            ),
-                                            Text(
-                                              item.user?.name ?? "G Plus News",
-                                              style: Theme.of(Navigation
-                                                      .instance
-                                                      .navigatorKey
-                                                      .currentContext!)
-                                                  .textTheme
-                                                  .headline5
-                                                  ?.copyWith(
-                                                    color: Storage
-                                                            .instance.isDarkMode
-                                                        ? Colors.white
-                                                        : Constance.fifthColor,
-                                                    // fontSize: 2.2.h,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
+                              if (count != 0) {
+                                return OpionionPageItem(
+                                  item: item,
+                                  data: data,
+                                );
+                              } else {
+                                return Container();
+                              }
                             },
                             separatorBuilder: (cont, inde) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 3.w),
-                                child: SizedBox(
-                                  height: 1.h,
-                                  child: Divider(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    thickness: 0.3.sp,
+                              if (inde != 0) {
+                                return Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 3.w),
+                                  child: SizedBox(
+                                    height: 1.h,
+                                    child: Divider(
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                      thickness: 0.3.sp,
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                              } else {
+                                return Container();
+                              }
                             },
                             itemCount: data.opinions.length),
                         SizedBox(
@@ -452,8 +342,8 @@ class _OpinionPageState extends State<OpinionPage> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -473,6 +363,16 @@ class _OpinionPageState extends State<OpinionPage> {
   void initState() {
     super.initState();
     // fetchOpinions();
+    controller.addListener(() {
+      if (controller.position.atEdge) {
+        bool isTop = controller.position.pixels == 0;
+        if (isTop) {
+          _refreshController.requestRefresh();
+        } else {
+          // print('At the bottom');
+        }
+      }
+    });
   }
 
   void fetchOpinions() async {

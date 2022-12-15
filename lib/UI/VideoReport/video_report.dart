@@ -216,7 +216,7 @@ class _VideoReportState extends State<VideoReport> {
                                       height: 2.h,
                                     ),
                                     Text(
-                                      'G Plus Admin, ${Jiffy(data.video_news[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                                      '${Jiffy(data.video_news[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
                                       style: Theme.of(Navigation.instance
                                               .navigatorKey.currentContext!)
                                           .textTheme

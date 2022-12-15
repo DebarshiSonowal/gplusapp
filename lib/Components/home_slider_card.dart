@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:sizer/sizer.dart';
-
+import "../Helper/string_extension.dart";
 import '../Helper/Constance.dart';
 import '../Model/article.dart';
 import '../Navigation/Navigate.dart';
@@ -66,16 +66,33 @@ class HomeSliderItem extends StatelessWidget {
                 ),
               ),
               // color: Colors.black.withOpacity(0.5),
-              padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 2.w),
+              padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 4.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 2.w,vertical: 0.5.h),
+                    color:Constance.primaryColor,
+                    child: Text(
+                      current.first_cat_name?.seo_name?.capitalize() ?? 'Big Deals\nand Offers',
+                      style: Theme.of(context).textTheme.headline3?.copyWith(
+                        color: Colors.grey.shade200,
+                        // fontSize: 25.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
                   Text(
                     current.title ?? 'Big Deals\nand Offers',
-                    style: Theme.of(context).textTheme.headline4?.copyWith(
-                        color: Colors.grey.shade200,
-                        fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headline3?.copyWith(
+                          color: Colors.grey.shade200,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   SizedBox(
                     height: 0.5.h,
