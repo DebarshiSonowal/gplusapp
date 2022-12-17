@@ -7,13 +7,11 @@ import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-
-
 class VideoPlayerScreen extends StatefulWidget {
   final String input;
 
-  VideoPlayerScreen(this.input){
-   print(input.toString().split(',')[1]);
+  VideoPlayerScreen(this.input) {
+    print(input.toString().split(',')[1]);
   }
 
   @override
@@ -82,7 +80,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             context,
                         listen: false)
                     .video_news)
-            .indexWhere((element) => element.youtube_id == widget.input.toString().split(',')[0]));
+            .indexWhere((element) =>
+                element.youtube_id == widget.input.toString().split(',')[0]));
 
         page = (widget.input.toString().split(',')[1] == '1'
                 ? Provider.of<DataProvider>(
@@ -95,7 +94,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             context,
                         listen: false)
                     .video_news)
-            .indexWhere((element) => element.youtube_id ==  widget.input.toString().split(',')[0]);
+            .indexWhere((element) =>
+                element.youtube_id == widget.input.toString().split(',')[0]);
         // _controller = YoutubePlayerController(
         //   initialVideoId: widget.youtube_id,
         //   flags: const YoutubePlayerFlags(
@@ -149,7 +149,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           ),
           child: Consumer<DataProvider>(builder: (context, data, _) {
             return Container(
-              padding: EdgeInsets.only(top: 0.h,),
+              padding: EdgeInsets.only(
+                top: 0.h,
+              ),
               child: PageView.builder(
                 itemCount: _controllers.length,
                 scrollDirection: Axis.horizontal,
@@ -173,7 +175,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           height: 70.h,
                           width: double.infinity,
                           child: Padding(
-                            padding: EdgeInsets.only(top: 7.h, bottom: 15.h,),
+                            padding: EdgeInsets.only(
+                              top: 7.h,
+                              bottom: 15.h,
+                            ),
                             child: YoutubePlayer(
                               // controller: _controller = YoutubePlayerController(
                               //   initialVideoId: current.youtube_id!,
@@ -184,6 +189,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               // ),
                               controller: _controllers[index],
                               showVideoProgressIndicator: true,
+                              thumbnail: Image.network(
+                                getYoutubeThumbnail(current.youtube_id),
+                                fit: BoxFit.fill,
+                              ),
                               // aspectRatio: 16 / 10,
                               // videoProgressIndicatorColor: Colors.amber,
                               progressColors: const ProgressBarColors(
@@ -234,9 +243,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 1.w),
                                 child: Text(
-                                  "${page + 1} of ${(widget.input.toString().split(',')[1] == '1'
-                                      ? data.home_weekly
-                                      : data.video_news).length}",
+                                  "${page + 1} of ${(widget.input.toString().split(',')[1] == '1' ? data.home_weekly : data.video_news).length}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline3
@@ -325,16 +332,18 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                   Future.delayed(Duration(seconds: 2), () {
                     setState(() {
                       currentId = (widget.input.toString().split(',')[1] == '1'
-                          ? Provider.of<DataProvider>(
-                          Navigation.instance.navigatorKey.currentContext ??
-                              context,
-                          listen: false)
-                          .home_weekly
-                          : Provider.of<DataProvider>(
-                          Navigation.instance.navigatorKey.currentContext ??
-                              context,
-                          listen: false)
-                          .video_news)[count]
+                              ? Provider.of<DataProvider>(
+                                      Navigation.instance.navigatorKey
+                                              .currentContext ??
+                                          context,
+                                      listen: false)
+                                  .home_weekly
+                              : Provider.of<DataProvider>(
+                                      Navigation.instance.navigatorKey
+                                              .currentContext ??
+                                          context,
+                                      listen: false)
+                                  .video_news)[count]
                           .youtube_id!;
                     });
                   });
@@ -345,5 +354,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         ),
       ),
     );
+  }
+
+  String getYoutubeThumbnail(var id) {
+    return 'https://img.youtube.com/vi/${id}/0.jpg';
   }
 }

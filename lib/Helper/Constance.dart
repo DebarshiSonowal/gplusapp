@@ -35,10 +35,10 @@ class Constance {
   static const paymentIcon = 'assets/animation/payment.json';
   static const defaultImage =
       'http://gplus.shecure.co.in/public/web/images/logo.png';
-  // static const googleApiKey = "AIzaSyBSwGrs_l9vnBKU5tdS_1dv2JnKTt-ISdw";
-  static const googleApiKey = "AIzaSyAOniov-vDxU0pIg--OvkCeEsN7iK2Eozo";
-  // static const googleApiKeyIos = "AIzaSyCnFa6MT7xDbZ_Fb94uVz5fFuecg7xcoes";
-  static const googleApiKeyIos = "AIzaSyAOniov-vDxU0pIg--OvkCeEsN7iK2Eozo";
+  static const googleApiKey = "AIzaSyBSwGrs_l9vnBKU5tdS_1dv2JnKTt-ISdw";
+  // static const googleApiKey = "AIzaSyAOniov-vDxU0pIg--OvkCeEsN7iK2Eozo";
+  static const googleApiKeyIos = "AIzaSyCnFa6MT7xDbZ_Fb94uVz5fFuecg7xcoes";
+  // static const googleApiKeyIos = "AIzaSyAOniov-vDxU0pIg--OvkCeEsN7iK2Eozo";
   static var listPagesViewModel = [
     PageViewModel(
       title: "G Plus",

@@ -7,6 +7,7 @@ import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
@@ -434,7 +435,6 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       SizedBox(
                         height: 1.h,
                       ),
-
                     ],
                   ),
                 ),
@@ -1051,7 +1051,6 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 onTap: () {
                   if (data.profile?.is_plan_active ?? false) {
                     Navigation.instance.navigate('/profile');
-
                   } else {
                     Navigation.instance.navigate('/beamember');
                   }
@@ -1146,12 +1145,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             ),
                             Text(
                               'About Us',
-                              style:
-                                  Theme.of(context).textTheme.headline4?.copyWith(
-                                        color: Colors.white,
-                                        // fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    // fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ],
                         ),
@@ -1180,12 +1181,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             ),
                             Text(
                               'Contact Us',
-                              style:
-                                  Theme.of(context).textTheme.headline4?.copyWith(
-                                        color: Colors.white,
-                                        // fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    // fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ],
                         ),
@@ -1214,12 +1217,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             ),
                             Text(
                               'Privacy Policy',
-                              style:
-                                  Theme.of(context).textTheme.headline4?.copyWith(
-                                        color: Colors.white,
-                                        // fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    // fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ],
                         ),
@@ -1245,12 +1250,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             ),
                             Text(
                               'Refund Policy',
-                              style:
-                                  Theme.of(context).textTheme.headline4?.copyWith(
-                                        color: Colors.white,
-                                        // fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    // fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ],
                         ),
@@ -1276,12 +1283,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             ),
                             Text(
                               'Terms and Conditions',
-                              style:
-                              Theme.of(context).textTheme.headline4?.copyWith(
-                                color: Colors.white,
-                                // fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    // fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ],
                         ),
@@ -1310,12 +1319,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             ),
                             Text(
                               'Grievance Redressal',
-                              style:
-                                  Theme.of(context).textTheme.headline4?.copyWith(
-                                        color: Colors.white,
-                                        // fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    // fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ],
                         ),
@@ -1344,18 +1355,255 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             ),
                             Text(
                               'Advertise With Us',
-                              style:
-                                  Theme.of(context).textTheme.headline4?.copyWith(
-                                        color: Colors.white,
-                                        // fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    // fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ],
                         ),
                       ),
                     ),
                   ],
+                ),
+              ),
+              const Divider(
+                color: Colors.white,
+                thickness: 0.2,
+              ),
+              Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
+                child: ListTileTheme(
+                  contentPadding: EdgeInsets.all(0),
+                  child: ExpansionTile(
+                    title: Row(
+                      children: [
+                        const Icon(
+                          FontAwesomeIcons.meta,
+                          color: Constance.secondaryColor,
+                        ),
+                        SizedBox(
+                          width: 3.w,
+                        ),
+                        Text(
+                          'Our Socials',
+                          style:
+                              Theme.of(context).textTheme.headline4?.copyWith(
+                                    color: Colors.white,
+                                    // fontSize: 19.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        SizedBox(
+                          width: 2.w,
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.white,
+                          size: 3.h,
+                        ),
+                      ],
+                    ),
+                    trailing: Container(
+                      height: 6,
+                      width: 6,
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    children: [
+                      InkWell(
+                        splashColor: Constance.secondaryColor,
+                        radius: 15.w,
+                        onTap: () {
+                          _launchUrl(Uri.parse(
+                              'https://www.facebook.com/guwahatiplus/'));
+                        },
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Icon(
+                              FontAwesomeIcons.facebook,
+                              color: Constance.secondaryColor,
+                              size: 12.sp,
+                            ),
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Text(
+                              'Facebook',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            Expanded(child: Container()),
+                            Container(
+                              height: 6,
+                              width: 6,
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      InkWell(
+                        splashColor: Constance.secondaryColor,
+                        radius: 15.w,
+                        onTap: () {
+                          _launchUrl(Uri.parse(
+                              'https://www.instagram.com/guwahatiplus/'));
+                        },
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Icon(
+                              FontAwesomeIcons.instagram,
+                              color: Constance.secondaryColor,
+                              size: 12.sp,
+                            ),
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Text(
+                              'Instagram',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                color: Colors.white,
+                                fontSize: 10.sp,
+                                // fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Expanded(child: Container()),
+                            Container(
+                              height: 6,
+                              width: 6,
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      InkWell(
+                        splashColor: Constance.secondaryColor,
+                        radius: 15.w,
+                        onTap: () {
+                          _launchUrl(Uri.parse(
+                              'https://twitter.com/guwahatiplus'));
+                        },
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Icon(
+                              FontAwesomeIcons.twitter,
+                              color: Constance.secondaryColor,
+                              size: 12.sp,
+                            ),
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Text(
+                              'Twitter',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                color: Colors.white,
+                                fontSize: 10.sp,
+                                // fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Expanded(child: Container()),
+                            Container(
+                              height: 6,
+                              width: 6,
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      InkWell(
+                        splashColor: Constance.secondaryColor,
+                        radius: 15.w,
+                        onTap: () {
+                          _launchUrl(Uri.parse(
+                              'https://youtube.com/@GPlusGuwahati'));
+                        },
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Icon(
+                              FontAwesomeIcons.youtube,
+                              color: Constance.secondaryColor,
+                              size: 12.sp,
+                            ),
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Text(
+                              'Youtube',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                color: Colors.white,
+                                fontSize: 10.sp,
+                                // fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Expanded(child: Container()),
+                            Container(
+                              height: 6,
+                              width: 6,
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const Divider(
@@ -1520,5 +1768,11 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  Future<void> _launchUrl(_url) async {
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
   }
 }

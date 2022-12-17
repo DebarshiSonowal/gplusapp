@@ -17,7 +17,7 @@ class GPlusExclusiveSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 27.h,
+      height: 30.h,
       width: double.infinity,
       // color: Constance.secondaryColor,
       padding: EdgeInsets.symmetric(vertical: 0.5.h),

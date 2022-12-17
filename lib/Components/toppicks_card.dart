@@ -82,10 +82,11 @@ class SuggestedForYouCard extends StatelessWidget {
                 children: [
                   Center(
                     child: Text(
-                      item.title ?? "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient.",
+                      item.title ??
+                          "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient.",
                       maxLines: 8,
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                          // fontSize: 2.2.h,
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                          // fontSize: 11.sp,
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,
                           color: Constance.primaryColor),
@@ -95,7 +96,7 @@ class SuggestedForYouCard extends StatelessWidget {
                   //   height: 1.5.h,
                   // ),
                   Text(
-                    item.author_name??"",
+                    item.author_name ?? "",
                     style: Theme.of(context)
                         .textTheme
                         .headline6

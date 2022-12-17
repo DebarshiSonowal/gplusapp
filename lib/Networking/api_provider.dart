@@ -1631,6 +1631,84 @@ class ApiProvider {
       return GenericResponse.withError(e.message);
     }
   }
+  Future<GenericResponse> deleteComment(comment_id,) async {
+    var url = "${baseUrl}/app/comment-delete/${comment_id}";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // var data = {
+    //   'device_token': token,
+    // };
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        // data: data,
+        // queryParameters: data,
+      );
+      debugPrint("comment-delete response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("comment-delete error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("comment-delete error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+  Future<GenericResponse> editComment(commentId, comment) async {
+    var url = "$baseUrl/app/comment/$commentId";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'comment': comment,
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("comment-edit response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("comment-edit error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("comment-edit error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
 
   Future<GenericResponse> notificationRead(id) async {
     var url = "${baseUrl}/app/notifications/read";
@@ -2678,7 +2756,7 @@ class ApiProvider {
   }
 
   Future<GenericResponse> deactiveAccount() async {
-    var url = "${baseUrl}/app/deactive-user";
+    var url = "${baseUrl}/request-for-deactive";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',

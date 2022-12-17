@@ -1,11 +1,12 @@
 import 'dart:convert';
-
+import 'package:flutter_config/flutter_config.dart';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Helper/Storage.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_file_safe/open_file_safe.dart';
+// import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
 import 'Components/alert.dart';
@@ -72,6 +73,7 @@ void main() async {
     // name: "GPlusNewApp",
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FlutterConfig.loadEnvVariables();
   setUpFirebase();
   Storage.instance.initializeStorage();
   const AndroidInitializationSettings initializationSettingsAndroid =

@@ -86,7 +86,7 @@ class GPlusExecCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       item.title ?? "",
-                      maxLines: 4,
+                      maxLines: 7,
                       style: Theme.of(context).textTheme.headline5?.copyWith(
                           // fontSize: 2.2.h,
                           fontWeight: FontWeight.bold,

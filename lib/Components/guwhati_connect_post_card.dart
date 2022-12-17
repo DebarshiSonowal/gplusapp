@@ -244,15 +244,20 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Text(
-                          '${data.total_comment} comments' ?? "",
-                          style:
-                              Theme.of(context).textTheme.headline6?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                        GestureDetector(
+                          onTap:(){
+                            showComments(count, context);
+                          },
+                          child: Text(
+                            '${data.total_comment} comments' ?? "",
+                            style:
+                                Theme.of(context).textTheme.headline6?.copyWith(
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                          ),
                         ),
                       ],
                     ),

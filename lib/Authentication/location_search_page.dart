@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:flutter_config/flutter_config.dart';
+
 
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -25,9 +27,11 @@ class _LocationSearchPageState extends State<LocationSearchPage> {
   void initState() {
     // String apiKey = DotEnv().env['API_KEY'];
     if (Platform.isAndroid) {
-      googlePlace = GooglePlace(Constance.googleApiKey);
+      // googlePlace = GooglePlace(Constance.googleApiKey);
+      googlePlace = GooglePlace(FlutterConfig.get('androidMapKey'));
     } else {
-      googlePlace = GooglePlace(Constance.googleApiKeyIos);
+      // googlePlace = GooglePlace(Constance.googleApiKeyIos);
+      googlePlace = GooglePlace(FlutterConfig.get('iosMapKey'));
     }
     super.initState();
   }
@@ -107,7 +111,9 @@ class _LocationSearchPageState extends State<LocationSearchPage> {
                     return ListTile(
                       onTap: () async {
                         DetailsResponse? current =
-                            await googlePlace.details.get(data.placeId!);
+                            await googlePlace.details.get(data.placeId!).catchError((err){
+                              print(err);
+                            });
                         debugPrint(current?.result?.reference);
                         // var googleGeocoding =
                         //     GoogleGeocoding(Constance.googleApiKey);
@@ -148,7 +154,9 @@ class _LocationSearchPageState extends State<LocationSearchPage> {
   }
 
   void autoCompleteSearch(String value) async {
-    var result = await googlePlace.autocomplete.get(value);
+    var result = await googlePlace.autocomplete.get(value).catchError((err){
+      print(err);
+    });
     if (result != null && result.predictions != null && mounted) {
       setState(() {
         predictions = result.predictions!;
