@@ -32,7 +32,7 @@ class VideoNews {
     description = json['description'] ?? "";
     image_file_name = json['image_file_name'] ?? "";
     as_title = json['as_title'] ?? "";
-    sequence = json['sequence'] ?? "";
+    // sequence = json['sequence'] ?? "";
     as_description = json['as_description'] ?? "";
     video_file_name = json['video_file_name'] ?? "";
     youtube_id = json['youtube_id'] ?? "";
@@ -49,16 +49,15 @@ class VideoNewsResponse {
     message = json['message'] ?? "Something Went Wrong";
     videos = json['data'] == null
         ? []
-        : (json['data'] as List)
-            .map((e) => VideoNews.fromJson(e))
-            .toList();
-  }
-  VideoNewsResponse.withError(msg){
-    success = false;
-    message = msg??"Something Went Wrong";
+        : (json['data'] as List).map((e) => VideoNews.fromJson(e)).toList();
   }
 
+  VideoNewsResponse.withError(msg) {
+    success = false;
+    message = msg ?? "Something Went Wrong";
+  }
 }
+
 class MoreVideoNewsResponse {
   bool? success;
   String? message;
@@ -70,12 +69,12 @@ class MoreVideoNewsResponse {
     videos = json['data']['data'] == null
         ? []
         : (json['data']['data'] as List)
-        .map((e) => VideoNews.fromJson(e))
-        .toList();
-  }
-  MoreVideoNewsResponse.withError(msg){
-    success = false;
-    message = msg??"Something Went Wrong";
+            .map((e) => VideoNews.fromJson(e))
+            .toList();
   }
 
+  MoreVideoNewsResponse.withError(msg) {
+    success = false;
+    message = msg ?? "Something Went Wrong";
+  }
 }

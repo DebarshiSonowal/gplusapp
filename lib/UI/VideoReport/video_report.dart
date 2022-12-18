@@ -42,7 +42,7 @@ class _VideoReportState extends State<VideoReport> {
     setState(() {
       page = 1;
     });
-    final response = await ApiProvider.instance.getVideoNews();
+    final response = await ApiProvider.instance.getVideoMoreNews(widget.category, 10, 1);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
@@ -366,7 +366,7 @@ class _VideoReportState extends State<VideoReport> {
   }
 
   void fetchData() async {
-    final response = await ApiProvider.instance.getVideoNews();
+    final response = await ApiProvider.instance.getVideoMoreNews(widget.category, 10, 1);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,

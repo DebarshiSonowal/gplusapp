@@ -167,7 +167,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                               element.is_primary == 1)
                                           .isEmpty ??
                                       false
-                                  ? ""
+                                  ? data.profile?.addresses.first.address ?? ""
                                   : data.profile?.addresses
                                           .where((element) =>
                                               element.is_primary == 1)
@@ -1490,10 +1490,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                   .textTheme
                                   .headline6
                                   ?.copyWith(
-                                color: Colors.white,
-                                fontSize: 10.sp,
-                                // fontWeight: FontWeight.bold,
-                              ),
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                             ),
                             Expanded(child: Container()),
                             Container(
@@ -1514,8 +1514,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         splashColor: Constance.secondaryColor,
                         radius: 15.w,
                         onTap: () {
-                          _launchUrl(Uri.parse(
-                              'https://twitter.com/guwahatiplus'));
+                          _launchUrl(
+                              Uri.parse('https://twitter.com/guwahatiplus'));
                         },
                         child: Row(
                           children: [
@@ -1536,10 +1536,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                   .textTheme
                                   .headline6
                                   ?.copyWith(
-                                color: Colors.white,
-                                fontSize: 10.sp,
-                                // fontWeight: FontWeight.bold,
-                              ),
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                             ),
                             Expanded(child: Container()),
                             Container(
@@ -1560,8 +1560,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         splashColor: Constance.secondaryColor,
                         radius: 15.w,
                         onTap: () {
-                          _launchUrl(Uri.parse(
-                              'https://youtube.com/@GPlusGuwahati'));
+                          _launchUrl(
+                              Uri.parse('https://youtube.com/@GPlusGuwahati'));
                         },
                         child: Row(
                           children: [
@@ -1582,10 +1582,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                   .textTheme
                                   .headline6
                                   ?.copyWith(
-                                color: Colors.white,
-                                fontSize: 10.sp,
-                                // fontWeight: FontWeight.bold,
-                              ),
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                             ),
                             Expanded(child: Container()),
                             Container(

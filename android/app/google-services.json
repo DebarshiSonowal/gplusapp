@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "1048331216720-dgtmeqg5m1meblmmbgnsdim5n9i8kdcc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appbazooka.gplus",
+            "certificate_hash": "8380022215f67f9de75f4dc3f93b7b62247453ac"
+          }
+        },
+        {
           "client_id": "1048331216720-r6d24ki8mbi7nqf6e015mqaron6qjtc8.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -38,6 +46,14 @@
             {
               "client_id": "1048331216720-r6d24ki8mbi7nqf6e015mqaron6qjtc8.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1048331216720-7og2ruaqtb2lk53dd39v2q4c0lv0529v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gplus.app.gplusapp",
+                "app_store_id": "6444875975"
+              }
             }
           ]
         }

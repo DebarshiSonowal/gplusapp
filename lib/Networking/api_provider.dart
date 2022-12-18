@@ -1125,7 +1125,7 @@ class ApiProvider {
     }
   }
 
-  Future<VideoNewsResponse> getVideoNews() async {
+  Future<VideoNewsResponse> getVideoNews(categ) async {
     // var data = {
     //   // 'mobile': mobile,
     // };

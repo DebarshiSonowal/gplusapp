@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
-		70BFEE7B294D7D8D00D43244 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70BFEE7A294D7D8D00D43244 /* StoreKit.framework */; };
 		70F343A0293F1DE300F3DF0C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 70F3439F293F1DE200F3DF0C /* GoogleService-Info.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		923ECA1D8529C2F97BF6BEAA /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FC6ADB39FB4007412049C8A /* Pods_Runner.framework */; };
@@ -37,7 +36,6 @@
 		2FC6ADB39FB4007412049C8A /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		7016C8D0293E6737007108B0 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
-		70BFEE7A294D7D8D00D43244 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		70F3439F293F1DE200F3DF0C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -60,7 +58,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				923ECA1D8529C2F97BF6BEAA /* Pods_Runner.framework in Frameworks */,
-				70BFEE7B294D7D8D00D43244 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,7 +77,6 @@
 		5077F6CEFE2CC2DAB1B3929E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				70BFEE7A294D7D8D00D43244 /* StoreKit.framework */,
 				2FC6ADB39FB4007412049C8A /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
@@ -392,7 +388,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30405;
+				CURRENT_PROJECT_VERSION = 30407;
 				DEVELOPMENT_TEAM = 2D4P335MFU;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -403,7 +399,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 3.4.7;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gplus.app.gplusapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -542,7 +539,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30405;
+				CURRENT_PROJECT_VERSION = 30407;
 				DEVELOPMENT_TEAM = 2D4P335MFU;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -553,7 +550,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 3.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gplus.app.gplusapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -578,7 +575,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30405;
+				CURRENT_PROJECT_VERSION = 30407;
 				DEVELOPMENT_TEAM = 2D4P335MFU;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -589,7 +586,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 3.4.7;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gplus.app.gplusapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
