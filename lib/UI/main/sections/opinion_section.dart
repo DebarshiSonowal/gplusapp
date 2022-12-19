@@ -56,7 +56,7 @@ class OpinionSection extends StatelessWidget {
                           false) {
                         Navigation.instance.navigate(
                             '/opinionDetails',
-                            args: item.seo_name?.trim());
+                            args: '${item.seo_name?.trim()},${item.category_gallery?.id}');
                       } else {
                         showNotaMember();
                       }

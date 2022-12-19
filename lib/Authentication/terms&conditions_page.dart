@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
@@ -8,6 +9,7 @@ import 'package:sizer/sizer.dart';
 import '../Components/alert.dart';
 import '../Helper/Constance.dart';
 import '../Helper/DataProvider.dart';
+import '../Helper/Storage.dart';
 
 class TermsAndConditions extends StatefulWidget {
   final int mobile;
@@ -55,19 +57,21 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
             SizedBox(
               height: 2.h,
             ),
-            Expanded(
-              flex: 1,
+            SizedBox(
+              height: 62.h,
               child: SingleChildScrollView(
-                scrollDirection: Axis.vertical, //.horizontal
-                child: Text(
-                  terms,
-                  overflow: TextOverflow.clip,
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black,
-                        fontSize: 11.sp,
-                        // fontWeight: FontWeight.bold,
+                child: Html(data: terms,
+                    // overflow: TextOverflow.clip,
+                    style: {
+                      '#': Style(
+                        // fontSize: FontSize(_counterValue),
+                        // maxLines: 20,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
+                        // textOverflow: TextOverflow.ellipsis,
                       ),
-                ),
+                    }),
               ),
             ),
             // Spacer(),

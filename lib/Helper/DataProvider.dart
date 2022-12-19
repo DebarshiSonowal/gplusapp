@@ -36,14 +36,16 @@ import '../Model/topick.dart';
 
 class DataProvider extends ChangeNotifier {
   int currentIndex = 0;
-  Profile? profile, author;
+  Profile? profile;
+  AuthorProfile? author;
   List<NotificationInDevice> notifications = [];
   List<Opinion> opinions = [];
   List<Story> stories = [];
   List<Article> home_albums = [],
       home_exclusive = [],
       news_from = [],
-      suggestion = [];
+      suggestion = [],
+      authors_news = [];
   List<VideoNews> home_weekly = [], video_news = [];
   List<Opinion> latestOpinions = [];
   List<Membership> memberships = [];
@@ -256,6 +258,11 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setAuthorsNews(List<Article> list) {
+    authors_news = list;
+    notifyListeners();
+  }
+
   addHomeTopPicks(List<TopPicks> list) {
     home_toppicks.addAll(list);
     notifyListeners();
@@ -326,7 +333,7 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  setAuthor(Profile prof) {
+  setAuthor(AuthorProfile prof) {
     author = prof;
     notifyListeners();
   }

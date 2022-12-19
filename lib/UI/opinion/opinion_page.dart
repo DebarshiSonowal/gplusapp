@@ -148,7 +148,7 @@ class _OpinionPageState extends State<OpinionPage> {
                         GestureDetector(
                           onTap: () {
                             Navigation.instance.navigate('/opinionDetails',
-                                args: data.opinions[0].seo_name?.trim());
+                                args: '${data.opinions[0].seo_name?.trim()},${data.opinions[0].category_gallery?.id}');
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 5.w),
@@ -177,7 +177,7 @@ class _OpinionPageState extends State<OpinionPage> {
                           onTap: () {
                             if (data.profile?.is_plan_active ?? false) {
                               Navigation.instance.navigate('/opinionDetails',
-                                  args: data.opinions[0].seo_name?.trim());
+                                  args: '${data.opinions[0].seo_name?.trim()},${data.opinions[0].category_gallery?.id}');
                             } else {
                               Constance.showMembershipPrompt(context, () {});
                             }

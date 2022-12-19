@@ -23,9 +23,11 @@ class OpionionPageItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (data.profile?.is_plan_active ?? false) {
-          Navigation.instance.navigate(
-              '/opinionDetails',
-              args: item.seo_name?.trim());
+          // Navigation.instance.navigate(
+          //     '/opinionDetails',
+          //     args: item.seo_name?.trim());
+          Navigation.instance.navigate('/opinionDetails',
+              args: '${item.seo_name?.trim()},${item.category_gallery?.id}');
         } else {
           Constance.showMembershipPrompt(
               context, () {});

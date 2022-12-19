@@ -1015,7 +1015,8 @@ class ApiProvider {
       'Authorization': 'Bearer ${Storage.instance.token}'
       // 'APP-KEY': ConstanceData.app_key
     });
-    var url = "${homeUrl}/opinion/editorials/${slug}";
+    var url =
+        "${homeUrl}/opinion/${slug.toString().split(",")[1] == '4' ? 'editorials' : 'opinion'}/${slug.toString().split(",")[0]}";
     dio = Dio(option);
     debugPrint(url.toString());
     // debugPrint(jsonEncode(data));
@@ -1631,7 +1632,10 @@ class ApiProvider {
       return GenericResponse.withError(e.message);
     }
   }
-  Future<GenericResponse> deleteComment(comment_id,) async {
+
+  Future<GenericResponse> deleteComment(
+    comment_id,
+  ) async {
     var url = "${baseUrl}/app/comment-delete/${comment_id}";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -1670,6 +1674,7 @@ class ApiProvider {
       return GenericResponse.withError(e.message);
     }
   }
+
   Future<GenericResponse> editComment(commentId, comment) async {
     var url = "$baseUrl/app/comment/$commentId";
     BaseOptions option =

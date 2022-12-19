@@ -2,11 +2,13 @@ import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gplusapp/Components/author_related_opinion.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Components/alert.dart';
+import '../../Components/author_related_news.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
@@ -32,7 +34,7 @@ class _AuthorPageState extends State<AuthorPage> {
         return Container(
           padding: EdgeInsets.symmetric(
             vertical: 1.h,
-            horizontal: 5.w,
+            // horizontal: 5.w,
           ),
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.start,
@@ -40,7 +42,8 @@ class _AuthorPageState extends State<AuthorPage> {
               SizedBox(
                 height: 2.h,
               ),
-              SizedBox(
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
                 height: 15.h,
                 width: double.infinity,
                 child: Row(
@@ -106,7 +109,7 @@ class _AuthorPageState extends State<AuthorPage> {
                               ),
                         ),
                         Row(
-                          children:  [
+                          children: [
                             Icon(
                               FontAwesomeIcons.facebookSquare,
                               color: Storage.instance.isDarkMode
@@ -141,24 +144,15 @@ class _AuthorPageState extends State<AuthorPage> {
               SizedBox(
                 height: 5.h,
               ),
-              Text(
-                'It is a long established fact that a reader will be '
-                'distracted by the readable content of a page when '
-                'looking at its layout. The point of using Lorem Ipsum '
-                'is that it has a more-or-less normal distribution of letters, '
-                'as opposed to using. Many desktop publishing packages and'
-                ' web page editors now use Lorem Ipsum as their default model'
-                ' text, and a search for will uncover many web sites still in'
-                ' their infancy.',
-                style:
-                    Theme.of(Navigation.instance.navigatorKey.currentContext!)
-                        .textTheme
-                        .headline4
-                        ?.copyWith(
-                          color:Storage.instance.isDarkMode ? Colors.white : Colors.black,
-                          // fontSize: 11.sp,
-                          // fontWeight: FontWeight.bold,
-                        ),
+              AuthorRelatedNews(
+                data,
+                news: data.author?.news ?? [],
+              ),
+              SizedBox(
+                height: 5.h,
+              ),
+              AuthorRelatedOpinions(
+                opinions: data.author?.opinions ?? [], data: data,
               ),
             ],
           ),
@@ -221,8 +215,8 @@ class _AuthorPageState extends State<AuthorPage> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );

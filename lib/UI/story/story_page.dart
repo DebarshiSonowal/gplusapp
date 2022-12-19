@@ -1,9 +1,14 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+
+// import 'package:flutter_html/custom_render.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
@@ -11,7 +16,11 @@ import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
+import 'package:twitter_oembed_api/twitter_oembed_api.dart';
+
+// import 'package:twitter_cards/twitter_cards.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../Components/alert.dart';
 import '../../Components/suggestion_card.dart';
@@ -36,16 +45,16 @@ class StoryPage extends StatefulWidget {
 }
 
 class _StoryPageState extends State<StoryPage> {
+  final twitterApi = TwitterOEmbedApi();
   int random = 0;
   var categories = ['international', 'assam', 'guwahati', 'india'];
   var dropdownvalue = 'international';
 
   // WebViewController? _controller;
-  bool like = false,
-      dislike = false;
-
+  bool like = false, dislike = false;
+  String blockquote = "";
   int skip = 10;
-
+  WebViewController? _controller;
   bool is_bookmark = false;
 
   @override
@@ -63,602 +72,650 @@ class _StoryPageState extends State<StoryPage> {
     return Scaffold(
       appBar: buildAppBar(),
       body: Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height,
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return SingleChildScrollView(
             child: data.selectedArticle == null
                 ? Container()
                 : Column(
-              children: [
-                Container(
-                  height: 39.h,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    // borderRadius: BorderRadius.all(
-                    //   // Radius.circular(10),
-                    // ),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: CachedNetworkImageProvider(
-                        data.selectedArticle?.image_file_name ??
-                            'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 5.w, vertical: 1.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      // Row(
-                      //   children: [
-                      //     Container(
-                      //       color: Constance.primaryColor,
-                      //       padding: EdgeInsets.symmetric(
-                      //           horizontal: 2.w, vertical: 1.h),
-                      //       child: Text(
-                      //         'Guwahati',
-                      //         style: Theme.of(Navigation.instance
-                      //                 .navigatorKey.currentContext!)
-                      //             .textTheme
-                      //             .headline5
-                      //             ?.copyWith(
-                      //               color: Colors.white,
-                      //               // fontSize: 2.2.h,
-                      //               // fontWeight: FontWeight.bold,
-                      //             ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Text(
-                        data.selectedArticle?.title ??
-                            'It is a long established fact that a reader will be distracted by the readable content of a',
-                        style: Theme
-                            .of(Navigation
-                            .instance.navigatorKey.currentContext!)
-                            .textTheme
-                            .headline3
-                            ?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Constance.primaryColor,
-                          // fontSize: 2.2.h,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigation.instance.navigate('/authorPage',
-                              args: data.selectedArticle?.author);
-                        },
-                        child: Text(
-                          '${data.selectedArticle?.author_name ?? "G Plus"}, ${
-                          // Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()
-                              Jiffy(data.selectedArticle?.publish_date?.split(
-                                  " ")[0], "yyyy-MM-dd").format("dd/MM/yyyy")}',
-                          style: Theme
-                              .of(Navigation
-                              .instance.navigatorKey.currentContext!)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
-                            // fontSize: 2.2.h,
-                            // fontWeight: FontWeight.bold,
+                      Container(
+                        height: 39.h,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          // borderRadius: BorderRadius.all(
+                          //   // Radius.circular(10),
+                          // ),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: CachedNetworkImageProvider(
+                              data.selectedArticle?.image_file_name ??
+                                  'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+                            ),
                           ),
                         ),
                       ),
-
-                      SizedBox(
-                        height: 1.5.h,
-                      ),
-                      Row(
-                        children: [
-                          Material(
-                            type: MaterialType.transparency,
-                            child: IconButton(
-                              onPressed: () {
-                                postLike(data.selectedArticle?.id, 1);
-                                setState(() {
-                                  like = !like;
-                                  if (dislike) {
-                                    dislike = !like;
-                                  }
-                                });
-                              },
-                              splashRadius: 20.0,
-                              splashColor: !like
-                                  ? Constance.secondaryColor
-                                  : Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Constance.primaryColor,
-                              icon: Icon(
-                                Icons.thumb_up,
-                                color: like
-                                    ? Constance.secondaryColor
-                                    : Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Constance.primaryColor,
-                              ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 5.w, vertical: 1.h),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 2.h,
                             ),
-                          ),
-                          SizedBox(
-                            width: 2.w,
-                          ),
-                          Material(
-                            type: MaterialType.transparency,
-                            child: IconButton(
-                              onPressed: () {
-                                postLike(data.selectedArticle?.id, 0);
-                                setState(() {
-                                  dislike = !dislike;
-                                  if (like) {
-                                    like = !dislike;
-                                  }
-                                });
-                              },
-                              splashRadius: 20.0,
-                              splashColor: !dislike
-                                  ? Constance.secondaryColor
-                                  : Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Constance.primaryColor,
-                              icon: Icon(
-                                Icons.thumb_down,
-                                color: dislike
-                                    ? Constance.secondaryColor
-                                    : Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Constance.primaryColor,
-                              ),
+                            // Row(
+                            //   children: [
+                            //     Container(
+                            //       color: Constance.primaryColor,
+                            //       padding: EdgeInsets.symmetric(
+                            //           horizontal: 2.w, vertical: 1.h),
+                            //       child: Text(
+                            //         'Guwahati',
+                            //         style: Theme.of(Navigation.instance
+                            //                 .navigatorKey.currentContext!)
+                            //             .textTheme
+                            //             .headline5
+                            //             ?.copyWith(
+                            //               color: Colors.white,
+                            //               // fontSize: 2.2.h,
+                            //               // fontWeight: FontWeight.bold,
+                            //             ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            SizedBox(
+                              height: 2.h,
                             ),
-                          ),
-                          SizedBox(
-                            width: 2.w,
-                          ),
-                          Material(
-                            type: MaterialType.transparency,
-                            child: IconButton(
-                              onPressed: () {
-                                addBookmark(
-                                    data.selectedArticle?.id, 'news');
-                                setState(() {
-                                  is_bookmark = !is_bookmark;
-                                });
-                              },
-                              splashRadius: 20.0,
-                              splashColor: Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Constance.secondaryColor,
-                              icon: Icon(
-                                Icons.bookmark,
-                                color: is_bookmark
-                                    ? Constance.secondaryColor
-                                    : Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Constance.primaryColor,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 2.w,
-                          ),
-                          Material(
-                            type: MaterialType.transparency,
-                            child: IconButton(
-                              onPressed: () {
-                                Share.share(data
-                                    .selectedArticle?.web_url ==
-                                    ""
-                                    ? 'check out our website https://guwahatiplus.com/'
-                                    : '${data.selectedArticle?.web_url}');
-                              },
-                              splashRadius: 20.0,
-                              splashColor: Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Constance.secondaryColor,
-                              icon: Icon(
-                                Icons.share,
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Constance.primaryColor,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      /* SizedBox(
-                              height: 1.5.h,
-                            ),*/
-                      Html(
-                        onImageError: (Object exception,
-                            StackTrace? stackTrace) {
-                          print(exception);
-                        },
-                        onLinkTap: (str, contxt, map, elment) {
-                          // print("${str}");
-                          // print("${elment?.text}");
-                          _launchUrl(Uri.parse(str ?? ""));
-                        },
-                        data: data.selectedArticle?.description?.trim() ??
-                            "",
-                        shrinkWrap: true,
-                        style: {
-                          '#': Style(
-                            // fontSize: FontSize(_counterValue),
-                            // maxLines: 20,
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
-                            // textOverflow: TextOverflow.ellipsis,
-                          ),
-                        },
-                      ),
-                      SizedBox(
-                        height: 1.5.h,
-                      ),
-                      data.ads.isNotEmpty
-                          ? Row(
-                        children: [
-                          Container(
-                            color: Constance.secondaryColor,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 0.2.h, horizontal: 1.w),
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 2.w),
-                            child: Text(
-                              'Ad',
-                              style: Theme
-                                  .of(context)
+                            Text(
+                              data.selectedArticle?.title ??
+                                  'It is a long established fact that a reader will be distracted by the readable content of a',
+                              style: Theme.of(Navigation
+                                      .instance.navigatorKey.currentContext!)
                                   .textTheme
                                   .headline3
                                   ?.copyWith(
-                                fontSize: 12.sp,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor,
+                                    // fontSize: 2.2.h,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            SizedBox(
+                              height: 1.h,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigation.instance.navigate('/authorPage',
+                                    args: data.selectedArticle?.author);
+                              },
+                              child: Text(
+                                '${data.selectedArticle?.author_name ?? "G Plus"}, ${
+                                // Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()
+                                Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                                style: Theme.of(Navigation
+                                        .instance.navigatorKey.currentContext!)
+                                    .textTheme
+                                    .headline5
+                                    ?.copyWith(
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                      // fontSize: 2.2.h,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                          : Container(),
-                      data.ads.isNotEmpty
-                          ? SizedBox(
-                        // height: 10.h,
-                        width: double.infinity,
-                        child: GestureDetector(
-                          onTap: () {
-                            _launchUrl(Uri.parse(
-                                data.ads[random].link.toString()));
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 2.w,
+
+                            SizedBox(
+                              height: 1.5.h,
                             ),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.fill,
-                              imageUrl: data.ads[random]
-                                  .image_file_name ??
-                                  '',
-                              placeholder: (cont, _) {
-                                return Image.asset(
-                                  Constance.logoIcon,
-                                  // color: Colors.black,
-                                );
+                            Row(
+                              children: [
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      postLike(data.selectedArticle?.id, 1);
+                                      setState(() {
+                                        like = !like;
+                                        if (dislike) {
+                                          dislike = !like;
+                                        }
+                                      });
+                                    },
+                                    splashRadius: 20.0,
+                                    splashColor: !like
+                                        ? Constance.secondaryColor
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
+                                    icon: Icon(
+                                      Icons.thumb_up,
+                                      color: like
+                                          ? Constance.secondaryColor
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2.w,
+                                ),
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      postLike(data.selectedArticle?.id, 0);
+                                      setState(() {
+                                        dislike = !dislike;
+                                        if (like) {
+                                          like = !dislike;
+                                        }
+                                      });
+                                    },
+                                    splashRadius: 20.0,
+                                    splashColor: !dislike
+                                        ? Constance.secondaryColor
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
+                                    icon: Icon(
+                                      Icons.thumb_down,
+                                      color: dislike
+                                          ? Constance.secondaryColor
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2.w,
+                                ),
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      addBookmark(
+                                          data.selectedArticle?.id, 'news');
+                                      setState(() {
+                                        is_bookmark = !is_bookmark;
+                                      });
+                                    },
+                                    splashRadius: 20.0,
+                                    splashColor: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.secondaryColor,
+                                    icon: Icon(
+                                      Icons.bookmark,
+                                      color: is_bookmark
+                                          ? Constance.secondaryColor
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2.w,
+                                ),
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Share.share(data
+                                                  .selectedArticle?.web_url ==
+                                              ""
+                                          ? 'check out our website https://guwahatiplus.com/'
+                                          : '${data.selectedArticle?.web_url}');
+                                    },
+                                    splashRadius: 20.0,
+                                    splashColor: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.secondaryColor,
+                                    icon: Icon(
+                                      Icons.share,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            /* SizedBox(
+                              height: 1.5.h,
+                            ),*/
+                            Html(
+                              onImageError:
+                                  (Object exception, StackTrace? stackTrace) {
+                                print(exception);
                               },
-                              errorWidget: (cont, _, e) {
-                                return Image.network(
-                                  Constance.defaultImage,
-                                  fit: BoxFit.fitWidth,
-                                );
+                              customRender: {
+                                "table": (context, child) {
+                                  return SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: (context.tree as TableLayoutElement)
+                                        .toWidget(context),
+                                  );
+                                },
+                                // "blockquote": (context, child) {
+                                //   return setupSummaryCard(
+                                //     title: 'Small Island Developing States Photo Submission',
+                                //     site: '@flickr',
+                                //     description: 'View the album on Flickr.',
+                                //     imageUrl: 'https://farm6.staticflickr.com/5510/14338202952_93595258ff_z.jpg',
+                                //   );
+                                // },
+                                "blockquote": (context, child) {
+                                  return SizedBox(
+                                    height: 25.h,
+                                    width: 90.h,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _launchUrl(Uri.parse(context
+                                                .tree.element?.innerHtml
+                                                .split("=")[3]
+                                                .split("?")[0]
+                                                .substring(1) ??
+                                            ""));
+
+                                        // print(context.tree.element?.innerHtml
+                                        //     .split("=")[3]
+                                        //     .split("?")[0]);
+                                      },
+                                      child: AbsorbPointer(
+                                        child: WebView(
+                                          gestureNavigationEnabled: false,
+                                          zoomEnabled: true,
+                                          initialUrl: Uri.dataFromString(
+                                            getHtmlString(context
+                                                .tree.element?.innerHtml
+                                                .split("=")[3]
+                                                .split("?")[0]
+                                                .split("/")
+                                                .last),
+                                            mimeType: 'text/html',
+                                            encoding:
+                                                Encoding.getByName('utf-8'),
+                                          ).toString(),
+                                          javascriptMode:
+                                              JavascriptMode.unrestricted,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                  // return Container(
+                                  //     child: Text(
+                                  //   '${context.tree.element?.innerHtml.split("=")[3].split("?")[0].split("/").last}',
+                                  //   style: TextStyle(color: Colors.black),
+                                  // ));
+                                },
+                              },
+                              onLinkTap: (str, contxt, map, elment) {
+                                // print("${str}");
+                                // print("${elment?.text}");
+                                _launchUrl(Uri.parse(str ?? ""));
+                              },
+                              data: data.selectedArticle?.description?.trim() ??
+                                  "",
+                              shrinkWrap: true,
+                              style: {
+                                '#': Style(
+                                  // fontSize: FontSize(_counterValue),
+                                  // maxLines: 20,
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
+                                  // textOverflow: TextOverflow.ellipsis,
+                                ),
                               },
                             ),
-                          ),
-                        ),
-                      )
-                          : Container(),
-                      SizedBox(
-                        height: 1.5.h,
-                      ),
-                      // Text(
-                      //   data.selectedArticle?.description
-                      //           ?.split('</p>')[3]
-                      //           .trim() ??
-                      //       "",
-                      //   style: Theme.of(context)
-                      //       .textTheme
-                      //       .headline5
-                      //       ?.copyWith(
-                      //         color: Colors.black45,
-                      //         // fontWeight: FontWeight.bold,
-                      //       ),
-                      // ),
-                      // SizedBox(
-                      //   height: 20.h,
-                      //   child: WebView(
-                      //     initialUrl: 'about:blank',
-                      //     onWebViewCreated:
-                      //         (WebViewController
-                      //     webViewController) {
-                      //       _controller = webViewController;
-                      //       _controller?.loadHtmlString(data.selectedArticle?.description??"");
-                      //     },
-                      //   ),
-                      // ),
-                      SizedBox(
-                        height: 1.5.h,
-                      ),
-                      Divider(
-                        color: Colors.black,
-                        thickness: 0.07.h,
-                      ),
-                      SizedBox(
-                        height: 1.5.h,
-                      ),
-                      Row(
-                        children: [
-                          Material(
-                            type: MaterialType.transparency,
-                            child: IconButton(
-                              onPressed: () {
-                                postLike(data.selectedArticle?.id, 0);
-                                setState(() {
-                                  like = !like;
-                                  if (dislike) {
-                                    dislike = !like;
-                                  }
-                                });
-                              },
-                              splashRadius: 20.0,
-                              splashColor: !like
-                                  ? Constance.secondaryColor
-                                  : Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Constance.primaryColor,
-                              icon: Icon(
-                                Icons.thumb_up,
-                                color: like
-                                    ? Constance.secondaryColor
-                                    : Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Constance.primaryColor,
-                              ),
+                            SizedBox(
+                              height: 1.5.h,
                             ),
-                          ),
-                          SizedBox(
-                            width: 2.w,
-                          ),
-                          Material(
-                            type: MaterialType.transparency,
-                            child: IconButton(
-                              onPressed: () {
-                                postLike(data.selectedArticle?.id, 1);
-                                setState(() {
-                                  dislike = !dislike;
-                                  if (like) {
-                                    like = !dislike;
-                                  }
-                                });
-                              },
-                              splashRadius: 20.0,
-                              splashColor: !dislike
-                                  ? Constance.secondaryColor
-                                  : Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Constance.primaryColor,
-                              icon: Icon(
-                                Icons.thumb_down,
-                                color: dislike
-                                    ? Constance.secondaryColor
-                                    : Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Constance.primaryColor,
-                              ),
+                            data.ads.isNotEmpty
+                                ? Row(
+                                    children: [
+                                      Container(
+                                        color: Constance.secondaryColor,
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 0.2.h, horizontal: 1.w),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 2.w),
+                                        child: Text(
+                                          'Ad',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline3
+                                              ?.copyWith(
+                                                fontSize: 12.sp,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
+                            data.ads.isNotEmpty
+                                ? SizedBox(
+                                    // height: 10.h,
+                                    width: double.infinity,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _launchUrl(Uri.parse(
+                                            data.ads[random].link.toString()));
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 2.w,
+                                        ),
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.fill,
+                                          imageUrl: data.ads[random]
+                                                  .image_file_name ??
+                                              '',
+                                          placeholder: (cont, _) {
+                                            return Image.asset(
+                                              Constance.logoIcon,
+                                              // color: Colors.black,
+                                            );
+                                          },
+                                          errorWidget: (cont, _, e) {
+                                            return Image.network(
+                                              Constance.defaultImage,
+                                              fit: BoxFit.fitWidth,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
+                            SizedBox(
+                              height: 1.5.h,
                             ),
-                          ),
-                          SizedBox(
-                            width: 2.w,
-                          ),
-                          Material(
-                            type: MaterialType.transparency,
-                            child: IconButton(
-                              onPressed: () {
-                                addBookmark(
-                                    data.selectedArticle?.id, 'news');
-                                setState(() {
-                                  is_bookmark = !is_bookmark;
-                                });
-                              },
-                              splashRadius: 20.0,
-                              splashColor: Constance.secondaryColor,
-                              icon: Icon(
-                                Icons.bookmark,
-                                color: is_bookmark
-                                    ? Constance.secondaryColor
-                                    : Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Constance.primaryColor,
-                              ),
+                            // Text(
+                            //   data.selectedArticle?.description
+                            //           ?.split('</p>')[3]
+                            //           .trim() ??
+                            //       "",
+                            //   style: Theme.of(context)
+                            //       .textTheme
+                            //       .headline5
+                            //       ?.copyWith(
+                            //         color: Colors.black45,
+                            //         // fontWeight: FontWeight.bold,
+                            //       ),
+                            // ),
+                            // SizedBox(
+                            //   height: 20.h,
+                            //   child: WebView(
+                            //     initialUrl: 'about:blank',
+                            //     onWebViewCreated:
+                            //         (WebViewController
+                            //     webViewController) {
+                            //       _controller = webViewController;
+                            //       _controller?.loadHtmlString(data.selectedArticle?.description??"");
+                            //     },
+                            //   ),
+                            // ),
+                            SizedBox(
+                              height: 1.5.h,
                             ),
-                          ),
-                          SizedBox(
-                            width: 2.w,
-                          ),
-                          Material(
-                            type: MaterialType.transparency,
-                            child: IconButton(
-                              onPressed: () {
-                                Share.share(data
-                                    .selectedArticle?.web_url ==
-                                    ""
-                                    ? 'check out our website https://guwahatiplus.com/'
-                                    : '${data.selectedArticle?.web_url}');
-                              },
-                              splashRadius: 20.0,
-                              splashColor: Constance.secondaryColor,
-                              icon: Icon(
-                                Icons.share,
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Constance.primaryColor,
-                              ),
+                            Divider(
+                              color: Colors.black,
+                              thickness: 0.07.h,
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 1.5.h,
-                      ),
-                      Divider(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
-                        thickness: 0.07.h,
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Text(
-                        'Related Stories',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headline3
-                            ?.copyWith(
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Constance.primaryColor,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Sort by categories',
-                            style: Theme
-                                .of(Navigation.instance
-                                .navigatorKey.currentContext!)
-                                .textTheme
-                                .headline5
-                                ?.copyWith(
+                            SizedBox(
+                              height: 1.5.h,
+                            ),
+                            Row(
+                              children: [
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      postLike(data.selectedArticle?.id, 0);
+                                      setState(() {
+                                        like = !like;
+                                        if (dislike) {
+                                          dislike = !like;
+                                        }
+                                      });
+                                    },
+                                    splashRadius: 20.0,
+                                    splashColor: !like
+                                        ? Constance.secondaryColor
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
+                                    icon: Icon(
+                                      Icons.thumb_up,
+                                      color: like
+                                          ? Constance.secondaryColor
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2.w,
+                                ),
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      postLike(data.selectedArticle?.id, 1);
+                                      setState(() {
+                                        dislike = !dislike;
+                                        if (like) {
+                                          like = !dislike;
+                                        }
+                                      });
+                                    },
+                                    splashRadius: 20.0,
+                                    splashColor: !dislike
+                                        ? Constance.secondaryColor
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
+                                    icon: Icon(
+                                      Icons.thumb_down,
+                                      color: dislike
+                                          ? Constance.secondaryColor
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2.w,
+                                ),
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      addBookmark(
+                                          data.selectedArticle?.id, 'news');
+                                      setState(() {
+                                        is_bookmark = !is_bookmark;
+                                      });
+                                    },
+                                    splashRadius: 20.0,
+                                    splashColor: Constance.secondaryColor,
+                                    icon: Icon(
+                                      Icons.bookmark,
+                                      color: is_bookmark
+                                          ? Constance.secondaryColor
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2.w,
+                                ),
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Share.share(data
+                                                  .selectedArticle?.web_url ==
+                                              ""
+                                          ? 'check out our website https://guwahatiplus.com/'
+                                          : '${data.selectedArticle?.web_url}');
+                                    },
+                                    splashRadius: 20.0,
+                                    splashColor: Constance.secondaryColor,
+                                    icon: Icon(
+                                      Icons.share,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 1.5.h,
+                            ),
+                            Divider(
                               color: Storage.instance.isDarkMode
                                   ? Colors.white
                                   : Colors.black,
-                              // fontSize: 2.2.h,
-                              // fontWeight: FontWeight.bold,
+                              thickness: 0.07.h,
                             ),
-                          ),
-                          SizedBox(
-                            width: 4.w,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white70
-                                    : Colors
-                                    .black26, //                   <--- border color
-                                // width: 5.0,
-                              ),
-                              borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                      5.0) //                 <--- border radius here
-                              ),
+                            SizedBox(
+                              height: 2.h,
                             ),
-                            padding:
-                            EdgeInsets.symmetric(horizontal: 1.5.w),
-                            child: DropdownButton(
-                              dropdownColor: !Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
-                              isExpanded: false,
-                              style: Theme
-                                  .of(context)
+                            Text(
+                              'Related Stories',
+                              style: Theme.of(context)
                                   .textTheme
-                                  .headline5
+                                  .headline3
                                   ?.copyWith(
-                                color: !Storage.instance.isDarkMode
-                                    ? Colors.black
-                                    : Colors.white,
-                              ),
-                              underline: SizedBox.shrink(),
-                              // Initial Value
-                              value: dropdownvalue,
-
-                              // Down Arrow Icon
-                              icon: Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
-                              ),
-                              // Array list of items
-                              items: categories.map((String items) {
-                                return DropdownMenuItem(
-                                  value: items,
-                                  child: Text(items.capitalize()),
-                                );
-                              }).toList(),
-                              // After selecting the desired option,it will
-                              // change button value to selected value
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownvalue = newValue!;
-                                  skip = 10;
-                                });
-                                fetchContent();
-                              },
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                      fontWeight: FontWeight.bold),
                             ),
-                          ),
-                        ],
-                      ),
-                      suggestion_list_view(data, context),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomButton(
-                              txt: 'Load More',
-                              onTap: () {
-                                skip = skip * 2;
-                                fetchMoreContent();
-                              }),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 4.h,
+                            SizedBox(
+                              height: 2.h,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  'Sort by categories',
+                                  style: Theme.of(Navigation.instance
+                                          .navigatorKey.currentContext!)
+                                      .textTheme
+                                      .headline5
+                                      ?.copyWith(
+                                        color: Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                        // fontSize: 2.2.h,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                SizedBox(
+                                  width: 4.w,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white70
+                                          : Colors
+                                              .black26, //                   <--- border color
+                                      // width: 5.0,
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(
+                                            5.0) //                 <--- border radius here
+                                        ),
+                                  ),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 1.5.w),
+                                  child: DropdownButton(
+                                    dropdownColor: !Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    isExpanded: false,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline5
+                                        ?.copyWith(
+                                          color: !Storage.instance.isDarkMode
+                                              ? Colors.black
+                                              : Colors.white,
+                                        ),
+                                    underline: SizedBox.shrink(),
+                                    // Initial Value
+                                    value: dropdownvalue,
+
+                                    // Down Arrow Icon
+                                    icon: Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                    // Array list of items
+                                    items: categories.map((String items) {
+                                      return DropdownMenuItem(
+                                        value: items,
+                                        child: Text(items.capitalize()),
+                                      );
+                                    }).toList(),
+                                    // After selecting the desired option,it will
+                                    // change button value to selected value
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        dropdownvalue = newValue!;
+                                        skip = 10;
+                                      });
+                                      fetchContent();
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            suggestion_list_view(data, context),
+                            SizedBox(
+                              height: 2.h,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CustomButton(
+                                    txt: 'Load More',
+                                    onTap: () {
+                                      skip = skip * 2;
+                                      fetchMoreContent();
+                                    }),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 4.h,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
           );
         }),
       ),
@@ -686,7 +743,7 @@ class _StoryPageState extends State<StoryPage> {
               height: 1.h,
               child: Divider(
                 color:
-                Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
                 thickness: 0.3.sp,
               ),
             );
@@ -706,8 +763,8 @@ class _StoryPageState extends State<StoryPage> {
       title: GestureDetector(
         onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -730,8 +787,8 @@ class _StoryPageState extends State<StoryPage> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -793,8 +850,8 @@ class _StoryPageState extends State<StoryPage> {
     final response = await ApiProvider.instance.getAdvertise();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setAds(response.ads ?? []);
       random = Random().nextInt(response.ads?.length ?? 0);
     }
@@ -807,8 +864,8 @@ class _StoryPageState extends State<StoryPage> {
         widget.slug.toString().split(',')[1]);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setArticleDetails(response.article!);
       print(response.article?.is_liked);
       setState(() {
@@ -825,12 +882,12 @@ class _StoryPageState extends State<StoryPage> {
   void fetchContent() async {
     Navigation.instance.navigate('/loadingDialog');
     final response =
-    await ApiProvider.instance.getMoreArticle(dropdownvalue, 11, 1, skip);
+        await ApiProvider.instance.getMoreArticle(dropdownvalue, 11, 1, skip);
     if (response.success ?? false) {
       Navigation.instance.goBack();
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setSuggestion(response.articles ?? []);
       // _refreshController.refreshCompleted();
 
@@ -843,12 +900,12 @@ class _StoryPageState extends State<StoryPage> {
   void fetchMoreContent() async {
     Navigation.instance.navigate('/loadingDialog');
     final response =
-    await ApiProvider.instance.getMoreArticle(dropdownvalue, 11, 1, skip);
+        await ApiProvider.instance.getMoreArticle(dropdownvalue, 11, 1, skip);
     if (response.success ?? false) {
       Navigation.instance.goBack();
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .addSuggestion(response.articles ?? []);
       // _refreshController.refreshCompleted();
     } else {
@@ -861,7 +918,7 @@ class _StoryPageState extends State<StoryPage> {
     print(id);
     final response = await ApiProvider.instance.postLike(id, is_like, 'news');
     if (response.success ?? false) {
-      Fluttertoast.showToast(msg: response.message??"");
+      Fluttertoast.showToast(msg: response.message ?? "");
       // fetchDetails();
     } else {
       showError("Something went wrong");
@@ -871,10 +928,11 @@ class _StoryPageState extends State<StoryPage> {
   void addBookmark(bookmark_for_id, type) async {
     Navigation.instance.navigate('/loadingDialog');
     final response =
-    await ApiProvider.instance.addBookmark(bookmark_for_id, type);
+        await ApiProvider.instance.addBookmark(bookmark_for_id, type);
     if (response.success ?? false) {
       Navigation.instance.goBack();
-      Fluttertoast.showToast(msg: response.message??"Bookmark added successfully");
+      Fluttertoast.showToast(
+          msg: response.message ?? "Bookmark added successfully");
     } else {
       Navigation.instance.goBack();
       showError(response.message ?? "Something went wrong");
@@ -903,5 +961,54 @@ class _StoryPageState extends State<StoryPage> {
       return true;
     }
     return false;
+  }
+
+  getEmbeded(context) async {
+    // fetchIT(id);
+    // return blockquote;
+    final embeddedTweet = await twitterApi.publishEmbeddedTweet(
+      screenName: 'embeded',
+      tweetId: context.tree.element?.innerHtml
+          .split("=")[3]
+          .split("?")[0]
+          .split("/")
+          .last,
+      maxWidth: 850,
+      // omitScript: true,
+      // align: ContentAlign.center,
+    );
+    _controller?.loadHtmlString(embeddedTweet.html);
+  }
+
+  String getHtmlString(String? tweetId) {
+    return """
+      <html>
+      
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+        </head>
+        <body>
+            <div id="container"></div>
+                
+        </body>
+        <script id="twitter-wjs" type="text/javascript" async defer src="https://platform.twitter.com/widgets.js" onload="createMyTweet()"></script>
+        <script>
+        
+       
+      function  createMyTweet() {  
+         var twtter = window.twttr;
+  
+         twttr.widgets.createTweet(
+          '$tweetId',
+          document.getElementById('container'),
+          {
+          width:450
+          }
+        )
+      }
+        </script>
+        
+      </html>
+    """;
   }
 }
