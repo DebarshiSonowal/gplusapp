@@ -66,6 +66,7 @@ import '../UI/refer_earn/refer&earn.dart';
 import '../UI/story/story_page.dart';
 import '../UI/toppicks/top_picks_page.dart';
 import '../UI/view/view_image_page.dart';
+import '../UI/view/webview_payment.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -138,6 +139,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/paymentProcessing':
       return FadeTransitionPageRouteBuilder(
           page: PaymentProcessingPage(settings.arguments as String));
+    case '/paymentProcessingIOS':
+      return FadeTransitionPageRouteBuilder(
+          page: Webview_payment(url: settings.arguments as String));
 
     case '/notification':
       return FadeTransitionPageRouteBuilder(page: NotificationPage());

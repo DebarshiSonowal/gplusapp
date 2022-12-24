@@ -106,11 +106,8 @@ class OpionionPageItem extends StatelessWidget {
                   Expanded(
                     child: Text(
                       item.title ?? "",
-                      maxLines: 3,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline4
-                          ?.copyWith(
+                      maxLines: 8,
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
                           fontWeight:
                           FontWeight.bold,
                           overflow: TextOverflow

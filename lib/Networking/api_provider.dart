@@ -40,6 +40,7 @@ import '../Model/redeem_details.dart';
 import '../Model/redeem_history.dart';
 import '../Model/referEarnHistory.dart';
 import '../Model/refer_earn_response.dart';
+import '../Model/report_model.dart';
 import '../Model/search_result.dart';
 import '../Model/shop.dart';
 import '../Model/shop_category.dart';
@@ -1438,6 +1439,42 @@ class ApiProvider {
       return GenericMsgResponse.withError(e.message);
     }
   }
+  Future<ReportResponse> getReportMsg() async {
+    var url = "${baseUrl}/user-report-list";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("user-report-list response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ReportResponse.fromJson(response?.data);
+      } else {
+        debugPrint("user-report-list error: ${response?.data}");
+        return ReportResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("user-report-list error: ${e.response}");
+      return ReportResponse.withError(e.message);
+    }
+  }
 
   Future<GenericMsgResponse> getTerms() async {
     var url = "${baseUrl}/user-security-msg";
@@ -1629,6 +1666,85 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("device_token error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+  Future<GenericResponse> reportPost_Comment(id,report_type,type) async {
+    var url = "${baseUrl}/app/user-report";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'report_for_id': id,
+      'report_type_id':report_type,
+      'type':type,
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("user-report response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("user-report error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("user-report error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> blockUser(id, categ) async {
+    var url = "${baseUrl}/app/block-user-by-user";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'block_user_id': id, 'block_for': categ};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("block-user-by-user response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("block-user-by-user error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("update-device-token error: ${e.response}");
       return GenericResponse.withError(e.message);
     }
   }
@@ -3336,7 +3452,7 @@ class ApiProvider {
     }
   }
 
-  Future<GenericResponse> postClassified(classified_category_id, locality_id,
+  Future<GenericResponse> postClassified(classified_category_id, locality_name,
       title, description, price, List<File> files) async {
     var url = "${baseUrl}/app/classified";
     BaseOptions option =
@@ -3350,7 +3466,7 @@ class ApiProvider {
     debugPrint(url.toString());
     FormData data = FormData.fromMap({
       'classified_category_id': classified_category_id,
-      'locality_id': locality_id,
+      'locality_name': locality_name,
       'title': title,
       'description': description,
       'price': price,
@@ -3369,7 +3485,7 @@ class ApiProvider {
     }
     //attachment_list[0][file_data]
     //attachment_list[0][file_type]
-    // debugPrint(jsonEncode(data));
+    debugPrint(data.fields.toString());
 
     try {
       Response? response = await dio?.post(

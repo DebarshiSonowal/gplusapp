@@ -36,7 +36,10 @@ class Classified {
     //Category
     categoryName = CategoryName.fromJson(json['category']);
 
-    locality = Locality.fromJson(json['locality']);
+    locality = json['locality'] == null
+        ? Locality(json['locality_id'], 0, 1,
+            json['locality_name'])
+        : Locality.fromJson(json['locality']);
 
     attach_files = json['attached_files'] == null
         ? []

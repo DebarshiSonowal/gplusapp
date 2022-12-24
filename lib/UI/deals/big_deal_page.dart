@@ -36,6 +36,8 @@ class _BigDealPageState extends State<BigDealPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: true);
 
+  bool isEmpty = false;
+
   void _onRefresh() async {
     // monitor network fetch
     final response = await ApiProvider.instance.getPromotedDeals();
@@ -44,17 +46,29 @@ class _BigDealPageState extends State<BigDealPage> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setPromotedDeals(response.deals ?? []);
+      setState(() {
+        isEmpty = (response.deals?.isEmpty ?? false) ? true : false;
+      });
       final response1 = await ApiProvider.instance.getShopCategory();
       if (response1.success ?? false) {
         Provider.of<DataProvider>(
                 Navigation.instance.navigatorKey.currentContext ?? context,
                 listen: false)
             .setShopCategory(response1.categories ?? []);
+        setState(() {
+          isEmpty = (response1.categories?.isEmpty ?? false) ? true : false;
+        });
         _refreshController.refreshCompleted();
       } else {
+        setState(() {
+          isEmpty=true;
+        });
         _refreshController.refreshFailed();
       }
     } else {
+      setState(() {
+        isEmpty=true;
+      });
       _refreshController.refreshFailed();
     }
     // if failed,use refreshFailed()
@@ -134,6 +148,7 @@ class _BigDealPageState extends State<BigDealPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+
                           current.deals.isEmpty
                               ? Container()
                               : Padding(
@@ -223,7 +238,9 @@ class _BigDealPageState extends State<BigDealPage> {
                       ),
                     )
                   : Lottie.asset(
-                      Constance.searchingIcon,
+                      isEmpty
+                          ? Constance.noDataLoader
+                          : Constance.searchingIcon,
                     );
             }),
           ),
@@ -274,8 +291,8 @@ class _BigDealPageState extends State<BigDealPage> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );

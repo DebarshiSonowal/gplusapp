@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:open_file_safe/open_file_safe.dart';
+
 // import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
@@ -54,7 +55,7 @@ Future<void> onDidReceiveNotificationResponse(
       NotificationReceived.fromJson(jsonDecode(jsData));
   // Navigation.instance.navigate('');
   setRead(notification.notification_id, notification.seo_name,
-      notification.seo_name_category);
+      notification.seo_name_category,notification.type);
 }
 
 Future<void> onDidReceiveBackgroundNotificationResponse(
@@ -175,14 +176,52 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void setRead(String? id, seo_name, category_name) async {
+void setRead(String? id, seo_name, category_name,type) async {
   final response = await ApiProvider.instance.notificationRead(id);
   if (response.success ?? false) {
     fetchNotification();
-    Navigation.instance
-        .navigate('/story', args: '${seo_name},${category_name}');
+    sendToDestination(seo_name, category_name,type);
   } else {
     showError(response.message ?? "Something went wrong");
+  }
+}
+
+void sendToDestination(seo_name, category_name,type) async {
+  //News Notifications ( On all and selected News)
+  //
+  // Any Notifications to be sent from dashboard:- ( Example Earthquake)
+  //
+  // Ghy connect :- Status of Post Notifications and Comments Notification
+  //
+  // Citizen Journalist ( Post Status Notification)
+  //
+  // Big Deal offers Notifications- Based on locality / Locations on that area automatically
+  // Or Any Notification of any vendor which can be send from backend  dashboard to promote their business and offers)
+  //
+  // Classifieds Ads:- Post accept Reject Status
+  //
+  // Also Locality Notifications
+  switch (type) {
+    case "news":
+      Navigation.instance
+          .navigate('/story', args: '${seo_name},${category_name}');
+      break;
+    case "ghy_connect":
+      Navigation.instance.navigate('/guwahatiConnects');
+      break;
+    case "citizen_journalist":
+      Navigation.instance.navigate('/citizenJournalist');
+      break;
+    case "big_deal":
+      Navigation.instance.navigate('/bigdealpage');
+      break;
+    case "classified":
+      // Navigation.instance.navigate('/classifiedDetails',args: );
+      break;
+    case "locality":
+      break;
+    default:
+      break;
   }
 }
 

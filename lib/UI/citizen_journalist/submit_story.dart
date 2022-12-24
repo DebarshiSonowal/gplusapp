@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:badges/badges.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -218,7 +219,39 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                 ),
               ),
               SizedBox(
-                height: 5.h,
+                height: 2.h,
+              ),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text:
+                      'By clicking "Submit" you agreed to our ',
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black54,
+                        // fontSize: 1.6.h,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'Terms & Conditions.',
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
+                        // fontSize: 1.6.h,
+                      ),
+                      recognizer: TapGestureRecognizer()..onTap = () {
+                        Navigation.instance.navigate('/termsConditions');
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 2.h,
               ),
               SizedBox(
                 height: 5.h,

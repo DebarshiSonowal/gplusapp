@@ -49,6 +49,8 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
                      , queries about accommodations, eateries, hospitals, places 
                      to visit etc. and someone will definitely help you out.''';
 
+  bool isEmpty = false;
+
   @override
   void initState() {
     _animationController = AnimationController(
@@ -86,13 +88,19 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setMyGuwahatiConnect(response.posts);
+      setState(() {
+        isEmpty = (response.posts.isEmpty ?? false) ? true : false;
+      });
       _refreshController.refreshCompleted();
     } else {
+      setState(() {
+        isEmpty = true;
+      });
       // Navigation.instance.goBack();
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .setMyGuwahatiConnect(response.posts);
+      // Provider.of<DataProvider>(
+      //         Navigation.instance.navigatorKey.currentContext ?? context,
+      //         listen: false)
+      //     .setMyGuwahatiConnect(response.posts);
       _refreshController.refreshFailed();
     }
     // if failed,use refreshFailed()
@@ -201,7 +209,9 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
                   return current.myGuwahatiConnect.isEmpty
                       ? Center(
                           child: Lottie.asset(
-                            Constance.searchingIcon,
+                            isEmpty
+                                ? Constance.noDataLoader
+                                : Constance.searchingIcon,
                           ),
                         )
                       : Padding(
@@ -231,7 +241,7 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
                                     showing = false;
                                   });
                                 }
-                              }, 1,true);
+                              }, 1, true);
                             },
                             separatorBuilder:
                                 (BuildContext context, int index) {
@@ -289,8 +299,8 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );

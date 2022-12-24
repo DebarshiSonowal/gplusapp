@@ -118,8 +118,8 @@ class VideoReportItem extends StatelessWidget {
                 Text(
                   item.title ?? "",
                   overflow: TextOverflow.clip,
-                  maxLines: 4,
-                  style: Theme.of(context).textTheme.headline4?.copyWith(
+                  maxLines: 8,
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
                       // fontSize: 2.2.h,
                       fontWeight: FontWeight.bold,
                       overflow: TextOverflow.ellipsis,

@@ -23,7 +23,7 @@ class SuggestedForYouCard extends StatelessWidget {
         ),
       ),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
+        padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.5.h),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(
             Radius.circular(5),

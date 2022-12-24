@@ -16,6 +16,7 @@ import 'package:gplusapp/Model/profile.dart';
 import 'package:gplusapp/Model/promoted_deal.dart';
 import 'package:gplusapp/Model/redeem_history.dart';
 import 'package:gplusapp/Model/refer_earn_response.dart';
+import 'package:gplusapp/Model/report_model.dart';
 import 'package:gplusapp/Model/search_result.dart';
 import 'package:gplusapp/Model/shop_category.dart';
 import 'package:gplusapp/Model/swtich_status.dart';
@@ -38,6 +39,7 @@ class DataProvider extends ChangeNotifier {
   int currentIndex = 0;
   Profile? profile;
   AuthorProfile? author;
+  List<ReportModel> reportCategories = [];
   List<NotificationInDevice> notifications = [];
   List<Opinion> opinions = [];
   List<Story> stories = [];
@@ -96,6 +98,12 @@ class DataProvider extends ChangeNotifier {
 
   setCitizenJournalist(List<CitizenJournalist> list) {
     citizenlist = list;
+    notifyListeners();
+  }
+
+  setReportModel(List<ReportModel> list) {
+    print("list set ${list}");
+    reportCategories = list;
     notifyListeners();
   }
 

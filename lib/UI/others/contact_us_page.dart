@@ -98,7 +98,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                 height: 2.h,
               ),
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(
                     Icons.location_on,
@@ -109,20 +109,18 @@ class _ContactUsPageState extends State<ContactUsPage> {
                   SizedBox(
                     width: 4.w,
                   ),
-                  Expanded(
-                    child: SizedBox(
-                      height: 6.h,
-                      child: Text(
-                        ('${data.contactUs?.address1},${data.contactUs?.address2},${data.contactUs?.address3}') ??
-                            'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                      ),
+                  SizedBox(
+                    width: 80.w,
+                    child: Text(
+                      ('${data.contactUs?.address1},${data.contactUs?.address2},${data.contactUs?.address3}') ??
+                          'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                          ),
                     ),
                   ),
                 ],

@@ -83,8 +83,8 @@ class SuggestionCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       item.title ?? "",
-                      maxLines: 4,
-                      style: Theme.of(context).textTheme.headline4?.copyWith(
+                      maxLines: 8,
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,
                           color: Storage.instance.isDarkMode

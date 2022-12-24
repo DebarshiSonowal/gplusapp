@@ -30,6 +30,8 @@ class _OpinionPageState extends State<OpinionPage> {
       RefreshController(initialRefresh: true);
   final ScrollController controller = ScrollController();
 
+  bool isEmpty = false;
+
   void _onRefresh() async {
     // monitor network fetch
     setState(() {
@@ -41,8 +43,14 @@ class _OpinionPageState extends State<OpinionPage> {
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
           .setOpinions(response.opinion ?? []);
+      setState(() {
+        isEmpty = (response.opinion?.isEmpty ?? false) ? true : false;
+      });
       _refreshController.refreshCompleted();
     } else {
+      setState(() {
+        isEmpty=true;
+      });
       _refreshController.refreshFailed();
     }
     // if failed,use refreshFailed()
@@ -148,7 +156,8 @@ class _OpinionPageState extends State<OpinionPage> {
                         GestureDetector(
                           onTap: () {
                             Navigation.instance.navigate('/opinionDetails',
-                                args: '${data.opinions[0].seo_name?.trim()},${data.opinions[0].category_gallery?.id}');
+                                args:
+                                    '${data.opinions[0].seo_name?.trim()},${data.opinions[0].category_gallery?.id}');
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 5.w),
@@ -177,7 +186,8 @@ class _OpinionPageState extends State<OpinionPage> {
                           onTap: () {
                             if (data.profile?.is_plan_active ?? false) {
                               Navigation.instance.navigate('/opinionDetails',
-                                  args: '${data.opinions[0].seo_name?.trim()},${data.opinions[0].category_gallery?.id}');
+                                  args:
+                                      '${data.opinions[0].seo_name?.trim()},${data.opinions[0].category_gallery?.id}');
                             } else {
                               Constance.showMembershipPrompt(context, () {});
                             }
@@ -305,7 +315,7 @@ class _OpinionPageState extends State<OpinionPage> {
                     ),
                   )
                 : Lottie.asset(
-                    Constance.searchingIcon,
+                    isEmpty ? Constance.noDataLoader : Constance.searchingIcon,
                   ),
           );
         }),

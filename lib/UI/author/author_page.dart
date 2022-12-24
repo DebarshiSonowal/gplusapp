@@ -1,11 +1,13 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/author_related_opinion.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/alert.dart';
 import '../../Components/author_related_news.dart';
@@ -110,26 +112,45 @@ class _AuthorPageState extends State<AuthorPage> {
                         ),
                         Row(
                           children: [
-                            Icon(
-                              FontAwesomeIcons.facebookSquare,
-                              color: Storage.instance.isDarkMode
-                                  ? Constance.secondaryColor
-                                  : Constance.primaryColor,
-                              size: 30,
+                            GestureDetector(
+                              onTap: () {
+                                _launchUrl(data.author?.fb_link ??
+                                    Uri.parse(
+                                        "https://www.facebook.com/guwahatiplus/"));
+                              },
+                              child: Icon(
+                                FontAwesomeIcons.facebookSquare,
+                                color: Storage.instance.isDarkMode
+                                    ? Constance.secondaryColor
+                                    : Constance.primaryColor,
+                                size: 30,
+                              ),
                             ),
-                            Icon(
-                              FontAwesomeIcons.instagramSquare,
-                              color: Storage.instance.isDarkMode
-                                  ? Constance.secondaryColor
-                                  : Constance.primaryColor,
-                              size: 30,
+                            GestureDetector(
+                              onTap: () {
+                                _launchUrl(Uri.parse(data.author?.insta_link ??
+                                    "https://www.instagram.com/guwahatiplus/"));
+                              },
+                              child: Icon(
+                                FontAwesomeIcons.instagramSquare,
+                                color: Storage.instance.isDarkMode
+                                    ? Constance.secondaryColor
+                                    : Constance.primaryColor,
+                                size: 30,
+                              ),
                             ),
-                            Icon(
-                              FontAwesomeIcons.twitterSquare,
-                              color: Storage.instance.isDarkMode
-                                  ? Constance.secondaryColor
-                                  : Constance.primaryColor,
-                              size: 30,
+                            GestureDetector(
+                              onTap: () {
+                                _launchUrl(Uri.parse(data.author?.insta_link ??
+                                    "https://twitter.com/guwahatiplus"));
+                              },
+                              child: Icon(
+                                FontAwesomeIcons.twitterSquare,
+                                color: Storage.instance.isDarkMode
+                                    ? Constance.secondaryColor
+                                    : Constance.primaryColor,
+                                size: 30,
+                              ),
                             ),
                           ],
                         ),
@@ -141,6 +162,15 @@ class _AuthorPageState extends State<AuthorPage> {
                   ],
                 ),
               ),
+              (data.author?.description?.isNotEmpty ?? false)
+                  ? Container(
+                      width: double.infinity,
+                      height: 20.h,
+                      child: Html(
+                        data: data.author?.description ?? "",
+                      ),
+                    )
+                  : Container(),
               SizedBox(
                 height: 5.h,
               ),
@@ -152,7 +182,8 @@ class _AuthorPageState extends State<AuthorPage> {
                 height: 5.h,
               ),
               AuthorRelatedOpinions(
-                opinions: data.author?.opinions ?? [], data: data,
+                opinions: data.author?.opinions ?? [],
+                data: data,
               ),
             ],
           ),
@@ -230,6 +261,12 @@ class _AuthorPageState extends State<AuthorPage> {
         ),
       ],
     );
+  }
+
+  Future<void> _launchUrl(_url) async {
+    if (!await launchUrl(_url, mode: LaunchMode.inAppWebView)) {
+      throw 'Could not launch $_url';
+    }
   }
 
   @override

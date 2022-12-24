@@ -37,6 +37,8 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   bool like = false, dislike = false;
   int page = 1;
 
+  bool isEmpty = false;
+
   @override
   void initState() {
     super.initState();
@@ -59,7 +61,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
           return SingleChildScrollView(
             child: data.opinion == null
                 ? Lottie.asset(
-                    Constance.searchingIcon,
+                    isEmpty ? Constance.noDataLoader : Constance.searchingIcon,
                   )
                 : Column(
                     children: [
@@ -160,7 +162,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      postLike(data.opinion?.id, 0);
+                                      postLike(data.opinion?.id, 1);
                                       setState(() {
                                         like = !like;
                                         if (dislike) {
@@ -191,7 +193,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      postLike(data.opinion?.id, 1);
+                                      postLike(data.opinion?.id, 0);
                                       setState(() {
                                         dislike = !dislike;
                                         if (like) {
@@ -372,7 +374,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      postLike(data.opinion?.id, 0);
+                                      postLike(data.opinion?.id, 1);
                                       setState(() {
                                         like = !like;
                                         if (dislike) {
@@ -403,7 +405,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      postLike(data.opinion?.id, 1);
+                                      postLike(data.opinion?.id, 0);
                                       setState(() {
                                         dislike = !dislike;
                                         if (like) {
@@ -645,10 +647,10 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                                   Expanded(
                                                     child: Text(
                                                       item.title ?? "",
-                                                      maxLines: 3,
+                                                      maxLines: 8,
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .headline4
+                                                          .headline5
                                                           ?.copyWith(
                                                               fontWeight:
                                                                   FontWeight
@@ -812,8 +814,14 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setOpinionDetails(response.opinion!);
+      setState(() {
+        isEmpty = (response.opinion == null) ? true : false;
+      });
       Navigation.instance.goBack();
     } else {
+      setState(() {
+        isEmpty = true;
+      });
       Navigation.instance.goBack();
       Navigation.instance.goBack();
     }

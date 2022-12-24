@@ -22,9 +22,9 @@ class AuthorRelatedOpinions extends StatelessWidget {
     return opinions.isEmpty
         ? Container()
         : Container(
-            height: 30.h,
+            height: 22.h,
             width: double.infinity,
-            color: Constance.secondaryColor,
+            // color: Constance.secondaryColor,
             padding: EdgeInsets.symmetric(vertical: 2.h),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

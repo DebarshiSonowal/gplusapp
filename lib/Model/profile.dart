@@ -82,14 +82,12 @@ class Profile {
     addresses = json['addresses'] == null
         ? []
         : (json['addresses'] as List).map((e) => Address.fromJson(e)).toList();
-    is_plan_active = json['plan_id'] == null ||
-            json['plan_id'].toString() == '0' ||
-            json['plan_active_date'] == null ||
-            json['plan_expiry_date'] == null
-        ? false
-        : check(json['plan_active_date'], json['plan_expiry_date'])
-            ? true
-            : false;
+    is_plan_active =
+        (json['plan_active_date'] == null || json['plan_expiry_date'] == null)
+            ? false
+            : check(json['plan_active_date'], json['plan_expiry_date'])
+                ? true
+                : false;
   }
 
   bool check(start_date, end_date) {
@@ -103,7 +101,7 @@ class Profile {
       return true;
     }
     // return false;
-    return true;
+    return false;
   }
 }
 
@@ -124,7 +122,8 @@ class AuthorProfile {
       dob,
       fb_link,
       insta_link,
-      twitter_link;
+      twitter_link,
+      description;
   int? super_admin,
       role_id,
       gender,
@@ -159,9 +158,10 @@ class AuthorProfile {
     image_file_name = json['image_file_name'] ?? "";
     plan_active_date = json['plan_active_date'] ?? "";
     plan_expiry_date = json['plan_expiry_date'] ?? "";
-    fb_link = json['fb_link'] ?? "";
-    insta_link = json['insta_link'] ?? "";
-    twitter_link = json['twitter_link'] ?? "";
+    fb_link = json['fb_link'] ?? "https://www.facebook.com/guwahatiplus/";
+    insta_link = json['insta_link'] ?? "https://www.instagram.com/guwahatiplus/";
+    twitter_link = json['twitter_link'] ?? "https://twitter.com/guwahatiplus";
+    description = json['description'] ?? "";
     // sign_in_count = json['sign_in_count'] ?? "";
     plan_reminder_date = json['plan_reminder_date'] ?? "";
     super_admin = int.parse((json['super_admin'] ?? 0).toString());
@@ -267,7 +267,7 @@ class ProfileResponse {
 class AuthorResponse {
   bool? success;
   String? msg;
- AuthorProfile? profile;
+  AuthorProfile? profile;
 
   // List<Topick> topicks = [];
   // List<GeoTopick> geoTopicks = [];

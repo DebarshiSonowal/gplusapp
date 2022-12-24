@@ -98,7 +98,69 @@ class CommentItem extends StatelessWidget {
                 ],
                 child: body(context, _, data.profile?.id),
               )
-            : body(context, _, data.profile?.id);
+            : FocusedMenuHolder(
+          blurSize: 5.0,
+          menuItemExtent: 45,
+          menuBoxDecoration: BoxDecoration(
+            color:
+            Storage.instance.isDarkMode ? Colors.black : Colors.grey,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(15.0),
+            ),
+          ),
+          duration: const Duration(milliseconds: 100),
+          animateMenuItems: true,
+          blurBackgroundColor: Colors.black54,
+          openWithTap: false,
+          // Open Focused-Menu on Tap rather than Long Press
+          menuOffset: 10.0,
+          // Offset value to show menuItem from the selected item
+          bottomOffsetHeight: 80.0,
+          // Offset hei
+          onPressed: () {},
+          menuItems: <FocusedMenuItem>[
+            // Add Each FocusedMenuItem  for Menu Options
+            FocusedMenuItem(
+              title: Text(
+                "Block user",
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Storage.instance.isDarkMode
+                      ? Colors.white
+                      : Colors.black,
+                ),
+              ),
+              trailingIcon: Icon(
+                Icons.block,
+                color: Storage.instance.isDarkMode
+                    ? Colors.white
+                    : Colors.black,
+              ),
+              onPressed: () {
+
+                // Navigator.push(context, MaterialPageRoute(builder: (context)=>ScreenTwo()));
+              },
+            ),
+            FocusedMenuItem(
+              title: Text(
+                "Report this comment",
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Storage.instance.isDarkMode
+                      ? Colors.white
+                      : Colors.black,
+                ),
+              ),
+              trailingIcon: const Icon(
+                Icons.report,
+                color: Constance.thirdColor,
+              ),
+              onPressed: () {
+                _showAlertDialog(context, current.id);
+                // Navigator.push(context, MaterialPageRoute(builder: (context)=>ScreenTwo()));
+              },
+            ),
+          ],
+          child: body(context, _, data.profile?.id),
+        );
       });
     });
   }
@@ -340,6 +402,71 @@ class CommentItem extends StatelessWidget {
       Navigation.instance.goBack();
       Navigation.instance.goBack();
       showError(response.message ?? "Something went wrong");
+    }
+  }
+  Future<void> _showAlertDialog(context, id) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // <-- SEE HERE
+          title: const Text('Cancel booking'),
+          content: SizedBox(
+            height: 30.h,
+            width: 40.w,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: Provider.of<DataProvider>(context, listen: false)
+                  .reportCategories
+                  .length,
+              itemBuilder: (BuildContext context, int index) {
+                var item = Provider.of<DataProvider>(context, listen: false)
+                    .reportCategories[index];
+                return ListTile(
+                  onTap: (){
+                    reportPost_Comment(context,id,item.id,"comment");
+                  },
+                  title: Text(
+                    item.name ?? "",
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.white
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            // TextButton(
+            //   child: const Text('Yes'),
+            //   onPressed: () {
+            //     Navigator.of(context).pop();
+            //   },
+            // ),
+          ],
+        );
+      },
+    );
+  }
+
+  void reportPost_Comment(context,id, report_type, type) async{
+    final response = await ApiProvider.instance.reportPost_Comment(id,report_type,type);
+    if(response.success??false){
+      Navigator.of(context).pop();
+      Fluttertoast.showToast(msg: response.message??"Something went wrong");
+    }else{
+      Navigator.of(context).pop();
+      showError(response.message??"Unable to report");
     }
   }
 }

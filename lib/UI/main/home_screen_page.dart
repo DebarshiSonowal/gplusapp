@@ -74,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchAds();
     askPermissions();
     fetchNotification();
+    fetchReportMsg();
     // Future.delayed(
     //     const Duration(seconds: 15),
     //         () => _listController.addListener(() {
@@ -380,6 +381,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         },
                       ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Text(
+                          'This material may not be published, broadcast, rewritten, or redistributed, 2022 © G plus. All rights reserved. Copyright © 2022 Insight Brandcom Pvt. Ltd. All rights reserved.',
+                          style:
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    // fontSize: 16.sp,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.fifthColor,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      ),
                       getSpace(),
                     ],
                   ),
@@ -428,7 +446,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 0.5.h),
                 child: CachedNetworkImage(
-                  height: 7.h,
+                  height: 6.h,
                   fit: BoxFit.fill,
                   imageUrl: data.ads[random].image_file_name ?? '',
                   placeholder: (cont, _) {
@@ -799,6 +817,16 @@ for an unparalleled publication, that people call their''',
         height: 30.h,
       );
     }
+  }
+
+  void fetchReportMsg() async {
+    final response = await ApiProvider.instance.getReportMsg();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setReportModel(response.reports);
+    } else {}
   }
 }
 

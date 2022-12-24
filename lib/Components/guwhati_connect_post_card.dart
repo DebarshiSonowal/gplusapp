@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/three_images_widget.dart';
 import 'package:gplusapp/Components/two_image_widget.dart';
 import 'package:gplusapp/Model/comment.dart';
+import 'package:gplusapp/main.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
@@ -154,7 +155,72 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                       : Constance.primaryColor,
                                 ),
                               )
-                            : Container(),
+                            : PopupMenuButton<int>(
+                                color: Constance.secondaryColor,
+                                itemBuilder: (BuildContext context) =>
+                                    <PopupMenuItem<int>>[
+                                  PopupMenuItem<int>(
+                                    value: 1,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.block,
+                                          color: Colors.black,
+                                        ),
+                                        SizedBox(
+                                          width: 2.w,
+                                        ),
+                                        Text(
+                                          'Block User',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  PopupMenuItem<int>(
+                                    value: 2,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.report,
+                                          color: Colors.black,
+                                        ),
+                                        SizedBox(
+                                          width: 2.w,
+                                        ),
+                                        Text(
+                                          'Report this post',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                onSelected: (int value) {
+                                  // setState(() {});
+                                  switch (value) {
+                                    case 2:
+                                      _showAlertDialog(context, data.id);
+                                      break;
+                                    default:
+                                      blockUser(data.user_id);
+                                      break;
+                                  }
+                                },
+                                // color: Colors.white,
+                                icon: Icon(
+                                  Icons.more_vert,
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Constance.primaryColor,
+                                ),
+                              ),
                       ],
                     ),
                   ),
@@ -245,7 +311,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                           ],
                         ),
                         GestureDetector(
-                          onTap:(){
+                          onTap: () {
                             showComments(count, context);
                           },
                           child: Text(
@@ -471,6 +537,83 @@ class GuwahatiConnectPostCard extends StatelessWidget {
       default:
         return 'Pending';
     }
+  }
+
+  void blockUser(int? id) async {
+    final response =
+        await ApiProvider.instance.blockUser(id, 'guwahati-connect');
+    if (response.success ?? false) {
+      Fluttertoast.showToast(msg: response.message ?? "Something went wrong");
+      fetchGuwahatiConnect();
+    } else {
+      Fluttertoast.showToast(msg: response.message ?? "Something went wrong");
+    }
+  }
+}
+
+Future<void> _showAlertDialog(context, id) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        // <-- SEE HERE
+        title: const Text('Cancel booking'),
+        content: SizedBox(
+          height: 30.h,
+          width: 40.w,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: Provider.of<DataProvider>(context, listen: false)
+                .reportCategories
+                .length,
+            itemBuilder: (BuildContext context, int index) {
+              var item = Provider.of<DataProvider>(context, listen: false)
+                  .reportCategories[index];
+              return ListTile(
+                onTap: (){
+                  reportPost_Comment(context,id,item.id,"guwahati-connect");
+                },
+                title: Text(
+                  item.name ?? "",
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                    color: Colors.white
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text(
+              'Cancel',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          // TextButton(
+          //   child: const Text('Yes'),
+          //   onPressed: () {
+          //     Navigator.of(context).pop();
+          //   },
+          // ),
+        ],
+      );
+    },
+  );
+}
+
+void reportPost_Comment(context,id, report_type, type) async{
+  final response = await ApiProvider.instance.reportPost_Comment(id,report_type,type);
+  if(response.success??false){
+    Navigator.of(context).pop();
+    Fluttertoast.showToast(msg: response.message??"Something went wrong");
+  }else{
+    Navigator.of(context).pop();
+    showError(response.message??"Unable to report");
   }
 }
 

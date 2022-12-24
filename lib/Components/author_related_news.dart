@@ -28,12 +28,13 @@ class AuthorRelatedNews extends StatelessWidget {
         : Container(
             height: 30.h,
             width: double.infinity,
-            color: Constance.secondaryColor,
+            // color: Constance.secondaryColor,
             padding: EdgeInsets.symmetric(vertical: 2.h),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.w),
                   child: Text(

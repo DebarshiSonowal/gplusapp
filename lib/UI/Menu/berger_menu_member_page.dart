@@ -24,6 +24,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
   Widget build(BuildContext context) {
     return Consumer<DataProvider>(builder: (context, data, _) {
       return Drawer(
+        // width: double.infinity,
         backgroundColor:
             Storage.instance.isDarkMode ? Colors.black : Constance.forthColor,
         child: Padding(
@@ -264,7 +265,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                   .headline6
                                   ?.copyWith(
                                     color: Colors.white,
-                                    fontSize: 10.sp,
+                                    fontSize: 11.sp,
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -302,7 +303,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                   .headline6
                                   ?.copyWith(
                                     color: Colors.white,
-                                    fontSize: 10.sp,
+                                    fontSize: 11.sp,
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -340,7 +341,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                   .headline6
                                   ?.copyWith(
                                     color: Colors.white,
-                                    fontSize: 10.sp,
+                                    fontSize: 11.sp,
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -378,7 +379,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                   .headline6
                                   ?.copyWith(
                                     color: Colors.white,
-                                    fontSize: 10.sp,
+                                    fontSize: 11.sp,
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -416,7 +417,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                                   .headline6
                                   ?.copyWith(
                                     color: Colors.white,
-                                    fontSize: 10.sp,
+                                    fontSize: 11.sp,
                                     // fontWeight: FontWeight.bold,
                                   ),
                             ),

@@ -14,7 +14,9 @@ import 'alert.dart';
 class ClassifiedCard extends StatelessWidget {
   final Classified current;
   bool like;
-  ClassifiedCard({Key? key, required this.current, required this.like}) : super(key: key);
+
+  ClassifiedCard({Key? key, required this.current, required this.like})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +52,12 @@ class ClassifiedCard extends StatelessWidget {
                         child: Text(
                           current.title ?? "",
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline3
-                              ?.copyWith(
-                              color: Constance.primaryColor,
-                              fontWeight: FontWeight.bold),
+                          style:
+                              Theme.of(context).textTheme.headline3?.copyWith(
+                                    color: Constance.primaryColor,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ),
                       LikeButton(
@@ -87,7 +89,7 @@ class ClassifiedCard extends StatelessWidget {
                         likeCount: 665,
                         countBuilder: (int? count, bool isLiked, String text) {
                           var color =
-                          like ? Colors.deepPurpleAccent : Colors.grey;
+                              like ? Colors.deepPurpleAccent : Colors.grey;
                           Widget result;
                           if (count == 0) {
                             result = Text(
@@ -109,25 +111,27 @@ class ClassifiedCard extends StatelessWidget {
                 current.price == null || current.price == 0
                     ? Container()
                     : SizedBox(
-                  height: 1.h,
-                ),
+                        height: 1.h,
+                      ),
                 current.price == null
                     ? Container()
                     : Text(
-                  'Rs:${current.price}' ?? '0',
-                  style: Theme.of(context).textTheme.headline3?.copyWith(
-                      color: Constance.thirdColor,
-                      fontWeight: FontWeight.bold),
-                ),
+                        'Rs:${current.price}' ?? '0',
+                        style: Theme.of(context).textTheme.headline3?.copyWith(
+                              color: Constance.thirdColor,
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
                 SizedBox(
                   height: 1.5.h,
                 ),
                 ReadMoreText(
                   current.description ?? "",
                   style: Theme.of(context).textTheme.headline5?.copyWith(
-                    color: Colors.black54,
-                    // fontWeight: FontWeight.bold,
-                  ),
+                        color: Colors.black54,
+                        // fontWeight: FontWeight.bold,
+                      ),
                   trimLines: 3,
                   colorClickableText: Constance.secondaryColor,
                   trimMode: TrimMode.Line,
@@ -150,10 +154,9 @@ class ClassifiedCard extends StatelessWidget {
                     Text(
                       '${current.total_views} views',
                       // overflow: TextOverflow.clip,
-                      style:
-                      Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black54,
-                      ),
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Colors.black54,
+                          ),
                     ),
                   ],
                 ),
@@ -172,12 +175,11 @@ class ClassifiedCard extends StatelessWidget {
                     ),
                     Text(
                       current.locality?.name ??
-                          'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
+                          'NA',
                       // overflow: TextOverflow.clip,
-                      style:
-                      Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black54,
-                      ),
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Colors.black54,
+                          ),
                     ),
                   ],
                 ),
@@ -191,6 +193,7 @@ class ClassifiedCard extends StatelessWidget {
       );
     });
   }
+
   void setAsFavourite(int? id, String type) async {
     final response = await ApiProvider.instance.setAsFavourite(id, type);
     if (response.success ?? false) {
@@ -199,6 +202,7 @@ class ClassifiedCard extends StatelessWidget {
       showError("Something went wrong");
     }
   }
+
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",

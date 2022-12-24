@@ -21,6 +21,14 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+  bool isEmpty = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchNotification();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,7 +135,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   },
                 )
               : Lottie.asset(
-                  Constance.searchingIcon,
+                  isEmpty?Constance.noDataLoader:Constance.searchingIcon,
                 ),
         );
       }),
@@ -188,6 +196,23 @@ class _NotificationPageState extends State<NotificationPage> {
           .navigate('/story', args: '${seo_name},${category_name}');
     } else {
       showError(response.message ?? "Something went wrong");
+    }
+  }
+
+  void fetchNotification() async {
+    final response = await ApiProvider.instance.getNotifications();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
+          .setNotificationInDevice(response.notification);
+      setState(() {
+        isEmpty = response.notification.isEmpty ? true : false;
+      });
+    } else {
+      setState(() {
+        isEmpty = true;
+      });
     }
   }
 

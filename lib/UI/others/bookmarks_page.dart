@@ -26,6 +26,8 @@ class _BookmarksPageState extends State<BookmarksPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: true);
 
+  bool isEmpty=false;
+
   void _onRefresh() async {
     // monitor network fetch
     final response = await ApiProvider.instance.fetchBookmarks();
@@ -35,8 +37,14 @@ class _BookmarksPageState extends State<BookmarksPage> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setBookmarkItems(response.bookmarks);
+      setState(() {
+        isEmpty = (response.bookmarks.isEmpty ?? false) ? true : false;
+      });
       _refreshController.refreshCompleted();
     } else {
+      setState(() {
+        isEmpty=true;
+      });
       _refreshController.refreshFailed();
       // showError(response.message ?? "Something went wrong");
     }
@@ -135,18 +143,29 @@ class _BookmarksPageState extends State<BookmarksPage> {
                           SizedBox(
                             height: 1.h,
                           ),
-                          Container(
-                            height: 30.h,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: CachedNetworkImageProvider(
-                                  data.bookmarks[0].image_file_name ??
-                                      'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+                          GestureDetector(
+                            onTap: () {
+                              if (data.profile?.is_plan_active ?? false) {
+                                Navigation.instance.navigate('/story',
+                                    args:
+                                    '${data.bookmarks[0].cat_seo_name},${data.bookmarks[0].seo_name}');
+                              } else {
+                                Constance.showMembershipPrompt(context, () {});
+                              }
+                            },
+                            child: Container(
+                              height: 30.h,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                                image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: CachedNetworkImageProvider(
+                                    data.bookmarks[0].image_file_name ??
+                                        'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+                                  ),
                                 ),
                               ),
                             ),
@@ -365,7 +384,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                       ),
                     )
                   : Lottie.asset(
-                    Constance.searchingIcon,
+                    isEmpty?Constance.noDataLoader:Constance.searchingIcon,
                   ));
         }),
       ),

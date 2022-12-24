@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:badges/badges.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,6 +28,7 @@ class PostAListing extends StatefulWidget {
 
 class _PostAListingState extends State<PostAListing> {
   var title = TextEditingController();
+  var localityEditor = TextEditingController();
 
   var desc = TextEditingController();
 
@@ -129,7 +131,7 @@ class _PostAListingState extends State<PostAListing> {
                       .toList(),
                   // After selecting the desired option,it will
                   // change button value to selected value
-                  onChanged: ( newValue) {
+                  onChanged: (newValue) {
                     setState(() {
                       selectedCategory = newValue!;
                     });
@@ -150,48 +152,69 @@ class _PostAListingState extends State<PostAListing> {
               SizedBox(
                 height: 1.h,
               ),
-              Consumer<DataProvider>(builder: (context, data, _) {
-                return DropdownButtonFormField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                  // underline: Container( height: 0.5.sp, color: Constance.primaryColor,),
-                  isExpanded: true,
-                  dropdownColor:
-                      Storage.instance.isDarkMode ? Colors.black : Colors.white,
-                  // Initial Value
-                  value: selectedLocality,
-
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
-
-                  // Array list of items
-                  items: data.locality
-                      .map((e) => DropdownMenuItem(
-                            value: e.id.toString(),
-                            child: Text(
-                              e.name ?? "",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4
-                                  ?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white70
-                                        : Constance.primaryColor,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ))
-                      .toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: ( newValue) {
-                    setState(() {
-                      selectedLocality = newValue!;
-                    });
-                  },
-                );
-              }),
+              // Consumer<DataProvider>(builder: (context, data, _) {
+              //   return DropdownButtonFormField(
+              //     decoration: const InputDecoration(
+              //       border: OutlineInputBorder(),
+              //     ),
+              //     // underline: Container( height: 0.5.sp, color: Constance.primaryColor,),
+              //     isExpanded: true,
+              //     dropdownColor:
+              //         Storage.instance.isDarkMode ? Colors.black : Colors.white,
+              //     // Initial Value
+              //     value: selectedLocality,
+              //
+              //     // Down Arrow Icon
+              //     icon: const Icon(Icons.keyboard_arrow_down),
+              //
+              //     // Array list of items
+              //     items: data.locality
+              //         .map((e) => DropdownMenuItem(
+              //               value: e.id.toString(),
+              //               child: Text(
+              //                 e.name ?? "",
+              //                 style: Theme.of(context)
+              //                     .textTheme
+              //                     .headline4
+              //                     ?.copyWith(
+              //                       color: Storage.instance.isDarkMode
+              //                           ? Colors.white70
+              //                           : Constance.primaryColor,
+              //                       // fontWeight: FontWeight.bold,
+              //                     ),
+              //               ),
+              //             ))
+              //         .toList(),
+              //     // After selecting the desired option,it will
+              //     // change button value to selected value
+              //     onChanged: ( newValue) {
+              //       setState(() {
+              //         selectedLocality = newValue!;
+              //       });
+              //     },
+              //   );
+              // }),
+              TextFormField(
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                      color: Colors.black,
+                      // fontSize: 1.6.h,
+                    ),
+                controller: localityEditor,
+                maxLines: 1,
+                keyboardType: TextInputType.name,
+                decoration: InputDecoration(
+                  filled: true,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  fillColor: Colors.white,
+                  labelText: 'Enter your locality',
+                  labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Colors.black,
+                        // fontSize: 1.5.h,
+                      ),
+                  border: const OutlineInputBorder(),
+                  enabledBorder: const OutlineInputBorder(),
+                ),
+              ),
               SizedBox(
                 height: 3.h,
               ),
@@ -339,6 +362,7 @@ class _PostAListingState extends State<PostAListing> {
               SizedBox(
                 height: 0.5.h,
               ),
+
               TextFormField(
                 style: Theme.of(context).textTheme.headline5?.copyWith(
                       color: Colors.black,
@@ -363,6 +387,38 @@ class _PostAListingState extends State<PostAListing> {
               SizedBox(
                 height: 2.h,
               ),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'By clicking "Go ahead" you agreed to our ',
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black54,
+                            // fontSize: 1.6.h,
+                          ),
+                    ),
+                    TextSpan(
+                      text: 'Terms & Conditions.',
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                            // fontSize: 1.6.h,
+                          ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigation.instance.navigate('/termsConditions');
+                        },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
               SizedBox(
                 width: double.infinity,
                 child: CustomButton(
@@ -370,8 +426,9 @@ class _PostAListingState extends State<PostAListing> {
                     // showDialogBox();
                     if (title.text.isNotEmpty &&
                         desc.text.isNotEmpty &&
-                        price.text.isNotEmpty) {
-                      postClassified(selectedCategory, selectedLocality,
+                        price.text.isNotEmpty &&
+                        localityEditor.text.isNotEmpty) {
+                      postClassified(selectedCategory, localityEditor.text,
                           title.text, desc.text, price.text, attachements);
                     } else {
                       showError(
@@ -424,8 +481,8 @@ class _PostAListingState extends State<PostAListing> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -667,11 +724,11 @@ class _PostAListingState extends State<PostAListing> {
     }
   }
 
-  void postClassified(classified_category_id, locality_id, title, description,
+  void postClassified(classified_category_id, locality_name, title, description,
       price, List<File> files) async {
     Navigation.instance.navigate('/loadingDialog');
     final reponse = await ApiProvider.instance.postClassified(
-        classified_category_id, locality_id, title, description, price, files);
+        classified_category_id, locality_name, title, description, price, files);
     if (reponse.success ?? false) {
       Fluttertoast.showToast(msg: "Posted successfully");
       Navigation.instance.goBack();

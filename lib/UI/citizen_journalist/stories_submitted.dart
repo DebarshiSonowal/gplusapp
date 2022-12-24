@@ -19,6 +19,8 @@ class StoriesSubmitted extends StatefulWidget {
 }
 
 class _StoriesSubmittedState extends State<StoriesSubmitted> {
+  bool isEmpty = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +56,9 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                 data.citizenlist.isEmpty
                     ? Center(
                         child: Lottie.asset(
-                          Constance.searchingIcon,
+                          isEmpty
+                              ? Constance.noDataLoader
+                              : Constance.searchingIcon,
                         ),
                       )
                     : ListView.separated(
@@ -216,7 +220,13 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
           .setCitizenJournalist(response.posts);
       // Fluttertoast.showToast(msg: "G successfully");
       // Navigation.instance.goBack();
+      setState(() {
+        isEmpty = response.posts.isEmpty ? true : false;
+      });
     } else {
+      setState(() {
+        isEmpty = true;
+      });
       // Navigation.instance.goBack();
     }
   }
@@ -250,8 +260,8 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );

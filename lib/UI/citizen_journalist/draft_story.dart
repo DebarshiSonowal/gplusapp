@@ -21,6 +21,8 @@ class DraftStory extends StatefulWidget {
 }
 
 class _DraftStoryState extends State<DraftStory> {
+  bool isEmpty = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +61,9 @@ class _DraftStoryState extends State<DraftStory> {
                 data.citizenlist.isEmpty
                     ? Center(
                         child: Lottie.asset(
-                          Constance.searchingIcon,
+                          isEmpty
+                              ? Constance.noDataLoader
+                              : Constance.searchingIcon,
                         ),
                       )
                     : ListView.separated(
@@ -279,8 +283,8 @@ class _DraftStoryState extends State<DraftStory> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -332,9 +336,15 @@ class _DraftStoryState extends State<DraftStory> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setCitizenJournalist(response.posts);
+      setState(() {
+        isEmpty = response.posts.isEmpty ? true : false;
+      });
       // Fluttertoast.showToast(msg: "G successfully");
       // Navigation.instance.goBack();
     } else {
+      setState(() {
+        isEmpty = true;
+      });
       // Navigation.instance.goBack();
     }
   }

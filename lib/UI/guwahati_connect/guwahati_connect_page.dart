@@ -50,6 +50,8 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                      , queries about accommodations, eateries, hospitals, places 
                      to visit etc. and someone will definitely help you out.''';
 
+  bool isEmpty = false;
+
   @override
   void initState() {
     _animationController = AnimationController(
@@ -84,13 +86,19 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setGuwahatiConnect(response.posts);
+      setState(() {
+        isEmpty = (response.posts.isEmpty ?? false) ? true : false;
+      });
       _refreshController.refreshCompleted();
     } else {
       // Navigation.instance.goBack();
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .setGuwahatiConnect(response.posts);
+      setState(() {
+        isEmpty=true;
+      });
+      // Provider.of<DataProvider>(
+      //         Navigation.instance.navigatorKey.currentContext ?? context,
+      //         listen: false)
+      //     .setGuwahatiConnect(response.posts);
       _refreshController.refreshFailed();
     }
     // if failed,use refreshFailed()
@@ -288,7 +296,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                   return current.guwahatiConnect.isEmpty
                       ? Center(
                           child: Lottie.asset(
-                            Constance.searchingIcon,
+                            isEmpty?Constance.noDataLoader:Constance.searchingIcon,
                           ),
                         )
                       : Padding(

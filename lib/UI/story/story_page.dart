@@ -305,6 +305,57 @@ class _StoryPageState extends State<StoryPage> {
                                         .toWidget(context),
                                   );
                                 },
+                                "a": (context, child) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      print("https://www.gmcpropertytax.com");
+                                      if (context.tree.attributes['href']
+                                              .toString()
+                                              .split("/")[2]
+                                              .trim() ==
+                                          "www.guwahatiplus.com") {
+                                        if (context.tree.attributes['href']
+                                                .toString()
+                                                .split("/")
+                                                .length >=
+                                            5) {
+                                          Navigation.instance.navigate('/story',
+                                              args:
+                                                  '${context.tree.attributes['href'].toString().split("/")[3]},${context.tree.attributes['href'].toString().split("/")[4]}');
+                                        } else {
+                                          Navigation.instance.navigate(
+                                              '/newsfrom',
+                                              args: context
+                                                  .tree.attributes['href']
+                                                  .toString()
+                                                  .split("/")[3]);
+                                        }
+                                      } else {
+                                        try {
+                                          _launchUrl(Uri.parse("https://www.gmcpropertytax.com"));
+                                        } catch (e) {
+                                          print(e);
+                                        }
+                                      }
+                                    },
+                                    child: Text(
+                                      context.tree.element?.innerHtml
+                                              .split("=")[0]
+                                              .toString() ??
+                                          "",
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Constance.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                    ),
+                                  );
+                                },
                                 // "blockquote": (context, child) {
                                 //   return setupSummaryCard(
                                 //     title: 'Small Island Developing States Photo Submission',
@@ -315,8 +366,8 @@ class _StoryPageState extends State<StoryPage> {
                                 // },
                                 "blockquote": (context, child) {
                                   return SizedBox(
-                                    height: 25.h,
-                                    width: 90.h,
+                                    height: 28.h,
+                                    // width: 90.h,
                                     child: GestureDetector(
                                       onTap: () {
                                         _launchUrl(Uri.parse(context
@@ -361,7 +412,7 @@ class _StoryPageState extends State<StoryPage> {
                               onLinkTap: (str, contxt, map, elment) {
                                 // print("${str}");
                                 // print("${elment?.text}");
-                                _launchUrl(Uri.parse(str ?? ""));
+                                print(str);
                               },
                               data: data.selectedArticle?.description?.trim() ??
                                   "",
@@ -483,7 +534,7 @@ class _StoryPageState extends State<StoryPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      postLike(data.selectedArticle?.id, 0);
+                                      postLike(data.selectedArticle?.id, 1);
                                       setState(() {
                                         like = !like;
                                         if (dislike) {
@@ -514,7 +565,7 @@ class _StoryPageState extends State<StoryPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      postLike(data.selectedArticle?.id, 1);
+                                      postLike(data.selectedArticle?.id, 0);
                                       setState(() {
                                         dislike = !dislike;
                                         if (like) {
@@ -841,7 +892,7 @@ class _StoryPageState extends State<StoryPage> {
   }
 
   Future<void> _launchUrl(_url) async {
-    if (!await launchUrl(_url)) {
+    if (!await launchUrl(_url,mode: LaunchMode.externalApplication)) {
       throw 'Could not launch $_url';
     }
   }
@@ -1002,7 +1053,7 @@ class _StoryPageState extends State<StoryPage> {
           '$tweetId',
           document.getElementById('container'),
           {
-          width:450
+          width:250
           }
         )
       }

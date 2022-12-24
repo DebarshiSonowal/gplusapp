@@ -29,7 +29,9 @@ class PromotedDealsItem extends StatelessWidget {
             false) {
           Navigation.instance.navigate('/categorySelect', args: data.vendor_id);
         } else {
-          Constance.showMembershipPrompt(context, () {});
+          Constance.showMembershipPrompt(context, () {
+
+          });
         }
       },
       child: Container(

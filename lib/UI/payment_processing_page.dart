@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +37,11 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     super.initState();
     Future.delayed(Duration.zero, () {
-      initiateOrder(widget.input.split(',')[0], widget.input.split(',')[1]);
+      if (Platform.isAndroid) {
+        initiateOrder(widget.input.split(',')[0], widget.input.split(',')[1]);
+      } else {
+        Navigation.instance.navigate('/paymentProcessingIOS',args: "https://rzp.io/l/haIT8vaJ");
+      }
     });
   }
 
@@ -192,7 +198,8 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
     // Do something when payment fails
     // print('error ${response.message} ${response.code} ');
     // showError(response.message ?? "Something went wrong");
-    showError(jsonDecode(response.message!)['error']['description'] ?? "Something went wrong");
+    showError(jsonDecode(response.message!)['error']['description'] ??
+        "Something went wrong");
     print(jsonDecode(response.message!)['error']['description']);
     // Navigation.instance.goBack();
   }
@@ -281,7 +288,7 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
                   child: CustomButton(
                       txt: 'Close',
                       onTap: () {
-                       Navigation.instance.navigate('/');
+                        Navigation.instance.navigate('/');
                       }),
                 ),
               ],

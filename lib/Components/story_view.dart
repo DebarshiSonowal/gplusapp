@@ -44,6 +44,16 @@ class _StoryViewPageState extends State<StoryViewPage> {
           )
           .toList());
       setState(() {});
+      print("${widget.count} ${index}");
+      // Future.delayed(Duration(seconds: 1),(){
+      //   while(widget.count>=index){
+      //     try {
+      //       controller.next();
+      //     } catch (e) {
+      //       print(e);
+      //     }
+      //   }
+      // });
     });
   }
 

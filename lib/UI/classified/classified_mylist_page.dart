@@ -38,6 +38,8 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
   final controller = TextEditingController();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
+  bool isEmpty = false;
+
   @override
   void initState() {
     super.initState();
@@ -65,8 +67,14 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setClassified(response.classifieds ?? []);
+      setState(() {
+        isEmpty = (response.classifieds?.isEmpty ?? false) ? true : false;
+      });
       _refreshController.refreshCompleted();
     } else {
+      setState(() {
+        isEmpty=true;
+      });
       _refreshController.refreshFailed();
     }
     // if failed,use refreshFailed()
@@ -324,7 +332,9 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                   data.classified.isEmpty
                       ? Center(
                           child: Lottie.asset(
-                            Constance.searchingIcon,
+                            isEmpty
+                                ? Constance.noDataLoader
+                                : Constance.searchingIcon,
                           ),
                         )
                       : Padding(
@@ -397,8 +407,8 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -502,9 +512,14 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setClassified(response.classifieds ?? []);
-
+      setState(() {
+        isEmpty = (response.classifieds?.isEmpty ?? false) ? true : false;
+      });
       Navigation.instance.goBack();
     } else {
+      setState(() {
+        isEmpty=true;
+      });
       Navigation.instance.goBack();
     }
   }

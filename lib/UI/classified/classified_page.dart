@@ -41,6 +41,8 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool showing = false;
 
+  bool isEmpty=false;
+
   @override
   void initState() {
     super.initState();
@@ -71,8 +73,14 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setClassified(response.classifieds ?? []);
+      setState(() {
+        isEmpty = (response.classifieds?.isEmpty ?? false) ? true : false;
+      });
       _refreshController.refreshCompleted();
     } else {
+      setState(() {
+        isEmpty=true;
+      });
       _refreshController.refreshFailed();
     }
     // if failed,use refreshFailed()
@@ -340,7 +348,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                   data.classified.isEmpty
                       ? Center(
                           child: Lottie.asset(
-                            Constance.searchingIcon,
+                            isEmpty?Constance.noDataLoader:Constance.searchingIcon,
                           ),
                         )
                       : Padding(

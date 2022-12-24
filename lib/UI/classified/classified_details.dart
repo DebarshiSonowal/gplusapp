@@ -102,7 +102,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                             autoPlay: false,
                             enlargeCenterPage: true,
                             // aspectRatio: 1,
-                            aspectRatio: 12/9,
+                            aspectRatio: 12 / 9,
                             viewportFraction: 1,
                             onPageChanged: (index, reason) {
                               setState(() {
@@ -278,7 +278,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.w),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Icon(
                         Icons.location_on,
@@ -289,21 +289,16 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                       SizedBox(
                         width: 4.w,
                       ),
-                      Expanded(
-                        child: SizedBox(
-                          height: 5.h,
-                          child: Text(
-                            data.selectedClassified?.locality?.name ??
-                                'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
-                            // overflow: TextOverflow.clip,
-                            style:
-                                Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
-                                    ),
-                          ),
-                        ),
+                      Text(
+                        data.selectedClassified?.locality?.name ??
+                            'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
+                        // overflow: TextOverflow.clip,
+                        style:
+                            Theme.of(context).textTheme.headline5?.copyWith(
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
                       ),
                     ],
                   ),
@@ -311,10 +306,13 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                 // SizedBox(
                 //   height: 1.h,
                 // ),
+                SizedBox(
+                  height: 2.h,
+                ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.w),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Icon(
                         Icons.remove_red_eye,
@@ -325,23 +323,21 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                       SizedBox(
                         width: 4.w,
                       ),
-                      Expanded(
-                        child: SizedBox(
-                          height: 5.h,
-                          child: Text(
-                            '${data.selectedClassified?.total_views} views',
-                            // overflow: TextOverflow.clip,
-                            style:
-                                Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
-                                    ),
-                          ),
-                        ),
+                      Text(
+                        '${data.selectedClassified?.total_views} views',
+                        // overflow: TextOverflow.clip,
+                        style:
+                            Theme.of(context).textTheme.headline5?.copyWith(
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
                       ),
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: 2.h,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.w),
@@ -385,7 +381,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                 data.selectedClassified?.user == null
                     ? Container()
                     : Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        padding: EdgeInsets.symmetric(horizontal: 10.w),
                         child: SizedBox(
                           width: double.infinity,
                           child: CustomButton(
@@ -453,8 +449,8 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -597,7 +593,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
   Color getStatusColour(int i) {
     switch (i) {
       case 1:
-        return Constance.secondaryColor;
+        return Colors.green;
       case 2:
         return Constance.thirdColor;
       default:
