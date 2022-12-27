@@ -26,6 +26,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/NavigationBar.dart';
@@ -132,65 +133,68 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor:
-          Storage.instance.isDarkMode ? Colors.black : Colors.grey.shade100,
-      appBar: buildAppBar(),
-      // floatingActionButtonLocation: showing
-      //     ? FloatingActionButtonLocation.miniStartFloat
-      //     : FloatingActionButtonLocation.miniEndFloat,
-      // floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: Colors.green,
-      //   onPressed: () {
-      //     _launchUrl(
-      //         Uri.parse('whatsapp://send?phone=919365974702&text=Hi+G+Plus!'));
-      //   },
-      //   child: Icon(
-      //     FontAwesomeIcons.whatsapp,
-      //     color: Colors.white,
-      //     size: 22.sp,
-      //   ),
-      // ),
-      drawer: BergerMenuMemPage(),
-      body: OfflineBuilder(
-        connectivityBuilder: (
-          BuildContext context,
-          ConnectivityResult connectivity,
-          Widget child,
-        ) {
-          final bool connected = connectivity != ConnectivityResult.none;
-          return connected
-              ? HomeScreenBody()
-              : Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.grey.shade100,
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 2.w),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Text(
-                          'Oops! You are not connected to Internet',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline2
-                              ?.copyWith(
-                                  color: Constance.thirdColor,
-                                  fontWeight: FontWeight.bold),
-                        ),
-                      ],
+    return UpgradeAlert(
+      upgrader: Upgrader(dialogStyle: Platform.isAndroid?UpgradeDialogStyle.material:UpgradeDialogStyle.cupertino),
+      child: Scaffold(
+        backgroundColor:
+            Storage.instance.isDarkMode ? Colors.black : Colors.grey.shade100,
+        appBar: buildAppBar(),
+        // floatingActionButtonLocation: showing
+        //     ? FloatingActionButtonLocation.miniStartFloat
+        //     : FloatingActionButtonLocation.miniEndFloat,
+        // floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+        // floatingActionButton: FloatingActionButton(
+        //   backgroundColor: Colors.green,
+        //   onPressed: () {
+        //     _launchUrl(
+        //         Uri.parse('whatsapp://send?phone=919365974702&text=Hi+G+Plus!'));
+        //   },
+        //   child: Icon(
+        //     FontAwesomeIcons.whatsapp,
+        //     color: Colors.white,
+        //     size: 22.sp,
+        //   ),
+        // ),
+        drawer: BergerMenuMemPage(),
+        body: OfflineBuilder(
+          connectivityBuilder: (
+            BuildContext context,
+            ConnectivityResult connectivity,
+            Widget child,
+          ) {
+            final bool connected = connectivity != ConnectivityResult.none;
+            return connected
+                ? HomeScreenBody()
+                : Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.grey.shade100,
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 2.w),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Text(
+                            'Oops! You are not connected to Internet',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline2
+                                ?.copyWith(
+                                    color: Constance.thirdColor,
+                                    fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-        },
-        child: Container(),
+                  );
+          },
+          child: Container(),
+        ),
+        bottomNavigationBar: CustomNavigationBar(current),
       ),
-      bottomNavigationBar: CustomNavigationBar(current),
     );
   }
 
@@ -508,7 +512,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search');
+            Navigation.instance.navigate('/search',args: "");
           },
           icon: const Icon(Icons.search),
         ),

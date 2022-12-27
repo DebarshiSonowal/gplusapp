@@ -212,7 +212,7 @@ void sendToDestination(seo_name, category_name,type) async {
     case "citizen_journalist":
       Navigation.instance.navigate('/citizenJournalist');
       break;
-    case "big_deal":
+    case "deals":
       Navigation.instance.navigate('/bigdealpage');
       break;
     case "classified":

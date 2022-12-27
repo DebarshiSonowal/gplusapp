@@ -351,7 +351,7 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search');
+            Navigation.instance.navigate('/search',args: "");
           },
           icon: Icon(Icons.search),
         ),

@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -223,7 +224,12 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                 Material(
                                   type: MaterialType.transparency,
                                   child: IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Share.share(data.opinion?.web_url ==
+                                          ""
+                                          ? 'check out our website https://guwahatiplus.com/'
+                                          : '${data.opinion?.web_url}');
+                                    },
                                     splashRadius: 20.0,
                                     splashColor: Constance.secondaryColor,
                                     icon: Icon(
@@ -359,6 +365,10 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             SizedBox(
                               height: 1.5.h,
                             ),
+
+                            SizedBox(
+                              height: 1.5.h,
+                            ),
                             Divider(
                               color: Storage.instance.isDarkMode
                                   ? Colors.white
@@ -435,7 +445,12 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                 Material(
                                   type: MaterialType.transparency,
                                   child: IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Share.share(data.opinion?.web_url ==
+                                          ""
+                                          ? 'check out our website https://guwahatiplus.com/'
+                                          : '${data.opinion?.web_url}');
+                                    },
                                     splashRadius: 20.0,
                                     splashColor: Constance.secondaryColor,
                                     icon: Icon(
@@ -781,7 +796,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search');
+            Navigation.instance.navigate('/search',args: "");
           },
           icon: Icon(Icons.search),
         ),

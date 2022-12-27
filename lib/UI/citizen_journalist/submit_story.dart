@@ -347,7 +347,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search');
+            Navigation.instance.navigate('/search',args: "");
           },
           icon: Icon(Icons.search),
         ),

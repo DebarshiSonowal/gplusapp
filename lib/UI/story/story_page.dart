@@ -332,7 +332,8 @@ class _StoryPageState extends State<StoryPage> {
                                         }
                                       } else {
                                         try {
-                                          _launchUrl(Uri.parse("https://www.gmcpropertytax.com"));
+                                          _launchUrl(Uri.parse(
+                                              "https://www.gmcpropertytax.com"));
                                         } catch (e) {
                                           print(e);
                                         }
@@ -518,6 +519,37 @@ class _StoryPageState extends State<StoryPage> {
                             //     },
                             //   ),
                             // ),
+                            SizedBox(
+                              height: 1.5.h,
+                            ),
+                            Wrap(
+                              children: [
+                                for (var i
+                                    in data.selectedArticle!.tags!.split(","))
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigation.instance
+                                          .navigate('/search', args: i);
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 2.w, vertical: 1.h),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 2.w, vertical: 1.h),
+                                      color: Constance.primaryColor,
+                                      child: Text(
+                                        i.trim(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5
+                                            ?.copyWith(
+                                              color: Colors.white,
+                                            ),
+                                      ),
+                                    ),
+                                  )
+                              ],
+                            ),
                             SizedBox(
                               height: 1.5.h,
                             ),
@@ -847,7 +879,7 @@ class _StoryPageState extends State<StoryPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search');
+            Navigation.instance.navigate('/search',args: "");
             // showSearch(
             //   context: context,
             //   delegate: SearchPage<Listing>(
@@ -892,7 +924,7 @@ class _StoryPageState extends State<StoryPage> {
   }
 
   Future<void> _launchUrl(_url) async {
-    if (!await launchUrl(_url,mode: LaunchMode.externalApplication)) {
+    if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
       throw 'Could not launch $_url';
     }
   }

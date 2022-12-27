@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/three_images_widget.dart';
@@ -20,6 +21,7 @@ import '../Networking/api_provider.dart';
 import 'alert.dart';
 import 'comment_item.dart';
 import 'comment_ui.dart';
+import 'custom_button.dart';
 import 'four_images_widget.dart';
 import 'multiple_image_widget.dart';
 
@@ -209,7 +211,9 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                       _showAlertDialog(context, data.id);
                                       break;
                                     default:
-                                      blockUser(data.user_id);
+                                      showBlockConfirmation(data.user_id,
+                                          data.user?.name, context);
+
                                       break;
                                   }
                                 },
@@ -543,11 +547,121 @@ class GuwahatiConnectPostCard extends StatelessWidget {
     final response =
         await ApiProvider.instance.blockUser(id, 'guwahati-connect');
     if (response.success ?? false) {
+      Navigation.instance.goBack();
       Fluttertoast.showToast(msg: response.message ?? "Something went wrong");
       fetchGuwahatiConnect();
     } else {
+      Navigation.instance.goBack();
       Fluttertoast.showToast(msg: response.message ?? "Something went wrong");
     }
+  }
+
+  void showBlockConfirmation(int? user_id, name, context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          contentPadding: EdgeInsets.zero,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          backgroundColor:
+              Storage.instance.isDarkMode ? Colors.black : Colors.white,
+          title: Text(
+            'Are you sure you want to block ${name} ?',
+            style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: !Storage.instance.isDarkMode
+                      ? Colors.black
+                      : Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          content: Container(
+            padding: EdgeInsets.symmetric(horizontal:2.5.h, vertical: 1.h),
+            // height: 50.h,
+            width: 80.w,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 1.h),
+                Text(
+                  'You will not be able to see ${name}\'s:',
+                  style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: !Storage.instance.isDarkMode
+                            ? Colors.black
+                            : Colors.white,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(height: 1.h),
+                Html(
+                  data: """ 
+                <ul> 
+                     <li>* Posts </li> <br/>
+                     <li>* Comments </li> <br/>
+                     <li>* Notifications </li>  <br/>
+                <ul>
+                """,
+                  shrinkWrap: true,
+                  style: {
+                    '#': Style(
+                      fontSize: FontSize(
+                        10.sp
+                      ),
+
+                      // maxLines: 20,
+                      color: Storage.instance.isDarkMode?Colors.white:Colors.black,
+                      // textOverflow: TextOverflow.ellipsis,
+                    ),
+                  },
+                ),
+                SizedBox(height: 2.h),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: Theme.of(context).textTheme.headline4?.copyWith(
+                      color: !Storage.instance.isDarkMode
+                          ? Colors.black
+                          : Colors.white,
+                    ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Confirm',
+                style: Theme.of(context).textTheme.headline4?.copyWith(
+                      color: !Storage.instance.isDarkMode
+                          ? Colors.black
+                          : Colors.white,
+                    ),
+              ),
+              onPressed: () {
+                blockUser(user_id);
+              },
+            ),
+            // TextButton(
+            //   child: const Text('Yes'),
+            //   onPressed: () {
+            //     Navigator.of(context).pop();
+            //   },
+            // ),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -557,38 +671,84 @@ Future<void> _showAlertDialog(context, id) async {
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       return AlertDialog(
+        backgroundColor:
+            Storage.instance.isDarkMode ? Colors.black : Colors.white,
         // <-- SEE HERE
-        title: const Text('Cancel booking'),
+        title: Text(
+          'Please select a problem',
+          style: Theme.of(context).textTheme.headline5?.copyWith(
+                fontWeight: FontWeight.bold,
+                color:
+                    !Storage.instance.isDarkMode ? Colors.black : Colors.white,
+              ),
+        ),
         content: SizedBox(
-          height: 30.h,
+          height: 23.h,
           width: 40.w,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: Provider.of<DataProvider>(context, listen: false)
-                .reportCategories
-                .length,
-            itemBuilder: (BuildContext context, int index) {
-              var item = Provider.of<DataProvider>(context, listen: false)
-                  .reportCategories[index];
-              return ListTile(
-                onTap: (){
-                  reportPost_Comment(context,id,item.id,"guwahati-connect");
-                },
-                title: Text(
-                  item.name ?? "",
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                    color: Colors.white
-                  ),
+          child: Column(
+            children: [
+              Text(
+                "If someone is in immediate danger, get help before reporting to G Plus. Don't wait.",
+                style: Theme.of(context).textTheme.headline6?.copyWith(
+                      color: !Storage.instance.isDarkMode
+                          ? Colors.black
+                          : Colors.white,
+                    ),
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
+              SizedBox(
+                height: 15.h,
+                width: double.infinity,
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: Provider.of<DataProvider>(context, listen: false)
+                      .reportCategories
+                      .length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var item = Provider.of<DataProvider>(context, listen: false)
+                        .reportCategories[index];
+                    return GestureDetector(
+                      onTap: () {
+                        reportPost_Comment(
+                            context, id, item.id, "guwahati-connect");
+                      },
+                      child: Text(
+                        item.name ?? "",
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                              color: !Storage.instance.isDarkMode
+                                  ? Colors.black
+                                  : Colors.white,
+                            ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 0.4.h),
+                      child: Divider(
+                        color: !Storage.instance.isDarkMode
+                            ? Colors.black
+                            : Colors.white,
+                        thickness: 0.01.h,
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+            ],
           ),
         ),
         actions: <Widget>[
           TextButton(
             child: Text(
               'Cancel',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headline4?.copyWith(
+                    color: !Storage.instance.isDarkMode
+                        ? Colors.black
+                        : Colors.white,
+                  ),
             ),
             onPressed: () {
               Navigator.of(context).pop();
@@ -606,14 +766,15 @@ Future<void> _showAlertDialog(context, id) async {
   );
 }
 
-void reportPost_Comment(context,id, report_type, type) async{
-  final response = await ApiProvider.instance.reportPost_Comment(id,report_type,type);
-  if(response.success??false){
+void reportPost_Comment(context, id, report_type, type) async {
+  final response =
+      await ApiProvider.instance.reportPost_Comment(id, report_type, type);
+  if (response.success ?? false) {
     Navigator.of(context).pop();
-    Fluttertoast.showToast(msg: response.message??"Something went wrong");
-  }else{
+    Fluttertoast.showToast(msg: response.message ?? "Something went wrong");
+  } else {
     Navigator.of(context).pop();
-    showError(response.message??"Unable to report");
+    showError(response.message ?? "Unable to report");
   }
 }
 

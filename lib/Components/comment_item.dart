@@ -117,7 +117,9 @@ class CommentItem extends StatelessWidget {
           // Offset value to show menuItem from the selected item
           bottomOffsetHeight: 80.0,
           // Offset hei
-          onPressed: () {},
+          onPressed: () {
+
+          },
           menuItems: <FocusedMenuItem>[
             // Add Each FocusedMenuItem  for Menu Options
             FocusedMenuItem(
@@ -410,38 +412,78 @@ class CommentItem extends StatelessWidget {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
           // <-- SEE HERE
-          title: const Text('Cancel booking'),
+          title: Text(
+            'Please select a problem',
+            style: Theme.of(context).textTheme.headline5?.copyWith(
+              fontWeight: FontWeight.bold,
+              color:
+              !Storage.instance.isDarkMode ? Colors.black : Colors.white,
+            ),
+          ),
           content: SizedBox(
-            height: 30.h,
+            height: 27.h,
             width: 40.w,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: Provider.of<DataProvider>(context, listen: false)
-                  .reportCategories
-                  .length,
-              itemBuilder: (BuildContext context, int index) {
-                var item = Provider.of<DataProvider>(context, listen: false)
-                    .reportCategories[index];
-                return ListTile(
-                  onTap: (){
-                    reportPost_Comment(context,id,item.id,"comment");
-                  },
-                  title: Text(
-                    item.name ?? "",
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.white
-                    ),
+            child: Column(
+              children: [
+                Text(
+                  "If someone is in immediate danger, get help before reporting to G Plus. Don't wait.",
+                  style: Theme.of(context).textTheme.headline6?.copyWith(
+                    color: !Storage.instance.isDarkMode
+                        ? Colors.black
+                        : Colors.white,
                   ),
-                );
-              },
+                ),
+                SizedBox(
+                  height: 9.h,
+                ),
+                ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: Provider.of<DataProvider>(context, listen: false)
+                      .reportCategories
+                      .length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var item = Provider.of<DataProvider>(context, listen: false)
+                        .reportCategories[index];
+                    return GestureDetector(
+                      onTap: () {
+                        reportPost_Comment(
+                            context, id, item.id, "guwahati-connect");
+                      },
+                      child: Text(
+                        item.name ?? "",
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: !Storage.instance.isDarkMode
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 0.4.h),
+                      child: Divider(
+                        color: !Storage.instance.isDarkMode
+                            ? Colors.black
+                            : Colors.white,
+                        thickness: 0.01.h,
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
           actions: <Widget>[
             TextButton(
               child: Text(
                 'Cancel',
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.headline4?.copyWith(
+                  color: !Storage.instance.isDarkMode?Colors.black:Colors.white,
+                ),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

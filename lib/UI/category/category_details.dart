@@ -725,7 +725,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search');
+            Navigation.instance.navigate('/search',args: "");
             // showSearch(
             //   context: context,
             //   delegate: SearchPage<Listing>(

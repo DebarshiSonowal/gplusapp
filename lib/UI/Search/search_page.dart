@@ -13,19 +13,27 @@ import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  final String? query;
+
+  const SearchPage({super.key, this.query});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
-  var _searchQueryController = TextEditingController();
+ final _searchQueryController = TextEditingController();
   int selected = 0;
 
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero,(){
+      if((widget.query?.isNotEmpty??false)&&widget.query!=""){
+        _searchQueryController.text = widget.query??"";
+        search(_searchQueryController.text,selected);
+      }
+    });
   }
 
   @override

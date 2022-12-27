@@ -323,7 +323,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search');
+            Navigation.instance.navigate('/search',args: "");
             // showSearch(
             //   context: context,
             //   delegate: SearchPage<Listing>(

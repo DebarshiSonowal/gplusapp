@@ -426,7 +426,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search');
+            Navigation.instance.navigate('/search',args: "");
           },
           icon: Icon(Icons.search),
         ),

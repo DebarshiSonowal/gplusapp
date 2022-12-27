@@ -25,7 +25,8 @@ class Opinion {
       description,
       short_description,
       image_file_name,
-      image_caption;
+      image_caption,
+      web_url;
 
   User? user;
   VideoGallery? category_gallery;
@@ -62,6 +63,7 @@ class Opinion {
     author_name = json['author_name'] ?? "Anonymous";
     publish_date = json['publish_date'] ?? "";
     tags = json['tags'] ?? "";
+    web_url = json['web_url'] ?? "";
     seo_name = json['seo_name'] ?? "";
     meta_title = json['meta_title'] ?? "";
     meta_description = json['meta_description'] ?? "";

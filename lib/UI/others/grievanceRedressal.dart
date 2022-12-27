@@ -241,7 +241,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search');
+            Navigation.instance.navigate('/search',args: "");
             // showSearch(
             //   context: context,
             //   delegate: SearchPage<Listing>(

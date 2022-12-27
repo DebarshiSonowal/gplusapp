@@ -480,7 +480,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search');
+            Navigation.instance.navigate('/search',args: "");
           },
           icon: const Icon(Icons.search),
         ),

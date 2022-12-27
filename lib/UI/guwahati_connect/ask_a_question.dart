@@ -276,7 +276,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search');
+            Navigation.instance.navigate('/search',args: "");
           },
           icon: const Icon(Icons.search),
         ),

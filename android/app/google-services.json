@@ -15,15 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "1048331216720-0tgdds2m5austv48a159fgonom9a4h87.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.appbazooka.gplus",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "1048331216720-dgtmeqg5m1meblmmbgnsdim5n9i8kdcc.apps.googleusercontent.com",
+          "client_id": "1048331216720-h7e8lhotbfnih2ofncvfjkbrjpvddlc4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.appbazooka.gplus",

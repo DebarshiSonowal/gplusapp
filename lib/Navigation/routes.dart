@@ -232,7 +232,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(
           page: EditAskAQuestionPage(settings.arguments as String));
     case '/search':
-      return FadeTransitionPageRouteBuilder(page: SearchPage());
+      return FadeTransitionPageRouteBuilder(
+          page: SearchPage(query: settings.arguments as String));
     case '/aboutUs':
       return FadeTransitionPageRouteBuilder(page: AboutUsPage());
     case '/refundPolicy':

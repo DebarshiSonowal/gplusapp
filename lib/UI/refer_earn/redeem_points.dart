@@ -556,7 +556,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search');
+            Navigation.instance.navigate('/search',args: "");
           },
           icon: Icon(Icons.search),
         ),

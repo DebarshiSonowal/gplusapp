@@ -423,7 +423,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search');
+            Navigation.instance.navigate('/search',args: "");
           },
           icon: Icon(Icons.search),
         ),
