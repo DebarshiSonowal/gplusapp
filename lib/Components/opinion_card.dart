@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:sizer/sizer.dart';
 
@@ -34,7 +35,7 @@ class OpinionCard extends StatelessWidget {
           ),
           color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         ),
-        height: 10.h,
+        height: 12.5.h,
         width: MediaQuery.of(context).size.width - 7.w,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,12 +86,12 @@ class OpinionCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style:
                                 Theme.of(context).textTheme.headline5?.copyWith(
-                                      fontSize: 11.sp,
+                                      fontSize: 12.sp,
                                       color: Storage.instance.isDarkMode
                                           ? Colors.white
                                           : Constance.fifthColor,
-                                      // fontWeight:
-                                      //     FontWeight.bold,
+                                      fontWeight:
+                                          FontWeight.bold,
                                     ),
                           ),
                         ),
@@ -105,21 +106,33 @@ class OpinionCard extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        item.user?.name ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Constance.fifthColor,
-                              // fontWeight: FontWeight.bold,
-                            ),
+                      Row(
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.user,
+                            color: Constance.secondaryColor,
+                            size: 8.sp,
+                          ),
+                          SizedBox(
+                            width: 1.w,
+                          ),
+                          Text(
+                            item.user?.name ?? "",
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.headline6?.copyWith(
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Constance.fifthColor,
+                                  // fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ],
                       ),
                       Text(
                         // item.publish_date?.split(" ")[0] ?? "",
                         Jiffy(item.publish_date?.split(" ")[0] ?? "",
                                 "yyyy-MM-dd")
-                            .format("dd/MM/yyyy"),
+                            .format("dd MMM,yyyy"),
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Storage.instance.isDarkMode

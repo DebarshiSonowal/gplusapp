@@ -113,10 +113,13 @@ class _ExclusivePageState extends State<ExclusivePage> {
                       children: [
                         Row(
                           children: [
-                            Icon(
-                              Icons.star,
+                            Image.asset(
+                              Constance.exclusiveIcon,
                               color: Constance.secondaryColor,
-                              size: 4.h,
+                              scale: 20,
+                            ),
+                            SizedBox(
+                              width: 1.w,
                             ),
                             Text(
                               'G Plus Exclusive',
@@ -188,20 +191,73 @@ class _ExclusivePageState extends State<ExclusivePage> {
                         SizedBox(
                           height: 2.h,
                         ),
-                        Text(
-                          '${data.home_exclusive[0].author_name}, ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
-                          style: Theme.of(Navigation
-                                  .instance.navigatorKey.currentContext!)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
-                                // fontSize: 2.2.h,
-                                // fontWeight: FontWeight.bold,
+                        Row(
+                          children: [
+                            Image.asset(
+                              Constance.authorIcon,
+                              scale: 35,
+                              color: Constance.secondaryColor,
+                            ),
+                            SizedBox(
+                              width: 0.5.w,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigation.instance.navigate('/authorPage',
+                                    args: data.home_exclusive[0].author);
+                              },
+                              child: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: data.home_exclusive[0].author_name ??
+                                          "G Plus",
+                                      style: Theme.of(Navigation.instance
+                                          .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                        color: Constance.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        decoration:
+                                        TextDecoration.underline,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                      ' , ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                      style: Theme.of(Navigation.instance
+                                          .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                        color: Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                        // fontSize: 2.2.h,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
+                            ),
+                          ],
                         ),
+                        // Text(
+                        //   '${data.home_exclusive[0].author_name}, ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                        //   style: Theme.of(Navigation
+                        //           .instance.navigatorKey.currentContext!)
+                        //       .textTheme
+                        //       .headline5
+                        //       ?.copyWith(
+                        //         color: Storage.instance.isDarkMode
+                        //             ? Colors.white
+                        //             : Colors.black,
+                        //         // fontSize: 2.2.h,
+                        //         // fontWeight: FontWeight.bold,
+                        //       ),
+                        // ),
                         Divider(
                           color: Storage.instance.isDarkMode
                               ? Colors.white
@@ -310,8 +366,8 @@ class _ExclusivePageState extends State<ExclusivePage> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -319,7 +375,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
           },
           icon: Icon(Icons.search),
         ),
@@ -361,5 +417,3 @@ class _ExclusivePageState extends State<ExclusivePage> {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 }
-
-

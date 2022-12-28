@@ -51,6 +51,7 @@ import '../UI/opinion/opinion_details_page.dart';
 import '../UI/opinion/opinion_page.dart';
 import '../UI/others/about_us_page.dart';
 import '../UI/others/advertise_with_us_page.dart';
+import '../UI/others/blocked_list_page.dart';
 import '../UI/others/bookmarks_page.dart';
 import '../UI/others/contact_us_page.dart';
 import '../UI/others/grievanceRedressal.dart';
@@ -145,6 +146,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '/notification':
       return FadeTransitionPageRouteBuilder(page: NotificationPage());
+      case '/blockedUsers':
+      return FadeTransitionPageRouteBuilder(page: BlockedUsersListPage());
     case '/bookmarks':
       return FadeTransitionPageRouteBuilder(page: BookmarksPage());
     case '/beamember':

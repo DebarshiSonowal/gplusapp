@@ -386,12 +386,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                       SizedBox(
-                        height: 2.h,
+                        height: 1.h,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.w),
                         child: Text(
-                          'This material may not be published, broadcast, rewritten, or redistributed, 2022 © G plus. All rights reserved. Copyright © 2022 Insight Brandcom Pvt. Ltd. All rights reserved.',
+                          'This material may not be published, broadcast, rewritten, or redistributed, 2022 © G Plus. All rights reserved. Copyright © 2022 Insight Brandcom Pvt. Ltd. All rights reserved.',
                           style:
                               Theme.of(context).textTheme.headline6?.copyWith(
                                     // fontSize: 16.sp,
@@ -417,7 +417,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Container AdsSection(BuildContext context, DataProvider data) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 1.w),
-      padding: EdgeInsets.symmetric(vertical: 1.h),
+      padding: EdgeInsets.symmetric(vertical: 0.h),
       child: Column(
         children: [
           Row(
@@ -429,9 +429,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   'Ad',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
-                        fontSize: 12.sp,
+                        fontSize: 7.sp,
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                        // fontWeight: FontWeight.bold,
                       ),
                 ),
               ),
@@ -448,7 +448,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _launchUrl(Uri.parse(data.ads[random].link.toString()));
               },
               child: Padding(
-                padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 0.5.h),
+                padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 0.9.h),
                 child: CachedNetworkImage(
                   height: 6.h,
                   fit: BoxFit.fill,
@@ -814,7 +814,7 @@ for an unparalleled publication, that people call their''',
   getSpace() {
     if (Platform.isAndroid) {
       return SizedBox(
-        height: 20.h,
+        height: 18.5.h,
       );
     } else if (Platform.isIOS) {
       return SizedBox(

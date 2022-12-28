@@ -26,7 +26,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: true);
 
-  bool isEmpty=false;
+  bool isEmpty = false;
 
   void _onRefresh() async {
     // monitor network fetch
@@ -43,7 +43,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
       _refreshController.refreshCompleted();
     } else {
       setState(() {
-        isEmpty=true;
+        isEmpty = true;
       });
       _refreshController.refreshFailed();
       // showError(response.message ?? "Something went wrong");
@@ -111,7 +111,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
-              padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+              padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 5.w),
               child: data.bookmarks.isNotEmpty
                   ? SingleChildScrollView(
                       child: Column(
@@ -148,7 +148,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                               if (data.profile?.is_plan_active ?? false) {
                                 Navigation.instance.navigate('/story',
                                     args:
-                                    '${data.bookmarks[0].cat_seo_name},${data.bookmarks[0].seo_name}');
+                                        '${data.bookmarks[0].cat_seo_name},${data.bookmarks[0].seo_name}');
                               } else {
                                 Constance.showMembershipPrompt(context, () {});
                               }
@@ -171,11 +171,11 @@ class _BookmarksPageState extends State<BookmarksPage> {
                             ),
                           ),
                           SizedBox(
-                            height: 2.h,
+                            height: 1.h,
                           ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
+                          // SizedBox(
+                          //   height: 2.h,
+                          // ),
                           GestureDetector(
                             onTap: () {
                               if (data.profile?.is_plan_active ?? false) {
@@ -203,22 +203,75 @@ class _BookmarksPageState extends State<BookmarksPage> {
                             ),
                           ),
                           SizedBox(
-                            height: 2.h,
+                            height: 1.h,
                           ),
-                          Text(
-                            '${data.bookmarks[0].author_name}, ${Jiffy(data.bookmarks[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
-                            style: Theme.of(Navigation
-                                    .instance.navigatorKey.currentContext!)
-                                .textTheme
-                                .headline5
-                                ?.copyWith(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  // fontSize: 2.2.h,
-                                  // fontWeight: FontWeight.bold,
+                          GestureDetector(
+                            onTap: () {
+                              // Navigation.instance.navigate('/authorPage',
+                              //     args: data.bookmarks[0].user_id);
+                            },
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  Constance.authorIcon,
+                                  scale: 30,
+                                  color: Constance.secondaryColor,
                                 ),
+                                SizedBox(
+                                  width: 0.5.w,
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text:
+                                            '${data.bookmarks[0].author_name ?? "G Plus"}',
+                                        style: Theme.of(Navigation.instance
+                                                .navigatorKey.currentContext!)
+                                            .textTheme
+                                            .headline5
+                                            ?.copyWith(
+                                              color: Constance.primaryColor,
+                                              fontWeight: FontWeight.bold,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
+                                      ),
+                                      TextSpan(
+                                        text:
+                                            ' , ${Jiffy(data.bookmarks[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                        style: Theme.of(Navigation.instance
+                                                .navigatorKey.currentContext!)
+                                            .textTheme
+                                            .headline5
+                                            ?.copyWith(
+                                              color: Storage.instance.isDarkMode
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              // fontSize: 2.2.h,
+                                              // fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                          // Text(
+                          //   '${data.bookmarks[0].author_name}, ${Jiffy(data.bookmarks[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                          //   style: Theme.of(Navigation
+                          //           .instance.navigatorKey.currentContext!)
+                          //       .textTheme
+                          //       .headline5
+                          //       ?.copyWith(
+                          //         color: Storage.instance.isDarkMode
+                          //             ? Colors.white
+                          //             : Colors.black,
+                          //         // fontSize: 2.2.h,
+                          //         // fontWeight: FontWeight.bold,
+                          //       ),
+                          // ),
                           Divider(
                             color: Storage.instance.isDarkMode
                                 ? Colors.white
@@ -265,7 +318,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               CachedNetworkImage(
-                                                height: 15.h,
+                                                height: 17.7.h,
                                                 width: 45.w,
                                                 imageUrl:
                                                     item.image_file_name ?? '',
@@ -282,26 +335,9 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                                   );
                                                 },
                                               ),
-                                              SizedBox(
-                                                height: 1.h,
-                                              ),
-                                              Text(
-                                                Jiffy(
-                                                        item.publish_date
-                                                                ?.split(
-                                                                    " ")[0] ??
-                                                            "",
-                                                        "yyyy-MM-dd")
-                                                    .format("dd/MM/yyyy"),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline6
-                                                    ?.copyWith(
-                                                        color: Storage.instance
-                                                                .isDarkMode
-                                                            ? Colors.white
-                                                            : Colors.black),
-                                              ),
+                                              // SizedBox(
+                                              //   height: 1.h,
+                                              // ),
                                             ],
                                           ),
                                         ),
@@ -317,22 +353,57 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                               Expanded(
                                                 child: Text(
                                                   item.title ?? "",
-                                                  maxLines: 4,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline4
-                                                      ?.copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          color: Storage
-                                                                  .instance
-                                                                  .isDarkMode
-                                                              ? Colors.white
-                                                              : Constance
-                                                                  .primaryColor),
+                                                  maxLines: 6,
+                                                  style: (item.title?.length ?? 0) > 60
+                                                      ? Theme.of(context)
+                                                          .textTheme
+                                                          .headline6
+                                                          ?.copyWith(
+                                                              fontWeight: FontWeight
+                                                                  .bold,
+                                                              overflow: TextOverflow
+                                                                  .ellipsis,
+                                                              color: Storage
+                                                                      .instance
+                                                                      .isDarkMode
+                                                                  ? Colors.white
+                                                                  : Constance
+                                                                      .primaryColor)
+                                                      : Theme.of(context)
+                                                          .textTheme
+                                                          .headline5
+                                                          ?.copyWith(
+                                                              fontWeight: FontWeight
+                                                                  .bold,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              color: Storage
+                                                                      .instance
+                                                                      .isDarkMode
+                                                                  ? Colors.white
+                                                                  : Constance.primaryColor),
                                                 ),
+                                              ),
+                                              // SizedBox(
+                                              //   height: 1.h,
+                                              // ),
+                                              Text(
+                                                Jiffy(
+                                                        item.publish_date
+                                                                ?.split(
+                                                                    " ")[0] ??
+                                                            "",
+                                                        "yyyy-MM-dd")
+                                                    .format("dd MMM,yyyy"),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6
+                                                    ?.copyWith(
+                                                        color: Storage.instance
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : Colors.black),
                                               ),
                                               SizedBox(
                                                 height: 1.h,
@@ -384,8 +455,10 @@ class _BookmarksPageState extends State<BookmarksPage> {
                       ),
                     )
                   : Lottie.asset(
-                    isEmpty?Constance.noDataLoader:Constance.searchingIcon,
-                  ));
+                      isEmpty
+                          ? Constance.noDataLoader
+                          : Constance.searchingIcon,
+                    ));
         }),
       ),
     );
@@ -420,8 +493,8 @@ class _BookmarksPageState extends State<BookmarksPage> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -429,7 +502,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
           },
           icon: Icon(Icons.search),
         ),

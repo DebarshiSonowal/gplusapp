@@ -30,6 +30,9 @@ class Constance {
   static const homeIcon = 'assets/images/home.png';
   static const connectIcon = 'assets/images/connect.png';
   static const classifiedIcon = 'assets/images/classifieds.png';
+  static const entertainmentIcon = 'assets/images/entertainment.png';
+  static const authorIcon = 'assets/images/author.png';
+  static const exclusiveIcon = 'assets/images/exclusive.png';
   static const bigDealIcon = 'assets/images/big_deal.png';
   static const citizenIcon = 'assets/images/citizen_journalist.png';
   static const searchingIcon = 'assets/animation/searching.json';

@@ -17,6 +17,7 @@ import '../Model/address.dart';
 import '../Model/advertise.dart';
 import '../Model/article.dart';
 import '../Model/article_desc.dart';
+import '../Model/blocked_user.dart';
 import '../Model/citizen_journalist.dart';
 import '../Model/classified.dart';
 import '../Model/classified_category.dart';
@@ -1439,6 +1440,7 @@ class ApiProvider {
       return GenericMsgResponse.withError(e.message);
     }
   }
+
   Future<ReportResponse> getReportMsg() async {
     var url = "${baseUrl}/user-report-list";
     BaseOptions option =
@@ -1630,6 +1632,48 @@ class ApiProvider {
     }
   }
 
+  Future<BlockedUserResponse> getBlockedList() async {
+    var url = "${baseUrl}/app/blocked-user-list";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // var data = {
+    //   'mobile': mobile,
+    //   'topic_ids': topicks,
+    //   'geo_ids': geotopicks,
+    // };
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // data: data,
+        // queryParameters: data,
+      );
+      debugPrint("BlockedUserResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return BlockedUserResponse.fromJson(response?.data);
+      } else {
+        debugPrint("BlockedUserResponse error: ${response?.data}");
+        return BlockedUserResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("BlockedUserResponse error: ${e.response}");
+      return BlockedUserResponse.withError(e.message);
+    }
+  }
+
   Future<GenericResponse> updateDeviceToken(token) async {
     var url = "${baseUrl}/update-device-token";
     BaseOptions option =
@@ -1669,7 +1713,8 @@ class ApiProvider {
       return GenericResponse.withError(e.message);
     }
   }
-  Future<GenericResponse> reportPost_Comment(id,report_type,type) async {
+
+  Future<GenericResponse> reportPost_Comment(id, report_type, type) async {
     var url = "${baseUrl}/app/user-report";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -1682,8 +1727,8 @@ class ApiProvider {
     debugPrint(url.toString());
     var data = {
       'report_for_id': id,
-      'report_type_id':report_type,
-      'type':type,
+      'report_type_id': report_type,
+      'type': type,
     };
     debugPrint(jsonEncode(data));
 

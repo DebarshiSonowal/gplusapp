@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -27,7 +28,7 @@ class _NewsFromState extends State<NewsFrom> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  int skip=5;
+  int skip = 5;
 
   @override
   void initState() {
@@ -37,7 +38,7 @@ class _NewsFromState extends State<NewsFrom> {
 
   void _onRefresh() async {
     setState(() {
-      skip=10;
+      skip = 10;
     });
     // monitor network fetch
     final response = await ApiProvider.instance.getArticle(widget.categ);
@@ -103,7 +104,7 @@ class _NewsFromState extends State<NewsFrom> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
-            padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+            padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 5.w),
             child: data.news_from.isNotEmpty
                 ? SingleChildScrollView(
                     child: Column(
@@ -111,13 +112,22 @@ class _NewsFromState extends State<NewsFrom> {
                       children: [
                         Row(
                           children: [
-                            Icon(
-                              Icons.star,
-                              color: Constance.secondaryColor,
-                              size: 4.h,
+                            capitalize(widget.categ) == "Entertainment"
+                                ? Image.asset(
+                                    Constance.entertainmentIcon,
+                                    color: Constance.secondaryColor,
+                                    scale: 27,
+                                  )
+                                : Icon(
+                                    Icons.star,
+                                    color: Constance.secondaryColor,
+                                    size: 4.h,
+                                  ),
+                            SizedBox(
+                              width: 1.w,
                             ),
                             Text(
-                              capitalize(widget.categ),
+                              capitalize(widget.categ)=="Buzz"?"Featured":capitalize(widget.categ),
                               style: Theme.of(Navigation
                                       .instance.navigatorKey.currentContext!)
                                   .textTheme
@@ -151,9 +161,9 @@ class _NewsFromState extends State<NewsFrom> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
+                        // SizedBox(
+                        //   height: 2.h,
+                        // ),
                         // Row(
                         //   children: [
                         //     Container(
@@ -176,7 +186,7 @@ class _NewsFromState extends State<NewsFrom> {
                         //   ],
                         // ),
                         SizedBox(
-                          height: 2.h,
+                          height: 0.7.h,
                         ),
                         GestureDetector(
                           onTap: () {
@@ -207,19 +217,72 @@ class _NewsFromState extends State<NewsFrom> {
                         SizedBox(
                           height: 2.h,
                         ),
-                        Text(
-                          '${data.news_from[0].author_name}, ${Jiffy(data.news_from[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
-                          style: Theme.of(Navigation
-                                  .instance.navigatorKey.currentContext!)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
-                                // fontSize: 2.2.h,
-                                // fontWeight: FontWeight.bold,
+                        Row(
+                          children: [
+                            Image.asset(
+                              Constance.authorIcon,
+                              scale: 35,
+                              color: Constance.secondaryColor,
+                            ),
+                            SizedBox(
+                              width: 0.5.w,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigation.instance.navigate('/authorPage',
+                                    args: data.news_from[0].author);
+                              },
+                              child: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: data.news_from[0].author_name ??
+                                          "G Plus",
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Constance.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          ' , ${Jiffy(data.news_from[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Storage.instance.isDarkMode
+                                                ? Colors.white
+                                                : Colors.black,
+                                            // fontSize: 2.2.h,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
                               ),
+                            ),
+                            // Text(
+                            //   '${data.news_from[0].author_name}, ${Jiffy(data.news_from[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                            //   style: Theme.of(Navigation
+                            //           .instance.navigatorKey.currentContext!)
+                            //       .textTheme
+                            //       .headline5
+                            //       ?.copyWith(
+                            //         color: Storage.instance.isDarkMode
+                            //             ? Colors.white
+                            //             : Colors.black,
+                            //         // fontSize: 2.2.h,
+                            //         // fontWeight: FontWeight.bold,
+                            //       ),
+                            // ),
+                          ],
                         ),
                         Divider(
                           color: Storage.instance.isDarkMode
@@ -267,11 +330,10 @@ class _NewsFromState extends State<NewsFrom> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               CachedNetworkImage(
-                                                height: 15.h,
+                                                height: 17.5.h,
                                                 width: 45.w,
                                                 imageUrl:
-                                                    item.image_file_name ??
-                                                        '',
+                                                    item.image_file_name ?? '',
                                                 fit: BoxFit.fill,
                                                 placeholder: (cont, _) {
                                                   return Image.asset(
@@ -286,29 +348,9 @@ class _NewsFromState extends State<NewsFrom> {
                                                   );
                                                 },
                                               ),
-                                              SizedBox(
-                                                height: 1.h,
-                                              ),
-                                              Text(
-                                                // item.publish_date
-                                                //         ?.split(" ")[0] ??
-                                                //     "",
-                                                Jiffy(
-                                                        item.publish_date
-                                                                ?.split(
-                                                                    " ")[0] ??
-                                                            "",
-                                                        "yyyy-MM-dd")
-                                                    .format("dd/MM/yyyy"),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline6
-                                                    ?.copyWith(
-                                                        color: Storage.instance
-                                                                .isDarkMode
-                                                            ? Colors.white
-                                                            : Colors.black),
-                                              ),
+                                              // SizedBox(
+                                              //   height: 1.h,
+                                              // ),
                                             ],
                                           ),
                                         ),
@@ -324,22 +366,63 @@ class _NewsFromState extends State<NewsFrom> {
                                               Expanded(
                                                 child: Text(
                                                   item.title ?? "",
-                                                  maxLines: 3,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline4
-                                                      ?.copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          color: Storage
-                                                                  .instance
-                                                                  .isDarkMode
-                                                              ? Colors.white
-                                                              : Constance
-                                                                  .primaryColor),
+                                                  maxLines: 6,
+                                                  style: (item.title?.length ??
+                                                              0) >
+                                                          70
+                                                      ? Theme.of(context)
+                                                          .textTheme
+                                                          .headline5
+                                                          ?.copyWith(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            color: Storage
+                                                                    .instance
+                                                                    .isDarkMode
+                                                                ? Colors.white
+                                                                : Constance
+                                                                    .primaryColor,
+                                                          )
+                                                      : Theme.of(context)
+                                                          .textTheme
+                                                          .headline4
+                                                          ?.copyWith(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            color: Storage
+                                                                    .instance
+                                                                    .isDarkMode
+                                                                ? Colors.white
+                                                                : Constance
+                                                                    .primaryColor,
+                                                          ),
                                                 ),
+                                              ),
+                                              // SizedBox(
+                                              //   height: 1.h,
+                                              // ),
+                                              Text(
+                                                Jiffy(
+                                                        item.publish_date
+                                                                ?.split(
+                                                                    " ")[0] ??
+                                                            "",
+                                                        "yyyy-MM-dd")
+                                                    .format("dd MMM,yyyy"),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6
+                                                    ?.copyWith(
+                                                        color: Storage.instance
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : Colors.black),
                                               ),
                                               SizedBox(
                                                 height: 1.h,
@@ -375,7 +458,8 @@ class _NewsFromState extends State<NewsFrom> {
                                   height: 1.h,
                                   child: Divider(
                                     color: Storage.instance.isDarkMode
-                                        ? Colors.white:Colors.black,
+                                        ? Colors.white
+                                        : Colors.black,
                                     thickness: 0.3.sp,
                                   ),
                                 );
@@ -383,7 +467,7 @@ class _NewsFromState extends State<NewsFrom> {
                             },
                             itemCount: data.news_from.length),
                         SizedBox(
-                          height:2.h,
+                          height: 2.h,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -391,13 +475,13 @@ class _NewsFromState extends State<NewsFrom> {
                             CustomButton(
                                 txt: 'Load More',
                                 onTap: () {
-                                  skip = skip*2;
+                                  skip = skip * 2;
                                   fetchMoreContent();
                                 }),
                           ],
                         ),
                         SizedBox(
-                          height:15.h,
+                          height: 15.h,
                         ),
                       ],
                     ),
@@ -443,8 +527,8 @@ class _NewsFromState extends State<NewsFrom> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -452,7 +536,7 @@ class _NewsFromState extends State<NewsFrom> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
           },
           icon: Icon(Icons.search),
         ),
@@ -463,15 +547,16 @@ class _NewsFromState extends State<NewsFrom> {
   String capitalize(String str) {
     return "${str[0].toUpperCase()}${str.substring(1).toLowerCase()}";
   }
+
   void fetchMoreContent() async {
     Navigation.instance.navigate('/loadingDialog');
     final response =
-    await ApiProvider.instance.getMoreArticle(widget.categ, 5, 1, skip);
+        await ApiProvider.instance.getMoreArticle(widget.categ, 5, 1, skip);
     if (response.success ?? false) {
       Navigation.instance.goBack();
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .addNewsFrom(response.articles ?? []);
       // _refreshController.refreshCompleted();
     } else {
@@ -479,6 +564,7 @@ class _NewsFromState extends State<NewsFrom> {
       // _refreshController.refreshFailed();
     }
   }
+
   void fetchContent() async {
     final response = await ApiProvider.instance.getArticle(widget.categ);
     if (response.success ?? false) {

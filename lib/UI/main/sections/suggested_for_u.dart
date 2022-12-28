@@ -21,7 +21,7 @@ class SuggestedForYou extends StatelessWidget {
             height: 30.h,
             width: double.infinity,
             color: Constance.secondaryColor,
-            padding: EdgeInsets.symmetric(vertical: 2.h),
+            padding: EdgeInsets.symmetric(vertical: 1.h),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,

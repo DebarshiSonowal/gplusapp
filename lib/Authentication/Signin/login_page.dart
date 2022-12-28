@@ -104,10 +104,10 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Container(
                 height: 6.h,
-                width: double.infinity,
+                width: 55.w,
                 padding: const EdgeInsets.symmetric(horizontal: 26.0),
                 child: CustomButton(
-                    txt: 'continue',
+                    txt: 'Continue',
                     onTap: () {
                       // sendOTP(_mobile.text);
                       // Navigation.instance.navigate('/verifyOtp',args: int.parse('8638372157'));

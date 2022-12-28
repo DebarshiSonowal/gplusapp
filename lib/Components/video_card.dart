@@ -37,95 +37,7 @@ class VideoCard extends StatelessWidget {
         width: MediaQuery.of(context).size.width - 9.w,
         child: Row(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 10.h,
-                  width: 35.w,
-                  child: Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      SizedBox(
-                        height: 10.h,
-                        width: 35.w,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5.0),
-                          child: CachedNetworkImage(
-
-                            fit: BoxFit.fill,
-                            imageUrl: item.image_file_name ?? '',
-                            placeholder: (cont, _) {
-                              return Image.asset(
-                                Constance.logoIcon,
-                                // color: Colors.black,
-                              );
-                            },
-                            errorWidget: (cont, _, e) {
-                              return Image.network(
-                                Constance.defaultImage,
-                                fit: BoxFit.fitWidth,
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [Colors.transparent, Colors.black]),
-                          // color: Constance.secondaryColor,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(5.0),
-                            bottomRight: Radius.circular(5.0),
-                          ),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 1.w, vertical: 0.3.h),
-                        child: Row(
-                          // mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.play_arrow,
-                              color: Colors.white,
-                            ),
-                            Text(
-                              'Play Now',
-                              style: Theme.of(Navigation
-                                      .instance.navigatorKey.currentContext!)
-                                  .textTheme
-                                  .headline5
-                                  ?.copyWith(
-                                    color: Colors.white,
-                                    // fontSize: 2.2.h,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                Text(
-                  Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                      .format("dd/MM/yyyy"),
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      ?.copyWith(color: Colors.black54),
-                ),
-              ],
-            ),
+            ImageView(item: item),
             SizedBox(
               width: 5.w,
             ),
@@ -149,17 +61,115 @@ class VideoCard extends StatelessWidget {
                 //   height: 1.5.h,
                 // ),
                 Text(
-                  "",
+                  Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                      .format("dd MMM,yyyy"),
+                  maxLines: 4,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context)
                       .textTheme
                       .headline6
-                      ?.copyWith(color: Colors.black),
+                      ?.copyWith(color: Colors.black54),
                 ),
+                // Text(
+                //   "",
+                //   style: Theme.of(context)
+                //       .textTheme
+                //       .headline6
+                //       ?.copyWith(color: Colors.black),
+                // ),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class ImageView extends StatelessWidget {
+  const ImageView({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
+
+  final VideoNews item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 13.h,
+          width: 35.w,
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              SizedBox(
+                height: 13.h,
+                width: 35.w,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5.0),
+                  child: CachedNetworkImage(
+                    fit: BoxFit.fill,
+                    imageUrl: item.image_file_name ?? '',
+                    placeholder: (cont, _) {
+                      return Image.asset(
+                        Constance.logoIcon,
+                        // color: Colors.black,
+                      );
+                    },
+                    errorWidget: (cont, _, e) {
+                      return Image.network(
+                        Constance.defaultImage,
+                        fit: BoxFit.fitWidth,
+                      );
+                    },
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.transparent, Colors.black]),
+                  // color: Constance.secondaryColor,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(5.0),
+                    bottomRight: Radius.circular(5.0),
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(
+                    horizontal: 1.w, vertical: 0.3.h),
+                child: Row(
+                  // mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.play_arrow,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      'Play Now',
+                      style: Theme.of(Navigation
+                          .instance.navigatorKey.currentContext!)
+                          .textTheme
+                          .headline5
+                          ?.copyWith(
+                        color: Colors.white,
+                        // fontSize: 2.2.h,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

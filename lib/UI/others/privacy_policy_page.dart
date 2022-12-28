@@ -28,7 +28,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
         color: Storage.instance.isDarkMode
             ? Colors.black
             :Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+        padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
         child: Consumer<DataProvider>(
             builder: (context,data,_) {
               return SingleChildScrollView(

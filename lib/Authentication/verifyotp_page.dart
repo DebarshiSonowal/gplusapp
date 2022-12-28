@@ -83,7 +83,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                       ),
                 ),
                 Text(
-                  ' received in',
+                  ' received on',
                   style: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.black,
                         fontSize: 15.sp,
@@ -174,7 +174,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
             ),
             Container(
               height: 6.h,
-              width: double.infinity,
+              width: 66.w,
               padding: EdgeInsets.symmetric(horizontal: 6.w),
               child: CustomButton(
                   txt: 'Submit',

@@ -56,6 +56,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
               (videoId) => YoutubePlayerController(
                 initialVideoId: videoId.youtube_id!,
                 flags: const YoutubePlayerFlags(
+                  hideControls: false,
                   // hideThumbnail: true,
                   autoPlay: false,
                 ),
@@ -189,6 +190,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               // ),
                               controller: _controllers[index],
                               showVideoProgressIndicator: true,
+
                               thumbnail: Image.network(
                                 getYoutubeThumbnail(current.youtube_id),
                                 fit: BoxFit.fill,

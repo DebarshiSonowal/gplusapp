@@ -10,7 +10,9 @@ import '../../../Navigation/Navigate.dart';
 class VideoReportSection extends StatelessWidget {
   final DataProvider data;
   final Function showNotaMember;
-  const VideoReportSection({super.key, required this.data, required this.showNotaMember});
+
+  const VideoReportSection(
+      {super.key, required this.data, required this.showNotaMember});
 
   @override
   Widget build(BuildContext context) {
@@ -28,24 +30,53 @@ class VideoReportSection extends StatelessWidget {
             child: Text(
               'Videos Of The Week',
               style: Theme.of(context).textTheme.headline3?.copyWith(
-                fontSize: 16.sp,
-                color: Storage.instance.isDarkMode
-                    ? Colors.white
-                    : Constance.primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
+                    fontSize: 16.sp,
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           ),
           SizedBox(
-            height: 1.h,
+            height: 0.3.h,
           ),
           SizedBox(
             height: 17.h,
             width: double.infinity,
             child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (cont, count) {
-                  var item = data.home_weekly[count];
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (cont, count) {
+                var item = data.home_weekly[count];
+                if ((data.home_weekly.length > 4
+                        ? 3
+                        : data.home_weekly.length - 1) ==
+                    count) {
+                  return Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        if (data.profile?.is_plan_active ?? false) {
+                          Navigation.instance
+                              .navigate('/videoReport', args: 'news');
+                        } else {
+                          showNotaMember();
+                        }
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Text(
+                          'View All',
+                          style: Theme.of(context).textTheme.headline5?.copyWith(
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Constance.primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
                   return GestureDetector(
                       onTap: () {
                         if (data.profile?.is_plan_active ?? false) {
@@ -56,39 +87,18 @@ class VideoReportSection extends StatelessWidget {
                         }
                       },
                       child: VideoCard(item: item));
-                },
-                separatorBuilder: (cont, inde) {
-                  return SizedBox(
-                    width: 1.w,
-                  );
-                },
-                itemCount:
-                data.home_weekly.length > 3 ? 3 : data.home_weekly.length),
-          ),
-          SizedBox(
-            height: 1.h,
-          ),
-          GestureDetector(
-            onTap: () {
-              if (data.profile?.is_plan_active ?? false) {
-                Navigation.instance.navigate('/videoReport', args: 'news');
-              } else {
-                showNotaMember();
-              }
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.w),
-              child: Text(
-                'View All',
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Constance.primaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+                }
+              },
+              separatorBuilder: (cont, inde) {
+                return SizedBox(
+                  width: 1.w,
+                );
+              },
+              itemCount:
+                  data.home_weekly.length > 4 ? 4 : data.home_weekly.length + 1,
             ),
           ),
+
           // SizedBox(
           //   height: 1.h,
           // ),

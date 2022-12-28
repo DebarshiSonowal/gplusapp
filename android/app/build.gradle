@@ -37,7 +37,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply from: project(':flutter_config').projectDir.getPath() + "/dotenv.gradle"
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -52,10 +52,10 @@ android {
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
         minSdkVersion 20
         targetSdkVersion flutter.targetSdkVersion
-//        versionCode flutterVersionCode.toInteger()
-        versionCode 30415
-//        versionName flutterVersionName
-        versionName '3.4.15'
+        versionCode flutterVersionCode.toInteger()
+//        versionCode 30416
+        versionName flutterVersionName
+//        versionName '3.4.16'
         multiDexEnabled true
     }
     packagingOptions {
@@ -96,14 +96,14 @@ android {
         }
     }
     buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
-        }
 //        release {
-//            signingConfig signingConfigs.release
+//            // TODO: Add your own signing config for the release build.
+//            // Signing with the debug keys for now, so `flutter run --release` works.
+//            signingConfig signingConfigs.debug
 //        }
+        release {
+            signingConfig signingConfigs.release
+        }
     }
 }
 

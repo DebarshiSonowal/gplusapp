@@ -546,7 +546,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                             Row(
                               children: [
                                 Text(
-                                  'Sort by categories',
+                                  'Sort By Categories',
                                   style: Theme.of(Navigation.instance
                                           .navigatorKey.currentContext!)
                                       .textTheme

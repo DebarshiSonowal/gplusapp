@@ -24,6 +24,7 @@ import 'package:gplusapp/Model/top_picks.dart';
 import 'package:gplusapp/Model/video_news.dart';
 import 'package:gplusapp/UI/citizen_journalist/citizen_journalist_page.dart';
 import 'package:gplusapp/UI/others/contact_us_page.dart';
+import '../Model/blocked_user.dart';
 import '../Model/notification_in_device.dart';
 import '../Model/referEarnHistory.dart';
 import '../Model/search_result.dart' as search;
@@ -39,6 +40,7 @@ class DataProvider extends ChangeNotifier {
   int currentIndex = 0;
   Profile? profile;
   AuthorProfile? author;
+  List<BlockedUser> blockedUsers = [];
   List<ReportModel> reportCategories = [];
   List<NotificationInDevice> notifications = [];
   List<Opinion> opinions = [];
@@ -98,6 +100,11 @@ class DataProvider extends ChangeNotifier {
 
   setCitizenJournalist(List<CitizenJournalist> list) {
     citizenlist = list;
+    notifyListeners();
+  }
+
+  setBlockedUsers(List<BlockedUser> list) {
+    blockedUsers = list;
     notifyListeners();
   }
 

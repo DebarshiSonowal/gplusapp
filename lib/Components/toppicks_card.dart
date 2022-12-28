@@ -59,16 +59,6 @@ class SuggestedForYouCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 1.5.h,
-                  ),
-                  Text(
-                    Jiffy(item.date, "yyyy-MM-dd").format("dd/MM/yyyy"),
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(color: Colors.black87),
-                  ),
                 ],
               ),
             ),
@@ -85,8 +75,12 @@ class SuggestedForYouCard extends StatelessWidget {
                       item.title ??
                           "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient.",
                       maxLines: 8,
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                      style: (item.title?.length??0)>80?Theme.of(context).textTheme.headline5?.copyWith(
                           // fontSize: 11.sp,
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
+                          color: Constance.primaryColor):Theme.of(context).textTheme.headline4?.copyWith(
+                        fontSize: 15.sp,
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,
                           color: Constance.primaryColor),
@@ -95,12 +89,23 @@ class SuggestedForYouCard extends StatelessWidget {
                   // SizedBox(
                   //   height: 1.5.h,
                   // ),
+                  Spacer(),
+                  Text(
+                    Jiffy(item.date, "yyyy-MM-dd").format("dd MMM,yyyy"),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.black87,
+                          fontSize: 8.sp,
+                        ),
+                  ),
+                  SizedBox(
+                    height: 0.5.h,
+                  ),
                   Text(
                     item.author_name ?? "",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(color: Colors.black87),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.black87,
+                          fontSize: 8.5.sp,
+                        ),
                   ),
                 ],
               ),

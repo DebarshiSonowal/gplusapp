@@ -26,7 +26,7 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
   Widget build(BuildContext context) {
     return Consumer<DataProvider>(builder: (context, data, _) {
       return Container(
-        margin: EdgeInsets.only(top: 0.2.h),
+        margin: EdgeInsets.only(top: 0.h),
         // height:25.5.h,
         width: MediaQuery.of(context).size.width,
         child: Stack(alignment: Alignment.bottomCenter, children: [
@@ -59,7 +59,7 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
             ),
           ),
           SizedBox(
-            width: double.infinity,
+            width: 20.w,
             height: 3.h,
             child: Center(
               child: ListView.builder(

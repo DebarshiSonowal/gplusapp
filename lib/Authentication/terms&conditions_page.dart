@@ -120,7 +120,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
               width: double.infinity,
               height: 6.h,
               child: CustomButton(
-                txt: 'continue',
+                txt: 'Continue',
                 onTap: () {
                   if (agreed) {
                     Navigation.instance.navigateAndReplace('/personaldetails',

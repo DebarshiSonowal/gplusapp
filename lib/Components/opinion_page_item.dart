@@ -55,7 +55,7 @@ class OpionionPageItem extends StatelessWidget {
                 CrossAxisAlignment.start,
                 children: [
                   CachedNetworkImage(
-                    height: 15.h,
+                    height: 17.7.h,
                     width: 45.w,
                     imageUrl:
                     item.image_file_name ?? '',
@@ -73,24 +73,10 @@ class OpionionPageItem extends StatelessWidget {
                       );
                     },
                   ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  Text(
-                    Jiffy(
-                        item.publish_date
-                            ?.split(" ")[0],
-                        "yyyy-MM-dd")
-                        .format("dd/MM/yyyy"),
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(
-                        color: Storage.instance
-                            .isDarkMode
-                            ? Colors.white
-                            : Colors.black),
-                  ),
+                  // SizedBox(
+                  //   height: 1.h,
+                  // ),
+
                 ],
               ),
             ),
@@ -124,6 +110,24 @@ class OpionionPageItem extends StatelessWidget {
                     height: 1.h,
                   ),
                   Text(
+                    Jiffy(
+                        item.publish_date
+                            ?.split(" ")[0],
+                        "yyyy-MM-dd")
+                        .format("dd MMM,yyyy"),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(
+                        color: Storage.instance
+                            .isDarkMode
+                            ? Colors.white
+                            : Colors.black),
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  Text(
                     item.user?.name ??
                         "G Plus News",
                     style: Theme.of(Navigation
@@ -139,8 +143,8 @@ class OpionionPageItem extends StatelessWidget {
                           : Constance
                           .fifthColor,
                       // fontSize: 2.2.h,
-                      fontWeight:
-                      FontWeight.bold,
+                      // fontWeight:
+                      // FontWeight.bold,
                     ),
                   ),
                 ],

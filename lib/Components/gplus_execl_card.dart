@@ -26,7 +26,7 @@ class GPlusExecCard extends StatelessWidget {
         ),
       ),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
+        padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.5.h),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(
             Radius.circular(5),
@@ -62,22 +62,15 @@ class GPlusExecCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 1.5.h,
-                  ),
-                  Text(
-                    Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                        .format("dd/MM/yyyy"),
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black54),
-                  ),
+                  // SizedBox(
+                  //   height: 1.5.h,
+                  // ),
+
                 ],
               ),
             ),
             SizedBox(
-              width: 5.w,
+              width: 4.w,
             ),
             Expanded(
               child: Column(
@@ -87,14 +80,27 @@ class GPlusExecCard extends StatelessWidget {
                     child: Text(
                       item.title ?? "",
                       maxLines: 7,
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
-                          // fontSize: 2.2.h,
+                      style: (item.title?.length??0)>70?Theme.of(context).textTheme.headline5?.copyWith(
+                        // fontSize: 11.sp,
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Constance.primaryColor),
+                          color: Constance.primaryColor):Theme.of(context).textTheme.headline4?.copyWith(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
+                          color: Constance.primaryColor),
                     ),
+                  ),
+                  SizedBox(
+                    height: 1.5.h,
+                  ),
+                  Text(
+                    Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                        .format("dd MMM,yyyy"),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black54),
                   ),
                   SizedBox(
                     height: 1.5.h,

@@ -42,7 +42,8 @@ class _VideoReportState extends State<VideoReport> {
     setState(() {
       page = 1;
     });
-    final response = await ApiProvider.instance.getVideoMoreNews(widget.category, 10, 1);
+    final response =
+        await ApiProvider.instance.getVideoMoreNews(widget.category, 10, 1);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
@@ -338,8 +339,8 @@ class _VideoReportState extends State<VideoReport> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -347,7 +348,7 @@ class _VideoReportState extends State<VideoReport> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
           },
           icon: Icon(Icons.search),
         ),
@@ -366,7 +367,8 @@ class _VideoReportState extends State<VideoReport> {
   }
 
   void fetchData() async {
-    final response = await ApiProvider.instance.getVideoMoreNews(widget.category, 10, 1);
+    final response =
+        await ApiProvider.instance.getVideoMoreNews(widget.category, 10, 1);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
@@ -392,5 +394,3 @@ class _VideoReportState extends State<VideoReport> {
     }
   }
 }
-
-

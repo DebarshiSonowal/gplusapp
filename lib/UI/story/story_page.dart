@@ -82,7 +82,7 @@ class _StoryPageState extends State<StoryPage> {
                 : Column(
                     children: [
                       Container(
-                        height: 39.h,
+                        height: 36.h,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           // borderRadius: BorderRadius.all(
@@ -99,12 +99,12 @@ class _StoryPageState extends State<StoryPage> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 5.w, vertical: 1.h),
+                            horizontal: 3.w, vertical: 0.h),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: 2.h,
+                              height: 0.5.h,
                             ),
                             // Row(
                             //   children: [
@@ -146,28 +146,60 @@ class _StoryPageState extends State<StoryPage> {
                                   ),
                             ),
                             SizedBox(
-                              height: 1.h,
+                              height: 2.h,
                             ),
                             GestureDetector(
                               onTap: () {
                                 Navigation.instance.navigate('/authorPage',
                                     args: data.selectedArticle?.author);
                               },
-                              child: Text(
-                                '${data.selectedArticle?.author_name ?? "G Plus"}, ${
-                                // Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()
-                                Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd/MM/yyyy")}',
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
-                                      // fontSize: 2.2.h,
-                                      // fontWeight: FontWeight.bold,
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    Constance.authorIcon,
+                                    scale: 30,
+                                    color: Constance.secondaryColor,
+                                  ),
+                                  SizedBox(
+                                    width: 0.5.w,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              '${data.selectedArticle?.author_name ?? "G Plus"}',
+                                          style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
+                                              .textTheme
+                                              .headline5
+                                              ?.copyWith(
+                                                color: Constance.primaryColor,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              ' , ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                          style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
+                                              .textTheme
+                                              .headline5
+                                              ?.copyWith(
+                                                color:
+                                                    Storage.instance.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                // fontSize: 2.2.h,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ],
                                     ),
+                                  ),
+                                ],
                               ),
                             ),
 
@@ -188,7 +220,7 @@ class _StoryPageState extends State<StoryPage> {
                                         }
                                       });
                                     },
-                                    splashRadius: 20.0,
+                                    splashRadius: 10.0,
                                     splashColor: !like
                                         ? Constance.secondaryColor
                                         : Storage.instance.isDarkMode
@@ -204,9 +236,9 @@ class _StoryPageState extends State<StoryPage> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 2.w,
-                                ),
+                                // SizedBox(
+                                //   width: 0.w,
+                                // ),
                                 Material(
                                   type: MaterialType.transparency,
                                   child: IconButton(
@@ -219,7 +251,7 @@ class _StoryPageState extends State<StoryPage> {
                                         }
                                       });
                                     },
-                                    splashRadius: 20.0,
+                                    splashRadius: 10.0,
                                     splashColor: !dislike
                                         ? Constance.secondaryColor
                                         : Storage.instance.isDarkMode
@@ -700,7 +732,7 @@ class _StoryPageState extends State<StoryPage> {
                             Row(
                               children: [
                                 Text(
-                                  'Sort by categories',
+                                  'Sort By Categories',
                                   style: Theme.of(Navigation.instance
                                           .navigatorKey.currentContext!)
                                       .textTheme
@@ -879,7 +911,7 @@ class _StoryPageState extends State<StoryPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
             // showSearch(
             //   context: context,
             //   delegate: SearchPage<Listing>(

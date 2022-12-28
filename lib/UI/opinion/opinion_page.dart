@@ -123,7 +123,7 @@ class _OpinionPageState extends State<OpinionPage> {
                               ? Colors.white
                               : Constance.fifthColor,
                           padding: EdgeInsets.symmetric(
-                              vertical: 1.h, horizontal: 5.w),
+                              vertical: 0.h, horizontal: 5.w),
                           child: Row(
                             children: [
                               Icon(
@@ -180,7 +180,7 @@ class _OpinionPageState extends State<OpinionPage> {
                           ),
                         ),
                         SizedBox(
-                          height: 2.h,
+                          height: 1.h,
                         ),
                         GestureDetector(
                           onTap: () {
@@ -212,43 +212,92 @@ class _OpinionPageState extends State<OpinionPage> {
                           ),
                         ),
                         SizedBox(
-                          height: 2.h,
+                          height: 1.h,
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 5.w),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                data.opinions[0].user?.name ?? 'G Plus Admin',
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Constance.fifthColor,
-                                      // fontSize: 2.2.h,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                              // Text(
+                              //   data.opinions[0].user?.name ?? 'G Plus Admin',
+                              //   style: Theme.of(Navigation
+                              //           .instance.navigatorKey.currentContext!)
+                              //       .textTheme
+                              //       .headline5
+                              //       ?.copyWith(
+                              //         color: Storage.instance.isDarkMode
+                              //             ? Colors.white
+                              //             : Constance.fifthColor,
+                              //         // fontSize: 2.2.h,
+                              //         fontWeight: FontWeight.bold,
+                              //       ),
+                              // ),
+                              Image.asset(
+                                Constance.authorIcon,
+                                scale: 35,
+                                color: Constance.secondaryColor,
                               ),
-                              Text(
-                                Jiffy(
-                                        data.opinions[0].publish_date
-                                            ?.split(" ")[0],
-                                        "yyyy-MM-dd")
-                                    .format("dd/MM/yyyy"),
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      // fontSize: 2.2.h,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
+                              SizedBox(
+                                width: 0.5.w,
                               ),
+                              GestureDetector (
+                                onTap: () {
+                                  Navigation.instance.navigate('/authorPage',
+                                      args: data.opinions[0].user_id);
+                                },
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: data.opinions[0].user?.name ??
+                                            "G Plus",
+                                        style: Theme.of(Navigation.instance
+                                            .navigatorKey.currentContext!)
+                                            .textTheme
+                                            .headline5
+                                            ?.copyWith(
+                                          color: Constance.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          decoration:
+                                          TextDecoration.underline,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text:
+                                        ' , ${Jiffy(data.opinions[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                        style: Theme.of(Navigation.instance
+                                            .navigatorKey.currentContext!)
+                                            .textTheme
+                                            .headline5
+                                            ?.copyWith(
+                                          color: Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
+                                          // fontSize: 2.2.h,
+                                          // fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              // Text(
+                              //   Jiffy(
+                              //           data.opinions[0].publish_date
+                              //               ?.split(" ")[0],
+                              //           "yyyy-MM-dd")
+                              //       .format("dd/MM/yyyy"),
+                              //   style: Theme.of(Navigation
+                              //           .instance.navigatorKey.currentContext!)
+                              //       .textTheme
+                              //       .headline5
+                              //       ?.copyWith(
+                              //         color: Colors.black,
+                              //         // fontSize: 2.2.h,
+                              //         // fontWeight: FontWeight.bold,
+                              //       ),
+                              // ),
                             ],
                           ),
                         ),

@@ -84,7 +84,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 5.w, vertical: 2.h),
+                            horizontal: 5.w, vertical: 0.h),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -113,7 +113,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             //   ],
                             // ),
                             SizedBox(
-                              height: 2.h,
+                              height: 1.h,
                             ),
                             Text(
                               data.opinion?.title ??
@@ -136,27 +136,60 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             GestureDetector(
                               onTap: () {
                                 Navigation.instance.navigate('/authorPage',
-                                    args: data.opinion?.user?.id);
+                                    args: data.opinion?.user_id);
                               },
-                              child: Text(
-                                '${data.opinion?.user?.name ?? "GPlus"}, ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
-                                      // fontSize: 2.2.h,
-                                      // fontWeight: FontWeight.bold,
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    Constance.authorIcon,
+                                    scale: 30,
+                                    color: Constance.secondaryColor,
+                                  ),
+                                  SizedBox(
+                                    width: 0.5.w,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                          '${data.opinion?.user?.name ?? "G Plus"}',
+                                          style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                              .textTheme
+                                              .headline5
+                                              ?.copyWith(
+                                            color: Constance.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                            TextDecoration.underline,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                          ' , ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                          style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                              .textTheme
+                                              .headline5
+                                              ?.copyWith(
+                                            color:
+                                            Storage.instance.isDarkMode
+                                                ? Colors.white
+                                                : Colors.black,
+                                            // fontSize: 2.2.h,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
                                     ),
+                                  ),
+                                ],
                               ),
                             ),
-
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
+                            // SizedBox(
+                            //   height: 1.h,
+                            // ),
                             Row(
                               children: [
                                 Material(

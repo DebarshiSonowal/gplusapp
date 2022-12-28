@@ -92,19 +92,10 @@ class VideoReportItem extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 1.5.h,
-              ),
-              Text(
-                // item.publish_date?.split(" ")[0] ??
-                //     "",
-                Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                    .format("dd/MM/yyyy"),
-                style: Theme.of(context).textTheme.headline6?.copyWith(
-                    color: Storage.instance.isDarkMode
-                        ? Colors.white
-                        : Colors.black),
-              ),
+              // SizedBox(
+              //   height: 1.5.h,
+              // ),
+
             ],
           ),
           SizedBox(
@@ -112,8 +103,8 @@ class VideoReportItem extends StatelessWidget {
           ),
           Expanded(
             child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   item.title ?? "",
@@ -128,7 +119,17 @@ class VideoReportItem extends StatelessWidget {
                           : Constance.primaryColor),
                 ),
                 SizedBox(
-                  height: 7.h,
+                  height: 2.h,
+                ),
+                Text(
+                  // item.publish_date?.split(" ")[0] ??
+                  //     "",
+                  Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                      .format("dd/MM/yyyy"),
+                  style: Theme.of(context).textTheme.headline6?.copyWith(
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Colors.black),
                 ),
                 // Text(
                 //   "",

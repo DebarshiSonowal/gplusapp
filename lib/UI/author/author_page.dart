@@ -97,7 +97,7 @@ class _AuthorPageState extends State<AuthorPage> {
                         ),
                         Spacer(),
                         Text(
-                          'Follow at',
+                          'Follow on',
                           style: Theme.of(Navigation
                                   .instance.navigatorKey.currentContext!)
                               .textTheme
