@@ -272,7 +272,7 @@ class _BeAMemberState extends State<BeAMember> {
                     height: 1.5.h,
                   ),
                   Text(
-                    'Benefits of being a member',
+                    'Benefits of being a subscriber',
                     style: Theme.of(context).textTheme.headline4?.copyWith(
                           color: Storage.instance.isDarkMode
                               ? Colors.white

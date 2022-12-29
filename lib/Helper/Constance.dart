@@ -35,6 +35,7 @@ class Constance {
   static const exclusiveIcon = 'assets/images/exclusive.png';
   static const bigDealIcon = 'assets/images/big_deal.png';
   static const citizenIcon = 'assets/images/citizen_journalist.png';
+  static const linkIcon = 'assets/images/link.png';
   static const searchingIcon = 'assets/animation/searching.json';
   static const paymentIcon = 'assets/animation/payment.json';
   static const defaultImage =

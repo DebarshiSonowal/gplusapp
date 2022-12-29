@@ -85,7 +85,7 @@ class GPlusExecCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,
                           color: Constance.primaryColor):Theme.of(context).textTheme.headline4?.copyWith(
-                          fontSize: 14.sp,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,
                           color: Constance.primaryColor),

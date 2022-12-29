@@ -42,7 +42,7 @@ class SuggestionCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CachedNetworkImage(
-                    height: 15.h,
+                    height: 17.7.h,
                     width: 45.w,
                     imageUrl: item.image_file_name ?? '',
                     fit: BoxFit.fill,
@@ -58,17 +58,7 @@ class SuggestionCard extends StatelessWidget {
                       );
                     },
                   ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  Text(
-                    Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                        .format("dd/MM/yyyy"),
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black),
-                  ),
+
                 ],
               ),
             ),
@@ -91,6 +81,15 @@ class SuggestionCard extends StatelessWidget {
                               ? Colors.white
                               : Constance.primaryColor),
                     ),
+                  ),
+
+                  Text(
+                    Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                        .format("dd MMM,yyyy"),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black),
                   ),
                   SizedBox(
                     height: 1.h,

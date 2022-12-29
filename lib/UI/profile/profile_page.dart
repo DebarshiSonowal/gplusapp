@@ -133,12 +133,26 @@ class _ProfilePageState extends State<ProfilePage> {
                                               ),
                                         ),
                                         SizedBox(
-                                          height: 5.h,
+                                          height: 2.h,
+                                        ),
+                                        Text(
+                                          '*Subscription is for one time purchase only.\nWe do not renew you subscription automatically.',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(
+                                              color: Colors.white,
+                                              fontStyle: FontStyle.italic
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 2.h,
                                         ),
                                         SizedBox(
                                           width: double.infinity,
                                           child: CustomButton(
-                                            txt: 'Buy next membership term',
+                                            txt: 'Buy next subscription term',
                                             onTap: () async{
                                              final result= await Navigation.instance
                                                   .navigate('/beamember');

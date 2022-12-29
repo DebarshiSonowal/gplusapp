@@ -270,7 +270,7 @@ class _BigDealPageState extends State<BigDealPage> {
                   Navigation.instance.navigatorKey.currentContext ?? context,
                   listen: false)
               .setCurrent(0);
-          Navigation.instance.navigate('/main');
+          Navigation.instance.navigate('/mainWithAnimation');
         },
         child: Image.asset(
           Constance.logoIcon,

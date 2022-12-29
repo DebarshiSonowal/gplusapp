@@ -64,7 +64,7 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Be a Journalist',
+                'Be A Journalist',
                 style: Theme.of(context).textTheme.headline1?.copyWith(
                       color: Constance.secondaryColor,
                       fontWeight: FontWeight.bold,
@@ -113,7 +113,7 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
                 height: 5.h,
                 width: double.infinity,
                 child: CustomButton(
-                    txt: 'Submit a Story',
+                    txt: 'Submit A Story',
                     onTap: () {
                       if (Provider.of<DataProvider>(
                                   Navigation.instance.navigatorKey
@@ -171,7 +171,7 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
                     Navigation.instance.navigate('/submitedStory');
                   },
                   child: Text(
-                    'Stories submitted',
+                    'Stories Submitted',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Colors.white,
                           fontSize: 14.5.sp,

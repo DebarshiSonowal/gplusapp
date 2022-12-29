@@ -260,7 +260,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                         width: 4.w,
                       ),
                       Expanded(
-                        flex: 3,
+                        flex: 5,
                         child: Text(
                           'Guwahati Connect',
                           overflow: TextOverflow.clip,

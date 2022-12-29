@@ -80,7 +80,7 @@ class _OpinionPageState extends State<OpinionPage> {
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
         enablePullDown: true,
-        enablePullUp: true,
+        enablePullUp: false,
         header: const WaterDropHeader(),
         footer: CustomFooter(
           builder: (BuildContext context, LoadStatus? mode) {
@@ -97,7 +97,7 @@ class _OpinionPageState extends State<OpinionPage> {
               body = const Text("No more Data");
             }
             return SizedBox(
-              height: 55.0,
+              height: 30.0,
               child: Center(child: body),
             );
           },
@@ -123,7 +123,7 @@ class _OpinionPageState extends State<OpinionPage> {
                               ? Colors.white
                               : Constance.fifthColor,
                           padding: EdgeInsets.symmetric(
-                              vertical: 0.h, horizontal: 5.w),
+                              vertical: 1.h, horizontal: 5.w),
                           child: Row(
                             children: [
                               Icon(
@@ -343,22 +343,22 @@ class _OpinionPageState extends State<OpinionPage> {
                               }
                             },
                             itemCount: data.opinions.length),
+                        // SizedBox(
+                        //   height: 1.h,
+                        // ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     CustomButton(
+                        //         txt: 'Load More',
+                        //         onTap: () {
+                        //           page_no++;
+                        //           fetchMoreOpinions();
+                        //         }),
+                        //   ],
+                        // ),
                         SizedBox(
-                          height: 1.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomButton(
-                                txt: 'Load More',
-                                onTap: () {
-                                  page_no++;
-                                  fetchMoreOpinions();
-                                }),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5.h,
+                          height: 3.h,
                         ),
                       ],
                     ),
@@ -429,6 +429,7 @@ class _OpinionPageState extends State<OpinionPage> {
           _refreshController.requestRefresh();
         } else {
           // print('At the bottom');
+         _refreshController.requestLoading();
         }
       }
     });
@@ -454,9 +455,10 @@ class _OpinionPageState extends State<OpinionPage> {
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
           .setMoreOpinions(response.opinion ?? []);
-      // _refreshController.refreshCompleted();
+      _refreshController.loadComplete();
     } else {
       // _refreshController.refreshFailed();
+      _refreshController.loadFailed();
     }
   }
 }

@@ -78,32 +78,37 @@ class OpinionSection extends StatelessWidget {
           SizedBox(
             height: 1.h,
           ),
-          GestureDetector(
-            onTap: () {
-              if (data.profile?.is_plan_active ?? false) {
-                Navigation.instance.navigate('/opinionPage');
-              } else {
-               showNotaMember();
-              }
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (data.profile?.is_plan_active ?? false) {
+                    Navigation.instance.navigate('/opinionPage');
+                  } else {
+                   showNotaMember();
+                  }
 
-              // Navigation.instance
-              //     .navigate('/authorPage', args: 1);
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.w),
-              child: Text(
-                'Read More',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline5
-                    ?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black,
-                  fontWeight: FontWeight.bold,
+                  // Navigation.instance
+                  //     .navigate('/authorPage', args: 1);
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  child: Text(
+                    'Read More',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline5
+                        ?.copyWith(
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ],
       ),

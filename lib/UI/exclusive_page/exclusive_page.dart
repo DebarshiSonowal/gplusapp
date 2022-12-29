@@ -27,13 +27,24 @@ class ExclusivePage extends StatefulWidget {
 class _ExclusivePageState extends State<ExclusivePage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-
+  final ScrollController controller = ScrollController();
   int skip = 10;
 
   @override
   void initState() {
     super.initState();
     fetchGplus();
+    controller.addListener(() {
+      if (controller.position.atEdge) {
+        bool isTop = controller.position.pixels == 0;
+        if (isTop) {
+          _refreshController.requestRefresh();
+        } else {
+          // print('At the bottom');
+          _refreshController.requestLoading();
+        }
+      }
+    });
     // secureScreen();
   }
 
@@ -64,7 +75,9 @@ class _ExclusivePageState extends State<ExclusivePage> {
     //   setState(() {
     //
     //   });
-    _refreshController.loadComplete();
+    skip = skip * 2;
+    fetchMoreContent();
+
   }
 
   @override
@@ -108,6 +121,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
             padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
             child: data.home_exclusive.isNotEmpty
                 ? SingleChildScrollView(
+              controller: controller,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -305,22 +319,22 @@ class _ExclusivePageState extends State<ExclusivePage> {
                           },
                           itemCount: data.home_exclusive.length,
                         ),
+                        // SizedBox(
+                        //   height: 2.h,
+                        // ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     CustomButton(
+                        //         txt: 'Load More',
+                        //         onTap: () {
+                        //           skip = skip * 2;
+                        //           fetchMoreContent();
+                        //         }),
+                        //   ],
+                        // ),
                         SizedBox(
-                          height: 2.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomButton(
-                                txt: 'Load More',
-                                onTap: () {
-                                  skip = skip * 2;
-                                  fetchMoreContent();
-                                }),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 15.h,
+                          height: 5.h,
                         ),
                       ],
                     ),
@@ -407,9 +421,11 @@ class _ExclusivePageState extends State<ExclusivePage> {
               listen: false)
           .addHomeExecl(response.articles ?? []);
       // _refreshController.refreshCompleted();
+      _refreshController.loadComplete();
     } else {
       Navigation.instance.goBack();
       // _refreshController.refreshFailed();
+      _refreshController.loadFailed();
     }
   }
 

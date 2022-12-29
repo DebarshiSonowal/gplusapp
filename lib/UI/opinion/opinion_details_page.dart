@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:badges/badges.dart';
@@ -5,12 +6,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gplusapp/Model/opinion.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
@@ -66,25 +69,66 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                   )
                 : Column(
                     children: [
-                      Container(
-                        height: 40.h,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          // borderRadius: BorderRadius.all(
-                          //   // Radius.circular(10),
-                          // ),
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: CachedNetworkImageProvider(
-                              data.opinion?.image_file_name ??
-                                  'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+                      Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          Container(
+                            height: 40.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              // borderRadius: BorderRadius.all(
+                              //   // Radius.circular(10),
+                              // ),
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: CachedNetworkImageProvider(
+                                  data.opinion?.image_file_name ??
+                                      'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          Container(
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [Colors.transparent, Colors.black],
+                              ),
+                            ),
+                            // color: Colors.black.withOpacity(0.5),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 1.h, horizontal: 4.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  data.opinion?.image_caption ?? '',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4
+                                      ?.copyWith(
+                                        color: Colors.grey.shade200,
+                                        // fontSize: 25.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                // Text(
+                                //   "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
+                                //   style: Theme.of(context).textTheme.headline6?.copyWith(
+                                //         color: Colors.white,
+                                //       ),
+                                // ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 5.w, vertical: 0.h),
+                            horizontal: 3.w, vertical: 0.h),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -153,33 +197,33 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                       children: [
                                         TextSpan(
                                           text:
-                                          '${data.opinion?.user?.name ?? "G Plus"}',
+                                              '${data.opinion?.user?.name ?? "G Plus"}',
                                           style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
+                                                  .navigatorKey.currentContext!)
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
-                                            color: Constance.primaryColor,
-                                            fontWeight: FontWeight.bold,
-                                            decoration:
-                                            TextDecoration.underline,
-                                          ),
+                                                color: Constance.primaryColor,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
                                         ),
                                         TextSpan(
                                           text:
-                                          ' , ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                              ' , ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
                                           style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
+                                                  .navigatorKey.currentContext!)
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
-                                            color:
-                                            Storage.instance.isDarkMode
-                                                ? Colors.white
-                                                : Colors.black,
-                                            // fontSize: 2.2.h,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
+                                                color:
+                                                    Storage.instance.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                // fontSize: 2.2.h,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                       ],
                                     ),
@@ -258,8 +302,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      Share.share(data.opinion?.web_url ==
-                                          ""
+                                      Share.share(data.opinion?.web_url == ""
                                           ? 'check out our website https://guwahatiplus.com/'
                                           : '${data.opinion?.web_url}');
                                     },
@@ -294,6 +337,124 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             Html(
                               data: data.opinion?.description?.trim() ?? "",
                               shrinkWrap: true,
+                              customRender: {
+                                "table": (context, child) {
+                                  return SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: (context.tree as TableLayoutElement)
+                                        .toWidget(context),
+                                  );
+                                },
+                                "a": (context, child) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      print("https://www.gmcpropertytax.com");
+                                      if (context.tree.attributes['href']
+                                              .toString()
+                                              .split("/")[2]
+                                              .trim() ==
+                                          "www.guwahatiplus.com") {
+                                        if (context.tree.attributes['href']
+                                                .toString()
+                                                .split("/")
+                                                .length >=
+                                            5) {
+                                          Navigation.instance.navigate('/story',
+                                              args:
+                                                  '${context.tree.attributes['href'].toString().split("/")[3]},${context.tree.attributes['href'].toString().split("/")[4]}');
+                                        } else {
+                                          Navigation.instance.navigate(
+                                              '/newsfrom',
+                                              args: context
+                                                  .tree.attributes['href']
+                                                  .toString()
+                                                  .split("/")[3]);
+                                        }
+                                      } else {
+                                        try {
+                                          _launchUrl(Uri.parse(
+                                              "https://www.gmcpropertytax.com"));
+                                        } catch (e) {
+                                          print(e);
+                                        }
+                                      }
+                                    },
+                                    child: Text(
+                                      context.tree.element?.innerHtml
+                                              .split("=")[0]
+                                              .toString() ??
+                                          "",
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Constance.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                    ),
+                                  );
+                                },
+                                // "blockquote": (context, child) {
+                                //   return setupSummaryCard(
+                                //     title: 'Small Island Developing States Photo Submission',
+                                //     site: '@flickr',
+                                //     description: 'View the album on Flickr.',
+                                //     imageUrl: 'https://farm6.staticflickr.com/5510/14338202952_93595258ff_z.jpg',
+                                //   );
+                                // },
+                                "blockquote": (context, child) {
+                                  return SizedBox(
+                                    height: 28.h,
+                                    // width: 90.h,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _launchUrl(Uri.parse(context
+                                                .tree.element?.innerHtml
+                                                .split("=")[3]
+                                                .split("?")[0]
+                                                .substring(1) ??
+                                            ""));
+
+                                        // print(context.tree.element?.innerHtml
+                                        //     .split("=")[3]
+                                        //     .split("?")[0]);
+                                      },
+                                      child: AbsorbPointer(
+                                        child: WebView(
+                                          gestureNavigationEnabled: false,
+                                          zoomEnabled: true,
+                                          initialUrl: Uri.dataFromString(
+                                            getHtmlString(context
+                                                .tree.element?.innerHtml
+                                                .split("=")[3]
+                                                .split("?")[0]
+                                                .split("/")
+                                                .last),
+                                            mimeType: 'text/html',
+                                            encoding:
+                                                Encoding.getByName('utf-8'),
+                                          ).toString(),
+                                          javascriptMode:
+                                              JavascriptMode.unrestricted,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                  // return Container(
+                                  //     child: Text(
+                                  //   '${context.tree.element?.innerHtml.split("=")[3].split("?")[0].split("/").last}',
+                                  //   style: TextStyle(color: Colors.black),
+                                  // ));
+                                },
+                              },
+                              onLinkTap: (str, contxt, map, elment) {
+                                // print("${str}");
+                                // print("${elment?.text}");
+                                print(str);
+                              },
                               style: {
                                 '#': Style(
                                   // fontSize: FontSize(_counterValue),
@@ -305,9 +466,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                 ),
                               },
                             ),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
+                            // SizedBox(
+                            //   height: 1.5.h,
+                            // ),
                             data.ads.isNotEmpty
                                 ? Row(
                                     children: [
@@ -323,9 +484,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                               .textTheme
                                               .headline3
                                               ?.copyWith(
-                                                fontSize: 12.sp,
+                                                fontSize: 9.sp,
                                                 color: Colors.white,
-                                                fontWeight: FontWeight.bold,
+                                                // fontWeight: FontWeight.bold,
                                               ),
                                         ),
                                       ),
@@ -367,9 +528,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     ),
                                   )
                                 : Container(),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
+                            // SizedBox(
+                            //   height: 1.5.h,
+                            // ),
                             // Text(
                             //   data.selectedArticle?.description
                             //           ?.split('</p>')[3]
@@ -395,12 +556,12 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             //     },
                             //   ),
                             // ),
+                            // SizedBox(
+                            //   height: 1.5.h,
+                            // ),
+                            //
                             SizedBox(
-                              height: 1.5.h,
-                            ),
-
-                            SizedBox(
-                              height: 1.5.h,
+                              height: 1.h,
                             ),
                             Divider(
                               color: Storage.instance.isDarkMode
@@ -408,9 +569,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   : Colors.black,
                               thickness: 0.07.h,
                             ),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
+
                             Row(
                               children: [
                                 Material(
@@ -479,8 +638,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      Share.share(data.opinion?.web_url ==
-                                          ""
+                                      Share.share(data.opinion?.web_url == ""
                                           ? 'check out our website https://guwahatiplus.com/'
                                           : '${data.opinion?.web_url}');
                                     },
@@ -496,15 +654,13 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
+
                             Divider(
                               color: Colors.black,
                               thickness: 0.07.h,
                             ),
                             SizedBox(
-                              height: 2.h,
+                              height: 1.h,
                             ),
                             Text(
                               'Related Stories',
@@ -607,136 +763,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                 itemBuilder: (cont, count) {
                                   var item = data.opinions[count];
                                   if (count != 0) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        // Navigation.instance.navigate('/story',
-                                        //     args:
-                                        //         '$dropdownvalue,${item.seo_name}');
-                                        Navigation.instance.navigate(
-                                            '/opinionDetails',
-                                            args: item.seo_name?.trim());
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 3.w, vertical: 1.h),
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(5),
-                                          ),
-                                          color: Storage.instance.isDarkMode
-                                              ? Colors.black
-                                              : Colors.white,
-                                        ),
-                                        height: 20.h,
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                7.w,
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  CachedNetworkImage(
-                                                    height: 15.h,
-                                                    width: 45.w,
-                                                    imageUrl:
-                                                        item.image_file_name ??
-                                                            '',
-                                                    fit: BoxFit.fill,
-                                                    placeholder: (cont, _) {
-                                                      return Image.asset(
-                                                        Constance.logoIcon,
-                                                        // color: Colors.black,
-                                                      );
-                                                    },
-                                                    errorWidget: (cont, _, e) {
-                                                      return Image.network(
-                                                        Constance.defaultImage,
-                                                        fit: BoxFit.fitWidth,
-                                                      );
-                                                    },
-                                                  ),
-                                                  SizedBox(
-                                                    height: 1.h,
-                                                  ),
-                                                  Text(
-                                                    Jiffy(
-                                                            item.publish_date
-                                                                        ?.split(
-                                                                            " ")[
-                                                                    0] ??
-                                                                "",
-                                                            "yyyy-MM-dd")
-                                                        .format("dd/MM/yyyy"),
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .headline6
-                                                        ?.copyWith(
-                                                            color: Storage
-                                                                    .instance
-                                                                    .isDarkMode
-                                                                ? Colors.white
-                                                                : Colors.black),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 5.w,
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      item.title ?? "",
-                                                      maxLines: 8,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .headline5
-                                                          ?.copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              color: Storage
-                                                                      .instance
-                                                                      .isDarkMode
-                                                                  ? Colors.white
-                                                                  : Constance
-                                                                      .primaryColor),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 1.h,
-                                                  ),
-                                                  Text(
-                                                    item.author_name ??
-                                                        "G Plus News",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .headline6
-                                                        ?.copyWith(
-                                                            color: Storage
-                                                                    .instance
-                                                                    .isDarkMode
-                                                                ? Colors.white
-                                                                : Colors.black),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
+                                    return OpinionDetailsItem(item: item);
                                   } else {
                                     return Container();
                                   }
@@ -829,7 +856,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
           },
           icon: Icon(Icons.search),
         ),
@@ -920,5 +947,143 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+}
+
+String getHtmlString(String? tweetId) {
+  return """
+      <html>
+      
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+        </head>
+        <body>
+            <div id="container"></div>
+                
+        </body>
+        <script id="twitter-wjs" type="text/javascript" async defer src="https://platform.twitter.com/widgets.js" onload="createMyTweet()"></script>
+        <script>
+        
+       
+      function  createMyTweet() {  
+         var twtter = window.twttr;
+  
+         twttr.widgets.createTweet(
+          '$tweetId',
+          document.getElementById('container'),
+          {
+          width:250
+          }
+        )
+      }
+        </script>
+        
+      </html>
+    """;
+}
+
+class OpinionDetailsItem extends StatelessWidget {
+  const OpinionDetailsItem({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
+
+  final Opinion item;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // Navigation.instance.navigate('/story',
+        //     args:
+        //         '$dropdownvalue,${item.seo_name}');
+        Navigation.instance
+            .navigate('/opinionDetails', args: item.seo_name?.trim());
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(
+            Radius.circular(5),
+          ),
+          color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
+        ),
+        height: 20.h,
+        width: MediaQuery.of(context).size.width - 7.w,
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CachedNetworkImage(
+                    height: 17.7.h,
+                    width: 45.w,
+                    imageUrl: item.image_file_name ?? '',
+                    fit: BoxFit.fill,
+                    placeholder: (cont, _) {
+                      return Image.asset(
+                        Constance.logoIcon,
+                        // color: Colors.black,
+                      );
+                    },
+                    errorWidget: (cont, _, e) {
+                      return Image.network(
+                        Constance.defaultImage,
+                        fit: BoxFit.fitWidth,
+                      );
+                    },
+                  ),
+                  // SizedBox(
+                  //   height: 1.h,
+                  // ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 5.w,
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      item.title ?? "",
+                      maxLines: 8,
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor),
+                    ),
+                  ),
+                  Text(
+                    Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                        .format("dd MMM,yyyy"),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black),
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  Text(
+                    item.author_name ?? "G Plus News",
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

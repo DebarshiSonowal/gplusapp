@@ -30,11 +30,23 @@ class _VideoReportState extends State<VideoReport> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   int page = 1;
+  final ScrollController controller = ScrollController();
 
   @override
   void initState() {
     super.initState();
     fetchData();
+    controller.addListener(() {
+      if (controller.position.atEdge) {
+        bool isTop = controller.position.pixels == 0;
+        if (isTop) {
+          _refreshController.requestRefresh();
+        } else {
+          // print('At the bottom');
+          _refreshController.requestLoading();
+        }
+      }
+    });
   }
 
   void _onRefresh() async {
@@ -65,7 +77,8 @@ class _VideoReportState extends State<VideoReport> {
     //   setState(() {
     //
     //   });
-    _refreshController.loadComplete();
+    page++;
+    fetchMoreData();
   }
 
   @override
@@ -111,6 +124,7 @@ class _VideoReportState extends State<VideoReport> {
               // padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
               child: data.video_news.isNotEmpty
                   ? SingleChildScrollView(
+                      controller: controller,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -277,22 +291,22 @@ class _VideoReportState extends State<VideoReport> {
                                 );
                               },
                               itemCount: data.video_news.length),
+                          // SizedBox(
+                          //   height: 2.h,
+                          // ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     CustomButton(
+                          //         txt: 'Load More',
+                          //         onTap: () {
+                          //           page++;
+                          //           fetchMoreData();
+                          //         }),
+                          //   ],
+                          // ),
                           SizedBox(
-                            height: 2.h,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomButton(
-                                  txt: 'Load More',
-                                  onTap: () {
-                                    page++;
-                                    fetchMoreData();
-                                  }),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 17.h,
+                            height: 10.h,
                           ),
                         ],
                       ),
@@ -389,8 +403,10 @@ class _VideoReportState extends State<VideoReport> {
               listen: false)
           .addVideoNews(response.videos ?? []);
       // _refreshController.refreshCompleted();
+      _refreshController.loadComplete();
     } else {
       // _refreshController.refreshFailed();
+      _refreshController.loadFailed();
     }
   }
 }

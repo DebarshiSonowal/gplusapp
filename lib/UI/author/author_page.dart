@@ -38,154 +38,164 @@ class _AuthorPageState extends State<AuthorPage> {
             vertical: 1.h,
             // horizontal: 5.w,
           ),
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 2.h,
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 5.w),
-                height: 15.h,
-                width: double.infinity,
-                child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        // padding: EdgeInsets.all(2.h),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Constance.primaryColor,
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: CachedNetworkImageProvider(
-                              data.author?.image_file_name ??
-                                  "https://images.unsplash.com/photo-1587590834224-3247f65be147?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
-                              scale: 1,
+          child: SingleChildScrollView(
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 2.h,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  height: 15.h,
+                  width: double.infinity,
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          // padding: EdgeInsets.all(2.h),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Constance.primaryColor,
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: CachedNetworkImageProvider(
+                                data.author?.image_file_name ??
+                                    "https://images.unsplash.com/photo-1587590834224-3247f65be147?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
+                                scale: 1,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 5.w,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Spacer(),
-                        SizedBox(
-                          width: 50.w,
-                          child: Text(
-                            data.author?.name ?? 'Joan Rivers',
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Spacer(),
+                          SizedBox(
+                            width: 50.w,
+                            child: Text(
+                              data.author?.name ?? 'Joan Rivers',
+                              style: Theme.of(Navigation
+                                      .instance.navigatorKey.currentContext!)
+                                  .textTheme
+                                  .headline3
+                                  ?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    // fontSize: 11.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ),
+                          Spacer(),
+                          Text(
+                            'Follow on',
                             style: Theme.of(Navigation
                                     .instance.navigatorKey.currentContext!)
                                 .textTheme
-                                .headline3
+                                .headline5
                                 ?.copyWith(
                                   color: Storage.instance.isDarkMode
                                       ? Colors.white
                                       : Colors.black,
                                   // fontSize: 11.sp,
-                                  fontWeight: FontWeight.bold,
+                                  // fontWeight: FontWeight.bold,
                                 ),
                           ),
-                        ),
-                        Spacer(),
-                        Text(
-                          'Follow on',
-                          style: Theme.of(Navigation
-                                  .instance.navigatorKey.currentContext!)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
-                                // fontSize: 11.sp,
-                                // fontWeight: FontWeight.bold,
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  _launchUrl(data.author?.fb_link ??
+                                      Uri.parse(
+                                          "https://www.facebook.com/guwahatiplus/"));
+                                },
+                                child: Icon(
+                                  FontAwesomeIcons.facebookSquare,
+                                  color: Storage.instance.isDarkMode
+                                      ? Constance.secondaryColor
+                                      : Constance.primaryColor,
+                                  size: 30,
+                                ),
                               ),
-                        ),
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                _launchUrl(data.author?.fb_link ??
-                                    Uri.parse(
-                                        "https://www.facebook.com/guwahatiplus/"));
-                              },
-                              child: Icon(
-                                FontAwesomeIcons.facebookSquare,
-                                color: Storage.instance.isDarkMode
-                                    ? Constance.secondaryColor
-                                    : Constance.primaryColor,
-                                size: 30,
+                              GestureDetector(
+                                onTap: () {
+                                  _launchUrl(Uri.parse(data
+                                          .author?.insta_link ??
+                                      "https://www.instagram.com/guwahatiplus/"));
+                                },
+                                child: Icon(
+                                  FontAwesomeIcons.instagramSquare,
+                                  color: Storage.instance.isDarkMode
+                                      ? Constance.secondaryColor
+                                      : Constance.primaryColor,
+                                  size: 30,
+                                ),
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                _launchUrl(Uri.parse(data.author?.insta_link ??
-                                    "https://www.instagram.com/guwahatiplus/"));
-                              },
-                              child: Icon(
-                                FontAwesomeIcons.instagramSquare,
-                                color: Storage.instance.isDarkMode
-                                    ? Constance.secondaryColor
-                                    : Constance.primaryColor,
-                                size: 30,
+                              GestureDetector(
+                                onTap: () {
+                                  _launchUrl(Uri.parse(
+                                      data.author?.insta_link ??
+                                          "https://twitter.com/guwahatiplus"));
+                                },
+                                child: Icon(
+                                  FontAwesomeIcons.twitterSquare,
+                                  color: Storage.instance.isDarkMode
+                                      ? Constance.secondaryColor
+                                      : Constance.primaryColor,
+                                  size: 30,
+                                ),
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                _launchUrl(Uri.parse(data.author?.insta_link ??
-                                    "https://twitter.com/guwahatiplus"));
-                              },
-                              child: Icon(
-                                FontAwesomeIcons.twitterSquare,
-                                color: Storage.instance.isDarkMode
-                                    ? Constance.secondaryColor
-                                    : Constance.primaryColor,
-                                size: 30,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 5.w,
-                    ),
-                  ],
-                ),
-              ),
-              (data.author?.description?.isNotEmpty ?? false)
-                  ? Container(
-                      width: double.infinity,
-                      height: 20.h,
-                      child: Html(
-                        data: data.author?.description ?? "",
+                            ],
+                          ),
+                        ],
                       ),
-                    )
-                  : Container(),
-              SizedBox(
-                height: 5.h,
-              ),
-              AuthorRelatedNews(
-                data,
-                news: data.author?.news ?? [],
-              ),
-              SizedBox(
-                height: 5.h,
-              ),
-              AuthorRelatedOpinions(
-                opinions: data.author?.opinions ?? [],
-                data: data,
-              ),
-            ],
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                    ],
+                  ),
+                ),
+                (data.author?.description?.isNotEmpty ?? false)
+                    ? Container(
+                        width: double.infinity,
+                        height: 20.h,
+                        child: Html(
+                          data: data.author?.description ?? "",
+                        ),
+                      )
+                    : Container(),
+                SizedBox(
+                  height: 1.h,
+                ),
+                AuthorRelatedNews(
+                  data,
+                  news: data.author?.news ?? [],
+                  updateState: () {
+                    setState(() {});
+                  },
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                AuthorRelatedOpinions(
+                  opinions: data.author?.opinions ?? [],
+                  data: data,
+                  updateState: () {
+                    setState(() {});
+                  },
+                ),
+              ],
+            ),
           ),
         );
       }),
@@ -255,7 +265,7 @@ class _AuthorPageState extends State<AuthorPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
           },
           icon: Icon(Icons.search),
         ),

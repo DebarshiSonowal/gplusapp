@@ -64,7 +64,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5.w),
                 child: Text(
-                  'Submit a story',
+                  'Submit A Story',
                   style: Theme.of(context).textTheme.headline2?.copyWith(
                       color: Storage.instance.isDarkMode
                           ? Colors.white

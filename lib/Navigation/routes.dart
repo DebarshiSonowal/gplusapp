@@ -146,7 +146,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '/notification':
       return FadeTransitionPageRouteBuilder(page: NotificationPage());
-      case '/blockedUsers':
+    case '/blockedUsers':
       return FadeTransitionPageRouteBuilder(page: BlockedUsersListPage());
     case '/bookmarks':
       return FadeTransitionPageRouteBuilder(page: BookmarksPage());
@@ -254,6 +254,29 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //Main
     case '/main':
       return FadeTransitionPageRouteBuilder(page: HomeScreen());
+    case '/mainWithAnimation':
+      return PageRouteBuilder(
+        pageBuilder: (BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          return const HomeScreen();
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.1, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.ease;
+
+          final tween = Tween(begin: begin, end: end);
+          final curvedAnimation = CurvedAnimation(
+            parent: animation,
+            curve: curve,
+          );
+
+          return SlideTransition(
+            position: tween.animate(curvedAnimation),
+            child: child,
+          );
+        },
+      );
 
     default:
       return MaterialPageRoute(builder: (_) {

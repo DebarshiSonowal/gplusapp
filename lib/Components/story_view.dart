@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Components/custom_button.dart';
+import 'package:gplusapp/Helper/Constance.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -110,40 +111,74 @@ class _StoryViewPageState extends State<StoryViewPage> {
                         : Padding(
                             padding: EdgeInsets.only(bottom: 12.h),
                             child: SizedBox(
-                              width: 30.w,
-                              height: 4.h,
-                              child: CustomButton(
-                                color: Color(int.parse(
-                                    '0xff${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).stories[index].btn_color?.substring(1)}')),
-                                txt: Provider.of<DataProvider>(
-                                            Navigation.instance.navigatorKey
-                                                    .currentContext ??
-                                                context,
-                                            listen: false)
-                                        .stories[index]
-                                        .btn_text ??
-                                    "Click here",
-                                size: 12.sp,
-                                onTap: () {
-                                  if (current != null) {
-                                    _launchUrl(Uri.parse(
-                                        Provider.of<DataProvider>(
-                                                    Navigation
-                                                            .instance
-                                                            .navigatorKey
-                                                            .currentContext ??
-                                                        context,
-                                                    listen: false)
-                                                .stories[storyItems
-                                                    .indexOf(current!)]
-                                                .web_url ??
-                                            "https://guwahatiplus.com/"));
-                                  } else {
-                                    _launchUrl(
-                                        Uri.parse("https://guwahatiplus.com/"));
-                                  }
-                                },
+                              // width: 30.w,
+                              height: 5.h,
+                              child: ElevatedButton.icon(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.transparent),
+                                ),
+                                onPressed: () {},
+                                icon: Image.asset(
+                                  Constance.linkIcon,
+                                  color: Color(
+                                    int.parse(
+                                        '0xff${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).stories[index].btn_color?.substring(1)}'),
+                                  ),
+                                  scale: 3,
+                                ),
+                                label: Text(
+                                  Provider.of<DataProvider>(
+                                              Navigation.instance.navigatorKey
+                                                      .currentContext ??
+                                                  context,
+                                              listen: false)
+                                          .stories[index]
+                                          .btn_text ??
+                                      "Click here",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4
+                                      ?.copyWith(
+                                        color: Color(
+                                          int.parse(
+                                              '0xff${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).stories[index].btn_color?.substring(1)}'),
+                                        ),
+                                      ),
+                                ),
                               ),
+                              //  CustomButton(
+                              //                                 color: Color(int.parse(
+                              //                                     '0xff${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).stories[index].btn_color?.substring(1)}')),
+                              //                                 txt: Provider.of<DataProvider>(
+                              //                                             Navigation.instance.navigatorKey
+                              //                                                     .currentContext ??
+                              //                                                 context,
+                              //                                             listen: false)
+                              //                                         .stories[index]
+                              //                                         .btn_text ??
+                              //                                     "Click here",
+                              //                                 size: 12.sp,
+                              //                                 onTap: () {
+                              //                                   if (current != null) {
+                              //                                     _launchUrl(Uri.parse(
+                              //                                         Provider.of<DataProvider>(
+                              //                                                     Navigation
+                              //                                                             .instance
+                              //                                                             .navigatorKey
+                              //                                                             .currentContext ??
+                              //                                                         context,
+                              //                                                     listen: false)
+                              //                                                 .stories[storyItems
+                              //                                                     .indexOf(current!)]
+                              //                                                 .web_url ??
+                              //                                             "https://guwahatiplus.com/"));
+                              //                                   } else {
+                              //                                     _launchUrl(
+                              //                                         Uri.parse("https://guwahatiplus.com/"));
+                              //                                   }
+                              //                                 },
+                              //                               )
                             ),
                           ),
                   ),

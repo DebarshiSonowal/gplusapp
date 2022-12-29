@@ -86,6 +86,7 @@ class _StoriesSectionState extends State<StoriesSection> {
                           ),
                         ),
                         Container(
+                          width:double.infinity,
                           decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(
                               Radius.circular(20),
@@ -99,7 +100,7 @@ class _StoriesSectionState extends State<StoriesSection> {
                           padding: EdgeInsets.symmetric(
                               vertical: 3.h, horizontal: 2.w),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(

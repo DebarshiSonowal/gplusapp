@@ -21,6 +21,7 @@ import 'package:twitter_oembed_api/twitter_oembed_api.dart';
 // import 'package:twitter_cards/twitter_cards.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../Components/alert.dart';
 import '../../Components/suggestion_card.dart';
@@ -47,7 +48,7 @@ class StoryPage extends StatefulWidget {
 class _StoryPageState extends State<StoryPage> {
   final twitterApi = TwitterOEmbedApi();
   int random = 0;
-  var categories = ['international', 'assam', 'guwahati', 'india'];
+  var categories = ['international', 'assam', 'guwahati', 'india', 'northeast'];
   var dropdownvalue = 'international';
 
   // WebViewController? _controller;
@@ -62,7 +63,6 @@ class _StoryPageState extends State<StoryPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       fetchDetails();
-      fetchContent();
     });
     fetchAds();
   }
@@ -81,21 +81,62 @@ class _StoryPageState extends State<StoryPage> {
                 ? Container()
                 : Column(
                     children: [
-                      Container(
-                        height: 36.h,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          // borderRadius: BorderRadius.all(
-                          //   // Radius.circular(10),
-                          // ),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: CachedNetworkImageProvider(
-                              data.selectedArticle?.image_file_name ??
-                                  'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+                      Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          Container(
+                            height: 36.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              // borderRadius: BorderRadius.all(
+                              //   // Radius.circular(10),
+                              // ),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: CachedNetworkImageProvider(
+                                  data.selectedArticle?.image_file_name ??
+                                      'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          Container(
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [Colors.transparent, Colors.black],
+                              ),
+                            ),
+                            // color: Colors.black.withOpacity(0.5),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 1.h, horizontal: 4.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  data.selectedArticle?.image_caption ?? '',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4
+                                      ?.copyWith(
+                                        color: Colors.grey.shade200,
+                                        // fontSize: 25.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                // Text(
+                                //   "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
+                                //   style: Theme.of(context).textTheme.headline6?.copyWith(
+                                //         color: Colors.white,
+                                //       ),
+                                // ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -103,9 +144,6 @@ class _StoryPageState extends State<StoryPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              height: 0.5.h,
-                            ),
                             // Row(
                             //   children: [
                             //     Container(
@@ -146,7 +184,7 @@ class _StoryPageState extends State<StoryPage> {
                                   ),
                             ),
                             SizedBox(
-                              height: 2.h,
+                              height: 1.h,
                             ),
                             GestureDetector(
                               onTap: () {
@@ -204,7 +242,7 @@ class _StoryPageState extends State<StoryPage> {
                             ),
 
                             SizedBox(
-                              height: 1.5.h,
+                              height: 1.h,
                             ),
                             Row(
                               children: [
@@ -335,6 +373,62 @@ class _StoryPageState extends State<StoryPage> {
                                     scrollDirection: Axis.horizontal,
                                     child: (context.tree as TableLayoutElement)
                                         .toWidget(context),
+                                  );
+                                },
+                                "iframe": (context, child) {
+
+                                  return YoutubePlayer(
+                                    // controller: _controller = YoutubePlayerController(
+                                    //   initialVideoId: current.youtube_id!,
+                                    //   flags: const YoutubePlayerFlags(
+                                    //     autoPlay: false,
+                                    //     mute: false,
+                                    //   ),
+                                    // ),
+                                    controller: YoutubePlayerController(
+                                      initialVideoId: context
+                                          .tree.attributes['src']
+                                          .toString()
+                                          .split("/")[4]
+                                          .toString(),
+                                      flags: const YoutubePlayerFlags(
+                                        hideControls: false,
+                                        // hideThumbnail: true,
+                                        autoPlay: false,
+                                      ),
+                                    ),
+                                    showVideoProgressIndicator: true,
+
+                                    thumbnail: Image.network(
+                                      getYoutubeThumbnail(context
+                                          .tree.attributes['src']
+                                          .toString()
+                                          .split("/")[4]
+                                          .toString()),
+                                      fit: BoxFit.fill,
+                                    ),
+                                    // aspectRatio: 16 / 10,
+                                    // videoProgressIndicatorColor: Colors.amber,
+                                    progressColors: const ProgressBarColors(
+                                      playedColor: Colors.amber,
+                                      handleColor: Colors.amberAccent,
+                                    ),
+                                    onReady: () {
+                                      // print('R12345&d');
+                                      // _controller
+                                      //     .addListener(() {});
+                                      // _controller!.play();
+                                      // setState(() {
+                                      //   controller.play();
+                                      // });
+                                    },
+                                  );
+                                  return Text(
+                                    context.tree.attributes['src']
+                                        .toString()
+                                        .split("/")[4]
+                                        .toString(),
+                                    style: TextStyle(color: Colors.black54),
                                   );
                                 },
                                 "a": (context, child) {
@@ -479,9 +573,9 @@ class _StoryPageState extends State<StoryPage> {
                                               .textTheme
                                               .headline3
                                               ?.copyWith(
-                                                fontSize: 12.sp,
+                                                fontSize: 9.sp,
                                                 color: Colors.white,
-                                                fontWeight: FontWeight.bold,
+                                                // fontWeight: FontWeight.bold,
                                               ),
                                         ),
                                       ),
@@ -523,9 +617,9 @@ class _StoryPageState extends State<StoryPage> {
                                     ),
                                   )
                                 : Container(),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
+                            // SizedBox(
+                            //   height: 1.h,
+                            // ),
                             // Text(
                             //   data.selectedArticle?.description
                             //           ?.split('</p>')[3]
@@ -551,9 +645,9 @@ class _StoryPageState extends State<StoryPage> {
                             //     },
                             //   ),
                             // ),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
+                            // SizedBox(
+                            //   height: 1.h,
+                            // ),
                             Wrap(
                               children: [
                                 for (var i
@@ -582,16 +676,16 @@ class _StoryPageState extends State<StoryPage> {
                                   )
                               ],
                             ),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
+                            // SizedBox(
+                            //   height: 1.5.h,
+                            // ),
                             Divider(
                               color: Colors.black,
                               thickness: 0.07.h,
                             ),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
+                            // SizedBox(
+                            //   height: 1.5.h,
+                            // ),
                             Row(
                               children: [
                                 Material(
@@ -703,9 +797,9 @@ class _StoryPageState extends State<StoryPage> {
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              height: 1.5.h,
-                            ),
+                            // SizedBox(
+                            //   height: 1.h,
+                            // ),
                             Divider(
                               color: Storage.instance.isDarkMode
                                   ? Colors.white
@@ -713,7 +807,7 @@ class _StoryPageState extends State<StoryPage> {
                               thickness: 0.07.h,
                             ),
                             SizedBox(
-                              height: 2.h,
+                              height: 1.h,
                             ),
                             Text(
                               'Related Stories',
@@ -727,7 +821,7 @@ class _StoryPageState extends State<StoryPage> {
                                       fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
-                              height: 2.h,
+                              height: 1.h,
                             ),
                             Row(
                               children: [
@@ -987,6 +1081,13 @@ class _StoryPageState extends State<StoryPage> {
         like = is_liked(response.article?.is_liked ?? -1);
         dislike = is_disliked(response.article?.is_liked ?? -1);
         is_bookmark = response.article?.is_bookmark ?? false;
+        if (categories.contains(response.article?.first_cat_name!.seo_name)) {
+          dropdownvalue =
+              response.article?.first_cat_name?.seo_name ?? "international";
+          fetchContent();
+        } else {
+          fetchContent();
+        }
       });
       Navigation.instance.goBack();
     } else {
@@ -1125,5 +1226,9 @@ class _StoryPageState extends State<StoryPage> {
         
       </html>
     """;
+  }
+
+  String getYoutubeThumbnail(var id) {
+    return 'https://img.youtube.com/vi/${id}/0.jpg';
   }
 }

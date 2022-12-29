@@ -7,14 +7,16 @@ import 'package:sizer/sizer.dart';
 import '../Helper/Constance.dart';
 import '../Model/opinion.dart';
 import '../Navigation/Navigate.dart';
+import 'custom_button.dart';
 import 'opinion_card.dart';
 
 class AuthorRelatedOpinions extends StatelessWidget {
   final List<Opinion> opinions;
   final DataProvider data;
-
-  const AuthorRelatedOpinions(
-      {Key? key, required this.opinions, required this.data})
+  int currentCount = 4;
+  final Function updateState;
+   AuthorRelatedOpinions(
+      {Key? key, required this.opinions, required this.data, required this.updateState})
       : super(key: key);
 
   @override
@@ -22,18 +24,18 @@ class AuthorRelatedOpinions extends StatelessWidget {
     return opinions.isEmpty
         ? Container()
         : Container(
-            height: 22.h,
+            // height: 22.h,
             width: double.infinity,
             // color: Constance.secondaryColor,
-            padding: EdgeInsets.symmetric(vertical: 2.h),
+            padding: EdgeInsets.symmetric(vertical: 2.h,horizontal: 3.w),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  padding: EdgeInsets.symmetric(horizontal: 2.w),
                   child: Text(
-                    'Opinions from same author',
+                    'Opinions',
                     style: Theme.of(context).textTheme.headline3?.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -44,12 +46,14 @@ class AuthorRelatedOpinions extends StatelessWidget {
                 SizedBox(
                   height: 1.h,
                 ),
-                Expanded(
+                SizedBox(
+                  width: double.infinity,
                   child: Container(
                     child: ListView.separated(
                       shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: opinions.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      itemCount: opinions.length>4?4:opinions.length,
                       itemBuilder: (cont, count) {
                         var item = opinions[count];
                         return GestureDetector(
@@ -72,6 +76,19 @@ class AuthorRelatedOpinions extends StatelessWidget {
                     ),
                   ),
                 ),
+                opinions.length>4?Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomButton(
+                        txt: 'Load More',
+                        onTap: () {
+                          opinions.removeRange(0, 4);
+                          updateState();
+                          // page++;
+                          // fetchMoreData();
+                        }),
+                  ],
+                ):Container(),
               ],
             ),
           );

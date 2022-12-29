@@ -10,7 +10,9 @@ import 'home_slider_card.dart';
 class HomeBannerPage extends StatefulWidget {
   final Function showNotaMember;
 
-  const HomeBannerPage({required this.showNotaMember});
+  HomeBannerPage({
+    required this.showNotaMember,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -19,8 +21,26 @@ class HomeBannerPage extends StatefulWidget {
 }
 
 class _CarouselWithIndicatorState extends State<HomeBannerPage> {
-  int _current = 0;
+  int _current = 0,till=5;
   final CarouselController _controller = CarouselController();
+  final ScrollController controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    // controller.addListener(() {
+    //   if (controller.position.atEdge) {
+    //     bool isTop = controller.position.pixels == 0;
+    //     if (isTop) {
+    //       print('At the top');
+    //       controller.jumpTo(-2.w);
+    //     } else {
+    //       print('At the bottom');
+    //       controller.jumpTo(2.w);
+    //     }
+    //   }
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +74,21 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                   onPageChanged: (index, reason) {
                     setState(() {
                       _current = index;
+                      if(index>till){
+                        controller.animateTo(
+                          controller.position.maxScrollExtent,
+                          duration: Duration(seconds: 2),
+                          curve: Curves.fastOutSlowIn,
+                        );
+                      }else if(index==0){
+                        controller.animateTo(
+                          controller.position.minScrollExtent,
+                          duration: Duration(seconds: 2),
+                          curve: Curves.fastOutSlowIn,
+                        );
+                      }
                     });
+
                   }),
             ),
           ),
@@ -63,6 +97,7 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
             height: 3.h,
             child: Center(
               child: ListView.builder(
+                controller: controller,
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemCount: data.home_albums.length,

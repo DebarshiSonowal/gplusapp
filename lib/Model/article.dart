@@ -15,7 +15,7 @@ class Article {
       as_description,
       as_short_description,
       web_url,
-      tags;
+      tags,image_caption;
   bool is_bookmark = false;
   CategoryName? first_cat_name;
 
@@ -47,6 +47,7 @@ class Article {
 
     //String
     title = json['title'] ?? "";
+    image_caption = json['image_caption'] ?? "";
     author_name = json['author_name'] ?? "";
     tags = json['tags'] ?? "";
     seo_name = json['seo_name'] ?? "";

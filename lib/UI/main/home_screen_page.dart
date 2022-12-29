@@ -98,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     });
+
   }
 
   void _onRefresh() async {
@@ -134,7 +135,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return UpgradeAlert(
-      upgrader: Upgrader(dialogStyle: Platform.isAndroid?UpgradeDialogStyle.material:UpgradeDialogStyle.cupertino),
+      upgrader: Upgrader(
+          dialogStyle: Platform.isAndroid
+              ? UpgradeDialogStyle.material
+              : UpgradeDialogStyle.cupertino),
       child: Scaffold(
         backgroundColor:
             Storage.instance.isDarkMode ? Colors.black : Colors.grey.shade100,
@@ -259,6 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   });
                                 });
                               },
+
                             )
                           : Container(),
                       data.profile?.is_plan_active ?? false
@@ -397,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     // fontSize: 16.sp,
                                     color: Storage.instance.isDarkMode
                                         ? Colors.white
-                                        : Constance.fifthColor,
+                                        : Colors.black54,
                                     // fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -512,7 +517,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
           },
           icon: const Icon(Icons.search),
         ),

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gplusapp/Model/top_picks.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -23,18 +24,29 @@ class TopPicksPage extends StatefulWidget {
 class _TopPicksPageState extends State<TopPicksPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-
-  int page=1;
+  final ScrollController controller = ScrollController();
+  int page = 1;
 
   @override
   void initState() {
     super.initState();
     fetchToppicks();
+    controller.addListener(() {
+      if (controller.position.atEdge) {
+        bool isTop = controller.position.pixels == 0;
+        if (isTop) {
+
+        } else {
+          // print('At the bottom');
+          _refreshController.requestLoading();
+        }
+      }
+    });
   }
 
   void _onRefresh() async {
     setState(() {
-      page=1;
+      page = 1;
     });
     // monitor network fetch
     final response = await ApiProvider.instance.getTopPicks(1);
@@ -59,7 +71,11 @@ class _TopPicksPageState extends State<TopPicksPage> {
     //   setState(() {
     //
     //   });
-    _refreshController.loadComplete();
+    setState(() {
+      page++;
+    });
+    fetchMoreToppicks(page);
+
   }
 
   @override
@@ -103,6 +119,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
             padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
             child: data.home_exclusive.isNotEmpty
                 ? SingleChildScrollView(
+                    controller: controller,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -151,9 +168,9 @@ class _TopPicksPageState extends State<TopPicksPage> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
+                        // SizedBox(
+                        //   height: 2.h,
+                        // ),
                         // Row(
                         //   children: [
                         //     Container(
@@ -176,7 +193,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
                         //   ],
                         // ),
                         SizedBox(
-                          height: 2.h,
+                          height: 1.h,
                         ),
                         GestureDetector(
                           onTap: () {
@@ -205,22 +222,75 @@ class _TopPicksPageState extends State<TopPicksPage> {
                           ),
                         ),
                         SizedBox(
-                          height: 2.h,
+                          height: 1.h,
                         ),
-                        Text(
-                          '${data.home_toppicks[0].author_name ?? "G Plus Admin"}, ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
-                          style: Theme.of(Navigation
-                                  .instance.navigatorKey.currentContext!)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
-                                // fontSize: 2.2.h,
-                                // fontWeight: FontWeight.bold,
+                        GestureDetector(
+                          onTap: () {
+                            Navigation.instance.navigate('/authorPage',
+                                args: data.home_toppicks[0].author_id);
+                          },
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                Constance.authorIcon,
+                                scale: 30,
+                                color: Constance.secondaryColor,
                               ),
+                              SizedBox(
+                                width: 0.5.w,
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          '${data.home_toppicks[0].author_name ?? "G Plus"}',
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Constance.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          ' , ${Jiffy(data.home_toppicks[0].date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Storage.instance.isDarkMode
+                                                ? Colors.white
+                                                : Colors.black,
+                                            // fontSize: 2.2.h,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                        // Text(
+                        //   '${data.home_toppicks[0].author_name ?? "G Plus Admin"}, ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                        //   style: Theme.of(Navigation
+                        //           .instance.navigatorKey.currentContext!)
+                        //       .textTheme
+                        //       .headline5
+                        //       ?.copyWith(
+                        //         color: Storage.instance.isDarkMode
+                        //             ? Colors.white
+                        //             : Colors.black,
+                        //         // fontSize: 2.2.h,
+                        //         // fontWeight: FontWeight.bold,
+                        //       ),
+                        // ),
                         Divider(
                           color: Colors.black,
                           thickness: 0.5.sp,
@@ -232,129 +302,9 @@ class _TopPicksPageState extends State<TopPicksPage> {
                           itemBuilder: (cont, count) {
                             var item = data.home_toppicks[count];
                             if (count != 0) {
-                              return GestureDetector(
-                                onTap: () {
-                                  if (data.profile?.is_plan_active ?? false) {
-                                    Navigation.instance.navigate('/story',
-                                        args:
-                                            '${item.categories?.first.seo_name},${item.seo_name}');
-                                  } else {
-                                    Constance.showMembershipPrompt(
-                                        context, () {});
-                                  }
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 3.w, vertical: 1.h),
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(5),
-                                    ),
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.black
-                                        : Colors.white,
-                                  ),
-                                  height: 20.h,
-                                  width:
-                                      MediaQuery.of(context).size.width - 7.w,
-                                  child: Row(
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          CachedNetworkImage(
-                                            height: 15.h,
-                                            width: 45.w,
-                                            imageUrl:
-                                                item.image_file_name ?? '',
-                                            fit: BoxFit.fill,
-                                            placeholder: (cont, _) {
-                                              return Image.asset(
-                                                Constance.logoIcon,
-                                                // color: Colors.black,
-                                              );
-                                            },
-                                            errorWidget: (cont, _, e) {
-                                              // print(e);
-                                              print(_);
-                                              return Image.asset(
-                                                Constance.logoIcon,
-                                                // color: Colors.black,
-                                              );
-                                            },
-                                          ),
-                                          SizedBox(
-                                            height: 1.h,
-                                          ),
-                                          Text(
-                                            // item.publish_date
-                                            //         ?.split(" ")[0] ??
-                                            //     "",
-                                            Jiffy(
-                                                    item.date
-                                                            ?.split(" ")[0] ??
-                                                        "",
-                                                    "yyyy-MM-dd")
-                                                .format("dd/MM/yyyy"),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                ?.copyWith(
-                                                    color: Storage.instance
-                                                            .isDarkMode
-                                                        ? Colors.white
-                                                        : Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        width: 4.w,
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              item.title ?? "",
-                                              maxLines: 3,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline4
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      overflow: TextOverflow
-                                                          .ellipsis,
-                                                      color: Storage.instance
-                                                              .isDarkMode
-                                                          ? Colors.white
-                                                          : Constance
-                                                              .primaryColor),
-                                            ),
-                                            // SizedBox(
-                                            //   height: 5.h,
-                                            // ),
-                                            Text(
-                                              item.author_name ?? "G Plus News",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(
-                                                      color: Storage.instance
-                                                              .isDarkMode
-                                                          ? Colors.white
-                                                          : Colors.black),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              return SuggestedForYouCard(
+                                item: item,
+                                data: data,
                               );
                             } else {
                               return Container();
@@ -377,24 +327,24 @@ class _TopPicksPageState extends State<TopPicksPage> {
                           },
                           itemCount: data.home_toppicks.length,
                         ),
+                        // SizedBox(
+                        //   height: 2.h,
+                        // ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     CustomButton(
+                        //         txt: 'Load More',
+                        //         onTap: () {
+                        //           setState(() {
+                        //             page++;
+                        //           });
+                        //           fetchMoreToppicks(page);
+                        //         }),
+                        //   ],
+                        // ),
                         SizedBox(
-                          height: 2.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomButton(
-                                txt: 'Load More',
-                                onTap: () {
-                                  setState(() {
-                                    page++;
-                                  });
-                                  fetchMoreToppicks(page);
-                                }),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10.h,
+                          height: 3.h,
                         ),
                       ],
                     ),
@@ -441,13 +391,129 @@ class _TopPicksPageState extends State<TopPicksPage> {
           .setHomeTopPicks(response.toppicks ?? []);
     }
   }
+
   void fetchMoreToppicks(page) async {
     final response = await ApiProvider.instance.getTopPicks(page);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .addHomeTopPicks(response.toppicks ?? []);
+      _refreshController.loadComplete();
+    }else{
+      _refreshController.loadFailed();
     }
+  }
+}
+
+class SuggestedForYouCard extends StatelessWidget {
+  const SuggestedForYouCard({
+    Key? key,
+    required this.item,
+    required this.data,
+  }) : super(key: key);
+
+  final TopPicks item;
+  final DataProvider data;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (data.profile?.is_plan_active ?? false) {
+          Navigation.instance.navigate('/story',
+              args: '${item.categories?.first.seo_name},${item.seo_name}');
+        } else {
+          Constance.showMembershipPrompt(context, () {});
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(
+            Radius.circular(5),
+          ),
+          color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
+        ),
+        height: 20.h,
+        width: MediaQuery.of(context).size.width - 7.w,
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CachedNetworkImage(
+                  height: 17.7.h,
+                  width: 45.w,
+                  imageUrl: item.image_file_name ?? '',
+                  fit: BoxFit.fill,
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  errorWidget: (cont, _, e) {
+                    // print(e);
+                    print(_);
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                ),
+              ],
+            ),
+            SizedBox(
+              width: 4.w,
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    item.title ?? "",
+                    maxLines: 6,
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        overflow: TextOverflow.ellipsis,
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Constance.primaryColor),
+                  ),
+                  // SizedBox(
+                  //   height: 5.h,
+                  // ),
+                  // SizedBox(
+                  //   height: 2.h,
+                  // ),
+                  Spacer(),
+                  Text(
+                    Jiffy(item.date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                        .format("dd MMM,yyyy"),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black),
+                  ),
+                  SizedBox(
+                    height: 0.5.h,
+                  ),
+                  Text(
+                    item.author_name ?? "G Plus News",
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

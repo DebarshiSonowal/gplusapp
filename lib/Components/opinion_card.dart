@@ -108,10 +108,11 @@ class OpinionCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(
-                            FontAwesomeIcons.user,
+                          Image.asset(
+                            Constance.authorIcon,
                             color: Constance.secondaryColor,
-                            size: 8.sp,
+                            // size: 8.sp,
+                            scale: 37,
                           ),
                           SizedBox(
                             width: 1.w,
