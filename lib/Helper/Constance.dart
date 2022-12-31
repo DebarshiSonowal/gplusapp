@@ -28,6 +28,8 @@ class Constance {
   static const logoIcon = 'assets/images/logo.png';
   static const noDataLoader = 'assets/animation/no_data.json';
   static const homeIcon = 'assets/images/home.png';
+  static const newsIcon = 'assets/images/news.png';
+  static const warningIcon = 'assets/images/warning.png';
   static const connectIcon = 'assets/images/connect.png';
   static const classifiedIcon = 'assets/images/classifieds.png';
   static const entertainmentIcon = 'assets/images/entertainment.png';

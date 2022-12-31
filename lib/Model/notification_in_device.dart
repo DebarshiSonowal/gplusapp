@@ -10,13 +10,14 @@ class NotificationInDevice {
       seo_name_category,
       web_path,
       api_path,
-      read_at;
+      read_at,vendor_id;
 
   NotificationInDevice.fromJson(json) {
     id = json['id'] ?? "";
     notifiable_type = json['notifiable_type'] ?? "";
     created_at = json['created_at'] ?? "";
     read_at = json['read_at'] ?? "";
+    vendor_id = json['vendor_id'] ?? "";
 
     title = json['data']['title'] ?? "";
     type = json['data']['type'] ?? "";

@@ -45,6 +45,7 @@ Future<void> onDidReceiveNotificationResponse(
   //     '{ "category_name": "Entertainment", "seo_name": "7-things-you-can-do-this-weekend-in-guwahati-4", "seo_name_category": "entertainment", "notification_id": "0f226151-e51c-4a75-abe8-bf5652cff30e", "type": "news", "title": "7 Things You Ca"  }' ??
   //         "");
   // var jsData = encoder.convert(notificationResponse.payload!);
+  print(notificationResponse.payload);
   var jsData = notificationResponse.payload ?? "";
   jsData = jsData.replaceAll('{', '{"');
   jsData = jsData.replaceAll(': ', '": "');
@@ -55,7 +56,7 @@ Future<void> onDidReceiveNotificationResponse(
       NotificationReceived.fromJson(jsonDecode(jsData));
   // Navigation.instance.navigate('');
   setRead(notification.notification_id, notification.seo_name,
-      notification.seo_name_category,notification.type);
+      notification.seo_name_category,notification.type,notification.post_id,notification.vendor_id);
 }
 
 Future<void> onDidReceiveBackgroundNotificationResponse(
@@ -176,17 +177,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void setRead(String? id, seo_name, category_name,type) async {
+void setRead(String? id, seo_name, category_name,type,post_id,vendor_id) async {
   final response = await ApiProvider.instance.notificationRead(id);
   if (response.success ?? false) {
     fetchNotification();
-    sendToDestination(seo_name, category_name,type);
+    sendToDestination(seo_name, category_name,type,post_id,vendor_id);
   } else {
     showError(response.message ?? "Something went wrong");
   }
 }
 
-void sendToDestination(seo_name, category_name,type) async {
+void sendToDestination(seo_name, category_name,type,id,vendor_id) async {
   //News Notifications ( On all and selected News)
   //
   // Any Notifications to be sent from dashboard:- ( Example Earthquake)
@@ -204,22 +205,44 @@ void sendToDestination(seo_name, category_name,type) async {
   switch (type) {
     case "news":
       Navigation.instance
-          .navigate('/story', args: '${seo_name},${category_name}');
+          .navigate('/story', args: '${category_name},${seo_name}');
       break;
     case "ghy_connect":
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
+          .setCurrent(2);
       Navigation.instance.navigate('/guwahatiConnects');
+
       break;
     case "citizen_journalist":
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
+          .setCurrent(3);
       Navigation.instance.navigate('/citizenJournalist');
       break;
     case "deals":
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
+          .setCurrent(1);
       Navigation.instance.navigate('/bigdealpage');
+      Navigation.instance.navigate('/categorySelect', args: int.parse(vendor_id));
       break;
     case "classified":
-      // Navigation.instance.navigate('/classifiedDetails',args: );
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
+          .setCurrent(4);
+      Navigation.instance.navigate('/classified');
+      Navigation.instance.navigate('/classifiedDetails',args: int.parse(id));
       break;
     case "locality":
+      Navigation.instance
+          .navigate('/story', args: '${category_name},${seo_name}');
       break;
+
     default:
       break;
   }

@@ -28,8 +28,12 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
   var publicationDate = '';
   var date = '';
   int year = 2000;
-  int max = DateTime.now().year;
-  int currentY = DateTime.now().year;
+  int max = DateTime
+      .now()
+      .year;
+  int currentY = DateTime
+      .now()
+      .year;
   final _first_name = TextEditingController();
   final _last_name = TextEditingController();
   final _email = TextEditingController();
@@ -78,8 +82,14 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
     return Scaffold(
       appBar: buildAppBar(),
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
         child: SingleChildScrollView(
@@ -98,7 +108,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                   ),
                   Text(
                     'Grievance Redressal',
-                    style: Theme.of(context).textTheme.headline2?.copyWith(
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline2
+                        ?.copyWith(
                         color: Storage.instance.isDarkMode
                             ? Colors.white
                             : Constance.primaryColor,
@@ -113,7 +127,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 height: 1.h,
                 child: Divider(
                   color:
-                      Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                  Storage.instance.isDarkMode ? Colors.white : Colors.black,
                   thickness: 0.4.sp,
                 ),
               ),
@@ -134,18 +148,22 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                         color: selected == 0
                             ? Constance.secondaryColor
                             : Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                            ? Colors.white
+                            : Colors.black,
                         child: Center(
                           child: Text(
                             'Submit Grievances',
                             style:
-                                Theme.of(context).textTheme.headline4?.copyWith(
-                                    color: selected == 0
-                                        ? Storage.instance.isDarkMode
-                                            ? Colors.black
-                                            : Colors.white
-                                        : Colors.black),
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .headline4
+                                ?.copyWith(
+                                color: selected == 0
+                                    ? Storage.instance.isDarkMode
+                                    ? Colors.black
+                                    : Colors.white
+                                    : Colors.black),
                           ),
                         ),
                       ),
@@ -163,19 +181,23 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                         color: selected == 1
                             ? Constance.secondaryColor
                             : Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                            ? Colors.white
+                            : Colors.black,
                         child: Center(
                           child: Text(
                             'Past Grievances',
                             style:
-                                Theme.of(context).textTheme.headline4?.copyWith(
-                                      color: selected == 1
-                                          ? Colors.black
-                                          : Storage.instance.isDarkMode
-                                              ? Colors.black
-                                              : Colors.white,
-                                    ),
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .headline4
+                                ?.copyWith(
+                              color: selected == 1
+                                  ? Colors.black
+                                  : Storage.instance.isDarkMode
+                                  ? Colors.black
+                                  : Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -208,8 +230,8 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
       title: GestureDetector(
         onTap: () {
           Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -231,7 +253,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
               badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',
-                style: Theme.of(context).textTheme.headline5?.copyWith(
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline5
+                    ?.copyWith(
                   color: Constance.thirdColor,
                 ),
               ),
@@ -241,7 +267,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
             // showSearch(
             //   context: context,
             //   delegate: SearchPage<Listing>(
@@ -298,22 +324,26 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 // width: 5.0,
               ),
               borderRadius: const BorderRadius.all(Radius.circular(
-                      5.0) //                 <--- border radius here
-                  ),
+                  5.0) //                 <--- border radius here
+              ),
             ),
             child: ExpansionTile(
               collapsedIconColor:
-                  Storage.instance.isDarkMode ? Colors.white : Colors.black,
+              Storage.instance.isDarkMode ? Colors.white : Colors.black,
               iconColor:
-                  Storage.instance.isDarkMode ? Colors.white : Colors.black,
+              Storage.instance.isDarkMode ? Colors.white : Colors.black,
               title: Text(
                 'July 2022',
-                style: Theme.of(context).textTheme.headline4?.copyWith(
-                      color: Storage.instance.isDarkMode
-                          ? Colors.white
-                          : Constance.primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline4
+                    ?.copyWith(
+                  color: Storage.instance.isDarkMode
+                      ? Colors.white
+                      : Constance.primaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               children: [
                 Container(
@@ -337,21 +367,29 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                     children: [
                       Text(
                         'Grievances Received',
-                        style: Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Constance.primaryColor,
-                              // fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .headline5
+                            ?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor,
+                          // fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         '20',
-                        style: Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Constance.primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .headline5
+                            ?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -366,21 +404,29 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                     children: [
                       Text(
                         'Grievances Resolved  ',
-                        style: Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Constance.primaryColor,
-                              // fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .headline5
+                            ?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor,
+                          // fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         '20',
-                        style: Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Constance.primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .headline5
+                            ?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -415,60 +461,80 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           ),
           Text(
             'The grievance can be addressed to our Grievance Officer',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color:
-                      Storage.instance.isDarkMode ? Colors.white : Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color:
+              Storage.instance.isDarkMode ? Colors.white : Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 1.7.h,
           ),
           Text(
             'Sidharth Bedi Varma',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color:
-                      Storage.instance.isDarkMode ? Colors.white : Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color:
+              Storage.instance.isDarkMode ? Colors.white : Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.5.h,
           ),
           Text(
             'Address: G Plus, 4-A, 4th Floor, Royal Arcade, B Barooah Road,'
-            ' Ulubari, Guwahati, Assam- 781007\n'
-            'Email: info@g-plus.in',
-            style: Theme.of(context).textTheme.headline6?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white70
-                      : Colors.black54,
-                ),
+                ' Ulubari, Guwahati, Assam- 781007\n'
+                'Email: info@g-plus.in',
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline6
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white70
+                  : Colors.black54,
+            ),
           ),
           SizedBox(
             height: 1.5.h,
           ),
           Text(
             'Please fill out all the details of the Grievance Redressal'
-            ' form. Any section left blank or anonymous* or fake'
-            ' submissions will not be accepted',
-            style: Theme.of(context).textTheme.headline6?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black54,
-                ),
+                ' form. Any section left blank or anonymous* or fake'
+                ' submissions will not be accepted',
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline6
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black54,
+            ),
           ),
           SizedBox(
             height: 1.7.h,
           ),
           Text(
             'First Name',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black54,
-                  // fontWeight: FontWeight.bold,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black54,
+              // fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.5.h,
@@ -478,8 +544,8 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
             padding: EdgeInsets.symmetric(horizontal: 2.w),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(
-                      5.0) //                 <--- border radius here
-                  ),
+                  5.0) //                 <--- border radius here
+              ),
               border: Border.all(
                   width: 1, //                   <--- border width here
                   color: Storage.instance.isDarkMode
@@ -493,7 +559,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 controller: _first_name,
                 autofocus: true,
                 cursorColor:
-                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                Storage.instance.isDarkMode ? Colors.white : Colors.black,
                 decoration: InputDecoration(
                   hintText: "Enter First Name",
                   border: InputBorder.none,
@@ -502,7 +568,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                           ? Colors.white70
                           : Colors.black26),
                 ),
-                style: Theme.of(context).textTheme.headline5?.copyWith(
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline5
+                    ?.copyWith(
                     color: Storage.instance.isDarkMode
                         ? Colors.white
                         : Colors.black),
@@ -515,12 +585,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           ),
           Text(
             'Last Name',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black54,
-                  // fontWeight: FontWeight.bold,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black54,
+              // fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.5.h,
@@ -530,8 +604,8 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
             padding: EdgeInsets.symmetric(horizontal: 2.w),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(
-                      5.0) //                 <--- border radius here
-                  ),
+                  5.0) //                 <--- border radius here
+              ),
               border: Border.all(
                   width: 1, //                   <--- border width here
                   color: Storage.instance.isDarkMode
@@ -545,7 +619,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 controller: _last_name,
                 autofocus: true,
                 cursorColor:
-                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                Storage.instance.isDarkMode ? Colors.white : Colors.black,
                 decoration: InputDecoration(
                   hintText: "Enter Last Name",
                   border: InputBorder.none,
@@ -554,7 +628,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                           ? Colors.white70
                           : Colors.black26),
                 ),
-                style: Theme.of(context).textTheme.headline5?.copyWith(
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline5
+                    ?.copyWith(
                     color: Storage.instance.isDarkMode
                         ? Colors.white
                         : Colors.black),
@@ -567,12 +645,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           ),
           Text(
             'Email Id',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black54,
-                  // fontWeight: FontWeight.bold,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black54,
+              // fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.5.h,
@@ -582,8 +664,8 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
             padding: EdgeInsets.symmetric(horizontal: 2.w),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(
-                      5.0) //                 <--- border radius here
-                  ),
+                  5.0) //                 <--- border radius here
+              ),
               border: Border.all(
                   width: 1, //                   <--- border width here
                   color: Storage.instance.isDarkMode
@@ -597,7 +679,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 controller: _email,
                 autofocus: true,
                 cursorColor:
-                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                Storage.instance.isDarkMode ? Colors.white : Colors.black,
                 decoration: InputDecoration(
                   hintText: "Enter Email Id",
                   border: InputBorder.none,
@@ -606,7 +688,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                           ? Colors.white70
                           : Colors.black26),
                 ),
-                style: Theme.of(context).textTheme.headline5?.copyWith(
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline5
+                    ?.copyWith(
                     color: Storage.instance.isDarkMode
                         ? Colors.white
                         : Colors.black),
@@ -619,12 +705,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           ),
           Text(
             'Mobile Phone',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black54,
-                  // fontWeight: FontWeight.bold,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black54,
+              // fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.5.h,
@@ -634,8 +724,8 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
             padding: EdgeInsets.symmetric(horizontal: 2.w),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(
-                      5.0) //                 <--- border radius here
-                  ),
+                  5.0) //                 <--- border radius here
+              ),
               border: Border.all(
                   width: 1, //                   <--- border width here
                   color: Storage.instance.isDarkMode
@@ -650,7 +740,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 keyboardType: TextInputType.phone,
                 autofocus: true,
                 cursorColor:
-                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                Storage.instance.isDarkMode ? Colors.white : Colors.black,
                 decoration: InputDecoration(
                   hintText: "Enter Mobile Number",
                   border: InputBorder.none,
@@ -659,7 +749,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                           ? Colors.white70
                           : Colors.black26),
                 ),
-                style: Theme.of(context).textTheme.headline5?.copyWith(
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline5
+                    ?.copyWith(
                     color: Storage.instance.isDarkMode
                         ? Colors.white
                         : Colors.black),
@@ -672,12 +766,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           ),
           Text(
             'Address',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black54,
-                  // fontWeight: FontWeight.bold,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black54,
+              // fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.5.h,
@@ -687,8 +785,8 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
             padding: EdgeInsets.symmetric(horizontal: 2.w),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(
-                      5.0) //                 <--- border radius here
-                  ),
+                  5.0) //                 <--- border radius here
+              ),
               border: Border.all(
                   width: 1, //                   <--- border width here
                   color: Storage.instance.isDarkMode
@@ -704,7 +802,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 autofocus: true,
                 maxLines: 6,
                 cursorColor:
-                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                Storage.instance.isDarkMode ? Colors.white : Colors.black,
                 decoration: InputDecoration(
                   hintText: "Enter Address",
                   border: InputBorder.none,
@@ -713,7 +811,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                           ? Colors.white70
                           : Colors.black26),
                 ),
-                style: Theme.of(context).textTheme.headline5?.copyWith(
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline5
+                    ?.copyWith(
                     color: Storage.instance.isDarkMode
                         ? Colors.white
                         : Colors.black),
@@ -726,12 +828,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           ),
           Text(
             'Pincode',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black54,
-                  // fontWeight: FontWeight.bold,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black54,
+              // fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.5.h,
@@ -741,8 +847,8 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
             padding: EdgeInsets.symmetric(horizontal: 2.w),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(
-                      5.0) //                 <--- border radius here
-                  ),
+                  5.0) //                 <--- border radius here
+              ),
               border: Border.all(
                   width: 1, //                   <--- border width here
                   color: Storage.instance.isDarkMode
@@ -758,7 +864,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 autofocus: true,
                 maxLength: 6,
                 cursorColor:
-                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                Storage.instance.isDarkMode ? Colors.white : Colors.black,
                 decoration: InputDecoration(
                   hintText: "Enter Pincode",
                   border: InputBorder.none,
@@ -767,7 +873,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                           ? Colors.white70
                           : Colors.black26),
                 ),
-                style: Theme.of(context).textTheme.headline5?.copyWith(
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline5
+                    ?.copyWith(
                     color: Storage.instance.isDarkMode
                         ? Colors.white
                         : Colors.black),
@@ -780,12 +890,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           ),
           Text(
             'Link to the content for which complaint needs to be filed',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black54,
-                  // fontWeight: FontWeight.bold,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black54,
+              // fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.7.h,
@@ -795,8 +909,8 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
             padding: EdgeInsets.symmetric(horizontal: 2.w),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(
-                      5.0) //                 <--- border radius here
-                  ),
+                  5.0) //                 <--- border radius here
+              ),
               border: Border.all(
                   width: 1, //                   <--- border width here
                   color: Storage.instance.isDarkMode
@@ -811,7 +925,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 keyboardType: TextInputType.url,
                 autofocus: true,
                 cursorColor:
-                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                Storage.instance.isDarkMode ? Colors.white : Colors.black,
                 decoration: InputDecoration(
                   hintText: "Paste link here",
                   border: InputBorder.none,
@@ -820,7 +934,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                           ? Colors.white70
                           : Colors.black26),
                 ),
-                style: Theme.of(context).textTheme.headline5?.copyWith(
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline5
+                    ?.copyWith(
                     color: Storage.instance.isDarkMode
                         ? Colors.white
                         : Colors.black),
@@ -833,12 +951,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           ),
           Text(
             'Date of publication',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black54,
-                  // fontWeight: FontWeight.bold,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black54,
+              // fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.7.h,
@@ -851,18 +973,22 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 firstDate: DateTime(year),
                 lastDate: DateTime(max),
                 dateFormat: "dd-MMMM-yyyy",
-                itemTextStyle: Theme.of(context).textTheme.headline6?.copyWith(
-                      color: Constance.primaryColor,
-                      // fontSize: 1.6.h,
-                      fontWeight: FontWeight.bold,
-                    ),
+                itemTextStyle: Theme
+                    .of(context)
+                    .textTheme
+                    .headline6
+                    ?.copyWith(
+                  color: Constance.primaryColor,
+                  // fontSize: 1.6.h,
+                  fontWeight: FontWeight.bold,
+                ),
                 locale: DateTimePickerLocale.en_us,
                 looping: true,
               );
               if (datePicked != null) {
                 setState(() {
                   publicationDate =
-                      "${datePicked?.day}-${datePicked?.month}-${datePicked?.year}";
+                  "${datePicked?.day}-${datePicked?.month}-${datePicked?.year}";
                 });
               }
             },
@@ -886,14 +1012,18 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                               ? ''
                               : '${publicationDate.split('-')[0]}',
                           style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    // fontSize: 2.h,
-                                    fontSize: 11.sp,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                          Theme
+                              .of(context)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                            // fontSize: 2.h,
+                            fontSize: 11.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
                         ),
                         SizedBox(
                           width: 2.w,
@@ -936,14 +1066,18 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                               ? ''
                               : '${publicationDate.split('-')[1]}',
                           style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    // fontSize: 2.h,
-                                    fontSize: 11.sp,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                          Theme
+                              .of(context)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                            // fontSize: 2.h,
+                            fontSize: 11.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
                         ),
                         SizedBox(
                           width: 2.w,
@@ -986,14 +1120,18 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                               ? ''
                               : '${publicationDate.split('-')[2]}',
                           style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    // fontSize: 2.h,
-                                    fontSize: 11.sp,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                          Theme
+                              .of(context)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                            // fontSize: 2.h,
+                            fontSize: 11.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
                         ),
                         SizedBox(
                           width: 2.w,
@@ -1066,14 +1204,18 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           ),
           Text(
             'Exact details of the content that vou feel contains a '
-            'violation. Please specify exact words or para of the '
-            'article, or exact time stamps for videos and podcasts.',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black54,
-                  // fontWeight: FontWeight.bold,
-                ),
+                'violation. Please specify exact words or para of the '
+                'article, or exact time stamps for videos and podcasts.',
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black54,
+              // fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.5.h,
@@ -1083,8 +1225,8 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
             padding: EdgeInsets.symmetric(horizontal: 2.w),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(
-                      5.0) //                 <--- border radius here
-                  ),
+                  5.0) //                 <--- border radius here
+              ),
               border: Border.all(
                   width: 1, //                   <--- border width here
                   color: Storage.instance.isDarkMode
@@ -1100,7 +1242,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 autofocus: true,
                 maxLines: 6,
                 cursorColor:
-                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                Storage.instance.isDarkMode ? Colors.white : Colors.black,
                 decoration: InputDecoration(
                   hintText: "Enter your answer",
                   border: InputBorder.none,
@@ -1109,7 +1251,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                           ? Colors.white70
                           : Colors.black26),
                 ),
-                style: Theme.of(context).textTheme.headline5?.copyWith(
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline5
+                    ?.copyWith(
                     color: Storage.instance.isDarkMode
                         ? Colors.white
                         : Colors.black),
@@ -1122,16 +1268,20 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           ),
           Text(
             'Please summarise details of the content which is in '
-            'violation and specify how it is a violation with respect'
-            'to the Code of Ethics. Also, please specify the exact'
-            'section from the Code of Ethics that vou are'
-            'referencing in the violation/complaint.',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black54,
-                  // fontWeight: FontWeight.bold,
-                ),
+                'violation and specify how it is a violation with respect'
+                'to the Code of Ethics. Also, please specify the exact'
+                'section from the Code of Ethics that vou are'
+                'referencing in the violation/complaint.',
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black54,
+              // fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.5.h,
@@ -1141,8 +1291,8 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
             padding: EdgeInsets.symmetric(horizontal: 2.w),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(
-                      5.0) //                 <--- border radius here
-                  ),
+                  5.0) //                 <--- border radius here
+              ),
               border: Border.all(
                   width: 1, //                   <--- border width here
                   color: Storage.instance.isDarkMode
@@ -1158,7 +1308,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 autofocus: true,
                 maxLines: 6,
                 cursorColor:
-                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                Storage.instance.isDarkMode ? Colors.white : Colors.black,
                 decoration: InputDecoration(
                   hintText: "Enter your answer",
                   border: InputBorder.none,
@@ -1167,7 +1317,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                           ? Colors.white70
                           : Colors.black26),
                 ),
-                style: Theme.of(context).textTheme.headline5?.copyWith(
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline5
+                    ?.copyWith(
                     color: Storage.instance.isDarkMode
                         ? Colors.white
                         : Colors.black),
@@ -1180,14 +1334,18 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           ),
           Text(
             'I hereby declare that I am resident of India '
-            'and all the information furnished above is '
-            'true, complete and correct to the best of my '
-            'knowledge and belief.',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color:
-                      Storage.instance.isDarkMode ? Colors.white : Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+                'and all the information furnished above is '
+                'true, complete and correct to the best of my '
+                'knowledge and belief.',
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color:
+              Storage.instance.isDarkMode ? Colors.white : Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.7.h,
@@ -1197,12 +1355,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           ),
           Text(
             'Name',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black54,
-                  // fontWeight: FontWeight.bold,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black54,
+              // fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.5.h,
@@ -1212,8 +1374,8 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
             padding: EdgeInsets.symmetric(horizontal: 2.w),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(
-                      5.0) //                 <--- border radius here
-                  ),
+                  5.0) //                 <--- border radius here
+              ),
               border: Border.all(
                   width: 1, //                   <--- border width here
                   color: Storage.instance.isDarkMode
@@ -1227,7 +1389,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 controller: _name,
                 autofocus: true,
                 cursorColor:
-                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
+                Storage.instance.isDarkMode ? Colors.white : Colors.black,
                 decoration: InputDecoration(
                   hintText: "Full Name",
                   border: InputBorder.none,
@@ -1236,7 +1398,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                           ? Colors.white70
                           : Colors.black26),
                 ),
-                style: Theme.of(context).textTheme.headline5?.copyWith(
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline5
+                    ?.copyWith(
                     color: Storage.instance.isDarkMode
                         ? Colors.white
                         : Colors.black),
@@ -1249,12 +1415,16 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           ),
           Text(
             'Date',
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black54,
-                  // fontWeight: FontWeight.bold,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline5
+                ?.copyWith(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black54,
+              // fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(
             height: 0.7.h,
@@ -1267,18 +1437,22 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                 firstDate: DateTime(year),
                 lastDate: DateTime(max),
                 dateFormat: "dd-MMMM-yyyy",
-                itemTextStyle: Theme.of(context).textTheme.headline6?.copyWith(
-                      color: Constance.primaryColor,
-                      // fontSize: 1.6.h,
-                      fontWeight: FontWeight.bold,
-                    ),
+                itemTextStyle: Theme
+                    .of(context)
+                    .textTheme
+                    .headline6
+                    ?.copyWith(
+                  color: Constance.primaryColor,
+                  // fontSize: 1.6.h,
+                  fontWeight: FontWeight.bold,
+                ),
                 locale: DateTimePickerLocale.en_us,
                 looping: true,
               );
               if (datePicked != null) {
                 setState(() {
                   date =
-                      "${datePicked?.day}-${datePicked?.month}-${datePicked?.year}";
+                  "${datePicked?.day}-${datePicked?.month}-${datePicked?.year}";
                 });
               }
             },
@@ -1300,14 +1474,18 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                         Text(
                           date == '' ? '' : '${date.split('-')[0]}',
                           style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    // fontSize: 2.h,
-                                    fontSize: 11.sp,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                          Theme
+                              .of(context)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                            // fontSize: 2.h,
+                            fontSize: 11.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
                         ),
                         SizedBox(
                           width: 2.w,
@@ -1348,14 +1526,18 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                         Text(
                           date == '' ? '' : '${date.split('-')[1]}',
                           style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    // fontSize: 2.h,
-                                    fontSize: 11.sp,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                          Theme
+                              .of(context)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                            // fontSize: 2.h,
+                            fontSize: 11.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
                         ),
                         SizedBox(
                           width: 2.w,
@@ -1396,14 +1578,18 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                         Text(
                           date == '' ? '' : '${date.split('-')[2]}',
                           style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    // fontSize: 2.h,
-                                    fontSize: 11.sp,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                          Theme
+                              .of(context)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                            // fontSize: 2.h,
+                            fontSize: 11.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
                         ),
                         SizedBox(
                           width: 2.w,
@@ -1461,18 +1647,26 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
               text: TextSpan(
                 // Note: Styles for TextSpans must be explicitly defined.
                 // Child text spans will inherit styles from parent
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Constance.thirdColor,
-                      // fontWeight: FontWeight.bold,
-                    ),
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline5
+                    ?.copyWith(
+                  color: Constance.thirdColor,
+                  // fontWeight: FontWeight.bold,
+                ),
                 children: <TextSpan>[
                   const TextSpan(text: 'G Plus is a member of '),
                   TextSpan(
                     text: 'DIGIPUB News India Foundation',
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.thirdColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline5
+                        ?.copyWith(
+                      color: Constance.thirdColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const TextSpan(
                     text: '. If a complainant is dissatisfied with our '
@@ -1481,10 +1675,14 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
                   ),
                   TextSpan(
                     text: 'selfregulatorybody@digipubindia.in',
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Constance.thirdColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline5
+                        ?.copyWith(
+                      color: Constance.thirdColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -1550,7 +1748,11 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
   }
 
   Future<void> _launchUrl(_url) async {
-    if (!await launchUrl(_url)) {
+    if (await canLaunchUrl(
+      _url,
+    )) {
+      await launchUrl(_url, mode: LaunchMode.externalApplication);
+    } else {
       throw 'Could not launch $_url';
     }
   }

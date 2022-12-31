@@ -1771,9 +1771,23 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
         });
   }
 
-  Future<void> _launchUrl(_url) async {
-    if (!await launchUrl(_url)) {
-      throw 'Could not launch $_url';
+  Future<void> _launchUrl(url) async {
+    // if (!await launchUrl(_url)) {
+    //   throw 'Could not launch $_url';
+    // }
+    try {
+      bool launched = await launchUrl(url, mode: LaunchMode.externalNonBrowserApplication
+          ); // Launch the app if installed!
+
+      if (!launched) {
+        launchUrl(url); // Launch web view if app is not installed!
+      }
+    } catch (e) {
+      launchUrl(url); // Launch web view if app is not installed!
     }
   }
+
+  Future<void> _launchSocialMediaAppIfInstalled({
+    required String url,
+  }) async {}
 }

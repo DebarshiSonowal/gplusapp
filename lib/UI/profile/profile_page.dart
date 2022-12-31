@@ -44,11 +44,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
-                        height: 3.h,
+                        height: 2.h,
                       ),
                       ((data.profile?.is_plan_active ?? false) &&
                               data.memberships.isNotEmpty)
                           ? ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: data.memberships.length,
                               itemBuilder: (cont, count) {
@@ -84,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         Row(
                                           children: [
                                             Text(
-                                              'Rs ${current.base_price ?? '999'}/',
+                                              'Rs ${current.base_price ?? '999'}',
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline1
@@ -93,17 +94,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                             ),
-                                            Text(
-                                              current.duration?.split(' ')[1] ??
-                                                  "month",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline4
-                                                  ?.copyWith(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
+                                            // Text(
+                                            //   current.duration?.split(' ')[1] ??
+                                            //       "month",
+                                            //   style: Theme.of(context)
+                                            //       .textTheme
+                                            //       .headline4
+                                            //       ?.copyWith(
+                                            //         color: Colors.white,
+                                            //         fontWeight: FontWeight.bold,
+                                            //       ),
+                                            // ),
                                           ],
                                         ),
                                         SizedBox(
@@ -183,7 +184,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                       SizedBox(
-                        height: 20.h,
+                        height: 10.h,
                       ),
                     ],
                   ),

@@ -2066,7 +2066,7 @@ class ApiProvider {
   }
 
   Future<GenericResponse> verifyPayment(
-      order_code, razorpay_payment_id, amount) async {
+      order_code, razorpay_payment_id, amount, payment_data) async {
     var url = "${baseUrl}/app/order/verify-payment";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -2077,10 +2077,34 @@ class ApiProvider {
     });
     dio = Dio(option);
     debugPrint(url.toString());
+    var exactData = {
+      'name_on_card': "${payment_data['name_on_card']}",
+      'txnid': "${payment_data['txnid']}",
+      'easepayid': "${payment_data['easepayid']}",
+      'addedon': "${payment_data['addedon']}",
+      'udf1': "${payment_data['udf1']}",
+      'udf2': "${payment_data['udf2']}",
+      'udf3': "${payment_data['udf3']}",
+      'amount': "${payment_data['amount']}",
+      'phone': "${payment_data['phone']}",
+      'email': "${payment_data['email']}",
+    };
+    debugPrint(jsonEncode(exactData));
     var data = {
       'order_code': order_code,
       'razorpay_payment_id': razorpay_payment_id,
       'amount': amount,
+      // 'payment_data':exactData,
+      'name_on_card': "${payment_data['name_on_card']}",
+      'txnid': "${payment_data['txnid']}",
+      'easepayid': "${payment_data['easepayid']}",
+      'addedon': "${payment_data['addedon']}",
+      'udf1': "${payment_data['udf1']}",
+      'udf2': "${payment_data['udf2']}",
+      'udf3': "${payment_data['udf3']}",
+      'amount': "${payment_data['amount']}",
+      'phone': "${payment_data['phone']}",
+      'email': "${payment_data['email']}",
     };
     debugPrint(jsonEncode(data));
 
@@ -3268,7 +3292,7 @@ class ApiProvider {
   }
 
   Future<CreateOrderResponse> createOrder(
-      subscription_id, use_referral_point) async {
+      subscription_id, use_referral_point, name, email, phone) async {
     var url = "${baseUrl}/app/order/subscription";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -3282,10 +3306,13 @@ class ApiProvider {
     var data = {
       'subscription_id': subscription_id,
       'use_referral_point': use_referral_point,
+      'payment_name': name,
+      'payment_email': email,
+      'payment_mobile': phone
     };
     //attachment_list[0][file_data]
     //attachment_list[0][file_type]
-    // debugPrint(jsonEncode(data));
+    debugPrint(jsonEncode(data));
 
     try {
       Response? response = await dio?.post(
@@ -3297,7 +3324,7 @@ class ApiProvider {
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return CreateOrderResponse.fromJson(response?.data);
       } else {
-        debugPrint("CreateOrderResponse error: ${response?.data}");
+        debugPrint("CreateOrderResponse1 error: ${response?.data}");
         return CreateOrderResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
@@ -3306,7 +3333,7 @@ class ApiProvider {
         Navigation.instance.navigateAndRemoveUntil('/login');
         showError("Oops! Your session expired. Please Login Again");
       }
-      debugPrint("CreateOrderResponse error: ${e.response}");
+      debugPrint("CreateOrderResponse2 error: ${e.response} ${e.message}");
       return CreateOrderResponse.withError(e.message);
     }
   }

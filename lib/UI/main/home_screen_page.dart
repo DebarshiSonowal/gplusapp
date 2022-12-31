@@ -98,7 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     });
-
   }
 
   void _onRefresh() async {
@@ -263,7 +262,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   });
                                 });
                               },
-
                             )
                           : Container(),
                       data.profile?.is_plan_active ?? false

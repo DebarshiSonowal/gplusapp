@@ -49,8 +49,12 @@ class _NotificationPageState extends State<NotificationPage> {
                     var current = data.notifications[count];
                     return GestureDetector(
                       onTap: () {
-                        setRead(current.id, current.seo_name,
-                            current.seo_name_category);
+                        setRead(
+                            current.id,
+                            current.seo_name,
+                            current.seo_name_category,
+                            current.vendor_id,
+                            current.type);
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -69,7 +73,7 @@ class _NotificationPageState extends State<NotificationPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '${current.title}',
+                              current.title ?? "",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                               style: Theme.of(Navigation
@@ -85,11 +89,27 @@ class _NotificationPageState extends State<NotificationPage> {
                             Row(
                               children: [
                                 // Icon(current.icon,color: Constance.primaryColor,),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    color: Constance.primaryColor,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20),
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: 0.9.w,vertical: 0.9.h),
+                                  child: Image.asset(
+                                    getIcon(current.type ?? "news"),
+                                    height: 2.5.h,
+                                    width: 6.w,
+                                    fit: BoxFit.fill,
+                                    color: Colors.white,
+                                  ),
+                                ),
                                 SizedBox(
                                   width: 2.w,
                                 ),
                                 Text(
-                                  current.author_name ?? "G Plus",
+                                  getName(current.type ?? "news"),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: Theme.of(Navigation.instance
@@ -135,7 +155,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   },
                 )
               : Lottie.asset(
-                  isEmpty?Constance.noDataLoader:Constance.searchingIcon,
+                  isEmpty ? Constance.noDataLoader : Constance.searchingIcon,
                 ),
         );
       }),
@@ -180,7 +200,7 @@ class _NotificationPageState extends State<NotificationPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
           },
           icon: Icon(Icons.search),
         ),
@@ -188,14 +208,77 @@ class _NotificationPageState extends State<NotificationPage> {
     );
   }
 
-  void setRead(String? id, seo_name, category_name) async {
+  void setRead(String? id, seo_name, category_name, vendor_id, type) async {
     final response = await ApiProvider.instance.notificationRead(id);
     if (response.success ?? false) {
       fetchNotification();
-      Navigation.instance
-          .navigate('/story', args: '${seo_name},${category_name}');
+      sendToDestination(seo_name, category_name, type, id, vendor_id);
+      // Navigation.instance
+      //     .navigate('/story', args: '${category_name},${seo_name}');
     } else {
       showError(response.message ?? "Something went wrong");
+    }
+  }
+
+  void sendToDestination(seo_name, category_name, type, id, vendor_id) async {
+    //News Notifications ( On all and selected News)
+    //
+    // Any Notifications to be sent from dashboard:- ( Example Earthquake)
+    //
+    // Ghy connect :- Status of Post Notifications and Comments Notification
+    //
+    // Citizen Journalist ( Post Status Notification)
+    //
+    // Big Deal offers Notifications- Based on locality / Locations on that area automatically
+    // Or Any Notification of any vendor which can be send from backend  dashboard to promote their business and offers)
+    //
+    // Classifieds Ads:- Post accept Reject Status
+    //
+    // Also Locality Notifications
+    switch (type) {
+      case "news":
+        Navigation.instance
+            .navigate('/story', args: '${category_name},${seo_name}');
+        break;
+      case "ghy_connect":
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext!,
+                listen: false)
+            .setCurrent(2);
+        Navigation.instance.navigate('/guwahatiConnects');
+
+        break;
+      case "citizen_journalist":
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext!,
+                listen: false)
+            .setCurrent(3);
+        Navigation.instance.navigate('/citizenJournalist');
+        break;
+      case "deals":
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext!,
+                listen: false)
+            .setCurrent(1);
+        Navigation.instance.navigate('/bigdealpage');
+        Navigation.instance
+            .navigate('/categorySelect', args: int.parse(vendor_id));
+        break;
+      case "classified":
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext!,
+                listen: false)
+            .setCurrent(4);
+        Navigation.instance.navigate('/classified');
+        Navigation.instance.navigate('/classifiedDetails', args: int.parse(id));
+        break;
+      case "locality":
+        Navigation.instance
+            .navigate('/story', args: '${category_name},${seo_name}');
+        break;
+
+      default:
+        break;
     }
   }
 
@@ -224,5 +307,42 @@ class _NotificationPageState extends State<NotificationPage> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  String getIcon(type) {
+    switch (type) {
+      case "news":
+        return Constance.newsIcon;
+      case "notification_news":
+        return Constance.newsIcon;
+      case "ghy_connect":
+        return Constance.connectIcon;
+      case "deals":
+        return Constance.bigDealIcon;
+      case "classified":
+        return Constance.classifiedIcon;
+      case "alert":
+        return Constance.warningIcon;
+      default:
+        return Constance.logoIcon;
+    }
+  }
+  String getName(type) {
+    switch (type) {
+      case "news":
+        return "News";
+      case "notification_news":
+        return "News Notification";
+      case "ghy_connect":
+        return "Guwahati Connect";
+      case "deals":
+        return "Big Deals";
+      case "classified":
+        return "Classified";
+      case "alert":
+        return "Alert";
+      default:
+        return "";
+    }
   }
 }

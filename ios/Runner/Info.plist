@@ -2,6 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tez</string>
+		<string>phonepe</string>
+		<string>paytm</string>
+		<string>gpay</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>We allow users to attach images and videos while posting content as well as reporting as citizen jounalist So we require this permission to enable you to upload images, videos</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
@@ -47,12 +59,12 @@
 	<string>We use your location to give you specific contents. That&apos;s why we require your this permission.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We allow users to attach images and videos while posting content as well as reporting as citizen jounalist So we require this permission to enable you to upload images, videos</string>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
 	</array>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>

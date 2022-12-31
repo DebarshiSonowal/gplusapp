@@ -46,6 +46,7 @@ class CreateOrderResponse {
   bool? success;
   String? message;
   Order? order;
+  String? access_key,environment;
 
   // int? current_page, last_page;
 
@@ -53,6 +54,9 @@ class CreateOrderResponse {
     success = json['success'] ?? false;
     message = json['message'] ?? "Something Went Wrong";
     order = Order.fromJson(json['result']['order']);
+    access_key = json['result']['access_data']??"";
+    environment = json['result']['environment']??"";
+
   }
 
   CreateOrderResponse.withError(msg) {

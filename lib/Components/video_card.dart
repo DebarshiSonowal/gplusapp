@@ -100,7 +100,7 @@ class ImageView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: 13.h,
+          height: 12.4.h,
           width: 35.w,
           child: Stack(
             alignment: Alignment.bottomCenter,

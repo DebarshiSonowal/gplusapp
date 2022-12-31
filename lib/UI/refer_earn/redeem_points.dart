@@ -547,8 +547,8 @@ class _RedeemPointsState extends State<RedeemPoints> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -556,7 +556,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
           },
           icon: Icon(Icons.search),
         ),
@@ -567,33 +567,40 @@ class _RedeemPointsState extends State<RedeemPoints> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero,()=>fetchReferEarn());
+    Future.delayed(Duration.zero, () => fetchReferEarn());
   }
 
-  void redeemByCoin(id) async{
+  void redeemByCoin(id) async {
     Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.createOrder(id, 1);
-    if(response.success??false){
+    final response = await ApiProvider.instance.createOrder(
+        id,
+        1,
+        Provider.of<DataProvider>(context, listen: false).profile?.name!,
+        Provider.of<DataProvider>(context, listen: false).profile?.email!,
+        Provider.of<DataProvider>(context, listen: false).profile?.mobile!);
+    if (response.success ?? false) {
       Navigation.instance.goBack();
       success();
-    }else{
+    } else {
       Navigation.instance.goBack();
       showError("Something went wrong");
     }
   }
+
   void fetchReferEarn() async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getReferAndEarn();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setReferEarn(response.data!);
       Navigation.instance.goBack();
     } else {
       Navigation.instance.goBack();
     }
   }
+
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",
