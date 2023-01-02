@@ -34,7 +34,7 @@ class OpinionSection extends StatelessWidget {
                 fontSize: 16.sp,
                 color: Storage.instance.isDarkMode
                     ? Colors.white
-                    : Constance.fifthColor,
+                    : Constance.primaryColor,
                 fontWeight: FontWeight.bold,
               ),
             ),

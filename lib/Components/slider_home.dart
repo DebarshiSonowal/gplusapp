@@ -106,16 +106,26 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                   return GestureDetector(
                     onTap: () => _controller.animateToPage(index),
                     child: Container(
-                      width: (index <= (data.home_albums.length / 2.toInt()))
-                          ? 2.w
-                          : (index >= (data.home_albums.length - 2))
-                              ? 1.25.w
-                              : 1.65.w,
-                      height: (index <= (data.home_albums.length / 2.toInt()))
-                          ? 2.h
-                          : (index >= (data.home_albums.length - 2))
-                              ? 1.25.w
-                              : 1.65.w,
+                      width:
+                      // (index <= (data.home_albums.length / 2.toInt()))
+                      //     ?
+                      2.w
+                          // :
+                      // (index >= (data.home_albums.length - 2))
+                      //         ? 1.25.w
+                      //         :
+                      // 1.65.w
+                      ,
+                      height:
+                      // (index <= (data.home_albums.length / 2.toInt()))
+                          // ?
+                      2.h
+                          // :
+                      // (index >= (data.home_albums.length - 2))
+                      //         ? 1.25.w
+                      //         :
+                      // 1.65.w
+                      ,
                       margin: const EdgeInsets.symmetric(
                           vertical: 8.0, horizontal: 4.0),
                       decoration: BoxDecoration(

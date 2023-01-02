@@ -31,7 +31,7 @@ class _AuthorPageState extends State<AuthorPage> {
     return Scaffold(
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar(),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           padding: EdgeInsets.symmetric(
@@ -82,7 +82,7 @@ class _AuthorPageState extends State<AuthorPage> {
                           SizedBox(
                             width: 50.w,
                             child: Text(
-                              data.author?.name ?? 'Joan Rivers',
+                              data.author?.name ?? '',
                               style: Theme.of(Navigation
                                       .instance.navigatorKey.currentContext!)
                                   .textTheme
@@ -90,7 +90,7 @@ class _AuthorPageState extends State<AuthorPage> {
                                   ?.copyWith(
                                     color: Storage.instance.isDarkMode
                                         ? Colors.white
-                                        : Colors.black,
+                                        : Constance.primaryColor,
                                     // fontSize: 11.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -227,51 +227,7 @@ class _AuthorPageState extends State<AuthorPage> {
         });
   }
 
-  AppBar buildAppBar() {
-    return AppBar(
-      title: GestureDetector(
-        onTap: () {
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .setCurrent(0);
-          Navigation.instance.navigate('/main');
-        },
-        child: Image.asset(
-          Constance.logoIcon,
-          fit: BoxFit.fill,
-          scale: 2,
-        ),
-      ),
-      centerTitle: true,
-      backgroundColor: Constance.primaryColor,
-      actions: [
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/notification');
-          },
-          icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return Badge(
-              badgeColor: Constance.secondaryColor,
-              badgeContent: Text(
-                '${data.notifications.length}',
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Constance.thirdColor,
-                    ),
-              ),
-              child: const Icon(Icons.notifications),
-            );
-          }),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/search', args: "");
-          },
-          icon: Icon(Icons.search),
-        ),
-      ],
-    );
-  }
+
 
   Future<void> _launchUrl(_url) async {
     if (!await launchUrl(_url, mode: LaunchMode.inAppWebView)) {

@@ -86,7 +86,7 @@ class _VideoReportState extends State<VideoReport> {
     return Scaffold(
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar(),
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
         enablePullDown: true,
@@ -324,51 +324,7 @@ class _VideoReportState extends State<VideoReport> {
     );
   }
 
-  AppBar buildAppBar() {
-    return AppBar(
-      title: GestureDetector(
-        onTap: () {
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .setCurrent(0);
-          Navigation.instance.navigate('/main');
-        },
-        child: Image.asset(
-          Constance.logoIcon,
-          fit: BoxFit.fill,
-          scale: 2,
-        ),
-      ),
-      centerTitle: true,
-      backgroundColor: Constance.primaryColor,
-      actions: [
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/notification');
-          },
-          icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return Badge(
-              badgeColor: Constance.secondaryColor,
-              badgeContent: Text(
-                '${data.notifications.length}',
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Constance.thirdColor,
-                    ),
-              ),
-              child: const Icon(Icons.notifications),
-            );
-          }),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/search', args: "");
-          },
-          icon: Icon(Icons.search),
-        ),
-      ],
-    );
-  }
+
 
   void showError(String msg) {
     AlertX.instance.showAlert(

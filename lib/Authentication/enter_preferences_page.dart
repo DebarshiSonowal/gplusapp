@@ -33,7 +33,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -226,26 +226,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
         });
   }
 
-  AppBar buildAppBar() {
-    return AppBar(
-      title: GestureDetector(
-        onTap: () {
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .setCurrent(0);
-          Navigation.instance.navigate('/main');
-        },
-        child: Image.asset(
-          Constance.logoIcon,
-          fit: BoxFit.fill,
-          scale: 2,
-        ),
-      ),
-      centerTitle: true,
-      backgroundColor: Constance.primaryColor,
-    );
-  }
+
 
   void signUp() async {
     final reponse = await ApiProvider.instance.createProfile(

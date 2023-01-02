@@ -89,7 +89,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -633,26 +633,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         .hasMatch(email);
   }
 
-  AppBar buildAppBar() {
-    return AppBar(
-      title: GestureDetector(
-        onTap: (){
-          Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-              .setCurrent(0);
-          Navigation.instance.navigate('/main');
-        },
-        child: Image.asset(
-          Constance.logoIcon,
-          fit: BoxFit.fill,
-          scale: 2,
-        ),
-      ),
-      centerTitle: true,
-      backgroundColor: Constance.primaryColor,
-    );
-  }
+
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;

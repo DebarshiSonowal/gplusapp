@@ -109,44 +109,82 @@ class OpionionPageItem extends StatelessWidget {
                   SizedBox(
                     height: 1.h,
                   ),
-                  Text(
-                    Jiffy(
-                        item.publish_date
-                            ?.split(" ")[0],
-                        "yyyy-MM-dd")
-                        .format("dd MMM,yyyy"),
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(
-                        color: Storage.instance
-                            .isDarkMode
-                            ? Colors.white
-                            : Colors.black),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      Text(
+                        Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                            .format("dd MMM,yyyy"),
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black54),
+                      ),
+                    ],
                   ),
                   SizedBox(
-                    height: 1.h,
+                    height: 0.5.h,
                   ),
-                  Text(
-                    item.user?.name ??
-                        "G Plus News",
-                    style: Theme.of(Navigation
-                        .instance
-                        .navigatorKey
-                        .currentContext!)
-                        .textTheme
-                        .headline5
-                        ?.copyWith(
-                      color: Storage.instance
-                          .isDarkMode
-                          ? Colors.white
-                          : Constance
-                          .fifthColor,
-                      // fontSize: 2.2.h,
-                      // fontWeight:
-                      // FontWeight.bold,
-                    ),
+                  Row(
+                    children: [
+                      Image.asset(
+                        Constance.authorIcon,
+                        color: Constance.secondaryColor,
+                        // size: 8.sp,
+                        scale: 37,
+                      ),
+                      SizedBox(
+                        width: 1.w,
+                      ),
+                      Text(
+                        item.user?.name ?? "",
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black54),
+                      ),
+                    ],
                   ),
+                  // Text(
+                  //   Jiffy(
+                  //       item.publish_date
+                  //           ?.split(" ")[0],
+                  //       "yyyy-MM-dd")
+                  //       .format("dd MMM,yyyy"),
+                  //   style: Theme.of(context)
+                  //       .textTheme
+                  //       .headline6
+                  //       ?.copyWith(
+                  //       color: Storage.instance
+                  //           .isDarkMode
+                  //           ? Colors.white
+                  //           : Colors.black),
+                  // ),
+                  // SizedBox(
+                  //   height: 1.h,
+                  // ),
+                  // Text(
+                  //   item.user?.name ??
+                  //       "G Plus News",
+                  //   style: Theme.of(Navigation
+                  //       .instance
+                  //       .navigatorKey
+                  //       .currentContext!)
+                  //       .textTheme
+                  //       .headline5
+                  //       ?.copyWith(
+                  //     color: Storage.instance
+                  //         .isDarkMode
+                  //         ? Colors.white
+                  //         : Constance
+                  //         .fifthColor,
+                  //     // fontSize: 2.2.h,
+                  //     // fontWeight:
+                  //     // FontWeight.bold,
+                  //   ),
+                  // ),
                 ],
               ),
             ),

@@ -52,7 +52,7 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar(),
       // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -66,12 +66,13 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5.w),
                 child: Text(
-                  'Submitted a story',
+                  'Submitted A Story',
                   style: Theme.of(context).textTheme.headline2?.copyWith(
-                      color: Storage.instance.isDarkMode
-                          ? Colors.white
-                          : Constance.primaryColor,
-                      fontWeight: FontWeight.bold),
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Constance.primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ),
               SizedBox(
@@ -150,9 +151,13 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                       : GestureDetector(
                           onTap: () {
                             print(images[pos].file_type);
-                            if (images[pos].file_type.toString().split('/')[0]=="image") {
+                            if (images[pos]
+                                    .file_type
+                                    .toString()
+                                    .split('/')[0] ==
+                                "image") {
                               Navigation.instance.navigate('/viewImage',
-                                                              args: images[pos].file_name);
+                                  args: images[pos].file_name);
                             } else {
                               // Navigation.instance.navigate('/viewVideo',
                               //     args: images[pos].file_name);
@@ -166,7 +171,7 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                               child: Image.network(
                                 images[pos].file_name ?? "",
                                 fit: BoxFit.fill,
-                                errorBuilder: (err,cont,st){
+                                errorBuilder: (err, cont, st) {
                                   return Image.asset(Constance.logoIcon);
                                 },
                               ),
@@ -198,51 +203,51 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
     );
   }
 
-  AppBar buildAppBar() {
-    return AppBar(
-      title: GestureDetector(
-        onTap: () {
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .setCurrent(0);
-          Navigation.instance.navigate('/main');
-        },
-        child: Image.asset(
-          Constance.logoIcon,
-          fit: BoxFit.fill,
-          scale: 2,
-        ),
-      ),
-      centerTitle: true,
-      backgroundColor: Constance.primaryColor,
-      actions: [
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/notification');
-          },
-          icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return Badge(
-              badgeColor: Constance.secondaryColor,
-              badgeContent: Text(
-                '${data.notifications.length}',
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
-              ),
-              child: const Icon(Icons.notifications),
-            );
-          }),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
-          },
-          icon: Icon(Icons.search),
-        ),
-      ],
-    );
-  }
+  // AppBar buildAppBar() {
+  //   return AppBar(
+  //     title: GestureDetector(
+  //       onTap: () {
+  //         Provider.of<DataProvider>(
+  //                 Navigation.instance.navigatorKey.currentContext ?? context,
+  //                 listen: false)
+  //             .setCurrent(0);
+  //         Navigation.instance.navigate('/main');
+  //       },
+  //       child: Image.asset(
+  //         Constance.logoIcon,
+  //         fit: BoxFit.fill,
+  //         scale: 2,
+  //       ),
+  //     ),
+  //     centerTitle: true,
+  //     backgroundColor: Constance.primaryColor,
+  //     actions: [
+  //       IconButton(
+  //         onPressed: () {
+  //           Navigation.instance.navigate('/notification');
+  //         },
+  //         icon: Consumer<DataProvider>(builder: (context, data, _) {
+  //           return Badge(
+  //             badgeColor: Constance.secondaryColor,
+  //             badgeContent: Text(
+  //               '${data.notifications.length}',
+  //               style: Theme.of(context).textTheme.headline6?.copyWith(
+  //                     color: Constance.thirdColor,
+  //                   ),
+  //             ),
+  //             child: const Icon(Icons.notifications),
+  //           );
+  //         }),
+  //       ),
+  //       IconButton(
+  //         onPressed: () {
+  //           Navigation.instance.navigate('/search', args: "");
+  //         },
+  //         icon: Icon(Icons.search),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {

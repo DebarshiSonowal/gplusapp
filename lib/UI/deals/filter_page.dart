@@ -40,7 +40,7 @@ class _FilterPageState extends State<FilterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -204,42 +204,6 @@ class _FilterPageState extends State<FilterPage> {
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
 
-  AppBar buildAppBar() {
-    return AppBar(
-      title: Text(
-        'Back',
-        style: Theme.of(context)
-            .textTheme
-            .headline5
-            ?.copyWith(color: Colors.white),
-      ),
-      centerTitle: false,
-      backgroundColor: Constance.primaryColor,
-      actions: [
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _map.clear();
-              Storage.instance.setFilter('');
-            });
-            Navigator.pop(context, '');
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: Center(
-              child: Text(
-                'Clear Filters',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline5
-                    ?.copyWith(color: Colors.white),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
   fetchLocality() async {
     Navigation.instance.navigate('/loadingDialog');

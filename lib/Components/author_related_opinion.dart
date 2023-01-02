@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:sizer/sizer.dart';
 
@@ -37,7 +38,7 @@ class AuthorRelatedOpinions extends StatelessWidget {
                   child: Text(
                     'Opinions',
                     style: Theme.of(context).textTheme.headline3?.copyWith(
-                          color: Colors.black,
+                          color: Constance.primaryColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 16.sp,
                         ),
@@ -79,14 +80,32 @@ class AuthorRelatedOpinions extends StatelessWidget {
                 opinions.length>4?Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CustomButton(
-                        txt: 'Load More',
-                        onTap: () {
-                          opinions.removeRange(0, 4);
-                          updateState();
-                          // page++;
-                          // fetchMoreData();
-                        }),
+                    GestureDetector(
+                      onTap: (){
+
+                        updateState();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Text(
+                          'Read More',
+                          style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Constance.primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // CustomButton(
+                    //     txt: 'Load More',
+                    //     onTap: () {
+                    //       opinions.removeRange(0, 4);
+                    //       updateState();
+                    //       // page++;
+                    //       // fetchMoreData();
+                    //     }),
                   ],
                 ):Container(),
               ],

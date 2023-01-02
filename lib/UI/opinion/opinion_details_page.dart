@@ -56,7 +56,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

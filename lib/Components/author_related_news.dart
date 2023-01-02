@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Components/toppicks_card.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:sizer/sizer.dart';
@@ -41,7 +42,7 @@ class AuthorRelatedNews extends StatelessWidget {
                   child: Text(
                     'Articles',
                     style: Theme.of(context).textTheme.headline3?.copyWith(
-                          color: Colors.black,
+                          color: Constance.primaryColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 16.sp,
                         ),
@@ -57,7 +58,7 @@ class AuthorRelatedNews extends StatelessWidget {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
-                    itemCount: news.length > 4 ? 4 : news.length,
+                    itemCount: news.length > currentCount ? currentCount : news.length,
                     itemBuilder: (cont, count) {
                       var item = news[count];
                       return GestureDetector(
@@ -157,23 +158,61 @@ class AuthorRelatedNews extends StatelessWidget {
                                       // SizedBox(
                                       //   height: 1.5.h,
                                       // ),
-                                      Text(
-                                        Jiffy(item.publish_date, "yyyy-MM-dd")
-                                            .format("dd MMM,yyyy"),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6
-                                            ?.copyWith(color: Colors.black87),
+                                      // Text(
+                                      //   Jiffy(item.publish_date, "yyyy-MM-dd")
+                                      //       .format("dd MMM,yyyy"),
+                                      //   style: Theme.of(context)
+                                      //       .textTheme
+                                      //       .headline6
+                                      //       ?.copyWith(color: Colors.black87),
+                                      // ),
+                                      // SizedBox(
+                                      //   height: 1.h,
+                                      // ),
+                                      // Text(
+                                      //   item.author_name ?? "",
+                                      //   style: Theme.of(context)
+                                      //       .textTheme
+                                      //       .headline6
+                                      //       ?.copyWith(color: Colors.black87),
+                                      // ),
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 4.w,
+                                          ),
+                                          Text(
+                                            Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                                                .format("dd MMM,yyyy"),
+                                            style: Theme.of(context).textTheme.headline6?.copyWith(
+                                                color: Storage.instance.isDarkMode
+                                                    ? Colors.white
+                                                    : Colors.black54),
+                                          ),
+                                        ],
                                       ),
                                       SizedBox(
-                                        height: 1.h,
+                                        height: 0.5.h,
                                       ),
-                                      Text(
-                                        item.author_name ?? "",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6
-                                            ?.copyWith(color: Colors.black87),
+                                      Row(
+                                        children: [
+                                          Image.asset(
+                                            Constance.authorIcon,
+                                            color: Constance.secondaryColor,
+                                            // size: 8.sp,
+                                            scale: 37,
+                                          ),
+                                          SizedBox(
+                                            width: 1.w,
+                                          ),
+                                          Text(
+                                            item.author_name ?? "",
+                                            style: Theme.of(context).textTheme.headline6?.copyWith(
+                                                color: Storage.instance.isDarkMode
+                                                    ? Colors.white
+                                                    : Colors.black54),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -191,18 +230,40 @@ class AuthorRelatedNews extends StatelessWidget {
                     },
                   ),
                 ),
-                news.length>4?Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                SizedBox(
+                  height: 1.h,
+                ),
+                news.length>currentCount?Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    CustomButton(
-                        txt: 'Load More',
-                        onTap: () {
-                          // currentCount+=4;
-                          news.removeRange(0, 4);
-                          updateState();
-                          // page++;
-                          // fetchMoreData();
-                        }),
+                    GestureDetector(
+                      onTap: (){
+                        // news.removeRange(0, 4);
+                        currentCount=currentCount*4;
+                        updateState();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Text(
+                          'Read More',
+                          style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Constance.primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // CustomButton(
+                    //     txt: 'Read More',
+                    //     onTap: () {
+                    //       // currentCount+=4;
+                    //       news.removeRange(0, 4);
+                    //       updateState();
+                    //       // page++;
+                    //       // fetchMoreData();
+                    //     }),
                   ],
                 ):Container(),
               ],

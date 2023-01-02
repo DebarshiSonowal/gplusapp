@@ -25,6 +25,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../Components/alert.dart';
 import '../../Components/suggestion_card.dart';
+import '../../Components/suggestion_list_view.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
@@ -70,7 +71,7 @@ class _StoryPageState extends State<StoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar2(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -103,28 +104,30 @@ class _StoryPageState extends State<StoryPage> {
                           Container(
                             width: double.infinity,
                             decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [Colors.transparent, Colors.black],
-                              ),
+                              // gradient: LinearGradient(
+                              //   begin: Alignment.topCenter,
+                              //   end: Alignment.bottomCenter,
+                              //   colors: [Colors.transparent,Colors.black45, Colors.black],
+                              // ),
+                              color: Colors.black,
                             ),
                             // color: Colors.black.withOpacity(0.5),
                             padding: EdgeInsets.symmetric(
-                                vertical: 1.h, horizontal: 4.w),
+                                vertical: 0.5.h, horizontal: 4.w),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  data.selectedArticle?.image_caption ?? '',
+                                  'Image Caption: ${data.selectedArticle?.image_caption ?? ''}',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .headline4
+                                      .headline6
                                       ?.copyWith(
-                                        color: Colors.grey.shade200,
+                                        color: Colors.white,
                                         // fontSize: 25.sp,
-                                        fontWeight: FontWeight.bold,
+                                        // fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic,
                                       ),
                                 ),
                                 // Text(
@@ -245,116 +248,105 @@ class _StoryPageState extends State<StoryPage> {
                               height: 1.h,
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      postLike(data.selectedArticle?.id, 1);
-                                      setState(() {
-                                        like = !like;
-                                        if (dislike) {
-                                          dislike = !like;
-                                        }
-                                      });
-                                    },
-                                    splashRadius: 10.0,
-                                    splashColor: !like
+                                IconButton(
+                                  onPressed: () {
+                                    postLike(data.selectedArticle?.id, 1);
+                                    setState(() {
+                                      like = !like;
+                                      if (dislike) {
+                                        dislike = !like;
+                                      }
+                                    });
+                                  },
+                                  splashRadius: 10.0,
+                                  splashColor: !like
+                                      ? Constance.secondaryColor
+                                      : Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                  icon: Icon(
+                                    Icons.thumb_up,
+                                    // size: 16.sp,
+                                    color: like
                                         ? Constance.secondaryColor
                                         : Storage.instance.isDarkMode
                                             ? Colors.white
                                             : Constance.primaryColor,
-                                    icon: Icon(
-                                      Icons.thumb_up,
-                                      color: like
-                                          ? Constance.secondaryColor
-                                          : Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Constance.primaryColor,
-                                    ),
                                   ),
                                 ),
                                 // SizedBox(
                                 //   width: 0.w,
                                 // ),
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      postLike(data.selectedArticle?.id, 0);
-                                      setState(() {
-                                        dislike = !dislike;
-                                        if (like) {
-                                          like = !dislike;
-                                        }
-                                      });
-                                    },
-                                    splashRadius: 10.0,
-                                    splashColor: !dislike
+                                IconButton(
+                                  onPressed: () {
+                                    postLike(data.selectedArticle?.id, 0);
+                                    setState(() {
+                                      dislike = !dislike;
+                                      if (like) {
+                                        like = !dislike;
+                                      }
+                                    });
+                                  },
+                                  splashRadius: 10.0,
+                                  splashColor: !dislike
+                                      ? Constance.secondaryColor
+                                      : Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                  icon: Icon(
+                                    Icons.thumb_down,
+                                    color: dislike
                                         ? Constance.secondaryColor
                                         : Storage.instance.isDarkMode
                                             ? Colors.white
                                             : Constance.primaryColor,
-                                    icon: Icon(
-                                      Icons.thumb_down,
-                                      color: dislike
-                                          ? Constance.secondaryColor
-                                          : Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Constance.primaryColor,
-                                    ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 2.w,
-                                ),
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      addBookmark(
-                                          data.selectedArticle?.id, 'news');
-                                      setState(() {
-                                        is_bookmark = !is_bookmark;
-                                      });
-                                    },
-                                    splashRadius: 20.0,
-                                    splashColor: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Constance.secondaryColor,
-                                    icon: Icon(
-                                      Icons.bookmark,
-                                      color: is_bookmark
-                                          ? Constance.secondaryColor
-                                          : Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Constance.primaryColor,
-                                    ),
+                                // SizedBox(
+                                //   width: 2.w,
+                                // ),
+                                IconButton(
+                                  onPressed: () {
+                                    addBookmark(
+                                        data.selectedArticle?.id, 'news');
+                                    setState(() {
+                                      is_bookmark = !is_bookmark;
+                                    });
+                                  },
+                                  splashRadius: 20.0,
+                                  splashColor: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Constance.secondaryColor,
+                                  icon: Icon(
+                                    Icons.bookmark,
+                                    color: is_bookmark
+                                        ? Constance.secondaryColor
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 2.w,
-                                ),
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Share.share(data
-                                                  .selectedArticle?.web_url ==
-                                              ""
-                                          ? 'check out our website https://guwahatiplus.com/'
-                                          : '${data.selectedArticle?.web_url}');
-                                    },
-                                    splashRadius: 20.0,
-                                    splashColor: Storage.instance.isDarkMode
+                                // SizedBox(
+                                //   width: 2.w,
+                                // ),
+                                IconButton(
+                                  onPressed: () {
+                                    Share.share(data.selectedArticle?.web_url ==
+                                            ""
+                                        ? 'check out our website https://guwahatiplus.com/'
+                                        : '${data.selectedArticle?.web_url}');
+                                  },
+                                  splashRadius: 20.0,
+                                  splashColor: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Constance.secondaryColor,
+                                  icon: Icon(
+                                    Icons.share,
+                                    color: Storage.instance.isDarkMode
                                         ? Colors.white
-                                        : Constance.secondaryColor,
-                                    icon: Icon(
-                                      Icons.share,
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Constance.primaryColor,
-                                    ),
+                                        : Constance.primaryColor,
                                   ),
                                 ),
                               ],
@@ -376,7 +368,6 @@ class _StoryPageState extends State<StoryPage> {
                                   );
                                 },
                                 "iframe": (context, child) {
-
                                   return YoutubePlayer(
                                     // controller: _controller = YoutubePlayerController(
                                     //   initialVideoId: current.youtube_id!,
@@ -558,65 +549,7 @@ class _StoryPageState extends State<StoryPage> {
                             SizedBox(
                               height: 1.5.h,
                             ),
-                            data.ads.isNotEmpty
-                                ? Row(
-                                    children: [
-                                      Container(
-                                        color: Constance.secondaryColor,
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 0.2.h, horizontal: 1.w),
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 2.w),
-                                        child: Text(
-                                          'Ad',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline3
-                                              ?.copyWith(
-                                                fontSize: 9.sp,
-                                                color: Colors.white,
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Container(),
-                            data.ads.isNotEmpty
-                                ? SizedBox(
-                                    // height: 10.h,
-                                    width: double.infinity,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        _launchUrl(Uri.parse(
-                                            data.ads[random].link.toString()));
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 2.w,
-                                        ),
-                                        child: CachedNetworkImage(
-                                          fit: BoxFit.fill,
-                                          imageUrl: data.ads[random]
-                                                  .image_file_name ??
-                                              '',
-                                          placeholder: (cont, _) {
-                                            return Image.asset(
-                                              Constance.logoIcon,
-                                              // color: Colors.black,
-                                            );
-                                          },
-                                          errorWidget: (cont, _, e) {
-                                            return Image.network(
-                                              Constance.defaultImage,
-                                              fit: BoxFit.fitWidth,
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : Container(),
+
                             // SizedBox(
                             //   height: 1.h,
                             // ),
@@ -679,120 +612,170 @@ class _StoryPageState extends State<StoryPage> {
                             // SizedBox(
                             //   height: 1.5.h,
                             // ),
+                            SizedBox(
+                              height: 1.h,
+                            ),
+                            data.ads.isNotEmpty
+                                ? Row(
+                                    children: [
+                                      Container(
+                                        color: Constance.secondaryColor,
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 0.2.h, horizontal: 1.w),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 2.w),
+                                        child: Text(
+                                          'Ad',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline3
+                                              ?.copyWith(
+                                                fontSize: 9.sp,
+                                                color: Colors.white,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
+                            data.ads.isNotEmpty
+                                ? SizedBox(
+                                    // height: 10.h,
+                                    width: double.infinity,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _launchUrl(Uri.parse(
+                                            data.ads[random].link.toString()));
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 2.w,
+                                        ),
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.fill,
+                                          imageUrl: data.ads[random]
+                                                  .image_file_name ??
+                                              '',
+                                          placeholder: (cont, _) {
+                                            return Image.asset(
+                                              Constance.logoIcon,
+                                              // color: Colors.black,
+                                            );
+                                          },
+                                          errorWidget: (cont, _, e) {
+                                            return Image.network(
+                                              Constance.defaultImage,
+                                              fit: BoxFit.fitWidth,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
+                            SizedBox(
+                              height: 0.5.h,
+                            ),
                             Divider(
                               color: Colors.black,
                               thickness: 0.07.h,
                             ),
-                            // SizedBox(
-                            //   height: 1.5.h,
-                            // ),
+
                             Row(
                               children: [
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      postLike(data.selectedArticle?.id, 1);
-                                      setState(() {
-                                        like = !like;
-                                        if (dislike) {
-                                          dislike = !like;
-                                        }
-                                      });
-                                    },
-                                    splashRadius: 20.0,
-                                    splashColor: !like
-                                        ? Constance.secondaryColor
-                                        : Storage.instance.isDarkMode
-                                            ? Colors.white
-                                            : Constance.primaryColor,
-                                    icon: Icon(
-                                      Icons.thumb_up,
-                                      color: like
-                                          ? Constance.secondaryColor
-                                          : Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Constance.primaryColor,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 2.w,
-                                ),
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      postLike(data.selectedArticle?.id, 0);
-                                      setState(() {
-                                        dislike = !dislike;
-                                        if (like) {
-                                          like = !dislike;
-                                        }
-                                      });
-                                    },
-                                    splashRadius: 20.0,
-                                    splashColor: !dislike
-                                        ? Constance.secondaryColor
-                                        : Storage.instance.isDarkMode
-                                            ? Colors.white
-                                            : Constance.primaryColor,
-                                    icon: Icon(
-                                      Icons.thumb_down,
-                                      color: dislike
-                                          ? Constance.secondaryColor
-                                          : Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Constance.primaryColor,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 2.w,
-                                ),
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      addBookmark(
-                                          data.selectedArticle?.id, 'news');
-                                      setState(() {
-                                        is_bookmark = !is_bookmark;
-                                      });
-                                    },
-                                    splashRadius: 20.0,
-                                    splashColor: Constance.secondaryColor,
-                                    icon: Icon(
-                                      Icons.bookmark,
-                                      color: is_bookmark
-                                          ? Constance.secondaryColor
-                                          : Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Constance.primaryColor,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 2.w,
-                                ),
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Share.share(data
-                                                  .selectedArticle?.web_url ==
-                                              ""
-                                          ? 'check out our website https://guwahatiplus.com/'
-                                          : '${data.selectedArticle?.web_url}');
-                                    },
-                                    splashRadius: 20.0,
-                                    splashColor: Constance.secondaryColor,
-                                    icon: Icon(
-                                      Icons.share,
-                                      color: Storage.instance.isDarkMode
+                                IconButton(
+                                  onPressed: () {
+                                    postLike(data.selectedArticle?.id, 1);
+                                    setState(() {
+                                      like = !like;
+                                      if (dislike) {
+                                        dislike = !like;
+                                      }
+                                    });
+                                  },
+                                  splashRadius: 10.0,
+                                  splashColor: !like
+                                      ? Constance.secondaryColor
+                                      : Storage.instance.isDarkMode
                                           ? Colors.white
                                           : Constance.primaryColor,
-                                    ),
+                                  icon: Icon(
+                                    Icons.thumb_up,
+                                    color: like
+                                        ? Constance.secondaryColor
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
+                                  ),
+                                ),
+                                // SizedBox(
+                                //   width: 2.w,
+                                // ),
+                                IconButton(
+                                  onPressed: () {
+                                    postLike(data.selectedArticle?.id, 0);
+                                    setState(() {
+                                      dislike = !dislike;
+                                      if (like) {
+                                        like = !dislike;
+                                      }
+                                    });
+                                  },
+                                  splashRadius: 10.0,
+                                  splashColor: !dislike
+                                      ? Constance.secondaryColor
+                                      : Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                  icon: Icon(
+                                    Icons.thumb_down,
+                                    color: dislike
+                                        ? Constance.secondaryColor
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
+                                  ),
+                                ),
+                                // SizedBox(
+                                //   width: 2.w,
+                                // ),
+                                IconButton(
+                                  onPressed: () {
+                                    addBookmark(
+                                        data.selectedArticle?.id, 'news');
+                                    setState(() {
+                                      is_bookmark = !is_bookmark;
+                                    });
+                                  },
+                                  splashRadius: 10.0,
+                                  splashColor: Constance.secondaryColor,
+                                  icon: Icon(
+                                    Icons.bookmark,
+                                    color: is_bookmark
+                                        ? Constance.secondaryColor
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
+                                  ),
+                                ),
+                                // SizedBox(
+                                //   width: 2.w,
+                                // ),
+                                IconButton(
+                                  onPressed: () {
+                                    Share.share(data.selectedArticle?.web_url ==
+                                            ""
+                                        ? 'check out our website https://guwahatiplus.com/'
+                                        : '${data.selectedArticle?.web_url}');
+                                  },
+                                  splashRadius: 10.0,
+                                  splashColor: Constance.secondaryColor,
+                                  icon: Icon(
+                                    Icons.share,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor,
                                   ),
                                 ),
                               ],
@@ -902,7 +885,10 @@ class _StoryPageState extends State<StoryPage> {
                                 ),
                               ],
                             ),
-                            suggestion_list_view(data, context),
+                            SuggestionListView(
+                              data: data,
+                              dropdownvalue: dropdownvalue,
+                            ),
                             SizedBox(
                               height: 2.h,
                             ),
@@ -929,36 +915,6 @@ class _StoryPageState extends State<StoryPage> {
         }),
       ),
     );
-  }
-
-  ListView suggestion_list_view(DataProvider data, BuildContext context) {
-    return ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        itemBuilder: (cont, count) {
-          var item = data.suggestion[count];
-          if (count != 0) {
-            return SuggestionCard(dropdownvalue: dropdownvalue, item: item);
-          } else {
-            return Container();
-          }
-        },
-        separatorBuilder: (cont, inde) {
-          if (inde == 0) {
-            return Container();
-          } else {
-            return SizedBox(
-              height: 1.h,
-              child: Divider(
-                color:
-                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
-                thickness: 0.3.sp,
-              ),
-            );
-          }
-        },
-        itemCount: data.suggestion.length);
   }
 
   AppBar buildAppBar() {

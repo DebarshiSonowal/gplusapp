@@ -83,23 +83,61 @@ class SuggestionCard extends StatelessWidget {
                     ),
                   ),
 
-                  Text(
-                    Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                        .format("dd MMM,yyyy"),
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black),
+                  // Text(
+                  //   Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                  //       .format("dd MMM,yyyy"),
+                  //   style: Theme.of(context).textTheme.headline6?.copyWith(
+                  //       color: Storage.instance.isDarkMode
+                  //           ? Colors.white
+                  //           : Colors.black),
+                  // ),
+                  // SizedBox(
+                  //   height: 1.h,
+                  // ),
+                  // Text(
+                  //   item.author_name ?? "G Plus News",
+                  //   style: Theme.of(context).textTheme.headline6?.copyWith(
+                  //       color: Storage.instance.isDarkMode
+                  //           ? Colors.white
+                  //           : Colors.black),
+                  // ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      Text(
+                        Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                            .format("dd MMM,yyyy"),
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black54),
+                      ),
+                    ],
                   ),
                   SizedBox(
-                    height: 1.h,
+                    height: 0.5.h,
                   ),
-                  Text(
-                    item.author_name ?? "G Plus News",
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black),
+                  Row(
+                    children: [
+                      Image.asset(
+                        Constance.authorIcon,
+                        color: Constance.secondaryColor,
+                        // size: 8.sp,
+                        scale: 37,
+                      ),
+                      SizedBox(
+                        width: 1.w,
+                      ),
+                      Text(
+                        item.author_name ?? "",
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black54),
+                      ),
+                    ],
                   ),
                 ],
               ),

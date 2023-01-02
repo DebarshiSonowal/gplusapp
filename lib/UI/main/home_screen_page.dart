@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         backgroundColor:
             Storage.instance.isDarkMode ? Colors.black : Colors.grey.shade100,
-        appBar: buildAppBar(),
+        appBar: Constance.buildAppBar(),
         // floatingActionButtonLocation: showing
         //     ? FloatingActionButtonLocation.miniStartFloat
         //     : FloatingActionButtonLocation.miniEndFloat,
@@ -477,51 +477,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  AppBar buildAppBar() {
-    return AppBar(
-      title: GestureDetector(
-        onTap: () {
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .setCurrent(0);
-          Navigation.instance.navigate('/main');
-        },
-        child: Image.asset(
-          Constance.logoIcon,
-          fit: BoxFit.fill,
-          scale: 2,
-        ),
-      ),
-      centerTitle: true,
-      backgroundColor: Constance.primaryColor,
-      actions: [
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/notification');
-          },
-          icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return Badge(
-              badgeColor: Constance.secondaryColor,
-              badgeContent: Text(
-                '${data.notifications.length}',
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Constance.thirdColor,
-                    ),
-              ),
-              child: const Icon(Icons.notifications),
-            );
-          }),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/search', args: "");
-          },
-          icon: const Icon(Icons.search),
-        ),
-      ],
-    );
-  }
+
 
   void fetchOpinion() async {
     final response = await ApiProvider.instance.getLatestOpinion();

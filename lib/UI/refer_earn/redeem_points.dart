@@ -25,7 +25,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
     return Scaffold(
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar(),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           padding: EdgeInsets.symmetric(

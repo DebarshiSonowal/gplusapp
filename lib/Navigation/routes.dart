@@ -263,7 +263,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(0.1, 1.0);
           const end = Offset.zero;
-          const curve = Curves.ease;
+          const curve = Curves.easeIn;
 
           final tween = Tween(begin: begin, end: end);
           final curvedAnimation = CurvedAnimation(

@@ -76,7 +76,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar2(),
       backgroundColor: Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(

@@ -45,7 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -442,57 +442,15 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  AppBar buildAppBar() {
-    return AppBar(
-      title: GestureDetector(
-        onTap: () {
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .setCurrent(0);
-          Navigation.instance.navigate('/main');
-        },
-        child: Image.asset(
-          Constance.logoIcon,
-          fit: BoxFit.fill,
-          scale: 2,
-        ),
-      ),
-      centerTitle: true,
-      backgroundColor: Constance.primaryColor,
-      actions: [
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/notification');
-          },
-          icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return Badge(
-              badgeColor: Constance.secondaryColor,
-              badgeContent: Text(
-                '${data.notifications.length}',
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
-              ),
-              child: const Icon(Icons.notifications),
-            );
-          }),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
-          },
-          icon: const Icon(Icons.search),
-        ),
-      ],
-    );
-  }
+
 
   updateSwitch(val, type) async {
     final response = await ApiProvider.instance.setSwitch(val, type);
     if (response.success ?? false) {
       fetchSwitchStatusAfter();
-
+      if (type=="dark") {
+        Navigation.instance.navigateAndRemoveUntil('/main');
+      }
     } else {
       showError(response.message ?? "Something went wrong");
     }
@@ -547,7 +505,7 @@ class _SettingsPageState extends State<SettingsPage> {
         Storage.instance.setDarkMode(dark_mode);
       });
       Navigation.instance.goBack();
-      Navigation.instance.navigateAndRemoveUntil('/main');
+
     } else {
       Navigation.instance.goBack();
       showError(response.msg ?? "Something went wrong");

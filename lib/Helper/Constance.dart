@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
@@ -102,6 +103,106 @@ class Constance {
     'Ipsum',
     'Lorem',
   ];
+
+  static AppBar buildAppBar() {
+    return AppBar(
+      title: GestureDetector(
+        onTap: () {
+          Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext!,
+                  listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
+      ),
+      centerTitle: true,
+      backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Consumer<DataProvider>(builder: (context, data, _) {
+            return Badge(
+              badgeColor: Constance.secondaryColor,
+              badgeContent: Text(
+                '${data.notifications.length}',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6
+                    ?.copyWith(color: Constance.primaryColor, fontSize: 8.sp),
+              ),
+              child: const Icon(Icons.notifications),
+            );
+          }),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search', args: "");
+          },
+          icon: const Icon(Icons.search),
+        ),
+      ],
+    );
+  }
+
+  static AppBar buildAppBar2() {
+    return AppBar(
+      // leading: IconButton(
+      //   onPressed: () {
+      //     Navigation.instance.navigate('/bergerMenuMem');
+      //   },
+      //   icon: Icon(Icons.menu),
+      // ),
+      title: GestureDetector(
+        onTap: () {
+          Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext!,
+                  listen: false)
+              .setCurrent(0);
+          Navigation.instance.navigate('/main');
+        },
+        child: Image.asset(
+          Constance.logoIcon,
+          fit: BoxFit.fill,
+          scale: 2,
+        ),
+      ),
+      centerTitle: true,
+      backgroundColor: Constance.primaryColor,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/notification');
+          },
+          icon: Consumer<DataProvider>(builder: (context, data, _) {
+            return Badge(
+              badgeColor: Constance.secondaryColor,
+              badgeContent: Text(
+                '${data.notifications.length}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                      color: Constance.primaryColor,
+                      fontSize: 8.sp,
+                    ),
+              ),
+              child: const Icon(Icons.notifications),
+            );
+          }),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigation.instance.navigate('/search', args: "");
+          },
+          icon: Icon(Icons.search),
+        ),
+      ],
+    );
+  }
 
   static List<BigDiscount> discounts = [
     BigDiscount('Subway', 'RGB road, Zoo tiniali', FontAwesomeIcons.subway),

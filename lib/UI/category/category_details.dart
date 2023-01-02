@@ -60,7 +60,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -681,93 +681,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
         itemCount: data.suggestion.length);
   }
 
-  AppBar buildAppBar() {
-    return AppBar(
-      // leading: IconButton(
-      //   onPressed: () {
-      //     Navigation.instance.navigate('/bergerMenuMem');
-      //   },
-      //   icon: Icon(Icons.menu),
-      // ),
-      title: GestureDetector(
-        onTap: () {
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .setCurrent(0);
-          Navigation.instance.navigate('/main');
-        },
-        child: Image.asset(
-          Constance.logoIcon,
-          fit: BoxFit.fill,
-          scale: 2,
-        ),
-      ),
-      centerTitle: true,
-      backgroundColor: Constance.primaryColor,
-      actions: [
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/notification');
-          },
-          icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return Badge(
-              badgeColor: Constance.secondaryColor,
-              badgeContent: Text(
-                '${data.notifications.length}',
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
-              ),
-              child: const Icon(Icons.notifications),
-            );
-          }),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
-            // showSearch(
-            //   context: context,
-            //   delegate: SearchPage<Listing>(
-            //     items: Constance.listings,
-            //     searchLabel: 'Search posts',
-            //     suggestion: Center(
-            //       child: Text(
-            //         'Filter posts by name, descr',
-            //         style: Theme.of(context).textTheme.headline5,
-            //       ),
-            //     ),
-            //     failure: const Center(
-            //       child: Text('No posts found :('),
-            //     ),
-            //     filter: (current) => [
-            //       current.title,
-            //       current.descr,
-            //       // person.age.toString(),
-            //     ],
-            //     builder: (data) => ListTile(
-            //       title: Text(
-            //         data.title ?? "",
-            //         style: Theme.of(context).textTheme.headline5,
-            //       ),
-            //       subtitle: Text(
-            //         data.descr ?? '',
-            //         style: Theme.of(context).textTheme.headline6,
-            //       ),
-            //       // trailing: CachedNetworkImage(
-            //       //   imageUrl: data.image??'',
-            //       //   height: 20,
-            //       //   width: 20,
-            //       // ),
-            //     ),
-            //   ),
-            // );
-          },
-          icon: Icon(Icons.search),
-        ),
-      ],
-    );
-  }
+
 
   Future<void> _launchUrl(_url) async {
     if (!await launchUrl(_url)) {

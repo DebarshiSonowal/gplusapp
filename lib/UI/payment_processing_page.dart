@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:provider/provider.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+// import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Components/alert.dart';
@@ -29,7 +29,7 @@ class PaymentProcessingPage extends StatefulWidget {
 class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
   double tempTotal = 0;
   var temp_order_id = "";
-  final _razorpay = Razorpay();
+  // final _razorpay = Razorpay();
   static const MethodChannel _channel = MethodChannel('easebuzz');
   final email = TextEditingController();
   final phone = TextEditingController();
@@ -37,9 +37,9 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
 
   @override
   void initState() {
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     super.initState();
     Future.delayed(Duration.zero, () {
       getUserInformation();
@@ -56,7 +56,7 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
 
   @override
   void dispose() {
-    _razorpay.clear(); // Removes all listeners
+    // _razorpay.clear(); // Removes all listeners
     super.dispose();
   }
 
@@ -87,7 +87,7 @@ You can parse it accordingly to handle response */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar2(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -190,73 +190,73 @@ You can parse it accordingly to handle response */
   //   }
   // }
 
-  void startPayment(RazorpayKey razorpay, double? total, id, customer_id) {
-    var options = {
-      'key': razorpay.api_key,
-      'amount': total! * 100,
-      // 'order_id': id,
-      'name':
-          '${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.f_name} ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.l_name}',
-      'description': 'Books',
-      'prefill': {
-        'contact': Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .profile
-            ?.mobile,
-        'email': Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .profile
-            ?.email
-      },
-      'note': {
-        'customer_id': customer_id,
-        'order_id': id,
-      },
-    };
-    debugPrint(jsonEncode(options));
-    try {
-      _razorpay.open(options);
-    } catch (e) {
-      print(e);
-    }
-  }
+  // void startPayment(RazorpayKey razorpay, double? total, id, customer_id) {
+  //   var options = {
+  //     'key': razorpay.api_key,
+  //     'amount': total! * 100,
+  //     // 'order_id': id,
+  //     'name':
+  //         '${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.f_name} ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.l_name}',
+  //     'description': 'Books',
+  //     'prefill': {
+  //       'contact': Provider.of<DataProvider>(
+  //               Navigation.instance.navigatorKey.currentContext ?? context,
+  //               listen: false)
+  //           .profile
+  //           ?.mobile,
+  //       'email': Provider.of<DataProvider>(
+  //               Navigation.instance.navigatorKey.currentContext ?? context,
+  //               listen: false)
+  //           .profile
+  //           ?.email
+  //     },
+  //     'note': {
+  //       'customer_id': customer_id,
+  //       'order_id': id,
+  //     },
+  //   };
+  //   debugPrint(jsonEncode(options));
+  //   try {
+  //     _razorpay.open(options);
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print(
-        'success ${response.paymentId} ${response.orderId} ${response.signature}');
-    handleSuccess(response);
-  }
+  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  //   print(
+  //       'success ${response.paymentId} ${response.orderId} ${response.signature}');
+  //   handleSuccess(response);
+  // }
+  //
+  // void _handlePaymentError(PaymentFailureResponse response) {
+  //   // Do something when payment fails
+  //   // print('error ${response.message} ${response.code} ');
+  //   // showError(response.message ?? "Something went wrong");
+  //   showError(jsonDecode(response.message!)['error']['description'] ??
+  //       "Something went wrong");
+  //   print(jsonDecode(response.message!)['error']['description']);
+  //   // Navigation.instance.goBack();
+  // }
+  //
+  // void _handleExternalWallet(ExternalWalletResponse response) {
+  //   // Do something when an external wallet was selected
+  // }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
-    // Do something when payment fails
-    // print('error ${response.message} ${response.code} ');
-    // showError(response.message ?? "Something went wrong");
-    showError(jsonDecode(response.message!)['error']['description'] ??
-        "Something went wrong");
-    print(jsonDecode(response.message!)['error']['description']);
-    // Navigation.instance.goBack();
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    // Do something when an external wallet was selected
-  }
-
-  void handleSuccess(PaymentSuccessResponse response) async {
-    final response1 = await ApiProvider.instance
-        .verifyPayment(temp_order_id, response.paymentId, tempTotal ?? 1,"");
-    if (response1.success ?? false) {
-      fetchProfile();
-      Navigation.instance.goBack();
-      showDialogBox();
-    } else {
-      Navigation.instance.goBack();
-      Navigation.instance.goBack();
-      showError(response1.message ?? "Something went wrong");
-      // print(jsonDecode(response1.message!)['error']['description']);
-    }
-  }
+  // void handleSuccess(PaymentSuccessResponse response) async {
+  //   final response1 = await ApiProvider.instance
+  //       .verifyPayment(temp_order_id, response.paymentId, tempTotal ?? 1,"");
+  //   if (response1.success ?? false) {
+  //     fetchProfile();
+  //     Navigation.instance.goBack();
+  //     showDialogBox();
+  //   } else {
+  //     Navigation.instance.goBack();
+  //     Navigation.instance.goBack();
+  //     showError(response1.message ?? "Something went wrong");
+  //     // print(jsonDecode(response1.message!)['error']['description']);
+  //   }
+  // }
 
   void fetchProfile() async {
     // Navigation.instance.navigate('/loadingDialog');

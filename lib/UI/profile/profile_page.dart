@@ -23,7 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar2(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -40,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: Theme.of(context).textTheme.headline3?.copyWith(
                             color: Storage.instance.isDarkMode
                                 ? Colors.white
-                                : Constance.secondaryColor,
+                                : Constance.primaryColor,
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
@@ -49,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ((data.profile?.is_plan_active ?? false) &&
                               data.memberships.isNotEmpty)
                           ? ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
+                              physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: data.memberships.length,
                               itemBuilder: (cont, count) {
@@ -142,10 +142,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                               .textTheme
                                               .headline6
                                               ?.copyWith(
-                                              color: Colors.white,
-                                              fontStyle: FontStyle.italic
-                                            // fontWeight: FontWeight.bold,
-                                          ),
+                                                  color: Colors.white,
+                                                  fontStyle: FontStyle.italic
+                                                  // fontWeight: FontWeight.bold,
+                                                  ),
                                         ),
                                         SizedBox(
                                           height: 2.h,
@@ -153,13 +153,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                         SizedBox(
                                           width: double.infinity,
                                           child: CustomButton(
-                                            txt: 'Buy next subscription term',
-                                            onTap: () async{
-                                             final result= await Navigation.instance
+                                            txt: 'Renew Subscription',
+                                            onTap: () async {
+                                              final result = await Navigation
+                                                  .instance
                                                   .navigate('/beamember');
-                                             if(result==null){
-                                               fetch();
-                                             }
+                                              if (result == null) {
+                                                fetch();
+                                              }
                                             },
                                           ),
                                         ),
@@ -195,57 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  AppBar buildAppBar() {
-    return AppBar(
-      // leading: IconButton(
-      //   onPressed: () {
-      //     Navigation.instance.navigate('/bergerMenuMem');
-      //   },
-      //   icon: Icon(Icons.menu),
-      // ),
-      title: GestureDetector(
-        onTap: () {
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .setCurrent(0);
-          Navigation.instance.navigate('/main');
-        },
-        child: Image.asset(
-          Constance.logoIcon,
-          fit: BoxFit.fill,
-          scale: 2,
-        ),
-      ),
-      centerTitle: true,
-      backgroundColor: Constance.primaryColor,
-      actions: [
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/notification');
-          },
-          icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return Badge(
-              badgeColor: Constance.secondaryColor,
-              badgeContent: Text(
-                '${data.notifications.length}',
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
-              ),
-              child: const Icon(Icons.notifications),
-            );
-          }),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
-          },
-          icon: Icon(Icons.search),
-        ),
-      ],
-    );
-  }
+
 
   void fetch() async {
     Navigation.instance.navigate('/loadingDialog');
@@ -275,7 +226,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   getExpires(Membership current) {
     try {
-      return Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd").format("dd/MM/yyyy");
+      return Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd")
+          .format("dd/MM/yyyy");
     } catch (e) {
       print(e);
       return "";
@@ -284,12 +236,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   getLeft(Membership current) {
     try {
-      return Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd").format("dd/MM/yyyy");
+      return Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd")
+          .format("dd/MM/yyyy");
     } catch (e) {
       print(e);
       return "";
     }
   }
-
-
 }

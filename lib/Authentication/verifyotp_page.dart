@@ -63,7 +63,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: Constance.buildAppBar(),
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -242,26 +242,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
     );
   }
 
-  AppBar buildAppBar() {
-    return AppBar(
-      title: GestureDetector(
-        onTap: (){
-          Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-              .setCurrent(0);
-          Navigation.instance.navigate('/main');
-        },
-        child: Image.asset(
-          Constance.logoIcon,
-          fit: BoxFit.fill,
-          scale: 2,
-        ),
-      ),
-      centerTitle: true,
-      backgroundColor: Constance.primaryColor,
-    );
-  }
+
 
   void GetProfile() async {
     PhoneCodeSent codeSent =

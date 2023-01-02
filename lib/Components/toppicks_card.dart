@@ -5,6 +5,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
+import '../Helper/Storage.dart';
 
 class SuggestedForYouCard extends StatelessWidget {
   final TopPicks item;
@@ -90,22 +91,43 @@ class SuggestedForYouCard extends StatelessWidget {
                   //   height: 1.5.h,
                   // ),
                   Spacer(),
-                  Text(
-                    Jiffy(item.date, "yyyy-MM-dd").format("dd MMM,yyyy"),
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                          color: Colors.black87,
-                          fontSize: 8.sp,
-                        ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      Text(
+                        Jiffy(item.date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                            .format("dd MMM,yyyy"),
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black54),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 0.5.h,
                   ),
-                  Text(
-                    item.author_name ?? "",
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                          color: Colors.black87,
-                          fontSize: 8.5.sp,
-                        ),
+                  Row(
+                    children: [
+                      Image.asset(
+                        Constance.authorIcon,
+                        color: Constance.secondaryColor,
+                        // size: 8.sp,
+                        scale: 37,
+                      ),
+                      SizedBox(
+                        width: 1.w,
+                      ),
+                      Text(
+                        item.author_name ?? "",
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black54),
+                      ),
+                    ],
                   ),
                 ],
               ),

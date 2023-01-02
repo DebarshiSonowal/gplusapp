@@ -7,8 +7,8 @@ import '../Helper/Constance.dart';
 import '../Helper/Storage.dart';
 import '../Model/article.dart';
 
-class ExclusiveItem extends StatelessWidget {
-  const ExclusiveItem({
+class NewsFromMoreItem extends StatelessWidget {
+  const NewsFromMoreItem({
     Key? key,
     required this.item,
   }) : super(key: key);
@@ -19,7 +19,7 @@ class ExclusiveItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-          horizontal: 3.w, vertical: 1.h),
+          horizontal: 2.w, vertical: 1.h),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(
           Radius.circular(5),
@@ -39,7 +39,7 @@ class ExclusiveItem extends StatelessWidget {
               CrossAxisAlignment.start,
               children: [
                 CachedNetworkImage(
-                  height: 17.7.h,
+                  height: 17.5.h,
                   width: 45.w,
                   imageUrl:
                   item.image_file_name ?? '',
@@ -51,33 +51,14 @@ class ExclusiveItem extends StatelessWidget {
                     );
                   },
                   errorWidget: (cont, _, e) {
-                    // print(e);
-                    print(_);
-                    return Text(_);
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
                   },
                 ),
                 // SizedBox(
                 //   height: 1.h,
-                // ),
-                // Text(
-                //   // item.publish_date
-                //   //         ?.split(" ")[0] ??
-                //   //     "",
-                //   Jiffy(
-                //       item.publish_date
-                //           ?.split(" ")[0] ??
-                //           "",
-                //       "yyyy-MM-dd")
-                //       .format("dd/MM/yyyy"),
-                //   style: Theme.of(context)
-                //       .textTheme
-                //       .headline6
-                //       ?.copyWith(
-                //     color: Storage
-                //         .instance.isDarkMode
-                //         ? Colors.white
-                //         : Colors.black54,
-                //   ),
                 // ),
               ],
             ),
@@ -94,22 +75,47 @@ class ExclusiveItem extends StatelessWidget {
                 Expanded(
                   child: Text(
                     item.title ?? "",
-                    maxLines: 3,
-                    style: Theme.of(context)
+                    maxLines: 6,
+                    style: (item.title?.length ??
+                        0) >
+                        70
+                        ? Theme.of(context)
+                        .textTheme
+                        .headline5
+                        ?.copyWith(
+                      fontWeight:
+                      FontWeight.bold,
+                      overflow:
+                      TextOverflow
+                          .ellipsis,
+                      color: Storage
+                          .instance
+                          .isDarkMode
+                          ? Colors.white
+                          : Constance
+                          .primaryColor,
+                    )
+                        : Theme.of(context)
                         .textTheme
                         .headline4
                         ?.copyWith(
-                        fontWeight:
-                        FontWeight.bold,
-                        overflow: TextOverflow
-                            .ellipsis,
-                        color: Storage.instance
-                            .isDarkMode
-                            ? Colors.white
-                            : Constance
-                            .primaryColor),
+                      fontWeight:
+                      FontWeight.bold,
+                      overflow:
+                      TextOverflow
+                          .ellipsis,
+                      color: Storage
+                          .instance
+                          .isDarkMode
+                          ? Colors.white
+                          : Constance
+                          .primaryColor,
+                    ),
                   ),
                 ),
+                // SizedBox(
+                //   height: 1.h,
+                // ),
                 Row(
                   children: [
                     SizedBox(
@@ -148,6 +154,38 @@ class ExclusiveItem extends StatelessWidget {
                     ),
                   ],
                 ),
+                // Text(
+                //   Jiffy(
+                //           item.publish_date
+                //                   ?.split(
+                //                       " ")[0] ??
+                //               "",
+                //           "yyyy-MM-dd")
+                //       .format("dd MMM,yyyy"),
+                //   style: Theme.of(context)
+                //       .textTheme
+                //       .headline6
+                //       ?.copyWith(
+                //           color: Storage.instance
+                //                   .isDarkMode
+                //               ? Colors.white
+                //               : Colors.black),
+                // ),
+                // SizedBox(
+                //   height: 1.h,
+                // ),
+                // Text(
+                //   item.author_name ??
+                //       "G Plus News",
+                //   style: Theme.of(context)
+                //       .textTheme
+                //       .headline6
+                //       ?.copyWith(
+                //           color: Storage.instance
+                //                   .isDarkMode
+                //               ? Colors.white
+                //               : Colors.black),
+                // ),
               ],
             ),
           ),

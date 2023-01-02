@@ -65,7 +65,7 @@ class VideoReportSection extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.w),
                         child: Text(
-                          'View All',
+                          'Watch More',
                           style: Theme.of(context).textTheme.headline5?.copyWith(
                                 color: Storage.instance.isDarkMode
                                     ? Colors.white
