@@ -239,7 +239,8 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                               onTap: () {
                                 // Navigation.instance.goBack();
                                 (data.attachment?.length ?? 1) > 1
-                                    ? showAllImages(count)
+                                    // ? showAllImages(count)
+                                    ? showAllImages(data.id)
                                     : showThisImage(
                                         data.attachment![0].file_name ??
                                             Constance.defaultImage);

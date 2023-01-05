@@ -516,9 +516,11 @@ class _HomeScreenState extends State<HomeScreen> {
               listen: false)
           .setPollOfTheWeek(response.pollOfTheWeek!);
       if (response.pollOfTheWeek?.is_polled != 'false') {
-        setState(() {
-          _poll = response.pollOfTheWeek?.is_polled ?? "";
-        });
+        if (mounted) {
+          setState(() {
+                    _poll = response.pollOfTheWeek?.is_polled ?? "";
+                  });
+        }
       }
     }
   }

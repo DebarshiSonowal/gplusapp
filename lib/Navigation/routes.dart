@@ -55,6 +55,7 @@ import '../UI/others/blocked_list_page.dart';
 import '../UI/others/bookmarks_page.dart';
 import '../UI/others/contact_us_page.dart';
 import '../UI/others/grievanceRedressal.dart';
+import '../UI/others/link_failed_page.dart';
 import '../UI/others/privacy_policy_page.dart';
 import '../UI/others/refund_policy_page.dart';
 import '../UI/others/settings_page.dart';
@@ -254,6 +255,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //Main
     case '/main':
       return FadeTransitionPageRouteBuilder(page: HomeScreen());
+    case '/link_failed':
+      return FadeTransitionPageRouteBuilder(page: LinkFailedPage());
     case '/mainWithAnimation':
       return PageRouteBuilder(
         pageBuilder: (BuildContext context, Animation<double> animation,
@@ -280,11 +283,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     default:
       return MaterialPageRoute(builder: (_) {
-        return const Scaffold(
-          body: Center(
-            child: Text('404 Page not found'),
-          ),
-        );
+        return LinkFailedPage();
       });
   }
 }

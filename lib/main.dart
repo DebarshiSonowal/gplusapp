@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -9,6 +11,7 @@ import 'package:open_file_safe/open_file_safe.dart';
 
 // import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
+import 'package:uni_links/uni_links.dart';
 import 'dart:io';
 import 'Components/alert.dart';
 import 'Helper/AppTheme.dart';
@@ -28,23 +31,13 @@ Future<void> onDidReceiveNotificationResponse(
     NotificationResponse notificationResponse) async {
   var details =
       await FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails();
-  debugPrint("onDidReceiveNotificationResponse ${details?.notificationResponse?.payload}");
+  debugPrint(
+      "onDidReceiveNotificationResponse ${details?.notificationResponse?.payload}");
   if (details?.didNotificationLaunchApp ?? false) {
     if (details?.notificationResponse?.payload != 'downloading') {
       OpenFile.open(details?.notificationResponse?.payload);
     }
   }
-  try {
-    print(
-        "onDidReceiveNotificationResponse response ${notificationResponse.payload} ${notificationResponse.id} ${notificationResponse.input}");
-  } catch (e) {
-    print(e);
-  }
-  // const JsonEncoder encoder = JsonEncoder.withIndent('  ');
-  // var jsData = jsonDecode(
-  //     '{ "category_name": "Entertainment", "seo_name": "7-things-you-can-do-this-weekend-in-guwahati-4", "seo_name_category": "entertainment", "notification_id": "0f226151-e51c-4a75-abe8-bf5652cff30e", "type": "news", "title": "7 Things You Ca"  }' ??
-  //         "");
-  // var jsData = encoder.convert(notificationResponse.payload!);
   debugPrint(notificationResponse.payload);
   var jsData = notificationResponse.payload ?? "";
   jsData = jsData.replaceAll('{', '{"');
@@ -120,7 +113,15 @@ void notificationTapBackground(
               listen: false)
           .setCurrent(2);
       Navigation.instance.navigate('/guwahatiConnects');
-
+      Navigation.instance.navigate('/allImagesPage',args: int.parse(notification.post_id.toString()));
+      break;
+      case "ghy_connect_status":
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
+          .setCurrent(2);
+      Navigation.instance.navigate('/guwahatiConnects');
+      Navigation.instance.navigate('/allImagesPage',args: int.parse(notification.post_id.toString()));
       break;
     case "citizen_journalist":
       Provider.of<DataProvider>(
@@ -128,6 +129,17 @@ void notificationTapBackground(
               listen: false)
           .setCurrent(3);
       Navigation.instance.navigate('/citizenJournalist');
+      break;
+    case "ctz_journalist_status":
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
+          .setCurrent(3);
+      Navigation.instance.navigate('/citizenJournalist');
+      Navigation.instance.navigate('/submitedStory');
+      Navigation.instance.navigate(
+          '/viewStoryPage',
+          args: int.parse(notification.post_id.toString()));
       break;
     case "deals":
       Provider.of<DataProvider>(
@@ -321,10 +333,80 @@ void setUpFirebase() async {
   }); //
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  StreamSubscription? _sub;
+
+  void sendToRoute(String route, data, String? category) async {
+    switch (route) {
+      case "story":
+        // Navigation.instance.navigate('/main');
+        Navigation.instance.navigate('/story', args: '${category},${data}');
+        break;
+      default:
+        print("deeplink failed ${route}");
+        Navigation.instance.navigate(
+          '/link_failed',
+        );
+        break;
+    }
+  }
+
+  Future<void> initUniLinksResume() async {
+    // ... check initialUri
+
+    // Attach a listener to the stream
+    _sub = uriLinkStream.listen((Uri? uri) {
+      if (uri != null) {
+        print("deeplink2 ${uri.toString().split("/")}");
+        sendToRoute(
+            uri.toString().split("/")[4],
+            uri.toString().split("/")[5],
+            (uri.toString().split("/").length <= 6
+                ? ""
+                : uri.toString().split("/")[6]));
+      } else {
+        Navigation.instance.navigate('/link_failed',);
+      }
+      // Use the uri and warn the user, if it is not correct
+    }, onError: (err) {
+      // Handle exception by warning the user their action did not succeed
+      Navigation.instance.navigate('/link_failed',);
+    });
+
+    // NOTE: Don't forget to call _sub.cancel() in dispose()
+  }
+
+  Future<void> initUniLinks() async {
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      final initialLink = await getInitialLink();
+      if (initialLink != null) {
+        print("deeplink1 ${initialLink.split("/")}");
+        sendToRoute(
+            initialLink.split("/")[4],
+            initialLink.split("/")[5],
+            (initialLink.split("/").length <= 6
+                ? ""
+                : initialLink.split("/")[6]));
+      } else {
+        initUniLinksResume();
+      }
+      // Parse the link and warn the user, if it is not correct,
+      // but keep in mind it could be `null`.
+    } on PlatformException {
+      // Handle exception by warning the user their action did not succeed
+      // return?
+      Navigation.instance.navigate('/link_failed',);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -332,7 +414,7 @@ class MyApp extends StatelessWidget {
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'GPLUS',
+          title: 'Guwahati Plus',
           theme: AppTheme.getTheme(),
           navigatorKey: Navigation.instance.navigatorKey,
           onGenerateRoute: generateRoute,
@@ -340,7 +422,34 @@ class MyApp extends StatelessWidget {
       }),
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    initUniLinks();
+  }
 }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({Key? key}) : super(key: key);
+//
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     return ChangeNotifierProvider(
+//       create: (context) => DataProvider(),
+//       child: Sizer(builder: (context, orientation, deviceType) {
+//         return MaterialApp(
+//           debugShowCheckedModeBanner: false,
+//           title: 'GPLUS',
+//           theme: AppTheme.getTheme(),
+//           navigatorKey: Navigation.instance.navigatorKey,
+//           onGenerateRoute: generateRoute,
+//         );
+//       }),
+//     );
+//   }
+// }
 
 void setRead(String? id, seoName, categoryName, type, postId, vendorId,
     categoryId) async {
@@ -373,7 +482,15 @@ void sendToDestination(
               listen: false)
           .setCurrent(2);
       Navigation.instance.navigate('/guwahatiConnects');
-
+      Navigation.instance.navigate('/allImagesPage',args: int.parse(id.toString()));
+      break;
+      case "ghy_connect_status":
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
+          .setCurrent(2);
+      Navigation.instance.navigate('/guwahatiConnects');
+      Navigation.instance.navigate('/allImagesPage',args: int.parse(id.toString()));
       break;
     case "citizen_journalist":
       Provider.of<DataProvider>(
@@ -381,6 +498,17 @@ void sendToDestination(
               listen: false)
           .setCurrent(3);
       Navigation.instance.navigate('/citizenJournalist');
+      break;
+      case "ctz_journalist_status":
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
+          .setCurrent(3);
+      Navigation.instance.navigate('/citizenJournalist');
+      Navigation.instance.navigate('/submitedStory');
+      Navigation.instance.navigate(
+          '/viewStoryPage',
+          args: int.parse(id.toString()));
       break;
     case "deals":
       Provider.of<DataProvider>(

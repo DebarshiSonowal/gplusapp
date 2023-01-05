@@ -32,14 +32,25 @@ class _AllImagePageState extends State<AllImagePage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      setState(() {
-        like = Provider.of<DataProvider>(
-                    Navigation.instance.navigatorKey.currentContext ?? context,
-                    listen: false)
-                .guwahatiConnect[widget.id]
-                .is_liked ??
-            false;
-      });
+      if (Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .guwahatiConnect
+          .isNotEmpty) {
+        setState(() {
+          like = Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext ??
+                          context,
+                      listen: false)
+                  .guwahatiConnect
+                  .where((element) => (element.id == widget.id))
+                  .first
+                  .is_liked ??
+              false;
+        });
+      } else {
+        fetchGuwahatiConnect();
+      }
     });
   }
 
@@ -81,7 +92,8 @@ class _AllImagePageState extends State<AllImagePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    data.guwahatiConnect[widget.id].user
+                                    data.guwahatiConnect.where((element) => (element.id == widget.id))
+                                        .first.user
                                             ?.name ??
                                         "G Plus Author",
                                     style: Theme.of(context)
@@ -99,7 +111,8 @@ class _AllImagePageState extends State<AllImagePage> {
                                   ),
                                   Text(
                                     Jiffy(
-                                                data.guwahatiConnect[widget.id]
+                                                data.guwahatiConnect.where((element) => (element.id == widget.id))
+                                                    .first
                                                     .updated_at,
                                                 "yyyy-MM-dd")
                                             .fromNow() ??
@@ -130,7 +143,8 @@ class _AllImagePageState extends State<AllImagePage> {
                           height: 1.h,
                         ),
                         ReadMoreText(
-                          data.guwahatiConnect[widget.id].question ?? "",
+                          data.guwahatiConnect.where((element) => (element.id == widget.id))
+                              .first.question ?? "",
                           style:
                               Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Storage.instance.isDarkMode
@@ -156,10 +170,12 @@ class _AllImagePageState extends State<AllImagePage> {
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount:
-                      data.guwahatiConnect[widget.id].attachment?.length ?? 1,
+                      data.guwahatiConnect.where((element) => (element.id == widget.id))
+                          .first.attachment?.length ?? 1,
                   itemBuilder: (context, count) {
                     var current =
-                        data.guwahatiConnect[widget.id].attachment![count];
+                        data.guwahatiConnect.where((element) => (element.id == widget.id))
+                            .first.attachment![count];
                     return GestureDetector(
                       onTap: () {
                         Navigation.instance.navigate('/viewImage',
@@ -226,7 +242,9 @@ class _AllImagePageState extends State<AllImagePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        '${like ? ((data.guwahatiConnect[widget.id].total_liked ?? 0) + 1) : data.guwahatiConnect[widget.id].total_liked} likes' ??
+                        '${like ? ((data.guwahatiConnect.where((element) => (element.id == widget.id))
+                            .first.total_liked ?? 0) + 1) : data.guwahatiConnect.where((element) => (element.id == widget.id))
+                            .first.total_liked} likes' ??
                             "",
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Storage.instance.isDarkMode
@@ -247,7 +265,8 @@ class _AllImagePageState extends State<AllImagePage> {
                       //   ),
                       // ),
                       Text(
-                        '${data.guwahatiConnect[widget.id].total_comment} comments' ??
+                        '${data.guwahatiConnect.where((element) => (element.id == widget.id))
+                            .first.total_comment} comments' ??
                             "",
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Storage.instance.isDarkMode
@@ -285,7 +304,8 @@ class _AllImagePageState extends State<AllImagePage> {
                             type: MaterialType.transparency,
                             child: IconButton(
                               onPressed: () {
-                                postLike(data.guwahatiConnect[widget.id].id, 1);
+                                postLike(data.guwahatiConnect.where((element) => (element.id == widget.id))
+                                    .first.id, 1);
                                 setState(() {
                                   like = !like;
                                   if (dislike) {
@@ -440,10 +460,12 @@ class _AllImagePageState extends State<AllImagePage> {
                             // physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount:
-                                data.guwahatiConnect[count].comments.length,
+                                data.guwahatiConnect.where((element) => (element.id == widget.id))
+                                    .first.comments.length,
                             itemBuilder: (cont, ind) {
                               var current =
-                                  data.guwahatiConnect[count].comments[ind];
+                                  data.guwahatiConnect.where((element) => (element.id == widget.id))
+                                      .first.comments[ind];
                               return SizedBox(
                                 height: 16.h,
                                 width: 40.w,
@@ -604,7 +626,8 @@ class _AllImagePageState extends State<AllImagePage> {
                                         // Navigation.instance.navigate('/exclusivePage');
                                         _(() {
                                           postComment(
-                                              data.guwahatiConnect[count].id,
+                                              data.guwahatiConnect.where((element) => (element.id == widget.id))
+                                                  .first.id,
                                               'guwahati-connect',
                                               _searchQueryController.text);
                                         });
@@ -685,7 +708,6 @@ class _AllImagePageState extends State<AllImagePage> {
         });
   }
 
-
   void fetchGuwahatiConnect() async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getGuwahatiConnect();
@@ -693,18 +715,18 @@ class _AllImagePageState extends State<AllImagePage> {
       // setGuwahatiConnect
       Navigation.instance.goBack();
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setGuwahatiConnect(response.posts);
       if (!Storage.instance.isGuwahatiConnect) {
         // showDialogBox();
       }
     } else {
       Navigation.instance.goBack();
-      Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
-          .setGuwahatiConnect(response.posts);
+      // Provider.of<DataProvider>(
+      //     Navigation.instance.navigatorKey.currentContext ?? context,
+      //     listen: false)
+      //     .setGuwahatiConnect(response.posts);
     }
   }
 }

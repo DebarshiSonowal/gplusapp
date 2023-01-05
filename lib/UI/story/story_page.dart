@@ -13,6 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
@@ -49,11 +50,18 @@ class StoryPage extends StatefulWidget {
 class _StoryPageState extends State<StoryPage> {
   final twitterApi = TwitterOEmbedApi();
   int random = 0;
-  var categories = ['international', 'assam', 'guwahati', 'india', 'northeast','exclusive-news'];
+  var categories = [
+    'international',
+    'assam',
+    'guwahati',
+    'india',
+    'northeast',
+    'exclusive-news'
+  ];
   var dropdownvalue = 'international';
 
   // WebViewController? _controller;
-  bool like = false, dislike = false;
+  bool like = false, dislike = false,isEmpty=false;
   String blockquote = "";
   int skip = 10;
   WebViewController? _controller;
@@ -72,7 +80,6 @@ class _StoryPageState extends State<StoryPage> {
       if (controller.position.atEdge) {
         bool isTop = controller.position.pixels == 0;
         if (isTop) {
-
         } else {
           // print('At the bottom');
           skip = skip * 2;
@@ -80,6 +87,14 @@ class _StoryPageState extends State<StoryPage> {
         }
       }
     });
+  }
+
+  @override
+  void dispose() {
+    Provider.of<DataProvider>(
+        Navigation.instance.navigatorKey.currentContext ?? context,
+        listen: false).selectedArticle=null;
+    super.dispose();
   }
 
   @override
@@ -94,7 +109,9 @@ class _StoryPageState extends State<StoryPage> {
           return SingleChildScrollView(
             controller: controller,
             child: data.selectedArticle == null
-                ? Container()
+                ? Lottie.asset(
+                    isEmpty ? Constance.noDataLoader : Constance.searchingIcon,
+                  )
                 : Column(
                     children: [
                       Stack(
@@ -119,13 +136,13 @@ class _StoryPageState extends State<StoryPage> {
                           Container(
                             width: double.infinity,
                             decoration: const BoxDecoration(
-                              // gradient: LinearGradient(
-                              //   begin: Alignment.topCenter,
-                              //   end: Alignment.bottomCenter,
-                              //   colors: [Colors.transparent,Colors.black45, Colors.black],
-                              // ),
-                              // color: Colors.black,
-                            ),
+                                // gradient: LinearGradient(
+                                //   begin: Alignment.topCenter,
+                                //   end: Alignment.bottomCenter,
+                                //   colors: [Colors.transparent,Colors.black45, Colors.black],
+                                // ),
+                                // color: Colors.black,
+                                ),
                             // color: Colors.black.withOpacity(0.5),
                             padding: EdgeInsets.symmetric(
                                 vertical: 0.5.h, horizontal: 4.w),
@@ -174,11 +191,13 @@ class _StoryPageState extends State<StoryPage> {
                                   .textTheme
                                   .headline6
                                   ?.copyWith(
-                                color: Storage.instance.isDarkMode?Colors.white:Colors.black,
-                                // fontSize: 25.sp,
-                                // fontWeight: FontWeight.bold,
-                                // fontStyle: FontStyle.italic,
-                              ),
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    // fontSize: 25.sp,
+                                    // fontWeight: FontWeight.bold,
+                                    // fontStyle: FontStyle.italic,
+                                  ),
                             ),
                           ),
                         ],
@@ -257,7 +276,8 @@ class _StoryPageState extends State<StoryPage> {
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
-                                                color: Storage.instance.isDarkMode
+                                                color: Storage
+                                                        .instance.isDarkMode
                                                     ? Constance.secondaryColor
                                                     : Constance.primaryColor,
                                                 fontWeight: FontWeight.bold,
@@ -913,7 +933,9 @@ class _StoryPageState extends State<StoryPage> {
                                     items: categories.map((String items) {
                                       return DropdownMenuItem(
                                         value: items,
-                                        child: Text(items.capitalize().replaceFirst("-", " ")),
+                                        child: Text(items
+                                            .capitalize()
+                                            .replaceFirst("-", " ")),
                                       );
                                     }).toList(),
                                     // After selecting the desired option,it will
@@ -1067,7 +1089,7 @@ class _StoryPageState extends State<StoryPage> {
   }
 
   void fetchDetails() async {
-    Navigation.instance.navigate('/loadingDialog');
+    // Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getArticleDetails(
         widget.slug.toString().split(',')[0],
         widget.slug.toString().split(',')[1]);
@@ -1089,18 +1111,24 @@ class _StoryPageState extends State<StoryPage> {
           fetchContent();
         }
       });
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
+      setState(() {
+        isEmpty=false;
+      });
     } else {
-      Navigation.instance.goBack();
+      setState(() {
+        isEmpty=true;
+      });
+      // Navigation.instance.goBack();
     }
   }
 
   void fetchContent() async {
-    Navigation.instance.navigate('/loadingDialog');
+    // Navigation.instance.navigate('/loadingDialog');
     final response =
         await ApiProvider.instance.getMoreArticle(dropdownvalue, 11, 1, skip);
     if (response.success ?? false) {
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
@@ -1108,7 +1136,7 @@ class _StoryPageState extends State<StoryPage> {
       // _refreshController.refreshCompleted();
 
     } else {
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
       // _refreshController.refreshFailed();
     }
   }

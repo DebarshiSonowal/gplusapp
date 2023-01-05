@@ -193,7 +193,7 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      debugPrint("Profile response: ${response?.data}");
+      // debugPrint("Profile response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ProfileResponse.fromJson(response?.data);
       } else {
@@ -831,7 +831,7 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      debugPrint("HomeAlbum response: ${response?.data}");
+      // debugPrint("HomeAlbum response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ArticleResponse.fromJson(response?.data);
       } else {
@@ -869,7 +869,7 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      debugPrint("StoryResponse response: ${response?.data}");
+      // debugPrint("StoryResponse response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return StoryResponse.fromJson(response?.data);
       } else {
@@ -986,7 +986,7 @@ class ApiProvider {
         url,
         // queryParameters: data,
       );
-      debugPrint("latest-opinions response: ${response?.data}");
+      // debugPrint("latest-opinions response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return LatestOpinionResponse.fromJson(response?.data);
       } else {
@@ -2312,7 +2312,7 @@ class ApiProvider {
         url,
         // queryParameters: data,
       );
-      debugPrint("advertise response: ${response?.data}");
+      // debugPrint("advertise response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return AdvertiseResponse.fromJson(response?.data);
       } else {
@@ -2869,7 +2869,7 @@ class ApiProvider {
         url,
         // queryParameters: data,
       );
-      debugPrint("PollOfTheWeekResponse: ${response?.data}");
+      // debugPrint("PollOfTheWeekResponse: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return PollOfTheWeekResponse.fromJson(response?.data);
       } else {
