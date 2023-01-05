@@ -103,9 +103,9 @@ class SuggestionCard extends StatelessWidget {
                   // ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: 4.w,
-                      ),
+                      // SizedBox(
+                      //   width: 4.w,
+                      // ),
                       Text(
                         Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
                             .format("dd MMM,yyyy"),
@@ -121,15 +121,15 @@ class SuggestionCard extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Image.asset(
-                        Constance.authorIcon,
-                        color: Constance.secondaryColor,
-                        // size: 8.sp,
-                        scale: 37,
-                      ),
-                      SizedBox(
-                        width: 1.w,
-                      ),
+                      // Image.asset(
+                      //   Constance.authorIcon,
+                      //   color: Constance.secondaryColor,
+                      //   // size: 8.sp,
+                      //   scale: 37,
+                      // ),
+                      // SizedBox(
+                      //   width: 1.w,
+                      // ),
                       Text(
                         item.author_name ?? "",
                         style: Theme.of(context).textTheme.headline6?.copyWith(

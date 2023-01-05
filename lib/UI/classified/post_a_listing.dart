@@ -276,7 +276,7 @@ class _PostAListingState extends State<PostAListing> {
                         : Colors.black,
                   ),
                   Text(
-                    'Add more attachments',
+                    'Add attachments',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Storage.instance.isDarkMode
                               ? Colors.white
@@ -435,7 +435,7 @@ class _PostAListingState extends State<PostAListing> {
                           "Title, Description and Price is mandatory to post");
                     }
                   },
-                  txt: 'Go ahead',
+                  txt: 'Submit',
                 ),
               ),
             ],

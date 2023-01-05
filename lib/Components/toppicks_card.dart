@@ -76,15 +76,17 @@ class SuggestedForYouCard extends StatelessWidget {
                       item.title ??
                           "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient.",
                       maxLines: 8,
-                      style: (item.title?.length??0)>80?Theme.of(context).textTheme.headline5?.copyWith(
-                          // fontSize: 11.sp,
-                          fontWeight: FontWeight.bold,
-                          overflow: TextOverflow.ellipsis,
-                          color: Constance.primaryColor):Theme.of(context).textTheme.headline4?.copyWith(
-                        fontSize: 13.sp,
-                          fontWeight: FontWeight.bold,
-                          overflow: TextOverflow.ellipsis,
-                          color: Constance.primaryColor),
+                      style: (item.title?.length ?? 0) > 80
+                          ? Theme.of(context).textTheme.headline5?.copyWith(
+                              // fontSize: 11.sp,
+                              fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.ellipsis,
+                              color: Constance.primaryColor)
+                          : Theme.of(context).textTheme.headline4?.copyWith(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.ellipsis,
+                              color: Constance.primaryColor),
                     ),
                   ),
                   // SizedBox(
@@ -93,16 +95,16 @@ class SuggestedForYouCard extends StatelessWidget {
                   Spacer(),
                   Row(
                     children: [
-                      SizedBox(
-                        width: 4.w,
-                      ),
+                      // SizedBox(
+                      //   width: 4.w,
+                      // ),
                       Text(
                         Jiffy(item.date?.split(" ")[0] ?? "", "yyyy-MM-dd")
                             .format("dd MMM,yyyy"),
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Colors.black54),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            ?.copyWith(color: Colors.black54),
                       ),
                     ],
                   ),
@@ -111,21 +113,21 @@ class SuggestedForYouCard extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Image.asset(
-                        Constance.authorIcon,
-                        color: Constance.secondaryColor,
-                        // size: 8.sp,
-                        scale: 37,
-                      ),
-                      SizedBox(
-                        width: 1.w,
-                      ),
+                      // Image.asset(
+                      //   Constance.authorIcon,
+                      //   color: Constance.secondaryColor,
+                      //   // size: 8.sp,
+                      //   scale: 37,
+                      // ),
+                      // SizedBox(
+                      //   width: 1.w,
+                      // ),
                       Text(
                         item.author_name ?? "",
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Colors.black54),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            ?.copyWith(color: Colors.black54),
                       ),
                     ],
                   ),

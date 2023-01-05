@@ -49,7 +49,7 @@ class StoryPage extends StatefulWidget {
 class _StoryPageState extends State<StoryPage> {
   final twitterApi = TwitterOEmbedApi();
   int random = 0;
-  var categories = ['international', 'assam', 'guwahati', 'india', 'northeast'];
+  var categories = ['international', 'assam', 'guwahati', 'india', 'northeast','exclusive-news'];
   var dropdownvalue = 'international';
 
   // WebViewController? _controller;
@@ -59,6 +59,8 @@ class _StoryPageState extends State<StoryPage> {
   WebViewController? _controller;
   bool is_bookmark = false;
 
+  final ScrollController controller = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -66,6 +68,18 @@ class _StoryPageState extends State<StoryPage> {
       fetchDetails();
     });
     fetchAds();
+    controller.addListener(() {
+      if (controller.position.atEdge) {
+        bool isTop = controller.position.pixels == 0;
+        if (isTop) {
+
+        } else {
+          // print('At the bottom');
+          skip = skip * 2;
+          fetchMoreContent();
+        }
+      }
+    });
   }
 
   @override
@@ -78,6 +92,7 @@ class _StoryPageState extends State<StoryPage> {
         color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return SingleChildScrollView(
+            controller: controller,
             child: data.selectedArticle == null
                 ? Container()
                 : Column(
@@ -93,7 +108,7 @@ class _StoryPageState extends State<StoryPage> {
                               //   // Radius.circular(10),
                               // ),
                               image: DecorationImage(
-                                fit: BoxFit.cover,
+                                fit: BoxFit.fill,
                                 image: CachedNetworkImageProvider(
                                   data.selectedArticle?.image_file_name ??
                                       'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
@@ -109,34 +124,61 @@ class _StoryPageState extends State<StoryPage> {
                               //   end: Alignment.bottomCenter,
                               //   colors: [Colors.transparent,Colors.black45, Colors.black],
                               // ),
-                              color: Colors.black,
+                              // color: Colors.black,
                             ),
                             // color: Colors.black.withOpacity(0.5),
                             padding: EdgeInsets.symmetric(
                                 vertical: 0.5.h, horizontal: 4.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Image Caption: ${data.selectedArticle?.image_caption ?? ''}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      ?.copyWith(
-                                        color: Colors.white,
-                                        // fontSize: 25.sp,
-                                        // fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                ),
-                                // Text(
-                                //   "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
-                                //   style: Theme.of(context).textTheme.headline6?.copyWith(
-                                //         color: Colors.white,
-                                //       ),
-                                // ),
-                              ],
+                            // child: Column(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   mainAxisSize: MainAxisSize.min,
+                            //   children: [
+                            //     Text(
+                            //       data.selectedArticle?.image_caption ?? '',
+                            //       style: Theme.of(context)
+                            //           .textTheme
+                            //           .headline6
+                            //           ?.copyWith(
+                            //             color: Colors.white,
+                            //             // fontSize: 25.sp,
+                            //             // fontWeight: FontWeight.bold,
+                            //             // fontStyle: FontStyle.italic,
+                            //           ),
+                            //     ),
+                            //     // Text(
+                            //     //   "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
+                            //     //   style: Theme.of(context).textTheme.headline6?.copyWith(
+                            //     //         color: Colors.white,
+                            //     //       ),
+                            //     // ),
+                            //   ],
+                            // ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          SizedBox(
+                            width: 90.w,
+                            child: Text(
+                              data.selectedArticle?.image_caption ?? '',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                color: Storage.instance.isDarkMode?Colors.white:Colors.black,
+                                // fontSize: 25.sp,
+                                // fontWeight: FontWeight.bold,
+                                // fontStyle: FontStyle.italic,
+                              ),
                             ),
                           ),
                         ],
@@ -215,7 +257,9 @@ class _StoryPageState extends State<StoryPage> {
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
-                                                color: Constance.primaryColor,
+                                                color: Storage.instance.isDarkMode
+                                                    ? Constance.secondaryColor
+                                                    : Constance.primaryColor,
                                                 fontWeight: FontWeight.bold,
                                                 decoration:
                                                     TextDecoration.underline,
@@ -869,7 +913,7 @@ class _StoryPageState extends State<StoryPage> {
                                     items: categories.map((String items) {
                                       return DropdownMenuItem(
                                         value: items,
-                                        child: Text(items.capitalize()),
+                                        child: Text(items.capitalize().replaceFirst("-", " ")),
                                       );
                                     }).toList(),
                                     // After selecting the desired option,it will
@@ -892,17 +936,17 @@ class _StoryPageState extends State<StoryPage> {
                             SizedBox(
                               height: 2.h,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CustomButton(
-                                    txt: 'Load More',
-                                    onTap: () {
-                                      skip = skip * 2;
-                                      fetchMoreContent();
-                                    }),
-                              ],
-                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     CustomButton(
+                            //         txt: 'Load More',
+                            //         onTap: () {
+                            //           skip = skip * 2;
+                            //           fetchMoreContent();
+                            //         }),
+                            //   ],
+                            // ),
                             SizedBox(
                               height: 4.h,
                             ),

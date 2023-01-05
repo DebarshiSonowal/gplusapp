@@ -75,7 +75,7 @@ class HomeSliderItem extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 2.w,vertical: 0.5.h),
                     color:Constance.primaryColor,
                     child: Text(
-                      current.first_cat_name?.seo_name?.capitalize() ?? 'Big Deals\nand Offers',
+                      current.first_cat_name?.seo_name?.capitalize().replaceFirst("-", " ") ?? 'Big Deals\nand Offers',
                       style: Theme.of(context).textTheme.headline4?.copyWith(
                         color: Colors.grey.shade200,
                         // fontSize: 25.sp,

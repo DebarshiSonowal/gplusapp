@@ -110,7 +110,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                         : Colors.black,
                   ),
                   Text(
-                    'Add more attachments',
+                    'Add attachments',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Storage.instance.isDarkMode
                               ? Colors.white

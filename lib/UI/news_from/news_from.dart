@@ -85,7 +85,7 @@ class _NewsFromState extends State<NewsFrom> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Constance.buildAppBar(),
-      backgroundColor: Colors.white,
+      backgroundColor: Storage.instance.isDarkMode?Colors.black:Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
         enablePullDown: true,
@@ -261,7 +261,9 @@ class _NewsFromState extends State<NewsFrom> {
                                           .textTheme
                                           .headline5
                                           ?.copyWith(
-                                            color: Constance.primaryColor,
+                                            color: Storage.instance.isDarkMode
+                                                ? Constance.secondaryColor
+                                                : Constance.primaryColor,
                                             fontWeight: FontWeight.bold,
                                             decoration:
                                                 TextDecoration.underline,

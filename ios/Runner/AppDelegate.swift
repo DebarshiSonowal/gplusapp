@@ -1,29 +1,10 @@
-//import UIKit
-//import Flutter
-//import GoogleMaps
-//import flutter_config
-//import Easebuzz
-//
-//@UIApplicationMain
-//@objc class AppDelegate: FlutterAppDelegate {
-//  override func application(
-//    _ application: UIApplication,
-//    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-//  ) -> Bool {
-//      GMSServices.provideAPIKey(FlutterConfigPlugin.env(for:  "iosMapKey"))
-//      GeneratedPluginRegistrant.register(with: self)
-//
-//     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-//  }
-//
-//
-//}
-//
+
 import UIKit
 import Flutter
 import GoogleMaps
 import flutter_config
 import Easebuzz
+import flutter_local_notifications
  
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate,PayWithEasebuzzCallback {
@@ -34,6 +15,13 @@ didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: An
 ) -> Bool {
     GMSServices.provideAPIKey(FlutterConfigPlugin.env(for: "iosMapKey"))
     GeneratedPluginRegistrant.register(with: self)
+    if #available(iOS 10.0, *) {
+      UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+    }
+
+    FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
+        GeneratedPluginRegistrant.register(with: registry)
+      }
 self.initializeFlutterChannelMethod()
          return super.application(application, didFinishLaunchingWithOptions: launchOptions)
 }

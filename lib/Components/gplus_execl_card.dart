@@ -65,7 +65,6 @@ class GPlusExecCard extends StatelessWidget {
                   // SizedBox(
                   //   height: 1.5.h,
                   // ),
-
                 ],
               ),
             ),
@@ -80,15 +79,23 @@ class GPlusExecCard extends StatelessWidget {
                     child: Text(
                       item.title ?? "",
                       maxLines: 7,
-                      style: (item.title?.length??0)>70?Theme.of(context).textTheme.headline5?.copyWith(
-                        // fontSize: 11.sp,
-                          fontWeight: FontWeight.bold,
-                          overflow: TextOverflow.ellipsis,
-                          color: Constance.primaryColor):Theme.of(context).textTheme.headline4?.copyWith(
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.bold,
-                          overflow: TextOverflow.ellipsis,
-                          color: Constance.primaryColor),
+                      style: (item.title?.length ?? 0) > 70
+                          ? Theme.of(context).textTheme.headline5?.copyWith(
+                                // fontSize: 11.sp,
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.ellipsis,
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Constance.primaryColor,
+                              )
+                          : Theme.of(context).textTheme.headline4?.copyWith(
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.ellipsis,
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Constance.primaryColor,
+                              ),
                     ),
                   ),
                   SizedBox(
@@ -96,11 +103,12 @@ class GPlusExecCard extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: 4.w,
-                      ),
+                      // SizedBox(
+                      //   width: 4.w,
+                      // ),
                       Text(
-                        Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
+                        Jiffy(item.publish_date?.split(" ")[0] ?? "",
+                                "yyyy-MM-dd")
                             .format("dd MMM,yyyy"),
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                             color: Storage.instance.isDarkMode
@@ -114,15 +122,15 @@ class GPlusExecCard extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Image.asset(
-                        Constance.authorIcon,
-                        color: Constance.secondaryColor,
-                        // size: 8.sp,
-                        scale: 37,
-                      ),
-                      SizedBox(
-                        width: 1.w,
-                      ),
+                      // Image.asset(
+                      //   Constance.authorIcon,
+                      //   color: Constance.secondaryColor,
+                      //   // size: 8.sp,
+                      //   scale: 37,
+                      // ),
+                      // SizedBox(
+                      //   width: 1.w,
+                      // ),
                       Text(
                         item.author_name ?? "",
                         style: Theme.of(context).textTheme.headline6?.copyWith(

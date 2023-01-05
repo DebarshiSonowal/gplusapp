@@ -418,12 +418,16 @@ class _VerifyOTPState extends State<VerifyOTP> {
   void setTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timer.tick == 30) {
-        if (mounted) {
-          setState(() {
-            timer.cancel();
-          });
-        } else {
-          timer.cancel();
+        try {
+          if (mounted) {
+                    setState(() {
+                      timer.cancel();
+                    });
+                  } else {
+                    timer.cancel();
+                  }
+        } catch (e) {
+          print(e);
         }
       }
       if (mounted) {

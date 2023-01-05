@@ -81,7 +81,7 @@ class DataProvider extends ChangeNotifier {
   List<Shop> shops = [];
   SwitchStatus? status;
   List<BookmarkItem> bookmarks = [];
-  String citizenJournalist = "", deal = "", classifiedMsg = "";
+  String citizenJournalist = "", deal = "", classifiedMsg = "",refer_earn="",redeem="";
 
   setCitizenJournalistText(String txt) {
     citizenJournalist = txt;
@@ -90,6 +90,14 @@ class DataProvider extends ChangeNotifier {
 
   setDealText(String txt) {
     deal = txt;
+    notifyListeners();
+  }
+  setReferEarnText(String txt) {
+    refer_earn = txt;
+    notifyListeners();
+  }
+  setRedeemText(String txt) {
+    redeem = txt;
     notifyListeners();
   }
 

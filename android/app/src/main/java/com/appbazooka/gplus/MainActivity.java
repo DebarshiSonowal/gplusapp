@@ -2,9 +2,12 @@ package com.appbazooka.gplus;
 
 import static android.app.PendingIntent.getActivity;
 
+import io.flutter.embedding.engine.FlutterEngine;
 import android.content.Intent;
 import android.os.Bundle;
 //import io.flutter.app.FlutterActivity;
+import androidx.annotation.NonNull;
+
 import com.easebuzz.payment.kit.PWECouponsActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -14,8 +17,11 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
+import io.flutter.embedding.engine.plugins.util.GeneratedPluginRegister;
 import datamodels.PWEStaticDataModel;
+import io.flutter.plugin.common.PluginRegistry;
 import retrofit2.converter.gson.GsonConverterFactory;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -23,7 +29,9 @@ import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.flutter.embedding.android.FlutterActivity;
 
 
-public class MainActivity extends FlutterActivity {
+public class MainActivity extends FlutterActivity
+//        implements PluginRegistry.PluginRegistrantCallback
+{
     private static final String CHANNEL = "easebuzz";
     MethodChannel.Result channel_result;
     private boolean start_payment = true;
@@ -31,7 +39,7 @@ public class MainActivity extends FlutterActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GeneratedPluginRegistrant.registerWith(getFlutterEngine());
+        GeneratedPluginRegister.registerGeneratedPlugins(getFlutterEngine());
         start_payment = true;
 
         new MethodChannel(getFlutterEngine().getDartExecutor().getBinaryMessenger(), CHANNEL).setMethodCallHandler(
@@ -123,4 +131,9 @@ public class MainActivity extends FlutterActivity {
             }
         }
     }
+
+//    @Override
+//    public void registerWith(@NonNull PluginRegistry registry) {
+//        GeneratedPluginRegister.registerGeneratedPlugins(new FlutterEngine(this));
+//    }
 }

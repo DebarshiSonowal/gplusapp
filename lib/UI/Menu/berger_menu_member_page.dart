@@ -624,9 +624,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       },
                       child: Row(
                         children: [
-                          const Icon(
-                            Icons.star,
+                          // const Icon(
+                          //   Icons.star,
+                          //   color: Constance.secondaryColor,
+                          // ),
+                          Image.asset(
+                            Constance.exclusiveIcon,
                             color: Constance.secondaryColor,
+                            scale: 20,
                           ),
                           SizedBox(
                             width: 2.w,

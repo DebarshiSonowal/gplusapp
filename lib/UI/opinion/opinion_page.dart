@@ -57,7 +57,9 @@ class _OpinionPageState extends State<OpinionPage> {
   }
 
   void _onLoading() async {
-    page_no++;
+    setState(() {
+      page_no++;
+    });
     // monitor network fetch
     final response = await ApiProvider.instance.getOpinion(11, page_no);
     if (response.success ?? false) {
@@ -257,7 +259,9 @@ class _OpinionPageState extends State<OpinionPage> {
                                             .textTheme
                                             .headline5
                                             ?.copyWith(
-                                          color: Constance.primaryColor,
+                                          color: Storage.instance.isDarkMode
+                                              ? Constance.secondaryColor
+                                              : Constance.primaryColor,
                                           fontWeight: FontWeight.bold,
                                           decoration:
                                           TextDecoration.underline,
@@ -424,12 +428,16 @@ class _OpinionPageState extends State<OpinionPage> {
     // fetchOpinions();
     controller.addListener(() {
       if (controller.position.atEdge) {
-        bool isTop = controller.position.pixels == 0;
-        if (isTop) {
+        print('At edge');
+        if (controller.position.pixels == 0) {
           _refreshController.requestRefresh();
         } else {
-          // print('At the bottom');
-         _refreshController.requestLoading();
+          print('At the bottom');
+         // _refreshController.requestLoading();
+        setState(() {
+          page_no++;
+        });
+          fetchMoreOpinions();
         }
       }
     });

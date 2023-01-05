@@ -55,14 +55,6 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   void _onLoading() async {
-    // monitor network fetch
-    // await Future.delayed(Duration(milliseconds: 1000));
-    // // if failed,use loadFailed(),if no data return,use LoadNodata()
-    // items.add((items.length+1).toString());
-    // if(mounted)
-    //   setState(() {
-    //
-    //   });
     _refreshController.loadComplete();
   }
 
@@ -155,27 +147,6 @@ class _CategoryPageState extends State<CategoryPage> {
                         SizedBox(
                           height: 2.h,
                         ),
-                        // Row(
-                        //   children: [
-                        //     Container(
-                        //       color: Constance.primaryColor,
-                        //       padding: EdgeInsets.symmetric(
-                        //           horizontal: 2.w, vertical: 1.h),
-                        //       child: Text(
-                        //         'Guwahati',
-                        //         style: Theme.of(Navigation
-                        //                 .instance.navigatorKey.currentContext!)
-                        //             .textTheme
-                        //             .headline5
-                        //             ?.copyWith(
-                        //               color: Colors.white,
-                        //               // fontSize: 2.2.h,
-                        //               // fontWeight: FontWeight.bold,
-                        //             ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
                         SizedBox(
                           height: 2.h,
                         ),

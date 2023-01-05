@@ -76,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
     askPermissions();
     fetchNotification();
     fetchReportMsg();
+    fetchRedeemMsg();
     // Future.delayed(
     //     const Duration(seconds: 15),
     //         () => _listController.addListener(() {
@@ -477,8 +478,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-
   void fetchOpinion() async {
     final response = await ApiProvider.instance.getLatestOpinion();
     if (response.success ?? false) {
@@ -789,6 +788,23 @@ for an unparalleled publication, that people call their''',
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setReportModel(response.reports);
+    } else {}
+  }
+
+  void fetchRedeemMsg() async {
+    final response = await ApiProvider.instance.getReferEarnText();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setReferEarnText(response.desc ?? "");
+    } else {}
+    final response1 = await ApiProvider.instance.getRedeemText();
+    if (response1.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setRedeemText(response1.desc ?? "");
     } else {}
   }
 }

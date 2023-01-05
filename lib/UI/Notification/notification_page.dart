@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:gplusapp/Model/notification_in_device.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:gplusapp/UI/main/home_screen_page.dart';
 import 'package:jiffy/jiffy.dart';
@@ -56,96 +57,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             current.vendor_id,
                             current.type);
                       },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.black26,
-                            ),
-                            borderRadius: BorderRadius.circular(
-                                5) // use instead of BorderRadius.all(Radius.circular(20))
-                            ),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 2.5.w, vertical: 1.4.h),
-                        width: double.infinity,
-                        height: 14.h,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              current.title ?? "",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: Theme.of(Navigation
-                                      .instance.navigatorKey.currentContext!)
-                                  .textTheme
-                                  .headline4
-                                  ?.copyWith(
-                                    color: Constance.primaryColor,
-                                    // fontSize: 11.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                            Row(
-                              children: [
-                                // Icon(current.icon,color: Constance.primaryColor,),
-                                Container(
-                                  decoration: const BoxDecoration(
-                                    color: Constance.primaryColor,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(20),
-                                    ),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 0.9.w,vertical: 0.9.h),
-                                  child: Image.asset(
-                                    getIcon(current.type ?? "news"),
-                                    height: 2.5.h,
-                                    width: 6.w,
-                                    fit: BoxFit.fill,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 2.w,
-                                ),
-                                Text(
-                                  getName(current.type ?? "news"),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: Theme.of(Navigation.instance
-                                          .navigatorKey.currentContext!)
-                                      .textTheme
-                                      .headline6
-                                      ?.copyWith(
-                                        color: Constance.primaryColor,
-                                        // fontSize: 11.sp,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                Spacer(),
-                                Text(
-                                  Jiffy("${current.created_at?.split("T")[0]} ${current.created_at?.split("T")[1]}",
-                                              "yyyy-MM-dd hh:mm:ss")
-                                          .fromNow() ??
-                                      '${current.created_at}',
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: Theme.of(Navigation.instance
-                                          .navigatorKey.currentContext!)
-                                      .textTheme
-                                      .headline6
-                                      ?.copyWith(
-                                        color: Constance.primaryColor,
-                                        // fontSize: 11.sp,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        // color: Colors.red,
-                      ),
+                      child: NotificationItem(current),
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) {
@@ -162,7 +74,102 @@ class _NotificationPageState extends State<NotificationPage> {
     );
   }
 
-
+  Container NotificationItem(NotificationInDevice current) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            color: Colors.black26,
+          ),
+          borderRadius: BorderRadius.circular(
+              5) // use instead of BorderRadius.all(Radius.circular(20))
+          ),
+      padding: EdgeInsets.symmetric(horizontal: 2.5.w, vertical: 1.h),
+      width: double.infinity,
+      height: 12.h,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            current.title ?? "",
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+            style: Theme.of(Navigation.instance.navigatorKey.currentContext!)
+                .textTheme
+                .headline4
+                ?.copyWith(
+                  color: Constance.primaryColor,
+                  // fontSize: 11.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              // Icon(current.icon,color: Constance.primaryColor,),
+              Container(
+                // height: 9.h,
+                // width: 9.w,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Constance.primaryColor,
+                ),
+                padding: EdgeInsets.all(0.5.h),
+                child: ClipOval(
+                  child: SizedBox.fromSize(
+                    size: Size.fromRadius(1.3.h), // Image radius
+                    child: Image.asset(
+                      getIcon(current.type ?? "news"),
+                      fit: BoxFit.cover,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 2.w,
+              ),
+              Text(
+                getName(current.type ?? "news"),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style:
+                    Theme.of(Navigation.instance.navigatorKey.currentContext!)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(
+                          color: Constance.primaryColor,
+                          // fontSize: 11.sp,
+                          // fontWeight: FontWeight.bold,
+                        ),
+              ),
+              Spacer(),
+              Text(
+                Jiffy("${current.created_at?.split("T")[0]} ${current.created_at?.split("T")[1].split(".")[0]}",
+                            "yyyy-MM-dd hh:mm:ss")
+                        .fromNow() ??
+                    '${current.created_at}',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style:
+                    Theme.of(Navigation.instance.navigatorKey.currentContext!)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(
+                          color: Constance.primaryColor,
+                          // fontSize: 11.sp,
+                          // fontWeight: FontWeight.bold,
+                        ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      // color: Colors.red,
+    );
+  }
 
   void setRead(String? id, seo_name, category_name, vendor_id, type) async {
     final response = await ApiProvider.instance.notificationRead(id);
@@ -283,6 +290,7 @@ class _NotificationPageState extends State<NotificationPage> {
         return Constance.logoIcon;
     }
   }
+
   String getName(type) {
     switch (type) {
       case "news":

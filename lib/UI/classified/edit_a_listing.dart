@@ -248,7 +248,7 @@ class _EditAListingPostState extends State<EditAListingPost> {
                         : Colors.black,
                   ),
                   Text(
-                    'Add more attachments',
+                    'Add attachments',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Storage.instance.isDarkMode
                               ? Colors.white
@@ -443,7 +443,7 @@ class _EditAListingPostState extends State<EditAListingPost> {
                           "Title, Description and Price is mandatory to post");
                     }
                   },
-                  txt: 'Go ahead',
+                  txt: 'Submit',
                 ),
               ),
             ],

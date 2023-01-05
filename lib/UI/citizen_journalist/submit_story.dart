@@ -143,7 +143,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                         : Colors.black,
                   ),
                   Text(
-                    'Add more attachments',
+                    'Add attachments',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Storage.instance.isDarkMode
                               ? Colors.white
@@ -191,7 +191,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                                 child: Image.file(
                                   attachements[pos],
                                   fit: BoxFit.fill,
-                                  errorBuilder: (err,cont,st){
+                                  errorBuilder: (err, cont, st) {
                                     return Image.asset(Constance.logoIcon);
                                   },
                                 ),
@@ -225,27 +225,27 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text:
-                      'By clicking "Submit" you agreed to our ',
+                      text: 'By clicking "Submit" you agreed to our ',
                       style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black54,
-                        // fontSize: 1.6.h,
-                      ),
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black54,
+                            // fontSize: 1.6.h,
+                          ),
                     ),
                     TextSpan(
                       text: 'Terms & Conditions.',
                       style: Theme.of(context).textTheme.headline6?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
-                        // fontSize: 1.6.h,
-                      ),
-                      recognizer: TapGestureRecognizer()..onTap = () {
-                        Navigation.instance.navigate('/termsConditions');
-                      },
+                            fontWeight: FontWeight.bold,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                            // fontSize: 1.6.h,
+                          ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigation.instance.navigate('/termsConditions');
+                        },
                     ),
                   ],
                 ),
@@ -309,8 +309,6 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
     );
   }
 
-
-
   void showPhotoBottomSheet(Function(int) getImage) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -327,14 +325,15 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                   "Add Photo/Video",
                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                 )),
-                contentPadding: EdgeInsets.only(top: 24, bottom: 30,left: 2.w,right: 2.w),
+                contentPadding:
+                    EdgeInsets.only(top: 24, bottom: 30, left: 2.w, right: 2.w),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-
                         InkWell(
                             onTap: () {
                               Navigation.instance.goBack();
@@ -353,7 +352,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                 Text(
+                                Text(
                                   "Camera",
                                   style: TextStyle(
                                     fontSize: 8.sp,
@@ -361,7 +360,9 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                                 ),
                               ],
                             )),
-
+                        SizedBox(
+                          width: 10.w,
+                        ),
                         InkWell(
                             onTap: () {
                               Navigation.instance.goBack();
@@ -388,59 +389,58 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                                 ),
                               ],
                             )),
-                        InkWell(
-                            onTap: () {
-                              Navigation.instance.goBack();
-                              getImage(2);
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  margin: EdgeInsets.only(bottom: 4),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.purple.shade300),
-                                  child: const Icon(
-                                    Icons.videocam,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                            Text(
-                                  "Videocam",
-                                  style: TextStyle(
-                                    fontSize: 8.sp,
-                                  ),
-                                ),
-                              ],
-                            )),
-                        InkWell(
-                            onTap: () {
-                              Navigation.instance.goBack();
-                              getImage(3);
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  margin: EdgeInsets.only(bottom: 4),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.purple.shade300),
-                                  child: const Icon(
-                                    Icons.video_library,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                 Text(
-                                  "Video Roll",
-                                  style: TextStyle(
-                                    fontSize: 8.sp,
-                                  ),
-                                ),
-                              ],
-                            )),
-
+                        // InkWell(
+                        //     onTap: () {
+                        //       Navigation.instance.goBack();
+                        //       getImage(2);
+                        //     },
+                        //     child: Column(
+                        //       children: [
+                        //         Container(
+                        //           padding: const EdgeInsets.all(10),
+                        //           margin: EdgeInsets.only(bottom: 4),
+                        //           decoration: BoxDecoration(
+                        //               borderRadius: BorderRadius.circular(30),
+                        //               color: Colors.purple.shade300),
+                        //           child: const Icon(
+                        //             Icons.videocam,
+                        //             color: Colors.white,
+                        //           ),
+                        //         ),
+                        //     Text(
+                        //           "Videocam",
+                        //           style: TextStyle(
+                        //             fontSize: 8.sp,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     )),
+                        // InkWell(
+                        //     onTap: () {
+                        //       Navigation.instance.goBack();
+                        //       getImage(3);
+                        //     },
+                        //     child: Column(
+                        //       children: [
+                        //         Container(
+                        //           padding: const EdgeInsets.all(10),
+                        //           margin: EdgeInsets.only(bottom: 4),
+                        //           decoration: BoxDecoration(
+                        //               borderRadius: BorderRadius.circular(30),
+                        //               color: Colors.purple.shade300),
+                        //           child: const Icon(
+                        //             Icons.video_library,
+                        //             color: Colors.white,
+                        //           ),
+                        //         ),
+                        //          Text(
+                        //           "Video Roll",
+                        //           style: TextStyle(
+                        //             fontSize: 8.sp,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     )),
                       ],
                     ),
                   ],
@@ -485,7 +485,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
           attachements.add(profileImage);
         });
       }
-    }else{
+    } else {
       final pickedFile = await _picker.pickVideo(
         source: ImageSource.gallery,
       );

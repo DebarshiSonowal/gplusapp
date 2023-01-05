@@ -140,9 +140,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/paymentProcessing':
       return FadeTransitionPageRouteBuilder(
           page: PaymentProcessingPage(settings.arguments as String));
-    case '/paymentProcessingIOS':
-      return FadeTransitionPageRouteBuilder(
-          page: Webview_payment(url: settings.arguments as String));
+    // case '/paymentProcessingIOS':
+    //   return FadeTransitionPageRouteBuilder(
+    //       page: Webview_payment(url: settings.arguments as String));
 
     case '/notification':
       return FadeTransitionPageRouteBuilder(page: NotificationPage());

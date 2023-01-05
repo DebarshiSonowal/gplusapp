@@ -36,6 +36,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   int random = 0;
   var categories = ['international', 'assam', 'guwahati', 'india'];
   var dropdownvalue = 'international';
+  final ScrollController controller = ScrollController();
 
   // WebViewController? _controller;
   bool like = false, dislike = false;
@@ -51,6 +52,18 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
       fetchContent();
     });
     fetchAds();
+    controller.addListener(() {
+      if (controller.position.atEdge) {
+        bool isTop = controller.position.pixels == 0;
+        if (isTop) {
+        } else {
+          // print('At the bottom');
+          // skip = skip * 2;
+          page++;
+          fetchMoreContent();
+        }
+      }
+    });
   }
 
   @override
@@ -63,6 +76,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
         color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return SingleChildScrollView(
+            controller: controller,
             child: data.opinion == null
                 ? Lottie.asset(
                     isEmpty ? Constance.noDataLoader : Constance.searchingIcon,
@@ -91,37 +105,67 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                           Container(
                             width: double.infinity,
                             decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [Colors.transparent, Colors.black],
-                              ),
-                            ),
+                                // gradient: LinearGradient(
+                                //   begin: Alignment.topCenter,
+                                //   end: Alignment.bottomCenter,
+                                //   colors: [Colors.transparent,Colors.black45, Colors.black],
+                                // ),
+                                // color: Colors.black,
+                                ),
                             // color: Colors.black.withOpacity(0.5),
                             padding: EdgeInsets.symmetric(
                                 vertical: 1.h, horizontal: 4.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  data.opinion?.image_caption ?? '',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline4
-                                      ?.copyWith(
-                                        color: Colors.grey.shade200,
-                                        // fontSize: 25.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                // Text(
-                                //   "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
-                                //   style: Theme.of(context).textTheme.headline6?.copyWith(
-                                //         color: Colors.white,
-                                //       ),
-                                // ),
-                              ],
+                            // child: Column(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   mainAxisSize: MainAxisSize.min,
+                            //   children: [
+                            //     Text(
+                            //       data.opinion?.image_caption ?? '',
+                            //       style: Theme.of(context)
+                            //           .textTheme
+                            //           .headline6
+                            //           ?.copyWith(
+                            //             color: Colors.grey.shade200,
+                            //             // fontSize: 25.sp,
+                            //             fontWeight: FontWeight.bold,
+                            //           ),
+                            //     ),
+                            //     // Text(
+                            //     //   "${current.author_name?.trim()}, ${Jiffy(current.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}",
+                            //     //   style: Theme.of(context).textTheme.headline6?.copyWith(
+                            //     //         color: Colors.white,
+                            //     //       ),
+                            //     // ),
+                            //   ],
+                            // ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          SizedBox(
+                            width: 90.w,
+                            child: Text(
+                              data.opinion?.image_caption ?? '',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    // fontSize: 25.sp,
+                                    // fontWeight: FontWeight.bold,
+                                    // fontStyle: FontStyle.italic,
+                                  ),
                             ),
                           ),
                         ],
@@ -203,7 +247,10 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
-                                                color: Constance.primaryColor,
+                                                color: Storage
+                                                        .instance.isDarkMode
+                                                    ? Constance.secondaryColor
+                                                    : Constance.primaryColor,
                                                 fontWeight: FontWeight.bold,
                                                 decoration:
                                                     TextDecoration.underline,
@@ -236,68 +283,62 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             // ),
                             Row(
                               children: [
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      postLike(data.opinion?.id, 1);
-                                      setState(() {
-                                        like = !like;
-                                        if (dislike) {
-                                          dislike = !like;
-                                        }
-                                      });
-                                    },
-                                    splashRadius: 20.0,
-                                    splashColor: !like
+                                IconButton(
+                                  onPressed: () {
+                                    postLike(data.opinion?.id, 1);
+                                    setState(() {
+                                      like = !like;
+                                      if (dislike) {
+                                        dislike = !like;
+                                      }
+                                    });
+                                  },
+                                  splashRadius: 10.0,
+                                  splashColor: !like
+                                      ? Constance.secondaryColor
+                                      : Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                  icon: Icon(
+                                    Icons.thumb_up,
+                                    color: like
                                         ? Constance.secondaryColor
                                         : Storage.instance.isDarkMode
                                             ? Colors.white
                                             : Constance.primaryColor,
-                                    icon: Icon(
-                                      Icons.thumb_up,
-                                      color: like
-                                          ? Constance.secondaryColor
-                                          : Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Constance.primaryColor,
-                                    ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 2.w,
-                                ),
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      postLike(data.opinion?.id, 0);
-                                      setState(() {
-                                        dislike = !dislike;
-                                        if (like) {
-                                          like = !dislike;
-                                        }
-                                      });
-                                    },
-                                    splashRadius: 20.0,
-                                    splashColor: !dislike
+                                // SizedBox(
+                                //   width: 2.w,
+                                // ),
+                                IconButton(
+                                  onPressed: () {
+                                    postLike(data.opinion?.id, 0);
+                                    setState(() {
+                                      dislike = !dislike;
+                                      if (like) {
+                                        like = !dislike;
+                                      }
+                                    });
+                                  },
+                                  splashRadius: 10.0,
+                                  splashColor: !dislike
+                                      ? Constance.secondaryColor
+                                      : Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                  icon: Icon(
+                                    Icons.thumb_down,
+                                    color: dislike
                                         ? Constance.secondaryColor
                                         : Storage.instance.isDarkMode
                                             ? Colors.white
                                             : Constance.primaryColor,
-                                    icon: Icon(
-                                      Icons.thumb_down,
-                                      color: dislike
-                                          ? Constance.secondaryColor
-                                          : Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Constance.primaryColor,
-                                    ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 2.w,
-                                ),
+                                // SizedBox(
+                                //   width: 2.w,
+                                // ),
                                 Material(
                                   type: MaterialType.transparency,
                                   child: IconButton(
@@ -306,7 +347,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                           ? 'check out our website https://guwahatiplus.com/'
                                           : '${data.opinion?.web_url}');
                                     },
-                                    splashRadius: 20.0,
+                                    splashRadius: 10.0,
                                     splashColor: Constance.secondaryColor,
                                     icon: Icon(
                                       Icons.share,
@@ -317,9 +358,6 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   ),
                                 ),
                               ],
-                            ),
-                            SizedBox(
-                              height: 1.5.h,
                             ),
                             // Text(
                             //   data.selectedArticle?.description
@@ -572,84 +610,75 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
 
                             Row(
                               children: [
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      postLike(data.opinion?.id, 1);
-                                      setState(() {
-                                        like = !like;
-                                        if (dislike) {
-                                          dislike = !like;
-                                        }
-                                      });
-                                    },
-                                    splashRadius: 20.0,
-                                    splashColor: !like
-                                        ? Constance.secondaryColor
-                                        : Storage.instance.isDarkMode
-                                            ? Colors.white
-                                            : Constance.primaryColor,
-                                    icon: Icon(
-                                      Icons.thumb_up,
-                                      color: like
-                                          ? Constance.secondaryColor
-                                          : Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Constance.primaryColor,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 2.w,
-                                ),
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      postLike(data.opinion?.id, 0);
-                                      setState(() {
-                                        dislike = !dislike;
-                                        if (like) {
-                                          like = !dislike;
-                                        }
-                                      });
-                                    },
-                                    splashRadius: 20.0,
-                                    splashColor: !dislike
-                                        ? Constance.secondaryColor
-                                        : Storage.instance.isDarkMode
-                                            ? Colors.white
-                                            : Constance.primaryColor,
-                                    icon: Icon(
-                                      Icons.thumb_down,
-                                      color: dislike
-                                          ? Constance.secondaryColor
-                                          : Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Constance.primaryColor,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 2.w,
-                                ),
-                                Material(
-                                  type: MaterialType.transparency,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Share.share(data.opinion?.web_url == ""
-                                          ? 'check out our website https://guwahatiplus.com/'
-                                          : '${data.opinion?.web_url}');
-                                    },
-                                    splashRadius: 20.0,
-                                    splashColor: Constance.secondaryColor,
-                                    icon: Icon(
-                                      Icons.share,
-                                      color: Storage.instance.isDarkMode
+                                IconButton(
+                                  onPressed: () {
+                                    postLike(data.opinion?.id, 1);
+                                    setState(() {
+                                      like = !like;
+                                      if (dislike) {
+                                        dislike = !like;
+                                      }
+                                    });
+                                  },
+                                  splashRadius: 10.0,
+                                  splashColor: !like
+                                      ? Constance.secondaryColor
+                                      : Storage.instance.isDarkMode
                                           ? Colors.white
                                           : Constance.primaryColor,
-                                    ),
+                                  icon: Icon(
+                                    Icons.thumb_up,
+                                    color: like
+                                        ? Constance.secondaryColor
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
+                                  ),
+                                ),
+                                // SizedBox(
+                                //   width: 2.w,
+                                // ),
+                                IconButton(
+                                  onPressed: () {
+                                    postLike(data.opinion?.id, 0);
+                                    setState(() {
+                                      dislike = !dislike;
+                                      if (like) {
+                                        like = !dislike;
+                                      }
+                                    });
+                                  },
+                                  splashRadius: 10.0,
+                                  splashColor: !dislike
+                                      ? Constance.secondaryColor
+                                      : Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                  icon: Icon(
+                                    Icons.thumb_down,
+                                    color: dislike
+                                        ? Constance.secondaryColor
+                                        : Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
+                                  ),
+                                ),
+                                // SizedBox(
+                                //   width: 2.w,
+                                // ),
+                                IconButton(
+                                  onPressed: () {
+                                    Share.share(data.opinion?.web_url == ""
+                                        ? 'check out our website https://guwahatiplus.com/'
+                                        : '${data.opinion?.web_url}');
+                                  },
+                                  splashRadius: 10.0,
+                                  splashColor: Constance.secondaryColor,
+                                  icon: Icon(
+                                    Icons.share,
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor,
                                   ),
                                 ),
                               ],
@@ -787,17 +816,17 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             SizedBox(
                               height: 2.h,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CustomButton(
-                                    txt: 'Load More',
-                                    onTap: () {
-                                      page++;
-                                      fetchMoreContent();
-                                    }),
-                              ],
-                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     CustomButton(
+                            //         txt: 'Load More',
+                            //         onTap: () {
+                            //           page++;
+                            //           fetchMoreContent();
+                            //         }),
+                            //   ],
+                            // ),
                             SizedBox(
                               height: 2.h,
                             ),

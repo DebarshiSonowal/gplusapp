@@ -147,7 +147,13 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                         height: 2.h,
                       ),
                       Text(
-                        'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution',
+                        Provider.of<DataProvider>(
+                                    Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                        context,
+                                    listen: false)
+                                .refer_earn ??
+                            'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution',
                         style: Theme.of(Navigation
                                 .instance.navigatorKey.currentContext!)
                             .textTheme
@@ -171,7 +177,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                           border: Border.all(
                             color: Storage.instance.isDarkMode
                                 ? Colors.white
-                                :Colors.black26,
+                                : Colors.black26,
                           ),
                           borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(7.0),
@@ -198,7 +204,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                     ?.copyWith(
                                       color: Storage.instance.isDarkMode
                                           ? Colors.white
-                                          :Colors.black,
+                                          : Colors.black,
                                       // fontSize: 11.sp,
                                       // fontWeight: FontWeight.bold,
                                     ),
@@ -221,7 +227,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                               },
                               child: Icon(
                                 Icons.copy,
-                                color:Storage.instance.isDarkMode
+                                color: Storage.instance.isDarkMode
                                     ? Colors.white
                                     : Colors.black,
                               ),
@@ -238,8 +244,8 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                         child: CustomButton(
                           txt: 'Send invite',
                           onTap: () {
-                            Share.share("Hello I welcome you to G Plus. Join me and download their app using my referral code ${data.referEarn?.referral_link
-                                ?.split('/')[3]}");
+                            Share.share(
+                                "Hello I welcome you to G Plus. Join me and download their app using my referral code ${data.referEarn?.referral_link?.split('/')[3]}");
                           },
                         ),
                       ),
@@ -660,8 +666,8 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -669,7 +675,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
           },
           icon: Icon(Icons.search),
         ),

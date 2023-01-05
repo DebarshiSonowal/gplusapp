@@ -229,7 +229,9 @@ class _ExclusivePageState extends State<ExclusivePage> {
                                           .textTheme
                                           .headline5
                                           ?.copyWith(
-                                        color: Constance.primaryColor,
+                                        color: Storage.instance.isDarkMode
+                                            ? Constance.secondaryColor
+                                            : Constance.primaryColor,
                                         fontWeight: FontWeight.bold,
                                         decoration:
                                         TextDecoration.underline,

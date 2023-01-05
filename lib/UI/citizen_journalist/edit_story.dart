@@ -137,7 +137,7 @@ class _EditStoryState extends State<EditStory> {
                         : Colors.black,
                   ),
                   Text(
-                    'Add more attachments',
+                    'Add attachments',
                     style: Theme.of(context).textTheme.headline5?.copyWith(
                           color: Storage.instance.isDarkMode
                               ? Colors.white
@@ -363,8 +363,8 @@ class _EditStoryState extends State<EditStory> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-
                         InkWell(
                             onTap: () {
                               Navigation.instance.goBack();
@@ -391,7 +391,9 @@ class _EditStoryState extends State<EditStory> {
                                 ),
                               ],
                             )),
-
+                        SizedBox(
+                          width: 10.w,
+                        ),
                         InkWell(
                             onTap: () {
                               Navigation.instance.goBack();
@@ -418,58 +420,58 @@ class _EditStoryState extends State<EditStory> {
                                 ),
                               ],
                             )),
-                        InkWell(
-                            onTap: () {
-                              Navigation.instance.goBack();
-                              getImage(2);
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  margin: EdgeInsets.only(bottom: 4),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.purple.shade300),
-                                  child: const Icon(
-                                    Icons.videocam,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  "Videocam",
-                                  style: TextStyle(
-                                    fontSize: 8.sp,
-                                  ),
-                                ),
-                              ],
-                            )),
-                        InkWell(
-                            onTap: () {
-                              Navigation.instance.goBack();
-                              getImage(3);
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  margin: EdgeInsets.only(bottom: 4),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.purple.shade300),
-                                  child: const Icon(
-                                    Icons.video_library,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  "Video Roll",
-                                  style: TextStyle(
-                                    fontSize: 8.sp,
-                                  ),
-                                ),
-                              ],
-                            )),
+                        // InkWell(
+                        //     onTap: () {
+                        //       Navigation.instance.goBack();
+                        //       getImage(2);
+                        //     },
+                        //     child: Column(
+                        //       children: [
+                        //         Container(
+                        //           padding: const EdgeInsets.all(10),
+                        //           margin: EdgeInsets.only(bottom: 4),
+                        //           decoration: BoxDecoration(
+                        //               borderRadius: BorderRadius.circular(30),
+                        //               color: Colors.purple.shade300),
+                        //           child: const Icon(
+                        //             Icons.videocam,
+                        //             color: Colors.white,
+                        //           ),
+                        //         ),
+                        //         Text(
+                        //           "Videocam",
+                        //           style: TextStyle(
+                        //             fontSize: 8.sp,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     )),
+                        // InkWell(
+                        //     onTap: () {
+                        //       Navigation.instance.goBack();
+                        //       getImage(3);
+                        //     },
+                        //     child: Column(
+                        //       children: [
+                        //         Container(
+                        //           padding: const EdgeInsets.all(10),
+                        //           margin: EdgeInsets.only(bottom: 4),
+                        //           decoration: BoxDecoration(
+                        //               borderRadius: BorderRadius.circular(30),
+                        //               color: Colors.purple.shade300),
+                        //           child: const Icon(
+                        //             Icons.video_library,
+                        //             color: Colors.white,
+                        //           ),
+                        //         ),
+                        //         Text(
+                        //           "Video Roll",
+                        //           style: TextStyle(
+                        //             fontSize: 8.sp,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     )),
 
                       ],
                     ),
