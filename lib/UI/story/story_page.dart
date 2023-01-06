@@ -12,6 +12,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Model/category_name.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +62,7 @@ class _StoryPageState extends State<StoryPage> {
   var dropdownvalue = 'international';
 
   // WebViewController? _controller;
-  bool like = false, dislike = false,isEmpty=false;
+  bool like = false, dislike = false, isEmpty = false;
   String blockquote = "";
   int skip = 10;
   WebViewController? _controller;
@@ -92,8 +93,9 @@ class _StoryPageState extends State<StoryPage> {
   @override
   void dispose() {
     Provider.of<DataProvider>(
-        Navigation.instance.navigatorKey.currentContext ?? context,
-        listen: false).selectedArticle=null;
+            Navigation.instance.navigatorKey.currentContext ?? context,
+            listen: false)
+        .selectedArticle = null;
     super.dispose();
   }
 
@@ -208,27 +210,6 @@ class _StoryPageState extends State<StoryPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Row(
-                            //   children: [
-                            //     Container(
-                            //       color: Constance.primaryColor,
-                            //       padding: EdgeInsets.symmetric(
-                            //           horizontal: 2.w, vertical: 1.h),
-                            //       child: Text(
-                            //         'Guwahati',
-                            //         style: Theme.of(Navigation.instance
-                            //                 .navigatorKey.currentContext!)
-                            //             .textTheme
-                            //             .headline5
-                            //             ?.copyWith(
-                            //               color: Colors.white,
-                            //               // fontSize: 2.2.h,
-                            //               // fontWeight: FontWeight.bold,
-                            //             ),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
                             SizedBox(
                               height: 2.h,
                             ),
@@ -397,10 +378,13 @@ class _StoryPageState extends State<StoryPage> {
                                 // ),
                                 IconButton(
                                   onPressed: () {
-                                    Share.share(data.selectedArticle?.web_url ==
-                                            ""
-                                        ? 'check out our website https://guwahatiplus.com/'
-                                        : '${data.selectedArticle?.web_url}');
+                                    // Share.share(data.selectedArticle?.web_url ==
+                                    //         ""
+                                    //     ? 'check out our website https://guwahatiplus.com/'
+                                    //     : '${data.selectedArticle?.web_url}');
+                                    Share.share(generateURL(
+                                        data.selectedArticle?.first_cat_name,
+                                        data.selectedArticle?.seo_name));
                                   },
                                   splashRadius: 20.0,
                                   splashColor: Storage.instance.isDarkMode
@@ -538,14 +522,6 @@ class _StoryPageState extends State<StoryPage> {
                                     ),
                                   );
                                 },
-                                // "blockquote": (context, child) {
-                                //   return setupSummaryCard(
-                                //     title: 'Small Island Developing States Photo Submission',
-                                //     site: '@flickr',
-                                //     description: 'View the album on Flickr.',
-                                //     imageUrl: 'https://farm6.staticflickr.com/5510/14338202952_93595258ff_z.jpg',
-                                //   );
-                                // },
                                 "blockquote": (context, child) {
                                   return SizedBox(
                                     height: 28.h,
@@ -613,38 +589,6 @@ class _StoryPageState extends State<StoryPage> {
                             SizedBox(
                               height: 1.5.h,
                             ),
-
-                            // SizedBox(
-                            //   height: 1.h,
-                            // ),
-                            // Text(
-                            //   data.selectedArticle?.description
-                            //           ?.split('</p>')[3]
-                            //           .trim() ??
-                            //       "",
-                            //   style: Theme.of(context)
-                            //       .textTheme
-                            //       .headline5
-                            //       ?.copyWith(
-                            //         color: Colors.black45,
-                            //         // fontWeight: FontWeight.bold,
-                            //       ),
-                            // ),
-                            // SizedBox(
-                            //   height: 20.h,
-                            //   child: WebView(
-                            //     initialUrl: 'about:blank',
-                            //     onWebViewCreated:
-                            //         (WebViewController
-                            //     webViewController) {
-                            //       _controller = webViewController;
-                            //       _controller?.loadHtmlString(data.selectedArticle?.description??"");
-                            //     },
-                            //   ),
-                            // ),
-                            // SizedBox(
-                            //   height: 1.h,
-                            // ),
                             Wrap(
                               children: [
                                 for (var i
@@ -828,10 +772,13 @@ class _StoryPageState extends State<StoryPage> {
                                 // ),
                                 IconButton(
                                   onPressed: () {
-                                    Share.share(data.selectedArticle?.web_url ==
-                                            ""
-                                        ? 'check out our website https://guwahatiplus.com/'
-                                        : '${data.selectedArticle?.web_url}');
+                                    // Share.share(data.selectedArticle?.web_url ==
+                                    //         ""
+                                    //     ? 'check out our website https://guwahatiplus.com/'
+                                    //     : '${data.selectedArticle?.web_url}');
+                                    Share.share(generateURL(
+                                        data.selectedArticle?.first_cat_name,
+                                        data.selectedArticle?.seo_name));
                                   },
                                   splashRadius: 10.0,
                                   splashColor: Constance.secondaryColor,
@@ -1113,11 +1060,11 @@ class _StoryPageState extends State<StoryPage> {
       });
       // Navigation.instance.goBack();
       setState(() {
-        isEmpty=false;
+        isEmpty = false;
       });
     } else {
       setState(() {
-        isEmpty=true;
+        isEmpty = true;
       });
       // Navigation.instance.goBack();
     }
@@ -1258,5 +1205,9 @@ class _StoryPageState extends State<StoryPage> {
 
   String getYoutubeThumbnail(var id) {
     return 'https://img.youtube.com/vi/${id}/0.jpg';
+  }
+
+  String generateURL(CategoryName? first_cat_name, String? seo_name) {
+    return "https://guwahatiplus.com/deeplink/story/${seo_name}/${first_cat_name}";
   }
 }

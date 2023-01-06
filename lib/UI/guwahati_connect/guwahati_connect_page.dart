@@ -58,7 +58,11 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
       vsync: this,
       duration: const Duration(milliseconds: 260),
     );
-
+    Future.delayed(Duration.zero,(){
+      if (!Storage.instance.isGuwahatiConnect) {
+        showDialogBox();
+      }
+    });
     final curvedAnimation =
         CurvedAnimation(curve: Curves.easeInOut, parent: _animationController!);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
@@ -462,9 +466,6 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setGuwahatiConnect(response.posts);
-      if (!Storage.instance.isGuwahatiConnect) {
-        showDialogBox();
-      }
     } else {
       Navigation.instance.goBack();
       Provider.of<DataProvider>(

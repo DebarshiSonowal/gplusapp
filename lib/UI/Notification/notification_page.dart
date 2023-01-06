@@ -55,7 +55,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             current.seo_name,
                             current.seo_name_category,
                             current.vendor_id,
-                            current.type);
+                            current.type,current.notification_id);
                       },
                       child: NotificationItem(current),
                     );
@@ -171,11 +171,11 @@ class _NotificationPageState extends State<NotificationPage> {
     );
   }
 
-  void setRead(String? id, seo_name, category_name, vendor_id, type) async {
+  void setRead(String? id, seo_name, category_name, vendor_id, type,categoryId) async {
     final response = await ApiProvider.instance.notificationRead(id);
     if (response.success ?? false) {
       fetchNotification();
-      sendToDestination(seo_name, category_name, type, id, vendor_id);
+      sendToDestination(seo_name, category_name, type, id, vendor_id,categoryId);
       // Navigation.instance
       //     .navigate('/story', args: '${category_name},${seo_name}');
     } else {
@@ -183,61 +183,73 @@ class _NotificationPageState extends State<NotificationPage> {
     }
   }
 
-  void sendToDestination(seo_name, category_name, type, id, vendor_id) async {
-    //News Notifications ( On all and selected News)
-    //
-    // Any Notifications to be sent from dashboard:- ( Example Earthquake)
-    //
-    // Ghy connect :- Status of Post Notifications and Comments Notification
-    //
-    // Citizen Journalist ( Post Status Notification)
-    //
-    // Big Deal offers Notifications- Based on locality / Locations on that area automatically
-    // Or Any Notification of any vendor which can be send from backend  dashboard to promote their business and offers)
-    //
-    // Classifieds Ads:- Post accept Reject Status
-    //
-    // Also Locality Notifications
+  void sendToDestination(
+      seoName, categoryName, type, id, vendorId, categoryId) async {
     switch (type) {
       case "news":
+        debugPrint("News clicked ${categoryName},${seoName} ");
         Navigation.instance
-            .navigate('/story', args: '${category_name},${seo_name}');
+            .navigate('/story', args: '${categoryName},${seoName}');
+        break;
+      case "opinion":
+        Navigation.instance.navigate('/opinionPage');
+        Navigation.instance
+            .navigate('/opinionDetails', args: '${seoName},${categoryId}');
         break;
       case "ghy_connect":
         Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext!,
-                listen: false)
+            Navigation.instance.navigatorKey.currentContext!,
+            listen: false)
             .setCurrent(2);
         Navigation.instance.navigate('/guwahatiConnects');
-
+        Navigation.instance.navigate('/allImagesPage',args: int.parse(id.toString()));
+        break;
+      case "ghy_connect_status":
+        Provider.of<DataProvider>(
+            Navigation.instance.navigatorKey.currentContext!,
+            listen: false)
+            .setCurrent(2);
+        Navigation.instance.navigate('/guwahatiConnects');
+        Navigation.instance.navigate('/allImagesPage',args: int.parse(id.toString()));
         break;
       case "citizen_journalist":
         Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext!,
-                listen: false)
+            Navigation.instance.navigatorKey.currentContext!,
+            listen: false)
             .setCurrent(3);
         Navigation.instance.navigate('/citizenJournalist');
         break;
+      case "ctz_journalist_status":
+        Provider.of<DataProvider>(
+            Navigation.instance.navigatorKey.currentContext!,
+            listen: false)
+            .setCurrent(3);
+        Navigation.instance.navigate('/citizenJournalist');
+        Navigation.instance.navigate('/submitedStory');
+        Navigation.instance.navigate(
+            '/viewStoryPage',
+            args: int.parse(id.toString()));
+        break;
       case "deals":
         Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext!,
-                listen: false)
+            Navigation.instance.navigatorKey.currentContext!,
+            listen: false)
             .setCurrent(1);
         Navigation.instance.navigate('/bigdealpage');
         Navigation.instance
-            .navigate('/categorySelect', args: int.parse(vendor_id));
+            .navigate('/categorySelect', args: int.parse(vendorId));
         break;
       case "classified":
         Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext!,
-                listen: false)
+            Navigation.instance.navigatorKey.currentContext!,
+            listen: false)
             .setCurrent(4);
         Navigation.instance.navigate('/classified');
         Navigation.instance.navigate('/classifiedDetails', args: int.parse(id));
         break;
       case "locality":
         Navigation.instance
-            .navigate('/story', args: '${category_name},${seo_name}');
+            .navigate('/story', args: '${categoryName},${seoName}');
         break;
 
       default:

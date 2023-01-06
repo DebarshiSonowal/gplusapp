@@ -45,7 +45,7 @@ class _EditAListingPostState extends State<EditAListingPost> {
   var selectedCategory = '';
   var selectedLocality = '';
   var locality = ['Rukminigaon', 'Khanapara', 'Beltola', ''];
-
+  final localityEditor = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   List<AttachFile> images = [];
   List<File> attachements = [];
@@ -65,6 +65,7 @@ class _EditAListingPostState extends State<EditAListingPost> {
     title.dispose();
     desc.dispose();
     price.dispose();
+    localityEditor.dispose();
   }
 
   @override
@@ -150,43 +151,64 @@ class _EditAListingPostState extends State<EditAListingPost> {
               SizedBox(
                 height: 0.3.h,
               ),
-              Consumer<DataProvider>(builder: (context, data, _) {
-                return DropdownButton(
-                  dropdownColor:
-                      Storage.instance.isDarkMode ? Colors.black : Colors.white,
-                  // Initial Value
-                  value: selectedLocality,
-
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
-
-                  // Array list of items
-                  items: data.locality
-                      .map((e) => DropdownMenuItem(
-                            value: e.id.toString(),
-                            child: Text(
-                              e.name ?? "",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4
-                                  ?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white70
-                                        : Constance.primaryColor,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ))
-                      .toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedLocality = newValue!;
-                    });
-                  },
-                );
-              }),
+              // Consumer<DataProvider>(builder: (context, data, _) {
+              //   return DropdownButton(
+              //     dropdownColor:
+              //         Storage.instance.isDarkMode ? Colors.black : Colors.white,
+              //     // Initial Value
+              //     value: selectedLocality,
+              //
+              //     // Down Arrow Icon
+              //     icon: const Icon(Icons.keyboard_arrow_down),
+              //
+              //     // Array list of items
+              //     items: data.locality
+              //         .map((e) => DropdownMenuItem(
+              //               value: e.id.toString(),
+              //               child: Text(
+              //                 e.name ?? "",
+              //                 style: Theme.of(context)
+              //                     .textTheme
+              //                     .headline4
+              //                     ?.copyWith(
+              //                       color: Storage.instance.isDarkMode
+              //                           ? Colors.white70
+              //                           : Constance.primaryColor,
+              //                       // fontWeight: FontWeight.bold,
+              //                     ),
+              //               ),
+              //             ))
+              //         .toList(),
+              //     // After selecting the desired option,it will
+              //     // change button value to selected value
+              //     onChanged: (String? newValue) {
+              //       setState(() {
+              //         selectedLocality = newValue!;
+              //       });
+              //     },
+              //   );
+              // }),
+              TextFormField(
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                      color: Colors.black,
+                      // fontSize: 1.6.h,
+                    ),
+                controller: localityEditor,
+                maxLines: 1,
+                keyboardType: TextInputType.name,
+                decoration: InputDecoration(
+                  filled: true,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  fillColor: Colors.white,
+                  labelText: 'Enter your locality',
+                  labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Colors.black,
+                        // fontSize: 1.5.h,
+                      ),
+                  border: const OutlineInputBorder(),
+                  enabledBorder: const OutlineInputBorder(),
+                ),
+              ),
               SizedBox(
                 height: 2.h,
               ),
@@ -423,10 +445,11 @@ class _EditAListingPostState extends State<EditAListingPost> {
                     // showDialogBox();
                     if (title.text.isNotEmpty &&
                         desc.text.isNotEmpty &&
-                        price.text.isNotEmpty) {
+                        price.text.isNotEmpty &&
+                        localityEditor.text.isNotEmpty) {
                       updateClassified(
                           selectedCategory,
-                          selectedLocality,
+                          localityEditor.text,
                           title.text,
                           desc.text,
                           price.text,

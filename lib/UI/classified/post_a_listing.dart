@@ -27,12 +27,12 @@ class PostAListing extends StatefulWidget {
 }
 
 class _PostAListingState extends State<PostAListing> {
-  var title = TextEditingController();
-  var localityEditor = TextEditingController();
+  final title = TextEditingController();
+  final localityEditor = TextEditingController();
 
-  var desc = TextEditingController();
+  final desc = TextEditingController();
 
-  var price = TextEditingController();
+  final price = TextEditingController();
 
   var current = 3;
 

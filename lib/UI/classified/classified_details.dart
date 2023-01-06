@@ -64,52 +64,60 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                       color: Colors.grey.shade200,
                       width: MediaQuery.of(context).size.width,
                       // height: 40.h,
-                      child: CarouselSlider(
-                        items: data.selectedClassified?.attach_files
-                            ?.asMap()
-                            .entries
-                            .map(
-                              (e) => GestureDetector(
-                                onTap: () {
-                                  Navigation.instance.navigate('/viewImage',
-                                      args: e.value.file_name ??
-                                          Constance.defaultImage);
-                                },
-                                child: CachedNetworkImage(
-                                  imageUrl: e.value.file_name ?? "",
-                                  width: double.infinity,
-                                  // height: 35.h,
-                                  fit: BoxFit.fitHeight,
-                                  // filterQuality: FilterQuality.low,
-                                  placeholder: (cont, _) {
-                                    return Image.asset(
-                                      Constance.logoIcon,
-                                      // color: Colors.black,
-                                    );
-                                  },
-                                  errorWidget: (cont, _, e) {
-                                    return Image.network(
-                                      Constance.defaultImage,
-                                      fit: BoxFit.fill,
-                                    );
-                                  },
-                                ),
-                              ),
+                      child: ((data.selectedClassified?.attach_files ?? [])
+                              .isNotEmpty)
+                          ? CarouselSlider(
+                              items: data.selectedClassified?.attach_files
+                                  ?.asMap()
+                                  .entries
+                                  .map(
+                                    (e) => GestureDetector(
+                                      onTap: () {
+                                        Navigation.instance.navigate(
+                                            '/viewImage',
+                                            args: e.value.file_name ??
+                                                Constance.defaultImage);
+                                      },
+                                      child: CachedNetworkImage(
+                                        imageUrl: e.value.file_name ?? "",
+                                        width: double.infinity,
+                                        // height: 35.h,
+                                        fit: BoxFit.fitHeight,
+                                        // filterQuality: FilterQuality.low,
+                                        placeholder: (cont, _) {
+                                          return Image.asset(
+                                            Constance.logoIcon,
+                                            // color: Colors.black,
+                                          );
+                                        },
+                                        errorWidget: (cont, _, e) {
+                                          return Image.network(
+                                            Constance.defaultImage,
+                                            fit: BoxFit.fill,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                              carouselController: _controller,
+                              options: CarouselOptions(
+                                  autoPlay: false,
+                                  enlargeCenterPage: true,
+                                  // aspectRatio: 1,
+                                  aspectRatio: 12 / 9,
+                                  viewportFraction: 1,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      _current = index;
+                                    });
+                                  }),
                             )
-                            .toList(),
-                        carouselController: _controller,
-                        options: CarouselOptions(
-                            autoPlay: false,
-                            enlargeCenterPage: true,
-                            // aspectRatio: 1,
-                            aspectRatio: 12 / 9,
-                            viewportFraction: 1,
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                _current = index;
-                              });
-                            }),
-                      ),
+                          : Image.asset(
+                              Constance.logoIcon,
+                              scale: 1,
+                              // color: Colors.black,
+                            ),
                     ),
                     Container(
                       decoration: const BoxDecoration(
@@ -293,12 +301,11 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                         data.selectedClassified?.locality?.name ??
                             'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
                         // overflow: TextOverflow.clip,
-                        style:
-                            Theme.of(context).textTheme.headline5?.copyWith(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
+                        style: Theme.of(context).textTheme.headline5?.copyWith(
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                       ),
                     ],
                   ),
@@ -326,12 +333,11 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                       Text(
                         '${data.selectedClassified?.total_views} views',
                         // overflow: TextOverflow.clip,
-                        style:
-                            Theme.of(context).textTheme.headline5?.copyWith(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
+                        style: Theme.of(context).textTheme.headline5?.copyWith(
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                       ),
                     ],
                   ),

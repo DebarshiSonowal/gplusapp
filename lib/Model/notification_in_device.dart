@@ -10,7 +10,10 @@ class NotificationInDevice {
       seo_name_category,
       web_path,
       api_path,
-      read_at,vendor_id;
+      read_at,
+      vendor_id,
+      notification_id,
+      category_id;
 
   NotificationInDevice.fromJson(json) {
     id = json['id'] ?? "";
@@ -18,7 +21,7 @@ class NotificationInDevice {
     created_at = json['created_at'] ?? "";
     read_at = json['read_at'] ?? "";
     vendor_id = json['vendor_id'] ?? "";
-
+    notification_id = json['notification_id']??"";
     title = json['data']['title'] ?? "";
     type = json['data']['type'] ?? "";
     author_name = json['data']['author_name'] ?? "G Plus";
@@ -27,6 +30,7 @@ class NotificationInDevice {
     seo_name_category = json['data']['seo_name_category'] ?? "";
     web_path = json['data']['web_path'] ?? "";
     api_path = json['data']['api_path'] ?? "";
+    category_id = (json['category_id'] ?? "") as String;
   }
 }
 

@@ -303,7 +303,7 @@ class ClassifiedMyListCard extends StatelessWidget {
       case 2:
         return 'Rejected';
       default:
-        return 'Pending for available';
+        return 'Pending For Approval';
     }
   }
 

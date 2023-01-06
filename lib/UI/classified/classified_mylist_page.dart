@@ -727,7 +727,7 @@ for an unparalleled publication, that people call their''',
       case 2:
         return 'Rejected';
       default:
-        return 'Pending for available';
+        return 'Pending For Approval';
     }
   }
 
