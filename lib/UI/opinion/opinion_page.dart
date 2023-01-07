@@ -241,48 +241,52 @@ class _OpinionPageState extends State<OpinionPage> {
                                 color: Constance.secondaryColor,
                               ),
                               SizedBox(
-                                width: 0.5.w,
+                                width: 0.7.w,
                               ),
-                              GestureDetector (
-                                onTap: () {
-                                  Navigation.instance.navigate('/authorPage',
-                                      args: data.opinions[0].user_id);
-                                },
-                                child: RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: data.opinions[0].user?.name ??
-                                            "G Plus",
-                                        style: Theme.of(Navigation.instance
-                                            .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                          color: Storage.instance.isDarkMode
-                                              ? Constance.secondaryColor
-                                              : Constance.primaryColor,
-                                          fontWeight: FontWeight.bold,
-                                          decoration:
-                                          TextDecoration.underline,
+                              Expanded(
+                                child: GestureDetector (
+                                  onTap: () {
+                                    Navigation.instance.navigate('/authorPage',
+                                        args: data.opinions[0].user_id);
+                                  },
+                                  child: RichText(
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: data.opinions[0].user?.name ??
+                                              "G Plus",
+                                          style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                              .textTheme
+                                              .headline5
+                                              ?.copyWith(
+                                            color: Storage.instance.isDarkMode
+                                                ? Constance.secondaryColor
+                                                : Constance.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                            TextDecoration.underline,
+                                          ),
                                         ),
-                                      ),
-                                      TextSpan(
-                                        text:
-                                        ' , ${Jiffy(data.opinions[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
-                                        style: Theme.of(Navigation.instance
-                                            .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                          color: Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Colors.black,
-                                          // fontSize: 2.2.h,
-                                          // fontWeight: FontWeight.bold,
+                                        TextSpan(
+                                          text:
+                                          ' , ${Jiffy(data.opinions[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                          style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                              .textTheme
+                                              .headline5
+                                              ?.copyWith(
+                                            color: Storage.instance.isDarkMode
+                                                ? Colors.white
+                                                : Colors.black,
+                                            // fontSize: 2.2.h,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

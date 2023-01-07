@@ -1090,10 +1090,12 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
               //   color: Colors.white,
               //   thickness: 0.2,
               // ),
-              SizedBox(
+              (!Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext!).hideReferEarn)?SizedBox(
                 height: 0.2.h,
-              ),
-              Padding(
+              ):Container(),
+              (!Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext!).hideReferEarn)?Padding(
                 padding: EdgeInsets.symmetric(vertical: 1.0.h),
                 child: InkWell(
                   splashColor: Constance.secondaryColor,
@@ -1121,7 +1123,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     ],
                   ),
                 ),
-              ),
+              ):Container(),
               const Divider(
                 color: Colors.white,
                 thickness: 0.2,

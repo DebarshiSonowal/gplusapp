@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:io' show Platform;
 import 'package:badges/badges.dart';
@@ -26,6 +27,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
+import 'package:uni_links/uni_links.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -54,6 +56,63 @@ class _HomeScreenState extends State<HomeScreen> {
   // final _listController = PageController(keepPage: true, viewportFraction: 0.8);
 
   String _poll = Constance.pollWeek[0];
+
+  StreamSubscription? _sub;
+
+  void sendToRoute(String route, data, String? category) async {
+    print("our route ${route}");
+    switch (route) {
+      case "story":
+      // Navigation.instance.navigate('/main');
+        print("this route");
+        Navigation.instance.navigate('/story', args: '${category},${data}');
+        break;
+      case "opinion":
+        Navigation.instance
+            .navigate('/opinionDetails', args: '${data},${category}');
+        break;
+      default:
+        debugPrint("deeplink failed 1 ${route}");
+        Navigation.instance.navigate(
+            '/link_failed',args: ""
+        );
+        break;
+    }
+  }
+
+  // Future<void> initUniLinksResume() async {
+  //   // ... check initialUri
+  //
+  //   // Attach a listener to the stream
+  //   _sub = uriLinkStream.listen((Uri? uri,) {
+  //     if (uri != null) {
+  //       print("deeplink2 this ${uri.toString().split("/")}");
+  //       sendToRoute(
+  //           uri.toString().split("/")[4].trim(),
+  //           uri.toString().split("/")[5].trim(),
+  //           (uri.toString().split("/").length <= 6
+  //               ? ""
+  //               : uri.toString().split("/")[6].trim()));
+  //     } else {
+  //       debugPrint("deeplink failed 2 ");
+  //       // Navigation.instance.navigate(
+  //       //   '/link_failed',
+  //       // );
+  //     }
+  //     // Use the uri and warn the user, if it is not correct
+  //   }, onError: (err) {
+  //     debugPrint("deeplink failed 3 error ${err} ");
+  //     // Handle exception by warning the user their action did not succeed
+  //     // Navigation.instance.navigate(
+  //     //     '/link_failed',
+  //     //     args: ""
+  //     // );
+  //   });
+  //
+  //   // NOTE: Don't forget to call _sub.cancel() in dispose()
+  // }
+
+
 
   @override
   void dispose() {
@@ -599,6 +658,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setMyGeoTopicks(response.geoTopicks);
+      // initUniLinks();
+      // initUniLinksResume();
     } else {
       // Navigation.instance.goBack();
     }

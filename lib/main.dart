@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:open_file_safe/open_file_safe.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 // import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
@@ -113,15 +114,17 @@ void notificationTapBackground(
               listen: false)
           .setCurrent(2);
       Navigation.instance.navigate('/guwahatiConnects');
-      Navigation.instance.navigate('/allImagesPage',args: int.parse(notification.post_id.toString()));
+      Navigation.instance.navigate('/allImagesPage',
+          args: int.parse(notification.post_id.toString()));
       break;
-      case "ghy_connect_status":
+    case "ghy_connect_status":
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
           .setCurrent(2);
       Navigation.instance.navigate('/guwahatiConnects');
-      Navigation.instance.navigate('/allImagesPage',args: int.parse(notification.post_id.toString()));
+      Navigation.instance.navigate('/allImagesPage',
+          args: int.parse(notification.post_id.toString()));
       break;
     case "citizen_journalist":
       Provider.of<DataProvider>(
@@ -132,13 +135,12 @@ void notificationTapBackground(
       break;
     case "ctz_journalist_status":
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext!,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
           .setCurrent(3);
       Navigation.instance.navigate('/citizenJournalist');
       Navigation.instance.navigate('/submitedStory');
-      Navigation.instance.navigate(
-          '/viewStoryPage',
+      Navigation.instance.navigate('/viewStoryPage',
           args: int.parse(notification.post_id.toString()));
       break;
     case "deals":
@@ -247,9 +249,38 @@ void main() async {
   setUpFirebase();
   Storage.instance.initializeStorage();
 
-  //notification
-
   runApp(const MyApp());
+}
+
+void checkVersion(String version, String buildNumber) async {
+  if (Platform.isIOS) {
+    Provider.of<DataProvider>(
+        Navigation.instance.navigatorKey.currentContext!,listen: false)
+        .setHide(true);
+  }
+  // final response =
+  //     await ApiProvider.instance.versionCheck(version, buildNumber);
+  // if (response.success ?? true) {
+  //   if (Platform.isIOS) {
+  //     Provider.of<DataProvider>(
+  //             Navigation.instance.navigatorKey.currentContext!,listen: false)
+  //         .setHide(response.success);
+  //   } else {
+  //     Provider.of<DataProvider>(
+  //             Navigation.instance.navigatorKey.currentContext!,listen: false)
+  //         .setHide(true);
+  //   }
+  // } else {
+  //   if (Platform.isIOS) {
+  //     Provider.of<DataProvider>(
+  //             Navigation.instance.navigatorKey.currentContext!,listen: false)
+  //         .setHide(response.success);
+  //   } else {
+  //     Provider.of<DataProvider>(
+  //             Navigation.instance.navigatorKey.currentContext!,listen: false)
+  //         .setHide(true);
+  //   }
+  // }
 }
 
 void NotificationHandler(message) async {
@@ -341,71 +372,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  StreamSubscription? _sub;
 
-  void sendToRoute(String route, data, String? category) async {
-    switch (route) {
-      case "story":
-        // Navigation.instance.navigate('/main');
-        Navigation.instance.navigate('/story', args: '${category},${data}');
-        break;
-      default:
-        print("deeplink failed ${route}");
-        Navigation.instance.navigate(
-          '/link_failed',
-        );
-        break;
-    }
-  }
-
-  Future<void> initUniLinksResume() async {
-    // ... check initialUri
-
-    // Attach a listener to the stream
-    _sub = uriLinkStream.listen((Uri? uri) {
-      if (uri != null) {
-        print("deeplink2 ${uri.toString().split("/")}");
-        sendToRoute(
-            uri.toString().split("/")[4],
-            uri.toString().split("/")[5],
-            (uri.toString().split("/").length <= 6
-                ? ""
-                : uri.toString().split("/")[6]));
-      } else {
-        Navigation.instance.navigate('/link_failed',);
-      }
-      // Use the uri and warn the user, if it is not correct
-    }, onError: (err) {
-      // Handle exception by warning the user their action did not succeed
-      Navigation.instance.navigate('/link_failed',);
-    });
-
-    // NOTE: Don't forget to call _sub.cancel() in dispose()
-  }
-
-  Future<void> initUniLinks() async {
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      final initialLink = await getInitialLink();
-      if (initialLink != null) {
-        print("deeplink1 ${initialLink.split("/")}");
-        sendToRoute(
-            initialLink.split("/")[4],
-            initialLink.split("/")[5],
-            (initialLink.split("/").length <= 6
-                ? ""
-                : initialLink.split("/")[6]));
-      } else {
-        initUniLinksResume();
-      }
-      // Parse the link and warn the user, if it is not correct,
-      // but keep in mind it could be `null`.
-    } on PlatformException {
-      // Handle exception by warning the user their action did not succeed
-      // return?
-      Navigation.instance.navigate('/link_failed',);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -427,6 +394,15 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initUniLinks();
+    initValues();
+  }
+
+  void initValues() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    debugPrint(
+        "version:${packageInfo.version} buildNumber:${packageInfo.buildNumber}");
+    //notification
+    checkVersion(packageInfo.version, packageInfo.buildNumber);
   }
 }
 
@@ -482,15 +458,17 @@ void sendToDestination(
               listen: false)
           .setCurrent(2);
       Navigation.instance.navigate('/guwahatiConnects');
-      Navigation.instance.navigate('/allImagesPage',args: int.parse(id.toString()));
+      Navigation.instance
+          .navigate('/allImagesPage', args: int.parse(id.toString()));
       break;
-      case "ghy_connect_status":
+    case "ghy_connect_status":
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
           .setCurrent(2);
       Navigation.instance.navigate('/guwahatiConnects');
-      Navigation.instance.navigate('/allImagesPage',args: int.parse(id.toString()));
+      Navigation.instance
+          .navigate('/allImagesPage', args: int.parse(id.toString()));
       break;
     case "citizen_journalist":
       Provider.of<DataProvider>(
@@ -499,16 +477,15 @@ void sendToDestination(
           .setCurrent(3);
       Navigation.instance.navigate('/citizenJournalist');
       break;
-      case "ctz_journalist_status":
+    case "ctz_journalist_status":
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
           .setCurrent(3);
       Navigation.instance.navigate('/citizenJournalist');
       Navigation.instance.navigate('/submitedStory');
-      Navigation.instance.navigate(
-          '/viewStoryPage',
-          args: int.parse(id.toString()));
+      Navigation.instance
+          .navigate('/viewStoryPage', args: int.parse(id.toString()));
       break;
     case "deals":
       Provider.of<DataProvider>(
@@ -536,7 +513,56 @@ void sendToDestination(
       break;
   }
 }
-
+Future<void> initUniLinks() async {
+  // Platform messages may fail, so we use a try/catch PlatformException.
+  try {
+    final initialLink = await getInitialLink();
+    if (initialLink != null) {
+      print("deeplink1 ${initialLink.split("/")}");
+      sendToRoute(
+          initialLink.split("/")[4].trim(),
+          initialLink.split("/")[5].trim(),
+          (initialLink.split("/").length <= 6
+              ? ""
+              : initialLink.split("/")[6].trim()));
+    } else {
+      debugPrint("deeplink failed 1 continue ");
+      // initUniLinksResume();
+    }
+    // Parse the link and warn the user, if it is not correct,
+    // but keep in mind it could be `null`.
+  } on PlatformException {
+    // Handle exception by warning the user their action did not succeed
+    // return?
+    debugPrint("deeplink failed 1 ");
+    // Navigation.instance.navigate(
+    //     '/link_failed',
+    //     args: ""
+    // );
+  }
+}
+void sendToRoute(String route, data, String? category) async {
+  print("link 1 our route ${route}");
+  switch (route) {
+    case "story":
+      // Navigation.instance.navigate('/main');
+      print("this route1");
+      Navigation.instance.navigate('/story', args: '${category},${data}');
+      break;
+    case "opinion":
+      // Navigation.instance.navigate('/main');
+      print("this route2");
+      Navigation.instance
+          .navigate('/opinionDetails', args: '${data},${category}');
+      break;
+    default:
+      debugPrint("deeplink failed 1 ${route}");
+      Navigation.instance.navigate(
+          '/main',args: ""
+      );
+      break;
+  }
+}
 void showError(String msg) {
   AlertX.instance.showAlert(
       title: "Error",
@@ -546,3 +572,4 @@ void showError(String msg) {
         Navigation.instance.goBack();
       });
 }
+

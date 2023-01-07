@@ -69,6 +69,7 @@ import '../UI/story/story_page.dart';
 import '../UI/toppicks/top_picks_page.dart';
 import '../UI/view/view_image_page.dart';
 import '../UI/view/webview_payment.dart';
+import 'Navigate.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -256,7 +257,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/main':
       return FadeTransitionPageRouteBuilder(page: HomeScreen());
     case '/link_failed':
-      return FadeTransitionPageRouteBuilder(page: LinkFailedPage());
+      return FadeTransitionPageRouteBuilder(
+          page: LinkFailedPage(
+        path: settings.arguments as String,
+      ));
     case '/mainWithAnimation':
       return PageRouteBuilder(
         pageBuilder: (BuildContext context, Animation<double> animation,
@@ -283,7 +287,46 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     default:
       return MaterialPageRoute(builder: (_) {
-        return LinkFailedPage();
+        debugPrint("deeplink failed 3 settings ${settings.name}");
+        // return LinkFailedPage(path: settings.name as String,);
+        return HomeScreen();
+        // Navigation.instance.navigate(
+        //     sendToRoute(
+        //             settings.name.toString().split("/")[4].trim(),
+        //             settings.name.toString().split("/")[5].trim(),
+        //             (settings.name.toString().split("/").length <= 6
+        //                 ? ""
+        //                 : settings.name.toString().split("/")[6].trim()))
+        //         .split(".")[0],
+        //     args: sendToRoute(
+        //             settings.name.toString().split("/")[4].trim(),
+        //             settings.name.toString().split("/")[5].trim(),
+        //             (settings.name.toString().split("/").length <= 6
+        //                 ? ""
+        //                 : settings.name.toString().split("/")[6].trim()))
+        //         .split(".")[1]);
       });
   }
 }
+
+// String sendToRoute(String route, data, String? category) {
+//   print("our route ${route}");
+//   switch (route) {
+//     case "story":
+//       // Navigation.instance.navigate('/main');
+//       print("this route");
+//       // Navigation.instance.navigate('/story', args: '${category},${data}');
+//       return "/story.${category},${data}";
+//     // break;
+//     case "opinion":
+//       // Navigation.instance
+//       //     .navigate('/opinionDetails', args: '${data},${category}');
+//       return "/opinionDetails.${data},${category}";
+//     // break;
+//     default:
+//       debugPrint("deeplink failed 1 ${route}");
+//       // Navigation.instance.navigate('/main', args: "");
+//       return "/main.";
+//     // break;
+//   }
+// }

@@ -17,6 +17,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
+import '../../Components/opinion_details_item.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
@@ -236,43 +237,45 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   SizedBox(
                                     width: 0.5.w,
                                   ),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              '${data.opinion?.user?.name ?? "G Plus"}',
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline5
-                                              ?.copyWith(
-                                                color: Storage
-                                                        .instance.isDarkMode
-                                                    ? Constance.secondaryColor
-                                                    : Constance.primaryColor,
-                                                fontWeight: FontWeight.bold,
-                                                decoration:
-                                                    TextDecoration.underline,
-                                              ),
-                                        ),
-                                        TextSpan(
-                                          text:
-                                              ' , ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline5
-                                              ?.copyWith(
-                                                color:
-                                                    Storage.instance.isDarkMode
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                // fontSize: 2.2.h,
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ],
+                                  Expanded(
+                                    child: RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                '${data.opinion?.user?.name ?? "G Plus"}',
+                                            style: Theme.of(Navigation.instance
+                                                    .navigatorKey.currentContext!)
+                                                .textTheme
+                                                .headline5
+                                                ?.copyWith(
+                                                  color: Storage
+                                                          .instance.isDarkMode
+                                                      ? Constance.secondaryColor
+                                                      : Constance.primaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                ),
+                                          ),
+                                          TextSpan(
+                                            text:
+                                                ' , ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                            style: Theme.of(Navigation.instance
+                                                    .navigatorKey.currentContext!)
+                                                .textTheme
+                                                .headline5
+                                                ?.copyWith(
+                                                  color:
+                                                      Storage.instance.isDarkMode
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                  // fontSize: 2.2.h,
+                                                  // fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -343,9 +346,12 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                   type: MaterialType.transparency,
                                   child: IconButton(
                                     onPressed: () {
-                                      Share.share(data.opinion?.web_url == ""
-                                          ? 'check out our website https://guwahatiplus.com/'
-                                          : '${data.opinion?.web_url}');
+                                      // Share.share(data.opinion?.web_url == ""
+                                      //     ? 'check out our website https://guwahatiplus.com/'
+                                      //     : '${data.opinion?.web_url}');
+                                      Share.share(generateURL(
+                                          data.opinion?.category_id,
+                                          data.opinion?.seo_name));
                                     },
                                     splashRadius: 10.0,
                                     splashColor: Constance.secondaryColor,
@@ -668,9 +674,12 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                 // ),
                                 IconButton(
                                   onPressed: () {
-                                    Share.share(data.opinion?.web_url == ""
-                                        ? 'check out our website https://guwahatiplus.com/'
-                                        : '${data.opinion?.web_url}');
+                                    // Share.share(data.opinion?.web_url == ""
+                                    //     ? 'check out our website https://guwahatiplus.com/'
+                                    //     : '${data.opinion?.web_url}');
+                                    Share.share(generateURL(
+                                        data.opinion?.category_id,
+                                        data.opinion?.seo_name));
                                   },
                                   splashRadius: 10.0,
                                   splashColor: Constance.secondaryColor,
@@ -911,7 +920,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   }
 
   void fetchDetails() async {
-    Navigation.instance.navigate('/loadingDialog');
+    // Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getOpinionDetails(widget.slug);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -921,13 +930,13 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
       setState(() {
         isEmpty = (response.opinion == null) ? true : false;
       });
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
     } else {
       setState(() {
         isEmpty = true;
       });
-      Navigation.instance.goBack();
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
+      // Navigation.instance.goBack();
     }
   }
 
@@ -1010,109 +1019,8 @@ String getHtmlString(String? tweetId) {
       </html>
     """;
 }
-
-class OpinionDetailsItem extends StatelessWidget {
-  const OpinionDetailsItem({
-    Key? key,
-    required this.item,
-  }) : super(key: key);
-
-  final Opinion item;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // Navigation.instance.navigate('/story',
-        //     args:
-        //         '$dropdownvalue,${item.seo_name}');
-        Navigation.instance
-            .navigate('/opinionDetails', args: item.seo_name?.trim());
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(5),
-          ),
-          color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
-        ),
-        height: 20.h,
-        width: MediaQuery.of(context).size.width - 7.w,
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CachedNetworkImage(
-                    height: 17.7.h,
-                    width: 45.w,
-                    imageUrl: item.image_file_name ?? '',
-                    fit: BoxFit.fill,
-                    placeholder: (cont, _) {
-                      return Image.asset(
-                        Constance.logoIcon,
-                        // color: Colors.black,
-                      );
-                    },
-                    errorWidget: (cont, _, e) {
-                      return Image.network(
-                        Constance.defaultImage,
-                        fit: BoxFit.fitWidth,
-                      );
-                    },
-                  ),
-                  // SizedBox(
-                  //   height: 1.h,
-                  // ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 5.w,
-            ),
-            Expanded(
-              flex: 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      item.title ?? "",
-                      maxLines: 8,
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          overflow: TextOverflow.ellipsis,
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Constance.primaryColor),
-                    ),
-                  ),
-                  Text(
-                    Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                        .format("dd MMM,yyyy"),
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black),
-                  ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  Text(
-                    item.author_name ?? "G Plus News",
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+String generateURL(first_cat_name, String? seo_name) {
+  return "https://guwahatiplus.com/deeplink/opinion/${seo_name}/${first_cat_name}";
 }
+
+

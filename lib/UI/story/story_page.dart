@@ -383,7 +383,7 @@ class _StoryPageState extends State<StoryPage> {
                                     //     ? 'check out our website https://guwahatiplus.com/'
                                     //     : '${data.selectedArticle?.web_url}');
                                     Share.share(generateURL(
-                                        data.selectedArticle?.first_cat_name,
+                                        data.selectedArticle?.first_cat_name?.seo_name,
                                         data.selectedArticle?.seo_name));
                                   },
                                   splashRadius: 20.0,
@@ -777,7 +777,7 @@ class _StoryPageState extends State<StoryPage> {
                                     //     ? 'check out our website https://guwahatiplus.com/'
                                     //     : '${data.selectedArticle?.web_url}');
                                     Share.share(generateURL(
-                                        data.selectedArticle?.first_cat_name,
+                                        data.selectedArticle?.first_cat_name!.seo_name??"",
                                         data.selectedArticle?.seo_name));
                                   },
                                   splashRadius: 10.0,
@@ -1207,7 +1207,7 @@ class _StoryPageState extends State<StoryPage> {
     return 'https://img.youtube.com/vi/${id}/0.jpg';
   }
 
-  String generateURL(CategoryName? first_cat_name, String? seo_name) {
+  String generateURL(first_cat_name, String? seo_name) {
     return "https://guwahatiplus.com/deeplink/story/${seo_name}/${first_cat_name}";
   }
 }

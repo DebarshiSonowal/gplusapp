@@ -83,7 +83,7 @@ class _AuthorPageState extends State<AuthorPage> {
                             width: 50.w,
                             child: Text(
                               data.author?.name ?? '',
-                              style: Theme.of(Navigation
+                              style:(data.author?.name ?? '').length>60? Theme.of(Navigation
                                       .instance.navigatorKey.currentContext!)
                                   .textTheme
                                   .headline3
@@ -93,7 +93,17 @@ class _AuthorPageState extends State<AuthorPage> {
                                         : Constance.primaryColor,
                                     // fontSize: 11.sp,
                                     fontWeight: FontWeight.bold,
-                                  ),
+                                  ):Theme.of(Navigation
+                                  .instance.navigatorKey.currentContext!)
+                                  .textTheme
+                                  .headline5
+                                  ?.copyWith(
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Constance.primaryColor,
+                                // fontSize: 11.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Spacer(),

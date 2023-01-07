@@ -81,6 +81,7 @@ class DataProvider extends ChangeNotifier {
   List<Shop> shops = [];
   SwitchStatus? status;
   List<BookmarkItem> bookmarks = [];
+  bool hideReferEarn=false;
   String citizenJournalist = "", deal = "", classifiedMsg = "",refer_earn="",redeem="";
 
   setCitizenJournalistText(String txt) {
@@ -94,6 +95,10 @@ class DataProvider extends ChangeNotifier {
   }
   setReferEarnText(String txt) {
     refer_earn = txt;
+    notifyListeners();
+  }
+  setHide(val){
+    hideReferEarn = val;
     notifyListeners();
   }
   setRedeemText(String txt) {

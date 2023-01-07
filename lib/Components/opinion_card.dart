@@ -117,15 +117,18 @@ class OpinionCard extends StatelessWidget {
                           SizedBox(
                             width: 1.w,
                           ),
-                          Text(
-                            item.user?.name ?? "",
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.headline6?.copyWith(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Constance.fifthColor,
-                                  // fontWeight: FontWeight.bold,
-                                ),
+                          SizedBox(
+                            width: 45.w,
+                            child: Text(
+                              item.user?.name ?? "",
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.fifthColor,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                            ),
                           ),
                         ],
                       ),

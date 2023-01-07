@@ -907,7 +907,7 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      debugPrint("getNotifications response: ${response?.data}");
+      // debugPrint("getNotifications response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return NotificationInDeviceResponse.fromJson(response?.data);
       } else {
@@ -945,7 +945,7 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      debugPrint("Weekly response: ${response?.data}");
+      // debugPrint("Weekly response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return VideoNewsResponse.fromJson(response?.data);
       } else {
@@ -1440,6 +1440,7 @@ class ApiProvider {
       return GenericMsgResponse.withError(e.message);
     }
   }
+
   Future<GenericMsgResponse> getReferEarnText() async {
     var url = "${baseUrl}/refer-n-earn-msg";
     BaseOptions option =
@@ -1476,6 +1477,7 @@ class ApiProvider {
       return GenericMsgResponse.withError(e.message);
     }
   }
+
   Future<GenericMsgResponse> getRedeemText() async {
     var url = "${baseUrl}/redeem-confirmation-msg";
     BaseOptions option =
@@ -3498,6 +3500,50 @@ class ApiProvider {
     }
   }
 
+  Future<GenericResponse> versionCheck(
+      String version, String buildNumber) async {
+    var url = "${baseUrl}/verify-version";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      'version_code': version,
+      'build_no': buildNumber,
+    };
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // data: data,
+        queryParameters: data,
+      );
+      debugPrint("verify-version response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("verify-version error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("verify-version error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
   Future<GenericResponse> deleteGuwhatiConnect(id) async {
     var url = "${baseUrl}/app/guwahati-connect-delete/${id}";
     BaseOptions option =
@@ -3962,8 +4008,13 @@ class ApiProvider {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var tempDir = "/storage/emulated/0/Download";
     DateTime now = new DateTime.now();
-    DateTime date = new DateTime(now.year, now.month, now.day,now.hour,now.minute,now.second);
-    String fullPath = tempDir + "/" + "gplus_edition_""${date.toString().split(" ")[0].replaceAll("-", "").replaceAll(".", "")}"+"_${date.toString().split(" ")[1].replaceAll(":", "").replaceAll(".", "")}.pdf";
+    DateTime date = new DateTime(
+        now.year, now.month, now.day, now.hour, now.minute, now.second);
+    String fullPath = tempDir +
+        "/" +
+        "gplus_edition_"
+            "${date.toString().split(" ")[0].replaceAll("-", "").replaceAll(".", "")}" +
+        "_${date.toString().split(" ")[1].replaceAll(":", "").replaceAll(".", "")}.pdf";
     print('full path ${fullPath}');
     try {
       Response? response = await dio?.get(

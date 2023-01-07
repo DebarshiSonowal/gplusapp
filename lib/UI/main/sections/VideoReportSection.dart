@@ -41,7 +41,7 @@ class VideoReportSection extends StatelessWidget {
           SizedBox(
             height: 0.3.h,
           ),
-          SizedBox(
+          data.home_weekly.isNotEmpty?SizedBox(
             height: 17.h,
             width: double.infinity,
             child: ListView.separated(
@@ -97,7 +97,7 @@ class VideoReportSection extends StatelessWidget {
               itemCount:
                   data.home_weekly.length > 4 ? 4 : data.home_weekly.length + 1,
             ),
-          ),
+          ):Container(),
 
           // SizedBox(
           //   height: 1.h,
