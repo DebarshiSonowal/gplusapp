@@ -72,11 +72,11 @@
 
                 <data
                     android:host="guwahatiplus.com"
-                    android:pathPrefix="/deeplink/"
+                    android:pathPrefix="/link/"
                     android:scheme="http" />
                 <data
                     android:host="guwahatiplus.com"
-                    android:pathPrefix="/deeplink/"
+                    android:pathPrefix="/link/"
                     android:scheme="https" />
             </intent-filter>
 

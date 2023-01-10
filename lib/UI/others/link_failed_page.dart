@@ -162,7 +162,8 @@ class _LinkFailedPageState extends State<LinkFailedPage> {
   }
 
   void checkForLinks() {
-    if (widget.path != "") {
+    if (widget.path.contains("/link")){
+      Navigation.instance.goBack();
       // sendToRoute(
       //     widget.path.split("/")[1].trim(),
       //     widget.path.split("/")[2].trim(),

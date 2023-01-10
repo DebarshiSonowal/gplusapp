@@ -217,7 +217,11 @@ class ApiProvider {
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${Storage.instance.token}'
+      'Auth'
+          ''
+          ''
+          ''
+          'orization': 'Bearer ${Storage.instance.token}'
       // 'APP-KEY': ConstanceData.app_key
     });
     dio = Dio(option);
@@ -228,7 +232,7 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      debugPrint("AuthorResponse response: ${response?.data}");
+      // debugPrint("AuthorResponse response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return AuthorResponse.fromJson(response?.data);
       } else {
@@ -1497,7 +1501,7 @@ class ApiProvider {
         url,
         // queryParameters: data,
       );
-      debugPrint("GenericMsgResponse response: ${response?.data}");
+      // debugPrint("GenericMsgResponse response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return GenericMsgResponse.fromJson(response?.data);
       } else {
@@ -1972,7 +1976,7 @@ class ApiProvider {
         data: data,
         // queryParameters: data,
       );
-      debugPrint("notifications/read response: ${response?.data}");
+      // debugPrint("notifications/read response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return GenericResponse.fromJson(response?.data);
       } else {

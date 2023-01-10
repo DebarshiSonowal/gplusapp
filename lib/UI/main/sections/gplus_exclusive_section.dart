@@ -41,7 +41,7 @@ class GPlusExclusiveSection extends StatelessWidget {
           SizedBox(
             height: 0.3.h,
           ),
-          Expanded(
+          data.home_exclusive.isNotEmpty?Expanded(
             child: Container(
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
@@ -99,31 +99,8 @@ class GPlusExclusiveSection extends StatelessWidget {
                     : data.home_exclusive.length + 1,
               ),
             ),
-          ),
-          // SizedBox(
-          //   height: 1.h,
-          // ),
-          // GestureDetector(
-          //   onTap: () {
-          //     if (data.profile?.is_plan_active ?? false) {
-          //       Navigation.instance.navigate('/exclusivePage');
-          //     } else {
-          //      showNotaMember();
-          //     }
-          //   },
-          //   child: Padding(
-          //     padding: EdgeInsets.symmetric(horizontal: 5.w),
-          //     child: Text(
-          //       'Read More',
-          //       style: Theme.of(context).textTheme.headline5?.copyWith(
-          //             color: Storage.instance.isDarkMode
-          //                 ? Colors.white
-          //                 : Constance.primaryColor,
-          //             fontWeight: FontWeight.bold,
-          //           ),
-          //     ),
-          //   ),
-          // ),
+          ):Container(),
+
         ],
       ),
     );

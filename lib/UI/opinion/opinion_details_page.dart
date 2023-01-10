@@ -1020,7 +1020,7 @@ String getHtmlString(String? tweetId) {
     """;
 }
 String generateURL(first_cat_name, String? seo_name) {
-  return "https://guwahatiplus.com/deeplink/opinion/${seo_name}/${first_cat_name}";
+  return "https://guwahatiplus.com/link/opinion/${seo_name}/${first_cat_name}";
 }
 
 

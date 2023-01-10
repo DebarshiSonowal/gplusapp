@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
@@ -43,10 +44,10 @@ class Constance {
   static const paymentIcon = 'assets/animation/payment.json';
   static const defaultImage =
       'http://gplus.shecure.co.in/public/web/images/logo.png';
-  static const googleApiKey = "AIzaSyBSwGrs_l9vnBKU5tdS_1dv2JnKTt-ISdw";
+  static final googleApiKey = FlutterConfig.get('androidMapKey');
 
   // static const googleApiKey = "AIzaSyAOniov-vDxU0pIg--OvkCeEsN7iK2Eozo";
-  static const googleApiKeyIos = "AIzaSyCnFa6MT7xDbZ_Fb94uVz5fFuecg7xcoes";
+  static final googleApiKeyIos = FlutterConfig.get('iosMapKey');
 
   // static const googleApiKeyIos = "AIzaSyAOniov-vDxU0pIg--OvkCeEsN7iK2Eozo";
   static var listPagesViewModel = [

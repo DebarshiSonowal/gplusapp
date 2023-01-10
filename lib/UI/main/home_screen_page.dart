@@ -15,6 +15,7 @@ import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:gplusapp/UI/main/sections/StoriesSection.dart';
 import 'package:gplusapp/UI/main/sections/VideoReportSection.dart';
+import 'package:gplusapp/UI/main/sections/ads_section.dart';
 import 'package:gplusapp/UI/main/sections/bigdeal_ad_section.dart';
 import 'package:gplusapp/UI/main/sections/gplus_exclusive_section.dart';
 import 'package:gplusapp/UI/main/sections/opinion_section.dart';
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print("our route ${route}");
     switch (route) {
       case "story":
-      // Navigation.instance.navigate('/main');
+        // Navigation.instance.navigate('/main');
         print("this route");
         Navigation.instance.navigate('/story', args: '${category},${data}');
         break;
@@ -73,9 +74,9 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       default:
         debugPrint("deeplink failed 1 ${route}");
-        Navigation.instance.navigate(
-            '/link_failed',args: ""
-        );
+        // Navigation.instance.navigate(
+        //     '/link_failed',args: ""
+        // );
         break;
     }
   }
@@ -112,8 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
   //   // NOTE: Don't forget to call _sub.cancel() in dispose()
   // }
 
-
-
   @override
   void dispose() {
     super.dispose();
@@ -125,17 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     // secureScreen();
     Future.delayed(Duration.zero, () => fetchProfile());
-    fetchStories();
-    fetchHome();
-    fetchOpinion();
-    fetchGPlusExcl();
-    fetchPoll();
-    fetchToppicks();
-    fetchAds();
-    askPermissions();
-    fetchNotification();
-    fetchReportMsg();
-    fetchRedeemMsg();
+
     // Future.delayed(
     //     const Duration(seconds: 15),
     //         () => _listController.addListener(() {
@@ -344,7 +333,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 1.h,
                       ),
                       data.ads.isNotEmpty
-                          ? AdsSection(context, data)
+                          ? AdsSection(data: data, random: random)
                           : Container(),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.w),
@@ -477,65 +466,65 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Container AdsSection(BuildContext context, DataProvider data) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 1.w),
-      padding: EdgeInsets.symmetric(vertical: 0.h),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                color: Constance.secondaryColor,
-                padding: EdgeInsets.symmetric(vertical: 0.2.h, horizontal: 1.w),
-                margin: EdgeInsets.symmetric(horizontal: 5.w),
-                child: Text(
-                  'Ad',
-                  style: Theme.of(context).textTheme.headline3?.copyWith(
-                        fontSize: 7.sp,
-                        color: Colors.white,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ),
-            ],
-          ),
-          // SizedBox(
-          //   height: 1.h,
-          // ),
-          SizedBox(
-            // height: 8.5.h,
-            width: double.infinity,
-            child: GestureDetector(
-              onTap: () {
-                _launchUrl(Uri.parse(data.ads[random].link.toString()));
-              },
-              child: Padding(
-                padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 0.9.h),
-                child: CachedNetworkImage(
-                  height: 6.h,
-                  fit: BoxFit.fill,
-                  imageUrl: data.ads[random].image_file_name ?? '',
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Container AdsSection(BuildContext context, DataProvider data) {
+  //   return Container(
+  //     margin: EdgeInsets.symmetric(horizontal: 1.w),
+  //     padding: EdgeInsets.symmetric(vertical: 0.h),
+  //     child: Column(
+  //       children: [
+  //         Row(
+  //           children: [
+  //             Container(
+  //               color: Constance.secondaryColor,
+  //               padding: EdgeInsets.symmetric(vertical: 0.2.h, horizontal: 1.w),
+  //               margin: EdgeInsets.symmetric(horizontal: 5.w),
+  //               child: Text(
+  //                 'Ad',
+  //                 style: Theme.of(context).textTheme.headline3?.copyWith(
+  //                       fontSize: 7.sp,
+  //                       color: Colors.white,
+  //                       // fontWeight: FontWeight.bold,
+  //                     ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //         // SizedBox(
+  //         //   height: 1.h,
+  //         // ),
+  //         SizedBox(
+  //           // height: 8.5.h,
+  //           width: double.infinity,
+  //           child: GestureDetector(
+  //             onTap: () {
+  //               _launchUrl(Uri.parse(data.ads[random].link.toString()));
+  //             },
+  //             child: Padding(
+  //               padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 0.9.h),
+  //               child: CachedNetworkImage(
+  //                 height: 6.h,
+  //                 fit: BoxFit.fill,
+  //                 imageUrl: data.ads[random].image_file_name ?? '',
+  //                 placeholder: (cont, _) {
+  //                   return Image.asset(
+  //                     Constance.logoIcon,
+  //                     // color: Colors.black,
+  //                   );
+  //                 },
+  //                 errorWidget: (cont, _, e) {
+  //                   return Image.network(
+  //                     Constance.defaultImage,
+  //                     fit: BoxFit.fitWidth,
+  //                   );
+  //                 },
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   void fetchOpinion() async {
     final response = await ApiProvider.instance.getLatestOpinion();
@@ -544,6 +533,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setLatestOpinions(response.opinion ?? []);
+      fetchGPlusExcl();
+    } else {
+      fetchGPlusExcl();
     }
   }
 
@@ -554,6 +546,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setHomeTopPicks(response.toppicks ?? []);
+      fetchAds();
+    } else {
+      fetchAds();
     }
   }
 
@@ -564,6 +559,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setHomeExecl(response.articles ?? []);
+      fetchPoll();
+    } else {
+      fetchPoll();
     }
   }
 
@@ -577,10 +575,13 @@ class _HomeScreenState extends State<HomeScreen> {
       if (response.pollOfTheWeek?.is_polled != 'false') {
         if (mounted) {
           setState(() {
-                    _poll = response.pollOfTheWeek?.is_polled ?? "";
-                  });
+            _poll = response.pollOfTheWeek?.is_polled ?? "";
+          });
         }
       }
+      fetchToppicks();
+    } else {
+      fetchToppicks();
     }
   }
 
@@ -592,6 +593,12 @@ class _HomeScreenState extends State<HomeScreen> {
               listen: false)
           .setAds(response.ads ?? []);
       random = Random().nextInt(response.ads?.length ?? 0);
+      // fetchAds();
+      askPermissions();
+      fetchNotification();
+    } else {
+      askPermissions();
+      fetchNotification();
     }
   }
 
@@ -610,9 +617,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 listen: false)
             .setVideoWeekly(response.videos ?? []);
         // _refreshController.refreshCompleted();
+        fetchOpinion();
       }
     } else {
       // _refreshController.refreshFailed();
+      fetchOpinion();
     }
   }
 
@@ -660,6 +669,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .setMyGeoTopicks(response.geoTopicks);
       // initUniLinks();
       // initUniLinksResume();
+      fetchStories();
     } else {
       // Navigation.instance.goBack();
     }
@@ -829,6 +839,9 @@ for an unparalleled publication, that people call their''',
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setStories(response.stories);
+      fetchHome();
+    } else {
+      fetchHome();
     }
   }
 
@@ -851,7 +864,10 @@ for an unparalleled publication, that people call their''',
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setReportModel(response.reports);
-    } else {}
+      fetchRedeemMsg();
+    } else {
+      fetchRedeemMsg();
+    }
   }
 
   void fetchRedeemMsg() async {
@@ -870,13 +886,18 @@ for an unparalleled publication, that people call their''',
           .setRedeemText(response1.desc ?? "");
     } else {}
   }
+  void fetchNotification() async {
+    final response = await ApiProvider.instance.getNotifications();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
+          .setNotificationInDevice(response.notification);
+      fetchReportMsg();
+
+    } else {
+      fetchReportMsg();
+    }
+  }
 }
 
-void fetchNotification() async {
-  final response = await ApiProvider.instance.getNotifications();
-  if (response.success ?? false) {
-    Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext!,
-            listen: false)
-        .setNotificationInDevice(response.notification);
-  } else {}
-}
+

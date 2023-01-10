@@ -3,9 +3,11 @@ import 'dart:math';
 
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 // import 'package:flutter_html/custom_render.dart';
@@ -382,9 +384,10 @@ class _StoryPageState extends State<StoryPage> {
                                     //         ""
                                     //     ? 'check out our website https://guwahatiplus.com/'
                                     //     : '${data.selectedArticle?.web_url}');
-                                    Share.share(generateURL(
-                                        data.selectedArticle?.first_cat_name?.seo_name,
-                                        data.selectedArticle?.seo_name));
+                                    generateURL(
+                                        data.selectedArticle?.first_cat_name
+                                            ?.seo_name,
+                                        data.selectedArticle?.seo_name);
                                   },
                                   splashRadius: 20.0,
                                   splashColor: Storage.instance.isDarkMode
@@ -776,9 +779,11 @@ class _StoryPageState extends State<StoryPage> {
                                     //         ""
                                     //     ? 'check out our website https://guwahatiplus.com/'
                                     //     : '${data.selectedArticle?.web_url}');
-                                    Share.share(generateURL(
-                                        data.selectedArticle?.first_cat_name!.seo_name??"",
-                                        data.selectedArticle?.seo_name));
+                                    generateURL(
+                                        data.selectedArticle?.first_cat_name!
+                                                .seo_name ??
+                                            "",
+                                        data.selectedArticle?.seo_name);
                                   },
                                   splashRadius: 10.0,
                                   splashColor: Constance.secondaryColor,
@@ -1089,18 +1094,18 @@ class _StoryPageState extends State<StoryPage> {
   }
 
   void fetchMoreContent() async {
-    Navigation.instance.navigate('/loadingDialog');
+    // Navigation.instance.navigate('/loadingDialog');
     final response =
         await ApiProvider.instance.getMoreArticle(dropdownvalue, 11, 1, skip);
     if (response.success ?? false) {
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .addSuggestion(response.articles ?? []);
       // _refreshController.refreshCompleted();
     } else {
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
       // _refreshController.refreshFailed();
     }
   }
@@ -1207,7 +1212,30 @@ class _StoryPageState extends State<StoryPage> {
     return 'https://img.youtube.com/vi/${id}/0.jpg';
   }
 
-  String generateURL(first_cat_name, String? seo_name) {
-    return "https://guwahatiplus.com/deeplink/story/${seo_name}/${first_cat_name}";
+  void generateURL(first_cat_name, String? seo_name) async {
+    // final dynamicLinkParams = DynamicLinkParameters(
+    //   link: Uri.parse(
+    //       "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}"),
+    //   uriPrefix: "https://guwahatiplus.page.link",
+    //   androidParameters:
+    //       const AndroidParameters(packageName: "com.appbazooka.gplus"),
+    //   iosParameters: const IOSParameters(bundleId: "com.gplus.app.gplusapp"),
+    // );
+    // final dynamicLink =
+    //     await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
+    final dynamicLinkParams = DynamicLinkParameters(
+      link: Uri.parse(
+          "${FlutterConfig.get('domain')}/link/story/${seo_name}/${first_cat_name}"),
+      uriPrefix: FlutterConfig.get('customHostDeepLink'),
+      androidParameters:
+          AndroidParameters(packageName: FlutterConfig.get("androidPackage")),
+      iosParameters: IOSParameters(bundleId: FlutterConfig.get('iosBundleId')),
+    );
+    final dynamicLink = await FirebaseDynamicLinks.instance.buildShortLink(
+        dynamicLinkParams,
+        shortLinkType: ShortDynamicLinkType.unguessable);
+
+    Share.share(dynamicLink.shortUrl.toString());
+    // return "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}";
   }
 }

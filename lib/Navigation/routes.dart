@@ -72,6 +72,9 @@ import '../UI/view/webview_payment.dart';
 import 'Navigate.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
+  if (settings.name == null || settings.name == "") {
+    return FadeTransitionPageRouteBuilder(page: HomeScreen());
+  }
   switch (settings.name) {
     case '/':
       return FadeTransitionPageRouteBuilder(page: SplashScreen());
@@ -256,6 +259,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //Main
     case '/main':
       return FadeTransitionPageRouteBuilder(page: HomeScreen());
+    case null:
+      return FadeTransitionPageRouteBuilder(page: HomeScreen());
     case '/link_failed':
       return FadeTransitionPageRouteBuilder(
           page: LinkFailedPage(
@@ -286,26 +291,36 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
 
     default:
-      return MaterialPageRoute(builder: (_) {
-        debugPrint("deeplink failed 3 settings ${settings.name}");
-        // return LinkFailedPage(path: settings.name as String,);
-        return HomeScreen();
-        // Navigation.instance.navigate(
-        //     sendToRoute(
-        //             settings.name.toString().split("/")[4].trim(),
-        //             settings.name.toString().split("/")[5].trim(),
-        //             (settings.name.toString().split("/").length <= 6
-        //                 ? ""
-        //                 : settings.name.toString().split("/")[6].trim()))
-        //         .split(".")[0],
-        //     args: sendToRoute(
-        //             settings.name.toString().split("/")[4].trim(),
-        //             settings.name.toString().split("/")[5].trim(),
-        //             (settings.name.toString().split("/").length <= 6
-        //                 ? ""
-        //                 : settings.name.toString().split("/")[6].trim()))
-        //         .split(".")[1]);
-      });
+      return FadeTransitionPageRouteBuilder(
+          page: LinkFailedPage(
+        path: (settings.arguments ?? "") as String,
+      ));
+      // return MaterialPageRoute(builder: (_) {
+      //   debugPrint("deeplink failed 3 settings ${settings.name}");
+      //   // return LinkFailedPage(path: settings.name as String,);
+      //   if (settings.name!.contains("/link")) {
+      //     Navigation.instance.goBack();
+      //   }
+      //   // return FadeTransitionPageRouteBuilder(
+      //   //     page: LinkFailedPage(
+      //   //       path: settings.arguments as String,
+      //   //     ));
+      //   // Navigation.instance.navigate(
+      //   //     sendToRoute(
+      //   //             settings.name.toString().split("/")[4].trim(),
+      //   //             settings.name.toString().split("/")[5].trim(),
+      //   //             (settings.name.toString().split("/").length <= 6
+      //   //                 ? ""
+      //   //                 : settings.name.toString().split("/")[6].trim()))
+      //   //         .split(".")[0],
+      //   //     args: sendToRoute(
+      //   //             settings.name.toString().split("/")[4].trim(),
+      //   //             settings.name.toString().split("/")[5].trim(),
+      //   //             (settings.name.toString().split("/").length <= 6
+      //   //                 ? ""
+      //   //                 : settings.name.toString().split("/")[6].trim()))
+      //   //         .split(".")[1]);
+      // });
   }
 }
 

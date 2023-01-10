@@ -1,11 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:gplusapp/Components/custom_button.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
+
 // import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:sizer/sizer.dart';
 
@@ -13,6 +18,8 @@ import '../Components/alert.dart';
 import '../Helper/Constance.dart';
 import '../Helper/DataProvider.dart';
 import '../Helper/Storage.dart';
+import '../Helper/app_data.dart';
+import '../Helper/store_config.dart';
 import '../Model/razorpay_key.dart';
 import '../Navigation/Navigate.dart';
 import '../Networking/api_provider.dart';
@@ -29,20 +36,57 @@ class PaymentProcessingPage extends StatefulWidget {
 class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
   double tempTotal = 0;
   var temp_order_id = "";
-  // final _razorpay = Razorpay();
   static const MethodChannel _channel = MethodChannel('easebuzz');
   final email = TextEditingController();
   final phone = TextEditingController();
   final name = TextEditingController();
+  StreamSubscription<List<PurchaseDetails>>? _subscription;
+
+  void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
+    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+      if (purchaseDetails.status == PurchaseStatus.pending) {
+        // _showPendingUI();
+      } else {
+        if (purchaseDetails.status == PurchaseStatus.error) {
+          // _handleError(purchaseDetails.error!);
+          showError(purchaseDetails.error.toString());
+        } else if (purchaseDetails.status == PurchaseStatus.purchased ||
+            purchaseDetails.status == PurchaseStatus.restored) {
+          bool valid = await _verifyPurchase(purchaseDetails);
+          if (valid) {
+            // _deliverProduct(purchaseDetails);
+            fetchProfile();
+            Navigation.instance.goBack();
+            showDialogBox();
+          } else {
+            showError(purchaseDetails.error.toString());
+          }
+        }
+        if (purchaseDetails.pendingCompletePurchase) {
+          await InAppPurchase.instance.completePurchase(purchaseDetails);
+        }
+      }
+    });
+  }
 
   @override
   void initState() {
-    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
+    _subscription = purchaseUpdated.listen((purchaseDetailsList) {
+      _listenToPurchaseUpdated(purchaseDetailsList);
+    }, onDone: () {
+      _subscription?.cancel();
+    }, onError: (error) {
+      // handle error here.
+    }) as StreamSubscription<List<PurchaseDetails>>?;
     super.initState();
     Future.delayed(Duration.zero, () {
-      getUserInformation();
+      if (Platform.isAndroid) {
+        getUserInformation();
+      } else {
+        // initiateIOSpurchase();
+        initPlatformState();
+      }
       // if (Platform.isAndroid) {
       //   // initiateOrder(widget.input.split(',')[0], widget.input.split(',')[1]);
       //
@@ -57,6 +101,7 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
   @override
   void dispose() {
     // _razorpay.clear(); // Removes all listeners
+    _subscription?.cancel();
     super.dispose();
   }
 
@@ -74,9 +119,9 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
     print(result);
     var detailed_response = response['payment_response'];
     print(detailed_response);
-    if(result=="payment_successfull"){
+    if (result == "payment_successfull") {
       verifyPayment(detailed_response);
-    }else{
+    } else {
       Navigation.instance.goBack();
       showError("Payment failed");
     }
@@ -165,98 +210,6 @@ You can parse it accordingly to handle response */
       showError(response.message ?? "Something went wrong");
     }
   }
-
-  // void order(subscription_id, use_referral_point, razorpay) async {
-  //   Navigation.instance.navigate('/loadingDialog');
-  //   final response = await ApiProvider.instance
-  //       .createOrder(subscription_id, use_referral_point);
-  //   // startPayment(response.order?.base_price,response.order?.id,);
-  //   if (response.success ?? false) {
-  //     Navigation.instance.goBack();
-  //     tempTotal = response.order?.base_price ?? 0;
-  //     temp_order_id = response.order?.voucher_no.toString() ?? "";
-  //     startPayment(
-  //         razorpay,
-  //         response.order?.base_price,
-  //         response.order?.voucher_no,
-  //         Provider.of<DataProvider>(
-  //                 Navigation.instance.navigatorKey.currentContext ?? context,
-  //                 listen: false)
-  //             .profile
-  //             ?.id);
-  //   } else {
-  //     Navigation.instance.goBack();
-  //     showError(response.message ?? "Something went wrong");
-  //   }
-  // }
-
-  // void startPayment(RazorpayKey razorpay, double? total, id, customer_id) {
-  //   var options = {
-  //     'key': razorpay.api_key,
-  //     'amount': total! * 100,
-  //     // 'order_id': id,
-  //     'name':
-  //         '${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.f_name} ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.l_name}',
-  //     'description': 'Books',
-  //     'prefill': {
-  //       'contact': Provider.of<DataProvider>(
-  //               Navigation.instance.navigatorKey.currentContext ?? context,
-  //               listen: false)
-  //           .profile
-  //           ?.mobile,
-  //       'email': Provider.of<DataProvider>(
-  //               Navigation.instance.navigatorKey.currentContext ?? context,
-  //               listen: false)
-  //           .profile
-  //           ?.email
-  //     },
-  //     'note': {
-  //       'customer_id': customer_id,
-  //       'order_id': id,
-  //     },
-  //   };
-  //   debugPrint(jsonEncode(options));
-  //   try {
-  //     _razorpay.open(options);
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
-  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
-  //   print(
-  //       'success ${response.paymentId} ${response.orderId} ${response.signature}');
-  //   handleSuccess(response);
-  // }
-  //
-  // void _handlePaymentError(PaymentFailureResponse response) {
-  //   // Do something when payment fails
-  //   // print('error ${response.message} ${response.code} ');
-  //   // showError(response.message ?? "Something went wrong");
-  //   showError(jsonDecode(response.message!)['error']['description'] ??
-  //       "Something went wrong");
-  //   print(jsonDecode(response.message!)['error']['description']);
-  //   // Navigation.instance.goBack();
-  // }
-  //
-  // void _handleExternalWallet(ExternalWalletResponse response) {
-  //   // Do something when an external wallet was selected
-  // }
-
-  // void handleSuccess(PaymentSuccessResponse response) async {
-  //   final response1 = await ApiProvider.instance
-  //       .verifyPayment(temp_order_id, response.paymentId, tempTotal ?? 1,"");
-  //   if (response1.success ?? false) {
-  //     fetchProfile();
-  //     Navigation.instance.goBack();
-  //     showDialogBox();
-  //   } else {
-  //     Navigation.instance.goBack();
-  //     Navigation.instance.goBack();
-  //     showError(response1.message ?? "Something went wrong");
-  //     // print(jsonDecode(response1.message!)['error']['description']);
-  //   }
-  // }
 
   void fetchProfile() async {
     // Navigation.instance.navigate('/loadingDialog');
@@ -367,9 +320,12 @@ You can parse it accordingly to handle response */
   }
 
   void getUserInformation() async {
-    name.text = Provider.of<DataProvider>(context,listen: false).profile?.name??"";
-    email.text = Provider.of<DataProvider>(context,listen: false).profile?.email??"";
-    phone.text = Provider.of<DataProvider>(context,listen: false).profile?.mobile??"";
+    name.text =
+        Provider.of<DataProvider>(context, listen: false).profile?.name ?? "";
+    email.text =
+        Provider.of<DataProvider>(context, listen: false).profile?.email ?? "";
+    phone.text =
+        Provider.of<DataProvider>(context, listen: false).profile?.mobile ?? "";
     showModalBottomSheet<void>(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
@@ -584,125 +540,6 @@ You can parse it accordingly to handle response */
         );
       },
     );
-    // await showDialog(
-    //   context: context,
-    //   builder: (context) {
-    //     return AlertDialog(
-    //       backgroundColor:
-    //           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-    //       actions: [
-    //         TextButton(
-    //           onPressed: () {
-    //             Navigator.of(context).pop();
-    //           },
-    //           child: Text(
-    //             'Cancel',
-    //             style: Theme.of(context).textTheme.headline5?.copyWith(
-    //                   color: Constance.thirdColor,
-    //                 ),
-    //           ),
-    //         ),
-    //         TextButton(
-    //           onPressed: () {
-    //             Navigator.of(context).pop();
-    //           },
-    //           child: Text(
-    //             'Continue',
-    //             style: Theme.of(context).textTheme.headline5?.copyWith(
-    //                   color: Colors.green,
-    //                 ),
-    //           ),
-    //         ),
-    //       ],
-    //       // content: SizedBox(
-    //       //   width: 40.w,
-    //       //
-    //       //   child: Column(
-    //       //     crossAxisAlignment: CrossAxisAlignment.center,
-    //       //     mainAxisSize: MainAxisSize.min,
-    //       //     children: [
-    //       //       Text(
-    //       //         'Fill out our details',
-    //       //         style: Theme.of(context).textTheme.headline4?.copyWith(
-    //       //               color: !Storage.instance.isDarkMode
-    //       //                   ? Colors.black
-    //       //                   : Colors.white,
-    //       //             ),
-    //       //       ),
-    //       //       SizedBox(height: 1.h),
-    //       //       TextFormField(
-    //       //         controller: name,
-    //       //         decoration: InputDecoration(
-    //       //           hintText: "Enter your name",
-    //       //           hintStyle: Theme.of(context).textTheme.headline6?.copyWith(
-    //       //                 color: !Storage.instance.isDarkMode
-    //       //                     ? Colors.black
-    //       //                     : Colors.white,
-    //       //               ),
-    //       //           focusedBorder: const UnderlineInputBorder(
-    //       //             borderSide: BorderSide(),
-    //       //           ),
-    //       //           enabledBorder: const UnderlineInputBorder(
-    //       //               borderSide: BorderSide(
-    //       //                   width: 1.0)
-    //       //           ),
-    //       //         ),
-    //       //
-    //       //         onChanged: (value) {
-    //       //           // email = value;
-    //       //         },
-    //       //       ),
-    //       //       SizedBox(height: 1.h),
-    //       //       TextFormField(
-    //       //         controller: email,
-    //       //         decoration: InputDecoration(
-    //       //           hintText: "Enter your email",
-    //       //           hintStyle: Theme.of(context).textTheme.headline6?.copyWith(
-    //       //             color: !Storage.instance.isDarkMode
-    //       //                 ? Colors.black
-    //       //                 : Colors.white,
-    //       //           ),
-    //       //           focusedBorder: const UnderlineInputBorder(
-    //       //             borderSide: BorderSide(),
-    //       //           ),
-    //       //           enabledBorder: const UnderlineInputBorder(
-    //       //               borderSide: BorderSide(
-    //       //                   width: 1.0)
-    //       //           ),
-    //       //         ),
-    //       //         onChanged: (value) {
-    //       //           // email = value;
-    //       //         },
-    //       //       ),
-    //       //       SizedBox(height: 1.h),
-    //       //       TextFormField(
-    //       //         controller: phone,
-    //       //         keyboardType: TextInputType.phone,
-    //       //         decoration: InputDecoration(
-    //       //           hintText: "Enter your phone number",
-    //       //           hintStyle: Theme.of(context).textTheme.headline6?.copyWith(
-    //       //             color: !Storage.instance.isDarkMode
-    //       //                 ? Colors.black
-    //       //                 : Colors.white,
-    //       //           ),
-    //       //           focusedBorder: const UnderlineInputBorder(
-    //       //             borderSide: BorderSide(),
-    //       //           ),
-    //       //           enabledBorder: const UnderlineInputBorder(
-    //       //               borderSide: BorderSide(
-    //       //                   width: 1.0)
-    //       //           ),
-    //       //         ),
-    //       //         onChanged: (value) {
-    //       //           // email = value;
-    //       //         },
-    //       //       ),
-    //       //     ],
-    //       //   ),
-    //       // ),
-    //     );
-    //   },
-    // );
   }
 
   void fetchKeys(subscription_id, name, email, phone) async {
@@ -715,14 +552,96 @@ You can parse it accordingly to handle response */
     }
   }
 
-  void verifyPayment(detailed_response) async{
-    final response = await ApiProvider.instance.verifyPayment("","", "", detailed_response);
-    if(response.success??false){
+  void verifyPayment(detailed_response) async {
+    final response =
+        await ApiProvider.instance.verifyPayment("", "", "", detailed_response);
+    if (response.success ?? false) {
       fetchProfile();
       Navigation.instance.goBack();
       showDialogBox();
-    }else{
-      showError(response.message??"Something Went Wrong");
+    } else {
+      showError(response.message ?? "Something Went Wrong");
     }
+  }
+
+  _verifyPurchase(PurchaseDetails purchaseDetails) async {
+    return await InAppPurchase.instance.restorePurchases();
+  }
+
+  void initiateIOSpurchase() async {
+    final Set<String> _kIds = <String>{widget.input.split(',')[0].toString()};
+    final ProductDetailsResponse response =
+        await InAppPurchase.instance.queryProductDetails(_kIds);
+    if (response.notFoundIDs.isNotEmpty) {
+      showError("Product Details not found");
+    }
+    List<ProductDetails> products = response.productDetails;
+    final ProductDetails productDetails =
+        response.productDetails[0]; // Saved earlier from queryProductDetails().
+    final PurchaseParam purchaseParam =
+        PurchaseParam(productDetails: productDetails);
+    // if (_isConsumable(productDetails)) {
+    // InAppPurchase.instance.buyConsumable(purchaseParam: purchaseParam);
+    // } else {
+    // InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
+    // }
+    InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
+// From here the purchase flow will be handled by the underlying store.
+// Updates will be delivered to the `InAppPurchase.instance.purchaseStream`.
+  }
+
+  Future<void> initPlatformState() async {
+    // Enable debug logs before calling `configure`.
+    await Purchases.setDebugLogsEnabled(true);
+
+    /*
+    - appUserID is nil, so an anonymous ID will be generated automatically by the Purchases SDK. Read more about Identifying Users here: https://docs.revenuecat.com/docs/user-ids
+    - observerMode is false, so Purchases will automatically handle finishing transactions. Read more about Observer Mode here: https://docs.revenuecat.com/docs/observer-mode
+    */
+    PurchasesConfiguration configuration;
+    if (StoreConfig.isForAmazonAppstore()) {
+      configuration = AmazonConfiguration(StoreConfig.instance.apiKey)
+        ..appUserID = null
+        ..observerMode = false;
+    } else {
+      configuration = PurchasesConfiguration(StoreConfig.instance.apiKey)
+        ..appUserID = null
+        ..observerMode = false;
+    }
+    await Purchases.configure(configuration);
+
+    appData.appUserID = await Purchases.appUserID;
+
+    Purchases.addCustomerInfoUpdateListener((customerInfo) async {
+      appData.appUserID = await Purchases.appUserID;
+
+      CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+      (customerInfo.entitlements.all[FlutterConfig.get('entitlementId')] !=
+                  null &&
+              customerInfo.entitlements.all[FlutterConfig.get('entitlementId')]!
+                  .isActive)
+          ? appData.entitlementIsActive = true
+          : appData.entitlementIsActive = false;
+
+      setState(() {});
+    });
+    try {
+      // CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+      Offerings offerings;
+      try {
+        offerings = await Purchases.getOfferings();
+        CustomerInfo customerInfo = await Purchases.purchasePackage(
+            offerings.current!.availablePackages[0]);
+        appData.entitlementIsActive = customerInfo
+            .entitlements.all[FlutterConfig.get('entitlementId')]!.isActive;
+      } on PlatformException catch (e) {
+        showError("Something went wrong");
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    setState(() {});
+    Navigator.pop(context);
   }
 }

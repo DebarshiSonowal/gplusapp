@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:android_intent_plus/android_intent.dart';
@@ -19,6 +20,7 @@ import 'Helper/AppTheme.dart';
 import 'Helper/Constance.dart';
 import 'Helper/DataProvider.dart';
 import 'Helper/method_mine.dart';
+import 'Helper/store_config.dart';
 import 'Model/notification_received.dart';
 import 'Navigation/Navigate.dart';
 import 'Navigation/routes.dart';
@@ -88,16 +90,6 @@ void notificationTapBackground(
   debugPrint(jsData);
   NotificationReceived notification =
       NotificationReceived.fromJson(jsonDecode(jsData));
-
-  // setRead(
-  //     notification.notification_id,
-  //     notification.seo_name,
-  //     notification.seo_name_category,
-  //     notification.type,
-  //     notification.post_id,
-  //     notification.vendor_id,notification.category_id);
-  // sendToDestination(
-  //     seoName, categoryName, type, postId, vendorId, notification.category_id);
   switch (notification.type) {
     case "news":
       Navigation.instance.navigate('/story',
@@ -248,39 +240,20 @@ void main() async {
   await FlutterConfig.loadEnvVariables();
   setUpFirebase();
   Storage.instance.initializeStorage();
-
+  StoreConfig(
+    store: Store.appleStore,
+    apiKey: FlutterConfig.get('revenueCatIOSKey'),
+  );
+  // final PendingDynamicLinkData? initialLink = await FirebaseDynamicLinks.instance.getInitialLink();
   runApp(const MyApp());
 }
 
 void checkVersion(String version, String buildNumber) async {
   if (Platform.isIOS) {
-    Provider.of<DataProvider>(
-        Navigation.instance.navigatorKey.currentContext!,listen: false)
+    Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext!,
+            listen: false)
         .setHide(true);
   }
-  // final response =
-  //     await ApiProvider.instance.versionCheck(version, buildNumber);
-  // if (response.success ?? true) {
-  //   if (Platform.isIOS) {
-  //     Provider.of<DataProvider>(
-  //             Navigation.instance.navigatorKey.currentContext!,listen: false)
-  //         .setHide(response.success);
-  //   } else {
-  //     Provider.of<DataProvider>(
-  //             Navigation.instance.navigatorKey.currentContext!,listen: false)
-  //         .setHide(true);
-  //   }
-  // } else {
-  //   if (Platform.isIOS) {
-  //     Provider.of<DataProvider>(
-  //             Navigation.instance.navigatorKey.currentContext!,listen: false)
-  //         .setHide(response.success);
-  //   } else {
-  //     Provider.of<DataProvider>(
-  //             Navigation.instance.navigatorKey.currentContext!,listen: false)
-  //         .setHide(true);
-  //   }
-  // }
 }
 
 void NotificationHandler(message) async {
@@ -372,8 +345,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -393,8 +364,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initUniLinks();
+    // initUniLinks();
     initValues();
+    initDeepLink();
   }
 
   void initValues() async {
@@ -403,6 +375,40 @@ class _MyAppState extends State<MyApp> {
         "version:${packageInfo.version} buildNumber:${packageInfo.buildNumber}");
     //notification
     checkVersion(packageInfo.version, packageInfo.buildNumber);
+  }
+
+  void initDeepLink() async {
+    final PendingDynamicLinkData? initialLink =
+        await FirebaseDynamicLinks.instance.getInitialLink();
+    if (initialLink == null) {
+      FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+        debugPrint("URL link ${dynamicLinkData.link.path.split("/")}");
+        sendToRoute(
+          dynamicLinkData.link.path.split("/")[2].trim(),
+          dynamicLinkData.link.path.split("/")[3].trim(),
+          (dynamicLinkData.link.path.split("/").length <= 4
+              ? ""
+              : dynamicLinkData.link.path.split("/")[4].trim()),
+        );
+      }).onError((error) {
+        // Handle errors
+        debugPrint("URL link ${error}");
+      });
+    } else {
+      final Uri deepLink = initialLink.link;
+      debugPrint("URL link2 ${deepLink}");
+     Future.delayed(Duration(seconds: 5),(){
+       sendToRoute(
+         deepLink.path.split("/")[2].trim(),
+         deepLink.path.split("/")[3].trim(),
+         (deepLink.path.split("/").length <= 4
+             ? ""
+             : deepLink.path.split("/")[4].trim()),
+       );
+     });
+      // Example of using the dynamic link to push the user to a different screen
+
+    }
   }
 }
 
@@ -436,6 +442,19 @@ void setRead(String? id, seoName, categoryName, type, postId, vendorId,
         seoName, categoryName, type, postId, vendorId, categoryId);
   } else {
     showError(response.message ?? "Something went wrong");
+  }
+}
+
+void fetchNotification() async {
+  final response = await ApiProvider.instance.getNotifications();
+  if (response.success ?? false) {
+    Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext!,
+            listen: false)
+        .setNotificationInDevice(response.notification);
+    // fetchReportMsg();
+
+  } else {
+    // fetchReportMsg();
   }
 }
 
@@ -513,6 +532,7 @@ void sendToDestination(
       break;
   }
 }
+
 Future<void> initUniLinks() async {
   // Platform messages may fail, so we use a try/catch PlatformException.
   try {
@@ -541,6 +561,7 @@ Future<void> initUniLinks() async {
     // );
   }
 }
+
 void sendToRoute(String route, data, String? category) async {
   print("link 1 our route ${route}");
   switch (route) {
@@ -557,12 +578,11 @@ void sendToRoute(String route, data, String? category) async {
       break;
     default:
       debugPrint("deeplink failed 1 ${route}");
-      Navigation.instance.navigate(
-          '/main',args: ""
-      );
+      Navigation.instance.navigate('/main', args: "");
       break;
   }
 }
+
 void showError(String msg) {
   AlertX.instance.showAlert(
       title: "Error",
@@ -572,4 +592,3 @@ void showError(String msg) {
         Navigation.instance.goBack();
       });
 }
-
