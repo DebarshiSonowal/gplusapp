@@ -3,7 +3,9 @@ import 'dart:math';
 
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Model/opinion.dart';
@@ -349,9 +351,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                       // Share.share(data.opinion?.web_url == ""
                                       //     ? 'check out our website https://guwahatiplus.com/'
                                       //     : '${data.opinion?.web_url}');
-                                      Share.share(generateURL(
+                                      generateURL(
                                           data.opinion?.category_id,
-                                          data.opinion?.seo_name));
+                                          data.opinion?.seo_name);
                                     },
                                     splashRadius: 10.0,
                                     splashColor: Constance.secondaryColor,
@@ -677,9 +679,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     // Share.share(data.opinion?.web_url == ""
                                     //     ? 'check out our website https://guwahatiplus.com/'
                                     //     : '${data.opinion?.web_url}');
-                                    Share.share(generateURL(
+                                    generateURL(
                                         data.opinion?.category_id,
-                                        data.opinion?.seo_name));
+                                        data.opinion?.seo_name);
                                   },
                                   splashRadius: 10.0,
                                   splashColor: Constance.secondaryColor,
@@ -1019,8 +1021,21 @@ String getHtmlString(String? tweetId) {
       </html>
     """;
 }
-String generateURL(first_cat_name, String? seo_name) {
-  return "https://guwahatiplus.com/link/opinion/${seo_name}/${first_cat_name}";
+void generateURL(first_cat_name, String? seo_name) async {
+  final dynamicLinkParams = DynamicLinkParameters(
+    link: Uri.parse(
+        "${FlutterConfig.get('domain')}/link/opinion/${seo_name}/${first_cat_name}"),
+    uriPrefix: FlutterConfig.get('customHostDeepLink'),
+    androidParameters:
+    AndroidParameters(packageName: FlutterConfig.get("androidPackage")),
+    iosParameters: IOSParameters(bundleId: FlutterConfig.get('iosBundleId')),
+  );
+  final dynamicLink = await FirebaseDynamicLinks.instance.buildShortLink(
+      dynamicLinkParams,
+      shortLinkType: ShortDynamicLinkType.unguessable);
+
+  Share.share(dynamicLink.shortUrl.toString());
+  // return "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}";
 }
 
 

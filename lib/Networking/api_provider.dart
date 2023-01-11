@@ -1014,6 +1014,7 @@ class ApiProvider {
     //   'per_page': per_page,
     //   'page': page,
     // };
+    debugPrint("URL SLUG ${slug}");
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',

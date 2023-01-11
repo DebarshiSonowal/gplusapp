@@ -574,7 +574,7 @@ void sendToRoute(String route, data, String? category) async {
       // Navigation.instance.navigate('/main');
       print("this route2");
       Navigation.instance
-          .navigate('/opinionDetails', args: '${data},${category}');
+          .navigate('/opinionDetails', args: '${category},${data}');
       break;
     default:
       debugPrint("deeplink failed 1 ${route}");

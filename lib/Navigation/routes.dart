@@ -72,9 +72,9 @@ import '../UI/view/webview_payment.dart';
 import 'Navigate.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
-  if (settings.name == null || settings.name == "") {
-    return FadeTransitionPageRouteBuilder(page: HomeScreen());
-  }
+  // if (settings.name == null || settings.name == "") {
+  //   return FadeTransitionPageRouteBuilder(page: HomeScreen());
+  // }
   switch (settings.name) {
     case '/':
       return FadeTransitionPageRouteBuilder(page: SplashScreen());
@@ -259,8 +259,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //Main
     case '/main':
       return FadeTransitionPageRouteBuilder(page: HomeScreen());
-    case null:
-      return FadeTransitionPageRouteBuilder(page: HomeScreen());
+    // case null:
+    //   return FadeTransitionPageRouteBuilder(page: HomeScreen());
     case '/link_failed':
       return FadeTransitionPageRouteBuilder(
           page: LinkFailedPage(
