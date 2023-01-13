@@ -1034,6 +1034,7 @@ void generateURL(first_cat_name, String? seo_name) async {
       dynamicLinkParams,
       shortLinkType: ShortDynamicLinkType.unguessable);
 
+  debugPrint("${FlutterConfig.get('domain')}/link/opinion/${seo_name}/${first_cat_name}");
   Share.share(dynamicLink.shortUrl.toString());
   // return "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}";
 }

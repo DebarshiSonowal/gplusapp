@@ -19,6 +19,7 @@ import '../UI/Notification/notification_page.dart';
 import '../UI/Search/search_page.dart';
 import '../UI/VideoReport/video_report.dart';
 import '../UI/author/author_page.dart';
+import '../UI/blocked/blocked_user_list.dart';
 import '../UI/category/category_details.dart';
 import '../UI/category/category_page.dart';
 import '../UI/citizen_journalist/citizen_journalist_page.dart';
@@ -255,6 +256,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '/advertiseWithUs':
       return FadeTransitionPageRouteBuilder(page: AdvertiseWithUsPage());
+    case '/blockedUserList':
+      return FadeTransitionPageRouteBuilder(page: BlockedUserListPage());
 
     //Main
     case '/main':
@@ -262,6 +265,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     // case null:
     //   return FadeTransitionPageRouteBuilder(page: HomeScreen());
     case '/link_failed':
+      debugPrint("MyPath");
       return FadeTransitionPageRouteBuilder(
           page: LinkFailedPage(
         path: settings.arguments as String,
@@ -291,36 +295,40 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
 
     default:
+      debugPrint("DefaultPath");
+      Future.delayed(Duration.zero, () {
+        Navigation.instance.goBack();
+      });
       return FadeTransitionPageRouteBuilder(
           page: LinkFailedPage(
         path: (settings.arguments ?? "") as String,
       ));
-      // return MaterialPageRoute(builder: (_) {
-      //   debugPrint("deeplink failed 3 settings ${settings.name}");
-      //   // return LinkFailedPage(path: settings.name as String,);
-      //   if (settings.name!.contains("/link")) {
-      //     Navigation.instance.goBack();
-      //   }
-      //   // return FadeTransitionPageRouteBuilder(
-      //   //     page: LinkFailedPage(
-      //   //       path: settings.arguments as String,
-      //   //     ));
-      //   // Navigation.instance.navigate(
-      //   //     sendToRoute(
-      //   //             settings.name.toString().split("/")[4].trim(),
-      //   //             settings.name.toString().split("/")[5].trim(),
-      //   //             (settings.name.toString().split("/").length <= 6
-      //   //                 ? ""
-      //   //                 : settings.name.toString().split("/")[6].trim()))
-      //   //         .split(".")[0],
-      //   //     args: sendToRoute(
-      //   //             settings.name.toString().split("/")[4].trim(),
-      //   //             settings.name.toString().split("/")[5].trim(),
-      //   //             (settings.name.toString().split("/").length <= 6
-      //   //                 ? ""
-      //   //                 : settings.name.toString().split("/")[6].trim()))
-      //   //         .split(".")[1]);
-      // });
+    // return MaterialPageRoute(builder: (_) {
+    //   debugPrint("deeplink failed 3 settings ${settings.name}");
+    //   // return LinkFailedPage(path: settings.name as String,);
+    //   if (settings.name!.contains("/link")) {
+    //     Navigation.instance.goBack();
+    //   }
+    //   // return FadeTransitionPageRouteBuilder(
+    //   //     page: LinkFailedPage(
+    //   //       path: settings.arguments as String,
+    //   //     ));
+    //   // Navigation.instance.navigate(
+    //   //     sendToRoute(
+    //   //             settings.name.toString().split("/")[4].trim(),
+    //   //             settings.name.toString().split("/")[5].trim(),
+    //   //             (settings.name.toString().split("/").length <= 6
+    //   //                 ? ""
+    //   //                 : settings.name.toString().split("/")[6].trim()))
+    //   //         .split(".")[0],
+    //   //     args: sendToRoute(
+    //   //             settings.name.toString().split("/")[4].trim(),
+    //   //             settings.name.toString().split("/")[5].trim(),
+    //   //             (settings.name.toString().split("/").length <= 6
+    //   //                 ? ""
+    //   //                 : settings.name.toString().split("/")[6].trim()))
+    //   //         .split(".")[1]);
+    // });
   }
 }
 

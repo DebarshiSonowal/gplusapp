@@ -118,7 +118,38 @@ class _StoryViewPageState extends State<StoryViewPage> {
                                   backgroundColor: MaterialStateProperty.all(
                                       Colors.transparent),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  //  /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n?]+)/img
+                                  print(Provider.of<DataProvider>(
+                                              Navigation.instance.navigatorKey
+                                                      .currentContext ??
+                                                  context,
+                                              listen: false)
+                                          .stories[index]
+                                          .web_url ??
+                                      "");
+                                  final uri = Uri.parse(
+                                      Provider.of<DataProvider>(
+                                                  Navigation
+                                                          .instance
+                                                          .navigatorKey
+                                                          .currentContext ??
+                                                      context,
+                                                  listen: false)
+                                              .stories[index]
+                                              .web_url ??
+                                          "https://www.guwahatiplus.com/");
+                                  if (uri.path.contains("guwahatiplus.com")) {
+                                    debugPrint(uri.path.split("/").toString());
+                                    Navigation.instance.goBack();
+                                    sendToRoute(
+                                        uri.path.split("/")[1],
+                                        uri.path.split("/")[3],
+                                        uri.path.split("/")[2]);
+                                  } else {
+                                    _launchUrl("https://${uri}");
+                                  }
+                                },
                                 icon: Image.asset(
                                   Constance.linkIcon,
                                   color: Color(
@@ -189,8 +220,30 @@ class _StoryViewPageState extends State<StoryViewPage> {
     );
   }
 
+  void sendToRoute(String route, data, String? category) async {
+    print("link 1 our route ${route}");
+    switch (route) {
+      case "story":
+        // Navigation.instance.navigate('/main');
+        print("this route1");
+        Navigation.instance.navigate('/story', args: '${category},${data}');
+        break;
+      case "opinion":
+        // Navigation.instance.navigate('/main');
+        print("this route2 ${category},${data}");
+        Navigation.instance
+            .navigate('/opinionDetails', args: '${data},${category}');
+        break;
+      default:
+        debugPrint("deeplink failed 1 ${route}");
+        Navigation.instance.navigate('/main', args: "");
+        break;
+    }
+  }
+
   Future<void> _launchUrl(_url) async {
-    if (!await launchUrl(_url)) {
+    if (!await launchUrl(Uri.parse(_url),
+        mode: LaunchMode.externalApplication)) {
       throw 'Could not launch $_url';
     }
   }

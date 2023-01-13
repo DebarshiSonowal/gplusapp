@@ -124,7 +124,11 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     // secureScreen();
     Future.delayed(Duration.zero, () => fetchProfile());
-
+    fetchStories();
+    fetchHome();
+    fetchOpinion();
+    fetchGPlusExcl();
+    fetchPoll();
     // Future.delayed(
     //     const Duration(seconds: 15),
     //         () => _listController.addListener(() {
@@ -466,65 +470,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Container AdsSection(BuildContext context, DataProvider data) {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(horizontal: 1.w),
-  //     padding: EdgeInsets.symmetric(vertical: 0.h),
-  //     child: Column(
-  //       children: [
-  //         Row(
-  //           children: [
-  //             Container(
-  //               color: Constance.secondaryColor,
-  //               padding: EdgeInsets.symmetric(vertical: 0.2.h, horizontal: 1.w),
-  //               margin: EdgeInsets.symmetric(horizontal: 5.w),
-  //               child: Text(
-  //                 'Ad',
-  //                 style: Theme.of(context).textTheme.headline3?.copyWith(
-  //                       fontSize: 7.sp,
-  //                       color: Colors.white,
-  //                       // fontWeight: FontWeight.bold,
-  //                     ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //         // SizedBox(
-  //         //   height: 1.h,
-  //         // ),
-  //         SizedBox(
-  //           // height: 8.5.h,
-  //           width: double.infinity,
-  //           child: GestureDetector(
-  //             onTap: () {
-  //               _launchUrl(Uri.parse(data.ads[random].link.toString()));
-  //             },
-  //             child: Padding(
-  //               padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 0.9.h),
-  //               child: CachedNetworkImage(
-  //                 height: 6.h,
-  //                 fit: BoxFit.fill,
-  //                 imageUrl: data.ads[random].image_file_name ?? '',
-  //                 placeholder: (cont, _) {
-  //                   return Image.asset(
-  //                     Constance.logoIcon,
-  //                     // color: Colors.black,
-  //                   );
-  //                 },
-  //                 errorWidget: (cont, _, e) {
-  //                   return Image.network(
-  //                     Constance.defaultImage,
-  //                     fit: BoxFit.fitWidth,
-  //                   );
-  //                 },
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+
 
   void fetchOpinion() async {
     final response = await ApiProvider.instance.getLatestOpinion();
@@ -533,9 +479,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setLatestOpinions(response.opinion ?? []);
-      fetchGPlusExcl();
+
     } else {
-      fetchGPlusExcl();
+      // fetchGPlusExcl();
     }
   }
 
@@ -559,9 +505,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setHomeExecl(response.articles ?? []);
-      fetchPoll();
+
     } else {
-      fetchPoll();
+      // fetchPoll();
     }
   }
 
@@ -617,11 +563,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 listen: false)
             .setVideoWeekly(response.videos ?? []);
         // _refreshController.refreshCompleted();
-        fetchOpinion();
+
       }
     } else {
       // _refreshController.refreshFailed();
-      fetchOpinion();
+      // fetchOpinion();
     }
   }
 
@@ -669,7 +615,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .setMyGeoTopicks(response.geoTopicks);
       // initUniLinks();
       // initUniLinksResume();
-      fetchStories();
+
     } else {
       // Navigation.instance.goBack();
     }
@@ -839,9 +785,9 @@ for an unparalleled publication, that people call their''',
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setStories(response.stories);
-      fetchHome();
+
     } else {
-      fetchHome();
+
     }
   }
 

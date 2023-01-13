@@ -162,14 +162,16 @@ class _LinkFailedPageState extends State<LinkFailedPage> {
   }
 
   void checkForLinks() {
-    if (widget.path.contains("/link")){
-      Navigation.instance.goBack();
-      // sendToRoute(
-      //     widget.path.split("/")[1].trim(),
-      //     widget.path.split("/")[2].trim(),
-      //     (widget.path.split("/").length <= 3
-      //         ? ""
-      //         : widget.path.split("/")[3].trim()));
-    }
+    debugPrint("path ${widget.path}");
+    // if (widget.path.contains("/link")){
+    //   Navigation.instance.goBack();
+    //   // sendToRoute(
+    //   //     widget.path.split("/")[1].trim(),
+    //   //     widget.path.split("/")[2].trim(),
+    //   //     (widget.path.split("/").length <= 3
+    //   //         ? ""
+    //   //         : widget.path.split("/")[3].trim()));
+    // }
+
   }
 }

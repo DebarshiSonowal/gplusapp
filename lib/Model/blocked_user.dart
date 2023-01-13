@@ -9,6 +9,15 @@ class BlockedUser {
   String? block_for, created_by, updated_by;
   Profile? user;
 
+  BlockedUser() {
+    id = 0;
+    user_id = 0;
+    blocked_by_id = 0;
+    block_for = " ";
+    created_by="";
+    updated_by="";
+  }
+
   BlockedUser.fromJson(json) {
     id = json['id'] ?? 0;
     user_id = json['user_id'] ?? 0;
@@ -34,7 +43,8 @@ class BlockedUserResponse {
         ? []
         : (json['data'] as List).map((e) => BlockedUser.fromJson(e)).toList();
   }
-  BlockedUserResponse.withError(msg){
+
+  BlockedUserResponse.withError(msg) {
     success = false;
     message = msg;
   }

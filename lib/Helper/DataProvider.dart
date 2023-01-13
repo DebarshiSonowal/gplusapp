@@ -40,7 +40,11 @@ class DataProvider extends ChangeNotifier {
   int currentIndex = 0;
   Profile? profile;
   AuthorProfile? author;
-  List<BlockedUser> blockedUsers = [];
+  List<BlockedUser> blockedUsers = [
+    BlockedUser(
+
+    ),
+  ];
   List<ReportModel> reportCategories = [];
   List<NotificationInDevice> notifications = [];
   List<Opinion> opinions = [];

@@ -1649,9 +1649,36 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         ],
                       ),
                     ),
-                    // SizedBox(
-                    //   height: 1.5.h,
-                    // ),
+                    SizedBox(
+                      height: 1.5.h,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigation.instance.navigate('/blockedUserList');
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.block,
+                            color: Constance.secondaryColor,
+                            size: 2.5.h,
+                          ),
+                          SizedBox(
+                            width: 3.5.w,
+                          ),
+                          Text(
+                            'Blocked User List',
+                            style:
+                            Theme.of(context).textTheme.headline4?.copyWith(
+                              color: Colors.white,
+                              // fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
                     // InkWell(
                     //   splashColor: Constance.secondaryColor,
                     //   radius: 15.h,

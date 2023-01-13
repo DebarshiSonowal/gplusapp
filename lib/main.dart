@@ -378,22 +378,23 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initDeepLink() async {
+    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+      debugPrint("URL link ${dynamicLinkData.link.path.split("/")}");
+      sendToRoute(
+        dynamicLinkData.link.path.split("/")[2].trim(),
+        dynamicLinkData.link.path.split("/")[3].trim(),
+        (dynamicLinkData.link.path.split("/").length <= 4
+            ? ""
+            : dynamicLinkData.link.path.split("/")[4].trim()),
+      );
+    }).onError((error) {
+      // Handle errors
+      debugPrint("URL link ${error}");
+    });
     final PendingDynamicLinkData? initialLink =
         await FirebaseDynamicLinks.instance.getInitialLink();
     if (initialLink == null) {
-      FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
-        debugPrint("URL link ${dynamicLinkData.link.path.split("/")}");
-        sendToRoute(
-          dynamicLinkData.link.path.split("/")[2].trim(),
-          dynamicLinkData.link.path.split("/")[3].trim(),
-          (dynamicLinkData.link.path.split("/").length <= 4
-              ? ""
-              : dynamicLinkData.link.path.split("/")[4].trim()),
-        );
-      }).onError((error) {
-        // Handle errors
-        debugPrint("URL link ${error}");
-      });
+
     } else {
       final Uri deepLink = initialLink.link;
       debugPrint("URL link2 ${deepLink}");
@@ -572,9 +573,9 @@ void sendToRoute(String route, data, String? category) async {
       break;
     case "opinion":
       // Navigation.instance.navigate('/main');
-      print("this route2");
+      print("this route2 ${category},${data}");
       Navigation.instance
-          .navigate('/opinionDetails', args: '${category},${data}');
+          .navigate('/opinionDetails', args: '${data},${category}');
       break;
     default:
       debugPrint("deeplink failed 1 ${route}");
