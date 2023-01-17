@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -27,7 +28,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool classified = true;
   bool dark_mode = false;
   final TextEditingController _controller = TextEditingController();
-
+  final InAppReview inAppReview = InAppReview.instance;
   @override
   void dispose() {
     _controller.dispose();
@@ -255,20 +256,29 @@ class _SettingsPageState extends State<SettingsPage> {
                             fontWeight: FontWeight.bold,
                           ),
                     ),
-                    RatingBar.builder(
-                      unratedColor: Colors.grey.shade300,
-                      initialRating: 0,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemSize: 24.sp,
-                      itemPadding: EdgeInsets.symmetric(horizontal: 0.5.w),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
+                    GestureDetector(
+                      onTap: () async{
+                        if (await inAppReview.isAvailable()) {
+                        inAppReview.requestReview();
+                        }
+                      },
+                      child: AbsorbPointer(
+                        child: RatingBar.builder(
+                          unratedColor: Colors.grey.shade300,
+                          initialRating: 0,
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemSize: 24.sp,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 0.5.w),
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {},
+                        ),
                       ),
-                      onRatingUpdate: (rating) {},
                     ),
                   ],
                 ),

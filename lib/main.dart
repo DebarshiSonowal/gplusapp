@@ -242,7 +242,7 @@ void main() async {
   Storage.instance.initializeStorage();
   StoreConfig(
     store: Store.appleStore,
-    apiKey: FlutterConfig.get('revenueCatIOSKey'),
+    apiKey: FlutterConfig.get('revenueCatIOSKey')??"",
   );
   // final PendingDynamicLinkData? initialLink = await FirebaseDynamicLinks.instance.getInitialLink();
   runApp(const MyApp());

@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -18,6 +19,7 @@ class TermsConditionsPage extends StatefulWidget {
 }
 
 class _TermsConditionsPageState extends State<TermsConditionsPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
