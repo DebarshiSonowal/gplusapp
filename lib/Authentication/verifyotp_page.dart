@@ -28,10 +28,10 @@ class VerifyOTP extends StatefulWidget {
 }
 
 class _VerifyOTPState extends State<VerifyOTP> {
-  var textEditingController = TextEditingController();
+  final textEditingController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   Timer? timer;
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  // final _scaffoldKey = GlobalKey<ScaffoldState>();
   String? _verificationId;
 
   // final SmsAutoFill _autoFill = SmsAutoFill();
@@ -125,6 +125,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                 length: 6,
                 obscureText: false,
                 animationType: AnimationType.fade,
+                keyboardType: TextInputType.phone,
                 pinTheme: PinTheme(
                   shape: PinCodeFieldShape.box,
                   borderRadius: BorderRadius.circular(5),

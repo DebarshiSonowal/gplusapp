@@ -14,7 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var _mobile = TextEditingController();
+  final _mobile = TextEditingController();
 
   @override
   void dispose() {

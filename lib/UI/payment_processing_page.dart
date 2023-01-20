@@ -568,27 +568,27 @@ You can parse it accordingly to handle response */
     return await InAppPurchase.instance.restorePurchases();
   }
 
-  void initiateIOSpurchase() async {
-    final Set<String> _kIds = <String>{widget.input.split(',')[0].toString()};
-    final ProductDetailsResponse response =
-        await InAppPurchase.instance.queryProductDetails(_kIds);
-    if (response.notFoundIDs.isNotEmpty) {
-      showError("Product Details not found");
-    }
-    List<ProductDetails> products = response.productDetails;
-    final ProductDetails productDetails =
-        response.productDetails[0]; // Saved earlier from queryProductDetails().
-    final PurchaseParam purchaseParam =
-        PurchaseParam(productDetails: productDetails);
-    // if (_isConsumable(productDetails)) {
-    // InAppPurchase.instance.buyConsumable(purchaseParam: purchaseParam);
-    // } else {
-    // InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
-    // }
-    InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
-// From here the purchase flow will be handled by the underlying store.
-// Updates will be delivered to the `InAppPurchase.instance.purchaseStream`.
-  }
+//   void initiateIOSpurchase() async {
+//     final Set<String> _kIds = <String>{widget.input.split(',')[0].toString()};
+//     final ProductDetailsResponse response =
+//         await InAppPurchase.instance.queryProductDetails(_kIds);
+//     if (response.notFoundIDs.isNotEmpty) {
+//       showError("Product Details not found");
+//     }
+//     List<ProductDetails> products = response.productDetails;
+//     final ProductDetails productDetails =
+//         response.productDetails[0]; // Saved earlier from queryProductDetails().
+//     final PurchaseParam purchaseParam =
+//         PurchaseParam(productDetails: productDetails);
+//     // if (_isConsumable(productDetails)) {
+//     // InAppPurchase.instance.buyConsumable(purchaseParam: purchaseParam);
+//     // } else {
+//     // InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
+//     // }
+//     InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
+// // From here the purchase flow will be handled by the underlying store.
+// // Updates will be delivered to the `InAppPurchase.instance.purchaseStream`.
+//   }
 
   Future<void> initPlatformState() async {
     // Enable debug logs before calling `configure`.
@@ -623,25 +623,38 @@ You can parse it accordingly to handle response */
           ? appData.entitlementIsActive = true
           : appData.entitlementIsActive = false;
 
-      setState(() {});
+      // if(mounted){
+      //   setState(() {});
+      // }
     });
     try {
       // CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-      Offerings offerings;
-      try {
-        offerings = await Purchases.getOfferings();
-        CustomerInfo customerInfo = await Purchases.purchasePackage(
-            offerings.current!.availablePackages[0]);
-        appData.entitlementIsActive = customerInfo
-            .entitlements.all[FlutterConfig.get('entitlementId')]!.isActive;
-      } on PlatformException catch (e) {
-        showError("Something went wrong");
-      }
+      // await Purchases.purchaseProduct("gplus_subscription_one_month_non");
+
     } catch (e) {
       print(e);
     }
+    Offerings offerings;
+    try {
+      offerings = await Purchases.getOfferings();
+      debugPrint("Packages ${offerings.current!.availablePackages[0].storeProduct.identifier}");
+      CustomerInfo customerInfo = await Purchases.purchasePackage(
+          offerings.current!.availablePackages[0]);
+      // appData.entitlementIsActive = customerInfo
+      //     .entitlements.all[FlutterConfig.get('entitlementId')]!.isActive;
+      debugPrint("Payment ${customerInfo.nonSubscriptionTransactions[0]}"
+          // " : ${customerInfo.allPurchaseDates} : "
+          // "${customerInfo.allPurchasedProductIdentifiers}"
+      );
+    } on PlatformException catch (e) {
+      debugPrint("Payment ${e.message}");
+      showError("Something went wrong");
 
-    setState(() {});
+    }
+
+    // if (mounted) {
+    //   setState(() {});
+    // }
     Navigator.pop(context);
   }
 }

@@ -17,12 +17,15 @@ class _BlockedUserListPageState extends State<BlockedUserListPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: Constance.buildAppBar(),
-      body: Consumer<DataProvider>(builder: (context, data, child) {
-        return Container(
-          height: double.infinity,
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
-          child: ListView.separated(
+      body: SizedBox(
+        height: double.infinity,
+        width: double.infinity,
+        child: Consumer<DataProvider>(builder: (context, data, child) {
+          return Container(
+            height: 90.h,
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
+            child: ListView.separated(
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 var item = data.blockedUsers[index];
@@ -49,9 +52,11 @@ class _BlockedUserListPageState extends State<BlockedUserListPage> {
                   ),
                 );
               },
-              itemCount: data.blockedUsers.length),
-        );
-      }),
+              itemCount: data.blockedUsers.length,
+            ),
+          );
+        }),
+      ),
     );
   }
 }

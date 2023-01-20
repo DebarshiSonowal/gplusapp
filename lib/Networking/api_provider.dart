@@ -1872,6 +1872,81 @@ class ApiProvider {
       return GenericResponse.withError(e.message);
     }
   }
+  Future<GenericResponse> unblockUser(id, categ) async {
+    var url = "${baseUrl}/app/unblock-user-by-user";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'block_user_id': id, 'block_for': categ};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("unblock-user-by-user response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("unblock-user-by-user error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("unblock-user-by-user error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<BlockedUserResponse> blockedUsers() async {
+    var url = "${baseUrl}/app/blocked-user-list";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    // var data = {'block_user_id': id, 'block_for': categ};
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // data: data,
+        // queryParameters: data,
+      );
+      debugPrint("blocked-user-list response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return BlockedUserResponse.fromJson(response?.data);
+      } else {
+        debugPrint("blocked-user-list error: ${response?.data}");
+        return BlockedUserResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("blocked-user-list error: ${e.response}");
+      return BlockedUserResponse.withError(e.message);
+    }
+  }
 
   Future<GenericResponse> deleteComment(
     comment_id,

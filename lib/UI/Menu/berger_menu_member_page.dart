@@ -521,7 +521,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigation.instance.navigate('/blockedUserList');
+                        Navigation.instance.navigate('/blockedUsers');
                       },
                       child: Row(
                         children: [

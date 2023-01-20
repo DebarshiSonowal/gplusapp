@@ -1,18 +1,79 @@
 {
-  "identifier" : "40BA9BFD",
+  "identifier" : "AEA5631B",
   "nonRenewingSubscriptions" : [
-
+    {
+      "displayPrice" : "1.99",
+      "familyShareable" : false,
+      "internalID" : "6445479513",
+      "localizations" : [
+        {
+          "description" : "Access Premium Content",
+          "displayName" : "One Month Subscription",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "gplus_subscription_one_month_non",
+      "referenceName" : "GPlus Normal One month Subscription",
+      "type" : "NonRenewingSubscription"
+    }
   ],
   "products" : [
-
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "6445478354",
+      "localizations" : [
+        {
+          "description" : "Unlock all the premium content for one month",
+          "displayName" : "One Month Subscription",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "gplus_subscription_1_month",
+      "referenceName" : "one month subscription",
+      "type" : "Consumable"
+    }
   ],
   "settings" : {
     "_applicationInternalID" : "6444875975",
     "_developerTeamID" : "2D4P335MFU",
-    "_lastSynchronizedDate" : 694943333.41071999
+    "_lastSynchronizedDate" : 695887408.69243896
   },
   "subscriptionGroups" : [
+    {
+      "id" : "21162481",
+      "localizations" : [
 
+      ],
+      "name" : "Monthly Subscriptions",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "0.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6445478516",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Unlock all the premium features and content",
+              "displayName" : "Access Premium Content Monthly",
+              "locale" : "en_GB"
+            }
+          ],
+          "productID" : "gplus_subscription_one_month",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Access Premium Content - One Month",
+          "subscriptionGroupID" : "21162481",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
   ],
   "version" : {
     "major" : 2,

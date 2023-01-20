@@ -47,7 +47,7 @@ class ClassifiedMyListCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width: 70.w,
+                        width: 60.w,
                         child: Text(
                           current.title ?? "",
                           overflow: TextOverflow.ellipsis,

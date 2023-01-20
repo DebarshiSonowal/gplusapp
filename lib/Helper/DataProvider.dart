@@ -41,9 +41,7 @@ class DataProvider extends ChangeNotifier {
   Profile? profile;
   AuthorProfile? author;
   List<BlockedUser> blockedUsers = [
-    BlockedUser(
-
-    ),
+    // BlockedUser(),
   ];
   List<ReportModel> reportCategories = [];
   List<NotificationInDevice> notifications = [];
@@ -85,8 +83,12 @@ class DataProvider extends ChangeNotifier {
   List<Shop> shops = [];
   SwitchStatus? status;
   List<BookmarkItem> bookmarks = [];
-  bool hideReferEarn=false;
-  String citizenJournalist = "", deal = "", classifiedMsg = "",refer_earn="",redeem="";
+  bool hideReferEarn = false;
+  String citizenJournalist = "",
+      deal = "",
+      classifiedMsg = "",
+      refer_earn = "",
+      redeem = "";
 
   setCitizenJournalistText(String txt) {
     citizenJournalist = txt;
@@ -97,14 +99,17 @@ class DataProvider extends ChangeNotifier {
     deal = txt;
     notifyListeners();
   }
+
   setReferEarnText(String txt) {
     refer_earn = txt;
     notifyListeners();
   }
-  setHide(val){
+
+  setHide(val) {
     hideReferEarn = val;
     notifyListeners();
   }
+
   setRedeemText(String txt) {
     redeem = txt;
     notifyListeners();
@@ -121,6 +126,7 @@ class DataProvider extends ChangeNotifier {
   }
 
   setBlockedUsers(List<BlockedUser> list) {
+    debugPrint("MY LENGTH ${list.length}");
     blockedUsers = list;
     notifyListeners();
   }
