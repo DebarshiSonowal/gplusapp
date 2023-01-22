@@ -119,9 +119,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/viewImage':
       return FadeTransitionPageRouteBuilder(
           page: ViewImagePage(settings.arguments as String));
-    // case '/viewVideo':
-    //      return FadeTransitionPageRouteBuilder(
-    //          page: ViewVideoPage(settings.arguments as String));
+    case '/websitePayment':
+      return FadeTransitionPageRouteBuilder(
+          page: WebviewPayment(url: settings.arguments as String));
 
     case '/bigdealpage':
       return FadeTransitionPageRouteBuilder(page: BigDealPage());

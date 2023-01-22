@@ -12,6 +12,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../Components/custom_button.dart';
 import '../../Components/exclusive_item.dart';
+import '../../Components/exclusive_suggestions.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
@@ -281,47 +282,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
                               : Colors.black,
                           thickness: 0.5.sp,
                         ),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (cont, count) {
-                            var item = data.home_exclusive[count];
-                            if (count != 0) {
-                              return GestureDetector(
-                                onTap: () {
-                                  if (data.profile?.is_plan_active ?? false) {
-                                    Navigation.instance.navigate('/story',
-                                        args:
-                                            '${'exclusive-news'},${item.seo_name}');
-                                  } else {
-                                    Constance.showMembershipPrompt(
-                                        context, () {});
-                                  }
-                                },
-                                child: ExclusiveItem(item: item),
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
-                          separatorBuilder: (cont, inde) {
-                            if (inde == 0) {
-                              return Container();
-                            } else {
-                              return SizedBox(
-                                height: 1.h,
-                                child: Divider(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  thickness: 0.3.sp,
-                                ),
-                              );
-                            }
-                          },
-                          itemCount: data.home_exclusive.length,
-                        ),
+                        exclusiveSuggestions(data:data),
                         // SizedBox(
                         //   height: 2.h,
                         // ),
@@ -436,3 +397,5 @@ class _ExclusivePageState extends State<ExclusivePage> {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 }
+
+

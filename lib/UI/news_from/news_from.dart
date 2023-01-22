@@ -11,6 +11,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../Components/custom_button.dart';
 import '../../Components/news_from_more_item.dart';
+import '../../Components/news_from_suggestions.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
@@ -288,20 +289,6 @@ class _NewsFromState extends State<NewsFrom> {
                                 ),
                               ),
                             ),
-                            // Text(
-                            //   '${data.news_from[0].author_name}, ${Jiffy(data.news_from[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
-                            //   style: Theme.of(Navigation
-                            //           .instance.navigatorKey.currentContext!)
-                            //       .textTheme
-                            //       .headline5
-                            //       ?.copyWith(
-                            //         color: Storage.instance.isDarkMode
-                            //             ? Colors.white
-                            //             : Colors.black,
-                            //         // fontSize: 2.2.h,
-                            //         // fontWeight: FontWeight.bold,
-                            //       ),
-                            // ),
                           ],
                         ),
                         Divider(
@@ -310,59 +297,7 @@ class _NewsFromState extends State<NewsFrom> {
                               : Colors.black,
                           thickness: 0.5.sp,
                         ),
-                        ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (cont, count) {
-                              var item = data.news_from[count];
-                              if (count != 0) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    if (data.profile?.is_plan_active ?? false) {
-                                      Navigation.instance.navigate('/story',
-                                          args:
-                                              '${widget.categ},${item.seo_name}');
-                                    } else {
-                                      Constance.showMembershipPrompt(
-                                          context, () {});
-                                    }
-                                  },
-                                  child: NewsFromMoreItem(item: item),
-                                );
-                              } else {
-                                return Container();
-                              }
-                            },
-                            separatorBuilder: (cont, inde) {
-                              if (inde == 0) {
-                                return Container();
-                              } else {
-                                return SizedBox(
-                                  height: 1.h,
-                                  child: Divider(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    thickness: 0.3.sp,
-                                  ),
-                                );
-                              }
-                            },
-                            itemCount: data.news_from.length),
-                        // SizedBox(
-                        //   height: 2.h,
-                        // ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     CustomButton(
-                        //         txt: 'Load More',
-                        //         onTap: () {
-                        //
-                        //         }),
-                        //   ],
-                        // ),
+                        newsfrom_suggestion(widget: widget, data: data,),
                         SizedBox(
                           height: 15.h,
                         ),
@@ -419,3 +354,5 @@ class _NewsFromState extends State<NewsFrom> {
     }
   }
 }
+
+

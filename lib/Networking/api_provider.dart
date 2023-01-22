@@ -3446,7 +3446,7 @@ class ApiProvider {
   }
 
   Future<CreateOrderResponse> createOrder(
-      subscription_id, use_referral_point, name, email, phone) async {
+      subscription_id, use_referral_point, name, email, phone,device_type) async {
     var url = "${baseUrl}/app/order/subscription";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -3462,7 +3462,8 @@ class ApiProvider {
       'use_referral_point': use_referral_point,
       'payment_name': name,
       'payment_email': email,
-      'payment_mobile': phone
+      'payment_mobile': phone,
+      'device_type':device_type
     };
     //attachment_list[0][file_data]
     //attachment_list[0][file_type]

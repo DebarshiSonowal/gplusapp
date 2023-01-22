@@ -13,6 +13,7 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 
 // import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Components/alert.dart';
 import '../Helper/Constance.dart';
@@ -85,7 +86,8 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
         getUserInformation();
       } else {
         // initiateIOSpurchase();
-        initPlatformState();
+        // initPlatformState();
+        showPaymentOptions();
       }
       // if (Platform.isAndroid) {
       //   // initiateOrder(widget.input.split(',')[0], widget.input.split(',')[1]);
@@ -542,13 +544,143 @@ You can parse it accordingly to handle response */
     );
   }
 
+  void showPaymentOptions() async {
+    showModalBottomSheet<void>(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+      context: context,
+      isScrollControlled: true,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            height: 32.h,
+            width: 40.w,
+            padding: EdgeInsets.only(
+              top: 2.h,
+              right: 2.w,
+              left: 2.w,
+              // bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Select the desired payment method',
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
+                        color: !Storage.instance.isDarkMode
+                            ? Colors.black
+                            : Colors.white,
+                      ),
+                ),
+                SizedBox(height: 2.h),
+                ListView(
+                  shrinkWrap: true,
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.web),
+                      onTap: () {
+                        fetchKeys(
+                          widget.input.split(',')[0],
+                          Provider.of<DataProvider>(
+                                  Navigation.instance.navigatorKey
+                                          .currentContext ??
+                                      context,
+                                  listen: false)
+                              .profile!
+                              .name,
+                          Provider.of<DataProvider>(
+                                  Navigation.instance.navigatorKey
+                                          .currentContext ??
+                                      context,
+                                  listen: false)
+                              .profile!
+                              .email,
+                          Provider.of<DataProvider>(
+                                  Navigation.instance.navigatorKey
+                                          .currentContext ??
+                                      context,
+                                  listen: false)
+                              .profile!
+                              .mobile,
+                        );
+                        Navigation.instance.goBack();
+                      },
+                      title: Text(
+                        'Pay at our website',
+                        style: Theme.of(context).textTheme.headline5?.copyWith(
+                              color: Colors.green,
+                            ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.apple),
+                      onTap: () {
+                        initPlatformState();
+                        Navigation.instance.goBack();
+                      },
+                      title: Text(
+                        'InApp Purchase',
+                        style: Theme.of(context).textTheme.headline5?.copyWith(
+                              color: Colors.green,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 2.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'Cancel',
+                        style: Theme.of(context).textTheme.headline5?.copyWith(
+                              color: Constance.thirdColor,
+                            ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   void fetchKeys(subscription_id, name, email, phone) async {
-    final response = await ApiProvider.instance
-        .createOrder(subscription_id, 0, name, email, phone);
+    final response = await ApiProvider.instance.createOrder(
+      subscription_id,
+      0,
+      name,
+      email,
+      phone,
+      Platform.isAndroid ? "android" : "ios",
+    );
     if (response.success ?? false) {
-      initiatePayment(response.environment, response.access_key);
+      if (Platform.isAndroid) {
+        initiatePayment(response.environment, response.access_key);
+      } else {
+        Navigation.instance.navigate('/websitePayment',args: "https://guwahatiplus.com/payment/${response.order!.id}");
+        // _launchUrl(Uri.parse(
+        //     "https://guwahatiplus.com/payment/${response.order!.id}"));
+      }
     } else {
       showError(response.message ?? "Something went wrong");
+    }
+  }
+
+  Future<void> _launchUrl(_url) async {
+    if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $_url';
     }
   }
 
@@ -637,7 +769,8 @@ You can parse it accordingly to handle response */
     Offerings offerings;
     try {
       offerings = await Purchases.getOfferings();
-      debugPrint("Packages ${offerings.current!.availablePackages[0].storeProduct.identifier}");
+      debugPrint(
+          "Packages ${offerings.current!.availablePackages[0].storeProduct.identifier}");
       CustomerInfo customerInfo = await Purchases.purchasePackage(
           offerings.current!.availablePackages[0]);
       // appData.entitlementIsActive = customerInfo
@@ -645,16 +778,15 @@ You can parse it accordingly to handle response */
       debugPrint("Payment ${customerInfo.nonSubscriptionTransactions[0]}"
           // " : ${customerInfo.allPurchaseDates} : "
           // "${customerInfo.allPurchasedProductIdentifiers}"
-      );
+          );
     } on PlatformException catch (e) {
       debugPrint("Payment ${e.message}");
       showError("Something went wrong");
-
     }
 
     // if (mounted) {
     //   setState(() {});
     // }
-    Navigator.pop(context);
+    Navigation.instance.goBack();
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
@@ -411,12 +413,14 @@ class _RedeemPointsState extends State<RedeemPoints> {
                 SizedBox(height: 1.h),
                 Text(
                   Provider.of<DataProvider>(
-                      Navigation.instance.navigatorKey.currentContext ?? context,
-                      listen: false).redeem??
-                  'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                  ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                  ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                  ' remaining essentially unchanged',
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .redeem ??
+                      'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
+                          ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+                          ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+                          ' remaining essentially unchanged',
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontWeight: FontWeight.bold,
@@ -576,11 +580,13 @@ class _RedeemPointsState extends State<RedeemPoints> {
   void redeemByCoin(id) async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.createOrder(
-        id,
-        1,
-        Provider.of<DataProvider>(context, listen: false).profile?.name!,
-        Provider.of<DataProvider>(context, listen: false).profile?.email!,
-        Provider.of<DataProvider>(context, listen: false).profile?.mobile!);
+      id,
+      1,
+      Provider.of<DataProvider>(context, listen: false).profile?.name!,
+      Provider.of<DataProvider>(context, listen: false).profile?.email!,
+      Provider.of<DataProvider>(context, listen: false).profile?.mobile!,
+      Platform.isAndroid?"android":"ios",
+    );
     if (response.success ?? false) {
       Navigation.instance.goBack();
       success();

@@ -168,30 +168,6 @@ class _TopPicksPageState extends State<TopPicksPage> {
                             ),
                           ),
                         ),
-                        // SizedBox(
-                        //   height: 2.h,
-                        // ),
-                        // Row(
-                        //   children: [
-                        //     Container(
-                        //       color: Constance.primaryColor,
-                        //       padding: EdgeInsets.symmetric(
-                        //           horizontal: 2.w, vertical: 1.h),
-                        //       child: Text(
-                        //         'Guwahati',
-                        //         style: Theme.of(Navigation
-                        //                 .instance.navigatorKey.currentContext!)
-                        //             .textTheme
-                        //             .headline5
-                        //             ?.copyWith(
-                        //               color: Colors.white,
-                        //               // fontSize: 2.2.h,
-                        //               // fontWeight: FontWeight.bold,
-                        //             ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
                         SizedBox(
                           height: 1.h,
                         ),
@@ -295,38 +271,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
                           color: Colors.black,
                           thickness: 0.5.sp,
                         ),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (cont, count) {
-                            var item = data.home_toppicks[count];
-                            if (count != 0) {
-                              return SuggestedForYouCard(
-                                item: item,
-                                data: data,
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
-                          separatorBuilder: (cont, inde) {
-                            if (inde == 0) {
-                              return Container();
-                            } else {
-                              return SizedBox(
-                                height: 1.h,
-                                child: Divider(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  thickness: 0.3.sp,
-                                ),
-                              );
-                            }
-                          },
-                          itemCount: data.home_toppicks.length,
-                        ),
+                        toppickSuggestions(data:data),
                         // SizedBox(
                         //   height: 2.h,
                         // ),
@@ -403,6 +348,48 @@ class _TopPicksPageState extends State<TopPicksPage> {
     }else{
       _refreshController.loadFailed();
     }
+  }
+}
+
+class toppickSuggestions extends StatelessWidget {
+  const toppickSuggestions({
+    Key? key, required this.data,
+  }) : super(key: key);
+  final DataProvider data;
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      itemBuilder: (cont, count) {
+        var item = data.home_toppicks[count];
+        if (count != 0) {
+          return SuggestedForYouCard(
+            item: item,
+            data: data,
+          );
+        } else {
+          return Container();
+        }
+      },
+      separatorBuilder: (cont, inde) {
+        if (inde == 0) {
+          return Container();
+        } else {
+          return SizedBox(
+            height: 1.h,
+            child: Divider(
+              color: Storage.instance.isDarkMode
+                  ? Colors.white
+                  : Colors.black,
+              thickness: 0.3.sp,
+            ),
+          );
+        }
+      },
+      itemCount: data.home_toppicks.length,
+    );
   }
 }
 
