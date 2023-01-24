@@ -122,7 +122,7 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
     var detailed_response = response['payment_response'];
     print(detailed_response);
     if (result == "payment_successfull") {
-      verifyPayment(detailed_response);
+      verifyPayment(detailed_response, "payment_gateway");
     } else {
       Navigation.instance.goBack();
       showError("Payment failed");
@@ -669,7 +669,8 @@ You can parse it accordingly to handle response */
       if (Platform.isAndroid) {
         initiatePayment(response.environment, response.access_key);
       } else {
-        Navigation.instance.navigate('/websitePayment',args: "https://guwahatiplus.com/payment/${response.order!.id}");
+        Navigation.instance.navigate('/websitePayment',
+            args: "https://guwahatiplus.com/payment/${response.order!.id}");
         // _launchUrl(Uri.parse(
         //     "https://guwahatiplus.com/payment/${response.order!.id}"));
       }
@@ -684,9 +685,9 @@ You can parse it accordingly to handle response */
     }
   }
 
-  void verifyPayment(detailed_response) async {
-    final response =
-        await ApiProvider.instance.verifyPayment("", "", "", detailed_response);
+  void verifyPayment(detailed_response, type) async {
+    final response = await ApiProvider.instance
+        .verifyPayment("", "", "", detailed_response, type);
     if (response.success ?? false) {
       fetchProfile();
       Navigation.instance.goBack();
@@ -775,18 +776,34 @@ You can parse it accordingly to handle response */
           offerings.current!.availablePackages[0]);
       // appData.entitlementIsActive = customerInfo
       //     .entitlements.all[FlutterConfig.get('entitlementId')]!.isActive;
-      debugPrint("Payment ${customerInfo.nonSubscriptionTransactions[0]}"
+      debugPrint(
+          "Payment1 PurchasedProduct ${customerInfo.allPurchasedProductIdentifiers.toString()}"
+      );
+      debugPrint(
+          "Payment1 purchaseDate ${customerInfo.allPurchaseDates.toString()}");
+      debugPrint(
+          "Payment1 revenueCatIdentifier ${customerInfo.activeSubscriptions.toString()}"
+        // " : ${customerInfo.allPurchaseDates} : "
+        // "${customerInfo.allPurchasedProductIdentifiers}"
+      );
+      debugPrint(
+          "Payment productIdentifier ${customerInfo.nonSubscriptionTransactions[0].productIdentifier}"
+      );
+      debugPrint(
+          "Payment purchaseDate ${customerInfo.nonSubscriptionTransactions[0].purchaseDate}");
+      debugPrint(
+          "Payment revenueCatIdentifier ${customerInfo.nonSubscriptionTransactions[0].revenueCatIdentifier}"
           // " : ${customerInfo.allPurchaseDates} : "
           // "${customerInfo.allPurchasedProductIdentifiers}"
           );
     } on PlatformException catch (e) {
-      debugPrint("Payment ${e.message}");
+      debugPrint("Payment ${e.message} ${e.details}");
       showError("Something went wrong");
     }
 
     // if (mounted) {
     //   setState(() {});
     // }
-    Navigation.instance.goBack();
+    // Navigation.instance.goBack();
   }
 }

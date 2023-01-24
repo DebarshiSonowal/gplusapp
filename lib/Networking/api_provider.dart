@@ -2220,8 +2220,8 @@ class ApiProvider {
   }
 
   Future<GenericResponse> verifyPayment(
-      order_code, razorpay_payment_id, amount, payment_data) async {
-    var url = "${baseUrl}/app/order/verify-payment";
+      order_code, razorpay_payment_id, amount, payment_data,type) async {
+    var url = "${baseUrl}/app/order/verify-payment/${type}";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',
