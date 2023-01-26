@@ -122,7 +122,7 @@ class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
     var detailed_response = response['payment_response'];
     print(detailed_response);
     if (result == "payment_successfull") {
-      verifyPayment(detailed_response, "payment_gateway");
+      verifyPayment(detailed_response, "payment_gateway", "", "");
     } else {
       Navigation.instance.goBack();
       showError("Payment failed");
@@ -669,8 +669,15 @@ You can parse it accordingly to handle response */
       if (Platform.isAndroid) {
         initiatePayment(response.environment, response.access_key);
       } else {
-        Navigation.instance.navigate('/websitePayment',
+        final result = await Navigation.instance.navigate('/websitePayment',
             args: "https://guwahatiplus.com/payment/${response.order!.id}");
+        if(result!=null){
+          fetchProfile();
+          Navigation.instance.goBack();
+        }else{
+          fetchProfile();
+          Navigation.instance.goBack();
+        }
         // _launchUrl(Uri.parse(
         //     "https://guwahatiplus.com/payment/${response.order!.id}"));
       }
@@ -685,9 +692,10 @@ You can parse it accordingly to handle response */
     }
   }
 
-  void verifyPayment(detailed_response, type) async {
-    final response = await ApiProvider.instance
-        .verifyPayment("", "", "", detailed_response, type);
+  void verifyPayment(
+      detailed_response, type, transaction_id, purchase_date) async {
+    final response = await ApiProvider.instance.verifyPayment(
+        "", "", "", detailed_response, type, transaction_id, purchase_date);
     if (response.success ?? false) {
       fetchProfile();
       Navigation.instance.goBack();
@@ -722,6 +730,23 @@ You can parse it accordingly to handle response */
 // // From here the purchase flow will be handled by the underlying store.
 // // Updates will be delivered to the `InAppPurchase.instance.purchaseStream`.
 //   }
+  void fetchKeysInapp(subscription_id, name, email, phone, transaction_id,
+      purchase_date) async {
+    final response = await ApiProvider.instance.createOrder(
+      subscription_id,
+      0,
+      name,
+      email,
+      phone,
+      Platform.isAndroid ? "android" : "ios",
+    );
+    if (response.success ?? false) {
+      verifyPaymentInapp(
+          response.order?.voucher_no, transaction_id, purchase_date);
+    } else {
+      showError(response.message ?? "Something went wrong");
+    }
+  }
 
   Future<void> initPlatformState() async {
     // Enable debug logs before calling `configure`.
@@ -777,18 +802,16 @@ You can parse it accordingly to handle response */
       // appData.entitlementIsActive = customerInfo
       //     .entitlements.all[FlutterConfig.get('entitlementId')]!.isActive;
       debugPrint(
-          "Payment1 PurchasedProduct ${customerInfo.allPurchasedProductIdentifiers.toString()}"
-      );
+          "Payment1 PurchasedProduct ${customerInfo.allPurchasedProductIdentifiers.toString()}");
       debugPrint(
           "Payment1 purchaseDate ${customerInfo.allPurchaseDates.toString()}");
       debugPrint(
           "Payment1 revenueCatIdentifier ${customerInfo.activeSubscriptions.toString()}"
-        // " : ${customerInfo.allPurchaseDates} : "
-        // "${customerInfo.allPurchasedProductIdentifiers}"
-      );
+          // " : ${customerInfo.allPurchaseDates} : "
+          // "${customerInfo.allPurchasedProductIdentifiers}"
+          );
       debugPrint(
-          "Payment productIdentifier ${customerInfo.nonSubscriptionTransactions[0].productIdentifier}"
-      );
+          "Payment productIdentifier ${customerInfo.nonSubscriptionTransactions[0].productIdentifier}");
       debugPrint(
           "Payment purchaseDate ${customerInfo.nonSubscriptionTransactions[0].purchaseDate}");
       debugPrint(
@@ -796,6 +819,25 @@ You can parse it accordingly to handle response */
           // " : ${customerInfo.allPurchaseDates} : "
           // "${customerInfo.allPurchasedProductIdentifiers}"
           );
+      fetchKeysInapp(
+          widget.input.split(',')[0],
+          Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .profile
+              ?.name,
+          Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .profile
+              ?.email,
+          Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .profile
+              ?.mobile,
+          customerInfo.nonSubscriptionTransactions[0].revenueCatIdentifier,
+          customerInfo.nonSubscriptionTransactions[0].purchaseDate);
     } on PlatformException catch (e) {
       debugPrint("Payment ${e.message} ${e.details}");
       showError("Something went wrong");
@@ -805,5 +847,17 @@ You can parse it accordingly to handle response */
     //   setState(() {});
     // }
     // Navigation.instance.goBack();
+  }
+
+  void verifyPaymentInapp(order_code, transaction_id, purchase_date) async {
+    final response = await ApiProvider.instance
+        .verifyPaymentInapp(order_code, transaction_id, purchase_date);
+    if (response.success ?? false) {
+      fetchProfile();
+      Navigation.instance.goBack();
+      showDialogBox();
+    } else {
+      showError(response.message ?? "Something Went Wrong");
+    }
   }
 }

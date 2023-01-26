@@ -2220,7 +2220,7 @@ class ApiProvider {
   }
 
   Future<GenericResponse> verifyPayment(
-      order_code, razorpay_payment_id, amount, payment_data,type) async {
+      order_code, razorpay_payment_id, amount, payment_data,type,transaction_id,purchase_date) async {
     var url = "${baseUrl}/app/order/verify-payment/${type}";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -2242,6 +2242,9 @@ class ApiProvider {
       'amount': "${payment_data['amount']}",
       'phone': "${payment_data['phone']}",
       'email': "${payment_data['email']}",
+      'order_code':"${order_code}",
+      'transaction_id':"${transaction_id}",
+      'purchase_date':"${purchase_date}",
     };
     debugPrint(jsonEncode(exactData));
     var data = {
@@ -2259,6 +2262,77 @@ class ApiProvider {
       'amount': "${payment_data['amount']}",
       'phone': "${payment_data['phone']}",
       'email': "${payment_data['email']}",
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        data: data,
+        // queryParameters: data,
+      );
+      debugPrint("verifyPayment response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("verifyPayment error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("verifyPayment error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
+  Future<GenericResponse> verifyPaymentInapp(
+      order_code,transaction_id,purchase_date) async {
+    var url = "${baseUrl}/app/order/verify-payment/inapp";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var exactData = {
+      // 'name_on_card': "${payment_data['name_on_card']}",
+      // 'txnid': "${payment_data['txnid']}",
+      // 'easepayid': "${payment_data['easepayid']}",
+      // 'addedon': "${payment_data['addedon']}",
+      // 'udf1': "${payment_data['udf1']}",
+      // 'udf2': "${payment_data['udf2']}",
+      // 'udf3': "${payment_data['udf3']}",
+      // 'amount': "${payment_data['amount']}",
+      // 'phone': "${payment_data['phone']}",
+      // 'email': "${payment_data['email']}",
+      'order_code':"${order_code}",
+      'transaction_id':"${transaction_id}",
+      'purchase_date':"${purchase_date}",
+    };
+    debugPrint(jsonEncode(exactData));
+    var data = {
+      'order_code': order_code,
+      'transaction_id':"${transaction_id}",
+      'purchase_date':"${purchase_date}",
+      // 'razorpay_payment_id': razorpay_payment_id,
+      // 'amount': amount,
+      // 'payment_data':exactData,
+      // 'name_on_card': "${payment_data['name_on_card']}",
+      // 'txnid': "${payment_data['txnid']}",
+      // 'easepayid': "${payment_data['easepayid']}",
+      // 'addedon': "${payment_data['addedon']}",
+      // 'udf1': "${payment_data['udf1']}",
+      // 'udf2': "${payment_data['udf2']}",
+      // 'udf3': "${payment_data['udf3']}",
+      // 'amount': "${payment_data['amount']}",
+      // 'phone': "${payment_data['phone']}",
+      // 'email': "${payment_data['email']}",
     };
     debugPrint(jsonEncode(data));
 

@@ -14,7 +14,10 @@ import '../../Components/alert.dart';
 import '../../Components/buzz_section.dart';
 import '../../Components/exclusive_section.dart';
 import '../../Components/location_section.dart';
+import '../../Components/membership_section.dart';
 import '../../Components/news_from_section.dart';
+import '../../Components/refer_earn_section.dart';
+import '../../Components/settings_section.dart';
 import '../../Components/social_media_section.dart';
 import '../../Components/video_section_menu.dart';
 import '../../Helper/Constance.dart';
@@ -392,41 +395,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 color: Colors.white,
                 thickness: 0.2,
               ),
-              InkWell(
-                splashColor: Constance.secondaryColor,
-                radius: 15.h,
-                onTap: () {
-                  if (data.profile?.is_plan_active ?? false) {
-                    Navigation.instance.navigate('/profile');
-                  } else {
-                    Navigation.instance.navigate('/beamember');
-                  }
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 1.0.h),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        FontAwesomeIcons.user,
-                        color: Constance.secondaryColor,
-                      ),
-                      SizedBox(
-                        width: 2.w,
-                      ),
-                      Text(
-                        (data.profile?.is_plan_active ?? false)
-                            ? 'Membership Info'
-                            : 'Be a member',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Constance.secondaryColor,
-                              // fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              MembershipSection(data: data),
 
               (!Provider.of<DataProvider>(
                           Navigation.instance.navigatorKey.currentContext!)
@@ -438,38 +407,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
               (!Provider.of<DataProvider>(
                           Navigation.instance.navigatorKey.currentContext!)
                       .hideReferEarn)
-                  ? Padding(
-                      padding: EdgeInsets.symmetric(vertical: 1.0.h),
-                      child: InkWell(
-                        splashColor: Constance.secondaryColor,
-                        radius: 15.h,
-                        onTap: () {
-                          Navigation.instance.navigate('/refer&earn');
-                        },
-                        child: Row(
-                          children: [
-                            const Icon(
-                              FontAwesomeIcons.indianRupeeSign,
-                              color: Constance.secondaryColor,
-                            ),
-                            SizedBox(
-                              width: 2.w,
-                            ),
-                            Text(
-                              'Refer and Earn',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4
-                                  ?.copyWith(
-                                    color: Colors.white,
-                                    // fontSize: 14.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
+                  ? const ReferAndEarnSection()
                   : Container(),
               const Divider(
                 color: Colors.white,
@@ -480,109 +418,12 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 color: Colors.white,
                 thickness: 0.2,
               ),
-              SocialMediaSection(),
+              const SocialMediaSection(),
               const Divider(
                 color: Colors.white,
                 thickness: 0.2,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 1.0.h),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigation.instance.navigate('/settingsPage');
-                      },
-                      child: Row(
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.gear,
-                            color: Constance.secondaryColor,
-                            size: 2.5.h,
-                          ),
-                          SizedBox(
-                            width: 3.5.w,
-                          ),
-                          Text(
-                            'Settings',
-                            style:
-                                Theme.of(context).textTheme.headline4?.copyWith(
-                                      color: Colors.white,
-                                      // fontSize: 14.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigation.instance.navigate('/blockedUsers');
-                      },
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.block,
-                            color: Constance.secondaryColor,
-                            size: 2.5.h,
-                          ),
-                          SizedBox(
-                            width: 3.5.w,
-                          ),
-                          Text(
-                            'Blocked User List',
-                            style:
-                                Theme.of(context).textTheme.headline4?.copyWith(
-                                      color: Colors.white,
-                                      // fontSize: 14.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // InkWell(
-                    //   splashColor: Constance.secondaryColor,
-                    //   radius: 15.h,
-                    //   onTap: () async {
-                    //     final FirebaseAuth _auth = FirebaseAuth.instance;
-                    //     await _auth.signOut();
-                    //     Storage.instance.logout();
-                    //     Navigation.instance.navigateAndRemoveUntil('/login');
-                    //   },
-                    //   child: Row(
-                    //     children: [
-                    //       const Icon(
-                    //         Icons.exit_to_app,
-                    //         color: Constance.secondaryColor,
-                    //         // size: 2.h,
-                    //       ),
-                    //       SizedBox(
-                    //         width: 2.w,
-                    //       ),
-                    //       Text(
-                    //         'Logout',
-                    //         style:
-                    //             Theme.of(context).textTheme.headline4?.copyWith(
-                    //                   color: Colors.white,
-                    //                   // fontSize: 14.sp,
-                    //                   fontWeight: FontWeight.bold,
-                    //                 ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                  ],
-                ),
-              ),
+              const SettingsSection(),
             ],
           ),
         ),
@@ -655,4 +496,5 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     required String url,
   }) async {}
 }
+
 
