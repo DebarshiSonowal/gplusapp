@@ -77,6 +77,13 @@ class _StoryPageState extends State<StoryPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       fetchDetails();
+      setRead(Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
+          .notifications
+          .firstWhere((element) =>
+              element.seo_name == widget.slug.toString().split(',')[1])
+          .id);
     });
     fetchAds();
     controller.addListener(() {
@@ -387,7 +394,14 @@ class _StoryPageState extends State<StoryPage> {
                                     generateURL(
                                         data.selectedArticle?.first_cat_name
                                             ?.seo_name,
-                                        data.selectedArticle?.seo_name);
+                                        data.selectedArticle?.seo_name,
+                                        data.selectedArticle?.description
+                                            ?.trim()
+                                            .split(".")
+                                            .sublist(0, 4)
+                                            .join(""),
+                                        data.selectedArticle?.image_file_name
+                                            ?.toString());
                                   },
                                   splashRadius: 20.0,
                                   splashColor: Storage.instance.isDarkMode
@@ -780,10 +794,16 @@ class _StoryPageState extends State<StoryPage> {
                                     //     ? 'check out our website https://guwahatiplus.com/'
                                     //     : '${data.selectedArticle?.web_url}');
                                     generateURL(
-                                        data.selectedArticle?.first_cat_name!
-                                                .seo_name ??
-                                            "",
-                                        data.selectedArticle?.seo_name);
+                                        data.selectedArticle?.first_cat_name
+                                            ?.seo_name,
+                                        data.selectedArticle?.seo_name,
+                                        data.selectedArticle?.description
+                                            ?.trim()
+                                            .split(".")
+                                            .sublist(0, 4)
+                                            .join(""),
+                                        data.selectedArticle?.image_file_name
+                                            .toString());
                                   },
                                   splashRadius: 10.0,
                                   splashColor: Constance.secondaryColor,
@@ -937,12 +957,6 @@ class _StoryPageState extends State<StoryPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      // leading: IconButton(
-      //   onPressed: () {
-      //     Navigation.instance.navigate('/bergerMenuMem');
-      //   },
-      //   icon: Icon(Icons.menu),
-      // ),
       title: GestureDetector(
         onTap: () {
           Provider.of<DataProvider>(
@@ -980,42 +994,6 @@ class _StoryPageState extends State<StoryPage> {
         IconButton(
           onPressed: () {
             Navigation.instance.navigate('/search', args: "");
-            // showSearch(
-            //   context: context,
-            //   delegate: SearchPage<Listing>(
-            //     items: Constance.listings,
-            //     searchLabel: 'Search posts',
-            //     suggestion: Center(
-            //       child: Text(
-            //         'Filter posts by name, descr',
-            //         style: Theme.of(context).textTheme.headline5,
-            //       ),
-            //     ),
-            //     failure: const Center(
-            //       child: Text('No posts found :('),
-            //     ),
-            //     filter: (current) => [
-            //       current.title,
-            //       current.descr,
-            //       // person.age.toString(),
-            //     ],
-            //     builder: (data) => ListTile(
-            //       title: Text(
-            //         data.title ?? "",
-            //         style: Theme.of(context).textTheme.headline5,
-            //       ),
-            //       subtitle: Text(
-            //         data.descr ?? '',
-            //         style: Theme.of(context).textTheme.headline6,
-            //       ),
-            //       // trailing: CachedNetworkImage(
-            //       //   imageUrl: data.image??'',
-            //       //   height: 20,
-            //       //   width: 20,
-            //       // ),
-            //     ),
-            //   ),
-            // );
           },
           icon: Icon(Icons.search),
         ),
@@ -1026,6 +1004,32 @@ class _StoryPageState extends State<StoryPage> {
   Future<void> _launchUrl(_url) async {
     if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
       throw 'Could not launch $_url';
+    }
+  }
+
+  void setRead(String? id) async {
+    final response = await ApiProvider.instance.notificationRead(id);
+    if (response.success ?? false) {
+      fetchNotification();
+    } else {
+      showError(response.message ?? "Something went wrong");
+    }
+  }
+
+  void fetchNotification() async {
+    final response = await ApiProvider.instance.getNotifications();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
+          .setNotificationInDevice(response.notification);
+      // setState(() {
+      //   isEmpty = response.notification.isEmpty ? true : false;
+      // });
+    } else {
+      // setState(() {
+      //   isEmpty = true;
+      // });
     }
   }
 
@@ -1212,7 +1216,8 @@ class _StoryPageState extends State<StoryPage> {
     return 'https://img.youtube.com/vi/${id}/0.jpg';
   }
 
-  void generateURL(first_cat_name, String? seo_name) async {
+  void generateURL(
+      first_cat_name, String? seo_name, description, image_url) async {
     // final dynamicLinkParams = DynamicLinkParameters(
     //   link: Uri.parse(
     //       "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}"),
@@ -1227,13 +1232,22 @@ class _StoryPageState extends State<StoryPage> {
       link: Uri.parse(
           "${FlutterConfig.get('domain')}/link/story/${seo_name}/${first_cat_name}"),
       uriPrefix: FlutterConfig.get('customHostDeepLink'),
-      androidParameters:
-          AndroidParameters(packageName: FlutterConfig.get("androidPackage")),
-      iosParameters: IOSParameters(bundleId: FlutterConfig.get('iosBundleId')),
+      androidParameters: AndroidParameters(
+        packageName: FlutterConfig.get("androidPackage"),
+      ),
+      iosParameters: IOSParameters(
+        bundleId: FlutterConfig.get('iosBundleId'),
+      ),
+      // socialMetaTagParameters: SocialMetaTagParameters(
+      //   description: description,
+      //   title: seo_name?.replaceAll("-", " "),
+      //   imageUrl: Uri.parse(image_url),
+      // ),
     );
     final dynamicLink = await FirebaseDynamicLinks.instance.buildShortLink(
-        dynamicLinkParams,
-        shortLinkType: ShortDynamicLinkType.unguessable);
+      dynamicLinkParams,
+      shortLinkType: ShortDynamicLinkType.unguessable,
+    );
 
     Share.share(dynamicLink.shortUrl.toString());
     // return "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}";

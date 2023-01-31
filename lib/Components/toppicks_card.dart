@@ -36,6 +36,7 @@ class SuggestedForYouCard extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
+              // flex: 5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -64,9 +65,10 @@ class SuggestedForYouCard extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: 5.w,
+              width: 3.w,
             ),
             Expanded(
+              // flex: 4,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

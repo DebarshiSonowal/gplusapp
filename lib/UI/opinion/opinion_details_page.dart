@@ -246,8 +246,10 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                           TextSpan(
                                             text:
                                                 '${data.opinion?.user?.name ?? "G Plus"}',
-                                            style: Theme.of(Navigation.instance
-                                                    .navigatorKey.currentContext!)
+                                            style: Theme.of(Navigation
+                                                    .instance
+                                                    .navigatorKey
+                                                    .currentContext!)
                                                 .textTheme
                                                 .headline5
                                                 ?.copyWith(
@@ -263,15 +265,17 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                           TextSpan(
                                             text:
                                                 ' , ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
-                                            style: Theme.of(Navigation.instance
-                                                    .navigatorKey.currentContext!)
+                                            style: Theme.of(Navigation
+                                                    .instance
+                                                    .navigatorKey
+                                                    .currentContext!)
                                                 .textTheme
                                                 .headline5
                                                 ?.copyWith(
-                                                  color:
-                                                      Storage.instance.isDarkMode
-                                                          ? Colors.white
-                                                          : Colors.black,
+                                                  color: Storage
+                                                          .instance.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                   // fontSize: 2.2.h,
                                                   // fontWeight: FontWeight.bold,
                                                 ),
@@ -352,8 +356,11 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                       //     ? 'check out our website https://guwahatiplus.com/'
                                       //     : '${data.opinion?.web_url}');
                                       generateURL(
-                                          data.opinion?.category_id,
-                                          data.opinion?.seo_name);
+                                        data.opinion?.category_id,
+                                        data.opinion?.seo_name,
+                                          data.opinion?.description?.trim().split(".").sublist(0,4).join(""),
+                                          data.opinion?.image_file_name
+                                      );
                                     },
                                     splashRadius: 10.0,
                                     splashColor: Constance.secondaryColor,
@@ -681,7 +688,10 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     //     : '${data.opinion?.web_url}');
                                     generateURL(
                                         data.opinion?.category_id,
-                                        data.opinion?.seo_name);
+                                        data.opinion?.seo_name,
+                                        data.opinion?.description?.trim().split(".").sublist(0,4).join(""),
+                                        data.opinion?.image_file_name
+                                    );
                                   },
                                   splashRadius: 10.0,
                                   splashColor: Constance.secondaryColor,
@@ -1021,22 +1031,31 @@ String getHtmlString(String? tweetId) {
       </html>
     """;
 }
-void generateURL(first_cat_name, String? seo_name) async {
+
+void generateURL(
+    first_cat_name, String? seo_name, description, image_url) async {
   final dynamicLinkParams = DynamicLinkParameters(
     link: Uri.parse(
         "${FlutterConfig.get('domain')}/link/opinion/${seo_name}/${first_cat_name}"),
     uriPrefix: FlutterConfig.get('customHostDeepLink'),
-    androidParameters:
-    AndroidParameters(packageName: FlutterConfig.get("androidPackage")),
-    iosParameters: IOSParameters(bundleId: FlutterConfig.get('iosBundleId')),
+    androidParameters: AndroidParameters(
+      packageName: FlutterConfig.get("androidPackage"),
+    ),
+    iosParameters: IOSParameters(
+      bundleId: FlutterConfig.get('iosBundleId'),
+    ),
+    // socialMetaTagParameters: SocialMetaTagParameters(
+    //   description: description,
+    //   title: seo_name?.replaceAll("-", " "),
+    //   imageUrl: Uri.parse(image_url),
+    // ),
   );
   final dynamicLink = await FirebaseDynamicLinks.instance.buildShortLink(
       dynamicLinkParams,
       shortLinkType: ShortDynamicLinkType.unguessable);
 
-  debugPrint("${FlutterConfig.get('domain')}/link/opinion/${seo_name}/${first_cat_name}");
+  debugPrint(
+      "${FlutterConfig.get('domain')}/link/opinion/${seo_name}/${first_cat_name}");
   Share.share(dynamicLink.shortUrl.toString());
   // return "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}";
 }
-
-

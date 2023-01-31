@@ -180,30 +180,6 @@ class _NewsFromState extends State<NewsFrom> {
                             ),
                           ),
                         ),
-                        // SizedBox(
-                        //   height: 2.h,
-                        // ),
-                        // Row(
-                        //   children: [
-                        //     Container(
-                        //       color: Constance.primaryColor,
-                        //       padding: EdgeInsets.symmetric(
-                        //           horizontal: 2.w, vertical: 1.h),
-                        //       child: Text(
-                        //         'Guwahati',
-                        //         style: Theme.of(Navigation
-                        //                 .instance.navigatorKey.currentContext!)
-                        //             .textTheme
-                        //             .headline5
-                        //             ?.copyWith(
-                        //               color: Colors.white,
-                        //               // fontSize: 2.2.h,
-                        //               // fontWeight: FontWeight.bold,
-                        //             ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
                         SizedBox(
                           height: 0.7.h,
                         ),

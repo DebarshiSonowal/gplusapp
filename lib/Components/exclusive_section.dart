@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Components/video_section_menu.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
+import '../Helper/DataProvider.dart';
+import '../Model/notification_in_device.dart';
 import '../Navigation/Navigate.dart';
 import 'buzz_section.dart';
 
@@ -43,20 +46,32 @@ class ExclusiveSection extends StatelessWidget {
                 Text(
                   'G Plus Exclusive',
                   style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Colors.white,
-                    // fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+                        color: Colors.white,
+                        // fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 Expanded(child: Container()),
-                Container(
-                  height: 6,
-                  width: 6,
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                ),
+                !filterToCheckPerCategory(
+                        Provider.of<DataProvider>(
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .notifications,
+                        'exclusive-news')
+                    ? const SizedBox(
+                        height: 6,
+                        width: 6,
+                      )
+                    : Container(
+                        height: 6,
+                        width: 6,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
               ],
             ),
           ),
@@ -85,13 +100,25 @@ class ExclusiveSection extends StatelessWidget {
                 Text(
                   'Opinion',
                   style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Colors.white,
-                    // fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+                        color: Colors.white,
+                        // fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 Expanded(child: Container()),
-                Container(
+                !filterToCheckPerType(
+                    Provider.of<DataProvider>(
+                        Navigation
+                            .instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                        .notifications,
+                    'opinion')
+                    ? const SizedBox(
+                  height: 6,
+                  width: 6,
+                )
+                    : Container(
                   height: 6,
                   width: 6,
                   decoration: const BoxDecoration(
@@ -109,5 +136,22 @@ class ExclusiveSection extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  filterToCheckPerCategory(List<NotificationInDevice> notifications, String s) {
+    for (var i in notifications) {
+      if (i.category_name == s) {
+        return true;
+      }
+    }
+    return false;
+  }
+  filterToCheckPerType(List<NotificationInDevice> notifications, String s) {
+    for (var i in notifications) {
+      if (i.type == s) {
+        return true;
+      }
+    }
+    return false;
   }
 }

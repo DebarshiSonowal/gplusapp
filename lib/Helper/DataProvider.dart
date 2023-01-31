@@ -141,6 +141,10 @@ class DataProvider extends ChangeNotifier {
     notifications = list;
     notifyListeners();
   }
+  removeNotificationInDevice(NotificationInDevice item) {
+    notifications.remove(item);
+    notifyListeners();
+  }
 
   setBookmarkItems(List<BookmarkItem> list) {
     bookmarks = list;

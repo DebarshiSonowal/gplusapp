@@ -568,12 +568,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                           height: 3.h,
                         ),
                         Text(
-                          '''Projected to be a smart city by 2025, Guwahati is a
-major port on the banks of Brahmaputra, the capital
-of Assam and the urban hub of the North East. This
-metropolitan city is growing leaps and bounds, and
-for its unparalleled pace of growth, comes the need
-for an unparalleled publication, that people call their''',
+                          Constance.about,
                           style:
                               Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Colors.black,

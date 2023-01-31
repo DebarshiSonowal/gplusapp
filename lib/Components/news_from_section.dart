@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gplusapp/Model/notification_in_device.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
+import '../Helper/DataProvider.dart';
 import '../Navigation/Navigate.dart';
 
 class NewsFromSection extends StatelessWidget {
@@ -12,10 +15,9 @@ class NewsFromSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: Theme.of(context)
-          .copyWith(dividerColor: Colors.transparent),
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ListTileTheme(
-        contentPadding: EdgeInsets.all(0),
+        contentPadding: const EdgeInsets.all(0),
         child: ExpansionTile(
           title: Row(
             children: [
@@ -28,12 +30,11 @@ class NewsFromSection extends StatelessWidget {
               ),
               Text(
                 'News from',
-                style:
-                Theme.of(context).textTheme.headline4?.copyWith(
-                  color: Colors.white,
-                  // fontSize: 19.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.headline4?.copyWith(
+                      color: Colors.white,
+                      // fontSize: 19.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               SizedBox(
                 width: 2.w,
@@ -45,21 +46,29 @@ class NewsFromSection extends StatelessWidget {
               ),
             ],
           ),
-          trailing: Container(
-            height: 6,
-            width: 6,
-            decoration: const BoxDecoration(
-              color: Colors.red,
-              shape: BoxShape.circle,
-            ),
-          ),
+          trailing: !filterToCheck(Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext ??
+                          context,
+                      listen: false)
+                  .notifications)
+              ? const SizedBox(
+                  height: 6,
+                  width: 6,
+                )
+              : Container(
+                  height: 6,
+                  width: 6,
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                ),
           children: [
             InkWell(
               splashColor: Constance.secondaryColor,
               radius: 15.w,
               onTap: () {
-                Navigation.instance
-                    .navigate('/newsfrom', args: 'guwahati');
+                Navigation.instance.navigate('/newsfrom', args: 'guwahati');
               },
               child: Row(
                 children: [
@@ -68,24 +77,33 @@ class NewsFromSection extends StatelessWidget {
                   ),
                   Text(
                     'Guwahati',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(
-                      color: Colors.white,
-                      fontSize: 11.sp,
-                      // fontWeight: FontWeight.bold,
-                    ),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.white,
+                          fontSize: 11.sp,
+                          // fontWeight: FontWeight.bold,
+                        ),
                   ),
                   Expanded(child: Container()),
-                  Container(
-                    height: 6,
-                    width: 6,
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
+                  !filterToCheckPerCategory(
+                          Provider.of<DataProvider>(
+                                  Navigation.instance.navigatorKey
+                                          .currentContext ??
+                                      context,
+                                  listen: false)
+                              .notifications,
+                          'guwahati')
+                      ? const SizedBox(
+                          height: 6,
+                          width: 6,
+                        )
+                      : Container(
+                          height: 6,
+                          width: 6,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
                 ],
               ),
             ),
@@ -96,8 +114,7 @@ class NewsFromSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.w,
               onTap: () {
-                Navigation.instance
-                    .navigate('/newsfrom', args: 'assam');
+                Navigation.instance.navigate('/newsfrom', args: 'assam');
               },
               child: Row(
                 children: [
@@ -106,55 +123,26 @@ class NewsFromSection extends StatelessWidget {
                   ),
                   Text(
                     'Assam',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(
-                      color: Colors.white,
-                      fontSize: 11.sp,
-                      // fontWeight: FontWeight.bold,
-                    ),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.white,
+                          fontSize: 11.sp,
+                          // fontWeight: FontWeight.bold,
+                        ),
                   ),
                   Expanded(child: Container()),
-                  Container(
+                  !filterToCheckPerCategory(
+                      Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey
+                              .currentContext ??
+                              context,
+                          listen: false)
+                          .notifications,
+                      'assam')
+                      ? const SizedBox(
                     height: 6,
                     width: 6,
-                    decoration: const BoxDecoration(
-                      // color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 2.h,
-            ),
-            InkWell(
-              splashColor: Constance.secondaryColor,
-              radius: 15.w,
-              onTap: () {
-                Navigation.instance
-                    .navigate('/newsfrom', args: 'northeast');
-              },
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 8.w,
-                  ),
-                  Text(
-                    'Northeast',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(
-                      color: Colors.white,
-                      fontSize: 11.sp,
-                      // fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Expanded(child: Container()),
-                  Container(
+                  )
+                      : Container(
                     height: 6,
                     width: 6,
                     decoration: const BoxDecoration(
@@ -172,8 +160,53 @@ class NewsFromSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.w,
               onTap: () {
-                Navigation.instance
-                    .navigate('/newsfrom', args: 'india');
+                Navigation.instance.navigate('/newsfrom', args: 'northeast');
+              },
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 8.w,
+                  ),
+                  Text(
+                    'Northeast',
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.white,
+                          fontSize: 11.sp,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  Expanded(child: Container()),
+                  !filterToCheckPerCategory(
+                      Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey
+                              .currentContext ??
+                              context,
+                          listen: false)
+                          .notifications,
+                      'northeast')
+                      ? const SizedBox(
+                    height: 6,
+                    width: 6,
+                  )
+                      : Container(
+                    height: 6,
+                    width: 6,
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 2.h,
+            ),
+            InkWell(
+              splashColor: Constance.secondaryColor,
+              radius: 15.w,
+              onTap: () {
+                Navigation.instance.navigate('/newsfrom', args: 'india');
               },
               child: Row(
                 children: [
@@ -182,21 +215,30 @@ class NewsFromSection extends StatelessWidget {
                   ),
                   Text(
                     'India',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(
-                      color: Colors.white,
-                      fontSize: 11.sp,
-                      // fontWeight: FontWeight.bold,
-                    ),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.white,
+                          fontSize: 11.sp,
+                          // fontWeight: FontWeight.bold,
+                        ),
                   ),
                   Expanded(child: Container()),
-                  Container(
+                  !filterToCheckPerCategory(
+                      Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey
+                              .currentContext ??
+                              context,
+                          listen: false)
+                          .notifications,
+                      'india')
+                      ? const SizedBox(
+                    height: 6,
+                    width: 6,
+                  )
+                      : Container(
                     height: 6,
                     width: 6,
                     decoration: const BoxDecoration(
-                      // color: Colors.red,
+                      color: Colors.red,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -220,21 +262,30 @@ class NewsFromSection extends StatelessWidget {
                   ),
                   Text(
                     'International',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(
-                      color: Colors.white,
-                      fontSize: 11.sp,
-                      // fontWeight: FontWeight.bold,
-                    ),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.white,
+                          fontSize: 11.sp,
+                          // fontWeight: FontWeight.bold,
+                        ),
                   ),
                   Expanded(child: Container()),
-                  Container(
+                  !filterToCheckPerCategory(
+                      Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey
+                              .currentContext ??
+                              context,
+                          listen: false)
+                          .notifications,
+                      'international')
+                      ? const SizedBox(
+                    height: 6,
+                    width: 6,
+                  )
+                      : Container(
                     height: 6,
                     width: 6,
                     decoration: const BoxDecoration(
-                      // color: Colors.red,
+                      color: Colors.red,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -248,5 +299,28 @@ class NewsFromSection extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  filterToCheck(List<NotificationInDevice> notifications) {
+    for (var i in notifications) {
+      if (i.category_name == "guwahati" ||
+          i.category_name == "international" ||
+          i.category_name == "assam" ||
+          i.category_name == "india" ||
+          i.category_name == "exclusive-news" ||
+          i.category_name == "northeast") {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  filterToCheckPerCategory(List<NotificationInDevice> notifications, String s) {
+    for (var i in notifications) {
+      if (i.category_name == s) {
+        return true;
+      }
+    }
+    return false;
   }
 }

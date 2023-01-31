@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
+import '../Helper/DataProvider.dart';
+import '../Model/notification_in_device.dart';
 import '../Navigation/Navigate.dart';
 
 class BuzzSection extends StatelessWidget {
@@ -46,7 +49,19 @@ class BuzzSection extends StatelessWidget {
               ),
             ],
           ),
-          trailing: Container(
+          trailing: !filterToCheckPerType(
+              Provider.of<DataProvider>(
+                  Navigation
+                      .instance.navigatorKey.currentContext ??
+                      context,
+                  listen: false)
+                  .notifications,
+              'buzz')
+              ? const SizedBox(
+            height: 6,
+            width: 6,
+          )
+              : Container(
             height: 6,
             width: 6,
             decoration: const BoxDecoration(
@@ -135,5 +150,13 @@ class BuzzSection extends StatelessWidget {
         ),
       ),
     );
+  }
+  filterToCheckPerType(List<NotificationInDevice> notifications, String s) {
+    for (var i in notifications) {
+      if (i.type == s) {
+        return true;
+      }
+    }
+    return false;
   }
 }

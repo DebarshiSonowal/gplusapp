@@ -580,42 +580,42 @@ You can parse it accordingly to handle response */
                 ListView(
                   shrinkWrap: true,
                   children: [
-                    ListTile(
-                      leading: const Icon(Icons.web),
-                      onTap: () {
-                        fetchKeys(
-                          widget.input.split(',')[0],
-                          Provider.of<DataProvider>(
-                                  Navigation.instance.navigatorKey
-                                          .currentContext ??
-                                      context,
-                                  listen: false)
-                              .profile!
-                              .name,
-                          Provider.of<DataProvider>(
-                                  Navigation.instance.navigatorKey
-                                          .currentContext ??
-                                      context,
-                                  listen: false)
-                              .profile!
-                              .email,
-                          Provider.of<DataProvider>(
-                                  Navigation.instance.navigatorKey
-                                          .currentContext ??
-                                      context,
-                                  listen: false)
-                              .profile!
-                              .mobile,
-                        );
-                        Navigation.instance.goBack();
-                      },
-                      title: Text(
-                        'Pay at our website',
-                        style: Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Colors.green,
-                            ),
-                      ),
-                    ),
+                    // ListTile(
+                    //   leading: const Icon(Icons.web),
+                    //   onTap: () {
+                    //     fetchKeys(
+                    //       widget.input.split(',')[0],
+                    //       Provider.of<DataProvider>(
+                    //               Navigation.instance.navigatorKey
+                    //                       .currentContext ??
+                    //                   context,
+                    //               listen: false)
+                    //           .profile!
+                    //           .name,
+                    //       Provider.of<DataProvider>(
+                    //               Navigation.instance.navigatorKey
+                    //                       .currentContext ??
+                    //                   context,
+                    //               listen: false)
+                    //           .profile!
+                    //           .email,
+                    //       Provider.of<DataProvider>(
+                    //               Navigation.instance.navigatorKey
+                    //                       .currentContext ??
+                    //                   context,
+                    //               listen: false)
+                    //           .profile!
+                    //           .mobile,
+                    //     );
+                    //     Navigation.instance.goBack();
+                    //   },
+                    //   title: Text(
+                    //     'Pay at our website',
+                    //     style: Theme.of(context).textTheme.headline5?.copyWith(
+                    //           color: Colors.green,
+                    //         ),
+                    //   ),
+                    // ),
                     ListTile(
                       leading: const Icon(Icons.apple),
                       onTap: () {

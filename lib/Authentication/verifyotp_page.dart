@@ -42,7 +42,11 @@ class _VerifyOTPState extends State<VerifyOTP> {
   @override
   void dispose() {
     textEditingController.dispose();
-    timer?.cancel();
+    try {
+      timer?.cancel();
+    } catch (e) {
+      print(e);
+    }
     super.dispose();
   }
 
@@ -378,6 +382,11 @@ class _VerifyOTPState extends State<VerifyOTP> {
         Navigation.instance.navigate('/terms&conditions', args: widget.number);
       } else {
         fetchToken();
+        try {
+          timer?.cancel();
+        } catch (e) {
+          print(e);
+        }
         Navigation.instance.navigateAndReplace('/main');
         // Navigation.instance.navigate('/terms&conditions', args: widget.number);
       }

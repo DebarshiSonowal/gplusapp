@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/alert.dart';
 import '../../Components/suggestion_card.dart';
+import '../../Components/suggestion_list_view.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
@@ -96,27 +97,6 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                             SizedBox(
                               height: 2.h,
                             ),
-                            // Row(
-                            //   children: [
-                            //     Container(
-                            //       color: Constance.primaryColor,
-                            //       padding: EdgeInsets.symmetric(
-                            //           horizontal: 2.w, vertical: 1.h),
-                            //       child: Text(
-                            //         'Guwahati',
-                            //         style: Theme.of(Navigation.instance
-                            //                 .navigatorKey.currentContext!)
-                            //             .textTheme
-                            //             .headline5
-                            //             ?.copyWith(
-                            //               color: Colors.white,
-                            //               // fontSize: 2.2.h,
-                            //               // fontWeight: FontWeight.bold,
-                            //             ),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
                             SizedBox(
                               height: 2.h,
                             ),
@@ -614,7 +594,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                                     onChanged: (String? newValue) {
                                       setState(() {
                                         dropdownvalue = newValue!;
-                                        page=1;
+                                        page = 1;
                                       });
                                       fetchContent();
                                     },
@@ -622,7 +602,10 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                                 ),
                               ],
                             ),
-                            suggestion_list_view(data, context),
+                            SuggestionListView(
+                              data: data,
+                              dropdownvalue: dropdownvalue,
+                            ),
                             SizedBox(
                               height: 2.h,
                             ),
@@ -650,38 +633,6 @@ class _CategoryDetailsState extends State<CategoryDetails> {
       ),
     );
   }
-
-  ListView suggestion_list_view(DataProvider data, BuildContext context) {
-    return ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        itemBuilder: (cont, count) {
-          var item = data.suggestion[count];
-          if (count != 0) {
-            return SuggestionCard(dropdownvalue: dropdownvalue, item: item);
-          } else {
-            return Container();
-          }
-        },
-        separatorBuilder: (cont, inde) {
-          if (inde == 0) {
-            return Container();
-          } else {
-            return SizedBox(
-              height: 1.h,
-              child: Divider(
-                color:
-                    Storage.instance.isDarkMode ? Colors.white : Colors.black,
-                thickness: 0.3.sp,
-              ),
-            );
-          }
-        },
-        itemCount: data.suggestion.length);
-  }
-
-
 
   Future<void> _launchUrl(_url) async {
     if (!await launchUrl(_url)) {
@@ -743,7 +694,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
   void fetchMoreContent() async {
     Navigation.instance.navigate('/loadingDialog');
     final response =
-        await ApiProvider.instance.getCategoryArticle(dropdownvalue,page);
+        await ApiProvider.instance.getCategoryArticle(dropdownvalue, page);
     if (response.success ?? false) {
       Navigation.instance.goBack();
       Provider.of<DataProvider>(

@@ -78,7 +78,6 @@ class _ExclusivePageState extends State<ExclusivePage> {
     //   });
     skip = skip * 2;
     fetchMoreContent();
-
   }
 
   @override
@@ -122,7 +121,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
             padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
             child: data.home_exclusive.isNotEmpty
                 ? SingleChildScrollView(
-              controller: controller,
+                    controller: controller,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -174,7 +173,6 @@ class _ExclusivePageState extends State<ExclusivePage> {
                         SizedBox(
                           height: 2.h,
                         ),
-
                         GestureDetector(
                           onTap: () {
                             if (data.profile?.is_plan_active ?? false) {
@@ -223,35 +221,36 @@ class _ExclusivePageState extends State<ExclusivePage> {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: data.home_exclusive[0].author_name ??
-                                          "G Plus",
+                                      text:
+                                          data.home_exclusive[0].author_name ??
+                                              "G Plus",
                                       style: Theme.of(Navigation.instance
-                                          .navigatorKey.currentContext!)
+                                              .navigatorKey.currentContext!)
                                           .textTheme
                                           .headline5
                                           ?.copyWith(
-                                        color: Storage.instance.isDarkMode
-                                            ? Constance.secondaryColor
-                                            : Constance.primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                        decoration:
-                                        TextDecoration.underline,
-                                      ),
+                                            color: Storage.instance.isDarkMode
+                                                ? Constance.secondaryColor
+                                                : Constance.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
                                     ),
                                     TextSpan(
                                       text:
-                                      ' , ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                          ' , ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
                                       style: Theme.of(Navigation.instance
-                                          .navigatorKey.currentContext!)
+                                              .navigatorKey.currentContext!)
                                           .textTheme
                                           .headline5
                                           ?.copyWith(
-                                        color: Storage.instance.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black,
-                                        // fontSize: 2.2.h,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
+                                            color: Storage.instance.isDarkMode
+                                                ? Colors.white
+                                                : Colors.black,
+                                            // fontSize: 2.2.h,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -262,41 +261,13 @@ class _ExclusivePageState extends State<ExclusivePage> {
                         SizedBox(
                           height: 1.h,
                         ),
-                        // Text(
-                        //   '${data.home_exclusive[0].author_name}, ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
-                        //   style: Theme.of(Navigation
-                        //           .instance.navigatorKey.currentContext!)
-                        //       .textTheme
-                        //       .headline5
-                        //       ?.copyWith(
-                        //         color: Storage.instance.isDarkMode
-                        //             ? Colors.white
-                        //             : Colors.black,
-                        //         // fontSize: 2.2.h,
-                        //         // fontWeight: FontWeight.bold,
-                        //       ),
-                        // ),
                         Divider(
                           color: Storage.instance.isDarkMode
                               ? Colors.white
                               : Colors.black,
                           thickness: 0.5.sp,
                         ),
-                        exclusiveSuggestions(data:data),
-                        // SizedBox(
-                        //   height: 2.h,
-                        // ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     CustomButton(
-                        //         txt: 'Load More',
-                        //         onTap: () {
-                        //           skip = skip * 2;
-                        //           fetchMoreContent();
-                        //         }),
-                        //   ],
-                        // ),
+                        exclusiveSuggestions(data: data),
                         SizedBox(
                           height: 5.h,
                         ),
@@ -397,5 +368,3 @@ class _ExclusivePageState extends State<ExclusivePage> {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 }
-
-

@@ -4,6 +4,7 @@ import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/Constance.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:gplusapp/Model/blocked_user.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:lottie/lottie.dart';
@@ -98,24 +99,7 @@ class _BlockedUsersListPageState extends State<BlockedUsersListPage> {
                                         : Colors.black54,
                                   ),
                             ),
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: Image.network(
-                                item.user?.image_file_name ??
-                                    "https://images.unsplash.com/photo-1499996860823-5214fcc65f8f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=932&q=80",
-                                height: 5.h,
-                                width: 10.w,
-                                fit: BoxFit.fill,
-                                errorBuilder: (cont, obj, err) {
-                                  return Image.network(
-                                    "https://images.unsplash.com/photo-1499996860823-5214fcc65f8f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=932&q=80",
-                                    height: 5.h,
-                                    width: 10.w,
-                                    fit: BoxFit.fill,
-                                  );
-                                },
-                              ),
-                            ),
+                            leading: blockedUserImage(item: item),
                             trailing: SizedBox(
                               width: 22.w,
                               height: 3.h,
@@ -184,5 +168,36 @@ class _BlockedUsersListPageState extends State<BlockedUsersListPage> {
     }else{
       Fluttertoast.showToast(msg: response.message??"Something went wrong");
     }
+  }
+}
+
+class blockedUserImage extends StatelessWidget {
+  const blockedUserImage({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
+
+  final BlockedUser item;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20.0),
+      child: Image.network(
+        item.user?.image_file_name ??
+            "https://images.unsplash.com/photo-1499996860823-5214fcc65f8f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=932&q=80",
+        height: 5.h,
+        width: 10.w,
+        fit: BoxFit.fill,
+        errorBuilder: (cont, obj, err) {
+          return Image.network(
+            "https://images.unsplash.com/photo-1499996860823-5214fcc65f8f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=932&q=80",
+            height: 5.h,
+            width: 10.w,
+            fit: BoxFit.fill,
+          );
+        },
+      ),
+    );
   }
 }

@@ -2,17 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-   <key>FirebaseDynamicLinksCustomDomains</key>
-    <array>
-    <string>https://guwahatiplus.page.link/link</string>
-    <string>https://guwahatiplus.com/link</string>
-    </array>
+	<key>FirebaseDynamicLinksCustomDomains</key>
+	<array>
+		<string>https://guwahatiplus.page.link/link</string>
+		<string>https://guwahatiplus.com/link</string>
+	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Gplusapp</string>
+	<string>G Plus</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -57,11 +57,11 @@
 	<key>NSCameraUsageDescription</key>
 	<string>We allow users to attach images and videos while posting content as well as reporting as citizen jounalist So we require this permission to enable you to upload images, videos</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>We provide location based traffic and disaster updates to our users. That&apos;s why we require you to provide us this permission</string>
+	<string>We provide location based traffic and disaster updates to our users. We notify you about any traffic jams nearby and also in case of disasters we notify you.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>We need location to provide you location based content/news which require your location.</string>
+	<string>We need location to provide you location based content/news. We require your location so that we can give you notification of news that occured in your locality.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We use your location to give you specific contents. That&apos;s why we require your this permission.</string>
+	<string>We need location to provide you location based content/news. We require your location so that we can give you notification of news that occured in your locality.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We allow users to attach images and videos while posting content as well as reporting as citizen jounalist So we require this permission to enable you to upload images, videos</string>
 	<key>UIBackgroundModes</key>

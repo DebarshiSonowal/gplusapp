@@ -619,7 +619,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                       height: 1.h,
                     ),
                     Text(
-                      'Sorry ${data.profile?.name}',
+                      'Hello ${data.profile?.name},',
                       style: Theme.of(context).textTheme.headline4?.copyWith(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -629,12 +629,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                       height: 3.h,
                     ),
                     Text(
-                      '''Projected to be a smart city by 2025, Guwahati is a
-major port on the banks of Brahmaputra, the capital
-of Assam and the urban hub of the North East. This
-metropolitan city is growing leaps and bounds, and 
-for its unparalleled pace of growth, comes the need
-for an unparalleled publication, that people call their''',
+                      Constance.about,
                       style: Theme.of(context).textTheme.headline5?.copyWith(
                             color: Colors.black,
                             // fontWeight: FontWeight.bold,
