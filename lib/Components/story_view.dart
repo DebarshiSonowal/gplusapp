@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stories/flutter_stories.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Components/storyButtonSection.dart';
+import 'package:gplusapp/Components/story_stacked_section.dart';
 import 'package:gplusapp/Helper/Constance.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:provider/provider.dart';
@@ -31,20 +34,20 @@ class _StoryViewPageState extends State<StoryViewPage> {
   @override
   void initState() {
     super.initState();
-    controller = StoryController();
+    // controller = StoryController();
     Future.delayed(Duration.zero, () {
-      storyItems.addAll(Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .stories
-          .map(
-            (e) => StoryItem.pageImage(
-              url: e.image_file_name ?? "",
-              controller: controller,
-              caption: e.title ?? "",
-            ),
-          )
-          .toList());
+      // storyItems.addAll(Provider.of<DataProvider>(
+      //         Navigation.instance.navigatorKey.currentContext ?? context,
+      //         listen: false)
+      //     .stories
+      //     .map(
+      //       (e) => StoryItem.pageImage(
+      //         url: e.image_file_name ?? "",
+      //         controller: controller,
+      //         caption: e.title ?? "",
+      //       ),
+      //     )
+      //     .toList());
       setState(() {});
       print("${widget.count} ${index}");
       // Future.delayed(Duration(seconds: 1),(){
@@ -71,46 +74,67 @@ class _StoryViewPageState extends State<StoryViewPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
-        child: storyItems.isNotEmpty
-            ? Stack(
-                children: [
-                  StoryView(
-                      storyItems: storyItems,
-                      controller: controller,
-                      onStoryShow: (s) {
-                        current = s;
-                        index = storyItems.indexOf(s);
-                      },
-                      onComplete: () => Navigation.instance.goBack(),
-                      onVerticalSwipeComplete: (direction) {
-                        Navigation.instance.goBack();
-                      }),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Provider.of<DataProvider>(
-                                    Navigation.instance.navigatorKey
-                                            .currentContext ??
-                                        context,
-                                    listen: false)
-                                .stories[index]
-                                .btn_text ==
-                            ""
-                        ? Container()
-                        : StoryButtonSection(
-                            index: index,
-                            launchUrl: (String data) {
-                              _launchUrl(data);
-                            },
-                            sendToRoute:
-                                (String data1, String data2, String data3) {
-                              sendToRoute(data1, data2, data3);
-                            },
-                          ),
-                  ),
-                ],
-              )
-            : Container(),
+        color: Colors.black,
+        child: Consumer<DataProvider>(builder: (context, data, w) {
+          return Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            color: Colors.black,
+            padding: EdgeInsets.symmetric(vertical: 4.h),
+            child: data.stories.isNotEmpty
+                ? SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: Stack(
+                      children: [
+                        Story(
+                          onFlashForward: Navigator.of(context).pop,
+                          onFlashBack: Navigator.of(context).pop,
+                          momentCount: data.stories.length,
+                          momentDurationGetter: (idx) =>
+                              const Duration(seconds: 10),
+                          momentBuilder: (context, idx) {
+                            updateIndex(idx);
+                            return SizedBox(
+                              height: MediaQuery.of(context).size.height,
+                              width: MediaQuery.of(context).size.width,
+                              child: SizedBox(
+                                height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                child: Center(
+                                  child: CachedNetworkImage(
+                                    height: 90.h,
+                                    width: MediaQuery.of(context).size.width,
+                                    fit: BoxFit.fitHeight,
+                                    imageUrl: data
+                                            .stories[idx].image_file_name ??
+                                        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        Align(
+                          alignment: FractionalOffset.bottomCenter,
+                          child: data.stories[index].btn_text == ""
+                              ? Container()
+                              : StackedStorySection(
+                                  data: data,
+                                  index: index,
+                                  launchUrl: (String data) =>
+                                      launchUrl(Uri.parse(data)),
+                                  sendToRoute: (String data1, String data2,
+                                          String data3) =>
+                                      sendToRoute(data1, data2, data3),
+                                ),
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(),
+          );
+        }),
       ),
     );
   }
@@ -130,16 +154,16 @@ class _StoryViewPageState extends State<StoryViewPage> {
             .navigate('/opinionDetails', args: '${data},${category}');
         break;
       default:
-
         Navigation.instance.navigate('/main', args: "");
         break;
     }
   }
 
-  Future<void> _launchUrl(_url) async {
-    if (!await launchUrl(Uri.parse(_url),
-        mode: LaunchMode.externalApplication)) {
-      throw 'Could not launch $_url';
-    }
+  void updateIndex(int idx) {
+    Future.delayed(Duration(seconds: 0), () {
+      setState(() {
+        index = idx;
+      });
+    });
   }
 }

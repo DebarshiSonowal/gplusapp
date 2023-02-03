@@ -129,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchOpinion();
     fetchGPlusExcl();
     fetchPoll();
+    fetchNotification();
     // Future.delayed(
     //     const Duration(seconds: 15),
     //         () => _listController.addListener(() {
@@ -470,8 +471,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-
   void fetchOpinion() async {
     final response = await ApiProvider.instance.getLatestOpinion();
     if (response.success ?? false) {
@@ -479,7 +478,6 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setLatestOpinions(response.opinion ?? []);
-
     } else {
       // fetchGPlusExcl();
     }
@@ -505,7 +503,6 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setHomeExecl(response.articles ?? []);
-
     } else {
       // fetchPoll();
     }
@@ -780,10 +777,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setStories(response.stories);
-
-    } else {
-
-    }
+    } else {}
   }
 
   getSpace() {
@@ -827,18 +821,17 @@ class _HomeScreenState extends State<HomeScreen> {
           .setRedeemText(response1.desc ?? "");
     } else {}
   }
+
   void fetchNotification() async {
     final response = await ApiProvider.instance.getNotifications();
     if (response.success ?? false) {
-      Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext!,
-          listen: false)
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
           .setNotificationInDevice(response.notification);
       fetchReportMsg();
-
     } else {
       fetchReportMsg();
     }
   }
 }
-
-
