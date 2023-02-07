@@ -22,7 +22,7 @@ class PromotedDeal extends StatelessWidget {
         current.deals.isEmpty
             ? Container()
             : SizedBox(
-                height: 29.h,
+                height: 27.h,
                 width: double.infinity,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,

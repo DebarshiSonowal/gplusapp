@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gplusapp/Components/video_report_card.dart';
 import 'package:gplusapp/Model/video_news.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:sizer/sizer.dart';
@@ -26,7 +27,7 @@ class VideoCard extends StatelessWidget {
         ),
       ),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
+        padding: EdgeInsets.symmetric(horizontal: 2.5.w, vertical: 1.2.h),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(
             Radius.circular(5),
@@ -39,14 +40,14 @@ class VideoCard extends StatelessWidget {
           children: [
             ImageView(item: item),
             SizedBox(
-              width: 5.w,
+              width: 2.w,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 40.w,
+                  width: 55.w,
                   child: Text(
                     item.title ?? "",
                     maxLines: 4,
@@ -86,90 +87,4 @@ class VideoCard extends StatelessWidget {
   }
 }
 
-class ImageView extends StatelessWidget {
-  const ImageView({
-    Key? key,
-    required this.item,
-  }) : super(key: key);
 
-  final VideoNews item;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 12.4.h,
-          width: 35.w,
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              SizedBox(
-                height: 13.h,
-                width: 35.w,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(5.0),
-                  child: CachedNetworkImage(
-                    fit: BoxFit.fill,
-                    imageUrl: item.image_file_name ?? '',
-                    placeholder: (cont, _) {
-                      return Image.asset(
-                        Constance.logoIcon,
-                        // color: Colors.black,
-                      );
-                    },
-                    errorWidget: (cont, _, e) {
-                      return Image.network(
-                        Constance.defaultImage,
-                        fit: BoxFit.fitWidth,
-                      );
-                    },
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.transparent, Colors.black]),
-                  // color: Constance.secondaryColor,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(5.0),
-                    bottomRight: Radius.circular(5.0),
-                  ),
-                ),
-                padding: EdgeInsets.symmetric(
-                    horizontal: 1.w, vertical: 0.3.h),
-                child: Row(
-                  // mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.play_arrow,
-                      color: Colors.white,
-                    ),
-                    Text(
-                      'Play Now',
-                      style: Theme.of(Navigation
-                          .instance.navigatorKey.currentContext!)
-                          .textTheme
-                          .headline5
-                          ?.copyWith(
-                        color: Colors.white,
-                        // fontSize: 2.2.h,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}

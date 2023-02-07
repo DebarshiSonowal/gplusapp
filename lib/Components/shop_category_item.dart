@@ -30,9 +30,13 @@ class ShopCategoryItem extends StatelessWidget {
               height: 8.h,
               padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
               decoration: BoxDecoration(
-                border:
-                Border.all(width: 1.5.sp, color: Constance.secondaryColor),
-                borderRadius: BorderRadius.circular(5),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  width: 1.5.sp,
+                  color: Constance.secondaryColor,
+                ),
+                color: Constance.secondaryColor,
+                // borderRadius: BorderRadius.circular(5),
               ),
               child: Image.network(
                 e.image_file_name ?? "",
@@ -47,12 +51,12 @@ class ShopCategoryItem extends StatelessWidget {
             Text(
               e.name ?? "1",
               style: Theme.of(context).textTheme.headline6?.copyWith(
-                color: Storage.instance.isDarkMode
-                    ? Colors.white
-                    : Colors.black54,
-                // fontSize: 1.7.h,
-                fontWeight: FontWeight.bold,
-              ),
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
+                    // fontSize: 1.7.h,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             SizedBox(
               height: 0.5.h,

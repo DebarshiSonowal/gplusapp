@@ -18,7 +18,7 @@ class HistorySection extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 4.w),
       child: Card(
-        color: Colors.white,
+        color: Constance.secondaryColor,
         child: ExpansionTile(
           collapsedIconColor: Colors.black,
           iconColor: Colors.black,

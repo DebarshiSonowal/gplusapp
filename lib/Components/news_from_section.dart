@@ -130,7 +130,7 @@ class NewsFromSection extends StatelessWidget {
                         ),
                   ),
                   Expanded(child: Container()),
-                  !filterToCheckPerCategory(
+                  filterToCheckPerCategory(
                       Provider.of<DataProvider>(
                           Navigation.instance.navigatorKey
                               .currentContext ??
@@ -303,12 +303,12 @@ class NewsFromSection extends StatelessWidget {
 
   filterToCheck(List<NotificationInDevice> notifications) {
     for (var i in notifications) {
-      if (i.category_name == "guwahati" ||
-          i.category_name == "international" ||
-          i.category_name == "assam" ||
-          i.category_name == "india" ||
-          i.category_name == "exclusive-news" ||
-          i.category_name == "northeast") {
+      if (i.category_name?.toLowerCase().trim() == "guwahati" ||
+          i.category_name?.toLowerCase().trim() == "international" ||
+          i.category_name?.toLowerCase().trim() == "assam" ||
+          i.category_name?.toLowerCase().trim() == "india" ||
+          i.category_name?.toLowerCase().trim() == "exclusive-news" ||
+          i.category_name?.toLowerCase().trim() == "northeast") {
         return true;
       }
     }
@@ -316,8 +316,11 @@ class NewsFromSection extends StatelessWidget {
   }
 
   filterToCheckPerCategory(List<NotificationInDevice> notifications, String s) {
+
     for (var i in notifications) {
-      if (i.category_name == s) {
+      // debugPrint("filterToCheckPerCategory ${i.category_name} ${s}");
+      if (i.category_name?.toLowerCase().trim() == s) {
+        // debugPrint("CHECK PER Category ${i.seo_name} ${i.category_name}");
         return true;
       }
     }

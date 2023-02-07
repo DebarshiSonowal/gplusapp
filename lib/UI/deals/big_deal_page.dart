@@ -194,7 +194,7 @@ class _BigDealPageState extends State<BigDealPage> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 1.w),
                             child: Wrap(
-                              alignment: WrapAlignment.spaceEvenly,
+                              alignment: WrapAlignment.start,
                               children: expandCateg
                                   ? current.category.map((e) {
                                       return ShopCategoryItem(

@@ -42,7 +42,7 @@ class VideoReportSection extends StatelessWidget {
             height: 0.3.h,
           ),
           data.home_weekly.isNotEmpty?SizedBox(
-            height: 17.h,
+            height: 20.h,
             width: double.infinity,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,

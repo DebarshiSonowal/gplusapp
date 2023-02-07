@@ -81,7 +81,7 @@ class GPlusExecCard extends StatelessWidget {
                       maxLines: 7,
                       style: (item.title?.length ?? 0) > 70
                           ? Theme.of(context).textTheme.headline5?.copyWith(
-                                // fontSize: 11.sp,
+                                fontSize: 11.sp,
                                 fontWeight: FontWeight.bold,
                                 overflow: TextOverflow.ellipsis,
                                 color: Storage.instance.isDarkMode
@@ -89,7 +89,7 @@ class GPlusExecCard extends StatelessWidget {
                                     : Constance.primaryColor,
                               )
                           : Theme.of(context).textTheme.headline4?.copyWith(
-                                fontSize: 13.sp,
+                                fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
                                 overflow: TextOverflow.ellipsis,
                                 color: Storage.instance.isDarkMode

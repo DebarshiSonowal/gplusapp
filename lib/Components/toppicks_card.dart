@@ -24,7 +24,7 @@ class SuggestedForYouCard extends StatelessWidget {
         ),
       ),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.5.h),
+        padding: EdgeInsets.symmetric(horizontal: 2.5.w, vertical: 1.5.h),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(
             Radius.circular(5),
@@ -36,7 +36,7 @@ class SuggestedForYouCard extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              flex: 5,
+              flex: 4,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -79,13 +79,13 @@ class SuggestedForYouCard extends StatelessWidget {
                           "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient.",
                       maxLines: 8,
                       style: (item.title?.length ?? 0) > 80
-                          ? Theme.of(context).textTheme.headline5?.copyWith(
-                              // fontSize: 11.sp,
+                          ? Theme.of(context).textTheme.headline6?.copyWith(
+                              fontSize: 11.sp,
                               fontWeight: FontWeight.bold,
                               overflow: TextOverflow.ellipsis,
                               color: Constance.primaryColor)
                           : Theme.of(context).textTheme.headline4?.copyWith(
-                              fontSize: 13.sp,
+                              fontSize: 12.sp,
                               fontWeight: FontWeight.bold,
                               overflow: TextOverflow.ellipsis,
                               color: Constance.primaryColor),

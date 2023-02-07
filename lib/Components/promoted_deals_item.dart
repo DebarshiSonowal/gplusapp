@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gplusapp/Components/promoted_deal_cupon.dart';
+import 'package:gplusapp/Components/promoted_deal_item_data.dart';
+import 'package:gplusapp/Components/promoted_deal_item_image.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -29,117 +32,45 @@ class PromotedDealsItem extends StatelessWidget {
             false) {
           Navigation.instance.navigate('/categorySelect', args: data.vendor_id);
         } else {
-          Constance.showMembershipPrompt(context, () {
-
-          });
+          Constance.showMembershipPrompt(context, () {});
         }
       },
-      child: Container(
-        // height: 30.h,
-        width: 53.w,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color:
-                Storage.instance.isDarkMode ? Colors.white : Colors.transparent,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Card(
-          elevation: 3,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              10.0,
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        children: [
+          Card(
+            elevation: 3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                10.0,
+              ),
+            ),
+            color: Storage.instance.isDarkMode
+                ? Constance.secondaryColor
+                : Constance.forthColor,
+            child: Container(
+              width: 83.w,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PromotedDealItemImage(data: data),
+                  // SizedBox(
+                  //   height: 1.h,
+                  // ),
+                  PromotedDealItemData(data: data),
+                ],
+              ),
             ),
           ),
-          color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 3,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(
-                        10.0,
-                      ),
-                      // bottomRight: Radius.circular(
-                      //   10.0,
-                      // ),
-                      topLeft: Radius.circular(
-                        10.0,
-                      ),
-                      // bottomLeft: Radius.circular(
-                      //   10.0,
-                      // ),
-                    ),
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: CachedNetworkImageProvider(
-                        data.vendor?.image_file_name ??
-                            "https://source.unsplash.com/user/c_v_r/1900x800",
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // SizedBox(
-              //   height: 1.h,
-              // ),
-              Expanded(
-                  flex: 2,
-                  child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data.vendor?.shop_name ?? "",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontWeight: FontWeight.bold),
-                        ),
-                        // SizedBox(
-                        //   height: 0.5.h,
-                        // ),
-                        Text(
-                          data.vendor?.address ?? "",
-                          style:
-                              Theme.of(context).textTheme.headline6?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    // fontWeight: FontWeight.bold
-                                  ),
-                        ),
-                        // SizedBox(
-                        //   height: 0.5.h,
-                        // ),
-                        Text(
-                          data.title ?? "",
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(
-                                  color: Constance.thirdColor,
-                                  fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  )),
-            ],
-          ),
-        ),
+          PromotedDealItemCupon(data: data),
+        ],
       ),
     );
   }
 }
+
+
+
+
+
+

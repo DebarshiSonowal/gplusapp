@@ -18,7 +18,7 @@ class SuggestedForYou extends StatelessWidget {
     return data.home_toppicks.isEmpty
         ? Container()
         : Container(
-            height: 30.h,
+            height: 27.h,
             width: double.infinity,
             color: Constance.secondaryColor,
             padding: EdgeInsets.symmetric(vertical: 1.h),
