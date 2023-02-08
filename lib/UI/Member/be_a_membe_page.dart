@@ -253,7 +253,7 @@ class _BeAMemberState extends State<BeAMember> {
                                       // initiateOrder(current.id, 0);
                                       Navigation.instance.navigate(
                                           '/paymentProcessing',
-                                          args: '${current.id},0');
+                                          args: '${current.id},0,${current.inapp_identifier}');
                                     },
                                   ),
                                 ),

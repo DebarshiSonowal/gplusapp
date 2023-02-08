@@ -671,10 +671,10 @@ You can parse it accordingly to handle response */
       } else {
         final result = await Navigation.instance.navigate('/websitePayment',
             args: "https://guwahatiplus.com/payment/${response.order!.id}");
-        if(result!=null){
+        if (result != null) {
           fetchProfile();
           Navigation.instance.goBack();
-        }else{
+        } else {
           fetchProfile();
           Navigation.instance.goBack();
         }
@@ -796,29 +796,64 @@ You can parse it accordingly to handle response */
     try {
       offerings = await Purchases.getOfferings();
       debugPrint(
-          "Packages ${offerings.current!.availablePackages[0].storeProduct.identifier}");
-      CustomerInfo customerInfo = await Purchases.purchasePackage(
-          offerings.current!.availablePackages[0]);
+          "Packages1 ${offerings.current!.availablePackages}");
+      try {
+        debugPrint(
+                  "Packages2 ${offerings.getOffering("subscriptions")!.annual!}");
+      } catch (e) {
+        print(e);
+      }
+      try {
+        debugPrint(
+                  "Packages3 ${offerings.getOffering("subscriptions")!.monthly!}");
+      } catch (e) {
+        print(e);
+      }
+      try {
+        debugPrint(
+                  "Packages4 ${offerings.getOffering("subscriptions")!.getPackage(widget.input.split(',')[2])}");
+      } catch (e) {
+        print(e);
+      }
+      // debugPrint(
+      //     "Packages2 ${offerings.getOffering(widget.input.split(',')[2])}");
+      // debugPrint(
+      //     "Packages3 ${offerings.getOffering(widget.input.split(',')[2])!.availablePackages}");
+      // debugPrint("Packages4 ${widget.input.split(',')[2]}");
+      // // debugPrint("Packages ${offerings.current!.availablePackages.length}");
+      // debugPrint(
+      //     "Packages annual ${offerings.all[widget.input.split(',')[2]]?.availablePackages.where((element) => element.identifier == widget.input.split(',')[2])}");
+      // debugPrint(
+      //     "Packages monthly ${offerings.all["gplus_subscription_one_month_non"]?.availablePackages}");
+      // debugPrint("Packages all ${offerings.all.length}");
+      // debugPrint("Packages all ${offerings.all.keys}");
+      // CustomerInfo customerInfo = await Purchases.purchasePackage(
+      //     offerings.current!.availablePackages[0]);
+      CustomerInfo customerInfo = await Purchases.purchasePackage(offerings
+          .getOffering("subscriptions")!
+          .availablePackages
+          .firstWhere((element) =>
+              element.storeProduct.identifier == widget.input.split(',')[2]));
       // appData.entitlementIsActive = customerInfo
       //     .entitlements.all[FlutterConfig.get('entitlementId')]!.isActive;
-      debugPrint(
-          "Payment1 PurchasedProduct ${customerInfo.allPurchasedProductIdentifiers.toString()}");
-      debugPrint(
-          "Payment1 purchaseDate ${customerInfo.allPurchaseDates.toString()}");
-      debugPrint(
-          "Payment1 revenueCatIdentifier ${customerInfo.activeSubscriptions.toString()}"
-          // " : ${customerInfo.allPurchaseDates} : "
-          // "${customerInfo.allPurchasedProductIdentifiers}"
-          );
-      debugPrint(
-          "Payment productIdentifier ${customerInfo.nonSubscriptionTransactions[0].productIdentifier}");
-      debugPrint(
-          "Payment purchaseDate ${customerInfo.nonSubscriptionTransactions[0].purchaseDate}");
-      debugPrint(
-          "Payment revenueCatIdentifier ${customerInfo.nonSubscriptionTransactions[0].revenueCatIdentifier}"
-          // " : ${customerInfo.allPurchaseDates} : "
-          // "${customerInfo.allPurchasedProductIdentifiers}"
-          );
+      // debugPrint(
+      //     "Payment1 PurchasedProduct ${customerInfo.allPurchasedProductIdentifiers.toString()}");
+      // debugPrint(
+      //     "Payment1 purchaseDate ${customerInfo.allPurchaseDates.toString()}");
+      // debugPrint(
+      //     "Payment1 revenueCatIdentifier ${customerInfo.activeSubscriptions.toString()}"
+      //     // " : ${customerInfo.allPurchaseDates} : "
+      //     // "${customerInfo.allPurchasedProductIdentifiers}"
+      //     );
+      // debugPrint(
+      //     "Payment productIdentifier ${customerInfo.nonSubscriptionTransactions[0].productIdentifier}");
+      // debugPrint(
+      //     "Payment purchaseDate ${customerInfo.nonSubscriptionTransactions[0].purchaseDate}");
+      // debugPrint(
+      //     "Payment revenueCatIdentifier ${customerInfo.nonSubscriptionTransactions[0].revenueCatIdentifier}"
+      // " : ${customerInfo.allPurchaseDates} : "
+      // "${customerInfo.allPurchasedProductIdentifiers}"
+      // );
       fetchKeysInapp(
           widget.input.split(',')[0],
           Provider.of<DataProvider>(
@@ -843,10 +878,10 @@ You can parse it accordingly to handle response */
       showError("Something went wrong");
     }
 
-    // if (mounted) {
-    //   setState(() {});
-    // }
-    // Navigation.instance.goBack();
+// if (mounted) {
+//   setState(() {});
+// }
+// Navigation.instance.goBack();
   }
 
   void verifyPaymentInapp(order_code, transaction_id, purchase_date) async {

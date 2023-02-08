@@ -6,7 +6,7 @@ class Membership {
       plan_type,
       bg_color,
       plan_active_date,
-      plan_expiry_date;
+      plan_expiry_date,inapp_identifier;
   bool? is_currently_active;
 
   Membership.fromJson(json) {
@@ -39,6 +39,7 @@ class Membership {
     duration = json['duration'] ?? "";
     plan_type = json['plan_type'] ?? "";
     bg_color = json['bg_color'] ?? "";
+    inapp_identifier = json['inapp_identifier'] ?? "gplus_subscription_one_month_non";
     plan_active_date = json['plan_active_date'] ?? "";
     plan_expiry_date = json['plan_expiry_date'] ?? "";
   }
