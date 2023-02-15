@@ -196,7 +196,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                         getProfile();
                       }).catchError((e){
                         print( _verificationId);
-                        print( _verificationId);
+                        print(e);
                         print(textEditingController.text);
                         showError(e??"Something went wrong");
                       });
@@ -250,11 +250,10 @@ class _VerifyOTPState extends State<VerifyOTP> {
 
 
   void GetProfile() async {
-    PhoneCodeSent codeSent =
-        (String verificationId, [int? forceResendingToken]) async {
+    codeSent(String verificationId, [int? forceResendingToken]) async {
       // showSnackbar('Please check your phone for the verification code.');
       _verificationId = verificationId;
-    };
+    }
   }
 
   Future<void> phoneSignIn({required String phoneNumber}) async {
@@ -275,7 +274,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
   }
 
   _onVerificationCompleted(PhoneAuthCredential authCredential) async {
-    print("verification completed ${authCredential.smsCode}");
+    // print("verification completed ${authCredential.smsCode}");
     User? user = FirebaseAuth.instance.currentUser;
     setState(() {
       textEditingController.text = authCredential.smsCode!;
@@ -454,7 +453,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
         print(timer.tick);
         time = (30 - timer.tick).toString();
       }
-      print("Dekhi 5 sec por por kisu hy ni :/");
+      // print("Dekhi 5 sec por por kisu hy ni :/");
     });
   }
   void fetchToken() async {

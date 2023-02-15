@@ -31,7 +31,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
   bool like, dislike, is_mine;
   final GlobalKey<ScaffoldState> scaffoldKey;
   final _searchQueryController = TextEditingController();
-  final void Function() fetchGuwahatiConnect;
+  final void Function() fetchGuwahatiConnect,showMembership;
   final Function(int, int) postLike;
   final Function(int) showing;
   final ScrollController _controller = ScrollController();
@@ -46,7 +46,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
     this.postLike,
     this.showing,
     this.type,
-    this.is_mine,
+    this.is_mine, this.showMembership,
   );
 
   void _scrollDown() {
@@ -65,8 +65,8 @@ class GuwahatiConnectPostCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         StatefulBuilder(builder: (context, _) {
-          return Card(
-            elevation: 3,
+          return Container(
+            // elevation: 3,
             color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
@@ -372,7 +372,18 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                               type: MaterialType.transparency,
                               child: IconButton(
                                 onPressed: () {
-                                  showComments(count, context);
+                                  if (Provider.of<DataProvider>(
+                                              Navigation.instance.navigatorKey
+                                                      .currentContext ??
+                                                  context,
+                                              listen: false)
+                                          .profile
+                                          ?.is_plan_active ??
+                                      false) {
+                                    showComments(count, context);
+                                  } else {
+                                    showMembership();
+                                  }
                                 },
                                 splashRadius: 20.0,
                                 splashColor: Constance.secondaryColor,
@@ -582,7 +593,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                 ),
           ),
           content: Container(
-            padding: EdgeInsets.symmetric(horizontal:2.5.h, vertical: 1.h),
+            padding: EdgeInsets.symmetric(horizontal: 2.5.h, vertical: 1.h),
             // height: 50.h,
             width: 80.w,
             child: Column(
@@ -612,12 +623,12 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                   shrinkWrap: true,
                   style: {
                     '#': Style(
-                      fontSize: FontSize(
-                        10.sp
-                      ),
+                      fontSize: FontSize(10.sp),
 
                       // maxLines: 20,
-                      color: Storage.instance.isDarkMode?Colors.white:Colors.black,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
                       // textOverflow: TextOverflow.ellipsis,
                     ),
                   },

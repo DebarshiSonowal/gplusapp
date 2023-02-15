@@ -202,7 +202,10 @@ class PollOfTheWeekSection extends StatelessWidget {
     );
   }
 
-  getOption(int count, data) {
+  getOption(int count,DataProvider data) {
+    print(data.pollOfTheWeek?.percent1);
+    print(data.pollOfTheWeek?.percent2);
+    print(data.pollOfTheWeek?.percent3);
     switch (count) {
       case 0:
         return data.pollOfTheWeek?.percent1;

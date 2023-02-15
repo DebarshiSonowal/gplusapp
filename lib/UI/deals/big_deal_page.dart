@@ -61,13 +61,13 @@ class _BigDealPageState extends State<BigDealPage> {
         _refreshController.refreshCompleted();
       } else {
         setState(() {
-          isEmpty=true;
+          isEmpty = true;
         });
         _refreshController.refreshFailed();
       }
     } else {
       setState(() {
-        isEmpty=true;
+        isEmpty = true;
       });
       _refreshController.refreshFailed();
     }
@@ -148,7 +148,6 @@ class _BigDealPageState extends State<BigDealPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           current.deals.isEmpty
                               ? Container()
                               : Padding(
@@ -219,17 +218,66 @@ class _BigDealPageState extends State<BigDealPage> {
                               : SizedBox(
                                   width: double.infinity,
                                   child: Center(
-                                    child: CustomButton(
-                                        txt: expandCateg
-                                            ? 'Show less'
-                                            : 'View More',
-                                        onTap: () {
-                                          setState(() {
-                                            expandCateg = !expandCateg;
-                                          });
-                                        }),
+                                    // child: CustomButton(
+                                    //     txt: expandCateg
+                                    //         ? 'Show less'
+                                    //         : 'View More',
+                                    //     onTap: () {
+                                    //       setState(() {
+                                    //         expandCateg = !expandCateg;
+                                    //       });
+                                    //     }),
+                                    child: GestureDetector(
+                                      onTap: (){
+                                              setState(() {
+                                                expandCateg = !expandCateg;
+                                              });
+                                      },
+                                      child: Container(
+                                        width: 90.w,
+                                        // height: 4.h,
+                                        padding: EdgeInsets.symmetric(vertical: 1.h,horizontal: 4.w),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Storage.instance.isDarkMode
+                                                  ? Colors.white
+                                                  : Colors.black54,
+                                            ),
+                                            borderRadius: const BorderRadius.all(
+                                                Radius.circular(5))),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              expandCateg
+                                                  ? 'Show less'
+                                                  : 'View More',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                    color: Storage
+                                                            .instance.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black54,
+                                                  ),
+                                            ),
+                                             Icon(
+                                               expandCateg?Icons.arrow_drop_up:Icons.arrow_drop_down,
+                                               color: Storage
+                                                   .instance.isDarkMode
+                                                   ? Colors.white
+                                                   : Colors.black54,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
+                          SizedBox(
+                            height: 1.h,
+                          ),
                           HistorySection(
                             current: current,
                           ),

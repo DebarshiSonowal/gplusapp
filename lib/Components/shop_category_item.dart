@@ -35,13 +35,13 @@ class ShopCategoryItem extends StatelessWidget {
                   width: 1.5.sp,
                   color: Constance.secondaryColor,
                 ),
-                color: Constance.secondaryColor,
+                color: Storage.instance.isDarkMode?Colors.transparent:Constance.secondaryColor,
                 // borderRadius: BorderRadius.circular(5),
               ),
               child: Image.network(
                 e.image_file_name ?? "",
                 color: Storage.instance.isDarkMode
-                    ? Colors.white
+                    ? Constance.secondaryColor
                     : Constance.primaryColor,
               ),
             ),

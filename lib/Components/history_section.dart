@@ -49,7 +49,7 @@ class HistorySection extends StatelessWidget {
             ListView.separated(
               shrinkWrap: true,
               itemBuilder: (cont, count) {
-                var data = current.history[count];
+                var data = current.history.reversed.toList()[count];
                 return GestureDetector(
                   onTap: () {
                     redeem(data.vendor_id!, data.code);

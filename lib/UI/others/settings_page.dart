@@ -457,10 +457,8 @@ class _SettingsPageState extends State<SettingsPage> {
   updateSwitch(val, type) async {
     final response = await ApiProvider.instance.setSwitch(val, type);
     if (response.success ?? false) {
-      fetchSwitchStatusAfter();
-      if (type=="dark") {
-        Navigation.instance.navigateAndRemoveUntil('/main');
-      }
+      fetchSwitchStatusAfter(type);
+
     } else {
       showError(response.message ?? "Something went wrong");
     }
@@ -498,7 +496,7 @@ class _SettingsPageState extends State<SettingsPage> {
       showError(response.msg ?? "Something went wrong");
     }
   }
-  void fetchSwitchStatusAfter() async {
+  void fetchSwitchStatusAfter(type) async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getSwitchStatus();
     if (response.success ?? false) {
@@ -506,15 +504,25 @@ class _SettingsPageState extends State<SettingsPage> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setSwitch(response.status);
-      setState(() {
-        big_deal = response.status?.deal ?? false;
-        classified = response.status?.classified ?? false;
-        guwahati_connect = response.status?.connect ?? false;
-        dark_mode = response.status?.dark ?? false;
-        // dark_mode = true;
-        Storage.instance.setDarkMode(dark_mode);
-      });
+      big_deal = response.status?.deal ?? false;
+      classified = response.status?.classified ?? false;
+      guwahati_connect = response.status?.connect ?? false;
+      dark_mode = response.status?.dark ?? false;
+      // dark_mode = true;
+      Storage.instance.setDarkMode(dark_mode);
       Navigation.instance.goBack();
+      if (type=="dark") {
+        // fetchSwitchStatus();
+        try {
+          setState(() {
+
+          });
+        } catch (e) {
+          print(e);
+        }
+        Navigation.instance.navigateAndRemoveUntil('/main');
+      }
+
 
     } else {
       Navigation.instance.goBack();

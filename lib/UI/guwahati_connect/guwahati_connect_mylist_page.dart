@@ -225,23 +225,42 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
                               bool like = data.is_liked ?? false,
                                   dislike = false;
                               return GuwahatiConnectPostCard(
-                                  data, count, like, dislike, scaffoldKey, () {
-                                fetchGuwahatiConnect();
-                              }, (id, val) {
-                                postLike(id, val, () {
-                                  like = !like;
-                                });
-                              }, (id) {
-                                if (id == 0) {
-                                  setState(() {
-                                    showing = true;
+                                  data,
+                                  count,
+                                  like,
+                                  dislike,
+                                  scaffoldKey,
+                                  () {
+                                    fetchGuwahatiConnect();
+                                  },
+                                  (id, val) {
+                                    postLike(id, val, () {
+                                      like = !like;
+                                    });
+                                  },
+                                  (id) {
+                                    if (id == 0) {
+                                      setState(() {
+                                        showing = true;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        showing = false;
+                                      });
+                                    }
+                                  },
+                                  1,
+                                  true,
+                                  () {
+                                    setState(() {
+                                      showing = true;
+                                    });
+                                    Constance.showMembershipPrompt(context, () {
+                                      setState(() {
+                                        showing = false;
+                                      });
+                                    });
                                   });
-                                } else {
-                                  setState(() {
-                                    showing = false;
-                                  });
-                                }
-                              }, 1, true);
                             },
                             separatorBuilder:
                                 (BuildContext context, int index) {
@@ -269,8 +288,6 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
       ),
     );
   }
-
-
 
   void showDialogBox() {
     Storage.instance.setGuwahatiConnect();
@@ -463,7 +480,7 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
                           height: 3.h,
                         ),
                         Text(
-                         Constance.about,
+                          Constance.about,
                           style:
                               Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Colors.black,

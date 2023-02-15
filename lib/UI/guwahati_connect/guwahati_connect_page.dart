@@ -58,7 +58,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
       vsync: this,
       duration: const Duration(milliseconds: 260),
     );
-    Future.delayed(Duration.zero,(){
+    Future.delayed(Duration.zero, () {
       if (!Storage.instance.isGuwahatiConnect) {
         showDialogBox();
       }
@@ -97,7 +97,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
     } else {
       // Navigation.instance.goBack();
       setState(() {
-        isEmpty=true;
+        isEmpty = true;
       });
       // Provider.of<DataProvider>(
       //         Navigation.instance.navigatorKey.currentContext ?? context,
@@ -300,7 +300,9 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                   return current.guwahatiConnect.isEmpty
                       ? Center(
                           child: Lottie.asset(
-                            isEmpty?Constance.noDataLoader:Constance.searchingIcon,
+                            isEmpty
+                                ? Constance.noDataLoader
+                                : Constance.searchingIcon,
                           ),
                         )
                       : Padding(
@@ -314,39 +316,59 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                               bool like = data.is_liked ?? false,
                                   dislike = false;
                               return GuwahatiConnectPostCard(
-                                  data, count, like, dislike, scaffoldKey, () {
-                                fetchGuwahatiConnect();
-                              }, (id, val) {
-                                if (Provider.of<DataProvider>(
-                                            Navigation.instance.navigatorKey
-                                                    .currentContext ??
-                                                context,
-                                            listen: false)
-                                        .profile
-                                        ?.is_plan_active ??
-                                    false) {
-                                  // Navigation.instance.navigate('/exclusivePage');
-                                  postLike(id, val, () {
-                                    like = !like;
-                                  });
-                                } else {
-                                  setState(() {
-                                    showing = true;
-                                  });
-                                  Constance.showMembershipPrompt(context, () {
+                                  data,
+                                  count,
+                                  like,
+                                  dislike,
+                                  scaffoldKey,
+                                  () {
+                                    fetchGuwahatiConnect();
+                                  },
+                                  (id, val) {
+                                    if (Provider.of<DataProvider>(
+                                                Navigation.instance.navigatorKey
+                                                        .currentContext ??
+                                                    context,
+                                                listen: false)
+                                            .profile
+                                            ?.is_plan_active ??
+                                        false) {
+                                      // Navigation.instance.navigate('/exclusivePage');
+                                      postLike(id, val, () {
+                                        like = !like;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        showing = true;
+                                      });
+                                      Constance.showMembershipPrompt(context,
+                                          () {
+                                        setState(() {
+                                          showing = false;
+                                        });
+                                      });
+                                    }
+                                  },
+                                  (id) {
+                                    if (id == 0) {
+                                    } else {
+                                      // setState(() {
+                                      //   showing = true;
+                                      // });
+                                    }
+                                  },
+                                  0,
+                                  false,
+                                  () {
                                     setState(() {
-                                      showing = false;
+                                      showing = true;
+                                    });
+                                    Constance.showMembershipPrompt(context, () {
+                                      setState(() {
+                                        showing = false;
+                                      });
                                     });
                                   });
-                                }
-                              }, (id) {
-                                if (id == 0) {
-                                } else {
-                                  // setState(() {
-                                  //   showing = true;
-                                  // });
-                                }
-                              }, 0, false);
                             },
                             separatorBuilder:
                                 (BuildContext context, int index) {
@@ -374,8 +396,6 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
       ),
     );
   }
-
-
 
   void showDialogBox() {
     Storage.instance.setGuwahatiConnect();
