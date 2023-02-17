@@ -17,7 +17,14 @@ class ClassifiedMyListCard extends StatelessWidget {
   final String result;
   final int selected;
   final Function(String s) fetchClassified;
-  ClassifiedMyListCard({Key? key, required this.current, required this.like, required this.selected, required this.fetchClassified, required this.result})
+
+  ClassifiedMyListCard(
+      {Key? key,
+      required this.current,
+      required this.like,
+      required this.selected,
+      required this.fetchClassified,
+      required this.result})
       : super(key: key);
 
   @override
@@ -55,6 +62,7 @@ class ClassifiedMyListCard extends StatelessWidget {
                               .textTheme
                               .headline3
                               ?.copyWith(
+                                  fontSize: 14.sp,
                                   color: Constance.primaryColor,
                                   fontWeight: FontWeight.bold),
                         ),
@@ -170,16 +178,16 @@ class ClassifiedMyListCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                current.price == null || current.price == 0
-                    ? Container()
-                    : SizedBox(
-                        height: 0.5.h,
-                      ),
+                // current.price == null || current.price == 0
+                //     ? Container()
+                //     : SizedBox(
+                //         height: 0.h,
+                //       ),
                 current.price == null
                     ? Container()
                     : Text(
                         'Rs:${current.price}' ?? '0',
-                        style: Theme.of(context).textTheme.headline3?.copyWith(
+                        style: Theme.of(context).textTheme.headline5?.copyWith(
                             color: Constance.thirdColor,
                             fontWeight: FontWeight.bold),
                       ),
@@ -190,6 +198,7 @@ class ClassifiedMyListCard extends StatelessWidget {
                   current.description ?? "",
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
+                        fontSize: 11.sp,
                         // fontWeight: FontWeight.bold,
                       ),
                   trimLines: 3,
@@ -204,58 +213,50 @@ class ClassifiedMyListCard extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.remove_red_eye,
-                      color: Colors.black,
+                      color: Colors.black54,
+                      size: 15.sp,
                     ),
                     SizedBox(
-                      width: 4.w,
+                      width: 2.w,
                     ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 5.h,
-                        child: Text(
-                          '${current.total_views} views',
-                          // overflow: TextOverflow.clip,
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.black,
-                                  ),
-                        ),
-                      ),
+                    Text(
+                      '${current.total_views} views',
+                      // overflow: TextOverflow.clip,
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Colors.black,
+                          ),
                     ),
                   ],
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.location_on,
-                      color: Colors.black,
+                      color: Colors.black54,
+                      size: 15.sp,
                     ),
                     SizedBox(
-                      width: 4.w,
+                      width: 2.w,
                     ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 5.h,
-                        child: Text(
-                          current.locality?.name ??
-                              'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
-                          // overflow: TextOverflow.clip,
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.black,
-                                  ),
-                        ),
-                      ),
+                    Text(
+                      current.locality?.name ?? "",
+                      // overflow: TextOverflow.clip,
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Colors.black54,
+                          ),
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: 1.h,
                 ),
                 Text(
                   getStatusText(current.status!),
                   // overflow: TextOverflow.clip,
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                  style: Theme.of(context).textTheme.headline6?.copyWith(
                         color: getStatusColour(current.status!),
                         fontWeight: FontWeight.bold,
                       ),
@@ -270,6 +271,7 @@ class ClassifiedMyListCard extends StatelessWidget {
       );
     });
   }
+
   void updateClassified(id) {
     Navigation.instance.navigate('/editingAListing', args: id);
   }
@@ -287,6 +289,7 @@ class ClassifiedMyListCard extends StatelessWidget {
       showError(response.message ?? "Something went wrong");
     }
   }
+
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",
@@ -296,6 +299,7 @@ class ClassifiedMyListCard extends StatelessWidget {
           Navigation.instance.goBack();
         });
   }
+
   String getStatusText(int i) {
     switch (i) {
       case 1:

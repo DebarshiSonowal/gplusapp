@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
 import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
@@ -14,7 +15,7 @@ import 'alert.dart';
 class ClassifiedCard extends StatelessWidget {
   final Classified current;
   bool like;
-
+  var f = NumberFormat("###,###", "en_US");
   ClassifiedCard({Key? key, required this.current, required this.like})
       : super(key: key);
 
@@ -53,9 +54,9 @@ class ClassifiedCard extends StatelessWidget {
                           current.title ?? "",
                           overflow: TextOverflow.ellipsis,
                           style:
-                              Theme.of(context).textTheme.headline3?.copyWith(
+                              Theme.of(context).textTheme.headline4?.copyWith(
                                     color: Constance.primaryColor,
-                                    fontSize: 16.sp,
+                                    fontSize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -116,20 +117,21 @@ class ClassifiedCard extends StatelessWidget {
                 current.price == null
                     ? Container()
                     : Text(
-                        'Rs:${current.price}' ?? '0',
-                        style: Theme.of(context).textTheme.headline3?.copyWith(
+                        'Rs:${f.format(current.price?.toInt())}' ?? '0',
+                        style: Theme.of(context).textTheme.headline5?.copyWith(
                               color: Constance.thirdColor,
-                              fontSize: 15.sp,
+                              // fontSize: 15.sp,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
                 SizedBox(
-                  height: 1.5.h,
+                  height: 1.h,
                 ),
                 ReadMoreText(
                   current.description ?? "",
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black54,
+                    fontSize: 11.sp,
                         // fontWeight: FontWeight.bold,
                       ),
                   trimLines: 3,
@@ -144,12 +146,13 @@ class ClassifiedCard extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Icon(
+                     Icon(
                       Icons.remove_red_eye,
                       color: Colors.black54,
+                      size: 15.sp,
                     ),
                     SizedBox(
-                      width: 4.w,
+                      width: 2.w,
                     ),
                     Text(
                       '${current.total_views} views',
@@ -161,17 +164,18 @@ class ClassifiedCard extends StatelessWidget {
                   ],
                 ),
                 SizedBox(
-                  height: 1.5.h,
+                  height: 1.h,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.location_on,
                       color: Colors.black54,
+                      size: 15.sp,
                     ),
                     SizedBox(
-                      width: 4.w,
+                      width: 2.w,
                     ),
                     Text(
                       current.locality?.name ??

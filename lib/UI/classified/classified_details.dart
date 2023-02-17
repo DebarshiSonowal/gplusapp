@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
@@ -13,6 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
+import '../../Components/classified_post_image.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
@@ -33,6 +35,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
   bool like = false;
+  var f = NumberFormat("###,###", "en_US");
 
   @override
   void initState() {
@@ -50,363 +53,364 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
         color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(vertical: 0.5.h),
         child: Consumer<DataProvider>(builder: (context, data, _) {
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  // height: .h,
-                  width: MediaQuery.of(context).size.width,
-                  child: Stack(alignment: Alignment.bottomCenter, children: [
-                    Container(
-                      // height: 2.h,
-                      padding: EdgeInsets.only(top: 0.h),
-                      color: Colors.grey.shade200,
-                      width: MediaQuery.of(context).size.width,
-                      // height: 40.h,
-                      child: ((data.selectedClassified?.attach_files ?? [])
-                              .isNotEmpty)
-                          ? CarouselSlider(
-                              items: data.selectedClassified?.attach_files
-                                  ?.asMap()
-                                  .entries
-                                  .map(
-                                    (e) => GestureDetector(
-                                      onTap: () {
-                                        Navigation.instance.navigate(
-                                            '/viewImage',
-                                            args: e.value.file_name ??
-                                                Constance.defaultImage);
-                                      },
-                                      child: CachedNetworkImage(
-                                        imageUrl: e.value.file_name ?? "",
-                                        width: double.infinity,
-                                        // height: 35.h,
-                                        fit: BoxFit.fitHeight,
-                                        // filterQuality: FilterQuality.low,
-                                        placeholder: (cont, _) {
-                                          return Image.asset(
-                                            Constance.logoIcon,
-                                            // color: Colors.black,
-                                          );
-                                        },
-                                        errorWidget: (cont, _, e) {
-                                          return Image.network(
-                                            Constance.defaultImage,
-                                            fit: BoxFit.fill,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              carouselController: _controller,
-                              options: CarouselOptions(
-                                  autoPlay: false,
-                                  enlargeCenterPage: true,
-                                  // aspectRatio: 1,
-                                  aspectRatio: 12 / 9,
-                                  viewportFraction: 1,
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      _current = index;
-                                    });
-                                  }),
-                            )
-                          : Image.asset(
-                              Constance.logoIcon,
-                              scale: 1,
-                              // color: Colors.black,
-                            ),
-                    ),
-                    Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [Colors.transparent, Colors.black],
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                setAsFavourite(
-                                    data.selectedClassified?.id, 'classified');
-                                setState(() {
-                                  like = !like;
-                                });
-                              },
-                              icon: Icon(
-                                FontAwesomeIcons.solidHeart,
-                                color: like
-                                    ? Constance.secondaryColor
-                                    : Colors.grey.shade400,
-                              )),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: data.selectedClassified!.attach_files!
-                                .asMap()
-                                .entries
-                                .map((entry) {
-                              return GestureDetector(
-                                onTap: () =>
-                                    _controller.animateToPage(entry.key),
-                                child: Container(
-                                  width: 12.0,
-                                  height: 12.0,
-                                  margin: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 4.0),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: (Theme.of(context).brightness ==
-                                                  Brightness.dark
-                                              ? Colors.white
-                                              : Colors.white)
-                                          .withOpacity(_current == entry.key
-                                              ? 0.8
-                                              : 0.4)),
-                                ),
-                              );
-                            }).toList(),
+          return Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              SizedBox(
+                height: 95.h,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        // height: .h,
+                        width: MediaQuery.of(context).size.width,
+                        child:
+                            Stack(alignment: Alignment.bottomCenter, children: [
+                          ClassifiedPostImageWidget(
+                            data: data,
+                            controller: _controller,
+                            updatePage: (index) {
+                              setState(() {
+                                _current = index;
+                              });
+                            },
                           ),
-                          (data.selectedClassified?.is_post_by_me ?? false)
-                              ? PopupMenuButton<int>(
-                                  color: Constance.secondaryColor,
-                                  itemBuilder: (BuildContext context) =>
-                                      <PopupMenuItem<int>>[
-                                    PopupMenuItem<int>(
-                                      value: 1,
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.edit,
-                                            color: Colors.black,
+                          Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [Colors.transparent, Colors.black],
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                    onPressed: () {
+                                      setAsFavourite(
+                                          data.selectedClassified?.id,
+                                          'classified');
+                                      setState(() {
+                                        like = !like;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      FontAwesomeIcons.solidHeart,
+                                      color: like
+                                          ? Constance.secondaryColor
+                                          : Colors.grey.shade400,
+                                    )),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: data
+                                      .selectedClassified!.attach_files!
+                                      .asMap()
+                                      .entries
+                                      .map((entry) {
+                                    return GestureDetector(
+                                      onTap: () =>
+                                          _controller.animateToPage(entry.key),
+                                      child: Container(
+                                        width: 12.0,
+                                        height: 12.0,
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 4.0),
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color:
+                                                (Theme.of(context).brightness ==
+                                                            Brightness.dark
+                                                        ? Colors.white
+                                                        : Colors.white)
+                                                    .withOpacity(
+                                                        _current == entry.key
+                                                            ? 0.8
+                                                            : 0.4)),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                                (data.selectedClassified?.is_post_by_me ??
+                                        false)
+                                    ? PopupMenuButton<int>(
+                                        color: Constance.secondaryColor,
+                                        itemBuilder: (BuildContext context) =>
+                                            <PopupMenuItem<int>>[
+                                          PopupMenuItem<int>(
+                                            value: 1,
+                                            child: Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.edit,
+                                                  color: Colors.black,
+                                                ),
+                                                SizedBox(
+                                                  width: 2.w,
+                                                ),
+                                                Text(
+                                                  'Edit',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline6
+                                                      ?.copyWith(
+                                                          color: Colors.black),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          SizedBox(
-                                            width: 2.w,
-                                          ),
-                                          Text(
-                                            'Edit',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                ?.copyWith(color: Colors.black),
+                                          PopupMenuItem<int>(
+                                            value: 2,
+                                            child: Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.black,
+                                                ),
+                                                SizedBox(
+                                                  width: 2.w,
+                                                ),
+                                                Text(
+                                                  'Delete',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline6
+                                                      ?.copyWith(
+                                                          color: Colors.black),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ],
-                                      ),
-                                    ),
-                                    PopupMenuItem<int>(
-                                      value: 2,
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.delete,
-                                            color: Colors.black,
-                                          ),
-                                          SizedBox(
-                                            width: 2.w,
-                                          ),
-                                          Text(
-                                            'Delete',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                ?.copyWith(color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                  onSelected: (int value) {
-                                    if (value == 1) {
-                                      updateClassified(widget.id);
-                                    } else {
-                                      deleteClassified(widget.id);
-                                    }
-                                  },
-                                  // color: Colors.white,
-                                  icon: const Icon(
-                                    Icons.more_vert,
-                                    color: Colors.white,
+                                        onSelected: (int value) {
+                                          if (value == 1) {
+                                            updateClassified(widget.id);
+                                          } else {
+                                            deleteClassified(widget.id);
+                                          }
+                                        },
+                                        // color: Colors.white,
+                                        icon: const Icon(
+                                          Icons.more_vert,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
+                            ),
+                          ),
+                        ]),
+                      ),
+                      SizedBox(
+                        height: 1.5.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Text(
+                          data.selectedClassified?.title ?? '2BHK for Rent',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline2
+                              ?.copyWith(
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Constance.primaryColor,
+                                  fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Text(
+                          'Posted by ${data.selectedClassified?.user?.name ?? "Anonymous"}',
+                          style:
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white70
+                                        : Colors.black54,
+                                    // fontWeight: FontWeight.bold,
                                   ),
-                                )
-                              : Container(),
-                        ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Text(
+                          'Rs: ${f.format(data.selectedClassified?.price?.toInt())}',
+                          style:
+                              Theme.of(context).textTheme.headline5?.copyWith(
+                                    color: Constance.thirdColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.location_on,
+                              color: Storage.instance.isDarkMode
+                                  ? Constance.secondaryColor
+                                  : Colors.black54,
+                              size: 15.sp,
+                            ),
+                            SizedBox(
+                              width: 2.w,
+                            ),
+                            Text(
+                              data.selectedClassified?.locality?.name ??
+                                  'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
+                              // overflow: TextOverflow.clip,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5
+                                  ?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black54,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // SizedBox(
+                      //   height: 1.h,
+                      // ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.remove_red_eye,
+                              color: Storage.instance.isDarkMode
+                                  ? Constance.secondaryColor
+                                  : Colors.black54,
+                              size: 15.sp,
+                            ),
+                            SizedBox(
+                              width: 2.w,
+                            ),
+                            Text(
+                              '${data.selectedClassified?.total_views} views',
+                              // overflow: TextOverflow.clip,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5
+                                  ?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black54,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.monitor,
+                              color: Storage.instance.isDarkMode
+                                  ? Constance.secondaryColor
+                                  : Colors.black54,
+                              size: 15.sp,
+                            ),
+                            SizedBox(
+                              width: 2.w,
+                            ),
+                            Text(
+                              getStatusText(
+                                  data.selectedClassified?.status ?? 0),
+                              // overflow: TextOverflow.clip,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: getStatusColour(
+                                        data.selectedClassified?.status ?? 0),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: ReadMoreText(
+                          data.selectedClassified?.description ??
+                          'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
+                          ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+                          ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+                          ' remaining essentially unchanged',
+                          style:
+                              Theme.of(context).textTheme.headline5?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white70
+                                        : Colors.black54,
+                                    // fontWeight: FontWeight.bold,
+                                    fontSize: 11.sp,
+                                  ),
+                          trimLines: 5,
+                          colorClickableText: Constance.secondaryColor,
+                          trimMode: TrimMode.Line,
+                          trimCollapsedText: 'Show more',
+                          trimExpandedText: 'Show less',
+                        ),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+
+                      // SizedBox(
+                      //   height: 1.5.h,
+                      // ),
+                    ],
+                  ),
+                ),
+              ),
+              data.selectedClassified?.user == null
+                  ? Container()
+                  : Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: CustomButton(
+                            txt:
+                                'Call ${data.selectedClassified?.user?.name ?? "Anonymous"}',
+                            onTap: () {
+                              if (data.profile?.is_plan_active ?? false) {
+                                _launchUrl(Uri.parse(
+                                    'tel:${data.selectedClassified?.user?.mobile}'));
+                              } else {
+                                Constance.showMembershipPrompt(context, () {});
+                              }
+                              // showDialogBox();
+                            }),
                       ),
                     ),
-                  ]),
-                ),
-                SizedBox(
-                  height: 1.5.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w),
-                  child: Text(
-                    data.selectedClassified?.title ?? '2BHK for Rent',
-                    style: Theme.of(context).textTheme.headline2?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Constance.primaryColor,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w),
-                  child: Text(
-                    'Posted by ${data.selectedClassified?.user?.name ?? "Anonymous"}',
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white70
-                              : Colors.black,
-                          // fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w),
-                  child: Text(
-                    'Rs: ${data.selectedClassified?.price}',
-                    style: Theme.of(context).textTheme.headline3?.copyWith(
-                          color: Constance.thirdColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        color: Storage.instance.isDarkMode
-                            ? Constance.secondaryColor
-                            : Colors.black,
-                      ),
-                      SizedBox(
-                        width: 4.w,
-                      ),
-                      Text(
-                        data.selectedClassified?.locality?.name ??
-                            'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
-                        // overflow: TextOverflow.clip,
-                        style: Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-                // SizedBox(
-                //   height: 1.h,
-                // ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.remove_red_eye,
-                        color: Storage.instance.isDarkMode
-                            ? Constance.secondaryColor
-                            : Colors.black,
-                      ),
-                      SizedBox(
-                        width: 4.w,
-                      ),
-                      Text(
-                        '${data.selectedClassified?.total_views} views',
-                        // overflow: TextOverflow.clip,
-                        style: Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w),
-                  child: ReadMoreText(
-                    data.selectedClassified?.description ??
-                        'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                            ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                            ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                            ' remaining essentially unchanged',
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white70
-                              : Colors.black,
-                          // fontWeight: FontWeight.bold,
-                        ),
-                    trimLines: 5,
-                    colorClickableText: Constance.secondaryColor,
-                    trimMode: TrimMode.Line,
-                    trimCollapsedText: 'Show more',
-                    trimExpandedText: 'Show less',
-                  ),
-                ),
-                SizedBox(
-                  height: 1.5.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w),
-                  child: Text(
-                    getStatusText(data.selectedClassified?.status ?? 0),
-                    // overflow: TextOverflow.clip,
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: getStatusColour(
-                              data.selectedClassified?.status ?? 0),
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-                SizedBox(
-                  height: 1.5.h,
-                ),
-                data.selectedClassified?.user == null
-                    ? Container()
-                    : Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: CustomButton(
-                              txt:
-                                  'Call ${data.selectedClassified?.user?.name ?? "Anonymous"}',
-                              onTap: () {
-                                if (data.profile?.is_plan_active ?? false) {
-                                  _launchUrl(Uri.parse(
-                                      'tel:${data.selectedClassified?.user?.mobile}'));
-                                } else {
-                                  Constance.showMembershipPrompt(
-                                      context, () {});
-                                }
-                                // showDialogBox();
-                              }),
-                        ),
-                      ),
-              ],
-            ),
+            ],
           );
         }),
       ),
