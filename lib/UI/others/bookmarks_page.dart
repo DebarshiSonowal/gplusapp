@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as bd;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -363,7 +363,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
             Navigation.instance.navigate('/notification');
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return Badge(
+            return bd.Badge(
               badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',

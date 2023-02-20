@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as bd;
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
@@ -137,7 +137,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
             Navigation.instance.navigate('/notification');
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return Badge(
+            return bd.Badge(
               badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',

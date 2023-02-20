@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as bd;
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
@@ -549,7 +549,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
             Navigation.instance.navigate('/notification');
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return Badge(
+            return bd.Badge(
               badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',

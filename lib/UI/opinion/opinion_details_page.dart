@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as bd;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
@@ -892,7 +892,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
             Navigation.instance.navigate('/notification');
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return Badge(
+            return bd.Badge(
               badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',

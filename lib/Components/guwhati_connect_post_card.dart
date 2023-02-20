@@ -31,7 +31,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
   bool like, dislike, is_mine;
   final GlobalKey<ScaffoldState> scaffoldKey;
   final _searchQueryController = TextEditingController();
-  final void Function() fetchGuwahatiConnect,showMembership;
+  final void Function() fetchGuwahatiConnect, showMembership;
   final Function(int, int) postLike;
   final Function(int) showing;
   final ScrollController _controller = ScrollController();
@@ -46,7 +46,8 @@ class GuwahatiConnectPostCard extends StatelessWidget {
     this.postLike,
     this.showing,
     this.type,
-    this.is_mine, this.showMembership,
+    this.is_mine,
+    this.showMembership,
   );
 
   void _scrollDown() {
@@ -64,7 +65,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        StatefulBuilder(builder: (context, _) {
+        StatefulBuilder(builder: (ctx, _) {
           return Container(
             // elevation: 3,
             color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
@@ -230,44 +231,8 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                   ),
                   data.attachment?.isEmpty ?? false
                       ? Container()
-                      : Padding(
-                          padding: EdgeInsets.symmetric(vertical: 1.h),
-                          child: SizedBox(
-                            // height: 35.h,
-                            width: double.infinity,
-                            child: GestureDetector(
-                              onTap: () {
-                                // Navigation.instance.goBack();
-                                (data.attachment?.length ?? 1) > 1
-                                    // ? showAllImages(count)
-                                    ? showAllImages(data.id)
-                                    : showThisImage(
-                                        data.attachment![0].file_name ??
-                                            Constance.defaultImage);
-                              },
-                              child: (data.attachment?.length ?? 1) > 1
-                                  ? getGridBasedOnNumbers(
-                                      data.attachment, context)
-                                  : CachedNetworkImage(
-                                      placeholder: (cont, _) {
-                                        return Image.asset(
-                                          Constance.logoIcon,
-                                          // color: Colors.black,
-                                        );
-                                      },
-                                      imageUrl:
-                                          data.attachment![0].file_name ?? "",
-                                      fit: BoxFit.fill,
-                                      errorWidget: (cont, _, e) {
-                                        return Image.network(
-                                          Constance.defaultImage,
-                                          fit: BoxFit.fitWidth,
-                                        );
-                                      },
-                                    ),
-                            ),
-                          ),
-                        ),
+                      : attachmentsSection(data.attachment!, ctx, data.id,
+                          data.attachment!.length),
                   SizedBox(
                     height: 1.h,
                   ),
@@ -431,6 +396,40 @@ class GuwahatiConnectPostCard extends StatelessWidget {
           );
         }),
       ],
+    );
+  }
+
+  Padding attachmentsSection(
+      List<GCAttachment> data, BuildContext context, id, int lengthOf) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 1.h),
+      child: SizedBox(
+        // height: 35.h,
+        width: double.infinity,
+        child: GestureDetector(
+          onTap: () => (lengthOf ?? 1) > 1
+              ? showAllImages(id)
+              : showThisImage(data[0].file_name ?? Constance.defaultImage),
+          child: (data.length ?? 1) > 1
+              ? getGridBasedOnNumbers(data, context)
+              : CachedNetworkImage(
+                  placeholder: (cont, _) {
+                    return Image.asset(
+                      Constance.logoIcon,
+                      // color: Colors.black,
+                    );
+                  },
+                  imageUrl: data[0].file_name ?? "",
+                  fit: BoxFit.fill,
+                  errorWidget: (cont, _, e) {
+                    return Image.network(
+                      Constance.defaultImage,
+                      fit: BoxFit.fitWidth,
+                    );
+                  },
+                ),
+        ),
+      ),
     );
   }
 

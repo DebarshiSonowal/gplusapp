@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as bd;
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/date_picker.dart';
 import 'package:flutter_holo_date_picker/i18n/date_picker_i18n.dart';
@@ -249,7 +249,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
             Navigation.instance.navigate('/notification');
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return Badge(
+            return bd.Badge(
               badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',
