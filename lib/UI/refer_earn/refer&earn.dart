@@ -26,7 +26,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
     return Scaffold(
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("redeem_offer",true),
       body: Container(
         height: double.infinity,
         width: double.infinity,

@@ -1,26 +1,17 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:io' show Platform;
-import 'package:badges/badges.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
-import 'package:gplusapp/UI/main/sections/StoriesSection.dart';
-import 'package:gplusapp/UI/main/sections/VideoReportSection.dart';
-import 'package:gplusapp/UI/main/sections/ads_section.dart';
-import 'package:gplusapp/UI/main/sections/bigdeal_ad_section.dart';
-import 'package:gplusapp/UI/main/sections/gplus_exclusive_section.dart';
-import 'package:gplusapp/UI/main/sections/opinion_section.dart';
-import 'package:gplusapp/UI/main/sections/poll_of_the_week_section.dart';
-import 'package:gplusapp/UI/main/sections/suggested_for_u.dart';
+import 'package:gplusapp/UI/main/sections/home_screen_body.dart';
+import 'package:gplusapp/UI/main/sections/internet_issue_screen.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
@@ -28,12 +19,12 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
-import 'package:uni_links/uni_links.dart';
+
+// import 'package:uni_links/uni_links.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/NavigationBar.dart';
-import '../../Components/slider_home.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
@@ -81,38 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // Future<void> initUniLinksResume() async {
-  //   // ... check initialUri
-  //
-  //   // Attach a listener to the stream
-  //   _sub = uriLinkStream.listen((Uri? uri,) {
-  //     if (uri != null) {
-  //       print("deeplink2 this ${uri.toString().split("/")}");
-  //       sendToRoute(
-  //           uri.toString().split("/")[4].trim(),
-  //           uri.toString().split("/")[5].trim(),
-  //           (uri.toString().split("/").length <= 6
-  //               ? ""
-  //               : uri.toString().split("/")[6].trim()));
-  //     } else {
-  //       debugPrint("deeplink failed 2 ");
-  //       // Navigation.instance.navigate(
-  //       //   '/link_failed',
-  //       // );
-  //     }
-  //     // Use the uri and warn the user, if it is not correct
-  //   }, onError: (err) {
-  //     debugPrint("deeplink failed 3 error ${err} ");
-  //     // Handle exception by warning the user their action did not succeed
-  //     // Navigation.instance.navigate(
-  //     //     '/link_failed',
-  //     //     args: ""
-  //     // );
-  //   });
-  //
-  //   // NOTE: Don't forget to call _sub.cancel() in dispose()
-  // }
-
   @override
   void dispose() {
     super.dispose();
@@ -130,11 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchGPlusExcl();
     fetchPoll();
     fetchNotification();
-    // Future.delayed(
-    //     const Duration(seconds: 15),
-    //         () => _listController.addListener(() {
-    //       setState(() {});
-    //     }));
     Future.delayed(
         Duration.zero,
         () => Provider.of<DataProvider>(
@@ -195,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         backgroundColor:
             Storage.instance.isDarkMode ? Colors.black : Colors.grey.shade100,
-        appBar: Constance.buildAppBar(),
+        appBar: Constance.buildAppBar("home",true),
         // floatingActionButtonLocation: showing
         //     ? FloatingActionButtonLocation.miniStartFloat
         //     : FloatingActionButtonLocation.miniEndFloat,
@@ -212,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
         //     size: 22.sp,
         //   ),
         // ),
-        drawer: BergerMenuMemPage(),
+        drawer: const BergerMenuMemPage(),
         body: OfflineBuilder(
           connectivityBuilder: (
             BuildContext context,
@@ -221,252 +175,22 @@ class _HomeScreenState extends State<HomeScreen> {
           ) {
             final bool connected = connectivity != ConnectivityResult.none;
             return connected
-                ? HomeScreenBody()
-                : Container(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.grey.shade100,
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 2.w),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Text(
-                            'Oops! You are not connected to Internet',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline2
-                                ?.copyWith(
-                                    color: Constance.thirdColor,
-                                    fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                ? HomeScreenBody(
+                    refreshController: _refreshController,
+                    onRefresh: _onRefresh,
+                    onLoading: _onLoading,
+                    showExitDialog: showExitDialog,
+                    controller: controller,
+                    random: random,
+                    fetchPoll: fetchPoll,
+                    poll: _poll,
+                    getSpace: getSpace,
+                  )
+                : const InternetIssueScreen();
           },
           child: Container(),
         ),
         bottomNavigationBar: CustomNavigationBar(current),
-      ),
-    );
-  }
-
-  Padding HomeScreenBody() {
-    return Padding(
-      padding: EdgeInsets.only(top: 0.h),
-      child: SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: false,
-        header: const WaterDropHeader(),
-        footer: CustomFooter(
-          builder: (BuildContext context, LoadStatus? mode) {
-            Widget body;
-            if (mode == LoadStatus.idle) {
-              body = Text("pull up load");
-            } else if (mode == LoadStatus.loading) {
-              body = const CupertinoActivityIndicator();
-            } else if (mode == LoadStatus.failed) {
-              body = const Text("Load Failed!Click retry!");
-            } else if (mode == LoadStatus.canLoading) {
-              body = const Text("release to load more");
-            } else {
-              body = const Text("No more Data");
-            }
-            return SizedBox(
-              height: 55.0,
-              child: Center(child: body),
-            );
-          },
-        ),
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        onLoading: _onLoading,
-        child: Padding(
-          padding: EdgeInsets.only(top: 0.h),
-          child: Consumer<DataProvider>(builder: (context, data, _) {
-            return WillPopScope(
-              onWillPop: () async {
-                showExitDialog();
-                return false;
-              },
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                color: Storage.instance.isDarkMode
-                    ? Colors.black
-                    : Colors.grey.shade100,
-                child: SingleChildScrollView(
-                  controller: controller,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      data.home_albums.isNotEmpty
-                          ? HomeBannerPage(
-                              showNotaMember: () {
-                                setState(() {
-                                  showing = true;
-                                });
-                                Constance.showMembershipPrompt(context, () {
-                                  setState(() {
-                                    showing = false;
-                                  });
-                                });
-                              },
-                            )
-                          : Container(),
-                      data.profile?.is_plan_active ?? false
-                          ? Container()
-                          : const BigDealsAdSection(),
-                      SuggestedForYou(
-                        data: data,
-                        showNotaMember: () {
-                          setState(() {
-                            showing = true;
-                          });
-                          Constance.showMembershipPrompt(context, () {
-                            setState(() {
-                              showing = false;
-                            });
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      data.ads.isNotEmpty
-                          ? AdsSection(data: data, random: random)
-                          : Container(),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: Divider(
-                          color: Colors.grey.shade800,
-                          thickness: 0.1.h,
-                        ),
-                      ),
-                      GPlusExclusiveSection(
-                        data: data,
-                        showNotaMember: () {
-                          setState(() {
-                            showing = true;
-                          });
-                          Constance.showMembershipPrompt(context, () {
-                            setState(() {
-                              showing = false;
-                            });
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: Divider(
-                          color: Colors.grey.shade800,
-                          thickness: 0.1.h,
-                        ),
-                      ),
-                      VideoReportSection(
-                        data: data,
-                        showNotaMember: () {
-                          setState(() {
-                            showing = true;
-                          });
-                          Constance.showMembershipPrompt(context, () {
-                            setState(() {
-                              showing = false;
-                            });
-                          });
-                        },
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: Divider(
-                          color: Colors.grey.shade800,
-                          thickness: 0.1.h,
-                        ),
-                      ),
-                      PollOfTheWeekSection(
-                        data: data,
-                        showNotaMember: () {
-                          setState(() {
-                            showing = true;
-                          });
-                          Constance.showMembershipPrompt(context, () {
-                            setState(() {
-                              showing = false;
-                            });
-                          });
-                        },
-                        update: () {
-                          setState(() {});
-                          fetchPoll();
-                        },
-                        poll: _poll,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: Divider(
-                          color: Colors.grey.shade800,
-                          thickness: 0.1.h,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      StoriesSection(data: data),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: Divider(
-                          color: Colors.grey.shade800,
-                          thickness: 0.1.h,
-                        ),
-                      ),
-                      OpinionSection(
-                        data: data,
-                        showNotaMember: () {
-                          setState(() {
-                            showing = true;
-                          });
-                          Constance.showMembershipPrompt(context, () {
-                            setState(() {
-                              showing = false;
-                            });
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.w),
-                        child: Text(
-                          'This material may not be published, broadcast, rewritten, or redistributed, 2022 © G Plus. All rights reserved. Copyright © 2022 Insight Brandcom Pvt. Ltd. All rights reserved.',
-                          style:
-                              Theme.of(context).textTheme.headline6?.copyWith(
-                                    // fontSize: 16.sp,
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black54,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ),
-                      getSpace(),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }),
-        ),
       ),
     );
   }
@@ -560,7 +284,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 listen: false)
             .setVideoWeekly(response.videos ?? []);
         // _refreshController.refreshCompleted();
-
       }
     } else {
       // _refreshController.refreshFailed();
@@ -612,7 +335,6 @@ class _HomeScreenState extends State<HomeScreen> {
           .setMyGeoTopicks(response.geoTopicks);
       // initUniLinks();
       // initUniLinksResume();
-
     } else {
       // Navigation.instance.goBack();
     }

@@ -37,7 +37,7 @@ import '../../Networking/api_provider.dart';
 
 extension StringExtension on String {
   String capitalize() {
-    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
   }
 }
 
@@ -111,7 +111,7 @@ class _StoryPageState extends State<StoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar2(),
+      appBar: Constance.buildAppBar2("article_detail"),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -260,7 +260,9 @@ class _StoryPageState extends State<StoryPage> {
                                       children: [
                                         TextSpan(
                                           text:
-                                              '${data.selectedArticle?.author_name ?? "G Plus"}',
+                                              '${data.selectedArticle?.author_name==""?
+                                                  "G Plus News"
+                                                  :data.selectedArticle?.author_name}',
                                           style: Theme.of(Navigation.instance
                                                   .navigatorKey.currentContext!)
                                               .textTheme
@@ -540,7 +542,9 @@ class _StoryPageState extends State<StoryPage> {
                                   );
                                 },
                                 "blockquote": (context, child) {
-                                  return SizedBox(
+                                  return context
+                                      .tree.element?.innerHtml
+                                      .split("=").length==3?SizedBox(
                                     height: 28.h,
                                     // width: 90.h,
                                     child: GestureDetector(
@@ -576,6 +580,8 @@ class _StoryPageState extends State<StoryPage> {
                                         ),
                                       ),
                                     ),
+                                  ):Container(
+
                                   );
                                   // return Container(
                                   //     child: Text(
@@ -1181,6 +1187,7 @@ class _StoryPageState extends State<StoryPage> {
   }
 
   String getHtmlString(String? tweetId) {
+    print("#!)!)!: ${tweetId}");
     return """
       <html>
       

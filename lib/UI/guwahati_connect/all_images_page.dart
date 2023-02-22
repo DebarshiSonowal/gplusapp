@@ -63,7 +63,7 @@ class _AllImagePageState extends State<AllImagePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("guwahati",true),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       body: Consumer<DataProvider>(builder: (context, data, _) {

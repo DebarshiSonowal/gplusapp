@@ -83,7 +83,7 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("guwahati",true),
       // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,

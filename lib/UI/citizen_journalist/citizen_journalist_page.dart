@@ -50,8 +50,8 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
     return Scaffold(
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar(),
-      drawer: BergerMenuMemPage(),
+      appBar: Constance.buildAppBar("citizen_journalist",true),
+      drawer: const BergerMenuMemPage(),
       bottomNavigationBar: CustomNavigationBar(current),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.h),

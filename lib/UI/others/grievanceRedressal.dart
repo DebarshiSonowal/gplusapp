@@ -80,7 +80,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar2(),
+      appBar: Constance.buildAppBar2("grievanceRedressal"),
       body: Container(
         height: MediaQuery
             .of(context)

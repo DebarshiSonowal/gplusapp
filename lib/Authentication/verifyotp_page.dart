@@ -67,7 +67,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("verify",false),
       body: Container(
         height: double.infinity,
         width: double.infinity,

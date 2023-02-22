@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:badges/badges.dart' as bd;
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Model/bigdeal.dart';
 import 'package:gplusapp/Model/category_discount.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,6 +20,7 @@ import '../Model/category.dart';
 import '../Model/connect_post.dart';
 import '../Model/listing.dart';
 import '../Model/notification.dart';
+import '../Model/profile.dart';
 import '../Model/top_picks.dart';
 import '../Navigation/Navigate.dart';
 
@@ -105,15 +108,20 @@ class Constance {
     'Lorem',
   ];
 
-  static AppBar buildAppBar() {
+  static AppBar buildAppBar(String screen,bool enable) {
     return AppBar(
       title: GestureDetector(
         onTap: () {
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext!,
-                  listen: false)
-              .setCurrent(0);
-          Navigation.instance.navigate('/main');
+          if (enable) {
+            logTheLogoClick(Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey.currentContext!,
+                          listen: false).profile!,screen);
+            Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext!,
+                    listen: false)
+                .setCurrent(0);
+            Navigation.instance.navigate('/main');
+          }
         },
         child: Image.asset(
           Constance.logoIcon,
@@ -152,7 +160,7 @@ class Constance {
     );
   }
 
-  static AppBar buildAppBar2() {
+  static AppBar buildAppBar2(String screen) {
     return AppBar(
       // leading: IconButton(
       //   onPressed: () {
@@ -162,6 +170,9 @@ class Constance {
       // ),
       title: GestureDetector(
         onTap: () {
+          logTheLogoClick(Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false).profile!,screen);
           Provider.of<DataProvider>(
                   Navigation.instance.navigatorKey.currentContext!,
                   listen: false)
@@ -202,6 +213,25 @@ class Constance {
           icon: Icon(Icons.search),
         ),
       ],
+    );
+  }
+
+  static void logTheLogoClick(Profile profile, String screen) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "logo_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "screen_name": screen,
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
     );
   }
 

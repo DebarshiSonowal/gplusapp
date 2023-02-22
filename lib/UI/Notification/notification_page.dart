@@ -34,7 +34,7 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("notification",true),
       // drawer: BergerMenuMemPage(),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(

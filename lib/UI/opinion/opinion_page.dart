@@ -78,7 +78,7 @@ class _OpinionPageState extends State<OpinionPage> {
     return Scaffold(
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar2(),
+      appBar: Constance.buildAppBar2("opinion"),
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
         enablePullDown: true,

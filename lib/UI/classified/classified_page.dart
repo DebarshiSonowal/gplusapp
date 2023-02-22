@@ -95,7 +95,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("classified",true),
       key: scaffoldKey,
       drawer: BergerMenuMemPage(),
       backgroundColor:

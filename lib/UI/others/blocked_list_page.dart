@@ -26,7 +26,7 @@ class _BlockedUsersListPageState extends State<BlockedUsersListPage> {
     return Scaffold(
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("blocked",true),
       body: Container(
         height: double.infinity,
         width: double.infinity,

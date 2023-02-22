@@ -43,7 +43,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("profile",true),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           height: MediaQuery.of(context).size.height,

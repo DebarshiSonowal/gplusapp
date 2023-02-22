@@ -81,7 +81,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:Constance.buildAppBar2(),
+      appBar:Constance.buildAppBar2("topics"),
       backgroundColor: Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(

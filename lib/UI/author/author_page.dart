@@ -31,7 +31,7 @@ class _AuthorPageState extends State<AuthorPage> {
     return Scaffold(
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("author",true),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           padding: EdgeInsets.symmetric(

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
@@ -13,8 +14,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 // import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
-import 'package:uni_links/uni_links.dart';
-import 'dart:io';
+// import 'package:uni_links/uni_links.dart';
+// import 'dart:io';
 import 'Components/alert.dart';
 import 'Helper/AppTheme.dart';
 import 'Helper/Constance.dart';
@@ -534,34 +535,34 @@ void sendToDestination(
   }
 }
 
-Future<void> initUniLinks() async {
-  // Platform messages may fail, so we use a try/catch PlatformException.
-  try {
-    final initialLink = await getInitialLink();
-    if (initialLink != null) {
-      print("deeplink1 ${initialLink.split("/")}");
-      sendToRoute(
-          initialLink.split("/")[4].trim(),
-          initialLink.split("/")[5].trim(),
-          (initialLink.split("/").length <= 6
-              ? ""
-              : initialLink.split("/")[6].trim()));
-    } else {
-      debugPrint("deeplink failed 1 continue ");
-      // initUniLinksResume();
-    }
-    // Parse the link and warn the user, if it is not correct,
-    // but keep in mind it could be `null`.
-  } on PlatformException {
-    // Handle exception by warning the user their action did not succeed
-    // return?
-    debugPrint("deeplink failed 1 ");
-    // Navigation.instance.navigate(
-    //     '/link_failed',
-    //     args: ""
-    // );
-  }
-}
+// Future<void> initUniLinks() async {
+//   // Platform messages may fail, so we use a try/catch PlatformException.
+//   try {
+//     final initialLink = await getInitialLink();
+//     if (initialLink != null) {
+//       print("deeplink1 ${initialLink.split("/")}");
+//       sendToRoute(
+//           initialLink.split("/")[4].trim(),
+//           initialLink.split("/")[5].trim(),
+//           (initialLink.split("/").length <= 6
+//               ? ""
+//               : initialLink.split("/")[6].trim()));
+//     } else {
+//       debugPrint("deeplink failed 1 continue ");
+//       // initUniLinksResume();
+//     }
+//     // Parse the link and warn the user, if it is not correct,
+//     // but keep in mind it could be `null`.
+//   } on PlatformException {
+//     // Handle exception by warning the user their action did not succeed
+//     // return?
+//     debugPrint("deeplink failed 1 ");
+//     // Navigation.instance.navigate(
+//     //     '/link_failed',
+//     //     args: ""
+//     // );
+//   }
+// }
 
 void sendToRoute(String route, data, String? category) async {
   print("link 1 our route ${route}");

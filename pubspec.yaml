@@ -101,8 +101,8 @@ dependencies:
   twitter_oembed_api: ^0.1.0
 #  in_app_update: ^4.0.1
   upgrader: ^4.8.1
-  uni_links: ^0.5.1
-  firebase_analytics: ^10.1.0
+#  uni_links: ^0.5.1
+  firebase_analytics: ^10.1.4
   package_info_plus: ^1.4.2
   purchases_flutter: ^4.5.5
   firebase_dynamic_links: ^5.0.11

@@ -6,6 +6,7 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
@@ -64,7 +65,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("bigdeal",true),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       body: SmartRefresher(
@@ -375,7 +376,11 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      openStatus(TimeFromString(current.details?.opening_time??"10AM"),TimeFromString(current.details?.closing_time??"11PM")),
+                      openStatus(
+                          TimeFromString(
+                              current.details?.opening_time ?? "10AM"),
+                          TimeFromString(
+                              current.details?.closing_time ?? "11PM")),
                       // overflow: TextOverflow.clip,
                       style: Theme.of(context).textTheme.headline4?.copyWith(
                             color: Storage.instance.isDarkMode
@@ -667,9 +672,11 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   }
 
   String openStatus(opening, closing) {
-    var currentTime = DateTime.now().hour;
-    print(currentTime);
-    if (currentTime >= opening && currentTime <= (closing + 12)) {
+    var currentTime = DateTime.now();
+    // print(currentTime);
+    if ((currentTime.isAfter(opening) ||
+            currentTime.isAtSameMomentAs(opening)) &&
+        currentTime.isBefore(closing)) {
       return 'Open Now';
     } else {
       return 'Closed Now';
@@ -677,10 +684,10 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   }
 
   TimeFromString(String closing_time) {
-    if(closing_time.contains("A")){
-      return int.parse(closing_time.split("A")[0]);
-    }else{
-      return int.parse(closing_time.split("P")[0]);
+    if (closing_time.contains("A")) {
+      return DateFormat("hh:mm").parse(closing_time.split("A")[0].trim());
+    } else {
+      return DateFormat("hh:mm").parse(closing_time.split("P")[0].trim());
     }
   }
 }

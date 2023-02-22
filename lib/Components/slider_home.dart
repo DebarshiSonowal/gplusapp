@@ -1,7 +1,10 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/Storage.dart';
+import 'package:gplusapp/Model/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -21,25 +24,13 @@ class HomeBannerPage extends StatefulWidget {
 }
 
 class _CarouselWithIndicatorState extends State<HomeBannerPage> {
-  int _current = 0,till=5;
+  int _current = 0, till = 5;
   final CarouselController _controller = CarouselController();
   final ScrollController controller = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    // controller.addListener(() {
-    //   if (controller.position.atEdge) {
-    //     bool isTop = controller.position.pixels == 0;
-    //     if (isTop) {
-    //       print('At the top');
-    //       controller.jumpTo(-2.w);
-    //     } else {
-    //       print('At the bottom');
-    //       controller.jumpTo(2.w);
-    //     }
-    //   }
-    // });
   }
 
   @override
@@ -74,13 +65,13 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                   onPageChanged: (index, reason) {
                     setState(() {
                       _current = index;
-                      if(index>till){
+                      if (index > till) {
                         controller.animateTo(
                           controller.position.maxScrollExtent,
                           duration: Duration(seconds: 2),
                           curve: Curves.fastOutSlowIn,
                         );
-                      }else if(index==0){
+                      } else if (index == 0) {
                         controller.animateTo(
                           controller.position.minScrollExtent,
                           duration: Duration(seconds: 2),
@@ -88,7 +79,6 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                         );
                       }
                     });
-
                   }),
             ),
           ),
@@ -107,20 +97,20 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
                     onTap: () => _controller.animateToPage(index),
                     child: Container(
                       width:
-                      // (index <= (data.home_albums.length / 2.toInt()))
-                      //     ?
-                      2.w
-                          // :
+                          // (index <= (data.home_albums.length / 2.toInt()))
+                          //     ?
+                          2.w
+                      // :
                       // (index >= (data.home_albums.length - 2))
                       //         ? 1.25.w
                       //         :
                       // 1.65.w
                       ,
                       height:
-                      // (index <= (data.home_albums.length / 2.toInt()))
+                          // (index <= (data.home_albums.length / 2.toInt()))
                           // ?
-                      2.h
-                          // :
+                          2.h
+                      // :
                       // (index >= (data.home_albums.length - 2))
                       //         ? 1.25.w
                       //         :
@@ -160,4 +150,6 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
 
     return Color.fromARGB(color.alpha, d, d, d);
   }
+
+
 }

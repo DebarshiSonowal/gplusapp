@@ -7,6 +7,7 @@ import 'package:sizer/sizer.dart';
 
 import '../Components/alert.dart';
 import '../Components/custom_button.dart';
+import '../Components/preferences_item.dart';
 import '../Helper/Constance.dart';
 import '../Helper/DataProvider.dart';
 import '../Navigation/Navigate.dart';
@@ -33,7 +34,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("preferences",false),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -144,6 +145,8 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                     for (int i = 0; i < data.topicks.length; i++)
                       GestureDetector(
                         onTap: () {
+                          debugPrint(data.topicks[i].title);
+                          debugPrint(selTop.toList().toString());
                           setState(() {
                             if (!selTop.contains(data.topicks[i])) {
                               selTop.add(data.topicks[i]);
@@ -152,41 +155,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                             }
                           });
                         },
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 6),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: selTop == []
-                                ? Colors.white
-                                : !selTop.contains(data.topicks[i])
-                                    ? Colors.white
-                                    : Constance.secondaryColor,
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              color: selTop == []
-                                  ? Colors.grey.shade600
-                                  : !selTop.contains(data.topicks[i])
-                                      ? Colors.grey.shade600
-                                      : Constance.secondaryColor,
-                              width: 0.5.w,
-                              // left: BorderSide(
-                              //   color: Colors.green,
-                              //   width: 1,
-                              // ),
-                            ),
-                          ),
-                          child: Text(
-                            data.topicks[i].title ?? "",
-                            style:
-                                Theme.of(context).textTheme.headline5?.copyWith(
-                                      color: Colors.grey.shade800,
-                                      // fontSize: 2.h,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                        ),
+                        child: preferencesItem(selTop: selTop, i: i,data: data),
                       ),
                   ],
                 ),
@@ -349,3 +318,5 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
     }
   }
 }
+
+

@@ -16,7 +16,7 @@ class _BlockedUserListPageState extends State<BlockedUserListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("blocked",true),
       body: SizedBox(
         height: double.infinity,
         width: double.infinity,

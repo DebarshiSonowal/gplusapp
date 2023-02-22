@@ -86,7 +86,7 @@ class _VideoReportState extends State<VideoReport> {
     return Scaffold(
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("video",true),
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
         enablePullDown: true,

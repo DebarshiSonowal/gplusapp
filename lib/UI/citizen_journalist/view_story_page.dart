@@ -63,7 +63,7 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("citizen_journalist",true),
       // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery

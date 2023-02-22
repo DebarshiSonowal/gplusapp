@@ -102,7 +102,7 @@ class _BigDealPageState extends State<BigDealPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar(),
+      appBar: Constance.buildAppBar("bigdeal",true),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       drawer: BergerMenuMemPage(),

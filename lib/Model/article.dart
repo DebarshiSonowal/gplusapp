@@ -1,8 +1,9 @@
+import 'package:gplusapp/Model/profile.dart';
+
 import 'category_name.dart';
 
 class Article {
   int? id, is_app, status, view_count, share_count, author, is_liked;
-
   String? title,
       author_name,
       seo_name,
@@ -18,6 +19,7 @@ class Article {
       tags,image_caption;
   bool is_bookmark = false;
   CategoryName? first_cat_name;
+  // AuthorProfile? author_profile;
 
   Article.fromJson(json) {
     print(json);
@@ -61,6 +63,7 @@ class Article {
     as_short_description = json['as_short_description'] ?? "";
     web_url = json['web_url'] ?? "";
     // author = json['author'] ?? "";
+    // author_profile = AuthorProfile.fromJson(json['author_detail']);
   }
 }
 
