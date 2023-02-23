@@ -13,6 +13,7 @@ import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class BeAMember extends StatefulWidget {
   const BeAMember({Key? key}) : super(key: key);
@@ -87,6 +88,7 @@ class _BeAMemberState extends State<BeAMember> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: Constance.buildAppBar("subscription",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "subscription",),
       backgroundColor: Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(

@@ -56,7 +56,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                     ),
               ),
               SizedBox(
-                height: 10.h,
+                height: 5.h,
               ),
               Text(
                 'Geographical',
@@ -70,7 +70,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                 height: 3.h,
               ),
               SizedBox(
-                height: 16.h,
+                // height: 16.h,
                 width: double.infinity,
                 child: Wrap(
                   children: [
@@ -125,7 +125,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                 ),
               ),
               SizedBox(
-                height: 5.h,
+                height: 3.h,
               ),
               Text(
                 'Topical',
@@ -136,16 +136,21 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                     ),
               ),
               SizedBox(
-                height: 3.h,
+                height: 2.h,
               ),
               SizedBox(
-                height: 15.h,
+                // height: 15.h,
                 width: double.infinity,
                 child: Wrap(
                   children: [
                     for (int i = 0; i < data.topicks.length; i++)
                       GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () {
+                          FocusScopeNode currentFocus = FocusScope.of(context);
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
                           debugPrint(data.topicks[i].title);
                           debugPrint(selTop.toList().toString());
                           setState(() {
@@ -170,6 +175,14 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                   onTap: () {
                     if (selGeo.isNotEmpty && selTop.isNotEmpty) {
                       signUp();
+                      // debugPrint("SELGEO");
+                      // for(var i in selGeo) {
+                      //   debugPrint("${i.title} ${i.id}");
+                      // }
+                      // debugPrint("SELTOP");
+                      // for(var i in selTop) {
+                      //   debugPrint("${i.title} ${i.id}");
+                      // }
                     } else {
                       showError("Select at least one of each");
                     }

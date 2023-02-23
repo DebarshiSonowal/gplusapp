@@ -21,6 +21,7 @@ import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class ClassifiedMyList extends StatefulWidget {
   const ClassifiedMyList({Key? key}) : super(key: key);
@@ -91,6 +92,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
     return Scaffold(
       appBar: Constance.buildAppBar("classified",true,scaffoldKey),
       key: scaffoldKey,
+      drawer: const BergerMenuMemPage(screen: "classified"),
       // drawer: BergerMenuMemPage(),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,

@@ -14,6 +14,7 @@ import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class _NotificationPageState extends State<NotificationPage> {
       key: _scaffoldKey,
       appBar: Constance.buildAppBar("notification",true,_scaffoldKey),
       // drawer: BergerMenuMemPage(),
+      drawer: const BergerMenuMemPage(screen: "notification",),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           height: MediaQuery.of(context).size.height,

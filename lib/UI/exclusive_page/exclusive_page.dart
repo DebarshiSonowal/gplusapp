@@ -17,6 +17,7 @@ import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class ExclusivePage extends StatefulWidget {
   const ExclusivePage({Key? key}) : super(key: key);
@@ -85,6 +86,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: Constance.buildAppBar("exclusive",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "exclusive"),
       backgroundColor: Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(

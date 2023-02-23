@@ -13,6 +13,7 @@ import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class AllImagePage extends StatefulWidget {
   final int id;
@@ -65,6 +66,7 @@ class _AllImagePageState extends State<AllImagePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: Constance.buildAppBar("guwahati",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "guwahati"),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       body: Consumer<DataProvider>(builder: (context, data, _) {

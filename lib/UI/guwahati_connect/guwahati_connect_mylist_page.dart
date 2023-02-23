@@ -19,6 +19,7 @@ import '../../Components/guwhati_connect_post_card.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class GuwahatiConnectMylistPage extends StatefulWidget {
   const GuwahatiConnectMylistPage({Key? key}) : super(key: key);
@@ -110,6 +111,7 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Constance.buildAppBar("guwahati", true, scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "guwahati"),
       key: scaffoldKey,
       // drawer: BergerMenuMemPage(),
 

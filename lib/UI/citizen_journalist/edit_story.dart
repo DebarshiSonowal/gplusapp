@@ -55,7 +55,7 @@ class _EditStoryState extends State<EditStory> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("citizen_journalist",true,_scaffoldKey),
+      appBar: Constance.buildAppBar2("citizen_journalist"),
       // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,

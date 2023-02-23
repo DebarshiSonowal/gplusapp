@@ -20,6 +20,7 @@ import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class ClassifiedDetails extends StatefulWidget {
   final int id;
@@ -48,6 +49,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: Constance.buildAppBar("classified",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "classified"),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

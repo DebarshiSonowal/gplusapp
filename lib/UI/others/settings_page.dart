@@ -14,6 +14,7 @@ import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -48,6 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: Constance.buildAppBar("settings",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "settings",),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

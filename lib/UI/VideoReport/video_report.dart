@@ -16,6 +16,7 @@ import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class VideoReport extends StatefulWidget {
   final String category;
@@ -89,6 +90,7 @@ class _VideoReportState extends State<VideoReport> {
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       appBar: Constance.buildAppBar("video", true, _scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "video",),
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
         enablePullDown: true,

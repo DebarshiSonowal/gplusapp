@@ -28,7 +28,7 @@ class _DraftStoryState extends State<DraftStory> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("citizen_journalist", true, _scaffoldKey),
+      appBar: Constance.buildAppBar2("citizen_journalist"),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

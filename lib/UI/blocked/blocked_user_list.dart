@@ -4,6 +4,8 @@ import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../Menu/berger_menu_member_page.dart';
+
 class BlockedUserListPage extends StatefulWidget {
   const BlockedUserListPage({Key? key}) : super(key: key);
 
@@ -19,6 +21,7 @@ class _BlockedUserListPageState extends State<BlockedUserListPage> {
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: Constance.buildAppBar("blocked",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "blocked"),
       body: SizedBox(
         height: double.infinity,
         width: double.infinity,

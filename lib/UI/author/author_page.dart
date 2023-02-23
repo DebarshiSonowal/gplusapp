@@ -15,6 +15,7 @@ import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class AuthorPage extends StatefulWidget {
   final int id;
@@ -34,6 +35,7 @@ class _AuthorPageState extends State<AuthorPage> {
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       appBar: Constance.buildAppBar("author",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "author"),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           padding: EdgeInsets.symmetric(

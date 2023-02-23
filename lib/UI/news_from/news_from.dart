@@ -17,6 +17,7 @@ import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class NewsFrom extends StatefulWidget {
   final String categ;
@@ -87,6 +88,7 @@ class _NewsFromState extends State<NewsFrom> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: Constance.buildAppBar("news_from",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "news_from",),
       backgroundColor: Storage.instance.isDarkMode?Colors.black:Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(

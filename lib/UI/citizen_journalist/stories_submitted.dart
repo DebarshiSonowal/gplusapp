@@ -25,7 +25,7 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("citizen_journalist",true,_scaffoldKey),
+      appBar: Constance.buildAppBar2("citizen_journalist"),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

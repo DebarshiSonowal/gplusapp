@@ -12,6 +12,7 @@ import 'package:sizer/sizer.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class ReferAndEarn extends StatefulWidget {
   const ReferAndEarn({Key? key}) : super(key: key);
@@ -29,6 +30,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       appBar: Constance.buildAppBar("redeem_offer",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "redeem_offer",),
       body: Container(
         height: double.infinity,
         width: double.infinity,

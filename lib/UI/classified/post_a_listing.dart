@@ -66,7 +66,7 @@ class _PostAListingState extends State<PostAListing> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("classified",true,_scaffoldKey),
+      appBar: Constance.buildAppBar2("classified"),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

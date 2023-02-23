@@ -123,7 +123,11 @@ class Constance {
               screen,
               "hamburget_icon_click",
             );
-            key.currentState!.openDrawer();
+            try {
+              key.currentState!.openDrawer();
+            } catch (e) {
+              print(e);
+            }
           }
         },
         icon: const Icon(Icons.menu),

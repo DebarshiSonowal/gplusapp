@@ -43,67 +43,68 @@ class SuggestedForYou extends StatelessWidget {
                 SizedBox(
                   height: 1.h,
                 ),
-                Expanded(
-                  child: Container(
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: data.home_toppicks.length > 4
-                          ? 4
-                          : data.home_toppicks.length + 1,
-                      itemBuilder: (cont, count) {
-                        var item = data.home_toppicks[count];
-                        if ((data.home_toppicks.length > 4
-                                ? 3
-                                : data.home_toppicks.length - 1) ==
-                            count) {
-                          return Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 1.w, vertical: 1.5.h),
-                            // height: 5.h,
-                            // width: 20.w,
-                            child: TextButton(
-                              onPressed: () {
-                                logTheViewAllClick(
-                                    data.profile!, "top_picks_for_you");
-                                Navigation.instance.navigate('/toppicks');
-                              },
-                              child: Text(
-                                'View All',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline3
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 10.sp,
-                                    ),
-                              ),
-                            ),
-                          );
-                        } else {
-                          return GestureDetector(
-                            onTap: () {
-                              if (data.profile?.is_plan_active ?? false) {
-                                logTheTopPicksClick(data.profile!, item.title!,
-                                    "top_picks_for_you", item.id!, item.date!);
-                                Navigation.instance.navigate('/story',
-                                    args:
-                                        '${item.categories?.first.seo_name},${item.seo_name}');
-                              } else {
-                                showNotaMember();
-                              }
+                Container(
+                  margin: EdgeInsets.only(left: 0.w),
+                  width: 100.w,
+                  height: 20.h,
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: data.home_toppicks.length > 4
+                        ? 4
+                        : data.home_toppicks.length + 1,
+                    itemBuilder: (cont, count) {
+                      var item = data.home_toppicks[count];
+                      if ((data.home_toppicks.length > 4
+                              ? 3
+                              : data.home_toppicks.length - 1) ==
+                          count) {
+                        return Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 1.w, vertical: 1.5.h),
+                          // height: 5.h,
+                          // width: 20.w,
+                          child: TextButton(
+                            onPressed: () {
+                              logTheViewAllClick(
+                                  data.profile!, "top_picks_for_you");
+                              Navigation.instance.navigate('/toppicks');
                             },
-                            child: SuggestedForYouCard(item: item),
-                          );
-                        }
-                      },
-                      separatorBuilder: (cont, inde) {
-                        return SizedBox(
-                          width: 1.w,
+                            child: Text(
+                              'View All',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline3
+                                  ?.copyWith(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10.sp,
+                                  ),
+                            ),
+                          ),
                         );
-                      },
-                    ),
+                      } else {
+                        return GestureDetector(
+                          onTap: () {
+                            if (data.profile?.is_plan_active ?? false) {
+                              logTheTopPicksClick(data.profile!, item.title!,
+                                  "top_picks_for_you", item.id!, item.date!);
+                              Navigation.instance.navigate('/story',
+                                  args:
+                                      '${item.categories?.first.seo_name},${item.seo_name}');
+                            } else {
+                              showNotaMember();
+                            }
+                          },
+                          child: SuggestedForYouCard(item: item),
+                        );
+                      }
+                    },
+                    separatorBuilder: (cont, inde) {
+                      return SizedBox(
+                        width: 1.w,
+                      );
+                    },
                   ),
                 ),
               ],

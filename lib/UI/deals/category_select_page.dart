@@ -66,7 +66,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("bigdeal",true,_scaffoldKey),
+      appBar: Constance.buildAppBar2("bigdeal"),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       body: SmartRefresher(

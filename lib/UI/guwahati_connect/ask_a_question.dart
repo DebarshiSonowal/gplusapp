@@ -50,7 +50,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("guwahati",true,_scaffoldKey),
+      appBar: Constance.buildAppBar2("guwahati"),
       // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,

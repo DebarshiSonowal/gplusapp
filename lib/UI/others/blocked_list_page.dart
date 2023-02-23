@@ -11,6 +11,8 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../Menu/berger_menu_member_page.dart';
+
 class BlockedUsersListPage extends StatefulWidget {
   const BlockedUsersListPage({Key? key}) : super(key: key);
 
@@ -28,6 +30,7 @@ class _BlockedUsersListPageState extends State<BlockedUsersListPage> {
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       appBar: Constance.buildAppBar("blocked",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "blocked",),
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -44,7 +47,7 @@ class _BlockedUsersListPageState extends State<BlockedUsersListPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Blocked Users",
+                    "Blocked Users1",
                     style: Theme.of(
                             Navigation.instance.navigatorKey.currentContext!)
                         .textTheme

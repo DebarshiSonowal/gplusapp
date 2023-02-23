@@ -14,6 +14,7 @@ import '../../Components/search_news_item.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class SearchPage extends StatefulWidget {
   final String? query;
@@ -50,6 +51,7 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: Constance.buildAppBar("search",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "profile",),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

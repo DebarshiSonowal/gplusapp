@@ -43,7 +43,7 @@ class preferencesItem extends StatelessWidget {
         ),
       ),
       child: Text(
-        data.topicks[i].title ?? "",
+        "${data.topicks[i].title}" ?? "",
         style:
         Theme.of(context).textTheme.headline5?.copyWith(
           color: Colors.grey.shade800,

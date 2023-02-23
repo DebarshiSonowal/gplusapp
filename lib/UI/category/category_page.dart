@@ -13,6 +13,7 @@ import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class CategoryPage extends StatefulWidget {
   final String categ;
@@ -63,6 +64,7 @@ class _CategoryPageState extends State<CategoryPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: Constance.buildAppBar("category",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "category"),
       backgroundColor: Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(

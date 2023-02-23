@@ -25,6 +25,7 @@ import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class OpinionDetailsPage extends StatefulWidget {
   final String? slug;
@@ -74,6 +75,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: Constance.buildAppBar("opinion",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "opinion",),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

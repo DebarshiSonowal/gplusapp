@@ -60,7 +60,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("profile",true,_scaffoldKey),
+      appBar: Constance.buildAppBar2("profile"),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

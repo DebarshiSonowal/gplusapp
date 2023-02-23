@@ -13,6 +13,7 @@ import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class RedeemPoints extends StatefulWidget {
   const RedeemPoints({Key? key}) : super(key: key);
@@ -30,6 +31,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       appBar: Constance.buildAppBar("redeem_offer",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "redeem_offer",),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           padding: EdgeInsets.symmetric(

@@ -12,6 +12,7 @@ import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class RedeemOfferPage extends StatefulWidget {
   const RedeemOfferPage({Key? key}) : super(key: key);
@@ -34,6 +35,7 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: Constance.buildAppBar("bigdeal",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: "bigdeal"),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

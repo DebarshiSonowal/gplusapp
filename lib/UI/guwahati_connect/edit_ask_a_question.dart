@@ -17,6 +17,7 @@ import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
+import '../Menu/berger_menu_member_page.dart';
 
 class EditAskAQuestionPage extends StatefulWidget {
   final String id;
@@ -84,7 +85,8 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("guwahati",true,_scaffoldKey),
+      appBar: Constance.buildAppBar2("guwahati"),
+      // drawer: const BergerMenuMemPage(screen: "guwahati"),
       // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,
