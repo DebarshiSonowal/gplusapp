@@ -108,14 +108,35 @@ class Constance {
     'Lorem',
   ];
 
-  static AppBar buildAppBar(String screen,bool enable) {
+  static AppBar buildAppBar(
+      String screen, bool enable, GlobalKey<ScaffoldState> key) {
     return AppBar(
+      leading: IconButton(
+        onPressed: () {
+          // Navigation.instance.navigate('/bergerMenuMem');
+          if (enable) {
+            logTheTopNavigationClick(
+              Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext!,
+                      listen: false)
+                  .profile!,
+              screen,
+              "hamburget_icon_click",
+            );
+            key.currentState!.openDrawer();
+          }
+        },
+        icon: const Icon(Icons.menu),
+      ),
       title: GestureDetector(
         onTap: () {
           if (enable) {
-            logTheLogoClick(Provider.of<DataProvider>(
-                          Navigation.instance.navigatorKey.currentContext!,
-                          listen: false).profile!,screen);
+            logTheLogoClick(
+                Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext!,
+                        listen: false)
+                    .profile!,
+                screen);
             Provider.of<DataProvider>(
                     Navigation.instance.navigatorKey.currentContext!,
                     listen: false)
@@ -134,6 +155,14 @@ class Constance {
       actions: [
         IconButton(
           onPressed: () {
+            logTheTopNavigationClick(
+              Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext!,
+                      listen: false)
+                  .profile!,
+              screen,
+              "notification_icon_click",
+            );
             Navigation.instance.navigate('/notification');
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
@@ -152,6 +181,13 @@ class Constance {
         ),
         IconButton(
           onPressed: () {
+            logTheSearchInitiationClick(
+              Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext!,
+                  listen: false)
+                  .profile!,
+              screen,
+            );
             Navigation.instance.navigate('/search', args: "");
           },
           icon: const Icon(Icons.search),
@@ -170,9 +206,12 @@ class Constance {
       // ),
       title: GestureDetector(
         onTap: () {
-          logTheLogoClick(Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false).profile!,screen);
+          logTheLogoClick(
+              Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext!,
+                      listen: false)
+                  .profile!,
+              screen);
           Provider.of<DataProvider>(
                   Navigation.instance.navigatorKey.currentContext!,
                   listen: false)
@@ -190,6 +229,14 @@ class Constance {
       actions: [
         IconButton(
           onPressed: () {
+            logTheTopNavigationClick(
+              Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext!,
+                      listen: false)
+                  .profile!,
+              screen,
+              "notification_icon_click",
+            );
             Navigation.instance.navigate('/notification');
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
@@ -208,6 +255,13 @@ class Constance {
         ),
         IconButton(
           onPressed: () {
+            logTheSearchInitiationClick(
+              Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext!,
+                      listen: false)
+                  .profile!,
+              screen,
+            );
             Navigation.instance.navigate('/search', args: "");
           },
           icon: Icon(Icons.search),
@@ -227,6 +281,50 @@ class Constance {
         "client_id_event": id,
         "user_id_event": profile.id,
         "screen_name": screen,
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+
+  static void logTheTopNavigationClick(
+    Profile profile,
+    String screen_name,
+    String cta_click,
+  ) async {
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    await FirebaseAnalytics.instance.logEvent(
+      name: "top_navigation_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "cta_click": cta_click,
+        "screen_name": screen_name,
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+
+  static void logTheSearchInitiationClick(
+    Profile profile,
+    String screen_name,
+    // String cta_click,
+  ) async {
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    await FirebaseAnalytics.instance.logEvent(
+      name: "search_initiation_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "cta_click": cta_click,
+        "screen_name": screen_name,
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,

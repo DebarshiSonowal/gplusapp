@@ -55,11 +55,12 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
       fetchAddress();
     });
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("profile",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("profile",true,_scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

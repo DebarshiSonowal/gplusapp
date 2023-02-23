@@ -12,11 +12,13 @@ class BlockedUserListPage extends StatefulWidget {
 }
 
 class _BlockedUserListPageState extends State<BlockedUserListPage> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
-      appBar: Constance.buildAppBar("blocked",true),
+      appBar: Constance.buildAppBar("blocked",true,_scaffoldKey),
       body: SizedBox(
         height: double.infinity,
         width: double.infinity,

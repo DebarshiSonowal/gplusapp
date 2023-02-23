@@ -39,11 +39,12 @@ class _EditAddressPageState extends State<EditAddressPage> {
   final _textFieldController = TextEditingController();
 
   String title = "";
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("profile",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("profile",true,_scaffoldKey),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           height: MediaQuery.of(context).size.height,

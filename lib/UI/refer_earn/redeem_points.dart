@@ -22,12 +22,14 @@ class RedeemPoints extends StatefulWidget {
 }
 
 class _RedeemPointsState extends State<RedeemPoints> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar("redeem_offer",true),
+      appBar: Constance.buildAppBar("redeem_offer",true,_scaffoldKey),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           padding: EdgeInsets.symmetric(

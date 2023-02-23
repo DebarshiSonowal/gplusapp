@@ -63,11 +63,12 @@ class _VerifyOTPState extends State<VerifyOTP> {
       phoneSignIn(phoneNumber: widget.number.toString());
     });
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("verify",false),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("verify",false,_scaffoldKey),
       body: Container(
         height: double.infinity,
         width: double.infinity,

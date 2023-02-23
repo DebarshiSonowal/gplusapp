@@ -20,13 +20,14 @@ class BlockedUsersListPage extends StatefulWidget {
 
 class _BlockedUsersListPageState extends State<BlockedUsersListPage> {
   bool isEmpty = false;
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar("blocked",true),
+      appBar: Constance.buildAppBar("blocked",true,_scaffoldKey),
       body: Container(
         height: double.infinity,
         width: double.infinity,

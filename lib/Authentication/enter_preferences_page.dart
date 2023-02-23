@@ -22,7 +22,7 @@ class EnterPreferencesPage extends StatefulWidget {
 class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
   List<GeoTopick> selGeo = [];
   List<Topick> selTop = [];
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -34,7 +34,8 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("preferences",false),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("preferences",false,_scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

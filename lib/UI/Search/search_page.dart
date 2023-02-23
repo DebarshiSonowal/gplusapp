@@ -44,11 +44,12 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
     _searchQueryController.dispose();
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("search",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("search",true,_scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

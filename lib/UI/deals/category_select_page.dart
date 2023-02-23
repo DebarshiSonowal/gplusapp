@@ -61,11 +61,12 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
     Future.delayed(Duration.zero, () => fetchDetails());
     // secureScreen();
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("bigdeal",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("bigdeal",true,_scaffoldKey),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       body: SmartRefresher(

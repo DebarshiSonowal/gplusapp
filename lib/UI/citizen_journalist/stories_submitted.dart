@@ -20,11 +20,12 @@ class StoriesSubmitted extends StatefulWidget {
 
 class _StoriesSubmittedState extends State<StoriesSubmitted> {
   bool isEmpty = false;
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("citizen_journalist",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("citizen_journalist",true,_scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

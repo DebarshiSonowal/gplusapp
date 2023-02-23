@@ -89,7 +89,7 @@ class GPlusExclusiveSection extends StatelessWidget {
                                 logTheExclusiveClick(
                                     data.profile!,
                                     item.title!,
-                                    "top_picks_for_you",
+                                    "g_plus_exclusive",
                                     item.id!,
                                     item.publish_date!,
                                     item.author_name!);

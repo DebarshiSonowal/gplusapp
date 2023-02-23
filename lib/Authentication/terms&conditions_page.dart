@@ -22,7 +22,7 @@ class TermsAndConditions extends StatefulWidget {
 
 class _TermsAndConditionsState extends State<TermsAndConditions> {
   bool agreed = false;
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   String terms = Constance.terms;
 
   @override
@@ -36,7 +36,8 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("terms&condition",false),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("terms&condition",false,_scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

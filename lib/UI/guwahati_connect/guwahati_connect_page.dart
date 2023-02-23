@@ -111,9 +111,9 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("guwahati",true),
+      appBar: Constance.buildAppBar("guwahati", true, scaffoldKey),
       key: scaffoldKey,
-      drawer: BergerMenuMemPage(),
+      drawer: const BergerMenuMemPage(screen: "guwahati"),
       // floatingActionButton: FloatingActionButton.extended(
       //   onPressed: () {
       //     checkIt();

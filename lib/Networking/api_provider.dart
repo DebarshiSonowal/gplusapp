@@ -3061,7 +3061,7 @@ class ApiProvider {
     };
     //attachment_list[0][file_data]
     //attachment_list[0][file_type]
-    // debugPrint(jsonEncode(data));
+    debugPrint(jsonEncode(data));
 
     try {
       Response? response = await dio?.post(

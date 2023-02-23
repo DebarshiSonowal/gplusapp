@@ -44,7 +44,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   int currentD = 1;
   String dropdownvalue = 'Male';
   double longitude = 0, latitude = 0;
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   // List of items in our dropdown menu
   var items = [
     'Male',
@@ -89,7 +89,8 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("personal_details",false),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("personal_details",false,_scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

@@ -30,11 +30,12 @@ class _NotificationPageState extends State<NotificationPage> {
     super.initState();
     fetchNotification();
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("notification",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("notification",true,_scaffoldKey),
       // drawer: BergerMenuMemPage(),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(

@@ -57,11 +57,12 @@ class _CategoryPageState extends State<CategoryPage> {
   void _onLoading() async {
     _refreshController.loadComplete();
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("category",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("category",true,_scaffoldKey),
       backgroundColor: Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(

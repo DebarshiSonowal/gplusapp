@@ -42,11 +42,12 @@ class _SettingsPageState extends State<SettingsPage> {
       fetchSwitchStatus();
     });
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("settings",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("settings",true,_scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

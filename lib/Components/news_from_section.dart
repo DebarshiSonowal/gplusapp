@@ -9,9 +9,9 @@ import '../Navigation/Navigate.dart';
 
 class NewsFromSection extends StatelessWidget {
   const NewsFromSection({
-    Key? key,
+    Key? key, required this.onTap,
   }) : super(key: key);
-
+  final Function(String,String) onTap;
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -68,6 +68,7 @@ class NewsFromSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.w,
               onTap: () {
+                onTap("news_from","guwahati");
                 Navigation.instance.navigate('/newsfrom', args: 'guwahati');
               },
               child: Row(
@@ -114,6 +115,7 @@ class NewsFromSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.w,
               onTap: () {
+                onTap("news_from","assam");
                 Navigation.instance.navigate('/newsfrom', args: 'assam');
               },
               child: Row(
@@ -160,6 +162,7 @@ class NewsFromSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.w,
               onTap: () {
+                onTap("news_from","northeast");
                 Navigation.instance.navigate('/newsfrom', args: 'northeast');
               },
               child: Row(
@@ -206,6 +209,7 @@ class NewsFromSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.w,
               onTap: () {
+                onTap("news_from","india");
                 Navigation.instance.navigate('/newsfrom', args: 'india');
               },
               child: Row(
@@ -252,6 +256,7 @@ class NewsFromSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.w,
               onTap: () {
+                onTap("news_from","international");
                 Navigation.instance
                     .navigate('/newsfrom', args: 'international');
               },

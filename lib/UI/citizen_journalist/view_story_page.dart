@@ -41,15 +41,15 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      if(Provider
-          .of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false).citizenJournalist.isNotEmpty){
+      if (Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .citizenJournalist
+          .isNotEmpty) {
         fetchDetails();
-      }else{
+      } else {
         fetchData();
       }
-
     });
   }
 
@@ -60,20 +60,17 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
     // desc.dispose();
   }
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("citizen_journalist",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("citizen_journalist", true, _scaffoldKey),
       // drawer: BergerMenuMemPage(),
       body: Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height,
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
         child: SingleChildScrollView(
@@ -84,16 +81,12 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                 padding: EdgeInsets.symmetric(horizontal: 5.w),
                 child: Text(
                   'Submitted A Story',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline2
-                      ?.copyWith(
-                    color: Storage.instance.isDarkMode
-                        ? Colors.white
-                        : Constance.primaryColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.headline2?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Constance.primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ),
               SizedBox(
@@ -103,17 +96,13 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                 width: double.infinity,
                 child: Text(
                   title,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline5
-                      ?.copyWith(
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
                       color: Storage.instance.isDarkMode
                           ? Colors.white
                           : Colors.black,
                       fontWeight: FontWeight.bold
-                    // fontSize: 1.6.h,
-                  ),
+                      // fontSize: 1.6.h,
+                      ),
                 ),
               ),
               SizedBox(
@@ -121,16 +110,12 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
               ),
               Text(
                 desc,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline5
-                    ?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black,
-                  // fontSize: 1.6.h,
-                ),
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
+                      // fontSize: 1.6.h,
+                    ),
               ),
               SizedBox(
                 height: 4.h,
@@ -145,16 +130,12 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                   ),
                   Text(
                     'Attachments',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline5
-                        ?.copyWith(
-                      color: Storage.instance.isDarkMode
-                          ? Colors.white
-                          : Colors.black,
-                      // fontSize: 1.6.h,
-                    ),
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
+                          // fontSize: 1.6.h,
+                        ),
                   ),
                 ],
               ),
@@ -166,71 +147,64 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                 runSpacing: 8,
                 children: List.generate(
                   (images.length ?? 0),
-                      (pos) =>
-                  (pos == images.length)
+                  (pos) => (pos == images.length)
                       ? GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      height: 8.h,
-                      width: 20.w,
-                      color: Colors.grey.shade200,
-                      child: const Center(
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  )
+                          onTap: () {},
+                          child: Container(
+                            height: 8.h,
+                            width: 20.w,
+                            color: Colors.grey.shade200,
+                            child: const Center(
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        )
                       : GestureDetector(
-                    onTap: () {
-                      print(images[pos].file_type);
-                      if (images[pos]
-                          .file_type
-                          .toString()
-                          .split('/')[0] ==
-                          "image") {
-                        Navigation.instance.navigate('/viewImage',
-                            args: images[pos].file_name);
-                      } else {
-                        // Navigation.instance.navigate('/viewVideo',
-                        //     args: images[pos].file_name);
-                      }
-                    },
-                    child: Container(
-                      height: 8.h,
-                      width: 20.w,
-                      color: Colors.grey.shade200,
-                      child: Center(
-                        child: Image.network(
-                          images[pos].file_name ?? "",
-                          fit: BoxFit.fill,
-                          errorBuilder: (err, cont, st) {
-                            return Image.asset(Constance.logoIcon);
+                          onTap: () {
+                            print(images[pos].file_type);
+                            if (images[pos]
+                                    .file_type
+                                    .toString()
+                                    .split('/')[0] ==
+                                "image") {
+                              Navigation.instance.navigate('/viewImage',
+                                  args: images[pos].file_name);
+                            } else {
+                              // Navigation.instance.navigate('/viewVideo',
+                              //     args: images[pos].file_name);
+                            }
                           },
+                          child: Container(
+                            height: 8.h,
+                            width: 20.w,
+                            color: Colors.grey.shade200,
+                            child: Center(
+                              child: Image.network(
+                                images[pos].file_name ?? "",
+                                fit: BoxFit.fill,
+                                errorBuilder: (err, cont, st) {
+                                  return Image.asset(Constance.logoIcon);
+                                },
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                 ),
               ),
               SizedBox(
                 height: 2.h,
               ),
               Text(
-                'Posted on ${Jiffy(
-                    local?.created_at ?? "2020-06-21", "yyyy-MM-dd").format(
-                    "dd/MM/yyyy")}',
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline5
-                    ?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white70
-                      : Colors.black,
-                  // fontSize: 1.6.h,
-                ),
+                'Posted on ${Jiffy(local?.created_at ?? "2020-06-21", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white70
+                          : Colors.black,
+                      // fontSize: 1.6.h,
+                    ),
               ),
               SizedBox(
                 height: 5.h,
@@ -328,14 +302,10 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
           backgroundColor: Colors.white,
           title: Text(
             'Be a journalist!',
-            style: Theme
-                .of(context)
-                .textTheme
-                .headline1
-                ?.copyWith(
-              color: Constance.secondaryColor,
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.headline1?.copyWith(
+                  color: Constance.secondaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           content: Container(
             padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
@@ -352,45 +322,30 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                   size: 15.h,
                 ),
                 Text(
-                  'Hello ${Provider
-                      .of<DataProvider>(context)
-                      .profile
-                      ?.name ?? ""}',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline3
-                      ?.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  'Hello ${Provider.of<DataProvider>(context).profile?.name ?? ""}',
+                  style: Theme.of(context).textTheme.headline3?.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 SizedBox(height: 1.h),
                 Text(
                   'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                      ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                      ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                      ' remaining essentially unchanged',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline5
-                      ?.copyWith(
-                    color: Colors.black,
-                    // fontWeight: FontWeight.bold,
-                  ),
+                  ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+                  ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+                  ' remaining essentially unchanged',
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.black,
+                        // fontWeight: FontWeight.bold,
+                      ),
                 ),
                 SizedBox(height: 1.h),
                 Text(
                   'is simply dummy text of the printing and typesetting industry',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline5
-                      ?.copyWith(
-                    color: Colors.black,
-                    // fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.black,
+                        // fontWeight: FontWeight.bold,
+                      ),
                 ),
                 SizedBox(height: 1.h),
                 SizedBox(
@@ -411,10 +366,9 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
 
   fetchDetails() async {
     setState(() {
-      local = Provider
-          .of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+      local = Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .citizenlist
           .where((element) => element.id == widget.id)
           .first;
@@ -435,12 +389,12 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
         });
   }
 
-  void fetchData() async{
+  void fetchData() async {
     final response = await ApiProvider.instance.getCitizenJournalistApproved();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setCitizenJournalist(response.posts);
       // Fluttertoast.showToast(msg: "G successfully");
       // Navigation.instance.goBack();

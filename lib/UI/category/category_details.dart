@@ -57,11 +57,12 @@ class _CategoryDetailsState extends State<CategoryDetails> {
     });
     fetchAds();
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("category",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("category",true,_scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

@@ -59,11 +59,12 @@ class _AllImagePageState extends State<AllImagePage> {
     _searchQueryController.dispose();
     super.dispose();
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("guwahati",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("guwahati",true,_scaffoldKey),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       body: Consumer<DataProvider>(builder: (context, data, _) {

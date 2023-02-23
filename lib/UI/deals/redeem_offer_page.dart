@@ -33,7 +33,7 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("bigdeal",true),
+      appBar: Constance.buildAppBar("bigdeal",true,_scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

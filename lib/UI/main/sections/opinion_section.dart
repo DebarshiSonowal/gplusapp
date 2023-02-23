@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:sizer/sizer.dart';
@@ -5,6 +6,7 @@ import 'package:sizer/sizer.dart';
 import '../../../Components/opinion_card.dart';
 import '../../../Helper/Constance.dart';
 import '../../../Helper/Storage.dart';
+import '../../../Model/profile.dart';
 import '../../../Navigation/Navigate.dart';
 
 class OpinionSection extends StatelessWidget {
@@ -112,6 +114,30 @@ class OpinionSection extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+  void logTheOpinionArticleClick(Profile profile, String heading, String title,
+      int thisId, String published_date, String author_name) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "opinion_article_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "heading_name": heading,
+        "article_id": thisId,
+        "screen_name": "home",
+        "title": "opinion",
+        "author_name": author_name,
+        "published_date": published_date,
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
     );
   }
 }

@@ -70,11 +70,12 @@ class _EditProfileState extends State<EditProfile> {
     last_name.dispose();
     email.dispose();
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("profile",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("profile",true,_scaffoldKey),
       // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,

@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController controller = ScrollController();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool showing = false;
 
   // final _listController = PageController(keepPage: true, viewportFraction: 0.8);
@@ -147,9 +147,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ? UpgradeDialogStyle.material
               : UpgradeDialogStyle.cupertino),
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor:
             Storage.instance.isDarkMode ? Colors.black : Colors.grey.shade100,
-        appBar: Constance.buildAppBar("home",true),
+        appBar: Constance.buildAppBar("home", true, _scaffoldKey),
         // floatingActionButtonLocation: showing
         //     ? FloatingActionButtonLocation.miniStartFloat
         //     : FloatingActionButtonLocation.miniEndFloat,
@@ -166,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
         //     size: 22.sp,
         //   ),
         // ),
-        drawer: const BergerMenuMemPage(),
+        drawer: const BergerMenuMemPage(screen: "home",),
         body: OfflineBuilder(
           connectivityBuilder: (
             BuildContext context,

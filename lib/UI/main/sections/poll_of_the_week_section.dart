@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -7,6 +8,7 @@ import 'package:sizer/sizer.dart';
 import '../../../Helper/Constance.dart';
 import '../../../Helper/DataProvider.dart';
 import '../../../Helper/Storage.dart';
+import '../../../Model/profile.dart';
 import '../../../Navigation/Navigate.dart';
 import '../../../Networking/api_provider.dart';
 
@@ -134,6 +136,12 @@ class PollOfTheWeekSection extends StatelessWidget {
                             if (data.profile?.is_plan_active ?? false) {
                               poll = getOptionName(count, data);
                               // update();
+                              logThePollSelectedClick(
+                                data.profile!,
+                                data.pollOfTheWeek!.title!,
+                                poll,
+                                data.pollOfTheWeek!.id!,
+                              );
                               postPollOfTheWeek(data.pollOfTheWeek?.id, poll);
                             } else {
                               showNotaMember();
@@ -202,7 +210,7 @@ class PollOfTheWeekSection extends StatelessWidget {
     );
   }
 
-  getOption(int count,DataProvider data) {
+  getOption(int count, DataProvider data) {
     print(data.pollOfTheWeek?.percent1);
     print(data.pollOfTheWeek?.percent2);
     print(data.pollOfTheWeek?.percent3);
@@ -237,5 +245,45 @@ class PollOfTheWeekSection extends StatelessWidget {
       Fluttertoast.showToast(msg: response.message ?? "Posted successfully");
       update();
     } else {}
+  }
+
+  void logThePollSelectedClick(
+    Profile profile,
+    String heading,
+    String answer,
+    int thisId,
+  ) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "poll_of_the_week_selection",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "heading_name": heading,
+        "article_id": thisId,
+        "screen_name": "home",
+        "poll_selected": getAnswer(answer),
+        "title": "poll_of_the_week",
+        // "published_date": published_date,
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+
+  getAnswer(String answer) {
+    switch (answer) {
+      case "Yes":
+        return "yes";
+      case "No":
+        return "no";
+      default:
+        return "i_dont_have_an_opinion";
+    }
   }
 }

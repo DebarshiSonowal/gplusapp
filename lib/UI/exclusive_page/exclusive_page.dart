@@ -79,11 +79,12 @@ class _ExclusivePageState extends State<ExclusivePage> {
     skip = skip * 2;
     fetchMoreContent();
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("exclusive",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("exclusive",true,_scaffoldKey),
       backgroundColor: Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(

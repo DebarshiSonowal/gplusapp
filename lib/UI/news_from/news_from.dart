@@ -81,11 +81,12 @@ class _NewsFromState extends State<NewsFrom> {
     fetchMoreContent();
 
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("news_from",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("news_from",true,_scaffoldKey),
       backgroundColor: Storage.instance.isDarkMode?Colors.black:Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(

@@ -44,14 +44,15 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
       }
     });
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar("citizen_journalist",true),
-      drawer: const BergerMenuMemPage(),
+      appBar: Constance.buildAppBar("citizen_journalist",true,_scaffoldKey),
+      drawer: const BergerMenuMemPage(screen: 'citizen_journalist',),
       bottomNavigationBar: CustomNavigationBar(current),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.h),

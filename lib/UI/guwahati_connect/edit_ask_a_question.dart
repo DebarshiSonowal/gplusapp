@@ -79,11 +79,12 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
     // title.dispose();
     desc.dispose();
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("guwahati",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("guwahati",true,_scaffoldKey),
       // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,

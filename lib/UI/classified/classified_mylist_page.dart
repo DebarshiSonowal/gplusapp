@@ -89,7 +89,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("classified",true),
+      appBar: Constance.buildAppBar("classified",true,scaffoldKey),
       key: scaffoldKey,
       // drawer: BergerMenuMemPage(),
       backgroundColor:

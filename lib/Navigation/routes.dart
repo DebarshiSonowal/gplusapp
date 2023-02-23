@@ -15,6 +15,7 @@ import '../Components/story_view.dart';
 import '../Components/video_player_screen.dart';
 import '../OnBoarding/on_boarding_page.dart';
 import '../UI/Member/be_a_membe_page.dart';
+import '../UI/Menu/berger_menu_member_page.dart';
 import '../UI/Notification/notification_page.dart';
 import '../UI/Search/search_page.dart';
 import '../UI/VideoReport/video_report.dart';
@@ -262,6 +263,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //Main
     case '/main':
       return FadeTransitionPageRouteBuilder(page: HomeScreen());
+    // case '/bergerMenuMem':
+    //   return FadeTransitionPageRouteBuilder(page: BergerMenuMemPage());
     // case null:
     //   return FadeTransitionPageRouteBuilder(page: HomeScreen());
     case '/link_failed':

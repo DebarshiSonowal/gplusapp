@@ -61,11 +61,12 @@ class _PostAListingState extends State<PostAListing> {
     desc.dispose();
     price.dispose();
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("classified",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("classified",true,_scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

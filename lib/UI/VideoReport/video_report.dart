@@ -31,6 +31,7 @@ class _VideoReportState extends State<VideoReport> {
       RefreshController(initialRefresh: false);
   int page = 1;
   final ScrollController controller = ScrollController();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -84,9 +85,10 @@ class _VideoReportState extends State<VideoReport> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar("video",true),
+      appBar: Constance.buildAppBar("video", true, _scaffoldKey),
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
         enablePullDown: true,
@@ -323,8 +325,6 @@ class _VideoReportState extends State<VideoReport> {
       ),
     );
   }
-
-
 
   void showError(String msg) {
     AlertX.instance.showAlert(

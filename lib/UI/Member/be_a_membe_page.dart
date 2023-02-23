@@ -81,11 +81,12 @@ class _BeAMemberState extends State<BeAMember> {
     //   });
     _refreshController.loadComplete();
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("subscription",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("subscription",true,_scaffoldKey),
       backgroundColor: Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(

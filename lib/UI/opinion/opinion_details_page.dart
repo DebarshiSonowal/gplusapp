@@ -68,11 +68,12 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
       }
     });
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("opinion",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("opinion",true,_scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

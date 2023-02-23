@@ -37,11 +37,12 @@ class _FoodDealPageState extends State<FoodDealPage> {
     Future.delayed(Duration.zero, () => fetchCategories());
     // secureScreen();
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("bigdeal",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("bigdeal",true,_scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

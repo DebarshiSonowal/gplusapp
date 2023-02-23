@@ -50,11 +50,12 @@ class _EditStoryState extends State<EditStory> {
     title.dispose();
     desc.dispose();
   }
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("citizen_journalist",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("citizen_journalist",true,_scaffoldKey),
       // drawer: BergerMenuMemPage(),
       body: Container(
         height: MediaQuery.of(context).size.height,

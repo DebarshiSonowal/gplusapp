@@ -99,13 +99,16 @@ class _BigDealPageState extends State<BigDealPage> {
     fetchHistory();
   }
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("bigdeal",true),
+      key: _scaffoldKey,
+      appBar: Constance.buildAppBar("bigdeal", true, _scaffoldKey),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      drawer: BergerMenuMemPage(),
+      drawer: const BergerMenuMemPage(screen: "bigdeal"),
       body: SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
@@ -228,25 +231,28 @@ class _BigDealPageState extends State<BigDealPage> {
                                     //       });
                                     //     }),
                                     child: GestureDetector(
-                                      onTap: (){
-                                              setState(() {
-                                                expandCateg = !expandCateg;
-                                              });
+                                      onTap: () {
+                                        setState(() {
+                                          expandCateg = !expandCateg;
+                                        });
                                       },
                                       child: Container(
                                         width: 90.w,
                                         // height: 4.h,
-                                        padding: EdgeInsets.symmetric(vertical: 1.h,horizontal: 4.w),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 1.h, horizontal: 4.w),
                                         decoration: BoxDecoration(
                                             border: Border.all(
                                               color: Storage.instance.isDarkMode
                                                   ? Colors.white
                                                   : Colors.black54,
                                             ),
-                                            borderRadius: const BorderRadius.all(
-                                                Radius.circular(5))),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(5))),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               expandCateg
@@ -262,12 +268,13 @@ class _BigDealPageState extends State<BigDealPage> {
                                                         : Colors.black54,
                                                   ),
                                             ),
-                                             Icon(
-                                               expandCateg?Icons.arrow_drop_up:Icons.arrow_drop_down,
-                                               color: Storage
-                                                   .instance.isDarkMode
-                                                   ? Colors.white
-                                                   : Colors.black54,
+                                            Icon(
+                                              expandCateg
+                                                  ? Icons.arrow_drop_up
+                                                  : Icons.arrow_drop_down,
+                                              color: Storage.instance.isDarkMode
+                                                  ? Colors.white
+                                                  : Colors.black54,
                                             ),
                                           ],
                                         ),

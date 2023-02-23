@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
@@ -21,10 +22,11 @@ import '../../Components/settings_section.dart';
 import '../../Components/social_media_section.dart';
 import '../../Components/video_section_menu.dart';
 import '../../Helper/Constance.dart';
+import '../../Model/profile.dart';
 
 class BergerMenuMemPage extends StatefulWidget {
-  const BergerMenuMemPage({Key? key}) : super(key: key);
-
+  const BergerMenuMemPage({Key? key, required this.screen}) : super(key: key);
+  final String screen;
   @override
   State<BergerMenuMemPage> createState() => _BergerMenuMemPageState();
 }
@@ -133,7 +135,20 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 color: Colors.white,
                 thickness: 0.2,
               ),
-              const NewsFromSection(),
+              NewsFromSection(
+                onTap: (category, subCategory) {
+                  logTheHambergerOptionClick(
+                    Provider.of<DataProvider>(
+                            Navigation.instance.navigatorKey.currentContext ??
+                                context,
+                            listen: false)
+                        .profile!,
+                    widget.screen,
+                    category,
+                    subCategory,
+                  );
+                },
+              ),
               const Divider(
                 color: Colors.white,
                 thickness: 0.2,
@@ -266,6 +281,30 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     });
   }
 
+  void logTheHambergerOptionClick(
+    Profile profile,
+    String screen_name,
+    String hamburger_category,
+    String hamburger_subcategory,
+  ) async {
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    await FirebaseAnalytics.instance.logEvent(
+      name: "hamburger_option_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "hamburger_category": hamburger_category,
+        "hamburger_subcategory": hamburger_subcategory,
+        "screen_name": screen_name,
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+
   void downloadEpaper() async {
     showLoaderDialog(context);
     final response = await ApiProvider.instance.getEpaper();
@@ -331,5 +370,3 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     required String url,
   }) async {}
 }
-
-
