@@ -1,4 +1,4 @@
--keep class com.yourcompany.app.BuildConfig { *; }
+-keep class com.appbazooka.gplus.BuildConfig { *; }
 -keepclassmembers class com.easebuzz.payment.kit.**{
 *;
 }

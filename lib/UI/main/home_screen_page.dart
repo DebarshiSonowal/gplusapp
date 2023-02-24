@@ -506,7 +506,7 @@ class _HomeScreenState extends State<HomeScreen> {
   getSpace() {
     if (Platform.isAndroid) {
       return SizedBox(
-        height: 18.5.h,
+        height: 20.h,
       );
     } else if (Platform.isIOS) {
       return SizedBox(
