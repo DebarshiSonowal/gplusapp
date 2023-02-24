@@ -443,7 +443,7 @@ class _PostAListingState extends State<PostAListing> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"classified"),
     );
   }
 

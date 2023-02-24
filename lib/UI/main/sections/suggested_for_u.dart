@@ -44,8 +44,8 @@ class SuggestedForYou extends StatelessWidget {
                   height: 1.h,
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 0.w),
-                  width: 100.w,
+                  margin: EdgeInsets.only(left: 4.w),
+                  width: 95.w,
                   height: 20.h,
                   child: ListView.separated(
                     shrinkWrap: true,

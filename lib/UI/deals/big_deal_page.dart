@@ -194,7 +194,7 @@ class _BigDealPageState extends State<BigDealPage> {
                             height: 2.h,
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 1.w),
+                            padding: EdgeInsets.symmetric(horizontal: 3.w),
                             child: Wrap(
                               alignment: WrapAlignment.start,
                               children: expandCateg
@@ -301,7 +301,7 @@ class _BigDealPageState extends State<BigDealPage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"bigdeal"),
     );
   }
 

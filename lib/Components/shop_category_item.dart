@@ -21,7 +21,7 @@ class ShopCategoryItem extends StatelessWidget {
       child: Container(
         // height: 10.h,
         width: 10.h,
-        margin: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.5.w),
+        margin: EdgeInsets.symmetric(horizontal: 0.5.w, vertical: 0.5.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

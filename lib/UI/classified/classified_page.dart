@@ -383,7 +383,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
           );
         }),
       ),
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"classified"),
     );
   }
 

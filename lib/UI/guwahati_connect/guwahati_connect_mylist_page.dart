@@ -115,7 +115,7 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
       key: scaffoldKey,
       // drawer: BergerMenuMemPage(),
 
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"guwahati"),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       body: SmartRefresher(

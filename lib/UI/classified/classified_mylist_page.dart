@@ -376,7 +376,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
           );
         }),
       ),
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"classified"),
     );
   }
 

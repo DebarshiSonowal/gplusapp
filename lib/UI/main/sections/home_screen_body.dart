@@ -203,10 +203,10 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                         height: 1.h,
                       ),
                       StoriesSection(data: data),
-                      SizedBox(
+                      data.stories.isEmpty?Container():SizedBox(
                         height: 1.h,
                       ),
-                      Padding(
+                      data.stories.isEmpty?Container():Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.w),
                         child: Divider(
                           color: Colors.grey.shade800,

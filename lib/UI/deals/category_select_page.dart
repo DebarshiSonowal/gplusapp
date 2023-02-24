@@ -464,7 +464,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                       Text(
                         data?.title ?? "",
                         // overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.headline3?.copyWith(
+                        style: Theme.of(context).textTheme.headline4?.copyWith(
                             color: Constance.thirdColor,
                             fontWeight: FontWeight.bold),
                       ),

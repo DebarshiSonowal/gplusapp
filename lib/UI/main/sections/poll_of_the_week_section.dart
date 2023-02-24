@@ -78,7 +78,7 @@ class PollOfTheWeekSection extends StatelessWidget {
               style: Theme.of(context).textTheme.headline3?.copyWith(
                     fontSize: 13.sp,
                     color: Storage.instance.isDarkMode
-                        ? Colors.white
+                        ? Colors.white70
                         : Constance.primaryColor,
                     // fontWeight: FontWeight.bold,
                   ),
@@ -88,6 +88,7 @@ class PollOfTheWeekSection extends StatelessWidget {
             height: 1.h,
           ),
           Container(
+            padding: EdgeInsets.symmetric(horizontal: 0.5.w),
             child: ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -103,7 +104,7 @@ class PollOfTheWeekSection extends StatelessWidget {
                             horizontal: 2.w, vertical: 1.h),
                         child: LinearPercentIndicator(
                           barRadius: const Radius.circular(5),
-                          width: 80.w,
+                          width: 95.w,
                           lineHeight: 5.h,
                           percent: data.pollOfTheWeek?.is_polled == 'false'
                               ? 0
@@ -155,20 +156,32 @@ class PollOfTheWeekSection extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                     ),
                           ),
-                          secondary: Text(
-                            item?.is_polled == 'false'
-                                ? ''
-                                : '${getOption(count, data)}%',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline5
-                                ?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    fontSize: 1.7.h
-                                    // fontWeight: FontWeight.bold,
-                                    ),
+                          secondary: SizedBox(
+                            height: 7.h,
+                            width: 25.w,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  item?.is_polled == 'false'
+                                      ? ''
+                                      : '${getOption(count, data)}%',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline5
+                                      ?.copyWith(
+                                          color: Colors.black, fontSize: 1.7.h
+                                          // fontWeight: FontWeight.bold,
+                                          ),
+                                ),
+                                const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.black,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),

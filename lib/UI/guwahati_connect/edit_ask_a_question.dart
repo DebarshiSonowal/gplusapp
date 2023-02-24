@@ -312,7 +312,7 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"guwahati"),
     );
   }
 

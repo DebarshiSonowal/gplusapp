@@ -201,7 +201,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
       floatingActionButtonLocation: showing
           ? FloatingActionButtonLocation.miniStartFloat
           : FloatingActionButtonLocation.miniEndFloat,
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"guwahati"),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       body: SmartRefresher(

@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: Container(),
         ),
-        bottomNavigationBar: CustomNavigationBar(current),
+        bottomNavigationBar: CustomNavigationBar(current,"home"),
       ),
     );
   }

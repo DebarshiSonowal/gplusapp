@@ -474,7 +474,7 @@ class _EditAListingPostState extends State<EditAListingPost> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"classified"),
     );
   }
 

@@ -208,7 +208,7 @@ class _FoodDealPageState extends State<FoodDealPage> {
           );
         }),
       ),
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"bigdeal"),
     );
   }
 

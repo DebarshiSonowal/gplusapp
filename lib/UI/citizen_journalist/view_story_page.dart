@@ -213,7 +213,7 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"citizen_journalist"),
     );
   }
 

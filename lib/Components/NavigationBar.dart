@@ -1,15 +1,19 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
+import '../Helper/Storage.dart';
+import '../Model/profile.dart';
 import '../Navigation/Navigate.dart';
 
 class CustomNavigationBar extends StatefulWidget {
   int current;
+  String screen;
 
-  CustomNavigationBar(this.current);
+  CustomNavigationBar(this.current, this.screen);
 
   @override
   State<CustomNavigationBar> createState() => _NavigationBarState();
@@ -40,18 +44,24 @@ class _NavigationBarState extends State<CustomNavigationBar> {
                 .setCurrent(val);
             switch (val) {
               case 1:
+                logTheBottomNavigationClick(data.profile!, "big_deal");
                 Navigation.instance.navigate('/bigdealpage');
                 break;
               case 2:
+                logTheBottomNavigationClick(data.profile!, "guwahati_connect");
                 Navigation.instance.navigate('/guwahatiConnects');
                 break;
               case 3:
+                logTheBottomNavigationClick(
+                    data.profile!, "citizen_journalist");
                 Navigation.instance.navigate('/citizenJournalist');
                 break;
               case 4:
+                logTheBottomNavigationClick(data.profile!, "classified");
                 Navigation.instance.navigate('/classified');
                 break;
               default:
+                logTheBottomNavigationClick(data.profile!, "home");
                 Navigation.instance.navigate('/main');
                 break;
             }
@@ -126,5 +136,25 @@ class _NavigationBarState extends State<CustomNavigationBar> {
         ),
       );
     });
+  }
+
+  void logTheBottomNavigationClick(Profile profile, String cta_click) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "bottom_navigation_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "cta_click": cta_click,
+        "screen_name": "search",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 }

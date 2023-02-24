@@ -6,7 +6,7 @@ class MessageResponse {
     success = json['success'] ?? false;
     message = json['message'] ?? "";
     deal = json['result']['deal-welcome-msg'] ?? "";
-    message = json['result']['classified-listing-msg'] ?? "";
+    classified = json['result']['classified-listing-msg'] ?? "";
   }
 
   MessageResponse.withError(msg) {

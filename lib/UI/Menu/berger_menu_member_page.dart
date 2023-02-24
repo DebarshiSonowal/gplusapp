@@ -39,242 +39,244 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
         // width: double.infinity,
         backgroundColor:
             Storage.instance.isDarkMode ? Colors.black : Constance.forthColor,
-        child: Padding(
-          padding: EdgeInsets.only(left: 2.w, right: 2.w),
-          child: ListView(
-            children: [
-              DrawerHeader(
-                child: SizedBox(
-                  height: 12.5.h,
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        data.profile?.f_name ?? 'Jonathan Doe',
-                        style: Theme.of(Navigation
-                                .instance.navigatorKey.currentContext!)
-                            .textTheme
-                            .subtitle2
-                            ?.copyWith(
-                              color: Colors.white,
-                              // fontSize: 19.sp,
-                              fontWeight: FontWeight.bold,
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(left: 2.w, right: 2.w),
+            child: ListView(
+              children: [
+                DrawerHeader(
+                  child: SizedBox(
+                    height: 12.5.h,
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          data.profile?.f_name ?? 'Jonathan Doe',
+                          style: Theme.of(Navigation
+                                  .instance.navigatorKey.currentContext!)
+                              .textTheme
+                              .subtitle2
+                              ?.copyWith(
+                                color: Colors.white,
+                                // fontSize: 19.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '+91 ${data.profile?.mobile ?? 'XXXXXXXXXX'}',
+                              style: Theme.of(Navigation
+                                      .instance.navigatorKey.currentContext!)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    // fontSize: 15.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '+91 ${data.profile?.mobile ?? 'XXXXXXXXXX'}',
+                            SizedBox(
+                              width: 1.5.w,
+                            ),
+                            // GestureDetector(
+                            //
+                            //   child: Text(
+                            //     'Change',
+                            //     style: Theme.of(Navigation
+                            //             .instance.navigatorKey.currentContext!)
+                            //         .textTheme
+                            //         .headline6
+                            //         ?.copyWith(
+                            //           color: Constance.secondaryColor,
+                            //           fontSize: 11.sp,
+                            //           fontWeight: FontWeight.bold,
+                            //         ),
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigation.instance.navigate('/editProfile');
+                          },
+                          child: Text(
+                            'View Profile',
                             style: Theme.of(Navigation
                                     .instance.navigatorKey.currentContext!)
                                 .textTheme
                                 .headline6
                                 ?.copyWith(
-                                  color: Colors.white,
-                                  // fontSize: 15.sp,
-                                  fontWeight: FontWeight.bold,
+                                  color: Constance.secondaryColor,
+                                  fontSize: 11.sp,
+                                  // fontWeight: FontWeight.bold,
                                 ),
                           ),
-                          SizedBox(
-                            width: 1.5.w,
-                          ),
-                          // GestureDetector(
-                          //
-                          //   child: Text(
-                          //     'Change',
-                          //     style: Theme.of(Navigation
-                          //             .instance.navigatorKey.currentContext!)
-                          //         .textTheme
-                          //         .headline6
-                          //         ?.copyWith(
-                          //           color: Constance.secondaryColor,
-                          //           fontSize: 11.sp,
-                          //           fontWeight: FontWeight.bold,
-                          //         ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigation.instance.navigate('/editProfile');
-                        },
-                        child: Text(
-                          'View Profile',
-                          style: Theme.of(Navigation
-                                  .instance.navigatorKey.currentContext!)
-                              .textTheme
-                              .headline6
-                              ?.copyWith(
-                                color: Constance.secondaryColor,
-                                fontSize: 11.sp,
-                                // fontWeight: FontWeight.bold,
-                              ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              // const Divider(
-              //   color: Colors.white,
-              //   thickness: 0.2,
-              // ),
-              LocationSection(
-                data: data,
-              ),
-              const Divider(
-                color: Colors.white,
-                thickness: 0.2,
-              ),
-              NewsFromSection(
-                onTap: (category, subCategory) {
-                  logTheHambergerOptionClick(
-                    Provider.of<DataProvider>(
-                            Navigation.instance.navigatorKey.currentContext ??
-                                context,
-                            listen: false)
-                        .profile!,
-                    widget.screen,
-                    category,
-                    subCategory,
-                  );
-                },
-              ),
-              const Divider(
-                color: Colors.white,
-                thickness: 0.2,
-              ),
-              const ExclusiveSection(),
-              const Divider(
-                color: Colors.white,
-                thickness: 0.2,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 1.0.h),
-                child: GestureDetector(
+                // const Divider(
+                //   color: Colors.white,
+                //   thickness: 0.2,
+                // ),
+                LocationSection(
+                  data: data,
+                ),
+                const Divider(
+                  color: Colors.white,
+                  thickness: 0.2,
+                ),
+                NewsFromSection(
+                  onTap: (category, subCategory) {
+                    logTheHambergerOptionClick(
+                      Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .profile!,
+                      widget.screen,
+                      category,
+                      subCategory,
+                    );
+                  },
+                ),
+                const Divider(
+                  color: Colors.white,
+                  thickness: 0.2,
+                ),
+                const ExclusiveSection(),
+                const Divider(
+                  color: Colors.white,
+                  thickness: 0.2,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 1.0.h),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (Provider.of<DataProvider>(
+                                  Navigation
+                                          .instance.navigatorKey.currentContext ??
+                                      context,
+                                  listen: false)
+                              .profile
+                              ?.is_plan_active ??
+                          false) {
+                        Navigation.instance.navigate('/bookmarks');
+                        // showError("Oops! You are not a member yet");
+                      } else {
+                        showError("Oops! You are not a member yet");
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.bookmark,
+                          color: Constance.secondaryColor,
+                        ),
+                        SizedBox(
+                          width: 2.w,
+                        ),
+                        Text(
+                          'Bookmarks',
+                          style: Theme.of(context).textTheme.headline4?.copyWith(
+                                color: Colors.white,
+                                // fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const Divider(
+                  color: Colors.white,
+                  thickness: 0.2,
+                ),
+                InkWell(
+                  splashColor: Constance.secondaryColor,
+                  radius: 15.h,
                   onTap: () {
                     if (Provider.of<DataProvider>(
-                                Navigation
-                                        .instance.navigatorKey.currentContext ??
+                                Navigation.instance.navigatorKey.currentContext ??
                                     context,
                                 listen: false)
                             .profile
                             ?.is_plan_active ??
                         false) {
-                      Navigation.instance.navigate('/bookmarks');
+                      downloadEpaper();
                       // showError("Oops! You are not a member yet");
                     } else {
                       showError("Oops! You are not a member yet");
                     }
                   },
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.bookmark,
-                        color: Constance.secondaryColor,
-                      ),
-                      SizedBox(
-                        width: 2.w,
-                      ),
-                      Text(
-                        'Bookmarks',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Colors.white,
-                              // fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 1.0.h),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.download,
+                          color: Constance.secondaryColor,
+                        ),
+                        SizedBox(
+                          width: 2.w,
+                        ),
+                        Text(
+                          'Download E-Paper',
+                          style: Theme.of(context).textTheme.headline4?.copyWith(
+                                color: Colors.white,
+                                // fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const Divider(
-                color: Colors.white,
-                thickness: 0.2,
-              ),
-              InkWell(
-                splashColor: Constance.secondaryColor,
-                radius: 15.h,
-                onTap: () {
-                  if (Provider.of<DataProvider>(
-                              Navigation.instance.navigatorKey.currentContext ??
-                                  context,
-                              listen: false)
-                          .profile
-                          ?.is_plan_active ??
-                      false) {
-                    downloadEpaper();
-                    // showError("Oops! You are not a member yet");
-                  } else {
-                    showError("Oops! You are not a member yet");
-                  }
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 1.0.h),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.download,
-                        color: Constance.secondaryColor,
-                      ),
-                      SizedBox(
-                        width: 2.w,
-                      ),
-                      Text(
-                        'Download E-Paper',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(
-                              color: Colors.white,
-                              // fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
-                  ),
+                const Divider(
+                  color: Colors.white,
+                  thickness: 0.2,
                 ),
-              ),
-              const Divider(
-                color: Colors.white,
-                thickness: 0.2,
-              ),
-              MembershipSection(data: data),
+                MembershipSection(data: data),
 
-              (!Provider.of<DataProvider>(
-                          Navigation.instance.navigatorKey.currentContext!)
-                      .hideReferEarn)
-                  ? SizedBox(
-                      height: 0.2.h,
-                    )
-                  : Container(),
-              (!Provider.of<DataProvider>(
-                          Navigation.instance.navigatorKey.currentContext!)
-                      .hideReferEarn)
-                  ? const ReferAndEarnSection()
-                  : Container(),
-              const Divider(
-                color: Colors.white,
-                thickness: 0.2,
-              ),
-              const aboutSection(),
-              const Divider(
-                color: Colors.white,
-                thickness: 0.2,
-              ),
-              const SocialMediaSection(),
-              const Divider(
-                color: Colors.white,
-                thickness: 0.2,
-              ),
-              const SettingsSection(),
-            ],
+                (!Provider.of<DataProvider>(
+                            Navigation.instance.navigatorKey.currentContext!)
+                        .hideReferEarn)
+                    ? SizedBox(
+                        height: 0.2.h,
+                      )
+                    : Container(),
+                (!Provider.of<DataProvider>(
+                            Navigation.instance.navigatorKey.currentContext!)
+                        .hideReferEarn)
+                    ? const ReferAndEarnSection()
+                    : Container(),
+                const Divider(
+                  color: Colors.white,
+                  thickness: 0.2,
+                ),
+                const aboutSection(),
+                const Divider(
+                  color: Colors.white,
+                  thickness: 0.2,
+                ),
+                const SocialMediaSection(),
+                const Divider(
+                  color: Colors.white,
+                  thickness: 0.2,
+                ),
+                const SettingsSection(),
+              ],
+            ),
           ),
         ),
       );

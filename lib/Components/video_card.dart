@@ -35,6 +35,7 @@ class VideoCard extends StatelessWidget {
           color: Constance.secondaryColor,
         ),
         // height: 10.h,
+        height: 15.h,
         width: MediaQuery.of(context).size.width - 9.w,
         child: Row(
           children: [
@@ -47,7 +48,7 @@ class VideoCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 55.w,
+                  width: 45.w,
                   child: Text(
                     item.title ?? "",
                     maxLines: 4,

@@ -45,7 +45,7 @@ class OpinionSection extends StatelessWidget {
             height: 1.h,
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 7.w),
+            padding: EdgeInsets.symmetric(horizontal: 4.w),
             child: ListView.separated(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),

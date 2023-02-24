@@ -71,7 +71,7 @@ class HomeSliderItem extends StatelessWidget {
                 ),
               ),
               // color: Colors.black.withOpacity(0.5),
-              padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 4.w),
+              padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 5.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,

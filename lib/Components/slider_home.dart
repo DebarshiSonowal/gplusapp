@@ -59,6 +59,7 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
               },
               options: CarouselOptions(
                   autoPlay: true,
+                  enableInfiniteScroll: true,
                   // enlargeCenterPage: true,
                   aspectRatio: 10.5 / 9,
                   viewportFraction: 1,

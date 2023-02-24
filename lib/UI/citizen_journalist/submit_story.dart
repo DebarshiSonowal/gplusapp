@@ -306,7 +306,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"citizen_journalist"),
     );
   }
 

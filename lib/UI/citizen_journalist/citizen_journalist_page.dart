@@ -53,7 +53,7 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       appBar: Constance.buildAppBar("citizen_journalist",true,_scaffoldKey),
       drawer: const BergerMenuMemPage(screen: 'citizen_journalist',),
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"citizen_journalist"),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.h),
         height: double.infinity,

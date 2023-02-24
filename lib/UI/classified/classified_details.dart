@@ -417,7 +417,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
           );
         }),
       ),
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"classified"),
     );
   }
 

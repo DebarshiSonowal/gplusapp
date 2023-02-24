@@ -45,7 +45,9 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
     // title.dispose();
     desc.dispose();
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,8 +192,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text:
-                          'By clicking "Submit" you agreed to our ',
+                      text: 'By clicking "Submit" you agreed to our ',
                       style: Theme.of(context).textTheme.headline6?.copyWith(
                             color: Storage.instance.isDarkMode
                                 ? Colors.white
@@ -202,15 +203,16 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                     TextSpan(
                       text: 'Terms & Conditions.',
                       style: Theme.of(context).textTheme.headline6?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
-                        // fontSize: 1.6.h,
-                      ),
-                      recognizer: TapGestureRecognizer()..onTap = () {
-                        Navigation.instance.navigate('/termsConditions');
-                      },
+                            fontWeight: FontWeight.bold,
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                            // fontSize: 1.6.h,
+                          ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigation.instance.navigate('/termsConditions');
+                        },
                     ),
                   ],
                 ),
@@ -235,7 +237,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current, "guwahati"),
     );
   }
 

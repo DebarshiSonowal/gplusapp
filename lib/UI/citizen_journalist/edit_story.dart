@@ -336,7 +336,7 @@ class _EditStoryState extends State<EditStory> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current),
+      bottomNavigationBar: CustomNavigationBar(current,"citizen_journalist"),
     );
   }
 

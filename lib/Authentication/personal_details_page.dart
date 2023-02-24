@@ -1,4 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/date_picker.dart';
 import 'package:flutter_holo_date_picker/i18n/date_picker_i18n.dart';
@@ -19,6 +20,7 @@ import '../Components/alert.dart';
 import '../Helper/Constance.dart';
 import '../Helper/DataProvider.dart';
 import '../Helper/Storage.dart';
+import '../Model/profile.dart';
 import '../Model/temp.dart';
 import '../Navigation/Navigate.dart';
 
@@ -627,7 +629,24 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       ),
     );
   }
-
+  void logTheSignupFlowClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "sign_up_flow",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "screen_name": "register",
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
   bool isValidEmail(email) {
     return RegExp(
             r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')

@@ -46,6 +46,9 @@ class GPlusExclusiveSection extends StatelessWidget {
           data.home_exclusive.isNotEmpty
               ? Expanded(
                   child: Container(
+                    margin: EdgeInsets.only(left: 4.w),
+                    width: 95.w,
+                    height: 20.h,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (cont, count) {
@@ -120,6 +123,7 @@ class GPlusExclusiveSection extends StatelessWidget {
       ),
     );
   }
+
   void logTheReadMoreClick(Profile profile) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
@@ -136,12 +140,13 @@ class GPlusExclusiveSection extends StatelessWidget {
         // "title": title,
         // "published_date": published_date,
         "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },
     );
   }
+
   void logTheExclusiveClick(Profile profile, String heading, String title,
       int thisId, String published_date, String author_name) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;

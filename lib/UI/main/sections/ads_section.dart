@@ -23,7 +23,7 @@ class AdsSection extends StatelessWidget {
               Container(
                 color: Constance.secondaryColor,
                 padding: EdgeInsets.symmetric(vertical: 0.2.h, horizontal: 1.w),
-                margin: EdgeInsets.symmetric(horizontal: 5.w),
+                margin: EdgeInsets.symmetric(horizontal: 4.w),
                 child: Text(
                   'Ad',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
@@ -46,7 +46,7 @@ class AdsSection extends StatelessWidget {
                 _launchUrl(Uri.parse(data.ads[random].link.toString()));
               },
               child: Padding(
-                padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 0.9.h),
+                padding: EdgeInsets.only(left: 4.w, right: 5.w, bottom: 0.9.h),
                 child: CachedNetworkImage(
                   height: 6.h,
                   fit: BoxFit.fill,

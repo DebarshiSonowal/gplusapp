@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/Constance.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
@@ -5,6 +6,8 @@ import 'package:sizer/sizer.dart';
 
 import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
+import '../../Helper/Storage.dart';
+import '../../Model/profile.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -114,6 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (_mobile.text.isNotEmpty &&
                           _mobile.text.length == 10) {
                         // sendOTP(_mobile.text);
+                        // logTheSignupInitiateClick(Profile profile);
                         Navigation.instance.navigate('/verifyOtp',
                             args: int.parse(_mobile.text));
                       } else {
@@ -140,6 +144,24 @@ class _LoginPageState extends State<LoginPage> {
   //     showError(response.message ?? "Something went wrong");
   //   }
   // }
+  void logTheSignupInitiateClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "sign_up_initiate",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "screen_name": "register",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
 
   void showError(String msg) {
     AlertX.instance.showAlert(

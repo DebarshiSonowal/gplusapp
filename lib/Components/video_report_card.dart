@@ -20,14 +20,14 @@ class ImageView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: 16.2.h,
-          width: 27.w,
+          height: 17.5.h,
+          width: 35.w,
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
               SizedBox(
-                height: 16.2.h,
-                width: 27.w,
+                height: 17.5.h,
+                width: 35.w,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(5.0),
                   child: CachedNetworkImage(

@@ -21,7 +21,8 @@ class PromotedDeal extends StatelessWidget {
               ),
         current.deals.isEmpty
             ? Container()
-            : SizedBox(
+            : Container(
+          padding: EdgeInsets.only(left: 4.w),
                 height: 27.h,
                 width: double.infinity,
                 child: ListView.separated(
