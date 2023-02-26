@@ -95,8 +95,8 @@ class Profile {
     DateTime endDate = DateTime.parse(end_date);
 
     DateTime now = DateTime.now();
-    print(
-        'XASA ${start_date} ${startDate}\n ${end_date} ${endDate}\n ${now} \n ${startDate.isBefore(now)} ${endDate.isAfter(now)}');
+    // print(
+    //     'XASA ${start_date} ${startDate}\n ${end_date} ${endDate}\n ${now} \n ${startDate.isBefore(now)} ${endDate.isAfter(now)}');
     if (startDate.isBefore(now) && endDate.isAfter(now)) {
       return true;
     }

@@ -95,12 +95,12 @@ class NotificationPageItem extends StatelessWidget {
                             // fontWeight: FontWeight.bold,
                           ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
-                  Jiffy("${current.created_at?.split("T")[0]} ${current.created_at?.split("T")[1].split(".")[0]}",
-                              "yyyy-MM-dd hh:mm:ss")
-                          .fromNow() ??
-                      '${current.created_at}',
+                  Jiffy("${current.created_at?.split(" ")[0]} ${current.created_at?.split(" ")[1].split(".")[0]}",
+                          "yyyy-MM-dd hh:mm:ss")
+                      .fromNow(),
+                  //     '${current.created_at?.split("T")[1].split(".")[0]}',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style:

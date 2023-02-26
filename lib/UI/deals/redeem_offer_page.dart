@@ -34,12 +34,12 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("bigdeal",true,_scaffoldKey),
+      appBar: Constance.buildAppBar("bigdeal", true, _scaffoldKey),
       drawer: const BergerMenuMemPage(screen: "bigdeal"),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Storage.instance.isDarkMode?Colors.black:Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         // padding: EdgeInsets.symmetric(vertical: 2.h),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return Stack(
@@ -317,8 +317,7 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
     );
   }
 
-
-  void showDialogBox() {
+  void showDialogBox(msg) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -358,10 +357,11 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
                 ),
                 SizedBox(height: 2.h),
                 Text(
-                  'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                  ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                  ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                  ' remaining essentially unchanged',
+                  msg ??
+                      'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
+                          ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+                          ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+                          ' remaining essentially unchanged',
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontWeight: FontWeight.bold,
@@ -405,18 +405,19 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
       },
     );
   }
+
   void fetchDeals() async {
     final response = await ApiProvider.instance.getPromotedDeals();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setPromotedDeals(response.deals ?? []);
       final response1 = await ApiProvider.instance.getShopCategory();
       if (response1.success ?? false) {
         Provider.of<DataProvider>(
-            Navigation.instance.navigatorKey.currentContext ?? context,
-            listen: false)
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
             .setShopCategory(response1.categories ?? []);
         // _refreshController.refreshCompleted();
       } else {
@@ -426,6 +427,7 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
       // _refreshController.refreshFailed();
     }
   }
+
   void showInSnackBar(String value) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value)));
     // _scaffoldKey.currentState?.showSnackBar(SnackBar(content: Text(value)));

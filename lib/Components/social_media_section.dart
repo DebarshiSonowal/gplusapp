@@ -48,7 +48,7 @@ class SocialMediaSection extends StatelessWidget {
             height: 6,
             width: 6,
             decoration: const BoxDecoration(
-              color: Colors.red,
+              color: Colors.transparent,
               shape: BoxShape.circle,
             ),
           ),
@@ -89,7 +89,7 @@ class SocialMediaSection extends StatelessWidget {
                     height: 6,
                     width: 6,
                     decoration: const BoxDecoration(
-                      color: Colors.red,
+                      color: Colors.transparent,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -135,7 +135,7 @@ class SocialMediaSection extends StatelessWidget {
                     height: 6,
                     width: 6,
                     decoration: const BoxDecoration(
-                      color: Colors.red,
+                      color: Colors.transparent,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -181,7 +181,7 @@ class SocialMediaSection extends StatelessWidget {
                     height: 6,
                     width: 6,
                     decoration: const BoxDecoration(
-                      color: Colors.red,
+                      color: Colors.transparent,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -227,7 +227,7 @@ class SocialMediaSection extends StatelessWidget {
                     height: 6,
                     width: 6,
                     decoration: const BoxDecoration(
-                      color: Colors.red,
+                      color: Colors.transparent,
                       shape: BoxShape.circle,
                     ),
                   ),

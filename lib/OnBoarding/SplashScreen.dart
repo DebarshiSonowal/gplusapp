@@ -117,6 +117,10 @@ class _SplashScreenState extends State<SplashScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setClassifiedText(response.classified ?? "");
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setGuwahatiText(response.guwahatiConnect ?? "");
     }
   }
 

@@ -31,14 +31,28 @@ class _NotificationPageState extends State<NotificationPage> {
     super.initState();
     fetchNotification();
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("notification",true,_scaffoldKey),
+      appBar: Constance.buildAppBar("notification", true, _scaffoldKey),
       // drawer: BergerMenuMemPage(),
-      drawer: const BergerMenuMemPage(screen: "notification",),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Constance.primaryColor,
+        onPressed: () {
+          readAll();
+        },
+        child: const Icon(
+          Icons.read_more,
+          color: Constance.secondaryColor,
+        ),
+      ),
+      drawer: const BergerMenuMemPage(
+        screen: "notification",
+      ),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           height: MediaQuery.of(context).size.height,
@@ -193,5 +207,14 @@ class _NotificationPageState extends State<NotificationPage> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  void readAll() async {
+    final response = await ApiProvider.instance.readAll();
+    if (response.success ?? false) {
+      fetchNotification();
+    } else {
+      showError(response.message ?? "Something went wrong");
+    }
   }
 }

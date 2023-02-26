@@ -88,6 +88,7 @@ class DataProvider extends ChangeNotifier {
       deal = "",
       classifiedMsg = "",
       refer_earn = "",
+      connect = "",
       redeem = "";
 
   setCitizenJournalistText(String txt) {
@@ -102,6 +103,11 @@ class DataProvider extends ChangeNotifier {
 
   setReferEarnText(String txt) {
     refer_earn = txt;
+    notifyListeners();
+  }
+
+  setGuwahatiText(String txt) {
+    connect = txt;
     notifyListeners();
   }
 
@@ -141,6 +147,7 @@ class DataProvider extends ChangeNotifier {
     notifications = list;
     notifyListeners();
   }
+
   removeNotificationInDevice(NotificationInDevice item) {
     notifications.remove(item);
     notifyListeners();

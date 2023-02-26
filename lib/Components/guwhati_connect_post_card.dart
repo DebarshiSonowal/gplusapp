@@ -204,11 +204,56 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                       ],
                                     ),
                                   ),
+                                  PopupMenuItem<int>(
+                                    value: 2,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.report,
+                                          color: Colors.black,
+                                        ),
+                                        SizedBox(
+                                          width: 2.w,
+                                        ),
+                                        Text(
+                                          'Report this user',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                      PopupMenuItem<int>(
+                                        value: 3,
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.report,
+                                              color: Colors.black,
+                                            ),
+                                            SizedBox(
+                                              width: 2.w,
+                                            ),
+                                            Text(
+                                              'Report this post',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  ?.copyWith(color: Colors.black),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                 ],
                                 onSelected: (int value) {
                                   // setState(() {});
                                   switch (value) {
                                     case 2:
+                                      _showAlertDialog(context, data.id);
+                                      break;
+                                    case 3:
                                       _showAlertDialog(context, data.id);
                                       break;
                                     default:

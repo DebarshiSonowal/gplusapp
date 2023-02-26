@@ -132,7 +132,7 @@ class NewsFromSection extends StatelessWidget {
                         ),
                   ),
                   Expanded(child: Container()),
-                  filterToCheckPerCategory(
+                  !filterToCheckPerCategory(
                       Provider.of<DataProvider>(
                           Navigation.instance.navigatorKey
                               .currentContext ??

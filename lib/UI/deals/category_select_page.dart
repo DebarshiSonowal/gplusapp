@@ -494,7 +494,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                     if (data?.is_used ?? false) {
                       redeem(widget.id, data?.code);
                     } else {
-                      showDialogBox(data?.code);
+                      showDialogBox(data?.code,current.redeem);
                     }
                   },
                 ),
@@ -516,7 +516,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
     }
   }
 
-  void showDialogBox(code) {
+  void showDialogBox(code,msg) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -556,7 +556,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                 ),
                 SizedBox(height: 2.h),
                 Text(
-                  'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
+                  msg??'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
                   ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
                   ' It has survived not only five centuries, but also the leap into electronic typesetting,'
                   ' remaining essentially unchanged',

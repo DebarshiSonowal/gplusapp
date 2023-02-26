@@ -1482,6 +1482,42 @@ class ApiProvider {
       return GenericMsgResponse.withError(e.message);
     }
   }
+  Future<GenericResponse> readAll() async {
+    var url = "${baseUrl}/app/notifications/read-all";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("notifications response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("notifications error: ${response?.data}");
+        return GenericResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("notifications error: ${e.response}");
+      return GenericResponse.withError(e.message);
+    }
+  }
 
   Future<GenericMsgResponse> getRedeemText() async {
     var url = "${baseUrl}/redeem-confirmation-msg";
