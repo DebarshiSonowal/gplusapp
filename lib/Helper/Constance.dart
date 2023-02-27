@@ -187,8 +187,8 @@ class Constance {
           onPressed: () {
             logTheSearchInitiationClick(
               Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext!,
-                  listen: false)
+                      Navigation.instance.navigatorKey.currentContext!,
+                      listen: false)
                   .profile!,
               screen,
             );
@@ -578,6 +578,44 @@ One of the leading digital news network of Guwahati,
  
   ''';
 
+  static void logTheSubscriptionInitiationClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "subscription_intiation",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "screen_name": "subscription",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+
+  static void logTheSubscriptionInitiationCancelClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "subscription_declined",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "screen_name": "subscription",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+
   static showMembershipPrompt(context, function) {
     showBottomSheet<void>(
         context: context,
@@ -665,6 +703,13 @@ One of the leading digital news network of Guwahati,
                           child: CustomButton(
                             txt: 'Yes, take me there',
                             onTap: () {
+                              logTheSubscriptionInitiationClick(
+                                  Provider.of<DataProvider>(
+                                          Navigation.instance.navigatorKey
+                                                  .currentContext ??
+                                              context,
+                                          listen: false)
+                                      .profile!);
                               Navigation.instance.navigate('/beamember');
                             },
                             size: 12.sp,
@@ -677,6 +722,13 @@ One of the leading digital news network of Guwahati,
                           child: CustomButton(
                             txt: '''No, I don't want it''',
                             onTap: () {
+                              logTheSubscriptionInitiationCancelClick(
+                                  Provider.of<DataProvider>(
+                                      Navigation.instance.navigatorKey
+                                          .currentContext ??
+                                          context,
+                                      listen: false)
+                                      .profile!);
                               Navigation.instance.goBack();
                             },
                             color: Colors.black,
@@ -695,6 +747,5 @@ One of the leading digital news network of Guwahati,
       //do whatever you want after closing the bottom sheet
       function();
     });
-    ;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/Storage.dart';
@@ -70,7 +71,9 @@ class _EditProfileState extends State<EditProfile> {
     last_name.dispose();
     email.dispose();
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -611,8 +614,6 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-
-
   void setData(Profile prof) {
     if (prof.f_name != '') {
       first_name.text = prof.f_name ?? "";
@@ -684,6 +685,14 @@ class _EditProfileState extends State<EditProfile> {
         '',
         0);
     if (response.success ?? false) {
+      logTheUpdateProfileClick(
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .profile!,
+        getComaSeparatedName(selGeo),
+        getComaSeparatedName(selTop),
+      );
       Navigation.instance.goBack();
       Fluttertoast.showToast(msg: "Profile Updated");
       fetchProfile();
@@ -704,7 +713,17 @@ class _EditProfileState extends State<EditProfile> {
     }
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
-
+  String getComaSeparatedName(List<dynamic> list) {
+    String temp = "";
+    for (int i = 0; i < list.length; i++) {
+      if (i == 0) {
+        temp = '${list[i].seo_name},';
+      } else {
+        temp += '${list[i].seo_name}';
+      }
+    }
+    return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
+  }
   void fetchAddress() async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getAddress();
@@ -809,16 +828,40 @@ class _EditProfileState extends State<EditProfile> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .mygeoTopicks;
-      print(Provider.of<DataProvider>(
+      debugPrint(Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .mytopicks
-          .length);
-      print(Provider.of<DataProvider>(
+          .length
+          .toString());
+      debugPrint(Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .mygeoTopicks
-          .length);
+          .length
+          .toString());
     });
+  }
+
+  void logTheUpdateProfileClick(
+      Profile profile, String geographical, String topical) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "update_profile",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "geographical": geographical,
+        "topical": topical,
+        "screen_name": "register",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 }

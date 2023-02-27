@@ -167,7 +167,9 @@ class _HomeScreenState extends State<HomeScreen> {
         //     size: 22.sp,
         //   ),
         // ),
-        drawer: const BergerMenuMemPage(screen: "home",),
+        drawer: const BergerMenuMemPage(
+          screen: "home",
+        ),
         body: OfflineBuilder(
           connectivityBuilder: (
             BuildContext context,
@@ -191,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: Container(),
         ),
-        bottomNavigationBar: CustomNavigationBar(current,"home"),
+        bottomNavigationBar: CustomNavigationBar(current, "home"),
       ),
     );
   }
@@ -341,98 +343,98 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void showDialogBox() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          insetPadding: EdgeInsets.zero,
-          contentPadding: EdgeInsets.zero,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10.0),
-            ),
-          ),
-          backgroundColor: Colors.white,
-          title: Text(
-            'Oops! You are not a member',
-            style: Theme.of(context).textTheme.headline1?.copyWith(
-                  color: Constance.secondaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          content: Container(
-            padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
-            // height: 50.h,
-            width: 80.w,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
-                  style: Theme.of(context).textTheme.headline3?.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(height: 1.h),
-                Flexible(
-                  child: Text(
-                    Constance.about,
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Colors.black,
-                          // fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-                SizedBox(height: 1.h),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Text(
-                  'Do you want to be a member?',
-                  style: Theme.of(context).textTheme.headline4?.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomButton(
-                      txt: 'Yes, take me there',
-                      onTap: () {
-                        Navigation.instance.navigate('/beamember');
-                      },
-                      size: 12.sp,
-                    ),
-                    SizedBox(
-                      width: 2.w,
-                    ),
-                    CustomButton(
-                      txt: '''No, I don't want it''',
-                      onTap: () {
-                        Navigation.instance.goBack();
-                      },
-                      color: Colors.black,
-                      size: 12.sp,
-                      fcolor: Colors.white,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  // void showDialogBox() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         insetPadding: EdgeInsets.zero,
+  //         contentPadding: EdgeInsets.zero,
+  //         clipBehavior: Clip.antiAliasWithSaveLayer,
+  //         shape: const RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.all(
+  //             Radius.circular(10.0),
+  //           ),
+  //         ),
+  //         backgroundColor: Colors.white,
+  //         title: Text(
+  //           'Oops! You are not a member',
+  //           style: Theme.of(context).textTheme.headline1?.copyWith(
+  //                 color: Constance.secondaryColor,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //         ),
+  //         content: Container(
+  //           padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
+  //           // height: 50.h,
+  //           width: 80.w,
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             mainAxisAlignment: MainAxisAlignment.start,
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Text(
+  //                 'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
+  //                 style: Theme.of(context).textTheme.headline3?.copyWith(
+  //                       color: Colors.black,
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //               ),
+  //               SizedBox(height: 1.h),
+  //               Flexible(
+  //                 child: Text(
+  //                   Constance.about,
+  //                   style: Theme.of(context).textTheme.headline5?.copyWith(
+  //                         color: Colors.black,
+  //                         // fontWeight: FontWeight.bold,
+  //                       ),
+  //                 ),
+  //               ),
+  //               SizedBox(height: 1.h),
+  //               SizedBox(
+  //                 height: 2.h,
+  //               ),
+  //               Text(
+  //                 'Do you want to be a member?',
+  //                 style: Theme.of(context).textTheme.headline4?.copyWith(
+  //                       color: Colors.black,
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //               ),
+  //               SizedBox(
+  //                 height: 1.h,
+  //               ),
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   CustomButton(
+  //                     txt: 'Yes, take me there',
+  //                     onTap: () {
+  //                       Navigation.instance.navigate('/beamember');
+  //                     },
+  //                     size: 12.sp,
+  //                   ),
+  //                   SizedBox(
+  //                     width: 2.w,
+  //                   ),
+  //                   CustomButton(
+  //                     txt: '''No, I don't want it''',
+  //                     onTap: () {
+  //                       Navigation.instance.goBack();
+  //                     },
+  //                     color: Colors.black,
+  //                     size: 12.sp,
+  //                     fcolor: Colors.white,
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   void showPopUp() {
     double doubleInRange(Random source, num start, num end) =>
@@ -448,7 +450,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ?.is_plan_active ??
           false) {
       } else {
-        showDialogBox();
+        // showDialogBox();
+        Constance.showMembershipPrompt(context, () {});
       }
     });
     // Future.delayed(Duration(seconds: 5), () => showDialogBox());

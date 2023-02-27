@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'dart:io';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
@@ -21,6 +22,7 @@ import '../Helper/DataProvider.dart';
 import '../Helper/Storage.dart';
 import '../Helper/app_data.dart';
 import '../Helper/store_config.dart';
+import '../Model/profile.dart';
 import '../Model/razorpay_key.dart';
 import '../Navigation/Navigate.dart';
 import '../Networking/api_provider.dart';
@@ -236,6 +238,10 @@ You can parse it accordingly to handle response */
   }
 
   void showDialogBox() {
+    logTheSubscriptionSuccessfulClick(Provider.of<DataProvider>(
+            Navigation.instance.navigatorKey.currentContext ?? context,
+            listen: false)
+        .profile!);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -285,6 +291,25 @@ You can parse it accordingly to handle response */
             ),
           ),
         );
+      },
+    );
+  }
+
+  void logTheSubscriptionSuccessfulClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "subscription_successfull",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "screen_name": "subscription",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
       },
     );
   }
@@ -788,30 +813,28 @@ You can parse it accordingly to handle response */
     try {
       // CustomerInfo customerInfo = await Purchases.getCustomerInfo();
       // await Purchases.purchaseProduct("gplus_subscription_one_month_non");
-
     } catch (e) {
       print(e);
     }
     Offerings offerings;
     try {
       offerings = await Purchases.getOfferings();
-      debugPrint(
-          "Packages1 ${offerings.current!.availablePackages}");
+      debugPrint("Packages1 ${offerings.current!.availablePackages}");
       try {
         debugPrint(
-                  "Packages2 ${offerings.getOffering("subscriptions")!.annual!}");
+            "Packages2 ${offerings.getOffering("subscriptions")!.annual!}");
       } catch (e) {
         print(e);
       }
       try {
         debugPrint(
-                  "Packages3 ${offerings.getOffering("subscriptions")!.monthly!}");
+            "Packages3 ${offerings.getOffering("subscriptions")!.monthly!}");
       } catch (e) {
         print(e);
       }
       try {
         debugPrint(
-                  "Packages4 ${offerings.getOffering("subscriptions")!.getPackage(widget.input.split(',')[2])}");
+            "Packages4 ${offerings.getOffering("subscriptions")!.getPackage(widget.input.split(',')[2])}");
       } catch (e) {
         print(e);
       }

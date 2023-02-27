@@ -1,8 +1,12 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
+import '../Helper/DataProvider.dart';
 import '../Helper/Storage.dart';
+import '../Model/profile.dart';
 import '../Model/shop_category.dart';
 import '../Navigation/Navigate.dart';
 
@@ -15,6 +19,12 @@ class ShopCategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        logTheBigDealCategoryClick(
+            Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ?? context,
+                    listen: false)
+                .profile!,
+            e.name!);
         // selectedCategory(e.name);
         Navigation.instance.navigate('/fooddealpage', args: e.id!);
       },
@@ -35,7 +45,9 @@ class ShopCategoryItem extends StatelessWidget {
                   width: 1.5.sp,
                   color: Constance.secondaryColor,
                 ),
-                color: Storage.instance.isDarkMode?Colors.transparent:Constance.secondaryColor,
+                color: Storage.instance.isDarkMode
+                    ? Colors.transparent
+                    : Constance.secondaryColor,
                 // borderRadius: BorderRadius.circular(5),
               ),
               child: Image.network(
@@ -64,6 +76,27 @@ class ShopCategoryItem extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void logTheBigDealCategoryClick(
+      Profile profile, String big_deal_category) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "big_deal_category_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "big_deal_category": big_deal_category,
+        "screen_name": "bigdeal",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
     );
   }
 }

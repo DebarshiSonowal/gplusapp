@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:badges/badges.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -18,6 +19,7 @@ import '../../Components/custom_button.dart';
 import '../../Components/guwhati_connect_post_card.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
@@ -509,6 +511,10 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
                               child: CustomButton(
                                 txt: 'Yes, take me there',
                                 onTap: () {
+                                  logTheSubscriptionInitiationClick(Provider.of<DataProvider>(
+                                      Navigation.instance.navigatorKey.currentContext ?? context,
+                                      listen: false)
+                                      .profile!);
                                   Navigation.instance.navigate('/beamember');
                                 },
                                 size: 12.sp,
@@ -521,6 +527,10 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
                               child: CustomButton(
                                 txt: '''No, I don't want it''',
                                 onTap: () {
+                                  logTheSubscriptionInitiationCancelClick(Provider.of<DataProvider>(
+                                      Navigation.instance.navigatorKey.currentContext ?? context,
+                                      listen: false)
+                                      .profile!);
                                   Navigation.instance.goBack();
                                 },
                                 color: Colors.black,
@@ -552,7 +562,43 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
           });
     }
   }
+  void logTheSubscriptionInitiationClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "subscription_intiation",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "screen_name": "subscription",
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
 
+  void logTheSubscriptionInitiationCancelClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "subscription_declined",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "screen_name": "subscription",
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
   Future<void> secureScreen() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Components/promoted_deal_cupon.dart';
 import 'package:gplusapp/Components/promoted_deal_item_data.dart';
@@ -9,6 +10,7 @@ import 'package:sizer/sizer.dart';
 import '../Helper/Constance.dart';
 import '../Helper/DataProvider.dart';
 import '../Helper/Storage.dart';
+import '../Model/profile.dart';
 import '../Model/promoted_deal.dart';
 import '../Navigation/Navigate.dart';
 
@@ -30,6 +32,17 @@ class PromotedDealsItem extends StatelessWidget {
                 .profile
                 ?.is_plan_active ??
             false) {
+          logTheBigDealCategoryClick(
+            Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ?? context,
+                    listen: false)
+                .profile!,
+            data.vendor?.shop_name ?? "",
+            data.vendor?.address ?? "",
+            data.id!,
+            data.title ?? "",
+            "promoted_deal",
+          );
           Navigation.instance.navigate('/categorySelect', args: data.vendor_id);
         } else {
           Constance.showMembershipPrompt(context, () {});
@@ -67,10 +80,36 @@ class PromotedDealsItem extends StatelessWidget {
       ),
     );
   }
+
+  void logTheBigDealCategoryClick(
+      Profile profile,
+      String heading_name,
+      String banner_category,
+      int article_id,
+      String offer_name,
+      String title) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "big_deal_banner_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "banner_position": "top",
+        "heading_name": heading_name,
+        "screen_name": "subscription",
+        "banner_category": banner_category,
+        "article_id": article_id,
+        "offer_name": offer_name,
+        "title": title,
+        // "big_deal_category": big_deal_category,
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
 }
-
-
-
-
-
-

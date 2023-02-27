@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -13,6 +14,7 @@ import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
@@ -30,6 +32,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool dark_mode = false;
   final TextEditingController _controller = TextEditingController();
   final InAppReview inAppReview = InAppReview.instance;
+
   @override
   void dispose() {
     _controller.dispose();
@@ -43,13 +46,17 @@ class _SettingsPageState extends State<SettingsPage> {
       fetchSwitchStatus();
     });
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("settings",true,_scaffoldKey),
-      drawer: const BergerMenuMemPage(screen: "settings",),
+      appBar: Constance.buildAppBar("settings", true, _scaffoldKey),
+      drawer: const BergerMenuMemPage(
+        screen: "settings",
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -260,9 +267,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                     ),
                     GestureDetector(
-                      onTap: () async{
+                      onTap: () async {
                         if (await inAppReview.isAvailable()) {
-                        inAppReview.requestReview();
+                          inAppReview.requestReview();
                         }
                       },
                       child: AbsorbPointer(
@@ -380,6 +387,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     onPressed: () async {
                       final FirebaseAuth _auth = FirebaseAuth.instance;
                       await _auth.signOut();
+                      logTheLogoutClick(data.profile!);
                       Storage.instance.logout();
                       Navigation.instance.navigateAndRemoveUntil('/login');
                     },
@@ -455,13 +463,10 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-
-
   updateSwitch(val, type) async {
     final response = await ApiProvider.instance.setSwitch(val, type);
     if (response.success ?? false) {
       fetchSwitchStatusAfter(type);
-
     } else {
       showError(response.message ?? "Something went wrong");
     }
@@ -499,6 +504,7 @@ class _SettingsPageState extends State<SettingsPage> {
       showError(response.msg ?? "Something went wrong");
     }
   }
+
   void fetchSwitchStatusAfter(type) async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getSwitchStatus();
@@ -514,19 +520,15 @@ class _SettingsPageState extends State<SettingsPage> {
       // dark_mode = true;
       Storage.instance.setDarkMode(dark_mode);
       Navigation.instance.goBack();
-      if (type=="dark") {
+      if (type == "dark") {
         // fetchSwitchStatus();
         try {
-          setState(() {
-
-          });
+          setState(() {});
         } catch (e) {
           print(e);
         }
         Navigation.instance.navigateAndRemoveUntil('/main');
       }
-
-
     } else {
       Navigation.instance.goBack();
       showError(response.msg ?? "Something went wrong");
@@ -547,12 +549,31 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void deactivateAccount() async {
     final response = await ApiProvider.instance.deactiveAccount();
-    if(response.success??false){
+    if (response.success ?? false) {
       Navigation.instance.goBack();
       Fluttertoast.showToast(msg: "Account deactivation request is received");
-    }else{
+    } else {
       Navigation.instance.goBack();
       showError(response.message ?? "Something went wrong");
     }
+  }
+
+  void logTheLogoutClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "log_out_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "screen_name": "logout",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 }

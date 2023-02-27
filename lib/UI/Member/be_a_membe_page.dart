@@ -5,11 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Model/membership.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import '../../Components/alert.dart';
+import '../../Components/be_a_member_card.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
@@ -166,104 +168,10 @@ class _BeAMemberState extends State<BeAMember> {
                   ),
                   ListView.separated(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (conte, count) {
                         var current = data.memberships[count];
-                        return Card(
-                          color: Constance.primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 1.5.h, horizontal: 4.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Get the ${current.name}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline5
-                                      ?.copyWith(
-                                        color: Colors.white,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                SizedBox(
-                                  height: 1.5.h,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Rs ${current.base_price}/',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline1
-                                          ?.copyWith(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    Text(
-                                      current.duration?.split(" ")[1] ?? "",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4
-                                          ?.copyWith(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 1.5.h,
-                                ),
-                                Text(
-                                  'You save Rs ${current.discount}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      ?.copyWith(
-                                        color: Colors.white,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                SizedBox(
-                                  height: 1.5.h,
-                                ),
-                                Text(
-                                  'Subscription is for one time purchase only.\nWe do not renew you subscription automatically.',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline5
-                                      ?.copyWith(
-                                          color: Colors.white,
-                                          fontStyle: FontStyle.italic
-                                          // fontWeight: FontWeight.bold,
-                                          ),
-                                ),
-                                SizedBox(
-                                  height: 1.5.h,
-                                ),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: CustomButton(
-                                    txt: 'Get it',
-                                    onTap: () {
-                                      // initiateOrder(current.id, 0);
-                                      Navigation.instance.navigate(
-                                          '/paymentProcessing',
-                                          args: '${current.id},0,${current.inapp_identifier}');
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
+                        return BeMemberCard(current: current,count: count);
                       },
                       separatorBuilder: (cont, ind) {
                         return SizedBox(
@@ -539,3 +447,5 @@ class _BeAMemberState extends State<BeAMember> {
     );
   }
 }
+
+

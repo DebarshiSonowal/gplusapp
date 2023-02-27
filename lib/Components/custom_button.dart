@@ -1,7 +1,13 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
+import '../Helper/DataProvider.dart';
+import '../Helper/Storage.dart';
+import '../Model/profile.dart';
+import '../Navigation/Navigate.dart';
 
 class CustomButton extends StatefulWidget {
   final String txt;
@@ -27,7 +33,10 @@ class _CustomButtonState extends State<CustomButton> {
         backgroundColor:
             MaterialStateProperty.all(widget.color ?? Constance.secondaryColor),
       ),
-      onPressed: () => widget.onTap(),
+      onPressed: () {
+
+        widget.onTap();
+      },
       child: Text(
         widget.txt,
         style: Theme.of(context).textTheme.headline5?.copyWith(
@@ -37,4 +46,6 @@ class _CustomButtonState extends State<CustomButton> {
       ),
     );
   }
+
+
 }
