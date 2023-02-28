@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -5,6 +6,7 @@ import 'package:sizer/sizer.dart';
 import '../Helper/Constance.dart';
 import '../Helper/DataProvider.dart';
 import '../Helper/Storage.dart';
+import '../Model/profile.dart';
 import '../Navigation/Navigate.dart';
 import '../Networking/api_provider.dart';
 import 'alert.dart';
@@ -136,6 +138,10 @@ class CommentUI extends StatelessWidget {
                                       false) {
                                     // Navigation.instance.navigate('/exclusivePage');
                                     _(() {
+                                      logTheCommentPostClick(
+                                        data.profile!,
+                                        data.guwahatiConnect[count].question!,
+                                      );
                                       postComment(
                                           data.guwahatiConnect[count].id,
                                           'guwahati-connect',
@@ -193,5 +199,29 @@ class CommentUI extends StatelessWidget {
     } else {
       Navigation.instance.goBack();
     }
+  }
+
+  void logTheCommentPostClick(
+    Profile profile,
+    String post,
+  ) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "comment_on_post",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "post": post,
+        // "cta_click": cta_click,
+        "screen_name": "guwahati",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 }

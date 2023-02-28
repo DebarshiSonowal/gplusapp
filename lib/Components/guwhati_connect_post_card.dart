@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -16,6 +17,7 @@ import '../Helper/Constance.dart';
 import '../Helper/DataProvider.dart';
 import '../Helper/Storage.dart';
 import '../Model/guwahati_connect.dart';
+import '../Model/profile.dart';
 import '../Navigation/Navigate.dart';
 import '../Networking/api_provider.dart';
 import 'alert.dart';
@@ -225,40 +227,45 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                      PopupMenuItem<int>(
-                                        value: 3,
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.report,
-                                              color: Colors.black,
-                                            ),
-                                            SizedBox(
-                                              width: 2.w,
-                                            ),
-                                            Text(
-                                              'Report this post',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6
-                                                  ?.copyWith(color: Colors.black),
-                                            ),
-                                          ],
+                                  PopupMenuItem<int>(
+                                    value: 3,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.report,
+                                          color: Colors.black,
                                         ),
-                                      ),
+                                        SizedBox(
+                                          width: 2.w,
+                                        ),
+                                        Text(
+                                          'Report this post',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6
+                                              ?.copyWith(color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                                 onSelected: (int value) {
                                   // setState(() {});
                                   switch (value) {
                                     case 2:
-                                      _showAlertDialog(context, data.id);
+                                      _showAlertDialog(
+                                          context, data.id, data.question!);
                                       break;
                                     case 3:
-                                      _showAlertDialog(context, data.id);
+                                      _showAlertDialog(
+                                          context, data.id, data.question!);
                                       break;
                                     default:
-                                      showBlockConfirmation(data.user_id,
-                                          data.user?.name, context);
+                                      showBlockConfirmation(
+                                          data.user_id,
+                                          data.user?.name,
+                                          context,
+                                          data.question!);
 
                                       break;
                                   }
@@ -355,6 +362,16 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                               type: MaterialType.transparency,
                               child: IconButton(
                                 onPressed: () {
+                                  logTheReactionPostClick(
+                                    Provider.of<DataProvider>(
+                                            Navigation.instance.navigatorKey
+                                                    .currentContext ??
+                                                context,
+                                            listen: false)
+                                        .profile!,
+                                    data.question!,
+                                    like ? "like" : "dislike",
+                                  );
                                   postLike(data.id!, 1);
                                   _(() {
                                     like = !like;
@@ -612,7 +629,31 @@ class GuwahatiConnectPostCard extends StatelessWidget {
     }
   }
 
-  void showBlockConfirmation(int? user_id, name, context) async {
+  void logTheBlockUserClick(
+    Profile profile,
+    String post,
+  ) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "block_user",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "post": post,
+        // "cta_click": cta_click,
+        "screen_name": "guwahati",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+
+  void showBlockConfirmation(int? user_id, name, context, post) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -705,6 +746,13 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                     ),
               ),
               onPressed: () {
+                logTheBlockUserClick(
+                    Provider.of<DataProvider>(
+                            Navigation.instance.navigatorKey.currentContext ??
+                                context,
+                            listen: false)
+                        .profile!,
+                    post);
                 blockUser(user_id);
               },
             ),
@@ -719,9 +767,52 @@ class GuwahatiConnectPostCard extends StatelessWidget {
       },
     );
   }
+
+  void logTheReactionPostClick(
+      Profile profile, String post, String cta_click) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "reaction_on_post",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "post": post,
+        "cta_click": cta_click,
+        "screen_name": "guwahati",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
 }
 
-Future<void> _showAlertDialog(context, id) async {
+void logTheReportPostClick(
+    Profile profile, String post, String cta_click) async {
+  // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+  // String id = await FirebaseInstallations.instance.getId();
+  await FirebaseAnalytics.instance.logEvent(
+    name: "report_the_post",
+    parameters: {
+      "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+      "client_id_event": id,
+      "user_id_event": profile.id,
+      "post": post,
+      "cta_click": cta_click,
+      "screen_name": "guwahati",
+      "user_login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+      "client_id": id,
+      "user_id_tvc": profile.id,
+    },
+  );
+}
+
+Future<void> _showAlertDialog(context, id, question) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -767,6 +858,12 @@ Future<void> _showAlertDialog(context, id) async {
                         .reportCategories[index];
                     return GestureDetector(
                       onTap: () {
+                        logTheReportPostClick(
+                          Provider.of<DataProvider>(context, listen: false)
+                              .profile!,
+                          question,
+                          item.name!,
+                        );
                         reportPost_Comment(
                             context, id, item.id, "guwahati-connect");
                       },

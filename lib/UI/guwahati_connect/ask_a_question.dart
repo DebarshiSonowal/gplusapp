@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:badges/badges.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +17,7 @@ import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 
 class AskAQuestionPage extends StatefulWidget {
@@ -227,6 +229,15 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                   onTap: () {
                     // showDialogBox();
                     if (desc.text.isNotEmpty) {
+                      logTheAskAQuestionClick(
+                        Provider.of<DataProvider>(
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .profile!,
+                        desc.text,
+                      );
                       postQuestion();
                     } else {}
                   },
@@ -435,6 +446,28 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
               listen: false)
           .setGuwahatiConnect(response.posts);
     }
+  }
+
+
+  void logTheAskAQuestionClick(Profile profile, String field_entered) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "ask_a_question_submit",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "field_entered": field_entered,
+        // "cta_click": cta_click,
+        "screen_name": "guwahati",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 
   void showError(String msg) {
