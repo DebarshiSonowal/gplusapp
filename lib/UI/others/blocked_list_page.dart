@@ -47,7 +47,7 @@ class _BlockedUsersListPageState extends State<BlockedUsersListPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Blocked Users1",
+                    "Blocked Users",
                     style: Theme.of(
                             Navigation.instance.navigatorKey.currentContext!)
                         .textTheme

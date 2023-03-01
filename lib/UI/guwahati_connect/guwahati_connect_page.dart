@@ -175,6 +175,11 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                     color: Colors.white,
                   ),
                   onPress: () {
+                    logTheMyListClick(Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                        .profile!);
                     _animationController?.reverse();
                     Navigation.instance.navigate('/guwahatiConnectsMy');
                   },
@@ -394,7 +399,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                         );
                 }),
                 SizedBox(
-                  height: 15.h,
+                  height: 17.h,
                 ),
               ],
             ),
@@ -419,6 +424,26 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
         "screen_name": "guwahati",
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+  void logTheMyListClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "my_list_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "post": post,
+        // "cta_click": cta_click,
+        "screen_name": "guwahati",
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },

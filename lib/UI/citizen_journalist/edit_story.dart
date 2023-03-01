@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:badges/badges.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -16,6 +17,7 @@ import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
@@ -288,6 +290,12 @@ class _EditStoryState extends State<EditStory> {
                         onTap: () {
                           // showDialogBox();
                           if (title.text.isNotEmpty && desc.text.isNotEmpty) {
+                            logTheCjSubmitClick(Provider.of<DataProvider>(
+                                Navigation.instance.navigatorKey
+                                    .currentContext ??
+                                    context,
+                                listen: false)
+                                .profile!);
                             postStory(widget.id, 1);
                           } else {
                             showError(
@@ -310,6 +318,12 @@ class _EditStoryState extends State<EditStory> {
                         onTap: () {
                           // showDialogBox();
                           if (title.text.isNotEmpty && desc.text.isNotEmpty) {
+                            logTheCjDraftSubmitClick(Provider.of<DataProvider>(
+                                Navigation.instance.navigatorKey
+                                    .currentContext ??
+                                    context,
+                                listen: false)
+                                .profile!);
                             postStory(widget.id, 0);
                           } else {
                             showError(
@@ -531,83 +545,83 @@ class _EditStoryState extends State<EditStory> {
     }
   }
 
-  void showDialogBox() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          insetPadding: EdgeInsets.zero,
-          contentPadding: EdgeInsets.zero,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10.0),
-            ),
-          ),
-          backgroundColor: Colors.white,
-          title: Text(
-            'Be a journalist!',
-            style: Theme.of(context).textTheme.headline1?.copyWith(
-                  color: Constance.secondaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          content: Container(
-            padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
-            // height: 50.h,
-            width: 80.w,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  FontAwesomeIcons.podcast,
-                  color: Constance.secondaryColor,
-                  size: 15.h,
-                ),
-                Text(
-                  'Hello ${Provider.of<DataProvider>(context).profile?.name ?? ""}',
-                  style: Theme.of(context).textTheme.headline3?.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(height: 1.h),
-                Text(
-                  'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                  ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                  ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                  ' remaining essentially unchanged',
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(height: 1.h),
-                Text(
-                  'is simply dummy text of the printing and typesetting industry',
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(height: 1.h),
-                SizedBox(
-                  width: double.infinity,
-                  child: CustomButton(
-                      txt: 'Go Ahead',
-                      onTap: () {
-                        Navigation.instance.goBack();
-                      }),
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  // void showDialogBox() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         insetPadding: EdgeInsets.zero,
+  //         contentPadding: EdgeInsets.zero,
+  //         clipBehavior: Clip.antiAliasWithSaveLayer,
+  //         shape: const RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.all(
+  //             Radius.circular(10.0),
+  //           ),
+  //         ),
+  //         backgroundColor: Colors.white,
+  //         title: Text(
+  //           'Be a journalist!',
+  //           style: Theme.of(context).textTheme.headline1?.copyWith(
+  //                 color: Constance.secondaryColor,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //         ),
+  //         content: Container(
+  //           padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
+  //           // height: 50.h,
+  //           width: 80.w,
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             mainAxisAlignment: MainAxisAlignment.start,
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Icon(
+  //                 FontAwesomeIcons.podcast,
+  //                 color: Constance.secondaryColor,
+  //                 size: 15.h,
+  //               ),
+  //               Text(
+  //                 'Hello ${Provider.of<DataProvider>(context).profile?.name ?? ""}',
+  //                 style: Theme.of(context).textTheme.headline3?.copyWith(
+  //                       color: Colors.black,
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //               ),
+  //               SizedBox(height: 1.h),
+  //               Text(
+  //                 'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
+  //                 ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+  //                 ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+  //                 ' remaining essentially unchanged',
+  //                 style: Theme.of(context).textTheme.headline5?.copyWith(
+  //                       color: Colors.black,
+  //                       // fontWeight: FontWeight.bold,
+  //                     ),
+  //               ),
+  //               SizedBox(height: 1.h),
+  //               Text(
+  //                 'is simply dummy text of the printing and typesetting industry',
+  //                 style: Theme.of(context).textTheme.headline5?.copyWith(
+  //                       color: Colors.black,
+  //                       // fontWeight: FontWeight.bold,
+  //                     ),
+  //               ),
+  //               SizedBox(height: 1.h),
+  //               SizedBox(
+  //                 width: double.infinity,
+  //                 child: CustomButton(
+  //                     txt: 'Go Ahead',
+  //                     onTap: () {
+  //                       Navigation.instance.goBack();
+  //                     }),
+  //               )
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   void postStory(id, is_story_submit) async {
     Navigation.instance.navigate('/loadingDialog');
@@ -637,6 +651,46 @@ class _EditStoryState extends State<EditStory> {
     } else {
       Navigation.instance.goBack();
     }
+  }
+  void logTheCjSubmitClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "cj_submit_a_story_final",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "post": post,
+        // "cta_click": cta_click,
+        "screen_name": "citizen_journalist",
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+  void logTheCjDraftSubmitClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "save_as_draft_final",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "post": post,
+        // "cta_click": cta_click,
+        "screen_name": "citizen_journalist",
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 
   fetchDetails() async {

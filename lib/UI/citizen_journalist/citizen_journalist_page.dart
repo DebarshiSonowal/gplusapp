@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
@@ -10,6 +11,7 @@ import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
@@ -44,16 +46,20 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
       }
     });
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar("citizen_journalist",true,_scaffoldKey),
-      drawer: const BergerMenuMemPage(screen: 'citizen_journalist',),
-      bottomNavigationBar: CustomNavigationBar(current,"citizen_journalist"),
+      appBar: Constance.buildAppBar("citizen_journalist", true, _scaffoldKey),
+      drawer: const BergerMenuMemPage(
+        screen: 'citizen_journalist',
+      ),
+      bottomNavigationBar: CustomNavigationBar(current, "citizen_journalist"),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.h),
         height: double.infinity,
@@ -124,6 +130,12 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
                               .profile
                               ?.is_plan_active ??
                           false) {
+                        logTheCjSubmitClick(Provider.of<DataProvider>(
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .profile!);
                         // Navigation.instance.navigate('/exclusivePage');
                         Navigation.instance.navigate('/submitStory');
                       } else {
@@ -141,6 +153,12 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
                         MaterialStateProperty.all(Constance.primaryColor),
                   ),
                   onPressed: () {
+                    logTheCjDraftsClick(Provider.of<DataProvider>(
+                        Navigation
+                            .instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                        .profile!);
                     Navigation.instance.navigate('/draftStory');
                   },
                   child: Text(
@@ -187,8 +205,6 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
     );
   }
 
-
-
   fetchText() async {
     if (Provider.of<DataProvider>(
                 Navigation.instance.navigatorKey.currentContext ?? context,
@@ -210,5 +226,46 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
         Navigation.instance.goBack();
       }
     }
+  }
+
+  void logTheCjSubmitClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "cj_submit_a_story_intiate",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "post": post,
+        // "cta_click": cta_click,
+        "screen_name": "citizen_journalist",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+  void logTheCjDraftsClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "drafts_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "post": post,
+        // "cta_click": cta_click,
+        "screen_name": "citizen_journalist",
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 }
