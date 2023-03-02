@@ -1,12 +1,17 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:like_button/like_button.dart';
+import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
+import '../Helper/DataProvider.dart';
+import '../Helper/Storage.dart';
 import '../Model/classified.dart';
+import '../Model/profile.dart';
 import '../Navigation/Navigate.dart';
 import '../Networking/api_provider.dart';
 import 'alert.dart';
@@ -116,8 +121,18 @@ class ClassifiedMyListCard extends StatelessWidget {
                               ],
                               onSelected: (int value) {
                                 if (value == 1) {
+                                  logTheClassifiedMyListPostClick(
+                                      Provider.of<DataProvider>(
+                                          Navigation.instance.navigatorKey.currentContext ??
+                                              context,
+                                          listen: false).profile!,"edit");
                                   updateClassified(current.id);
                                 } else {
+                                  logTheClassifiedMyListPostClick(
+                                      Provider.of<DataProvider>(
+                                          Navigation.instance.navigatorKey.currentContext ??
+                                              context,
+                                          listen: false).profile!,"delete");
                                   deleteClassified(current.id);
                                 }
                               },
@@ -331,4 +346,25 @@ class ClassifiedMyListCard extends StatelessWidget {
         return Constance.primaryColor;
     }
   }
+  void logTheClassifiedMyListPostClick(Profile profile, String cta_click) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "classified_my_list_post_interaction",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "cta_click": cta_click,
+        // "cta_click": cta_click,
+        "screen_name": "classified",
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
 }
+

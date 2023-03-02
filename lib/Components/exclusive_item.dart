@@ -94,7 +94,7 @@ class ExclusiveItem extends StatelessWidget {
                 Expanded(
                   child: Text(
                     item.title ?? "",
-                    maxLines: 3,
+                    maxLines: 5,
                     style: Theme.of(context)
                         .textTheme
                         .headline4

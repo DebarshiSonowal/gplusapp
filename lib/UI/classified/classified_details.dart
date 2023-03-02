@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,6 +20,7 @@ import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
@@ -43,12 +45,14 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
     super.initState();
     Future.delayed(Duration.zero, () => fetchDetails());
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("classified",true,_scaffoldKey),
+      appBar: Constance.buildAppBar("classified", true, _scaffoldKey),
       drawer: const BergerMenuMemPage(screen: "classified"),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -92,6 +96,19 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                               children: [
                                 IconButton(
                                     onPressed: () {
+                                      logTheAddToFavouritesClick(
+                                        Provider.of<DataProvider>(
+                                                Navigation.instance.navigatorKey
+                                                        .currentContext ??
+                                                    context,
+                                                listen: false)
+                                            .profile!,
+                                        data.selectedClassified!.title!,
+                                        data.selectedClassified!.description!,
+                                        data.selectedClassified!.locality!
+                                            .name!,
+                                        data.selectedClassified!.total_views!,
+                                      );
                                       setAsFavourite(
                                           data.selectedClassified?.id,
                                           'classified');
@@ -363,10 +380,10 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                         padding: EdgeInsets.symmetric(horizontal: 5.w),
                         child: ReadMoreText(
                           data.selectedClassified?.description ??
-                          'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                          ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                          ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                          ' remaining essentially unchanged',
+                              'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
+                                  ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+                                  ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+                                  ' remaining essentially unchanged',
                           style:
                               Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Storage.instance.isDarkMode
@@ -417,7 +434,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
           );
         }),
       ),
-      bottomNavigationBar: CustomNavigationBar(current,"classified"),
+      bottomNavigationBar: CustomNavigationBar(current, "classified"),
     );
   }
 
@@ -624,5 +641,34 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
       Navigation.instance.goBack();
       showError(response.message ?? "Something went wrong");
     }
+  }
+
+  void logTheAddToFavouritesClick(
+    Profile profile,
+    String title,
+    String field_entered,
+    String locality,
+    int views,
+  ) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "add_to_favourites",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "title": title,
+        "field_entered": field_entered,
+        "locality": locality,
+        "screen_name": "classified",
+        "views": views,
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 }

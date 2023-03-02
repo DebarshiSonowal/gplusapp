@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -21,6 +22,7 @@ import '../../Components/classified_popup.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
@@ -95,16 +97,22 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("classified",true,scaffoldKey),
+      appBar: Constance.buildAppBar("classified", true, scaffoldKey),
       key: scaffoldKey,
-      drawer: const BergerMenuMemPage(screen: "classified",),
+      drawer: const BergerMenuMemPage(
+        screen: "classified",
+      ),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
+          logThePostAListingClick(Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .profile!);
           checkIt();
         },
-        icon: Icon(Icons.add),
+        icon: const Icon(Icons.add),
         label: Text(
           "Post a listing",
           style: Theme.of(context).textTheme.headline5?.copyWith(
@@ -228,6 +236,12 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                             //   selected = 3;
                             // });
                             // fetchClassified(result);
+                            logTheMyListClick(Provider.of<DataProvider>(
+                                    Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                        context,
+                                    listen: false)
+                                .profile!);
                             var result = await Navigation.instance.navigate(
                               '/classifiedMyListDetails',
                             );
@@ -383,11 +397,9 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
           );
         }),
       ),
-      bottomNavigationBar: CustomNavigationBar(current,"classified"),
+      bottomNavigationBar: CustomNavigationBar(current, "classified"),
     );
   }
-
-
 
   void showDialogBox() {
     Storage.instance.setClassified();
@@ -511,6 +523,12 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   void getFilter() async {
     final result = await Navigation.instance.navigate('/filterPage');
     if (result != null) {
+      logTheFilterAppliedClick(
+          Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .profile!,
+          result);
       fetchClassified(result);
     }
   }
@@ -638,6 +656,69 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
       }
     }
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
+  }
+
+  void logThePostAListingClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "post_a_listing_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "post": post,
+        // "cta_click": cta_click,
+        "screen_name": "classified",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+
+  void logTheMyListClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "my_list_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "post": post,
+        // "cta_click": cta_click,
+        "screen_name": "classified",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+
+  void logTheFilterAppliedClick(Profile profile, String filter_applied) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "filter_applied",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "filter_applied": filter_applied,
+        // "cta_click": cta_click,
+        "screen_name": "classified",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 
   void fetchDealMsg() async {

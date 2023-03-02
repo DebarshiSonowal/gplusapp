@@ -187,6 +187,9 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
                   ),
                   onPressed: () {
                     // Navigation.instance.goBack();
+                    logTheStoriesSubmitterClick(Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ?? context,
+                        listen: false).profile!);
                     Navigation.instance.navigate('/submitedStory');
                   },
                   child: Text(
@@ -254,6 +257,26 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
     // String id = await FirebaseInstallations.instance.getId();
     await FirebaseAnalytics.instance.logEvent(
       name: "drafts_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "post": post,
+        // "cta_click": cta_click,
+        "screen_name": "citizen_journalist",
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+  void logTheStoriesSubmitterClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "stories_submitted_click",
       parameters: {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,

@@ -1,5 +1,6 @@
 // import 'package:empty_widget/empty_widget.dart';
 import 'package:badges/badges.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
@@ -11,6 +12,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 
 class DraftStory extends StatefulWidget {
@@ -204,6 +206,15 @@ class _DraftStoryState extends State<DraftStory> {
                                             ),
                                             GestureDetector(
                                               onTap: () {
+                                                logTheDeleteDraftClick(Provider.of<
+                                                            DataProvider>(
+                                                        Navigation
+                                                                .instance
+                                                                .navigatorKey
+                                                                .currentContext ??
+                                                            context,
+                                                        listen: false)
+                                                    .profile!);
                                                 deletePost(item.id);
                                               },
                                               child: Text(
@@ -282,6 +293,27 @@ class _DraftStoryState extends State<DraftStory> {
     } else {
       Navigation.instance.goBack();
     }
+  }
+
+  void logTheDeleteDraftClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "drafts_delete_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "post": post,
+        // "cta_click": cta_click,
+        "screen_name": "citizen_journalist",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 
   fetchDrafts() async {

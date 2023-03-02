@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:badges/badges.dart' as bd;
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -15,6 +16,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Model/category_name.dart';
+import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +34,7 @@ import '../../Components/suggestion_card.dart';
 import '../../Components/suggestion_list_view.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
@@ -260,9 +263,7 @@ class _StoryPageState extends State<StoryPage> {
                                       children: [
                                         TextSpan(
                                           text:
-                                              '${data.selectedArticle?.author_name==""?
-                                                  "G Plus News"
-                                                  :data.selectedArticle?.author_name}',
+                                              '${data.selectedArticle?.author_name == "" ? "G Plus News" : data.selectedArticle?.author_name}',
                                           style: Theme.of(Navigation.instance
                                                   .navigatorKey.currentContext!)
                                               .textTheme
@@ -308,6 +309,17 @@ class _StoryPageState extends State<StoryPage> {
                               children: [
                                 IconButton(
                                   onPressed: () {
+                                    logTheClassifiedMyListPostClick(
+                                      data.profile!,
+                                      !like ? "like" : "dislike",
+                                      data.selectedArticle!.title!,
+                                      "g_plus_exclusive",
+                                      data.selectedArticle!.id!,
+                                      data.selectedArticle!.author_name!,
+                                      DateFormat("dd MMM,yyyy").format(
+                                          DateTime.parse(data
+                                              .selectedArticle!.publish_date!)),
+                                    );
                                     postLike(data.selectedArticle?.id, 1);
                                     setState(() {
                                       like = !like;
@@ -337,6 +349,17 @@ class _StoryPageState extends State<StoryPage> {
                                 // ),
                                 IconButton(
                                   onPressed: () {
+                                    logTheClassifiedMyListPostClick(
+                                      data.profile!,
+                                      dislike ? "like" : "dislike",
+                                      data.selectedArticle!.title!,
+                                      "g_plus_exclusive",
+                                      data.selectedArticle!.id!,
+                                      data.selectedArticle!.author_name!,
+                                      DateFormat("dd MMM,yyyy").format(
+                                          DateTime.parse(data
+                                              .selectedArticle!.publish_date!)),
+                                    );
                                     postLike(data.selectedArticle?.id, 0);
                                     setState(() {
                                       dislike = !dislike;
@@ -365,6 +388,17 @@ class _StoryPageState extends State<StoryPage> {
                                 // ),
                                 IconButton(
                                   onPressed: () {
+                                    logTheClassifiedMyListPostClick(
+                                      data.profile!,
+                                      "bookmark",
+                                      data.selectedArticle!.title!,
+                                      "g_plus_exclusive",
+                                      data.selectedArticle!.id!,
+                                      data.selectedArticle!.author_name!,
+                                      DateFormat("dd MMM,yyyy").format(
+                                          DateTime.parse(data
+                                              .selectedArticle!.publish_date!)),
+                                    );
                                     addBookmark(
                                         data.selectedArticle?.id, 'news');
                                     setState(() {
@@ -393,6 +427,17 @@ class _StoryPageState extends State<StoryPage> {
                                     //         ""
                                     //     ? 'check out our website https://guwahatiplus.com/'
                                     //     : '${data.selectedArticle?.web_url}');
+                                    logTheClassifiedMyListPostClick(
+                                      data.profile!,
+                                      "share",
+                                      data.selectedArticle!.title!,
+                                      "g_plus_exclusive",
+                                      data.selectedArticle!.id!,
+                                      data.selectedArticle!.author_name!,
+                                      DateFormat("dd MMM,yyyy").format(
+                                          DateTime.parse(data
+                                              .selectedArticle!.publish_date!)),
+                                    );
                                     generateURL(
                                         data.selectedArticle?.first_cat_name
                                             ?.seo_name,
@@ -542,47 +587,48 @@ class _StoryPageState extends State<StoryPage> {
                                   );
                                 },
                                 "blockquote": (context, child) {
-                                  return context
-                                      .tree.element?.innerHtml
-                                      .split("=").length==3?SizedBox(
-                                    height: 28.h,
-                                    // width: 90.h,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        _launchUrl(Uri.parse(context
-                                                .tree.element?.innerHtml
-                                                .split("=")[3]
-                                                .split("?")[0]
-                                                .substring(1) ??
-                                            ""));
+                                  return context.tree.element?.innerHtml
+                                              .split("=")
+                                              .length ==
+                                          3
+                                      ? SizedBox(
+                                          height: 28.h,
+                                          // width: 90.h,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              _launchUrl(Uri.parse(context
+                                                      .tree.element?.innerHtml
+                                                      .split("=")[3]
+                                                      .split("?")[0]
+                                                      .substring(1) ??
+                                                  ""));
 
-                                        // print(context.tree.element?.innerHtml
-                                        //     .split("=")[3]
-                                        //     .split("?")[0]);
-                                      },
-                                      child: AbsorbPointer(
-                                        child: WebView(
-                                          gestureNavigationEnabled: false,
-                                          zoomEnabled: true,
-                                          initialUrl: Uri.dataFromString(
-                                            getHtmlString(context
-                                                .tree.element?.innerHtml
-                                                .split("=")[3]
-                                                .split("?")[0]
-                                                .split("/")
-                                                .last),
-                                            mimeType: 'text/html',
-                                            encoding:
-                                                Encoding.getByName('utf-8'),
-                                          ).toString(),
-                                          javascriptMode:
-                                              JavascriptMode.unrestricted,
-                                        ),
-                                      ),
-                                    ),
-                                  ):Container(
-
-                                  );
+                                              // print(context.tree.element?.innerHtml
+                                              //     .split("=")[3]
+                                              //     .split("?")[0]);
+                                            },
+                                            child: AbsorbPointer(
+                                              child: WebView(
+                                                gestureNavigationEnabled: false,
+                                                zoomEnabled: true,
+                                                initialUrl: Uri.dataFromString(
+                                                  getHtmlString(context
+                                                      .tree.element?.innerHtml
+                                                      .split("=")[3]
+                                                      .split("?")[0]
+                                                      .split("/")
+                                                      .last),
+                                                  mimeType: 'text/html',
+                                                  encoding: Encoding.getByName(
+                                                      'utf-8'),
+                                                ).toString(),
+                                                javascriptMode:
+                                                    JavascriptMode.unrestricted,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : Container();
                                   // return Container(
                                   //     child: Text(
                                   //   '${context.tree.element?.innerHtml.split("=")[3].split("?")[0].split("/").last}',
@@ -1096,7 +1142,6 @@ class _StoryPageState extends State<StoryPage> {
               listen: false)
           .setSuggestion(response.articles ?? []);
       // _refreshController.refreshCompleted();
-
     } else {
       // Navigation.instance.goBack();
       // _refreshController.refreshFailed();
@@ -1258,5 +1303,37 @@ class _StoryPageState extends State<StoryPage> {
 
     Share.share(dynamicLink.shortUrl.toString());
     // return "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}";
+  }
+
+  void logTheClassifiedMyListPostClick(
+      Profile profile,
+      String cta_click,
+      String heading_name,
+      String title,
+      int article_id,
+      String author_name,
+      String published_date) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "article_interaction",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "article_id": article_id,
+        "title": title,
+        "author_name": author_name,
+        "published_date": published_date,
+        "cta_click": cta_click,
+        "heading_name": heading_name,
+        "screen_name": "article_detail",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 }

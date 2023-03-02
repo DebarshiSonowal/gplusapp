@@ -786,4 +786,5 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
         return Constance.primaryColor;
     }
   }
+
 }

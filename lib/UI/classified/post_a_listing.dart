@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:badges/badges.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +17,7 @@ import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
@@ -61,7 +63,9 @@ class _PostAListingState extends State<PostAListing> {
     desc.dispose();
     price.dispose();
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -429,6 +433,19 @@ class _PostAListingState extends State<PostAListing> {
                         desc.text.isNotEmpty &&
                         price.text.isNotEmpty &&
                         localityEditor.text.isNotEmpty) {
+                      logTheClassifiedSubmitClick(
+                        Provider.of<DataProvider>(
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .profile!,
+                        selectedCategory,
+                        localityEditor.text,
+                        title.text,
+                        desc.text,
+                        price.text,
+                      );
                       postClassified(selectedCategory, localityEditor.text,
                           title.text, desc.text, price.text, attachements);
                     } else {
@@ -443,10 +460,9 @@ class _PostAListingState extends State<PostAListing> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current,"classified"),
+      bottomNavigationBar: CustomNavigationBar(current, "classified"),
     );
   }
-
 
   void showPhotoBottomSheet(Function(int) getImage) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -676,11 +692,47 @@ class _PostAListingState extends State<PostAListing> {
     }
   }
 
+  void logTheClassifiedSubmitClick(
+      Profile profile,
+      String story_category_selected,
+      String locality,
+      String title,
+      String field_entered,
+      String price) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "classified_submit_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "story_category_selected": story_category_selected,
+        "locality": locality,
+        "title": title,
+        "field_entered": field_entered,
+        "price": price,
+        // "cta_click": cta_click,
+        "screen_name": "classified",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+
   void postClassified(classified_category_id, locality_name, title, description,
       price, List<File> files) async {
     Navigation.instance.navigate('/loadingDialog');
     final reponse = await ApiProvider.instance.postClassified(
-        classified_category_id, locality_name, title, description, price, files);
+        classified_category_id,
+        locality_name,
+        title,
+        description,
+        price,
+        files);
     if (reponse.success ?? false) {
       Fluttertoast.showToast(msg: "Posted successfully");
       Navigation.instance.goBack();

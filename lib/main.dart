@@ -14,6 +14,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 // import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
+
 // import 'package:uni_links/uni_links.dart';
 // import 'dart:io';
 import 'Components/alert.dart';
@@ -30,6 +31,73 @@ import 'package:firebase_core/firebase_core.dart';
 import 'Networking/api_provider.dart';
 import 'UI/main/home_screen_page.dart';
 import 'firebase_options.dart';
+
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    description: 'This channel is used for important notifications.',
+    // description
+    importance: Importance.max,
+  );
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  const DarwinInitializationSettings initializationSettingsIos =
+      DarwinInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
+  );
+
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIos,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse:
+        (NotificationResponse notificationResponse) =>
+            onDidReceiveNotificationResponse(notificationResponse),
+    // onDidReceiveBackgroundNotificationResponse: (notificationResponse) =>
+    //     notificationTapBackground,
+  );
+  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+  debugPrint("test background message is coming ${message.data}");
+  // If `onMessage` is triggered with a notification, construct our own
+  // local notification to show to users using the created channel.
+  if (notification != null && android != null) {
+    flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channelDescription: channel.description,
+          // icon: android.smallIcon,
+          // other properties...
+        ),
+        iOS: DarwinNotificationDetails(
+          // badgeNumber: int.parse(channel.id),
+          subtitle: channel.name,
+          interruptionLevel: InterruptionLevel.critical,
+        ),
+      ),
+      payload: '${message.data}',
+    );
+  }
+}
 
 Future<void> onDidReceiveNotificationResponse(
     NotificationResponse notificationResponse) async {
@@ -164,72 +232,6 @@ void notificationTapBackground(
   }
 }
 
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    description: 'This channel is used for important notifications.',
-    // description
-    importance: Importance.max,
-  );
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  const DarwinInitializationSettings initializationSettingsIos =
-      DarwinInitializationSettings(
-    requestAlertPermission: true,
-    requestBadgePermission: true,
-    requestSoundPermission: true,
-  );
-
-  const InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsIos,
-  );
-
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    onDidReceiveNotificationResponse:
-        (NotificationResponse notificationResponse) =>
-            onDidReceiveNotificationResponse(notificationResponse),
-    // onDidReceiveBackgroundNotificationResponse: (notificationResponse) =>
-    //     notificationTapBackground,
-  );
-  RemoteNotification? notification = message.notification;
-  AndroidNotification? android = message.notification?.android;
-  debugPrint("test background message is coming ${message.data}");
-  // If `onMessage` is triggered with a notification, construct our own
-  // local notification to show to users using the created channel.
-  if (notification != null && android != null) {
-    flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
-      notification.title,
-      notification.body,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channelDescription: channel.description,
-          icon: android.smallIcon,
-          // other properties...
-        ),
-        iOS: DarwinNotificationDetails(
-          // badgeNumber: int.parse(channel.id),
-          subtitle: channel.name,
-          interruptionLevel: InterruptionLevel.critical,
-        ),
-      ),
-      payload: '${message.data}',
-    );
-  }
-}
-
 void main() async {
   // final FirebaseMessaging _firebaseMessaging;
   //Initializations
@@ -243,7 +245,7 @@ void main() async {
   Storage.instance.initializeStorage();
   StoreConfig(
     store: Store.appleStore,
-    apiKey: FlutterConfig.get('revenueCatIOSKey')??"",
+    apiKey: FlutterConfig.get('revenueCatIOSKey') ?? "",
   );
   // final PendingDynamicLinkData? initialLink = await FirebaseDynamicLinks.instance.getInitialLink();
   runApp(const MyApp());
@@ -395,21 +397,19 @@ class _MyAppState extends State<MyApp> {
     final PendingDynamicLinkData? initialLink =
         await FirebaseDynamicLinks.instance.getInitialLink();
     if (initialLink == null) {
-
     } else {
       final Uri deepLink = initialLink.link;
       debugPrint("URL link2 ${deepLink}");
-     Future.delayed(Duration(seconds: 5),(){
-       sendToRoute(
-         deepLink.path.split("/")[2].trim(),
-         deepLink.path.split("/")[3].trim(),
-         (deepLink.path.split("/").length <= 4
-             ? ""
-             : deepLink.path.split("/")[4].trim()),
-       );
-     });
+      Future.delayed(Duration(seconds: 5), () {
+        sendToRoute(
+          deepLink.path.split("/")[2].trim(),
+          deepLink.path.split("/")[3].trim(),
+          (deepLink.path.split("/").length <= 4
+              ? ""
+              : deepLink.path.split("/")[4].trim()),
+        );
+      });
       // Example of using the dynamic link to push the user to a different screen
-
     }
   }
 }
@@ -454,7 +454,6 @@ void fetchNotification() async {
             listen: false)
         .setNotificationInDevice(response.notification);
     // fetchReportMsg();
-
   } else {
     // fetchReportMsg();
   }
