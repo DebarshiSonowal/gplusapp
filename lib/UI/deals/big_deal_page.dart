@@ -31,14 +31,13 @@ class BigDealPage extends StatefulWidget {
 }
 
 class _BigDealPageState extends State<BigDealPage> {
-  String _value = 'Time',
-      deal = "";
+  String _value = 'Time', deal = "";
   bool expandCateg = false;
   var current = 1;
 
   final RefreshController _refreshController =
-  RefreshController(initialRefresh: true);
-
+      RefreshController(initialRefresh: true);
+  final ScrollController controller = ScrollController();
   bool isEmpty = false;
 
   void _onRefresh() async {
@@ -46,8 +45,8 @@ class _BigDealPageState extends State<BigDealPage> {
     final response = await ApiProvider.instance.getPromotedDeals();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setPromotedDeals(response.deals ?? []);
       setState(() {
         isEmpty = (response.deals?.isEmpty ?? false) ? true : false;
@@ -55,8 +54,8 @@ class _BigDealPageState extends State<BigDealPage> {
       final response1 = await ApiProvider.instance.getShopCategory();
       if (response1.success ?? false) {
         Provider.of<DataProvider>(
-            Navigation.instance.navigatorKey.currentContext ?? context,
-            listen: false)
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
             .setShopCategory(response1.categories ?? []);
         setState(() {
           isEmpty = (response1.categories?.isEmpty ?? false) ? true : false;
@@ -89,17 +88,24 @@ class _BigDealPageState extends State<BigDealPage> {
       } else {
         debugPrint("Here");
       }
-      if (Provider
-          .of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
-          .deal ==
+      if (Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .deal ==
           "") {
         fetchDealMsg();
       }
       // fetchDeals();
     });
-
+    controller.addListener(() {
+      logTheScrollClick(
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .profile!,
+        "${(controller.position.pixels / controller.position.maxScrollExtent) * 100.toInt()}%",
+      );
+    });
     fetchHistory();
   }
 
@@ -111,7 +117,7 @@ class _BigDealPageState extends State<BigDealPage> {
       key: _scaffoldKey,
       appBar: Constance.buildAppBar("bigdeal", true, _scaffoldKey),
       backgroundColor:
-      Storage.instance.isDarkMode ? Colors.black : Colors.white,
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       drawer: const BergerMenuMemPage(screen: "bigdeal"),
       body: SmartRefresher(
         enablePullDown: true,
@@ -145,194 +151,184 @@ class _BigDealPageState extends State<BigDealPage> {
             return true;
           },
           child: Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
             color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
             padding: EdgeInsets.symmetric(vertical: 2.h),
             child: Consumer<DataProvider>(builder: (context, current, _) {
               return current.deals.isNotEmpty || current.category.isNotEmpty
                   ? SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    current.deals.isEmpty
-                        ? Container()
-                        : Padding(
-                      padding:
-                      EdgeInsets.symmetric(horizontal: 5.w),
-                      child: Text(
-                        'Promoted Deals',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headline2
-                            ?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Constance.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    PromotedDeal(
-                      current: current,
-                    ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5.w),
-                      child: Text(
-                        'Categories',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headline3
-                            ?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Constance.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 3.w),
-                      child: Wrap(
-                        alignment: WrapAlignment.start,
-                        children: expandCateg
-                            ? current.category.map((e) {
-                          return ShopCategoryItem(
-                            e: e,
-                          );
-                        }).toList()
-                            : current.category
-                            .sublist(0, 8)
-                            .toList()
-                            .map((e) {
-                          return ShopCategoryItem(
-                            e: e,
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 2.5.h,
-                    ),
-                    current.category.length <= 8
-                        ? Container()
-                        : SizedBox(
-                      width: double.infinity,
-                      child: Center(
-                        // child: CustomButton(
-                        //     txt: expandCateg
-                        //         ? 'Show less'
-                        //         : 'View More',
-                        //     onTap: () {
-                        //       setState(() {
-                        //         expandCateg = !expandCateg;
-                        //       });
-                        //     }),
-                        child: GestureDetector(
-                          onTap: () {
-                            if (!expandCateg) {
-                              logTheViewMoreClick(
-                                  Provider
-                                      .of<DataProvider>(
-                                      Navigation
-                                          .instance
-                                          .navigatorKey
-                                          .currentContext ??
-                                          context,
-                                      listen: false)
-                                      .profile!);
-                            } else {
-                              logTheShowLessClick(
-                                  Provider
-                                      .of<DataProvider>(
-                                      Navigation
-                                          .instance
-                                          .navigatorKey
-                                          .currentContext ??
-                                          context,
-                                      listen: false)
-                                      .profile!);
-                            }
-                            setState(() {
-                              expandCateg = !expandCateg;
-                            });
-                          },
-                          child: Container(
-                            width: 90.w,
-                            // height: 4.h,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 1.h, horizontal: 4.w),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black54,
-                                ),
-                                borderRadius:
-                                const BorderRadius.all(
-                                    Radius.circular(5))),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  expandCateg
-                                      ? 'Show less'
-                                      : 'View More',
-                                  style: Theme
-                                      .of(context)
-                                      .textTheme
-                                      .headline5
-                                      ?.copyWith(
-                                    color: Storage
-                                        .instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black54,
+                      controller: controller,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          current.deals.isEmpty
+                              ? Container()
+                              : Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 5.w),
+                                  child: Text(
+                                    'Promoted Deals',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        ?.copyWith(
+                                          color: Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Constance.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
                                 ),
-                                Icon(
-                                  expandCateg
-                                      ? Icons.arrow_drop_up
-                                      : Icons.arrow_drop_down,
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black54,
-                                ),
-                              ],
+                          PromotedDeal(
+                            current: current,
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5.w),
+                            child: Text(
+                              'Categories',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline3
+                                  ?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ),
-                        ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 3.w),
+                            child: Wrap(
+                              alignment: WrapAlignment.start,
+                              children: expandCateg
+                                  ? current.category.map((e) {
+                                      return ShopCategoryItem(
+                                        e: e,
+                                      );
+                                    }).toList()
+                                  : current.category
+                                      .sublist(0, 8)
+                                      .toList()
+                                      .map((e) {
+                                      return ShopCategoryItem(
+                                        e: e,
+                                      );
+                                    }).toList(),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2.5.h,
+                          ),
+                          current.category.length <= 8
+                              ? Container()
+                              : SizedBox(
+                                  width: double.infinity,
+                                  child: Center(
+                                    // child: CustomButton(
+                                    //     txt: expandCateg
+                                    //         ? 'Show less'
+                                    //         : 'View More',
+                                    //     onTap: () {
+                                    //       setState(() {
+                                    //         expandCateg = !expandCateg;
+                                    //       });
+                                    //     }),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        if (!expandCateg) {
+                                          logTheViewMoreClick(
+                                              Provider.of<DataProvider>(
+                                                      Navigation
+                                                              .instance
+                                                              .navigatorKey
+                                                              .currentContext ??
+                                                          context,
+                                                      listen: false)
+                                                  .profile!);
+                                        } else {
+                                          logTheShowLessClick(
+                                              Provider.of<DataProvider>(
+                                                      Navigation
+                                                              .instance
+                                                              .navigatorKey
+                                                              .currentContext ??
+                                                          context,
+                                                      listen: false)
+                                                  .profile!);
+                                        }
+                                        setState(() {
+                                          expandCateg = !expandCateg;
+                                        });
+                                      },
+                                      child: Container(
+                                        width: 90.w,
+                                        // height: 4.h,
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 1.h, horizontal: 4.w),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Storage.instance.isDarkMode
+                                                  ? Colors.white
+                                                  : Colors.black54,
+                                            ),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(5))),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              expandCateg
+                                                  ? 'Show less'
+                                                  : 'View More',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                    color: Storage
+                                                            .instance.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black54,
+                                                  ),
+                                            ),
+                                            Icon(
+                                              expandCateg
+                                                  ? Icons.arrow_drop_up
+                                                  : Icons.arrow_drop_down,
+                                              color: Storage.instance.isDarkMode
+                                                  ? Colors.white
+                                                  : Colors.black54,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                          HistorySection(
+                            current: current,
+                          ),
+                          getSpace(),
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    HistorySection(
-                      current: current,
-                    ),
-                    getSpace(),
-                  ],
-                ),
-              )
+                    )
                   : Lottie.asset(
-                isEmpty
-                    ? Constance.noDataLoader
-                    : Constance.searchingIcon,
-              );
+                      isEmpty
+                          ? Constance.noDataLoader
+                          : Constance.searchingIcon,
+                    );
             }),
           ),
         ),
@@ -352,52 +348,6 @@ class _BigDealPageState extends State<BigDealPage> {
       );
     }
   }
-
-  // AppBar buildAppBar() {
-  //   return AppBar(
-  //     title: GestureDetector(
-  //       onTap: () {
-  //         Provider.of<DataProvider>(
-  //                 Navigation.instance.navigatorKey.currentContext ?? context,
-  //                 listen: false)
-  //             .setCurrent(0);
-  //         Navigation.instance.navigate('/mainWithAnimation');
-  //       },
-  //       child: Image.asset(
-  //         Constance.logoIcon,
-  //         fit: BoxFit.fill,
-  //         scale: 2,
-  //       ),
-  //     ),
-  //     centerTitle: true,
-  //     backgroundColor: Constance.primaryColor,
-  //     actions: [
-  //       IconButton(
-  //         onPressed: () {
-  //           Navigation.instance.navigate('/notification');
-  //         },
-  //         icon: Consumer<DataProvider>(builder: (context, data, _) {
-  //           return Badge(
-  //             badgeColor: Constance.secondaryColor,
-  //             badgeContent: Text(
-  //               '${data.notifications.length}',
-  //               style: Theme.of(context).textTheme.headline5?.copyWith(
-  //                     color: Constance.thirdColor,
-  //                   ),
-  //             ),
-  //             child: const Icon(Icons.notifications),
-  //           );
-  //         }),
-  //       ),
-  //       IconButton(
-  //         onPressed: () {
-  //           Navigation.instance.navigate('/search',args: "");
-  //         },
-  //         icon: Icon(Icons.search),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   void showSortByOption() {
     showModalBottomSheet(
@@ -425,15 +375,11 @@ class _BigDealPageState extends State<BigDealPage> {
                   children: [
                     Text(
                       'Sort by',
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(
-                        color: Constance.primaryColor,
-                        fontSize: 2.h,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Constance.primaryColor,
+                            fontSize: 2.h,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     SizedBox(
                       height: 4.h,
@@ -460,15 +406,11 @@ class _BigDealPageState extends State<BigDealPage> {
                         Text(
                           'Time',
                           style:
-                          Theme
-                              .of(context)
-                              .textTheme
-                              .headline6
-                              ?.copyWith(
-                            color: Constance.primaryColor,
-                            fontSize: 1.8.h,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Constance.primaryColor,
+                                    fontSize: 1.8.h,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     ),
@@ -494,15 +436,11 @@ class _BigDealPageState extends State<BigDealPage> {
                         Text(
                           'Alphabetical',
                           style:
-                          Theme
-                              .of(context)
-                              .textTheme
-                              .headline6
-                              ?.copyWith(
-                            color: Constance.primaryColor,
-                            fontSize: 1.8.h,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    color: Constance.primaryColor,
+                                    fontSize: 1.8.h,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     ),
@@ -530,20 +468,11 @@ class _BigDealPageState extends State<BigDealPage> {
           ),
           backgroundColor: Colors.white,
           title: Text(
-            'Hello ${Provider
-                .of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-                .profile
-                ?.name}',
-            style: Theme
-                .of(context)
-                .textTheme
-                .headline3
-                ?.copyWith(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
+            'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
+            style: Theme.of(context).textTheme.headline3?.copyWith(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           content: Container(
             padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
@@ -564,43 +493,33 @@ class _BigDealPageState extends State<BigDealPage> {
                 SizedBox(height: 1.h),
                 Text(
                   'Welcome\nto Big Deal!',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline1
-                      ?.copyWith(
-                    color: Constance.secondaryColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.headline1?.copyWith(
+                        color: Constance.secondaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 SizedBox(height: 1.h),
                 Text(
-                  Provider
-                      .of<DataProvider>(
-                      Navigation.instance.navigatorKey
-                          .currentContext ??
-                          context,
-                      listen: false)
-                      .deal ==
-                      ""
+                  Provider.of<DataProvider>(
+                                  Navigation.instance.navigatorKey
+                                          .currentContext ??
+                                      context,
+                                  listen: false)
+                              .deal ==
+                          ""
                       ? 'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                      ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                      ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                      ' remaining essentially unchanged'
-                      : Provider
-                      .of<DataProvider>(
-                      Navigation.instance.navigatorKey.currentContext ??
-                          context,
-                      listen: false)
-                      .deal,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline5
-                      ?.copyWith(
-                    color: Colors.black,
-                    // fontWeight: FontWeight.bold,
-                  ),
+                          ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+                          ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+                          ' remaining essentially unchanged'
+                      : Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .deal,
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.black,
+                        // fontWeight: FontWeight.bold,
+                      ),
                 ),
                 SizedBox(height: 1.h),
                 // Text(
@@ -642,7 +561,7 @@ class _BigDealPageState extends State<BigDealPage> {
   void selectedCategory(String? title) {
     switch (title) {
       case 'Parlours':
-      // Navigation.instance.navigate('/categorySelect');
+        // Navigation.instance.navigate('/categorySelect');
         break;
       case 'Food':
         Navigation.instance.navigate('/fooddealpage');
@@ -657,14 +576,14 @@ class _BigDealPageState extends State<BigDealPage> {
     final response = await ApiProvider.instance.getPromotedDeals();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setPromotedDeals(response.deals ?? []);
       final response1 = await ApiProvider.instance.getShopCategory();
       if (response1.success ?? false) {
         Provider.of<DataProvider>(
-            Navigation.instance.navigatorKey.currentContext ?? context,
-            listen: false)
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
             .setShopCategory(response1.categories ?? []);
         // _refreshController.refreshCompleted();
         Navigation.instance.goBack();
@@ -682,8 +601,8 @@ class _BigDealPageState extends State<BigDealPage> {
     final response = await ApiProvider.instance.redeemCupon(id, code);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setRedeemDetails(response.details!);
       fetchHistory();
       Navigation.instance.navigate('/redeemOfferPage');
@@ -696,8 +615,8 @@ class _BigDealPageState extends State<BigDealPage> {
     final response = await ApiProvider.instance.getRedeemHistory();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setRedeemHistory(response.data ?? []);
     } else {
       // _refreshController.refreshFailed();
@@ -722,12 +641,12 @@ class _BigDealPageState extends State<BigDealPage> {
     final response = await ApiProvider.instance.fetchMessages();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setDealText(response.deal ?? "");
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setClassifiedText(response.classified ?? "");
     }
   }
@@ -745,7 +664,7 @@ class _BigDealPageState extends State<BigDealPage> {
         // "big_deal_category": big_deal_category,
         "screen_name": "bigdeal",
         "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },
@@ -765,7 +684,30 @@ class _BigDealPageState extends State<BigDealPage> {
         // "big_deal_category": big_deal_category,
         "screen_name": "bigdeal",
         "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+
+  void logTheScrollClick(
+    Profile profile,
+    String percentage_scroll,
+  ) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "page_scroll",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "percentage_scroll": percentage_scroll,
+        "screen_name": "bigdeal",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },

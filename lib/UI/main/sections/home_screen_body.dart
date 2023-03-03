@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/UI/main/sections/poll_of_the_week_section.dart';
@@ -10,6 +11,8 @@ import '../../../Components/slider_home.dart';
 import '../../../Helper/Constance.dart';
 import '../../../Helper/DataProvider.dart';
 import '../../../Helper/Storage.dart';
+import '../../../Model/profile.dart';
+import '../../../Navigation/Navigate.dart';
 import 'StoriesSection.dart';
 import 'VideoReportSection.dart';
 import 'ads_section.dart';
@@ -24,19 +27,38 @@ class HomeScreenBody extends StatefulWidget {
       required this.onRefresh,
       required this.onLoading,
       required this.showExitDialog,
-      required this.controller, required this.random, required this.fetchPoll, required this.poll, required this.getSpace})
+      required this.controller,
+      required this.random,
+      required this.fetchPoll,
+      required this.poll,
+      required this.getSpace})
       : super(key: key);
   final RefreshController refreshController;
-  final Function onRefresh, onLoading, showExitDialog,fetchPoll,getSpace;
+  final Function onRefresh, onLoading, showExitDialog, fetchPoll, getSpace;
   final ScrollController controller;
   final int random;
   final String poll;
+
   @override
   State<HomeScreenBody> createState() => _HomeScreenBodyState();
 }
 
 class _HomeScreenBodyState extends State<HomeScreenBody> {
   bool showing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(() {
+      logTheScrollClick(
+        Provider.of<DataProvider>(
+            Navigation.instance.navigatorKey.currentContext ?? context,
+            listen: false)
+            .profile!,
+        "${(widget.controller.position.pixels/widget.controller.position.maxScrollExtent)*100.toInt()}%",
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +89,8 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
           },
         ),
         controller: widget.refreshController,
-        onRefresh: ()=>widget.onRefresh(),
-        onLoading: ()=>widget.onLoading(),
+        onRefresh: () => widget.onRefresh(),
+        onLoading: () => widget.onLoading(),
         child: Padding(
           padding: EdgeInsets.only(top: 0.h),
           child: Consumer<DataProvider>(builder: (context, data, _) {
@@ -203,16 +225,20 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                         height: 1.h,
                       ),
                       StoriesSection(data: data),
-                      data.stories.isEmpty?Container():SizedBox(
-                        height: 1.h,
-                      ),
-                      data.stories.isEmpty?Container():Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: Divider(
-                          color: Colors.grey.shade800,
-                          thickness: 0.1.h,
-                        ),
-                      ),
+                      data.stories.isEmpty
+                          ? Container()
+                          : SizedBox(
+                              height: 1.h,
+                            ),
+                      data.stories.isEmpty
+                          ? Container()
+                          : Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.w),
+                              child: Divider(
+                                color: Colors.grey.shade800,
+                                thickness: 0.1.h,
+                              ),
+                            ),
                       OpinionSection(
                         data: data,
                         showNotaMember: () {
@@ -252,6 +278,28 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
           }),
         ),
       ),
+    );
+  }
+  void logTheScrollClick(
+      Profile profile,
+      String percentage_scroll,
+      ) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "page_scroll",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "percentage_scroll": percentage_scroll,
+        "screen_name": "home",
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
     );
   }
 }

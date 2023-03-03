@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
@@ -10,6 +11,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 import '../Menu/berger_menu_member_page.dart';
@@ -373,6 +375,10 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
                   child: CustomButton(
                       txt: 'Go Ahead',
                       onTap: () {
+                        logTheRedeemOfferClick(Provider.of<DataProvider>(
+                            Navigation.instance.navigatorKey.currentContext ?? context,
+                            listen: false)
+                                .profile!);
                         Navigation.instance.goBack();
                         Navigation.instance.navigate('/redeemOfferPage');
                       }),
@@ -405,7 +411,28 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
       },
     );
   }
-
+  void logTheRedeemOfferClick(
+      Profile profile,
+      // String sort_applied,
+      ) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "redeem_offer",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "sort_applied": sort_applied,
+        "screen_name": "redeem_offer",
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
   void fetchDeals() async {
     final response = await ApiProvider.instance.getPromotedDeals();
     if (response.success ?? false) {

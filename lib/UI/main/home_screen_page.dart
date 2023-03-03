@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:io' show Platform;
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +27,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/NavigationBar.dart';
 import '../../Helper/Constance.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
@@ -343,99 +345,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // void showDialogBox() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         insetPadding: EdgeInsets.zero,
-  //         contentPadding: EdgeInsets.zero,
-  //         clipBehavior: Clip.antiAliasWithSaveLayer,
-  //         shape: const RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.all(
-  //             Radius.circular(10.0),
-  //           ),
-  //         ),
-  //         backgroundColor: Colors.white,
-  //         title: Text(
-  //           'Oops! You are not a member',
-  //           style: Theme.of(context).textTheme.headline1?.copyWith(
-  //                 color: Constance.secondaryColor,
-  //                 fontWeight: FontWeight.bold,
-  //               ),
-  //         ),
-  //         content: Container(
-  //           padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
-  //           // height: 50.h,
-  //           width: 80.w,
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             mainAxisAlignment: MainAxisAlignment.start,
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                 'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
-  //                 style: Theme.of(context).textTheme.headline3?.copyWith(
-  //                       color: Colors.black,
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //               ),
-  //               SizedBox(height: 1.h),
-  //               Flexible(
-  //                 child: Text(
-  //                   Constance.about,
-  //                   style: Theme.of(context).textTheme.headline5?.copyWith(
-  //                         color: Colors.black,
-  //                         // fontWeight: FontWeight.bold,
-  //                       ),
-  //                 ),
-  //               ),
-  //               SizedBox(height: 1.h),
-  //               SizedBox(
-  //                 height: 2.h,
-  //               ),
-  //               Text(
-  //                 'Do you want to be a member?',
-  //                 style: Theme.of(context).textTheme.headline4?.copyWith(
-  //                       color: Colors.black,
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //               ),
-  //               SizedBox(
-  //                 height: 1.h,
-  //               ),
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   CustomButton(
-  //                     txt: 'Yes, take me there',
-  //                     onTap: () {
-  //                       Navigation.instance.navigate('/beamember');
-  //                     },
-  //                     size: 12.sp,
-  //                   ),
-  //                   SizedBox(
-  //                     width: 2.w,
-  //                   ),
-  //                   CustomButton(
-  //                     txt: '''No, I don't want it''',
-  //                     onTap: () {
-  //                       Navigation.instance.goBack();
-  //                     },
-  //                     color: Colors.black,
-  //                     size: 12.sp,
-  //                     fcolor: Colors.white,
-  //                   ),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   void showPopUp() {
     double doubleInRange(Random source, num start, num end) =>
         source.nextDouble() * (end - start) + start;
@@ -476,11 +385,19 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             text: 'Cancel',
             iconData: Icons.cancel_outlined,
-            textStyle: TextStyle(color: Colors.grey),
+            textStyle: const TextStyle(color: Colors.grey),
             iconColor: Colors.grey,
           ),
           IconsButton(
             onPressed: () {
+              logTheExitAppClick(
+                Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                    .profile!,
+                // String sort_applied,
+              );
               SystemChannels.platform.invokeMethod('SystemNavigator.pop');
             },
             text: 'Exit',
@@ -490,6 +407,29 @@ class _HomeScreenState extends State<HomeScreen> {
             iconColor: Colors.white,
           ),
         ]);
+  }
+
+  void logTheExitAppClick(
+    Profile profile,
+    // String sort_applied,
+  ) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "exit_appexit_app",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "sort_applied": sort_applied,
+        "screen_name": "app_exit",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 
   Future<void> secureScreen() async {

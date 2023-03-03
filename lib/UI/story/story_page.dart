@@ -965,6 +965,10 @@ class _StoryPageState extends State<StoryPage> {
                                     // After selecting the desired option,it will
                                     // change button value to selected value
                                     onChanged: (String? newValue) {
+                                      logTheSortAppliedClick(
+                                        data.profile!,
+                                        newValue!,
+                                      );
                                       setState(() {
                                         dropdownvalue = newValue!;
                                         skip = 10;
@@ -1328,6 +1332,29 @@ class _StoryPageState extends State<StoryPage> {
         "published_date": published_date,
         "cta_click": cta_click,
         "heading_name": heading_name,
+        "screen_name": "article_detail",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+
+  void logTheSortAppliedClick(
+    Profile profile,
+    String sort_applied,
+  ) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "sort_applied",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "sort_applied": sort_applied,
         "screen_name": "article_detail",
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
