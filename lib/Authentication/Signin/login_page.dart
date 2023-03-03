@@ -112,11 +112,13 @@ class _LoginPageState extends State<LoginPage> {
                 child: CustomButton(
                     txt: 'Continue',
                     onTap: () {
+
                       // sendOTP(_mobile.text);
                       // Navigation.instance.navigate('/verifyOtp',args: int.parse('8638372157'));
                       if (_mobile.text.isNotEmpty &&
                           _mobile.text.length == 10) {
                         // sendOTP(_mobile.text);
+                        logTheSignupInitiateClick();
                         // logTheSignupInitiateClick(Profile profile);
                         Navigation.instance.navigate('/verifyOtp',
                             args: int.parse(_mobile.text));
@@ -144,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
   //     showError(response.message ?? "Something went wrong");
   //   }
   // }
-  void logTheSignupInitiateClick(Profile profile) async {
+  void logTheSignupInitiateClick() async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
     // String id = await FirebaseInstallations.instance.getId();
@@ -153,12 +155,12 @@ class _LoginPageState extends State<LoginPage> {
       parameters: {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
-        "user_id_event": profile.id,
+        "user_id_event": "NA",
         "screen_name": "register",
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
-        "user_id_tvc": profile.id,
+        "user_id_tvc": "NA",
       },
     );
   }

@@ -38,6 +38,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: true);
+  final ScrollController controller = ScrollController();
   Animation<double>? _animation;
   AnimationController? _animationController;
   String txt = '''If you have a huge friends’ list, 
@@ -70,6 +71,15 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
     super.initState();
     getText();
+    controller.addListener(() {
+      logTheScrollClick(
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .profile!,
+        "${(controller.position.pixels / controller.position.maxScrollExtent) * 100.toInt()}%",
+      );
+    });
     // secureScreen();
     // Future.delayed(Duration.zero, () {
     //   fetchGuwahatiConnect();
@@ -176,9 +186,9 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                   ),
                   onPress: () {
                     logTheMyListClick(Provider.of<DataProvider>(
-                        Navigation.instance.navigatorKey.currentContext ??
-                            context,
-                        listen: false)
+                            Navigation.instance.navigatorKey.currentContext ??
+                                context,
+                            listen: false)
                         .profile!);
                     _animationController?.reverse();
                     Navigation.instance.navigate('/guwahatiConnectsMy');
@@ -248,6 +258,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
           // color: Colors.white,
           padding: EdgeInsets.symmetric(vertical: 2.h),
           child: SingleChildScrollView(
+            controller: controller,
             child: Column(
               children: [
                 SizedBox(
@@ -429,6 +440,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
       },
     );
   }
+
   void logTheMyListClick(Profile profile) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
@@ -443,7 +455,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
         // "cta_click": cta_click,
         "screen_name": "guwahati",
         "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },
@@ -766,6 +778,29 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
 
   Future<void> secureScreen() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
+
+  void logTheScrollClick(
+    Profile profile,
+    String percentage_scroll,
+  ) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "page_scroll",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "percentage_scroll": percentage_scroll,
+        "screen_name": "guwahati",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 
   void getText() async {

@@ -90,6 +90,13 @@ class _StoryPageState extends State<StoryPage> {
     });
     fetchAds();
     controller.addListener(() {
+      logTheScrollClick(
+        Provider.of<DataProvider>(
+            Navigation.instance.navigatorKey.currentContext ?? context,
+            listen: false)
+            .profile!,
+        "${(controller.position.pixels / controller.position.maxScrollExtent) * 100.toInt()}%",
+      );
       if (controller.position.atEdge) {
         bool isTop = controller.position.pixels == 0;
         if (isTop) {
@@ -100,6 +107,7 @@ class _StoryPageState extends State<StoryPage> {
         }
       }
     });
+
   }
 
   @override
@@ -1358,6 +1366,28 @@ class _StoryPageState extends State<StoryPage> {
         "screen_name": "article_detail",
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+  void logTheScrollClick(
+      Profile profile,
+      String percentage_scroll,
+      ) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "page_scroll",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "percentage_scroll": percentage_scroll,
+        "screen_name": "article_detail",
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },

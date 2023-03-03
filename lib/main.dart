@@ -49,7 +49,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('@mipmap/ic_notification');
   const DarwinInitializationSettings initializationSettingsIos =
       DarwinInitializationSettings(
     requestAlertPermission: true,
@@ -86,6 +86,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           channel.name,
           channelDescription: channel.description,
           // icon: android.smallIcon,
+          icon: "@mipmap/ic_notification",
           // other properties...
         ),
         iOS: DarwinNotificationDetails(
@@ -276,7 +277,7 @@ void NotificationHandler(message) async {
       ?.createNotificationChannel(channel);
   RemoteNotification? notification = message?.notification;
   AndroidNotification? android = message?.notification?.android;
-  debugPrint("test message is coming ${message?.data}");
+  // debugPrint("test message is coming ${message?.data} ${android?.imageUrl??"!"} ${android!.smallIcon}");
   // If `onMessage` is triggered with a notification, construct our own
   // local notification to show to users using the created channel.
   if (notification != null && android != null) {
@@ -289,7 +290,7 @@ void NotificationHandler(message) async {
           channel.id,
           channel.name,
           channelDescription: channel.description,
-          icon: android.smallIcon,
+          icon: "@mipmap/ic_notification",
           // other properties...
         ),
         iOS: DarwinNotificationDetails(
@@ -305,7 +306,7 @@ void NotificationHandler(message) async {
 void setUpFirebase() async {
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('@mipmap/ic_notification');
   const DarwinInitializationSettings initializationSettingsIos =
       DarwinInitializationSettings(
     requestAlertPermission: true,
@@ -331,6 +332,7 @@ void setUpFirebase() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('notification on front');
+
     NotificationHandler(message);
   });
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
@@ -534,34 +536,7 @@ void sendToDestination(
   }
 }
 
-// Future<void> initUniLinks() async {
-//   // Platform messages may fail, so we use a try/catch PlatformException.
-//   try {
-//     final initialLink = await getInitialLink();
-//     if (initialLink != null) {
-//       print("deeplink1 ${initialLink.split("/")}");
-//       sendToRoute(
-//           initialLink.split("/")[4].trim(),
-//           initialLink.split("/")[5].trim(),
-//           (initialLink.split("/").length <= 6
-//               ? ""
-//               : initialLink.split("/")[6].trim()));
-//     } else {
-//       debugPrint("deeplink failed 1 continue ");
-//       // initUniLinksResume();
-//     }
-//     // Parse the link and warn the user, if it is not correct,
-//     // but keep in mind it could be `null`.
-//   } on PlatformException {
-//     // Handle exception by warning the user their action did not succeed
-//     // return?
-//     debugPrint("deeplink failed 1 ");
-//     // Navigation.instance.navigate(
-//     //     '/link_failed',
-//     //     args: ""
-//     // );
-//   }
-// }
+
 
 void sendToRoute(String route, data, String? category) async {
   print("link 1 our route ${route}");

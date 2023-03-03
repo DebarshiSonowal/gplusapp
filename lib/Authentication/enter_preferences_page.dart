@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Model/topick.dart';
@@ -23,6 +24,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
   List<GeoTopick> selGeo = [];
   List<Topick> selTop = [];
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +37,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("preferences",false,_scaffoldKey),
+      appBar: Constance.buildAppBar("preferences", false, _scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -161,7 +163,8 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                             }
                           });
                         },
-                        child: preferencesItem(selTop: selTop, i: i,data: data),
+                        child:
+                            preferencesItem(selTop: selTop, i: i, data: data),
                       ),
                   ],
                 ),
@@ -209,7 +212,26 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
         });
   }
 
-
+  void logTheSignUpSuccessClick(String geographical, String topical) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "sign_up_successful",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": "NA",
+        "geographical": geographical,
+        "topical": topical,
+        "screen_name": "register",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": "NA",
+      },
+    );
+  }
 
   void signUp() async {
     final reponse = await ApiProvider.instance.createProfile(
@@ -232,6 +254,10 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
         1);
     if (reponse.success ?? false) {
       // setPreferences();
+      logTheSignUpSuccessClick(
+        getComaSeparatedName(selGeo),
+        getComaSeparatedName(selTop),
+      );
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
@@ -240,6 +266,18 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
     } else {
       // showError(reponse.msg ?? "Something went wrong");
     }
+  }
+
+  String getComaSeparatedName(List<dynamic> list) {
+    String temp = "";
+    for (int i = 0; i < list.length; i++) {
+      if (i == 0) {
+        temp = '${list[i].seo_name},';
+      } else {
+        temp += '${list[i].seo_name}';
+      }
+    }
+    return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
 
   String getComaSeparated(List<dynamic> list) {
@@ -332,5 +370,3 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
     }
   }
 }
-
-

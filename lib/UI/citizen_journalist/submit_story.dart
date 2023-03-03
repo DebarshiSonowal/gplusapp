@@ -209,7 +209,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 color: Colors.white,
-                                child: Icon(
+                                child: const Icon(
                                   Icons.remove,
                                   color: Constance.thirdColor,
                                 ),
