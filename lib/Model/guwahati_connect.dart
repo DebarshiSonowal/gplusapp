@@ -25,10 +25,10 @@ class GuwahatiConnect {
     status = json['status'] == null ? 0 : int.parse(json['status'].toString());
     updated_at = json['updated_at'] == null
         ? ""
-        : '${json['updated_at'].toString().split("T")[0]} ${json['updated_at'].toString().split("T")[1].split('.')[0]}';
+        : '${json['updated_at'].toString().split(" ")[0]} ${json['updated_at'].toString().split(" ")[1].split('.')[0]}';
     created_at = json['created_at'] == null
         ? ""
-        : json['created_at'].toString().split("T")[0];
+        : '${json['created_at'].toString().split(" ")[0]} ${json['created_at'].toString().split(" ")[1].split('.')[0]}';
     //String
     question = json['question'] ?? "";
     attachment = json['attached_files'] == null
@@ -82,6 +82,22 @@ class GuwahatiConnectResponse {
   }
 
   GuwahatiConnectResponse.withError(msg) {
+    success = false;
+    message = msg ?? "Something went wrong";
+  }
+}
+class GuwahatiConnectSpecificResponse {
+  bool? success;
+  String? message;
+  GuwahatiConnect? post;
+
+  GuwahatiConnectSpecificResponse.fromJson(json) {
+    success = json['success'] ?? false;
+    message = json['message'] ?? "";
+    post = GuwahatiConnect.fromJson(json['data']);
+  }
+
+  GuwahatiConnectSpecificResponse.withError(msg) {
     success = false;
     message = msg ?? "Something went wrong";
   }

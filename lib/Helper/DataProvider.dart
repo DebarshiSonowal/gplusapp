@@ -84,6 +84,7 @@ class DataProvider extends ChangeNotifier {
   SwitchStatus? status;
   List<BookmarkItem> bookmarks = [];
   bool hideReferEarn = false;
+  GuwahatiConnect? specificGuwahatiConnect;
   String citizenJournalist = "",
       deal = "",
       classifiedMsg = "",
@@ -93,6 +94,11 @@ class DataProvider extends ChangeNotifier {
 
   setCitizenJournalistText(String txt) {
     citizenJournalist = txt;
+    notifyListeners();
+  }
+
+  setGuwahatiConnectSpecific(GuwahatiConnect val) {
+    specificGuwahatiConnect = val;
     notifyListeners();
   }
 

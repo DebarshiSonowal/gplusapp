@@ -1482,6 +1482,7 @@ class ApiProvider {
       return GenericMsgResponse.withError(e.message);
     }
   }
+
   Future<GenericResponse> readAll() async {
     var url = "${baseUrl}/app/notifications/read-all";
     BaseOptions option =
@@ -1908,6 +1909,7 @@ class ApiProvider {
       return GenericResponse.withError(e.message);
     }
   }
+
   Future<GenericResponse> unblockUser(id, categ) async {
     var url = "${baseUrl}/app/unblock-user-by-user";
     BaseOptions option =
@@ -2255,8 +2257,8 @@ class ApiProvider {
     }
   }
 
-  Future<GenericResponse> verifyPayment(
-      order_code, razorpay_payment_id, amount, payment_data,type,transaction_id,purchase_date) async {
+  Future<GenericResponse> verifyPayment(order_code, razorpay_payment_id, amount,
+      payment_data, type, transaction_id, purchase_date) async {
     var url = "${baseUrl}/app/order/verify-payment/${type}";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -2278,9 +2280,9 @@ class ApiProvider {
       'amount': "${payment_data['amount']}",
       'phone': "${payment_data['phone']}",
       'email': "${payment_data['email']}",
-      'order_code':"${order_code}",
-      'transaction_id':"${transaction_id}",
-      'purchase_date':"${purchase_date}",
+      'order_code': "${order_code}",
+      'transaction_id': "${transaction_id}",
+      'purchase_date': "${purchase_date}",
     };
     debugPrint(jsonEncode(exactData));
     var data = {
@@ -2324,8 +2326,9 @@ class ApiProvider {
       return GenericResponse.withError(e.message);
     }
   }
+
   Future<GenericResponse> verifyPaymentInapp(
-      order_code,transaction_id,purchase_date) async {
+      order_code, transaction_id, purchase_date) async {
     var url = "${baseUrl}/app/order/verify-payment/inapp";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -2347,15 +2350,15 @@ class ApiProvider {
       // 'amount': "${payment_data['amount']}",
       // 'phone': "${payment_data['phone']}",
       // 'email': "${payment_data['email']}",
-      'order_code':"${order_code}",
-      'transaction_id':"${transaction_id}",
-      'purchase_date':"${purchase_date}",
+      'order_code': "${order_code}",
+      'transaction_id': "${transaction_id}",
+      'purchase_date': "${purchase_date}",
     };
     debugPrint(jsonEncode(exactData));
     var data = {
       'order_code': order_code,
-      'transaction_id':"${transaction_id}",
-      'purchase_date':"${purchase_date}",
+      'transaction_id': "${transaction_id}",
+      'purchase_date': "${purchase_date}",
       // 'razorpay_payment_id': razorpay_payment_id,
       // 'amount': amount,
       // 'payment_data':exactData,
@@ -2928,6 +2931,44 @@ class ApiProvider {
       }
       debugPrint("guwahati-connect error: ${e.response}");
       return GuwahatiConnectResponse.withError(e.message);
+    }
+  }
+
+  Future<GuwahatiConnectSpecificResponse> getGuwahatiConnectSpecific(id) async {
+    var url = "${baseUrl}/app/guwahati-connect-test/${id}";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("guwahati-connect response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GuwahatiConnectSpecificResponse.fromJson(response?.data);
+      } else {
+        debugPrint("guwahati-connect error: ${response?.data}");
+        return GuwahatiConnectSpecificResponse.withError(
+            "Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("guwahati-connect error: ${e.response}");
+      return GuwahatiConnectSpecificResponse.withError(e.message);
     }
   }
 
@@ -3555,8 +3596,8 @@ class ApiProvider {
     }
   }
 
-  Future<CreateOrderResponse> createOrder(
-      subscription_id, use_referral_point, name, email, phone,device_type) async {
+  Future<CreateOrderResponse> createOrder(subscription_id, use_referral_point,
+      name, email, phone, device_type) async {
     var url = "${baseUrl}/app/order/subscription";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -3573,7 +3614,7 @@ class ApiProvider {
       'payment_name': name,
       'payment_email': email,
       'payment_mobile': phone,
-      'device_type':device_type
+      'device_type': device_type
     };
     //attachment_list[0][file_data]
     //attachment_list[0][file_type]

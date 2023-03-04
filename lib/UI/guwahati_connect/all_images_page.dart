@@ -33,25 +33,8 @@ class _AllImagePageState extends State<AllImagePage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      if (Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .guwahatiConnect
-          .isNotEmpty) {
-        setState(() {
-          like = Provider.of<DataProvider>(
-                      Navigation.instance.navigatorKey.currentContext ??
-                          context,
-                      listen: false)
-                  .guwahatiConnect
-                  .where((element) => (element.id == widget.id))
-                  .first
-                  .is_liked ??
-              false;
-        });
-      } else {
-        fetchGuwahatiConnect();
-      }
+      fetchGuwahatiConnect();
+      // fetchGuwahatiConnect();
     });
   }
 
@@ -60,12 +43,14 @@ class _AllImagePageState extends State<AllImagePage> {
     _searchQueryController.dispose();
     super.dispose();
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("guwahati",true,_scaffoldKey),
+      appBar: Constance.buildAppBar("guwahati", true, _scaffoldKey),
       drawer: const BergerMenuMemPage(screen: "guwahati"),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
@@ -95,9 +80,7 @@ class _AllImagePageState extends State<AllImagePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    data.guwahatiConnect.where((element) => (element.id == widget.id))
-                                        .first.user
-                                            ?.name ??
+                                    data.specificGuwahatiConnect?.user?.name ??
                                         "G Plus Author",
                                     style: Theme.of(context)
                                         .textTheme
@@ -113,10 +96,8 @@ class _AllImagePageState extends State<AllImagePage> {
                                     height: 0.7.h,
                                   ),
                                   Text(
-                                    Jiffy(
-                                                data.guwahatiConnect.where((element) => (element.id == widget.id))
-                                                    .first
-                                                    .updated_at,
+                                    Jiffy("${data.specificGuwahatiConnect
+                                        ?.updated_at}",
                                                 "yyyy-MM-dd")
                                             .fromNow() ??
                                         '${15} mins ago' ??
@@ -146,8 +127,7 @@ class _AllImagePageState extends State<AllImagePage> {
                           height: 1.h,
                         ),
                         ReadMoreText(
-                          data.guwahatiConnect.where((element) => (element.id == widget.id))
-                              .first.question ?? "",
+                          data.specificGuwahatiConnect?.question ?? "",
                           style:
                               Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Storage.instance.isDarkMode
@@ -173,16 +153,14 @@ class _AllImagePageState extends State<AllImagePage> {
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount:
-                      data.guwahatiConnect.where((element) => (element.id == widget.id))
-                          .first.attachment?.length ?? 1,
+                      data.specificGuwahatiConnect?.attachment?.length ?? 1,
                   itemBuilder: (context, count) {
                     var current =
-                        data.guwahatiConnect.where((element) => (element.id == widget.id))
-                            .first.attachment![count];
+                        data.specificGuwahatiConnect?.attachment![count];
                     return GestureDetector(
                       onTap: () {
                         Navigation.instance.navigate('/viewImage',
-                            args: current.file_name ?? Constance.defaultImage);
+                            args: current!.file_name ?? Constance.defaultImage);
                       },
                       child: Container(
                         height: 40.h,
@@ -196,7 +174,8 @@ class _AllImagePageState extends State<AllImagePage> {
                               // color: Colors.black,
                             );
                           },
-                          imageUrl: current.file_name ?? Constance.defaultImage,
+                          imageUrl:
+                              current!.file_name ?? Constance.defaultImage,
                           fit: BoxFit.fitHeight,
                           errorWidget: (cont, _, e) {
                             return Image.network(
@@ -245,9 +224,7 @@ class _AllImagePageState extends State<AllImagePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        '${like ? ((data.guwahatiConnect.where((element) => (element.id == widget.id))
-                            .first.total_liked ?? 0) + 1) : data.guwahatiConnect.where((element) => (element.id == widget.id))
-                            .first.total_liked} likes' ??
+                        '${like ? ((data.specificGuwahatiConnect?.total_liked ?? 0) + 1) : data.specificGuwahatiConnect?.total_liked} likes' ??
                             "",
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Storage.instance.isDarkMode
@@ -268,8 +245,7 @@ class _AllImagePageState extends State<AllImagePage> {
                       //   ),
                       // ),
                       Text(
-                        '${data.guwahatiConnect.where((element) => (element.id == widget.id))
-                            .first.total_comment} comments' ??
+                        '${data.specificGuwahatiConnect?.total_comment} comments' ??
                             "",
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Storage.instance.isDarkMode
@@ -307,8 +283,7 @@ class _AllImagePageState extends State<AllImagePage> {
                             type: MaterialType.transparency,
                             child: IconButton(
                               onPressed: () {
-                                postLike(data.guwahatiConnect.where((element) => (element.id == widget.id))
-                                    .first.id, 1);
+                                postLike(data.specificGuwahatiConnect?.id, 1);
                                 setState(() {
                                   like = !like;
                                   if (dislike) {
@@ -333,32 +308,6 @@ class _AllImagePageState extends State<AllImagePage> {
                               ),
                             ),
                           ),
-                          // Material(
-                          //   type: MaterialType.transparency,
-                          //   child: IconButton(
-                          //     onPressed: () {
-                          //       postLike(data.guwahatiConnect[widget.id].id, 0);
-                          //       setState(() {
-                          //         dislike = !dislike;
-                          //         if (like) {
-                          //           like = !dislike;
-                          //         }
-                          //       });
-                          //     },
-                          //     splashRadius: 20.0,
-                          //     splashColor: !dislike
-                          //         ? Constance.secondaryColor
-                          //         : Constance.primaryColor,
-                          //     icon: Icon(
-                          //       Icons.thumb_down,
-                          //       color: dislike
-                          //           ? Constance
-                          //           .secondaryColor
-                          //           : Constance
-                          //           .primaryColor,
-                          //     ),
-                          //   ),
-                          // ),
                           Material(
                             type: MaterialType.transparency,
                             child: IconButton(
@@ -463,12 +412,10 @@ class _AllImagePageState extends State<AllImagePage> {
                             // physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount:
-                                data.guwahatiConnect.where((element) => (element.id == widget.id))
-                                    .first.comments.length,
+                                data.specificGuwahatiConnect?.comments.length,
                             itemBuilder: (cont, ind) {
                               var current =
-                                  data.guwahatiConnect.where((element) => (element.id == widget.id))
-                                      .first.comments[ind];
+                                  data.specificGuwahatiConnect?.comments[ind];
                               return SizedBox(
                                 height: 16.h,
                                 width: 40.w,
@@ -482,7 +429,7 @@ class _AllImagePageState extends State<AllImagePage> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            current.name ?? "",
+                                            current?.name ?? "",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headline5
@@ -507,7 +454,7 @@ class _AllImagePageState extends State<AllImagePage> {
                                     Row(
                                       children: [
                                         Text(
-                                          current.comment ?? "",
+                                          current?.comment ?? "",
                                           style: Theme.of(context)
                                               .textTheme
                                               .headline6
@@ -549,14 +496,14 @@ class _AllImagePageState extends State<AllImagePage> {
                                                 child: IconButton(
                                                   onPressed: () {
                                                     postCommentLike(
-                                                        current.id, 1);
+                                                        current?.id, 1);
                                                   },
                                                   splashRadius: 20.0,
                                                   splashColor:
                                                       Constance.secondaryColor,
                                                   icon: Icon(
                                                     Icons.thumb_up,
-                                                    color: current.is_liked
+                                                    color: current!.is_liked
                                                         ? Constance
                                                             .secondaryColor
                                                         : Constance
@@ -629,8 +576,7 @@ class _AllImagePageState extends State<AllImagePage> {
                                         // Navigation.instance.navigate('/exclusivePage');
                                         _(() {
                                           postComment(
-                                              data.guwahatiConnect.where((element) => (element.id == widget.id))
-                                                  .first.id,
+                                              data.specificGuwahatiConnect?.id,
                                               'guwahati-connect',
                                               _searchQueryController.text);
                                         });
@@ -713,14 +659,18 @@ class _AllImagePageState extends State<AllImagePage> {
 
   void fetchGuwahatiConnect() async {
     Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.getGuwahatiConnect();
+    final response =
+        await ApiProvider.instance.getGuwahatiConnectSpecific(widget.id);
     if (response.success ?? false) {
       // setGuwahatiConnect
       Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
-          .setGuwahatiConnect(response.posts);
+          .setGuwahatiConnectSpecific(response.post!);
+      setState(() {
+        like = response.post!.is_liked ?? false;
+      });
       if (!Storage.instance.isGuwahatiConnect) {
         // showDialogBox();
       }
