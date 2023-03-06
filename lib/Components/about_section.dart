@@ -246,7 +246,8 @@ class aboutSection extends StatelessWidget {
                     width: 3.5.w,
                   ),
                   Text(
-                    'Advertise With Us',
+                    // 'Advertise With Us',
+                    'AD with us',
                     style: Theme.of(context)
                         .textTheme
                         .headline4

@@ -82,6 +82,7 @@ class _BigDealPageState extends State<BigDealPage> {
     // showDialogBox();
     // secureScreen();
     Future.delayed(Duration.zero, () {
+      // showDialogBox();
       if (!Storage.instance.isBigDeal) {
         showDialogBox();
         debugPrint("Here1");
