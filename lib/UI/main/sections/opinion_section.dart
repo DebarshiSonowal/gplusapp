@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../Components/opinion_card.dart';
@@ -56,6 +57,15 @@ class OpinionSection extends StatelessWidget {
                     onTap: () {
                       if (data.profile?.is_plan_active ??
                           false) {
+                        logTheOpinionArticleClick(
+                          data.profile!,
+                          item.title!,
+                          "opinion",
+                          item.id!,
+                          DateFormat("dd MMM,yyyy").format(
+                              DateTime.parse(item.publish_date!)),
+                          item.author_name!,
+                        );
                         Navigation.instance.navigate(
                             '/opinionDetails',
                             args: '${item.seo_name?.trim()},${item.category_gallery?.id}');

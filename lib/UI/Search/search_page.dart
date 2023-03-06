@@ -333,11 +333,7 @@ class _SearchPageState extends State<SearchPage> {
         "client_id_event": id,
         "user_id_event": profile.id,
         "search_term": search_term,
-        // "article_id": thisId,
         "screen_name": "search",
-        // "title": title,
-        // "author_name": author_name,
-        // "published_date": published_date,
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
@@ -357,11 +353,7 @@ class _SearchPageState extends State<SearchPage> {
         "client_id_event": id,
         "user_id_event": profile.id,
         "cta_click": cta_click,
-        // "article_id": thisId,
         "screen_name": "search",
-        // "title": title,
-        // "author_name": author_name,
-        // "published_date": published_date,
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,

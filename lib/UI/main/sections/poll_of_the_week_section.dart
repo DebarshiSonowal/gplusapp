@@ -280,7 +280,6 @@ class PollOfTheWeekSection extends StatelessWidget {
         "screen_name": "home",
         "poll_selected": getAnswer(answer),
         "title": "poll_of_the_week",
-        // "published_date": published_date,
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,

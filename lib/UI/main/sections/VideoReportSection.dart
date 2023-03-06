@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../Components/video_card.dart';
@@ -95,7 +96,8 @@ class VideoReportSection extends StatelessWidget {
                                   data.profile!,
                                   item.title!,
                                   item.id!,
-                                  item.publish_date!,
+                                  DateFormat("dd MMM,yyyy").format(
+                                      DateTime.parse(item.publish_date!)),
                                 );
                                 Navigation.instance.navigate('/videoPlayer',
                                     args: '${item.youtube_id},${1}');
@@ -136,11 +138,8 @@ class VideoReportSection extends StatelessWidget {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
         "user_id_event": profile.id,
-        // "heading_name": heading,
-        // "article_id": thisId,
         "screen_name": "home",
         "title": "videos_of_the_week",
-        // "published_date": published_date,
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,

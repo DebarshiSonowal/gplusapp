@@ -1,5 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../Components/toppicks_card.dart';
@@ -87,8 +88,14 @@ class SuggestedForYou extends StatelessWidget {
                         return GestureDetector(
                           onTap: () {
                             if (data.profile?.is_plan_active ?? false) {
-                              logTheTopPicksClick(data.profile!, item.title!,
-                                  "top_picks_for_you", item.id!, item.date!);
+                              logTheTopPicksClick(
+                                data.profile!,
+                                item.title!,
+                                "top_picks_for_you",
+                                item.id!,
+                                DateFormat("dd MMM,yyyy")
+                                    .format(DateTime.parse(item.date!)),
+                              );
                               Navigation.instance.navigate('/story',
                                   args:
                                       '${item.categories?.first.seo_name},${item.seo_name}');
@@ -146,11 +153,8 @@ class SuggestedForYou extends StatelessWidget {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
         "user_id_event": profile.id,
-        // "heading_name": heading,
-        // "article_id": thisId,
         "screen_name": "home",
         "title": title,
-        // "published_date": published_date,
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,

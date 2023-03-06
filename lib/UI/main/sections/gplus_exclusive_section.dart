@@ -1,5 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../Components/gplus_execl_card.dart';
@@ -94,7 +95,8 @@ class GPlusExclusiveSection extends StatelessWidget {
                                     item.title!,
                                     "g_plus_exclusive",
                                     item.id!,
-                                    item.publish_date!,
+                                    DateFormat("dd MMM,yyyy").format(
+                                        DateTime.parse(item.publish_date!)),
                                     item.author_name!);
                                 Navigation.instance.navigate('/story',
                                     args:
@@ -134,11 +136,7 @@ class GPlusExclusiveSection extends StatelessWidget {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
         "user_id_event": profile.id,
-        // "heading_name": heading,
-        // "article_id": thisId,
         "screen_name": "home",
-        // "title": title,
-        // "published_date": published_date,
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
