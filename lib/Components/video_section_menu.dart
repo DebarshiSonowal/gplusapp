@@ -6,9 +6,9 @@ import '../Navigation/Navigate.dart';
 
 class VideoSectionMenu extends StatelessWidget {
   const VideoSectionMenu({
-    Key? key,
+    Key? key, required this.onTap,
   }) : super(key: key);
-
+  final Function(String,String) onTap;
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -66,6 +66,7 @@ class VideoSectionMenu extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
+                onTap("video_reports","news");
                 Navigation.instance
                     .navigate('/videoReport', args: 'news');
               },
@@ -104,6 +105,7 @@ class VideoSectionMenu extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
+                onTap("video_reports","featured");
                 Navigation.instance
                     .navigate('/videoReport', args: 'featured');
               },

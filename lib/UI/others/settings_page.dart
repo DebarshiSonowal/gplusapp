@@ -388,8 +388,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       final FirebaseAuth _auth = FirebaseAuth.instance;
                       await _auth.signOut();
                       logTheLogoutClick(data.profile!);
-                      Storage.instance.logout();
-                      Navigation.instance.navigateAndRemoveUntil('/login');
+                      Future.delayed(const Duration(seconds: 1), () {
+                        Storage.instance.logout();
+                        Navigation.instance.navigateAndRemoveUntil('/login');
+                      });
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.max,

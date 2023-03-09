@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:gplusapp/Model/profile.dart';
 import 'package:gplusapp/Model/topick.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
@@ -212,7 +213,8 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
         });
   }
 
-  void logTheSignUpSuccessClick(String geographical, String topical) async {
+  void logTheSignUpSuccessClick(
+      String geographical, String topical, Profile profile) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
     // String id = await FirebaseInstallations.instance.getId();
@@ -221,14 +223,14 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
       parameters: {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
-        "user_id_event": "NA",
+        "user_id_event": profile.id,
         "geographical": geographical,
         "topical": topical,
         "screen_name": "register",
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
-        "user_id_tvc": "NA",
+        "user_id_tvc": profile.id,
       },
     );
   }
@@ -254,14 +256,13 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
         1);
     if (reponse.success ?? false) {
       // setPreferences();
-      logTheSignUpSuccessClick(
-        getComaSeparatedName(selGeo),
-        getComaSeparatedName(selTop),
-      );
+
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setProfile(reponse.profile!);
+      logTheSignUpSuccessClick(getComaSeparatedName(selGeo),
+          getComaSeparatedName(selTop), reponse.profile!);
       Navigation.instance.navigateAndReplace('/main');
     } else {
       // showError(reponse.msg ?? "Something went wrong");
@@ -277,6 +278,8 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
         temp += '${list[i].seo_name}';
       }
     }
+    print(temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp);
+
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
 

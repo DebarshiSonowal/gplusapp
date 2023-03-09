@@ -289,13 +289,6 @@ class PollOfTheWeekSection extends StatelessWidget {
   }
 
   getAnswer(String answer) {
-    switch (answer) {
-      case "Yes":
-        return "yes";
-      case "No":
-        return "no";
-      default:
-        return "i_dont_have_an_opinion";
-    }
+   return answer;
   }
 }

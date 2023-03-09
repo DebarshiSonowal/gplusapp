@@ -64,7 +64,7 @@ class OpinionSection extends StatelessWidget {
                           item.id!,
                           DateFormat("dd MMM,yyyy").format(
                               DateTime.parse(item.publish_date!)),
-                          item.author_name!,
+                          item.user!.name!,
                         );
                         Navigation.instance.navigate(
                             '/opinionDetails',

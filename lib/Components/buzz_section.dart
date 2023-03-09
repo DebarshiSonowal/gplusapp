@@ -9,9 +9,9 @@ import '../Navigation/Navigate.dart';
 
 class BuzzSection extends StatelessWidget {
   const BuzzSection({
-    Key? key,
+    Key? key, required this.onTap,
   }) : super(key: key);
-
+  final Function(String,String) onTap;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -74,6 +74,7 @@ class BuzzSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
+                onTap("buzz","entertainment");
                 Navigation.instance.navigate('/newsfrom',
                     args: 'entertainment');
               },
@@ -112,6 +113,7 @@ class BuzzSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
+                onTap("buzz","buzz");
                 Navigation.instance
                     .navigate('/newsfrom', args: 'buzz');
               },

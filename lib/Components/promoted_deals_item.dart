@@ -41,7 +41,7 @@ class PromotedDealsItem extends StatelessWidget {
             data.vendor?.address ?? "",
             data.id!,
             data.title ?? "",
-            "promoted_deal",
+            "promoted_deals",
           );
           Navigation.instance.navigate('/categorySelect', args: data.vendor_id);
         } else {
@@ -99,7 +99,7 @@ class PromotedDealsItem extends StatelessWidget {
         "user_id_event": profile.id,
         "banner_position": "top",
         "heading_name": heading_name,
-        "screen_name": "subscription",
+        "screen_name": "bigdeal",
         "banner_category": banner_category,
         "article_id": article_id,
         "offer_name": offer_name,

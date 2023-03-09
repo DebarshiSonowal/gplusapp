@@ -597,6 +597,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                           if (address != "" &&
                               latitude != 0 &&
                               longitude != 0) {
+                            logTheSignupFlowClick();
                             setData(
                                 widget.mobile,
                                 first_name.text,
@@ -629,7 +630,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       ),
     );
   }
-  void logTheSignupFlowClick(Profile profile) async {
+  void logTheSignupFlowClick() async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
     // String id = await FirebaseInstallations.instance.getId();
@@ -638,12 +639,12 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       parameters: {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
-        "user_id_event": profile.id,
+        "user_id_event": "NA",
         "screen_name": "register",
         "user_login_status":
         Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
-        "user_id_tvc": profile.id,
+        "user_id_tvc": "NA",
       },
     );
   }

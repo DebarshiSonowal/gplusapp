@@ -12,7 +12,9 @@ import 'buzz_section.dart';
 class ExclusiveSection extends StatelessWidget {
   const ExclusiveSection({
     Key? key,
+    required this.onTaped,
   }) : super(key: key);
+  final Function(String, String) onTaped;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +80,11 @@ class ExclusiveSection extends StatelessWidget {
           SizedBox(
             height: 1.2.h,
           ),
-          const BuzzSection(),
+          BuzzSection(
+            onTap: (txt1, txt2) {
+              onTaped(txt1, txt2);
+            },
+          ),
           SizedBox(
             height: 1.2.h,
           ),
@@ -107,32 +113,36 @@ class ExclusiveSection extends StatelessWidget {
                 ),
                 Expanded(child: Container()),
                 !filterToCheckPerType(
-                    Provider.of<DataProvider>(
-                        Navigation
-                            .instance.navigatorKey.currentContext ??
-                            context,
-                        listen: false)
-                        .notifications,
-                    'opinion')
+                        Provider.of<DataProvider>(
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .notifications,
+                        'opinion')
                     ? const SizedBox(
-                  height: 6,
-                  width: 6,
-                )
+                        height: 6,
+                        width: 6,
+                      )
                     : Container(
-                  height: 6,
-                  width: 6,
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                ),
+                        height: 6,
+                        width: 6,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
               ],
             ),
           ),
           SizedBox(
             height: 1.2.h,
           ),
-          const VideoSectionMenu(),
+          VideoSectionMenu(
+            onTap: (val1, val2) {
+              onTaped(val1, val2);
+            },
+          ),
         ],
       ),
     );
@@ -146,6 +156,7 @@ class ExclusiveSection extends StatelessWidget {
     }
     return false;
   }
+
   filterToCheckPerType(List<NotificationInDevice> notifications, String s) {
     for (var i in notifications) {
       if (i.type == s) {

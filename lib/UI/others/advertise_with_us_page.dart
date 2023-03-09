@@ -61,7 +61,7 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                 Text(
                   'Please fill out all the details below'
                   'so that we can understand your requirements'
-                  'and get in touch with you at the earliest',
+                  ' and get in touch with you at the earliest',
                   style: Theme.of(context).textTheme.headline4?.copyWith(
                         color: Storage.instance.isDarkMode
                             ? Colors.white

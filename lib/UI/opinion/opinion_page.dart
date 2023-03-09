@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart' as bd;
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
@@ -15,6 +16,7 @@ import 'package:sizer/sizer.dart';
 import '../../Components/custom_button.dart';
 import '../../Components/opinion_page_item.dart';
 import '../../Helper/Constance.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 
 class OpinionPage extends StatefulWidget {
@@ -473,4 +475,5 @@ class _OpinionPageState extends State<OpinionPage> {
       _refreshController.loadFailed();
     }
   }
+
 }

@@ -44,24 +44,28 @@ class _NavigationBarState extends State<CustomNavigationBar> {
                 .setCurrent(val);
             switch (val) {
               case 1:
-                logTheBottomNavigationClick(data.profile!, "big_deal");
+                logTheBottomNavigationClick(
+                    data.profile!, "big_deal", widget.screen);
                 Navigation.instance.navigate('/bigdealpage');
                 break;
               case 2:
-                logTheBottomNavigationClick(data.profile!, "guwahati_connect");
+                logTheBottomNavigationClick(
+                    data.profile!, "guwahati_connect", widget.screen);
                 Navigation.instance.navigate('/guwahatiConnects');
                 break;
               case 3:
                 logTheBottomNavigationClick(
-                    data.profile!, "citizen_journalist");
+                    data.profile!, "citizen_journalist", widget.screen);
                 Navigation.instance.navigate('/citizenJournalist');
                 break;
               case 4:
-                logTheBottomNavigationClick(data.profile!, "classified");
+                logTheBottomNavigationClick(
+                    data.profile!, "classified", widget.screen);
                 Navigation.instance.navigate('/classified');
                 break;
               default:
-                logTheBottomNavigationClick(data.profile!, "home");
+                logTheBottomNavigationClick(
+                    data.profile!, "home", widget.screen);
                 Navigation.instance.navigate('/main');
                 break;
             }
@@ -138,7 +142,8 @@ class _NavigationBarState extends State<CustomNavigationBar> {
     });
   }
 
-  void logTheBottomNavigationClick(Profile profile, String cta_click) async {
+  void logTheBottomNavigationClick(
+      Profile profile, String cta_click, String currentScreen) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
     // String id = await FirebaseInstallations.instance.getId();
@@ -149,7 +154,7 @@ class _NavigationBarState extends State<CustomNavigationBar> {
         "client_id_event": id,
         "user_id_event": profile.id,
         "cta_click": cta_click,
-        "screen_name": "search",
+        "screen_name": currentScreen,
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,

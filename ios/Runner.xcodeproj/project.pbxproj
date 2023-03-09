@@ -47,6 +47,7 @@
 		703477A929603146005B2BD9 /* Easebuzz.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Easebuzz.xcframework; sourceTree = "<group>"; };
 		70989C35297A661D00B7B30B /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		70989C37297A6CAB00B7B30B /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = StoreKitTestCertificate.cer; path = ../../../Desktop/StoreKitTestCertificate.cer; sourceTree = "<group>"; };
+		70CE047529BA029600A99347 /* FirebaseCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		70F3439F293F1DE200F3DF0C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -89,6 +90,7 @@
 		5077F6CEFE2CC2DAB1B3929E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				70CE047529BA029600A99347 /* FirebaseCore.framework */,
 				700A7B72296BF117006D8DEB /* StoreKit.framework */,
 				703477A229601A9D005B2BD9 /* Easebuzz.framework */,
 				703477A529601AB4005B2BD9 /* Easebuzz.framework */,
@@ -169,6 +171,8 @@
 			dependencies = (
 			);
 			name = Runner;
+			packageProductDependencies = (
+			);
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";

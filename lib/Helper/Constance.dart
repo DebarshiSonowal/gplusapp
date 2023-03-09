@@ -121,7 +121,7 @@ class Constance {
                       listen: false)
                   .profile!,
               screen,
-              "hamburget_icon_click",
+              "hamburger_icon_click",
             );
             try {
               key.currentState!.openDrawer();

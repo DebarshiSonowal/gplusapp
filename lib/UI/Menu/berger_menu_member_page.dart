@@ -27,6 +27,7 @@ import '../../Model/profile.dart';
 class BergerMenuMemPage extends StatefulWidget {
   const BergerMenuMemPage({Key? key, required this.screen}) : super(key: key);
   final String screen;
+
   @override
   State<BergerMenuMemPage> createState() => _BergerMenuMemPageState();
 }
@@ -154,7 +155,20 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   color: Colors.white,
                   thickness: 0.2,
                 ),
-                const ExclusiveSection(),
+                ExclusiveSection(
+                  onTaped: (category, subCategory) {
+                    logTheHambergerOptionClick(
+                      Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey.currentContext ??
+                              context,
+                          listen: false)
+                          .profile!,
+                      widget.screen,
+                      category,
+                      subCategory,
+                    );
+                  },
+                ),
                 const Divider(
                   color: Colors.white,
                   thickness: 0.2,
@@ -164,8 +178,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   child: GestureDetector(
                     onTap: () {
                       if (Provider.of<DataProvider>(
-                                  Navigation
-                                          .instance.navigatorKey.currentContext ??
+                                  Navigation.instance.navigatorKey
+                                          .currentContext ??
                                       context,
                                   listen: false)
                               .profile
@@ -188,11 +202,12 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         ),
                         Text(
                           'Bookmarks',
-                          style: Theme.of(context).textTheme.headline4?.copyWith(
-                                color: Colors.white,
-                                // fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.headline4?.copyWith(
+                                    color: Colors.white,
+                                    // fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     ),
@@ -207,7 +222,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   radius: 15.h,
                   onTap: () {
                     if (Provider.of<DataProvider>(
-                                Navigation.instance.navigatorKey.currentContext ??
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
                                     context,
                                 listen: false)
                             .profile
@@ -232,11 +248,12 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         ),
                         Text(
                           'Download E-Paper',
-                          style: Theme.of(context).textTheme.headline4?.copyWith(
-                                color: Colors.white,
-                                // fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.headline4?.copyWith(
+                                    color: Colors.white,
+                                    // fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     ),
