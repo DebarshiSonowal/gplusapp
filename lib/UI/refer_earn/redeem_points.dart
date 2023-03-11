@@ -596,7 +596,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
       success();
     } else {
       Navigation.instance.goBack();
-      showError("Something went wrong");
+      showError(response.message??"Something went wrong");
     }
   }
 

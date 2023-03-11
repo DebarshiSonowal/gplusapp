@@ -24,21 +24,21 @@ class PromotedDealItemCupon extends StatelessWidget {
         horizontal: 1.w,
       ),
       width: 30.w,
-      height: 15.h,
+      height: 8.5.h,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
-          topRight: Radius.circular(
-            10.0,
-          ),
+          // topRight: Radius.circular(
+          //   10.0,
+          // ),
           bottomRight: Radius.circular(
             10.0,
           ),
-          topLeft: Radius.circular(
-            10.0,
-          ),
-          bottomLeft: Radius.circular(
-            10.0,
-          ),
+          // topLeft: Radius.circular(
+          //   10.0,
+          // ),
+          // bottomLeft: Radius.circular(
+          //   10.0,
+          // ),
         ),
         color: Constance.thirdColor,
       ),

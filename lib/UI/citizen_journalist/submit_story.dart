@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:images_picker/images_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -452,15 +453,29 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      final pickedFile = await _picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 70,
+      // final pickedFile = await _picker.pickImage(
+      //   source: ImageSource.camera,
+      //   imageQuality: 70,
+      // );
+      // if (pickedFile != null) {
+      //   setState(() {
+      //     var profileImage = File(pickedFile.path);
+      //     attachements.add(profileImage);
+      //   });
+      // }
+      final pickedFile = await ImagesPicker.openCamera(
+        pickType: PickType.image,
+        quality: 0.7,
       );
+
       if (pickedFile != null) {
-        setState(() {
-          var profileImage = File(pickedFile.path);
-          attachements.add(profileImage);
-        });
+        for (var i in pickedFile) {
+          setState(() {
+            attachements.add(
+              File(i.path),
+            );
+          });
+        }
       }
     } else if (index == 1) {
       final pickedFile = await _picker.pickMultiImage(
@@ -476,15 +491,30 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
         });
       }
     } else if (index == 2) {
-      final pickedFile = await _picker.pickVideo(
-        source: ImageSource.camera,
-        maxDuration: const Duration(seconds: 30),
+      // final pickedFile = await _picker.pickVideo(
+      //   source: ImageSource.camera,
+      //   maxDuration: const Duration(seconds: 30),
+      // );
+      // if (pickedFile != null) {
+      //   setState(() {
+      //     var profileImage = File(pickedFile.path);
+      //     attachements.add(profileImage);
+      //   });
+      // }
+      final pickedFile = await ImagesPicker.openCamera(
+        pickType: PickType.video,
+        quality: 0.7,
+        maxTime: 30,
       );
+
       if (pickedFile != null) {
-        setState(() {
-          var profileImage = File(pickedFile.path);
-          attachements.add(profileImage);
-        });
+        for (var i in pickedFile) {
+          setState(() {
+            attachements.add(
+              File(i.path),
+            );
+          });
+        }
       }
     } else {
       final pickedFile = await _picker.pickVideo(

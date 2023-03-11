@@ -66,7 +66,7 @@ class ShopCategoryItem extends StatelessWidget {
                     color: Storage.instance.isDarkMode
                         ? Colors.white
                         : Constance.primaryColor,
-                    // fontSize: 1.7.h,
+                    fontSize: 10.sp,
                     fontWeight: FontWeight.bold,
                   ),
             ),

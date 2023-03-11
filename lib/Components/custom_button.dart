@@ -39,6 +39,8 @@ class _CustomButtonState extends State<CustomButton> {
       },
       child: Text(
         widget.txt,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
         style: Theme.of(context).textTheme.headline5?.copyWith(
               color: widget.fcolor ?? Colors.black,
               fontSize: widget.size ?? 14.5.sp,

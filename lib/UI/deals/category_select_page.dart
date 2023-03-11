@@ -61,7 +61,9 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
     Future.delayed(Duration.zero, () => fetchDetails());
     // secureScreen();
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -495,7 +497,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                     if (data?.is_used ?? false) {
                       redeem(widget.id, data?.code);
                     } else {
-                      showDialogBox(data?.code,current.redeem);
+                      showDialogBox(data?.code, current.redeem);
                     }
                   },
                 ),
@@ -517,7 +519,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
     }
   }
 
-  void showDialogBox(code,msg) {
+  void showDialogBox(code, msg) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -557,10 +559,11 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                 ),
                 SizedBox(height: 2.h),
                 Text(
-                  msg??'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                  ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                  ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                  ' remaining essentially unchanged',
+                  msg ??
+                      'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
+                          ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+                          ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+                          ' remaining essentially unchanged',
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontWeight: FontWeight.bold,
@@ -674,22 +677,25 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   }
 
   String openStatus(opening, closing) {
-    var currentTime = DateTime.now();
-    // print(currentTime);
-    if ((currentTime.isAfter(opening) ||
-            currentTime.isAtSameMomentAs(opening)) &&
-        currentTime.isBefore(closing)) {
+    var currentTime = DateFormat.jm().format(DateTime.now());
+    debugPrint(
+        "AP ${currentTime} ${DateFormat("HH:mm a").parse(currentTime).isAfter(DateFormat("HH:mm a").parse(opening))} ${DateFormat("HH:mm a").parse(currentTime).isBefore(DateFormat("HH:mm a").parse(closing))}");
+    if ((DateFormat("HH:mm a")
+            .parse(currentTime)
+            .isAfter(DateFormat("HH:mm a").parse(opening))) &&
+        DateFormat("HH:mm a")
+            .parse(currentTime)
+            .isBefore(DateFormat("HH:mm a").parse(closing))) {
       return 'Open Now';
     } else {
       return 'Closed Now';
     }
+    // return 'Open Now';
   }
 
   TimeFromString(String closing_time) {
-    if (closing_time.contains("A")) {
-      return DateFormat("hh:mm").parse(closing_time.split("A")[0].trim());
-    } else {
-      return DateFormat("hh:mm").parse(closing_time.split("P")[0].trim());
-    }
+    print(
+        "TIme ${DateFormat.jm().format(DateFormat("HH:mm a").parse(closing_time))}");
+    return DateFormat.jm().format(DateFormat("HH:mm a").parse(closing_time));
   }
 }

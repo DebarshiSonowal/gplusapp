@@ -4,6 +4,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:images_picker/images_picker.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -265,12 +266,26 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+      // final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+      // if (pickedFile != null) {
+      //   setState(() {
+      //     var profileImage = File(pickedFile.path);
+      //     attachements.add(profileImage);
+      //   });
+      // }
+      final pickedFile = await ImagesPicker.openCamera(
+        pickType: PickType.image,
+        quality: 0.7,
+      );
+
       if (pickedFile != null) {
-        setState(() {
-          var profileImage = File(pickedFile.path);
-          attachements.add(profileImage);
-        });
+        for (var i in pickedFile) {
+          setState(() {
+            attachements.add(
+              File(i.path),
+            );
+          });
+        }
       }
     } else {
       final pickedFile = await _picker.pickMultiImage();

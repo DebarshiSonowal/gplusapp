@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:images_picker/images_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -27,26 +29,48 @@ class AskAQuestionPage extends StatefulWidget {
   State<AskAQuestionPage> createState() => _AskAQuestionPageState();
 }
 
-class _AskAQuestionPageState extends State<AskAQuestionPage> {
+class _AskAQuestionPageState extends State<AskAQuestionPage>
+    with WidgetsBindingObserver {
   // var title = TextEditingController();
 
   final desc = TextEditingController();
 
   var current = 3;
+
   final ImagePicker _picker = ImagePicker();
   List<File> attachements = [];
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
     // title.dispose();
     desc.dispose();
   }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("didChangeAppLifecycleState $state");
+    if(state == AppLifecycleState.resumed){
+      print("didChangeAppLifecycleState inside $state");
+      try {
+        getLostData();
+      } catch (e) {
+        print("what error $e");
+      }
+    }
+  }
+
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -136,9 +160,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
                   (pos) => (pos == attachements.length)
                       ? GestureDetector(
                           onTap: () {
-                            setState(() {
-                              showPhotoBottomSheet(getProfileImage);
-                            });
+                            reqest();
                           },
                           child: Container(
                             height: 8.h,
@@ -384,17 +406,56 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
     }
   }
 
+  Future<void> getLostData() async {
+    final LostDataResponse response = await _picker.retrieveLostData();
+    if (response.isEmpty) {
+      print("didChangeAppLifecycleState isEmpty");
+      return;
+    }
+    if (response.files != null) {
+      print("didChangeAppLifecycleState isNotEmpty");
+      for (final XFile file in response.files!) {
+        setState(() {
+          attachements.add(
+            File(file.path),
+          );
+        });
+      }
+    } else {
+      print(response.exception!);
+    }
+  }
+
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      final pickedFile = await _picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 70,
+      final pickedFile = await ImagesPicker.openCamera(
+        pickType: PickType.image,
+        quality: 0.7,
+
+        // record video max time
       );
+      // final pickedFile = await _picker.pickImage(
+      //   source: ImageSource.camera,
+      //   imageQuality: 70,
+      // ).catchError((er){
+      //   print("error $er}");
+      // });
       if (pickedFile != null) {
-        setState(() {
-          var profileImage = File(pickedFile.path);
-          attachements.add(profileImage);
-        });
+        // setState(() {
+        //   var profileImage = File(pickedFile!.path);
+        //   attachements.add(profileImage);
+        // });
+        for (var i in pickedFile) {
+          setState(() {
+            attachements.add(
+              File(i.path),
+            );
+          });
+        }
+      } else {
+        // _picker = ImagePicker();
+        getLostData();
+        print("error $pickedFile}");
       }
     } else {
       final pickedFile = await _picker.pickMultiImage(
@@ -408,6 +469,10 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
             );
           }
         });
+      } else {
+        // _picker = ImagePicker();
+        getLostData();
+        print("error $pickedFile}");
       }
     }
   }
@@ -448,7 +513,6 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
     }
   }
 
-
   void logTheAskAQuestionClick(Profile profile, String field_entered) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
@@ -478,5 +542,23 @@ class _AskAQuestionPageState extends State<AskAQuestionPage> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  void reqest() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.storage,
+      Permission.camera,
+    ].request();
+    if (await Permission.storage.request().isGranted) {
+      setState(() {
+        try {
+          showPhotoBottomSheet(getProfileImage);
+        } catch (e) {
+          // ImagePicker().retrieveLostData();
+          print(e);
+        }
+      });
+      // Either the permission was already granted before or the user just granted it you
+    }
   }
 }

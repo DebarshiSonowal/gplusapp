@@ -68,7 +68,7 @@ class _AuthorPageState extends State<AuthorPage> {
                               fit: BoxFit.fill,
                               image: CachedNetworkImageProvider(
                                 data.author?.image_file_name ??
-                                    "https://images.unsplash.com/photo-1587590834224-3247f65be147?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
+                                    "",
                                 scale: 1,
                               ),
                             ),

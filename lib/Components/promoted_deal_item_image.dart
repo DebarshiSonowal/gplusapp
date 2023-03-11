@@ -21,15 +21,15 @@ class PromotedDealItemImage extends StatelessWidget {
             topRight: Radius.circular(
               10.0,
             ),
-            bottomRight: Radius.circular(
-              10.0,
-            ),
+            // bottomRight: Radius.circular(
+            //   10.0,
+            // ),
             topLeft: Radius.circular(
               10.0,
             ),
-            bottomLeft: Radius.circular(
-              10.0,
-            ),
+            // bottomLeft: Radius.circular(
+            //   10.0,
+            // ),
           ),
           image: DecorationImage(
             fit: BoxFit.fill,

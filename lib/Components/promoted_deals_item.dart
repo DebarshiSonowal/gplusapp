@@ -75,7 +75,7 @@ class PromotedDealsItem extends StatelessWidget {
               ),
             ),
           ),
-          PromotedDealItemCupon(data: data),
+          // PromotedDealItemCupon(data: data),
         ],
       ),
     );

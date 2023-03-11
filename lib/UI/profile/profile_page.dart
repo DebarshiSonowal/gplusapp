@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Model/membership.dart';
+import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -25,7 +26,9 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Constance.buildAppBar2("profile"),
-      drawer: const BergerMenuMemPage(screen: "profile",),
+      drawer: const BergerMenuMemPage(
+        screen: "profile",
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -126,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           height: 2.h,
                                         ),
                                         Text(
-                                          '${getLeft(current)} left',
+                                          '${getLeft(current)} Days left',
                                           style: Theme.of(context)
                                               .textTheme
                                               .headline4
@@ -198,8 +201,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-
-
   void fetch() async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getActiveMembership();
@@ -237,6 +238,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   getLeft(Membership current) {
+    return DateTime.parse(current.plan_expiry_date!).difference(DateTime.now()).inDays;
+
     try {
       return Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd")
           .format("dd/MM/yyyy");

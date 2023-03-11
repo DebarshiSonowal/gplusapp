@@ -11,7 +11,7 @@ class RedeemDetails {
       plan_id,
       status;
   bool? is_percent, is_one_time;
-  String? valid_from, valid_to, title, description, code;
+  String? valid_from, valid_to, title, description, code,disclaimer;
 
   RedeemDetails.fromJson(json) {
     id = json['id'] ?? 0;
@@ -46,6 +46,7 @@ class RedeemDetails {
     valid_to = json['valid_to'] ?? "";
     title = json['title'] ?? "";
     description = json['description'] ?? "";
+    disclaimer = json['disclaimer'] ?? "";
     code = json['code'] ?? "";
   }
 }

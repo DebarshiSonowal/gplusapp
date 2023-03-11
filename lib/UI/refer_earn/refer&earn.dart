@@ -151,13 +151,18 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                         height: 2.h,
                       ),
                       Text(
-                        Provider.of<DataProvider>(
-                                    Navigation.instance.navigatorKey
-                                            .currentContext ??
-                                        context,
-                                    listen: false)
-                                .refer_earn ??
-                            'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution',
+
+                            'Hi ${Provider.of<DataProvider>(
+                                Navigation.instance.navigatorKey
+                                    .currentContext ??
+                                    context,
+                                listen: false)
+                                .profile!.name}!\n\n${Provider.of<DataProvider>(
+                                Navigation.instance.navigatorKey
+                                    .currentContext ??
+                                    context,
+                                listen: false)
+                                .refer_earn}',
                         style: Theme.of(Navigation
                                 .instance.navigatorKey.currentContext!)
                             .textTheme
@@ -312,7 +317,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                               child: Row(
                                 children: [
                                   Text(
-                                    '${data.referEarn?.subscriber_added_point ?? '50'} points',
+                                    '${data.referEarn?.subscriber_added_point ?? '0'} points',
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.start,
                                     style: Theme.of(Navigation.instance
@@ -334,7 +339,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                               child: Row(
                                 children: [
                                   Text(
-                                    'added per subscriber added',
+                                    'added per subscriber',
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.start,
                                     style: Theme.of(Navigation.instance

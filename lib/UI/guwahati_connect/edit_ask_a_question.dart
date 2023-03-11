@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Model/guwahati_connect.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:images_picker/images_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -80,7 +81,9 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
     // title.dispose();
     desc.dispose();
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -296,11 +299,12 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
                             .id!);
                       } else {
                         updateQuestion(Provider.of<DataProvider>(
-                            Navigation
-                                .instance.navigatorKey.currentContext ??
-                                context,
-                            listen: false)
-                            .myGuwahatiConnect[int.parse(widget.id.split(",")[1])]
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .myGuwahatiConnect[
+                                int.parse(widget.id.split(",")[1])]
                             .id!);
                       }
                     } else {}
@@ -312,11 +316,9 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current,"guwahati"),
+      bottomNavigationBar: CustomNavigationBar(current, "guwahati"),
     );
   }
-
-
 
   void showPhotoBottomSheet(Function(int) getImage) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -406,12 +408,26 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+      // final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+      // if (pickedFile != null) {
+      //   setState(() {
+      //     var profileImage = File(pickedFile.path);
+      //     attachements.add(profileImage);
+      //   });
+      // }
+      final pickedFile = await ImagesPicker.openCamera(
+        pickType: PickType.image,
+        quality: 0.7,
+      );
+
       if (pickedFile != null) {
-        setState(() {
-          var profileImage = File(pickedFile.path);
-          attachements.add(profileImage);
-        });
+        for (var i in pickedFile) {
+          setState(() {
+            attachements.add(
+              File(i.path),
+            );
+          });
+        }
       }
     } else {
       final pickedFile = await _picker.pickMultiImage();
@@ -475,6 +491,7 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
           .setGuwahatiConnect(response.posts);
     }
   }
+
   void fetchMyGuwahatiConnect() async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getMyGuwahatiConnect();
@@ -482,14 +499,14 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
       // setGuwahatiConnect
       Navigation.instance.goBack();
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setMyGuwahatiConnect(response.posts);
     } else {
       Navigation.instance.goBack();
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setMyGuwahatiConnect(response.posts);
     }
   }

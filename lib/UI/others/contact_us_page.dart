@@ -155,7 +155,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                   ),
                         ),
                         Text(
-                          data.contactUs?.editor ?? 'Sunit Jain',
+                          data.contactUs?.editor ?? 'Sunit Jain1',
                           // overflow: TextOverflow.clip,
                           style:
                               Theme.of(context).textTheme.headline5?.copyWith(

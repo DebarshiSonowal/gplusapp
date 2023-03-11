@@ -410,15 +410,22 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                   ),
                 ),
               ),
-              data.selectedClassified?.user == null
+              (data.selectedClassified?.user == null ||
+                      data.selectedClassified?.user_id == data.profile!.id)
                   ? Container()
                   : Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      padding: EdgeInsets.symmetric(horizontal: 22.w),
                       child: SizedBox(
                         width: double.infinity,
                         child: CustomButton(
+                            size:
+                                ((data.selectedClassified?.user?.name!.length ??
+                                            0) <
+                                        25)
+                                    ? 13.sp
+                                    : 11.sp,
                             txt:
-                                'Call ${data.selectedClassified?.user?.name ?? "Anonymous"}',
+                                'Contact ${data.selectedClassified?.user?.name ?? "Anonymous"}',
                             onTap: () {
                               if (data.profile?.is_plan_active ?? false) {
                                 _launchUrl(Uri.parse(

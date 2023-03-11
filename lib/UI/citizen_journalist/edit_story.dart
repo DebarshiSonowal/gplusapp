@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Model/citizen_journalist.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:images_picker/images_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -52,7 +53,9 @@ class _EditStoryState extends State<EditStory> {
     title.dispose();
     desc.dispose();
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,7 +187,7 @@ class _EditStoryState extends State<EditStory> {
                                 child: Image.network(
                                   images[pos].file_name ?? "",
                                   fit: BoxFit.fill,
-                                  errorBuilder: (err,cont,st){
+                                  errorBuilder: (err, cont, st) {
                                     return Image.asset(Constance.logoIcon);
                                   },
                                 ),
@@ -291,10 +294,10 @@ class _EditStoryState extends State<EditStory> {
                           // showDialogBox();
                           if (title.text.isNotEmpty && desc.text.isNotEmpty) {
                             logTheCjSubmitClick(Provider.of<DataProvider>(
-                                Navigation.instance.navigatorKey
-                                    .currentContext ??
-                                    context,
-                                listen: false)
+                                    Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                        context,
+                                    listen: false)
                                 .profile!);
                             postStory(widget.id, 1);
                           } else {
@@ -319,10 +322,10 @@ class _EditStoryState extends State<EditStory> {
                           // showDialogBox();
                           if (title.text.isNotEmpty && desc.text.isNotEmpty) {
                             logTheCjDraftSubmitClick(Provider.of<DataProvider>(
-                                Navigation.instance.navigatorKey
-                                    .currentContext ??
-                                    context,
-                                listen: false)
+                                    Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                        context,
+                                    listen: false)
                                 .profile!);
                             postStory(widget.id, 0);
                           } else {
@@ -350,11 +353,9 @@ class _EditStoryState extends State<EditStory> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current,"citizen_journalist"),
+      bottomNavigationBar: CustomNavigationBar(current, "citizen_journalist"),
     );
   }
-
-
 
   void showPhotoBottomSheet(Function(int) getImage) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -369,10 +370,11 @@ class _EditStoryState extends State<EditStory> {
             return AlertDialog(
                 title: const Center(
                     child: Text(
-                      "Add Photo/Video",
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                    )),
-                contentPadding: EdgeInsets.only(top: 24, bottom: 30,left: 2.w,right: 2.w),
+                  "Add Photo/Video",
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                )),
+                contentPadding:
+                    EdgeInsets.only(top: 24, bottom: 30, left: 2.w, right: 2.w),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -487,7 +489,6 @@ class _EditStoryState extends State<EditStory> {
                         //         ),
                         //       ],
                         //     )),
-
                       ],
                     ),
                   ],
@@ -498,15 +499,40 @@ class _EditStoryState extends State<EditStory> {
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      final pickedFile = await _picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 70,
+      // final pickedFile = await _picker.pickImage(
+      //   source: ImageSource.camera,
+      //   imageQuality: 70,
+      // );
+      // if (pickedFile != null) {
+      //   setState(() {
+      //     var profileImage = File(pickedFile.path);
+      //     attachements.add(profileImage);
+      //   });
+      // }
+      final pickedFile = await ImagesPicker.openCamera(
+        pickType: PickType.image,
+        quality: 0.7,
+
+        // record video max time
       );
+      // final pickedFile = await _picker.pickImage(
+      //   source: ImageSource.camera,
+      //   imageQuality: 70,
+      // ).catchError((er){
+      //   print("error $er}");
+      // });
       if (pickedFile != null) {
-        setState(() {
-          var profileImage = File(pickedFile.path);
-          attachements.add(profileImage);
-        });
+        // setState(() {
+        //   var profileImage = File(pickedFile!.path);
+        //   attachements.add(profileImage);
+        // });
+        for (var i in pickedFile) {
+          setState(() {
+            attachements.add(
+              File(i.path),
+            );
+          });
+        }
       }
     } else if (index == 1) {
       final pickedFile = await _picker.pickMultiImage(
@@ -522,17 +548,32 @@ class _EditStoryState extends State<EditStory> {
         });
       }
     } else if (index == 2) {
-      final pickedFile = await _picker.pickVideo(
-        source: ImageSource.camera,
-        maxDuration: const Duration(seconds: 30),
+      // final pickedFile = await _picker.pickVideo(
+      //   source: ImageSource.camera,
+      //   maxDuration: const Duration(seconds: 30),
+      // );
+      // if (pickedFile != null) {
+      //   setState(() {
+      //     var profileImage = File(pickedFile.path);
+      //     attachements.add(profileImage);
+      //   });
+      // }
+      final pickedFile = await ImagesPicker.openCamera(
+        pickType: PickType.video,
+        quality: 0.7,
+        maxTime: 30,
+        // record video max time
       );
       if (pickedFile != null) {
-        setState(() {
-          var profileImage = File(pickedFile.path);
-          attachements.add(profileImage);
-        });
+        for (var i in pickedFile) {
+          setState(() {
+            attachements.add(
+              File(i.path),
+            );
+          });
+        }
       }
-    }else{
+    } else {
       final pickedFile = await _picker.pickVideo(
         source: ImageSource.gallery,
       );
@@ -652,6 +693,7 @@ class _EditStoryState extends State<EditStory> {
       Navigation.instance.goBack();
     }
   }
+
   void logTheCjSubmitClick(Profile profile) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
@@ -666,12 +708,13 @@ class _EditStoryState extends State<EditStory> {
         // "cta_click": cta_click,
         "screen_name": "citizen_journalist",
         "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },
     );
   }
+
   void logTheCjDraftSubmitClick(Profile profile) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
@@ -686,7 +729,7 @@ class _EditStoryState extends State<EditStory> {
         // "cta_click": cta_click,
         "screen_name": "citizen_journalist",
         "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },
