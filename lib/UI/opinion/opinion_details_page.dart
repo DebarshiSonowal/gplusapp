@@ -417,7 +417,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                             5) {
                                           Navigation.instance.navigate('/story',
                                               args:
-                                                  '${context.tree.attributes['href'].toString().split("/")[3]},${context.tree.attributes['href'].toString().split("/")[4]}');
+                                                  '${context.tree.attributes['href'].toString().split("/")[3]},${context.tree.attributes['href'].toString().split("/")[4]},opinion_details');
                                         } else {
                                           Navigation.instance.navigate(
                                               '/newsfrom',

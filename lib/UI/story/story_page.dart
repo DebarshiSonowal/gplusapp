@@ -259,7 +259,7 @@ class _StoryPageState extends State<StoryPage> {
                                   data.profile!,
                                   '${data.selectedArticle?.author_name == "" ? "G Plus News" : data.selectedArticle?.author_name}',
                                   data.selectedArticle!.title!,
-                                  "g_plus_exclusive",
+                                  widget.slug.toString().split(",")[2],
                                   data.selectedArticle!.id!,
                                   data.selectedArticle!.author_name!,
                                   DateFormat("dd MMM,yyyy").format(
@@ -575,7 +575,7 @@ class _StoryPageState extends State<StoryPage> {
                                             5) {
                                           Navigation.instance.navigate('/story',
                                               args:
-                                                  '${context.tree.attributes['href'].toString().split("/")[3]},${context.tree.attributes['href'].toString().split("/")[4]}');
+                                                  '${context.tree.attributes['href'].toString().split("/")[3]},${context.tree.attributes['href'].toString().split("/")[4]},story_page');
                                         } else {
                                           Navigation.instance.navigate(
                                               '/newsfrom',

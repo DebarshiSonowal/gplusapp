@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case "story":
         // Navigation.instance.navigate('/main');
         print("this route");
-        Navigation.instance.navigate('/story', args: '${category},${data}');
+        Navigation.instance.navigate('/story', args: '${category},${data},home_page');
         break;
       case "opinion":
         Navigation.instance
@@ -152,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
         key: _scaffoldKey,
         backgroundColor:
             Storage.instance.isDarkMode ? Colors.black : Colors.grey.shade100,
-        appBar: Constance.buildAppBar("home", true, _scaffoldKey),
+        appBar: Constance.buildAppBar("home_page", true, _scaffoldKey),
         // floatingActionButtonLocation: showing
         //     ? FloatingActionButtonLocation.miniStartFloat
         //     : FloatingActionButtonLocation.miniEndFloat,

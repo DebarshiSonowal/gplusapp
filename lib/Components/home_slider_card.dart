@@ -31,7 +31,7 @@ class HomeSliderItem extends StatelessWidget {
           logTheBannerClick(data.profile!, current.title!,
               current.first_cat_name?.seo_name ?? "", current.id!);
           Navigation.instance.navigate('/story',
-              args: '${current.first_cat_name?.seo_name},${current.seo_name}');
+              args: '${current.first_cat_name?.seo_name},${current.seo_name},home_page');
         } else {
           showNotaMember();
         }

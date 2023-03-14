@@ -52,8 +52,8 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("classified", true, _scaffoldKey),
-      drawer: const BergerMenuMemPage(screen: "classified"),
+      appBar: Constance.buildAppBar2("classified"),
+      // drawer: const BergerMenuMemPage(screen: "classified"),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -454,12 +454,11 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
           return AlertDialog(
             backgroundColor: Colors.white,
             title: SizedBox(
-              // height: 15.h,
+              height: 15.h,
               // width: 5.w,
               child: Image.asset(
                 Constance.disclaimerIcon,
                 fit: BoxFit.contain,
-                scale: 8,
               ),
             ),
             contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 8),
@@ -475,9 +474,11 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                 onPressed: () {
                   Navigation.instance.goBack();
                 },
-                child: Text(
+                child: const Text(
                   "Go Back",
-                  style: TextStyle(color: Colors.grey.shade500),
+                  style: TextStyle(
+                    color: Colors.black54,
+                  ),
                 ),
               ),
               TextButton(

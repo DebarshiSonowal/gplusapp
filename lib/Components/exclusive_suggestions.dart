@@ -26,7 +26,7 @@ class exclusiveSuggestions extends StatelessWidget {
               if (data.profile?.is_plan_active ?? false) {
                 Navigation.instance.navigate('/story',
                     args:
-                    '${'exclusive-news'},${item.seo_name}');
+                    '${'exclusive-news'},${item.seo_name},g_plus_exclusive');
               } else {
                 Constance.showMembershipPrompt(
                     context, () {});

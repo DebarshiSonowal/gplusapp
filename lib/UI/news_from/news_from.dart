@@ -191,7 +191,7 @@ class _NewsFromState extends State<NewsFrom> {
                             if (data.profile?.is_plan_active ?? false) {
                               Navigation.instance.navigate('/story',
                                   args:
-                                      '${widget.categ},${data.news_from[0].seo_name}');
+                                      '${widget.categ},${data.news_from[0].seo_name},news_from');
                             } else {
                               Constance.showMembershipPrompt(context, () {});
                             }

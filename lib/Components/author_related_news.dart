@@ -77,7 +77,7 @@ class _AuthorRelatedNewsState extends State<AuthorRelatedNews> {
                           if (widget.data.profile?.is_plan_active ?? false) {
                             Navigation.instance.navigate('/story',
                                 args:
-                                    '${item.first_cat_name?.seo_name},${item.seo_name}');
+                                    '${item.first_cat_name?.seo_name},${item.seo_name},author_page');
                           } else {
                             showNotaMember(context);
                           }

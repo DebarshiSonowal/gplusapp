@@ -150,7 +150,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                               if (data.profile?.is_plan_active ?? false) {
                                 Navigation.instance.navigate('/story',
                                     args:
-                                        '${data.bookmarks[0].cat_seo_name},${data.bookmarks[0].seo_name}');
+                                        '${data.bookmarks[0].cat_seo_name},${data.bookmarks[0].seo_name},bookmarks_page');
                               } else {
                                 Constance.showMembershipPrompt(context, () {});
                               }
@@ -183,7 +183,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                               if (data.profile?.is_plan_active ?? false) {
                                 Navigation.instance.navigate('/story',
                                     args:
-                                        '${data.bookmarks[0].cat_seo_name},${data.bookmarks[0].seo_name}');
+                                        '${data.bookmarks[0].cat_seo_name},${data.bookmarks[0].seo_name},bookmarks_page');
                               } else {
                                 Constance.showMembershipPrompt(context, () {});
                               }
@@ -294,7 +294,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                     if (data.profile?.is_plan_active ?? false) {
                                       Navigation.instance.navigate('/story',
                                           args:
-                                              '${item.cat_seo_name},${item.seo_name}');
+                                              '${item.cat_seo_name},${item.seo_name},bookmarks_page');
                                     } else {
                                       Constance.showMembershipPrompt(
                                           context, () {});

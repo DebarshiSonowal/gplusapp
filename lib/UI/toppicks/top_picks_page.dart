@@ -176,7 +176,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
                             if (data.profile?.is_plan_active ?? false) {
                               Navigation.instance.navigate('/story',
                                   args:
-                                      '${data.home_toppicks[0].categories?.first.seo_name},${data.home_toppicks[0].seo_name}');
+                                      '${data.home_toppicks[0].categories?.first.seo_name},${data.home_toppicks[0].seo_name},home_page');
                             } else {
                               Constance.showMembershipPrompt(context, () {});
                             }
@@ -409,7 +409,7 @@ class SuggestedForYouCard extends StatelessWidget {
       onTap: () {
         if (data.profile?.is_plan_active ?? false) {
           Navigation.instance.navigate('/story',
-              args: '${item.categories?.first.seo_name},${item.seo_name}');
+              args: '${item.categories?.first.seo_name},${item.seo_name},home_page');
         } else {
           Constance.showMembershipPrompt(context, () {});
         }

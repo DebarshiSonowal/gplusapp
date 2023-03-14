@@ -139,6 +139,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 ),
                 NewsFromSection(
                   onTap: (category, subCategory) {
+                    debugPrint("Screen The ${widget.screen}, $category, $subCategory");
                     logTheHambergerOptionClick(
                       Provider.of<DataProvider>(
                               Navigation.instance.navigatorKey.currentContext ??
@@ -157,6 +158,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 ),
                 ExclusiveSection(
                   onTaped: (category, subCategory) {
+                    debugPrint("Screen The ${widget.screen}, $category, $subCategory");
                     logTheHambergerOptionClick(
                       Provider.of<DataProvider>(
                               Navigation.instance.navigatorKey.currentContext ??

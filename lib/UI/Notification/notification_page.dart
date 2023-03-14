@@ -113,7 +113,7 @@ class _NotificationPageState extends State<NotificationPage> {
       case "news":
         debugPrint("News clicked ${categoryName},${seoName} ");
         Navigation.instance
-            .navigate('/story', args: '${categoryName},${seoName}');
+            .navigate('/story', args: '${categoryName},${seoName},notification_page');
         break;
       case "opinion":
         Navigation.instance.navigate('/opinionPage');
@@ -174,7 +174,7 @@ class _NotificationPageState extends State<NotificationPage> {
         break;
       case "locality":
         Navigation.instance
-            .navigate('/story', args: '${categoryName},${seoName}');
+            .navigate('/story', args: '${categoryName},${seoName},notification_page');
         break;
 
       default:

@@ -100,7 +100,7 @@ class GPlusExclusiveSection extends StatelessWidget {
                                     item.author_name!);
                                 Navigation.instance.navigate('/story',
                                     args:
-                                        '${'exclusive-news'},${item.seo_name}');
+                                        '${'exclusive-news'},${item.seo_name},g_plus_exclusive');
                               } else {
                                 showNotaMember();
                               }

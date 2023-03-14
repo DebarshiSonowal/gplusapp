@@ -24,7 +24,7 @@ class NewsSection extends StatelessWidget {
             onTap: () {
               if (data.profile?.is_plan_active ?? false) {
                 Navigation.instance.navigate('/story',
-                    args: '${item.first_cat_name?.seo_name},${item.seo_name}');
+                    args: '${item.first_cat_name?.seo_name},${item.seo_name},news_section');
               } else {
                 Constance.showMembershipPrompt(context, () {
                   // setState(() {

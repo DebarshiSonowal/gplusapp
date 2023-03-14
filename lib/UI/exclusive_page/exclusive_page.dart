@@ -181,7 +181,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
                             if (data.profile?.is_plan_active ?? false) {
                               Navigation.instance.navigate('/story',
                                   args:
-                                      '${'exclusive-news'},${data.home_exclusive[0].seo_name}');
+                                      '${'exclusive-news'},${data.home_exclusive[0].seo_name},exclusive_page');
                             } else {
                               Constance.showMembershipPrompt(context, () {});
                             }

@@ -31,7 +31,7 @@ class newsfrom_suggestion extends StatelessWidget {
                 if (data.profile?.is_plan_active ?? false) {
                   Navigation.instance.navigate('/story',
                       args:
-                      '${widget.categ},${item.seo_name}');
+                      '${widget.categ},${item.seo_name},news_from');
                 } else {
                   Constance.showMembershipPrompt(
                       context, () {});

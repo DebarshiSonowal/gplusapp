@@ -23,7 +23,7 @@ class SuggestionCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigation.instance
-            .navigate('/story', args: '$dropdownvalue,${item.seo_name}');
+            .navigate('/story', args: '$dropdownvalue,${item.seo_name},story_page');
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),

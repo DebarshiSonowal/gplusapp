@@ -86,7 +86,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           channel.name,
           channelDescription: channel.description,
           // icon: android.smallIcon,
-          icon: "@mipmap/ic_notification",
+          icon: "@drawable/ic_notification",
           // other properties...
         ),
         iOS: DarwinNotificationDetails(
@@ -130,107 +130,6 @@ Future<void> onDidReceiveNotificationResponse(
       notification.post_id,
       notification.vendor_id,
       notification.category_id);
-}
-
-@pragma('vm:entry-point')
-void notificationTapBackground(
-    NotificationResponse notificationResponse) async {
-  var details =
-      await FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails();
-  debugPrint(
-      "notification response 2 ${details?.notificationResponse?.payload}");
-  if (details?.didNotificationLaunchApp ?? false) {
-    if (details?.notificationResponse?.payload != 'downloading') {
-      OpenFile.open(details?.notificationResponse?.payload);
-    }
-  }
-  try {
-    debugPrint(
-        "notification response1 ${notificationResponse.payload} ${notificationResponse.id} ${notificationResponse.input}");
-  } catch (e) {
-    debugPrint(e.toString());
-  }
-  const JsonEncoder encoder = JsonEncoder.withIndent('  ');
-  debugPrint(notificationResponse.payload);
-  var jsData = notificationResponse.payload ?? "";
-  jsData = jsData.replaceAll('{', '{"');
-  jsData = jsData.replaceAll(': ', '": "');
-  jsData = jsData.replaceAll(', ', '", "');
-  jsData = jsData.replaceAll('}', '"}');
-  debugPrint(jsData);
-  NotificationReceived notification =
-      NotificationReceived.fromJson(jsonDecode(jsData));
-  switch (notification.type) {
-    case "news":
-      Navigation.instance.navigate('/story',
-          args: '${notification.seo_name_category},${notification.seo_name}');
-      break;
-    case "opinion":
-      Navigation.instance.navigate('/opinionPage');
-      Navigation.instance.navigate('/opinionDetails',
-          args: '${notification.seo_name},${notification.category_id}');
-      break;
-    case "ghy_connect":
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
-          .setCurrent(2);
-      Navigation.instance.navigate('/guwahatiConnects');
-      Navigation.instance.navigate('/allImagesPage',
-          args: int.parse(notification.post_id.toString()));
-      break;
-    case "ghy_connect_status":
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
-          .setCurrent(2);
-      Navigation.instance.navigate('/guwahatiConnects');
-      Navigation.instance.navigate('/allImagesPage',
-          args: int.parse(notification.post_id.toString()));
-      break;
-    case "citizen_journalist":
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
-          .setCurrent(3);
-      Navigation.instance.navigate('/citizenJournalist');
-      break;
-    case "ctz_journalist_status":
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
-          .setCurrent(3);
-      Navigation.instance.navigate('/citizenJournalist');
-      Navigation.instance.navigate('/submitedStory');
-      Navigation.instance.navigate('/viewStoryPage',
-          args: int.parse(notification.post_id.toString()));
-      break;
-    case "deals":
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
-          .setCurrent(1);
-      Navigation.instance.navigate('/bigdealpage');
-      Navigation.instance.navigate('/categorySelect',
-          args: int.parse(notification.vendor_id.toString()));
-      break;
-    case "classified":
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
-          .setCurrent(4);
-      Navigation.instance.navigate('/classified');
-      Navigation.instance.navigate('/classifiedDetails',
-          args: int.parse(notification.post_id.toString()));
-      break;
-    case "locality":
-      Navigation.instance.navigate('/story',
-          args: '${notification.seo_name_category},${notification.seo_name}');
-      break;
-
-    default:
-      break;
-  }
 }
 
 void main() async {
@@ -290,7 +189,7 @@ void NotificationHandler(message) async {
           channel.id,
           channel.name,
           channelDescription: channel.description,
-          icon: "@mipmap/ic_notification",
+          icon: "@drawable/ic_notification",
           // other properties...
         ),
         iOS: DarwinNotificationDetails(
@@ -331,13 +230,13 @@ void setUpFirebase() async {
   // print("test message is coming firebase set up}");
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('notification on front');
+    debugPrint('notification on front');
 
     NotificationHandler(message);
   });
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.getInitialMessage().then((message) {
-    print('killed notification');
+    debugPrint('killed notification');
     NotificationHandler(message);
   }); //
 }
@@ -416,27 +315,6 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-// class MyApp extends StatelessWidget {
-//   const MyApp({Key? key}) : super(key: key);
-//
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return ChangeNotifierProvider(
-//       create: (context) => DataProvider(),
-//       child: Sizer(builder: (context, orientation, deviceType) {
-//         return MaterialApp(
-//           debugShowCheckedModeBanner: false,
-//           title: 'GPLUS',
-//           theme: AppTheme.getTheme(),
-//           navigatorKey: Navigation.instance.navigatorKey,
-//           onGenerateRoute: generateRoute,
-//         );
-//       }),
-//     );
-//   }
-// }
-
 void setRead(String? id, seoName, categoryName, type, postId, vendorId,
     categoryId) async {
   final response = await ApiProvider.instance.notificationRead(id);
@@ -467,7 +345,7 @@ void sendToDestination(
     case "news":
       debugPrint("News clicked ${categoryName},${seoName} ");
       Navigation.instance
-          .navigate('/story', args: '${categoryName},${seoName}');
+          .navigate('/story', args: '${categoryName},${seoName},home_page');
       break;
     case "opinion":
       Navigation.instance.navigate('/opinionPage');
@@ -528,7 +406,7 @@ void sendToDestination(
       break;
     case "locality":
       Navigation.instance
-          .navigate('/story', args: '${categoryName},${seoName}');
+          .navigate('/story', args: '${categoryName},${seoName},home_page');
       break;
 
     default:
@@ -536,19 +414,18 @@ void sendToDestination(
   }
 }
 
-
-
 void sendToRoute(String route, data, String? category) async {
-  print("link 1 our route ${route}");
+  debugPrint("link 1 our route ${route}");
   switch (route) {
     case "story":
       // Navigation.instance.navigate('/main');
-      print("this route1");
-      Navigation.instance.navigate('/story', args: '${category},${data}');
+      debugPrint("this route1");
+      Navigation.instance
+          .navigate('/story', args: '${category},${data},home_page');
       break;
     case "opinion":
       // Navigation.instance.navigate('/main');
-      print("this route2 ${category},${data}");
+      debugPrint("this route2 ${category},${data}");
       Navigation.instance
           .navigate('/opinionDetails', args: '${data},${category}');
       break;
