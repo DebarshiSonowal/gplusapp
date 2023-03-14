@@ -105,8 +105,8 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                                             .profile!,
                                         data.selectedClassified!.title!,
                                         data.selectedClassified!.description!,
-                                        data.selectedClassified!.locality!
-                                            .name!,
+                                        data.selectedClassified!.locality!.name!
+                                            .toLowerCase(),
                                         data.selectedClassified!.total_views!,
                                       );
                                       setAsFavourite(
@@ -424,12 +424,13 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                                         25)
                                     ? 13.sp
                                     : 11.sp,
-                            txt:
-                                'Contact ${data.selectedClassified?.user?.name ?? "Anonymous"}',
+                            txt: 'Contact',
                             onTap: () {
                               if (data.profile?.is_plan_active ?? false) {
-                                _launchUrl(Uri.parse(
-                                    'tel:${data.selectedClassified?.user?.mobile}'));
+                                showDisclaimer(
+                                  data.selectedClassified?.disclaimer ?? "",
+                                  data.selectedClassified?.user?.mobile,
+                                );
                               } else {
                                 Constance.showMembershipPrompt(context, () {});
                               }
@@ -443,6 +444,58 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
       ),
       bottomNavigationBar: CustomNavigationBar(current, "classified"),
     );
+  }
+
+  showDisclaimer(String msg, number) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            title: SizedBox(
+              // height: 15.h,
+              // width: 5.w,
+              child: Image.asset(
+                Constance.disclaimerIcon,
+                fit: BoxFit.contain,
+                scale: 8,
+              ),
+            ),
+            contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 8),
+            actionsPadding: const EdgeInsets.only(left: 16, right: 16),
+            content: Text(
+              msg,
+              style: Theme.of(context).textTheme.headline5?.copyWith(
+                    color: Colors.black,
+                  ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigation.instance.goBack();
+                },
+                child: Text(
+                  "Go Back",
+                  style: TextStyle(color: Colors.grey.shade500),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigation.instance.goBack();
+                  _launchUrl(Uri.parse('tel:$number'));
+                },
+                child: Text(
+                  "I accept",
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
+                        color: Constance.primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   Future<void> _launchUrl(_url) async {

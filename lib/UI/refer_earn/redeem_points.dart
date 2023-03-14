@@ -24,14 +24,17 @@ class RedeemPoints extends StatefulWidget {
 
 class _RedeemPointsState extends State<RedeemPoints> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar("redeem_offer",true,_scaffoldKey),
-      drawer: const BergerMenuMemPage(screen: "redeem_offer",),
+      appBar: Constance.buildAppBar("redeem_offer", true, _scaffoldKey),
+      drawer: const BergerMenuMemPage(
+        screen: "redeem_offer",
+      ),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           padding: EdgeInsets.symmetric(
@@ -252,41 +255,69 @@ class _RedeemPointsState extends State<RedeemPoints> {
                             thickness: 0.1.h,
                           ),
                         ),
-                        ListView.separated(
-                            shrinkWrap: true,
-                            itemBuilder: (cont, count) {
-                              var current = data.referHistory[count];
-                              return Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 4.w, vertical: 1.h),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
+                        data.referHistory.isNotEmpty
+                            ? ListView.separated(
+                                shrinkWrap: true,
+                                itemBuilder: (cont, count) {
+                                  var current = data.referHistory[count];
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 1.h),
+                                    child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          current.is_subscription == 1
-                                              ? 'Redeem for subscription'
-                                              : 'Referral',
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.start,
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline5
-                                              ?.copyWith(
-                                                color:
-                                                    Storage.instance.isDarkMode
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              current.is_subscription == 1
+                                                  ? 'Redeem for subscription'
+                                                  : 'Referral',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                      .instance
+                                                      .navigatorKey
+                                                      .currentContext!)
+                                                  .textTheme
+                                                  .headline5
+                                                  ?.copyWith(
+                                                    color: Storage
+                                                            .instance.isDarkMode
                                                         ? Colors.white
                                                         : Colors.black,
-                                                // fontSize: 11.sp,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                                    // fontSize: 11.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                            Text(
+                                              '${current.is_credit == 1 ? '+' : '-'}${current.points ?? '250'} points',
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(Navigation
+                                                      .instance
+                                                      .navigatorKey
+                                                      .currentContext!)
+                                                  .textTheme
+                                                  .headline6
+                                                  ?.copyWith(
+                                                    color: current.is_credit ==
+                                                            1
+                                                        ? Colors.green
+                                                        : Constance.thirdColor,
+                                                    // fontSize: 11.sp,
+                                                    // fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                          ],
                                         ),
+                                        const Spacer(),
                                         Text(
-                                          '${current.is_credit == 1 ? '+' : '-'}${current.points ?? '250'} points',
+                                          Jiffy(current.updated_at,
+                                                  "yyyy-MM-dd")
+                                              .format("dd/MM/yyyy"),
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.start,
                                           style: Theme.of(Navigation.instance
@@ -294,43 +325,33 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                               .textTheme
                                               .headline6
                                               ?.copyWith(
-                                                color: current.is_credit == 1
-                                                    ? Colors.green
-                                                    : Constance.thirdColor,
+                                                color:
+                                                    Storage.instance.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
                                                 // fontSize: 11.sp,
                                                 // fontWeight: FontWeight.bold,
                                               ),
                                         ),
                                       ],
                                     ),
-                                    const Spacer(),
-                                    Text(
-                                      Jiffy(current.updated_at, "yyyy-MM-dd")
-                                          .format("dd/MM/yyyy"),
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.start,
-                                      style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
-                                          .textTheme
-                                          .headline6
-                                          ?.copyWith(
-                                            color: Storage.instance.isDarkMode
-                                                ? Colors.white
-                                                : Colors.black,
-                                            // fontSize: 11.sp,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ],
+                                  );
+                                },
+                                separatorBuilder: (cont, count) {
+                                  return SizedBox(
+                                    height: 1.h,
+                                  );
+                                },
+                                itemCount: data.referHistory.length)
+                            : Center(
+                                child: Text(
+                                  data.refer_history_msg,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline5
+                                      ?.copyWith(color: Constance.thirdColor),
                                 ),
-                              );
-                            },
-                            separatorBuilder: (cont, count) {
-                              return SizedBox(
-                                height: 1.h,
-                              );
-                            },
-                            itemCount: data.referHistory.length),
+                              ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Divider(
@@ -589,14 +610,14 @@ class _RedeemPointsState extends State<RedeemPoints> {
       Provider.of<DataProvider>(context, listen: false).profile?.name!,
       Provider.of<DataProvider>(context, listen: false).profile?.email!,
       Provider.of<DataProvider>(context, listen: false).profile?.mobile!,
-      Platform.isAndroid?"android":"ios",
+      Platform.isAndroid ? "android" : "ios",
     );
     if (response.success ?? false) {
       Navigation.instance.goBack();
       success();
     } else {
       Navigation.instance.goBack();
-      showError(response.message??"Something went wrong");
+      showError(response.message ?? "Something went wrong");
     }
   }
 

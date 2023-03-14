@@ -9,6 +9,7 @@ import 'package:gplusapp/Model/citizen_journalist.dart';
 import 'package:gplusapp/Model/classified.dart';
 import 'package:gplusapp/Model/classified_category.dart';
 import 'package:gplusapp/Model/deal_details.dart';
+import 'package:gplusapp/Model/grievence_redresal_send.dart';
 import 'package:gplusapp/Model/locality.dart';
 import 'package:gplusapp/Model/opinion.dart';
 import 'package:gplusapp/Model/poll_of_the_week.dart';
@@ -40,6 +41,7 @@ class DataProvider extends ChangeNotifier {
   int currentIndex = 0;
   Profile? profile;
   AuthorProfile? author;
+  List<GrievenceRedresalSend> grievences = [];
   List<BlockedUser> blockedUsers = [
     // BlockedUser(),
   ];
@@ -90,7 +92,9 @@ class DataProvider extends ChangeNotifier {
       classifiedMsg = "",
       refer_earn = "",
       connect = "",
-      redeem = "";
+      redeem = "",
+      refer_history_msg = "",
+      invite = "";
 
   setCitizenJournalistText(String txt) {
     citizenJournalist = txt;
@@ -164,8 +168,10 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  setReferEarnHistory(List<ReferEarnHistory> list) {
+  setReferEarnHistory(List<ReferEarnHistory> list, String msg, String txt) {
     referHistory = list;
+    refer_history_msg = msg;
+    invite = txt;
     notifyListeners();
   }
 
@@ -186,6 +192,11 @@ class DataProvider extends ChangeNotifier {
 
   setSearchResult(List<search.SearchResult> list) {
     searchlist = list;
+    notifyListeners();
+  }
+
+  setGrievences(List<GrievenceRedresalSend> list) {
+    grievences = list;
     notifyListeners();
   }
 

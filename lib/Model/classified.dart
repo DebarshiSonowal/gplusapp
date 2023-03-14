@@ -8,7 +8,7 @@ class Classified {
   int? id, user_id, classified_category_id, locality_id, status, total_views;
   double? price;
   CategoryName? categoryName;
-  String? title, description;
+  String? title, description, disclaimer;
   Locality? locality;
   List<AttachFile>? attach_files;
   Profile? user;
@@ -37,8 +37,7 @@ class Classified {
     categoryName = CategoryName.fromJson(json['category']);
 
     locality = json['locality'] == null
-        ? Locality(json['locality_id'], 0, 1,
-            json['locality_name'])
+        ? Locality(json['locality_id'], 0, 1, json['locality_name'])
         : Locality.fromJson(json['locality']);
 
     attach_files = json['attached_files'] == null
@@ -51,6 +50,7 @@ class Classified {
     }
     title = json['title'] ?? "";
     description = json['description'] ?? "";
+    disclaimer = json['call_disclaimer'] ?? "";
   }
 }
 

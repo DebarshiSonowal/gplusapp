@@ -24,7 +24,7 @@ class ShopCategoryItem extends StatelessWidget {
                     Navigation.instance.navigatorKey.currentContext ?? context,
                     listen: false)
                 .profile!,
-            e.name!);
+            e.name!.toLowerCase());
         // selectedCategory(e.name);
         Navigation.instance.navigate('/fooddealpage', args: e.id!);
       },
@@ -62,6 +62,7 @@ class ShopCategoryItem extends StatelessWidget {
             ),
             Text(
               e.name ?? "1",
+              textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline6?.copyWith(
                     color: Storage.instance.isDarkMode
                         ? Colors.white

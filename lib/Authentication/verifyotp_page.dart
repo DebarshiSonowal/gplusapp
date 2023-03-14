@@ -391,7 +391,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
         // Navigation.instance.navigate('/terms&conditions', args: widget.number);
       }
     } else {
-      Navigation.instance.navigate('/terms&conditions', args: widget.number);
+      showError("Your account has been suspended. Please contact with G Plus Admin");
     }
   }
 

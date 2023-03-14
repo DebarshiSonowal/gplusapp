@@ -5,7 +5,7 @@ import GoogleMaps
 import flutter_config
 import Easebuzz
 import flutter_local_notifications
-
+import FirebaseCore
  
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate,PayWithEasebuzzCallback {
@@ -14,6 +14,12 @@ override func application(
 _ application: UIApplication,
 didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
 ) -> Bool {
+    var newArguments = ProcessInfo.processInfo.arguments
+            newArguments.append("-FIRAnalyticsDebugEnabled")
+            newArguments.append("-FIRDebugEnabled")
+            newArguments.append("-FIRAnalyticsVerboseLoggingEnabled")
+            ProcessInfo.processInfo.setValue(newArguments, forKey: "arguments")
+    FirebaseApp.configure()
     GMSServices.provideAPIKey(FlutterConfigPlugin.env(for: "iosMapKey"))
     GeneratedPluginRegistrant.register(with: self)
     if #available(iOS 10.0, *) {

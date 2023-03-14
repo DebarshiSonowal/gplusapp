@@ -23,14 +23,17 @@ class ReferAndEarn extends StatefulWidget {
 
 class _ReferAndEarnState extends State<ReferAndEarn> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar("redeem_offer",true,_scaffoldKey),
-      drawer: const BergerMenuMemPage(screen: "redeem_offer",),
+      appBar: Constance.buildAppBar("redeem_offer", true, _scaffoldKey),
+      drawer: const BergerMenuMemPage(
+        screen: "redeem_offer",
+      ),
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -151,18 +154,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                         height: 2.h,
                       ),
                       Text(
-
-                            'Hi ${Provider.of<DataProvider>(
-                                Navigation.instance.navigatorKey
-                                    .currentContext ??
-                                    context,
-                                listen: false)
-                                .profile!.name}!\n\n${Provider.of<DataProvider>(
-                                Navigation.instance.navigatorKey
-                                    .currentContext ??
-                                    context,
-                                listen: false)
-                                .refer_earn}',
+                        'Hi ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile!.name}!\n\n${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).refer_earn}',
                         style: Theme.of(Navigation
                                 .instance.navigatorKey.currentContext!)
                             .textTheme
@@ -254,7 +246,8 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                           txt: 'Send invite',
                           onTap: () {
                             Share.share(
-                                "Hello I welcome you to G Plus. Join me and download their app using my referral code ${data.referEarn?.referral_link?.split('/')[3]}");
+                                // "Hello I welcome you to G Plus. Join me and download their app using my referral code ${data.referEarn?.referral_link?.split('/')[3]}",
+                                "${data.invite} ${data.referEarn?.referral_link?.split('/')[3]}");
                           },
                         ),
                       ),
@@ -375,7 +368,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          '${current?.base_price?.toInt() ?? 0} points',
+                                          '${current?.buying_points?.toInt() ?? 0} points',
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.start,
                                           style: Theme.of(Navigation.instance
@@ -524,41 +517,66 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                 thickness: 0.1.h,
                               ),
                             ),
-                            ListView.separated(
-                                shrinkWrap: true,
-                                itemBuilder: (cont, count) {
-                                  var current = data.referHistory[count];
-                                  return Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 4.w, vertical: 1.h),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Column(
+                            data.referHistory.isNotEmpty
+                                ? ListView.separated(
+                                    shrinkWrap: true,
+                                    itemBuilder: (cont, count) {
+                                      var current = data.referHistory[count];
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 4.w, vertical: 1.h),
+                                        child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              current.is_subscription == 1
-                                                  ? 'Redeem for subscription'
-                                                  : 'Referral',
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.start,
-                                              style: Theme.of(Navigation
-                                                      .instance
-                                                      .navigatorKey
-                                                      .currentContext!)
-                                                  .textTheme
-                                                  .headline5
-                                                  ?.copyWith(
-                                                    color: Colors.black,
-                                                    // fontSize: 11.sp,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  current.is_subscription == 1
+                                                      ? 'Redeem for subscription'
+                                                      : 'Referral',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  textAlign: TextAlign.start,
+                                                  style: Theme.of(Navigation
+                                                          .instance
+                                                          .navigatorKey
+                                                          .currentContext!)
+                                                      .textTheme
+                                                      .headline5
+                                                      ?.copyWith(
+                                                        color: Colors.black,
+                                                        // fontSize: 11.sp,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                                Text(
+                                                  '${current.points ?? '250'} points',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  textAlign: TextAlign.start,
+                                                  style: Theme.of(Navigation
+                                                          .instance
+                                                          .navigatorKey
+                                                          .currentContext!)
+                                                      .textTheme
+                                                      .headline6
+                                                      ?.copyWith(
+                                                        color: Colors.black,
+                                                        // fontSize: 11.sp,
+                                                        // fontWeight: FontWeight.bold,
+                                                      ),
+                                                ),
+                                              ],
                                             ),
+                                            const Spacer(),
                                             Text(
-                                              '${current.points ?? '250'} points',
+                                              Jiffy(current.updated_at,
+                                                      "yyyy-MM-dd")
+                                                  .format("dd/MM/yyyy"),
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.start,
                                               style: Theme.of(Navigation
@@ -575,33 +593,24 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                             ),
                                           ],
                                         ),
-                                        const Spacer(),
-                                        Text(
-                                          Jiffy(current.updated_at,
-                                                  "yyyy-MM-dd")
-                                              .format("dd/MM/yyyy"),
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.start,
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline6
-                                              ?.copyWith(
-                                                color: Colors.black,
-                                                // fontSize: 11.sp,
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ],
+                                      );
+                                    },
+                                    separatorBuilder: (cont, count) {
+                                      return SizedBox(
+                                        height: 1.h,
+                                      );
+                                    },
+                                    itemCount: data.referHistory.length)
+                                : Center(
+                                    child: Text(
+                                      data.refer_history_msg,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                              color: Constance.thirdColor),
                                     ),
-                                  );
-                                },
-                                separatorBuilder: (cont, count) {
-                                  return SizedBox(
-                                    height: 1.h,
-                                  );
-                                },
-                                itemCount: data.referHistory.length),
+                                  ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
@@ -721,7 +730,8 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
-          .setReferEarnHistory(response.history);
+          .setReferEarnHistory(
+              response.history, response.empty!, response.invite!);
     } else {}
   }
 }

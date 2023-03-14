@@ -160,6 +160,9 @@ PODS:
   - GTMSessionFetcher/Core (3.0.0)
   - image_picker_ios (0.0.1):
     - Flutter
+  - images_picker (0.0.1):
+    - Flutter
+    - ZLPhotoBrowser (= 4.2.5)
   - in_app_purchase_storekit (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -205,6 +208,9 @@ PODS:
     - Flutter
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
+  - ZLPhotoBrowser (4.2.5):
+    - ZLPhotoBrowser/Core (= 4.2.5)
+  - ZLPhotoBrowser/Core (4.2.5)
 
 DEPENDENCIES:
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
@@ -223,6 +229,7 @@ DEPENDENCIES:
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - google_maps_flutter_ios (from `.symlinks/plugins/google_maps_flutter_ios/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - images_picker (from `.symlinks/plugins/images_picker/ios`)
   - in_app_purchase_storekit (from `.symlinks/plugins/in_app_purchase_storekit/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - network_info_plus (from `.symlinks/plugins/network_info_plus/ios`)
@@ -262,6 +269,7 @@ SPEC REPOS:
     - ReachabilitySwift
     - RevenueCat
     - Toast
+    - ZLPhotoBrowser
 
 EXTERNAL SOURCES:
   connectivity_plus:
@@ -296,6 +304,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_maps_flutter_ios/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  images_picker:
+    :path: ".symlinks/plugins/images_picker/ios"
   in_app_purchase_storekit:
     :path: ".symlinks/plugins/in_app_purchase_storekit/ios"
   in_app_review:
@@ -358,6 +368,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: bad72cb363809015b1f7f19beb1f1cd23c589f95
   GTMSessionFetcher: c1edebe64e9fb4e8f6415d018edf1fd3eac074a1
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
+  images_picker: fa9364e3a7d3083c49f865fcfb2b9e7cdc574d3a
   in_app_purchase_storekit: 6b297e2b5eab9fa3251a492d57301722e4132a71
   in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
@@ -380,6 +391,7 @@ SPEC CHECKSUMS:
   video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_flutter_wkwebview: b7e70ef1ddded7e69c796c7390ee74180182971f
+  ZLPhotoBrowser: 4bfab86b851042e18d7f413284472aa68759626a
 
 PODFILE CHECKSUM: ee0b3a96b6fd61d68bcf250bee312830e2774d02
 

@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/main.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -265,12 +266,29 @@ class HistorySection extends StatelessWidget {
               listen: false)
           .setRedeemDetails(response.details!);
       fetchHistory();
-      Navigation.instance.navigate('/redeemOfferPage');
+      // Navigation.instance.navigate('/redeemOfferPage');
+      fetchDetails(id);
     } else {
-      Navigation.instance.navigate('/redeemOfferPage');
+      // Navigation.instance.navigate('/redeemOfferPage');
+      showError(response.message??"Something went wrong");
     }
   }
 
+  void fetchDetails(id) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getDealDetails(id);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
+          .setDealDetails(response.details!);
+      Navigation.instance.navigateAndReplace('/redeemOfferPage');
+      // _refreshController.refreshCompleted();
+    } else {
+      // _refreshController.refreshFailed();
+      Navigation.instance.goBack();
+    }
+  }
   void fetchHistory() async {
     final response = await ApiProvider.instance.getRedeemHistory();
     if (response.success ?? false) {

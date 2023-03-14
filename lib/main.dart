@@ -49,7 +49,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_notification');
+      AndroidInitializationSettings('@drawable/ic_notification');
   const DarwinInitializationSettings initializationSettingsIos =
       DarwinInitializationSettings(
     requestAlertPermission: true,
@@ -306,7 +306,7 @@ void NotificationHandler(message) async {
 void setUpFirebase() async {
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_notification');
+      AndroidInitializationSettings('@drawable/ic_notification');
   const DarwinInitializationSettings initializationSettingsIos =
       DarwinInitializationSettings(
     requestAlertPermission: true,

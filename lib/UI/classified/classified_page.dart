@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Model/classified.dart';
+import 'package:gplusapp/Model/locality.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:like_button/like_button.dart';
 import 'package:material_dialogs/material_dialogs.dart';
@@ -523,12 +524,12 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   void getFilter() async {
     final result = await Navigation.instance.navigate('/filterPage');
     if (result != null) {
-      logTheFilterAppliedClick(
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .profile!,
-          result);
+      // logTheFilterAppliedClick(
+      //     Provider.of<DataProvider>(
+      //             Navigation.instance.navigatorKey.currentContext ?? context,
+      //             listen: false)
+      //         .profile!,
+      //     result);
       fetchClassified(result);
     }
   }
@@ -710,7 +711,12 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
         "user_id_event": profile.id,
-        "filter_applied": filter_applied,
+        "filter_applied": getFilteredList(
+            filter_applied.toString().split(","),
+            Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ?? context,
+                    listen: false)
+                .locality),
         // "cta_click": cta_click,
         "screen_name": "classified",
         "user_login_status":
@@ -733,5 +739,21 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
               listen: false)
           .setClassifiedText(response.classified ?? "");
     }
+  }
+
+  getFilteredList(List<String> split, List<Locality> locality) {
+    String temp = "";
+    for (var i in split) {
+      for (var j in locality) {
+        if (i == j.id.toString()) {
+          if (temp == "") {
+            temp = '${j.name},';
+          } else {
+            temp += '${j.name},';
+          }
+        }
+      }
+    }
+    return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
 }

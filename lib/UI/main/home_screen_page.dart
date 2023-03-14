@@ -417,7 +417,7 @@ class _HomeScreenState extends State<HomeScreen> {
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
     // String id = await FirebaseInstallations.instance.getId();
     await FirebaseAnalytics.instance.logEvent(
-      name: "exit_appexit_app",
+      name: "exit_app",
       parameters: {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,

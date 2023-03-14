@@ -50,13 +50,22 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
   void initState() {
     super.initState();
     widget.controller.addListener(() {
-      logTheScrollClick(
-        Provider.of<DataProvider>(
-            Navigation.instance.navigatorKey.currentContext ?? context,
-            listen: false)
-            .profile!,
-        "${(widget.controller.position.pixels/widget.controller.position.maxScrollExtent)*100.toInt()}%",
-      );
+      var currentScroll = ((widget.controller.position.pixels /
+                  widget.controller.position.maxScrollExtent) *
+              100)
+          .toInt();
+      if (currentScroll == 25 ||
+          currentScroll == 50 ||
+          currentScroll == 75 ||
+          currentScroll == 100) {
+        logTheScrollClick(
+          Provider.of<DataProvider>(
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
+              .profile!,
+          "${((widget.controller.position.pixels / widget.controller.position.maxScrollExtent) * 100).toInt()}%",
+        );
+      }
     });
   }
 
@@ -280,10 +289,11 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
       ),
     );
   }
+
   void logTheScrollClick(
-      Profile profile,
-      String percentage_scroll,
-      ) async {
+    Profile profile,
+    String percentage_scroll,
+  ) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
     // String id = await FirebaseInstallations.instance.getId();
@@ -296,7 +306,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
         "percentage_scroll": percentage_scroll,
         "screen_name": "home",
         "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },

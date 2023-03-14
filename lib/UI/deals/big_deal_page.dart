@@ -99,13 +99,16 @@ class _BigDealPageState extends State<BigDealPage> {
       // fetchDeals();
     });
     controller.addListener(() {
-      logTheScrollClick(
-        Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .profile!,
-        "${(controller.position.pixels / controller.position.maxScrollExtent) * 100.toInt()}%",
-      );
+      var currentScroll = ((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt();
+      if(currentScroll==25||currentScroll==50||currentScroll==75||currentScroll==100){
+        logTheScrollClick(
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .profile!,
+          "${((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt()}%",
+        );
+      }
     });
     fetchHistory();
   }

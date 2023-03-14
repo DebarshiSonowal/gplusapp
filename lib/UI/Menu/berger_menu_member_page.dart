@@ -159,9 +159,9 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   onTaped: (category, subCategory) {
                     logTheHambergerOptionClick(
                       Provider.of<DataProvider>(
-                          Navigation.instance.navigatorKey.currentContext ??
-                              context,
-                          listen: false)
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
                           .profile!,
                       widget.screen,
                       category,
@@ -330,10 +330,17 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     if (response.success ?? false) {
       var status = await Permission.storage.status;
       if (status.isDenied) {
-        if (await Permission.storage.request().isGranted) {
-          await ApiProvider.instance
-              .download2(response.e_paper?.news_pdf ?? "");
-        } else {
+        try {
+          if (await Permission.storage.request().isGranted) {
+            await ApiProvider.instance
+                .download2(response.e_paper?.news_pdf ?? "");
+          } else {
+            Navigation.instance.goBack();
+            showError("We require storage permissions");
+          }
+        } catch (e) {
+          print(e);
+          Navigation.instance.goBack();
           showError("We require storage permissions");
         }
         // We didn't ask for permission yet or the permission has been denied before but not permanently.

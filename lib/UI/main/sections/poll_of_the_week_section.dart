@@ -134,13 +134,15 @@ class PollOfTheWeekSection extends StatelessWidget {
                           activeColor: Colors.black,
                           groupValue: poll,
                           onChanged: (val) {
+
                             if (data.profile?.is_plan_active ?? false) {
                               poll = getOptionName(count, data);
+                              debugPrint("Title ${poll.toLowerCase().replaceAll(" ", "_")}");
                               // update();
                               logThePollSelectedClick(
                                 data.profile!,
                                 data.pollOfTheWeek!.title!,
-                                poll,
+                                poll.toLowerCase().replaceAll(" ", "_"),
                                 data.pollOfTheWeek!.id!,
                               );
                               postPollOfTheWeek(data.pollOfTheWeek?.id, poll);

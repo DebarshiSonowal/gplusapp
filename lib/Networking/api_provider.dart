@@ -26,6 +26,7 @@ import '../Model/contact_us.dart';
 import '../Model/deal_details.dart';
 import '../Model/e_paper.dart';
 import '../Model/generic_response.dart';
+import '../Model/grievence_redresal_send.dart';
 import '../Model/guwahati_connect.dart';
 
 // import '../Model/login_response.dart';
@@ -2440,6 +2441,47 @@ class ApiProvider {
       return ShopCategoryResponse.withError(e.message);
     }
   }
+  Future<GrievenceRedressalResponse> getGrievences() async {
+    // var data = {
+    //   'category': 'opinion',
+    //   'per_page': per_page,
+    //   'page': page,
+    // };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${baseUrl}/status-grievance";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      debugPrint("GrievenceRedressalResponse  response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GrievenceRedressalResponse .fromJson(response?.data);
+      } else {
+        debugPrint("GrievenceRedressalResponse  error: ${response?.data}");
+        return GrievenceRedressalResponse .withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("GrievenceRedressalResponse  response: ${e.response}");
+      return GrievenceRedressalResponse .withError(e.message);
+    }
+  }
 
   Future<RedeemHistoryResponse> getRedeemHistory() async {
     // var data = {
@@ -4240,7 +4282,7 @@ class ApiProvider {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var tempDir = "/storage/emulated/0/Download";
     DateTime now = new DateTime.now();
-    DateTime date = new DateTime(
+    DateTime date = DateTime(
         now.year, now.month, now.day, now.hour, now.minute, now.second);
     String fullPath = tempDir +
         "/" +

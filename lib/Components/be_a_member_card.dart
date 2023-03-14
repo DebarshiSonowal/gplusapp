@@ -92,7 +92,8 @@ class BeMemberCard extends StatelessWidget {
               child: CustomButton(
                 txt: 'Get it',
                 onTap: () {
-                  if (current.id == 0) {
+
+                  if (current.id == 1) {
                     logTheOneMonthSubscriptionClick(Provider.of<DataProvider>(
                             Navigation.instance.navigatorKey.currentContext ??
                                 context,

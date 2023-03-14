@@ -90,13 +90,16 @@ class _StoryPageState extends State<StoryPage> {
     });
     fetchAds();
     controller.addListener(() {
-      logTheScrollClick(
-        Provider.of<DataProvider>(
-            Navigation.instance.navigatorKey.currentContext ?? context,
-            listen: false)
-            .profile!,
-        "${(controller.position.pixels / controller.position.maxScrollExtent) * 100.toInt()}%",
-      );
+      var currentScroll = ((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt();
+      if(currentScroll==25||currentScroll==50||currentScroll==75||currentScroll==100){
+        logTheScrollClick(
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .profile!,
+          "${((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt()}%",
+        );
+      }
       if (controller.position.atEdge) {
         bool isTop = controller.position.pixels == 0;
         if (isTop) {
@@ -107,7 +110,6 @@ class _StoryPageState extends State<StoryPage> {
         }
       }
     });
-
   }
 
   @override
@@ -253,6 +255,17 @@ class _StoryPageState extends State<StoryPage> {
                             ),
                             GestureDetector(
                               onTap: () {
+                                logTheClassifiedMyListPostClick(
+                                  data.profile!,
+                                  '${data.selectedArticle?.author_name == "" ? "G Plus News" : data.selectedArticle?.author_name}',
+                                  data.selectedArticle!.title!,
+                                  "g_plus_exclusive",
+                                  data.selectedArticle!.id!,
+                                  data.selectedArticle!.author_name!,
+                                  DateFormat("dd MMM,yyyy").format(
+                                      DateTime.parse(data.selectedArticle!
+                                          .publish_date!)),
+                                );
                                 Navigation.instance.navigate('/authorPage',
                                     args: data.selectedArticle?.author);
                               },
@@ -272,8 +285,10 @@ class _StoryPageState extends State<StoryPage> {
                                         TextSpan(
                                           text:
                                               '${data.selectedArticle?.author_name == "" ? "G Plus News" : data.selectedArticle?.author_name}',
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
+                                          style: Theme.of(Navigation
+                                                  .instance
+                                                  .navigatorKey
+                                                  .currentContext!)
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
@@ -289,15 +304,17 @@ class _StoryPageState extends State<StoryPage> {
                                         TextSpan(
                                           text:
                                               ' , ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
+                                          style: Theme.of(Navigation
+                                                  .instance
+                                                  .navigatorKey
+                                                  .currentContext!)
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
-                                                color:
-                                                    Storage.instance.isDarkMode
-                                                        ? Colors.white
-                                                        : Colors.black,
+                                                color: Storage
+                                                        .instance.isDarkMode
+                                                    ? Colors.white
+                                                    : Colors.black,
                                                 // fontSize: 2.2.h,
                                                 // fontWeight: FontWeight.bold,
                                               ),
@@ -853,6 +870,17 @@ class _StoryPageState extends State<StoryPage> {
                                     //         ""
                                     //     ? 'check out our website https://guwahatiplus.com/'
                                     //     : '${data.selectedArticle?.web_url}');
+                                    logTheClassifiedMyListPostClick(
+                                      data.profile!,
+                                      "share",
+                                      data.selectedArticle!.title!,
+                                      "g_plus_exclusive",
+                                      data.selectedArticle!.id!,
+                                      data.selectedArticle!.author_name!,
+                                      DateFormat("dd MMM,yyyy").format(
+                                          DateTime.parse(data
+                                              .selectedArticle!.publish_date!)),
+                                    );
                                     generateURL(
                                         data.selectedArticle?.first_cat_name
                                             ?.seo_name,
@@ -1371,10 +1399,11 @@ class _StoryPageState extends State<StoryPage> {
       },
     );
   }
+
   void logTheScrollClick(
-      Profile profile,
-      String percentage_scroll,
-      ) async {
+    Profile profile,
+    String percentage_scroll,
+  ) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
     // String id = await FirebaseInstallations.instance.getId();
@@ -1387,7 +1416,7 @@ class _StoryPageState extends State<StoryPage> {
         "percentage_scroll": percentage_scroll,
         "screen_name": "article_detail",
         "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },

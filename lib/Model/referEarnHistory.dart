@@ -33,12 +33,15 @@ class ReferEarnHistory {
 
 class ReferEarnHistoryResponse {
   bool? success;
-  String? message;
+  String? message,empty,invite;
   List<ReferEarnHistory> history = [];
+
 
   ReferEarnHistoryResponse.withJson(json) {
     success = json['success'] ?? false;
     message = json['message'] ?? "";
+    empty = json['data']['history_empty_msg'] ?? "";
+    invite = json['data']['invite_msg'] ?? "";
     history = json['data']['history'] == null
         ? []
         : (json['data']['history'] as List)

@@ -63,22 +63,27 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
     );
     Future.delayed(Duration.zero, () {
       if (!Storage.instance.isGuwahatiConnect) {
+        // getText();
         showDialogBox();
       }
+      // getText();
+      // showDialogBox();
     });
     final curvedAnimation =
         CurvedAnimation(curve: Curves.easeInOut, parent: _animationController!);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
     super.initState();
-    getText();
     controller.addListener(() {
-      logTheScrollClick(
-        Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .profile!,
-        "${(controller.position.pixels / controller.position.maxScrollExtent) * 100.toInt()}%",
-      );
+      var currentScroll = ((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt();
+      if(currentScroll==25||currentScroll==50||currentScroll==75||currentScroll==100){
+        logTheScrollClick(
+          Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+              .profile!,
+          "${((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt()}%",
+        );
+      }
     });
     // secureScreen();
     // Future.delayed(Duration.zero, () {
@@ -510,7 +515,11 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                 ),
                 SizedBox(height: 1.h),
                 Text(
-                  txt,
+                  Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey.currentContext ??
+                              context,
+                          listen: false)
+                      .connect,
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontWeight: FontWeight.bold,

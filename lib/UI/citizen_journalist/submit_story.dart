@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:badges/badges.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +19,7 @@ import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 
 class SubmitStoryPage extends StatefulWidget {
@@ -47,7 +49,9 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
     title.dispose();
     desc.dispose();
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -269,6 +273,12 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                         onTap: () {
                           // showDialogBox();
                           if (title.text.isNotEmpty && desc.text.isNotEmpty) {
+                            logTheCjSubmitClick(Provider.of<DataProvider>(
+                                    Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                        context,
+                                    listen: false)
+                                .profile!);
                             postStory(1);
                           } else {
                             showError(
@@ -291,6 +301,12 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                         onTap: () {
                           // showDialogBox();
                           if (title.text.isNotEmpty && desc.text.isNotEmpty) {
+                            logTheCjDraftSubmitClick(Provider.of<DataProvider>(
+                                    Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                        context,
+                                    listen: false)
+                                .profile!);
                             postStory(0);
                           } else {
                             showError(
@@ -307,7 +323,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current,"citizen_journalist"),
+      bottomNavigationBar: CustomNavigationBar(current, "citizen_journalist"),
     );
   }
 
@@ -391,64 +407,33 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                                 ),
                               ],
                             )),
-                        // InkWell(
-                        //     onTap: () {
-                        //       Navigation.instance.goBack();
-                        //       getImage(2);
-                        //     },
-                        //     child: Column(
-                        //       children: [
-                        //         Container(
-                        //           padding: const EdgeInsets.all(10),
-                        //           margin: EdgeInsets.only(bottom: 4),
-                        //           decoration: BoxDecoration(
-                        //               borderRadius: BorderRadius.circular(30),
-                        //               color: Colors.purple.shade300),
-                        //           child: const Icon(
-                        //             Icons.videocam,
-                        //             color: Colors.white,
-                        //           ),
-                        //         ),
-                        //     Text(
-                        //           "Videocam",
-                        //           style: TextStyle(
-                        //             fontSize: 8.sp,
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     )),
-                        // InkWell(
-                        //     onTap: () {
-                        //       Navigation.instance.goBack();
-                        //       getImage(3);
-                        //     },
-                        //     child: Column(
-                        //       children: [
-                        //         Container(
-                        //           padding: const EdgeInsets.all(10),
-                        //           margin: EdgeInsets.only(bottom: 4),
-                        //           decoration: BoxDecoration(
-                        //               borderRadius: BorderRadius.circular(30),
-                        //               color: Colors.purple.shade300),
-                        //           child: const Icon(
-                        //             Icons.video_library,
-                        //             color: Colors.white,
-                        //           ),
-                        //         ),
-                        //          Text(
-                        //           "Video Roll",
-                        //           style: TextStyle(
-                        //             fontSize: 8.sp,
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     )),
                       ],
                     ),
                   ],
                 ));
           });
     }
+  }
+
+  void logTheCjSubmitClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "cj_submit_a_story_final",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "post": post,
+        // "cta_click": cta_click,
+        "screen_name": "citizen_journalist",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 
   Future<void> getProfileImage(int index) async {
@@ -629,5 +614,26 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  void logTheCjDraftSubmitClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "save_as_draft_final",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "post": post,
+        // "cta_click": cta_click,
+        "screen_name": "citizen_journalist",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 }

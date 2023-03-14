@@ -441,7 +441,7 @@ class _PostAListingState extends State<PostAListing> {
                                     context,
                                 listen: false)
                             .profile!,
-                        selectedCategory,
+                        selectedCategory.toString().toLowerCase(),
                         localityEditor.text,
                         title.text,
                         desc.text,

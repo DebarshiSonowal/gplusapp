@@ -313,7 +313,7 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                       autofocus: true,
                       cursorColor: Storage.instance.isDarkMode
                           ? Colors.white
-                          :Constance.primaryColor,
+                          : Constance.primaryColor,
                       decoration: InputDecoration(
                         hintText: "Text your feedback here",
                         border: InputBorder.none,
@@ -345,8 +345,21 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
                           _email.text.isNotEmpty &&
                           _mobile.text.isNotEmpty &&
                           _feedback.text.isNotEmpty) {
-                        submit(_first_name.text, _last_name.text, _email.text,
-                            _mobile.text, selected, _feedback.text);
+                        if (isValidEmail(_email.text)) {
+                          if (_mobile.text.length == 10) {
+                            submit(
+                                _first_name.text,
+                                _last_name.text,
+                                _email.text,
+                                _mobile.text,
+                                selected,
+                                _feedback.text);
+                          } else {
+                            showError("Enter a valid mobile number");
+                          }
+                        } else {
+                          showError("Enter a valid email");
+                        }
                       } else {
                         showError("Enter all the details");
                       }
@@ -359,6 +372,12 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
         }),
       ),
     );
+  }
+
+  bool isValidEmail(email) {
+    return RegExp(
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(email);
   }
 
   void showError(String msg) {
@@ -400,8 +419,8 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -409,7 +428,7 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
           },
           icon: Icon(Icons.search),
         ),
@@ -424,7 +443,7 @@ class _AdvertiseWithUsPageState extends State<AdvertiseWithUsPage> {
         .advertiseWithUs(text, text2, text3, text4, selected, text5);
     if (response.success ?? false) {
       Navigation.instance.goBack();
-      Fluttertoast.showToast(msg: response.message??"Successfully posted");
+      Fluttertoast.showToast(msg: response.message ?? "Successfully posted");
       _first_name.clear();
       _last_name.clear();
       _feedback.clear();

@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/Storage.dart';
@@ -6,6 +7,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
@@ -36,7 +38,9 @@ class _FilterPageState extends State<FilterPage> {
       }
     });
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,7 +165,7 @@ class _FilterPageState extends State<FilterPage> {
                         .where((element) => element == true)
                         .isNotEmpty
                 ? Container(
-                    margin: EdgeInsets.only(bottom: 2.h,left: 45.w),
+                    margin: EdgeInsets.only(bottom: 2.h, left: 45.w),
                     width: 40.w,
                     height: 5.h,
                     child: CustomButton(
@@ -171,6 +175,17 @@ class _FilterPageState extends State<FilterPage> {
                           _map.keys.toList(),
                           _map.values.toList(),
                         ));
+                        logTheFilterAppliedClick(
+                            Provider.of<DataProvider>(
+                                    Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                        context,
+                                    listen: false)
+                                .profile!,
+                            getComaSeparatedName(
+                              _map.keys.toList(),
+                              _map.values.toList(),
+                            ));
                         Navigator.pop(
                             context,
                             getComaSeparated(
@@ -205,6 +220,19 @@ class _FilterPageState extends State<FilterPage> {
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
 
+  String getComaSeparatedName(List<dynamic> list, List<dynamic> list2) {
+    String temp = "";
+    for (int i = 0; i < list.length; i++) {
+      if (list2[i] == true) {
+        if (i == 0) {
+          temp = '${list[i].seo_name},';
+        } else {
+          temp += '${list[i].seo_name},';
+        }
+      }
+    }
+    return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
+  }
 
   fetchLocality() async {
     Navigation.instance.navigate('/loadingDialog');
@@ -225,5 +253,26 @@ class _FilterPageState extends State<FilterPage> {
     } else {
       Navigation.instance.goBack();
     }
+  }
+
+  void logTheFilterAppliedClick(Profile profile, String filter_applied) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "filter_applied",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "filter_applied": filter_applied,
+        // "cta_click": cta_click,
+        "screen_name": "filtered",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 }

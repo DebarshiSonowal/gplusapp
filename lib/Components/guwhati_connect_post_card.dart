@@ -923,7 +923,7 @@ Future<void> _showAlertDialog(context, id, question) async {
                           Provider.of<DataProvider>(context, listen: false)
                               .profile!,
                           question,
-                          item.name!,
+                          item.name!.toLowerCase(),
                         );
                         reportPost_Comment(
                             context, id, item.id, "guwahati-connect");

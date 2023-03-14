@@ -35,6 +35,7 @@ class Constance {
   static const homeIcon = 'assets/images/home.png';
   static const newsIcon = 'assets/images/news.png';
   static const warningIcon = 'assets/images/warning.png';
+  static const disclaimerIcon = 'assets/images/danger.png';
   static const connectIcon = 'assets/images/connect.png';
   static const classifiedIcon = 'assets/images/classifieds.png';
   static const entertainmentIcon = 'assets/images/entertainment.png';
