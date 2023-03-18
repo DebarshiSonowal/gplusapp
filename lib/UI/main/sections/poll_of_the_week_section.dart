@@ -139,12 +139,7 @@ class PollOfTheWeekSection extends StatelessWidget {
                               poll = getOptionName(count, data);
                               debugPrint("Title ${poll.toLowerCase().replaceAll(" ", "_")}");
                               // update();
-                              logThePollSelectedClick(
-                                data.profile!,
-                                data.pollOfTheWeek!.title!,
-                                poll.toLowerCase().replaceAll(" ", "_"),
-                                data.pollOfTheWeek!.id!,
-                              );
+
                               postPollOfTheWeek(data.pollOfTheWeek?.id, poll);
                             } else {
                               showNotaMember();
@@ -226,9 +221,7 @@ class PollOfTheWeekSection extends StatelessWidget {
   }
 
   getOption(int count, DataProvider data) {
-    print(data.pollOfTheWeek?.percent1);
-    print(data.pollOfTheWeek?.percent2);
-    print(data.pollOfTheWeek?.percent3);
+
     switch (count) {
       case 0:
         return data.pollOfTheWeek?.percent1;
@@ -257,6 +250,12 @@ class PollOfTheWeekSection extends StatelessWidget {
   void postPollOfTheWeek(int? id, String poll) async {
     final response = await ApiProvider.instance.postPollOfTheWeek(id, poll);
     if (response.success ?? false) {
+      logThePollSelectedClick(
+        data.profile!,
+        data.pollOfTheWeek!.title!,
+        poll.toLowerCase().replaceAll(" ", "_"),
+        data.pollOfTheWeek!.id!,
+      );
       Fluttertoast.showToast(msg: response.message ?? "Posted successfully");
       update();
     } else {}
@@ -277,7 +276,7 @@ class PollOfTheWeekSection extends StatelessWidget {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
         "user_id_event": profile.id,
-        "heading_name": heading,
+        "heading_name": heading.length>100?heading.substring(0,100):heading,
         "article_id": thisId,
         "screen_name": "home",
         "poll_selected": getAnswer(answer),

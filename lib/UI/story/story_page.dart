@@ -65,6 +65,8 @@ class _StoryPageState extends State<StoryPage> {
     'exclusive-news'
   ];
   var dropdownvalue = 'international';
+  var preventCall = false;
+  var currentScrollPercent = 0;
 
   // WebViewController? _controller;
   bool like = false, dislike = false, isEmpty = false;
@@ -90,16 +92,27 @@ class _StoryPageState extends State<StoryPage> {
     });
     fetchAds();
     controller.addListener(() {
-      var currentScroll = ((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt();
-      if(currentScroll==25||currentScroll==50||currentScroll==75||currentScroll==100){
-        logTheScrollClick(
-          Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-              .profile!,
-          "${((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt()}%",
-        );
+      var currentScroll =
+          ((controller.position.pixels / controller.position.maxScrollExtent) *
+                  100)
+              .toInt();
+      if (currentScroll == 25 ||
+          currentScroll == 50 ||
+          currentScroll == 75 ||
+          currentScroll == 100) {
+        if (currentScrollPercent != currentScroll) {
+          debugPrint("scrolling $currentScroll");
+          currentScrollPercent = currentScroll;
+          logTheScrollClick(
+            Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ?? context,
+                    listen: false)
+                .profile!,
+            "$currentScroll%",
+          );
+        }
       }
+
       if (controller.position.atEdge) {
         bool isTop = controller.position.pixels == 0;
         if (isTop) {
@@ -118,6 +131,7 @@ class _StoryPageState extends State<StoryPage> {
             Navigation.instance.navigatorKey.currentContext ?? context,
             listen: false)
         .selectedArticle = null;
+    controller.dispose();
     super.dispose();
   }
 
@@ -263,8 +277,8 @@ class _StoryPageState extends State<StoryPage> {
                                   data.selectedArticle!.id!,
                                   data.selectedArticle!.author_name!,
                                   DateFormat("dd MMM,yyyy").format(
-                                      DateTime.parse(data.selectedArticle!
-                                          .publish_date!)),
+                                      DateTime.parse(
+                                          data.selectedArticle!.publish_date!)),
                                 );
                                 Navigation.instance.navigate('/authorPage',
                                     args: data.selectedArticle?.author);
@@ -285,10 +299,8 @@ class _StoryPageState extends State<StoryPage> {
                                         TextSpan(
                                           text:
                                               '${data.selectedArticle?.author_name == "" ? "G Plus News" : data.selectedArticle?.author_name}',
-                                          style: Theme.of(Navigation
-                                                  .instance
-                                                  .navigatorKey
-                                                  .currentContext!)
+                                          style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
@@ -304,17 +316,15 @@ class _StoryPageState extends State<StoryPage> {
                                         TextSpan(
                                           text:
                                               ' , ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
-                                          style: Theme.of(Navigation
-                                                  .instance
-                                                  .navigatorKey
-                                                  .currentContext!)
+                                          style: Theme.of(Navigation.instance
+                                                  .navigatorKey.currentContext!)
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
-                                                color: Storage
-                                                        .instance.isDarkMode
-                                                    ? Colors.white
-                                                    : Colors.black,
+                                                color:
+                                                    Storage.instance.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
                                                 // fontSize: 2.2.h,
                                                 // fontWeight: FontWeight.bold,
                                               ),

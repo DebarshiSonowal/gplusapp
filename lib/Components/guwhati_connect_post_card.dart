@@ -383,16 +383,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                               type: MaterialType.transparency,
                               child: IconButton(
                                 onPressed: () {
-                                  logTheReactionPostClick(
-                                    Provider.of<DataProvider>(
-                                            Navigation.instance.navigatorKey
-                                                    .currentContext ??
-                                                context,
-                                            listen: false)
-                                        .profile!,
-                                    data.question!,
-                                    like ? "like" : "dislike",
-                                  );
+
                                   postLike(data.id!, 1);
                                   _(() {
                                     like = !like;
@@ -400,6 +391,16 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                       dislike = !like;
                                     }
                                   });
+                                  logTheReactionPostClick(
+                                    Provider.of<DataProvider>(
+                                        Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                            context,
+                                        listen: false)
+                                        .profile!,
+                                    data.question!,
+                                    like ? "like" : "dislike",
+                                  );
                                   debugPrint('${like}');
                                 },
                                 splashRadius: 20.0,

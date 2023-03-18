@@ -138,6 +138,7 @@ class _PostAListingState extends State<PostAListing> {
                   // After selecting the desired option,it will
                   // change button value to selected value
                   onChanged: (newValue) {
+                    print("value: $newValue");
                     setState(() {
                       selectedCategory = newValue!;
                     });
@@ -441,7 +442,17 @@ class _PostAListingState extends State<PostAListing> {
                                     context,
                                 listen: false)
                             .profile!,
-                        selectedCategory.toString().toLowerCase(),
+                        (Provider.of<DataProvider>(
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .classified_category
+                            .firstWhere((element) =>
+                                element.id.toString().trim() ==
+                                selectedCategory
+                                    .toString()
+                                    .trim())).title.toString().toLowerCase(),
                         localityEditor.text,
                         title.text,
                         desc.text,
@@ -726,10 +737,12 @@ class _PostAListingState extends State<PostAListing> {
         "story_category_selected": story_category_selected,
         "locality": locality,
         "title": title,
-        "field_entered": field_entered,
+        "field_entered": field_entered.length > 100
+            ? field_entered.toString().substring(0, 100)
+            : field_entered,
         "price": price,
         // "cta_click": cta_click,
-        "screen_name": "classified",
+        "screen_name": "post_a_listing",
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,

@@ -98,7 +98,7 @@ class SuggestedForYou extends StatelessWidget {
                               );
                               Navigation.instance.navigate('/story',
                                   args:
-                                      '${item.categories?.first.seo_name},${item.seo_name},home_page');
+                                      '${item.categories?.first.seo_name},${item.seo_name},top_picks_for_you');
                             } else {
                               showNotaMember();
                             }

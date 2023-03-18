@@ -45,6 +45,7 @@ class HomeScreenBody extends StatefulWidget {
 
 class _HomeScreenBodyState extends State<HomeScreenBody> {
   bool showing = false;
+  int currentScrollPercent = 0;
 
   @override
   void initState() {
@@ -58,13 +59,17 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
           currentScroll == 50 ||
           currentScroll == 75 ||
           currentScroll == 100) {
-        logTheScrollClick(
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .profile!,
-          "${((widget.controller.position.pixels / widget.controller.position.maxScrollExtent) * 100).toInt()}%",
-        );
+        if (currentScrollPercent != currentScroll) {
+          debugPrint("scrolling $currentScroll");
+          currentScrollPercent = currentScroll;
+          logTheScrollClick(
+            Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ?? context,
+                    listen: false)
+                .profile!,
+            "$currentScroll%",
+          );
+        }
       }
     });
   }
@@ -106,6 +111,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
             return WillPopScope(
               onWillPop: () async {
                 widget.showExitDialog();
+
                 return false;
               },
               child: Container(

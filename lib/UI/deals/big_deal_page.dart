@@ -34,7 +34,7 @@ class _BigDealPageState extends State<BigDealPage> {
   String _value = 'Time', deal = "";
   bool expandCateg = false;
   var current = 1;
-
+  int currentScrollPercent = 0;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: true);
   final ScrollController controller = ScrollController();
@@ -101,13 +101,18 @@ class _BigDealPageState extends State<BigDealPage> {
     controller.addListener(() {
       var currentScroll = ((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt();
       if(currentScroll==25||currentScroll==50||currentScroll==75||currentScroll==100){
-        logTheScrollClick(
-          Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-              .profile!,
-          "${((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt()}%",
-        );
+        if (currentScrollPercent != currentScroll) {
+          debugPrint("scrolling $currentScroll");
+          currentScrollPercent = currentScroll;
+          logTheScrollClick(
+            Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+                .profile!,
+            "$currentScroll%",
+          );
+        }
+
       }
     });
     fetchHistory();

@@ -634,7 +634,7 @@ class _EditProfileState extends State<EditProfile> {
     }
     try {
       id = prof.addresses
-          .firstWhere((element) => element.is_primary == 1)
+          .firstWhere((element) => element.is_primary == 1).id
           .toString();
     } catch (e) {
       print(e);

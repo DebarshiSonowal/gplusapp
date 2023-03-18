@@ -152,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
         key: _scaffoldKey,
         backgroundColor:
             Storage.instance.isDarkMode ? Colors.black : Colors.grey.shade100,
-        appBar: Constance.buildAppBar("home_page", true, _scaffoldKey),
+        appBar: Constance.buildAppBar("home", true, _scaffoldKey),
         // floatingActionButtonLocation: showing
         //     ? FloatingActionButtonLocation.miniStartFloat
         //     : FloatingActionButtonLocation.miniEndFloat,

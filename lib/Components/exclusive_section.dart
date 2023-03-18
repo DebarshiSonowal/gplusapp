@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Components/video_section_menu.dart';
 import 'package:provider/provider.dart';
@@ -5,17 +6,19 @@ import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
 import '../Helper/DataProvider.dart';
+import '../Helper/Storage.dart';
 import '../Model/notification_in_device.dart';
+import '../Model/profile.dart';
 import '../Navigation/Navigate.dart';
 import 'buzz_section.dart';
 
 class ExclusiveSection extends StatelessWidget {
   const ExclusiveSection({
     Key? key,
-    required this.onTaped,
+    required this.onTaped, required this.screen,
   }) : super(key: key);
   final Function(String, String) onTaped;
-
+  final String screen;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,6 +32,16 @@ class ExclusiveSection extends StatelessWidget {
             splashColor: Constance.secondaryColor,
             radius: 5.h,
             onTap: () {
+              logTheHambergerOptionClick(
+                Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ??
+                        context,
+                    listen: false)
+                    .profile!,
+                screen,
+                "exclusive",
+                "NA",
+              );
               Navigation.instance.navigate('/exclusivePage');
             },
             child: Row(
@@ -92,6 +105,16 @@ class ExclusiveSection extends StatelessWidget {
             splashColor: Constance.secondaryColor,
             radius: 15.h,
             onTap: () {
+              logTheHambergerOptionClick(
+                Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ??
+                        context,
+                    listen: false)
+                    .profile!,
+                screen,
+                "opinion",
+                "NA",
+              );
               Navigation.instance.navigate('/opinionPage');
             },
             child: Row(
@@ -164,5 +187,28 @@ class ExclusiveSection extends StatelessWidget {
       }
     }
     return false;
+  }
+  void logTheHambergerOptionClick(
+      Profile profile,
+      String screen_name,
+      String hamburger_category,
+      String hamburger_subcategory,
+      ) async {
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    await FirebaseAnalytics.instance.logEvent(
+      name: "hamburger_option_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "hamburger_category": hamburger_category,
+        "hamburger_subcategory": hamburger_subcategory,
+        "screen_name": screen_name,
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 }

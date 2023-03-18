@@ -721,9 +721,11 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
         "client_id_event": id,
         "user_id_event": profile.id,
         "title": title,
-        "field_entered": field_entered,
+        "field_entered": field_entered.length > 100
+            ? field_entered.substring(0, 100)
+            : field_entered,
         "locality": locality,
-        "screen_name": "classified",
+        "screen_name": "classified_details",
         "views": views,
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",

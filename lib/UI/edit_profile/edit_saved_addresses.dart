@@ -55,7 +55,9 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
       fetchAddress();
     });
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,6 +165,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
               predictions.isEmpty
                   ? Container()
                   : ListView.builder(
+
                       shrinkWrap: true,
                       itemCount: predictions.length,
                       itemBuilder: (context, index) {
@@ -279,6 +282,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
               ),
               Consumer<DataProvider>(builder: (context, data, _) {
                 return ListView.separated(
+                    physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (cont, count) {
                       var current = data.addresses![count];

@@ -307,7 +307,7 @@ class _DraftStoryState extends State<DraftStory> {
         "user_id_event": profile.id,
         // "post": post,
         // "cta_click": cta_click,
-        "screen_name": "citizen_journalist",
+        "screen_name": "drafts",
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,

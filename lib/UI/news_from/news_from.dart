@@ -107,7 +107,7 @@ class _NewsFromState extends State<NewsFrom> {
             } else if (mode == LoadStatus.canLoading) {
               body = const Text("release to load more");
             } else {
-              body = Text("No more Data");
+              body = const Text("No more Data");
             }
             return Container(
               height: 55.0,
@@ -278,7 +278,7 @@ class _NewsFromState extends State<NewsFrom> {
                         ),
                         newsfrom_suggestion(widget: widget, data: data,),
                         SizedBox(
-                          height: 15.h,
+                          height: 2.h,
                         ),
                       ],
                     ),

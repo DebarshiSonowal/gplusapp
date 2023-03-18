@@ -301,12 +301,16 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                         onTap: () {
                           // showDialogBox();
                           if (title.text.isNotEmpty && desc.text.isNotEmpty) {
-                            logTheCjDraftSubmitClick(Provider.of<DataProvider>(
-                                    Navigation.instance.navigatorKey
-                                            .currentContext ??
-                                        context,
-                                    listen: false)
-                                .profile!);
+                            logTheCjDraftSubmitClick(
+                              Provider.of<DataProvider>(
+                                      Navigation.instance.navigatorKey
+                                              .currentContext ??
+                                          context,
+                                      listen: false)
+                                  .profile!,
+                              title.text,
+                              desc.text,
+                            );
                             postStory(0);
                           } else {
                             showError(
@@ -616,7 +620,8 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
         });
   }
 
-  void logTheCjDraftSubmitClick(Profile profile) async {
+  void logTheCjDraftSubmitClick(
+      Profile profile, String title, String field_entered) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
     // String id = await FirebaseInstallations.instance.getId();
@@ -627,7 +632,9 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
         "client_id_event": id,
         "user_id_event": profile.id,
         // "post": post,
-        // "cta_click": cta_click,
+        "title": title,
+        "field_entered": field_entered,
+        "cta_click": "save_as_draft",
         "screen_name": "citizen_journalist",
         "user_login_status":
             Storage.instance.isLoggedIn ? "logged_in" : "guest",

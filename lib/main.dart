@@ -9,6 +9,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:intl/intl.dart';
 import 'package:open_file_safe/open_file_safe.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -76,27 +77,28 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If `onMessage` is triggered with a notification, construct our own
   // local notification to show to users using the created channel.
   if (notification != null && android != null) {
-    flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
-      notification.title,
-      notification.body,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channelDescription: channel.description,
-          // icon: android.smallIcon,
-          icon: "@drawable/ic_notification",
-          // other properties...
-        ),
-        iOS: DarwinNotificationDetails(
-          // badgeNumber: int.parse(channel.id),
-          subtitle: channel.name,
-          interruptionLevel: InterruptionLevel.critical,
-        ),
-      ),
-      payload: '${message.data}',
-    );
+    debugPrint("1st case ${DateFormat("dd MM, yyyy HH:MM:SS a").format(DateTime.now())}");
+    // flutterLocalNotificationsPlugin.show(
+    //   notification.hashCode,
+    //   notification.title,
+    //   notification.body,
+    //   NotificationDetails(
+    //     android: AndroidNotificationDetails(
+    //       channel.id,
+    //       channel.name,
+    //       channelDescription: channel.description,
+    //       // icon: android.smallIcon,
+    //       icon: "@drawable/ic_notification",
+    //       // other properties...
+    //     ),
+    //     iOS: DarwinNotificationDetails(
+    //       // badgeNumber: int.parse(channel.id),
+    //       subtitle: channel.name,
+    //       interruptionLevel: InterruptionLevel.critical,
+    //     ),
+    //   ),
+    //   payload: '${message.data}',
+    // );
   }
 }
 
@@ -111,7 +113,7 @@ Future<void> onDidReceiveNotificationResponse(
       OpenFile.open(details?.notificationResponse?.payload);
     }
   }
-  debugPrint(notificationResponse.payload);
+  debugPrint("Notification Payload ${notificationResponse.payload}");
   var jsData = notificationResponse.payload ?? "";
   jsData = jsData.replaceAll('{', '{"');
   jsData = jsData.replaceAll(': ', '": "');
@@ -180,6 +182,7 @@ void NotificationHandler(message) async {
   // If `onMessage` is triggered with a notification, construct our own
   // local notification to show to users using the created channel.
   if (notification != null && android != null) {
+    debugPrint("2nd case ${DateFormat("dd MM, yyyy HH:MM:SS a").format(DateTime.now())}");
     flutterLocalNotificationsPlugin.show(
       notification.hashCode,
       notification.title,
@@ -301,7 +304,7 @@ class _MyAppState extends State<MyApp> {
     } else {
       final Uri deepLink = initialLink.link;
       debugPrint("URL link2 ${deepLink}");
-      Future.delayed(Duration(seconds: 5), () {
+      Future.delayed(const Duration(seconds: 5), () {
         sendToRoute(
           deepLink.path.split("/")[2].trim(),
           deepLink.path.split("/")[3].trim(),
@@ -344,15 +347,18 @@ void sendToDestination(
   switch (type) {
     case "news":
       debugPrint("News clicked ${categoryName},${seoName} ");
+      Navigation.instance.navigate("/main");
       Navigation.instance
           .navigate('/story', args: '${categoryName},${seoName},home_page');
       break;
     case "opinion":
+      Navigation.instance.navigate("/main");
       Navigation.instance.navigate('/opinionPage');
       Navigation.instance
           .navigate('/opinionDetails', args: '${seoName},${categoryId}');
       break;
     case "ghy_connect":
+      Navigation.instance.navigate("/main");
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
@@ -362,6 +368,7 @@ void sendToDestination(
           .navigate('/allImagesPage', args: int.parse(id.toString()));
       break;
     case "ghy_connect_status":
+      Navigation.instance.navigate("/main");
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
@@ -371,6 +378,7 @@ void sendToDestination(
           .navigate('/allImagesPage', args: int.parse(id.toString()));
       break;
     case "citizen_journalist":
+      Navigation.instance.navigate("/main");
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
@@ -378,6 +386,7 @@ void sendToDestination(
       Navigation.instance.navigate('/citizenJournalist');
       break;
     case "ctz_journalist_status":
+      Navigation.instance.navigate("/main");
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
@@ -388,6 +397,7 @@ void sendToDestination(
           .navigate('/viewStoryPage', args: int.parse(id.toString()));
       break;
     case "deals":
+      Navigation.instance.navigate("/main");
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
@@ -397,6 +407,7 @@ void sendToDestination(
           .navigate('/categorySelect', args: int.parse(vendorId));
       break;
     case "classified":
+      Navigation.instance.navigate("/main");
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
@@ -405,6 +416,7 @@ void sendToDestination(
       Navigation.instance.navigate('/classifiedDetails', args: int.parse(id));
       break;
     case "locality":
+      Navigation.instance.navigate("/main");
       Navigation.instance
           .navigate('/story', args: '${categoryName},${seoName},home_page');
       break;

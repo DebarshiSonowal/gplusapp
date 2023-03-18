@@ -85,21 +85,6 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             SizedBox(
                               width: 1.5.w,
                             ),
-                            // GestureDetector(
-                            //
-                            //   child: Text(
-                            //     'Change',
-                            //     style: Theme.of(Navigation
-                            //             .instance.navigatorKey.currentContext!)
-                            //         .textTheme
-                            //         .headline6
-                            //         ?.copyWith(
-                            //           color: Constance.secondaryColor,
-                            //           fontSize: 11.sp,
-                            //           fontWeight: FontWeight.bold,
-                            //         ),
-                            //   ),
-                            // ),
                           ],
                         ),
                         SizedBox(
@@ -170,6 +155,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       subCategory,
                     );
                   },
+                  screen:widget.screen,
                 ),
                 const Divider(
                   color: Colors.white,
@@ -187,6 +173,16 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                               .profile
                               ?.is_plan_active ??
                           false) {
+                        logTheHambergerOptionClick(
+                          Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                              .profile!,
+                          widget.screen,
+                          "bookmark",
+                          "NA",
+                        );
                         Navigation.instance.navigate('/bookmarks');
                         // showError("Oops! You are not a member yet");
                       } else {

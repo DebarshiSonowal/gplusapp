@@ -33,7 +33,7 @@ class GuwahatiConnectPage extends StatefulWidget {
 
 class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
     with SingleTickerProviderStateMixin {
-  int current = 2;
+  int current = 2, currentScrollPercent = 0;
   bool showing = false;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final RefreshController _refreshController =
@@ -74,15 +74,25 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
     super.initState();
     controller.addListener(() {
-      var currentScroll = ((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt();
-      if(currentScroll==25||currentScroll==50||currentScroll==75||currentScroll==100){
-        logTheScrollClick(
-          Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-              .profile!,
-          "${((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt()}%",
-        );
+      var currentScroll =
+          ((controller.position.pixels / controller.position.maxScrollExtent) *
+                  100)
+              .toInt();
+      if (currentScroll == 25 ||
+          currentScroll == 50 ||
+          currentScroll == 75 ||
+          currentScroll == 100) {
+        if (currentScrollPercent != currentScroll) {
+          debugPrint("scrolling $currentScroll");
+          currentScrollPercent = currentScroll;
+          logTheScrollClick(
+            Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ?? context,
+                    listen: false)
+                .profile!,
+            "$currentScroll%",
+          );
+        }
       }
     });
     // secureScreen();

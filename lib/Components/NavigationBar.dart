@@ -38,34 +38,94 @@ class _NavigationBarState extends State<CustomNavigationBar> {
           type: BottomNavigationBarType.fixed,
           currentIndex: current,
           onTap: (val) {
-            Provider.of<DataProvider>(
-                    Navigation.instance.navigatorKey.currentContext ?? context,
-                    listen: false)
-                .setCurrent(val);
             switch (val) {
               case 1:
-                logTheBottomNavigationClick(
-                    data.profile!, "big_deal", widget.screen);
+                if (Provider.of<DataProvider>(
+                            Navigation.instance.navigatorKey.currentContext ??
+                                context,
+                            listen: false)
+                        .currentIndex !=
+                    val) {
+                  logTheBottomNavigationClick(
+                      data.profile!, "big_deal", widget.screen);
+                }
+
+                Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                    .setCurrent(val);
                 Navigation.instance.navigate('/bigdealpage');
                 break;
               case 2:
-                logTheBottomNavigationClick(
-                    data.profile!, "guwahati_connect", widget.screen);
+                if (Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ??
+                        context,
+                    listen: false)
+                    .currentIndex !=
+                    val) {
+                  logTheBottomNavigationClick(
+                      data.profile!, "guwahati_connect", widget.screen);
+                }
+
+                Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ??
+                        context,
+                    listen: false)
+                    .setCurrent(val);
                 Navigation.instance.navigate('/guwahatiConnects');
                 break;
               case 3:
-                logTheBottomNavigationClick(
-                    data.profile!, "citizen_journalist", widget.screen);
+                if (Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ??
+                        context,
+                    listen: false)
+                    .currentIndex !=
+                    val) {
+                  logTheBottomNavigationClick(
+                      data.profile!, "citizen_journalist", widget.screen);
+                }
+
+                Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ??
+                        context,
+                    listen: false)
+                    .setCurrent(val);
                 Navigation.instance.navigate('/citizenJournalist');
                 break;
               case 4:
-                logTheBottomNavigationClick(
-                    data.profile!, "classified", widget.screen);
+                if (Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ??
+                        context,
+                    listen: false)
+                    .currentIndex !=
+                    val) {
+                  logTheBottomNavigationClick(
+                      data.profile!, "classified", widget.screen);
+                }
+                Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ??
+                        context,
+                    listen: false)
+                    .setCurrent(val);
                 Navigation.instance.navigate('/classified');
                 break;
               default:
-                logTheBottomNavigationClick(
-                    data.profile!, "home", widget.screen);
+                if (Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ??
+                        context,
+                    listen: false)
+                    .currentIndex !=
+                    val) {
+                  logTheBottomNavigationClick(
+                      data.profile!, "home", widget.screen);
+                }
+
+                Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ??
+                        context,
+                    listen: false)
+                    .setCurrent(val);
                 Navigation.instance.navigate('/main');
                 break;
             }

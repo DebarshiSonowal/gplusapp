@@ -46,7 +46,6 @@ class _SplashScreenState extends State<SplashScreen> {
       fetchDealMsg();
     });
     Future.delayed(const Duration(seconds: 1), () {
-      print('LOGGEDIN');
       if (Storage.instance.isLoggedIn) {
         fetchSwitchStatus();
 
@@ -74,12 +73,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void fetchProfile() async {
-    print('object profile');
     // Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getprofile();
     if (response.success ?? false) {
       // Navigation.instance.goBack();
-      print('object profile');
+
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)

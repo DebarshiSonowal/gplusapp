@@ -33,7 +33,7 @@ class GuwahatiConnectMylistPage extends StatefulWidget {
 
 class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
     with SingleTickerProviderStateMixin {
-  int current = 2;
+  int current = 2,currentScrollPercent=0;
   bool showing = false;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final RefreshController _refreshController =
@@ -77,13 +77,17 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
     controller.addListener(() {
       var currentScroll = ((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt();
       if(currentScroll==25||currentScroll==50||currentScroll==75||currentScroll==100){
-        logTheScrollClick(
-          Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-              .profile!,
-          "${((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt()}%",
-        );
+        if (currentScrollPercent != currentScroll) {
+          debugPrint("scrolling $currentScroll");
+          currentScrollPercent = currentScroll;
+          logTheScrollClick(
+            Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+                .profile!,
+            "$currentScroll%",
+          );
+        }
       }
     });
   }

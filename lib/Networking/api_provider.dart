@@ -194,7 +194,7 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      // debugPrint("Profile response: ${response?.data}");
+      debugPrint("Profile response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ProfileResponse.fromJson(response?.data);
       } else {
@@ -206,6 +206,11 @@ class ApiProvider {
         Storage.instance.logout();
         Navigation.instance.navigateAndRemoveUntil('/login');
         showError("Oops! Your session expired. Please Login Again");
+      }
+      if (e.response?.statusCode == 450) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Your blocked by our account. Please Contact G Plus Admin");
       }
       debugPrint("Profile error response: ${e.response}");
       return ProfileResponse.withError(e.message);
@@ -549,14 +554,14 @@ class ApiProvider {
     var url = "${baseUrl}/address";
     dio = Dio(option);
     debugPrint(url.toString());
-    // debugPrint(jsonEncode(data));
+    debugPrint(jsonEncode(data));
 
     try {
       Response? response = await dio?.post(
         url,
         data: data,
       );
-      debugPrint("address response: ${response?.headers}");
+      debugPrint("address added response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return AddressResponse.fromJson(response?.data);
       } else {
@@ -639,7 +644,7 @@ class ApiProvider {
         url,
         // data: data,
       );
-      debugPrint("address delete response: ${response?.headers}");
+      debugPrint("address delete response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return AddressResponse.fromJson(response?.data);
       } else {

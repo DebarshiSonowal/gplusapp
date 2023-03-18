@@ -261,6 +261,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setProfile(reponse.profile!);
+      print("Profile Created ${reponse.profile!.id}");
       logTheSignUpSuccessClick(getComaSeparatedName(selGeo),
           getComaSeparatedName(selTop), reponse.profile!);
       Navigation.instance.navigateAndReplace('/main');

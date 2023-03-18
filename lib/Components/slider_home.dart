@@ -151,6 +151,4 @@ class _CarouselWithIndicatorState extends State<HomeBannerPage> {
 
     return Color.fromARGB(color.alpha, d, d, d);
   }
-
-
 }
