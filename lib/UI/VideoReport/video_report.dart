@@ -42,10 +42,14 @@ class _VideoReportState extends State<VideoReport> {
       if (controller.position.atEdge) {
         bool isTop = controller.position.pixels == 0;
         if (isTop) {
+          debugPrint("check ${controller.position}");
           _refreshController.requestRefresh();
         } else {
           // print('At the bottom');
-          _refreshController.requestLoading();
+          debugPrint("check2 ${controller.position}");
+          // _refreshController.requestLoading();
+          page++;
+          fetchMoreData();
         }
       }
     });

@@ -454,7 +454,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
           return AlertDialog(
             backgroundColor: Colors.white,
             title: SizedBox(
-              height: 15.h,
+              height: 13.h,
               // width: 5.w,
               child: Image.asset(
                 Constance.disclaimerIcon,
@@ -465,7 +465,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
             actionsPadding: const EdgeInsets.only(left: 16, right: 16),
             content: Text(
               msg,
-              style: Theme.of(context).textTheme.headline5?.copyWith(
+              style: Theme.of(context).textTheme.headline4?.copyWith(
                     color: Colors.black,
                   ),
             ),
@@ -480,6 +480,9 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                     color: Colors.black54,
                   ),
                 ),
+              ),
+              SizedBox(
+                width: 25.w,
               ),
               TextButton(
                 onPressed: () {
