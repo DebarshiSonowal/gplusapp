@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart' as bd;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -195,8 +197,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                             SizedBox(
                               width: 70.w,
                               child: Text(
-                                data.referEarn?.referral_link ??
-                                    'https://guwahatiplus.com/topic/bollywood',
+                                data.referEarn!.code!,
                                 overflow: TextOverflow.ellipsis,
                                 style: Theme.of(Navigation
                                         .instance.navigatorKey.currentContext!)
@@ -214,10 +215,8 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                             GestureDetector(
                               onTap: () {
                                 Clipboard.setData(ClipboardData(
-                                        text: data.referEarn?.referral_link
-                                                ?.split('/')[3] ??
-                                            'https://guwahatiplus.com/topic/bollywood'))
-                                    .then((_) {
+                                  text: data.referEarn?.code,
+                                )).then((_) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content:
@@ -247,7 +246,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                           onTap: () {
                             Share.share(
                                 // "Hello I welcome you to G Plus. Join me and download their app using my referral code ${data.referEarn?.referral_link?.split('/')[3]}",
-                                "${data.invite} ${data.referEarn?.referral_link?.split('/')[3]}");
+                                "${data.invite} ${data.referEarn?.code} \n ${getStoreLink()}");
                           },
                         ),
                       ),
@@ -733,5 +732,17 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
           .setReferEarnHistory(
               response.history, response.empty!, response.invite!);
     } else {}
+  }
+
+  getStoreLink() {
+    if (Platform.isAndroid || Platform.isIOS) {
+      final appId = Platform.isAndroid ? 'com.appbazooka.gplus' : '6444875975';
+      final url = Uri.parse(
+        Platform.isAndroid
+            ? "https://play.google.com/store/apps/details?id=$appId"
+            : "https://apps.apple.com/app/id$appId",
+      );
+      return url;
+    }
   }
 }

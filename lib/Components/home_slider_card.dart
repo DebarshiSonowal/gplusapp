@@ -27,7 +27,7 @@ class HomeSliderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (data.profile?.is_plan_active ?? false) {
+        if (current.has_permission?? false) {
           logTheBannerClick(data.profile!, current.title!,
               current.first_cat_name?.seo_name ?? "", current.id!);
           Navigation.instance.navigate('/story',
@@ -36,7 +36,7 @@ class HomeSliderItem extends StatelessWidget {
           showNotaMember();
         }
       },
-      child: Container(
+      child: SizedBox(
         // height: 45.h,
         width: double.infinity,
         child: Stack(

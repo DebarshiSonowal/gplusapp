@@ -54,7 +54,7 @@ class HistorySection extends StatelessWidget {
                       thickness: 0.1.h,
                     ),
                   ),
-            ListView.separated(
+            current.history.isEmpty?Container():ListView.separated(
               shrinkWrap: true,
               itemBuilder: (cont, count) {
                 var data = current.history.reversed.toList()[count];

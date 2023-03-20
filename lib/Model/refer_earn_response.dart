@@ -17,7 +17,7 @@ class ReferEarnResponse {
 
 class ReferEarn {
   int? subscriber_added_point, coin_balance,buying_points;
-  String? referral_link;
+  String? referral_link,code;
   List<ReferEarnPlan> plans = [];
 
   ReferEarn.fromJson(json) {
@@ -30,6 +30,7 @@ class ReferEarn {
 
     //string
     referral_link = json['referral_link'] ?? "";
+    code = json['referral_code'] ?? "";
 
     //list
     plans = json['plans'] == null

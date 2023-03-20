@@ -17,7 +17,7 @@ class Article {
       as_short_description,
       web_url,
       tags,image_caption;
-  bool is_bookmark = false;
+  bool is_bookmark = false,has_permission=false;
   CategoryName? first_cat_name;
   // AuthorProfile? author_profile;
 
@@ -40,6 +40,7 @@ class Article {
         : int.parse(json['share_count'].toString());
 
     is_bookmark = json['Is_bookmarked'] ?? false;
+    has_permission = json['has_permission'] ?? false;
     //Others
     try {
       first_cat_name = CategoryName.fromJson(json['first_cat_name']);

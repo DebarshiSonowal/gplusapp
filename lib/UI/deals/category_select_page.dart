@@ -239,51 +239,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
     );
   }
 
-  // AppBar buildAppBar() {
-  //   return AppBar(
-  //     title: GestureDetector(
-  //       onTap: () {
-  //         Provider.of<DataProvider>(
-  //                 Navigation.instance.navigatorKey.currentContext ?? context,
-  //                 listen: false)
-  //             .setCurrent(0);
-  //         Navigation.instance.navigate('/main');
-  //       },
-  //       child: Image.asset(
-  //         Constance.logoIcon,
-  //         fit: BoxFit.fill,
-  //         scale: 2,
-  //       ),
-  //     ),
-  //     centerTitle: true,
-  //     backgroundColor: Constance.primaryColor,
-  //     actions: [
-  //       IconButton(
-  //         onPressed: () {
-  //           Navigation.instance.navigate('/notification');
-  //         },
-  //         icon: Consumer<DataProvider>(builder: (context, data, _) {
-  //           return Badge(
-  //             badgeColor: Constance.secondaryColor,
-  //             badgeContent: Text(
-  //               '${data.notifications.length}',
-  //               style: Theme.of(context).textTheme.headline5?.copyWith(
-  //                 color: Constance.thirdColor,
-  //               ),
-  //             ),
-  //             child: const Icon(Icons.notifications),
-  //           );
-  //         }),
-  //       ),
-  //       IconButton(
-  //         onPressed: () {
-  //           Navigation.instance.navigate('/search',args: "");
-  //         },
-  //         icon: Icon(Icons.search),
-  //       ),
-  //     ],
-  //   );
-  // }
+
 
   getBody(DataProvider current) {
     switch (selected) {
@@ -379,11 +335,14 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      openStatus(
-                          TimeFromString(
-                              current.details?.opening_time ?? "10AM"),
-                          TimeFromString(
-                              current.details?.closing_time ?? "11PM")),
+                      checkRestaurentStatus(current.details!.opening_time!,
+                          current.details!.closing_time!)?"Open Now":"Closed Now",
+                      // openStatus(
+                      //     TimeFromString(
+                      //         current.details?.opening_time ?? "10AM"),
+                      //     TimeFromString(
+                      //         current.details?.closing_time ?? "11PM"),
+                      // ),
                       // overflow: TextOverflow.clip,
                       style: Theme.of(context).textTheme.headline4?.copyWith(
                             color: Storage.instance.isDarkMode
@@ -591,18 +550,6 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
               ],
             ),
           ),
-          actions: [
-            // FlatButton(
-            //   textColor: Colors.black,
-            //   onPressed: () {},
-            //   child: Text('CANCEL'),
-            // ),
-            // FlatButton(
-            //   textColor: Colors.black,
-            //   onPressed: () {},
-            //   child: Text('ACCEPT'),
-            // ),
-          ],
         );
       },
     );
@@ -697,5 +644,88 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
     print(
         "TIme ${DateFormat.jm().format(DateFormat("HH:mm a").parse(closing_time))}");
     return DateFormat.jm().format(DateFormat("HH:mm a").parse(closing_time));
+  }
+
+  bool checkRestaurentStatus(String openTime, String closedTime) {
+    //NOTE: Time should be as given format only
+    //10:00PM
+    //10:00AM
+
+    // 01:60PM ->13:60
+    //Hrs:Min
+    //if AM then its ok but if PM then? 12+time (12+10=22)
+
+    TimeOfDay timeNow = TimeOfDay.now();
+    String openHr = openTime.substring(0, 2);
+    String openMin = openTime.substring(3, 5);
+    String openAmPm = openTime.substring(5);
+    TimeOfDay timeOpen;
+    if (openAmPm == "AM") {
+      //am case
+      if (openHr == "12") {
+        //if 12AM then time is 00
+        timeOpen = TimeOfDay(hour: 00, minute: int.parse(openMin));
+      } else {
+        timeOpen =
+            TimeOfDay(hour: int.parse(openHr), minute: int.parse(openMin));
+      }
+    } else {
+      //pm case
+      if (openHr == "12") {
+//if 12PM means as it is
+        timeOpen =
+            TimeOfDay(hour: int.parse(openHr), minute: int.parse(openMin));
+      } else {
+//add +12 to conv time to 24hr format
+        timeOpen =
+            TimeOfDay(hour: int.parse(openHr) + 12, minute: int.parse(openMin));
+      }
+    }
+
+    String closeHr = closedTime.substring(0, 2);
+    String closeMin = closedTime.substring(3, 5);
+    String closeAmPm = closedTime.substring(5);
+
+    TimeOfDay timeClose;
+
+    if (closeAmPm == "AM") {
+      //am case
+      if (closeHr == "12") {
+        timeClose = TimeOfDay(hour: 0, minute: int.parse(closeMin));
+      } else {
+        timeClose =
+            TimeOfDay(hour: int.parse(closeHr), minute: int.parse(closeMin));
+      }
+    } else {
+      //pm case
+      if (closeHr == "12") {
+        timeClose =
+            TimeOfDay(hour: int.parse(closeHr), minute: int.parse(closeMin));
+      } else {
+        timeClose = TimeOfDay(
+            hour: int.parse(closeHr) + 12, minute: int.parse(closeMin));
+      }
+    }
+
+    int nowInMinutes = timeNow.hour * 60 + timeNow.minute;
+    int openTimeInMinutes = timeOpen.hour * 60 + timeOpen.minute;
+    int closeTimeInMinutes = timeClose.hour * 60 + timeClose.minute;
+
+//handling day change ie pm to am
+    if ((closeTimeInMinutes - openTimeInMinutes) < 0) {
+      closeTimeInMinutes = closeTimeInMinutes + 1440;
+      if (nowInMinutes >= 0 && nowInMinutes < openTimeInMinutes) {
+        nowInMinutes = nowInMinutes + 1440;
+      }
+      if (openTimeInMinutes < nowInMinutes &&
+          nowInMinutes < closeTimeInMinutes) {
+        return true;
+      }
+    } else if (openTimeInMinutes < nowInMinutes &&
+        nowInMinutes < closeTimeInMinutes) {
+      return true;
+    }
+
+    return false;
   }
 }
