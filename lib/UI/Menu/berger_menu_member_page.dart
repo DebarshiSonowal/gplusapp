@@ -124,7 +124,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 ),
                 NewsFromSection(
                   onTap: (category, subCategory) {
-                    debugPrint("Screen The ${widget.screen}, $category, $subCategory");
+                    debugPrint(
+                        "Screen The ${widget.screen}, $category, $subCategory");
                     logTheHambergerOptionClick(
                       Provider.of<DataProvider>(
                               Navigation.instance.navigatorKey.currentContext ??
@@ -143,7 +144,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 ),
                 ExclusiveSection(
                   onTaped: (category, subCategory) {
-                    debugPrint("Screen The ${widget.screen}, $category, $subCategory");
+                    debugPrint(
+                        "Screen The ${widget.screen}, $category, $subCategory");
                     logTheHambergerOptionClick(
                       Provider.of<DataProvider>(
                               Navigation.instance.navigatorKey.currentContext ??
@@ -155,7 +157,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                       subCategory,
                     );
                   },
-                  screen:widget.screen,
+                  screen: widget.screen,
                 ),
                 const Divider(
                   color: Colors.white,
@@ -175,9 +177,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                           false) {
                         logTheHambergerOptionClick(
                           Provider.of<DataProvider>(
-                              Navigation.instance.navigatorKey.currentContext ??
-                                  context,
-                              listen: false)
+                                  Navigation.instance.navigatorKey
+                                          .currentContext ??
+                                      context,
+                                  listen: false)
                               .profile!,
                           widget.screen,
                           "bookmark",
@@ -273,23 +276,76 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 (!Provider.of<DataProvider>(
                             Navigation.instance.navigatorKey.currentContext!)
                         .hideReferEarn)
-                    ? const ReferAndEarnSection()
+                    ? ReferAndEarnSection(
+                        onTap: () {
+                          logTheHambergerOptionClick(
+                            Provider.of<DataProvider>(
+                                    Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                        context,
+                                    listen: false)
+                                .profile!,
+                            widget.screen,
+                            "refer&earn",
+                            "NA",
+                          );
+                        },
+                      )
                     : Container(),
                 const Divider(
                   color: Colors.white,
                   thickness: 0.2,
                 ),
-                const aboutSection(),
+                aboutSection(
+                  onTap: (opt) {
+                    logTheHambergerOptionClick(
+                      Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .profile!,
+                      widget.screen,
+                      opt,
+                      "NA",
+                    );
+                  },
+                ),
                 const Divider(
                   color: Colors.white,
                   thickness: 0.2,
                 ),
-                const SocialMediaSection(),
+                SocialMediaSection(
+                  onTap: (opt, opt2) {
+                    logTheHambergerOptionClick(
+                      Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .profile!,
+                      widget.screen,
+                      opt,
+                      opt2,
+                    );
+                  },
+                ),
                 const Divider(
                   color: Colors.white,
                   thickness: 0.2,
                 ),
-                const SettingsSection(),
+                SettingsSection(
+                  onTap: (opt) {
+                    logTheHambergerOptionClick(
+                      Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey.currentContext ??
+                              context,
+                          listen: false)
+                          .profile!,
+                      widget.screen,
+                      opt,
+                      "NA",
+                    );
+                  },
+                ),
               ],
             ),
           ),

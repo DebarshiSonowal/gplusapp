@@ -8,7 +8,9 @@ import '../Navigation/Navigate.dart';
 class SettingsSection extends StatelessWidget {
   const SettingsSection({
     Key? key,
+    required this.onTap,
   }) : super(key: key);
+  final Function(String) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +21,7 @@ class SettingsSection extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
+              onTap("settings");
               Navigation.instance.navigate('/settingsPage');
             },
             child: Row(
@@ -33,12 +36,11 @@ class SettingsSection extends StatelessWidget {
                 ),
                 Text(
                   'Settings',
-                  style:
-                  Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Colors.white,
-                    // fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
+                        color: Colors.white,
+                        // fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ],
             ),
@@ -48,6 +50,7 @@ class SettingsSection extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
+              onTap("blocked_user");
               Navigation.instance.navigate('/blockedUsers');
             },
             child: Row(
@@ -62,48 +65,15 @@ class SettingsSection extends StatelessWidget {
                 ),
                 Text(
                   'Blocked User List',
-                  style:
-                  Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Colors.white,
-                    // fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
+                        color: Colors.white,
+                        // fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ],
             ),
           ),
-
-          // InkWell(
-          //   splashColor: Constance.secondaryColor,
-          //   radius: 15.h,
-          //   onTap: () async {
-          //     final FirebaseAuth _auth = FirebaseAuth.instance;
-          //     await _auth.signOut();
-          //     Storage.instance.logout();
-          //     Navigation.instance.navigateAndRemoveUntil('/login');
-          //   },
-          //   child: Row(
-          //     children: [
-          //       const Icon(
-          //         Icons.exit_to_app,
-          //         color: Constance.secondaryColor,
-          //         // size: 2.h,
-          //       ),
-          //       SizedBox(
-          //         width: 2.w,
-          //       ),
-          //       Text(
-          //         'Logout',
-          //         style:
-          //             Theme.of(context).textTheme.headline4?.copyWith(
-          //                   color: Colors.white,
-          //                   // fontSize: 14.sp,
-          //                   fontWeight: FontWeight.bold,
-          //                 ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
           SizedBox(
             height: 1.5.h,
           ),

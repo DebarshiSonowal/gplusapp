@@ -87,7 +87,7 @@ class SuggestedForYou extends StatelessWidget {
                       } else {
                         return GestureDetector(
                           onTap: () {
-                            if (data.profile?.is_plan_active ?? false) {
+                            if (item.has_permission ?? false) {
                               logTheTopPicksClick(
                                 data.profile!,
                                 item.title!,

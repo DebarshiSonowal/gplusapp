@@ -28,7 +28,7 @@ class GPlusExclusiveSection extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
+          data.home_exclusive.isNotEmpty? Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.w),
             child: Text(
               'G Plus Exclusive',
@@ -40,7 +40,7 @@ class GPlusExclusiveSection extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-          ),
+          ):Container(),
           SizedBox(
             height: 0.3.h,
           ),
@@ -61,7 +61,7 @@ class GPlusExclusiveSection extends StatelessWidget {
                           return Center(
                             child: GestureDetector(
                               onTap: () {
-                                if (data.profile?.is_plan_active ?? false) {
+                                if (item.has_permission ?? false) {
                                   logTheReadMoreClick(data.profile!);
                                   Navigation.instance
                                       .navigate('/exclusivePage');

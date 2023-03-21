@@ -19,9 +19,9 @@ class ClassifiedCard extends StatelessWidget {
   final Classified current;
   bool like;
   var f = NumberFormat("###,###", "en_US");
-  ClassifiedCard({Key? key, required this.current, required this.like})
+  ClassifiedCard({Key? key, required this.current, required this.like, required this.refreshParent})
       : super(key: key);
-
+  final Function refreshParent;
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, _) {
@@ -68,6 +68,7 @@ class ClassifiedCard extends StatelessWidget {
                         size: 2.5.h,
                         onTap: (val) async {
                           setAsFavourite(current.id, 'classified');
+                          refreshParent();
                           _(() {
                             like = !like;
                           });
@@ -204,7 +205,7 @@ class ClassifiedCard extends StatelessWidget {
   void setAsFavourite(int? id, String type) async {
     final response = await ApiProvider.instance.setAsFavourite(id, type);
     if (response.success ?? false) {
-      Fluttertoast.showToast(msg: "Added to favourites");
+      Fluttertoast.showToast(msg: response.message??"Added to favourites");
     } else {
       showError("Something went wrong");
     }

@@ -165,38 +165,61 @@ class _FilterPageState extends State<FilterPage> {
                         .where((element) => element == true)
                         .isNotEmpty
                 ? Container(
-                    margin: EdgeInsets.only(bottom: 2.h, left: 45.w),
-                    width: 40.w,
+                    margin: EdgeInsets.only(bottom: 2.h, ),
+                    width: 80.w,
                     height: 5.h,
-                    child: CustomButton(
-                      txt: 'Done',
-                      onTap: () {
-                        Storage.instance.setFilter(getComaSeparated(
-                          _map.keys.toList(),
-                          _map.values.toList(),
-                        ));
-                        logTheFilterAppliedClick(
-                            Provider.of<DataProvider>(
-                                    Navigation.instance.navigatorKey
-                                            .currentContext ??
-                                        context,
-                                    listen: false)
-                                .profile!,
-                            getComaSeparatedName(
-                              _map.keys.toList(),
-                              _map.values.toList(),
-                            ));
-                        Navigator.pop(
-                            context,
-                            getComaSeparated(
-                              _map.keys.toList(),
-                              _map.values.toList(),
-                            ));
-                        //  _map.keys.toList()_map.keys.toList()
-                        // print(
-                        //
-                        // );
-                      },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: CustomButton(
+                            color: Colors.white,
+                            txt: 'Clear',
+                            onTap: () {
+                              Storage.instance.setFilter("");
+                              setState(() {
+                                _map.clear();
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        Expanded(
+
+                          child: CustomButton(
+                            txt: 'Done',
+                            onTap: () {
+                              Storage.instance.setFilter(getComaSeparated(
+                                _map.keys.toList(),
+                                _map.values.toList(),
+                              ));
+                              logTheFilterAppliedClick(
+                                  Provider.of<DataProvider>(
+                                          Navigation.instance.navigatorKey
+                                                  .currentContext ??
+                                              context,
+                                          listen: false)
+                                      .profile!,
+                                  getComaSeparatedName(
+                                    _map.keys.toList(),
+                                    _map.values.toList(),
+                                  ));
+                              Navigator.pop(
+                                  context,
+                                  getComaSeparated(
+                                    _map.keys.toList(),
+                                    _map.values.toList(),
+                                  ));
+                              //  _map.keys.toList()_map.keys.toList()
+                              // print(
+                              //
+                              // );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 : Container(),
@@ -225,9 +248,9 @@ class _FilterPageState extends State<FilterPage> {
     for (int i = 0; i < list.length; i++) {
       if (list2[i] == true) {
         if (i == 0) {
-          temp = '${list[i].seo_name},';
+          temp = '${list[i]},';
         } else {
-          temp += '${list[i].seo_name},';
+          temp += '${list[i]},';
         }
       }
     }

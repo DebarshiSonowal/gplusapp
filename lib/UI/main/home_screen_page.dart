@@ -59,7 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
       case "story":
         // Navigation.instance.navigate('/main');
         print("this route");
-        Navigation.instance.navigate('/story', args: '${category},${data},home_page');
+        Navigation.instance
+            .navigate('/story', args: '${category},${data},home_page');
         break;
       case "opinion":
         Navigation.instance
@@ -83,6 +84,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    setUserProperty(Provider.of<DataProvider>(
+            Navigation.instance.navigatorKey.currentContext ?? context,
+            listen: false)
+        .profile);
     // secureScreen();
     Future.delayed(Duration.zero, () => fetchProfile());
     fetchStories();
@@ -499,5 +504,15 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       fetchReportMsg();
     }
+  }
+
+  void setUserProperty(Profile? profile) async {
+    FirebaseAnalytics.instance.setUserProperty(
+        name: "client_id",
+        value: await FirebaseAnalytics.instance.appInstanceId);
+    FirebaseAnalytics.instance
+        .setUserProperty(name: "user_id_tvc", value: profile!.id.toString());
+    FirebaseAnalytics.instance.setUserProperty(
+        name: "user_login_status", value: Storage.instance.isLoggedIn);
   }
 }

@@ -1215,7 +1215,7 @@ class ApiProvider {
     }
   }
 
-  Future<MembershipResponse2> getMembership() async {
+  Future<MembershipResponse2> getMembership(String platform) async {
     // var data = {
     //   'category': 'opinion',
     //   'per_page': per_page,
@@ -1228,7 +1228,7 @@ class ApiProvider {
       'Authorization': 'Bearer ${Storage.instance.token}'
       // 'APP-KEY': ConstanceData.app_key
     });
-    var url = "${baseUrl}/app/subscriptions";
+    var url = "${baseUrl}/app/subscriptions/$platform";
     dio = Dio(option);
     debugPrint(url.toString());
     var data = {'Authorization': 'Bearer ${Storage.instance.token}'};

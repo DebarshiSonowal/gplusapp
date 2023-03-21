@@ -377,9 +377,19 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                             itemCount: data.classified.length,
                             itemBuilder: (cont, count) {
                               var current = data.classified[count];
-                              bool like = selected == 2 ? true : false;
+                              // bool like = (selected == 2
+                              //     ? true
+                              //     : (current.is_favourite ?? false)
+                              //         ? true
+                              //         : false);
                               return ClassifiedCard(
-                                  current: current, like: like);
+                                  refreshParent: () {
+                                    fetchClassified("");
+                                  },
+                                  current: current,
+                                  like: (current.is_favourite ?? false)
+                                      ? true
+                                      : false);
                             },
                             separatorBuilder:
                                 (BuildContext context, int index) {
@@ -537,7 +547,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   void setAsFavourite(int? id, String type) async {
     final response = await ApiProvider.instance.setAsFavourite(id, type);
     if (response.success ?? false) {
-      Fluttertoast.showToast(msg: "Added to favourites");
+      Fluttertoast.showToast(msg: response.message ?? "Added to favourites");
     } else {
       showError("Something went wrong");
     }

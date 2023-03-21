@@ -13,7 +13,8 @@ class TopPicks {
       tags,
       author_name,
       image_caption;
-  List<CategoryNew>? categories=[];
+  bool has_permission = false;
+  List<CategoryNew>? categories = [];
   List<DailyBanner> banner = [];
 
   TopPicks.fromJson(json) {
@@ -32,6 +33,8 @@ class TopPicks {
     only_assamese = json['only_assamese'] == null
         ? 0
         : int.parse(json['only_assamese'].toString());
+
+    has_permission = json['has_permission'] ?? false;
 
     //String
     title = json['title'] ?? "";
@@ -58,7 +61,6 @@ class TopPicks {
         : (json['categories'] as List)
             .map((e) => CategoryNew.fromJson(e))
             .toList();
-
   }
 }
 
@@ -93,7 +95,9 @@ class TopPicksResponse {
     message = json['message'] ?? "Something Went Wrong";
     toppicks = json['data']['data'] == null
         ? []
-        : (json['data']['data'] as List).map((e) => TopPicks.fromJson(e)).toList();
+        : (json['data']['data'] as List)
+            .map((e) => TopPicks.fromJson(e))
+            .toList();
   }
 
   TopPicksResponse.withError(msg) {

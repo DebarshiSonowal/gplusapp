@@ -7,9 +7,9 @@ import '../Navigation/Navigate.dart';
 
 class ReferAndEarnSection extends StatelessWidget {
   const ReferAndEarnSection({
-    Key? key,
+    Key? key, required this.onTap,
   }) : super(key: key);
-
+  final Function onTap;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -18,6 +18,7 @@ class ReferAndEarnSection extends StatelessWidget {
         splashColor: Constance.secondaryColor,
         radius: 15.h,
         onTap: () {
+
           Navigation.instance.navigate('/refer&earn');
         },
         child: Row(

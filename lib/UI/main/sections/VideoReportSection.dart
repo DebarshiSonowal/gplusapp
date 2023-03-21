@@ -29,7 +29,7 @@ class VideoReportSection extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
+          data.home_weekly.isNotEmpty?Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.w),
             child: Text(
               'Videos Of The Week',
@@ -41,7 +41,7 @@ class VideoReportSection extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-          ),
+          ):Container(),
           SizedBox(
             height: 0.3.h,
           ),
@@ -63,7 +63,7 @@ class VideoReportSection extends StatelessWidget {
                         return Center(
                           child: GestureDetector(
                             onTap: () {
-                              if (data.profile?.is_plan_active ?? false) {
+                              if (item.has_permission ?? false) {
                                 logTheReadMoreClick(data.profile!);
                                 Navigation.instance
                                     .navigate('/videoReport', args: 'news');

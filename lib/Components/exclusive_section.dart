@@ -95,7 +95,17 @@ class ExclusiveSection extends StatelessWidget {
           ),
           BuzzSection(
             onTap: (txt1, txt2) {
-              onTaped(txt1, txt2);
+              // onTaped(txt1, txt2);
+              logTheHambergerOptionClick(
+                Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ??
+                        context,
+                    listen: false)
+                    .profile!,
+                screen,
+                txt1,
+                txt2,
+              );
             },
           ),
           SizedBox(

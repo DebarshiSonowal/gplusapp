@@ -7,9 +7,9 @@ import '../Navigation/Navigate.dart';
 
 class aboutSection extends StatelessWidget {
   const aboutSection({
-    Key? key,
+    Key? key, required this.onTap,
   }) : super(key: key);
-
+  final Function(String) onTap;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,6 +23,7 @@ class aboutSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
+                onTap("about_us");
                 Navigation.instance.navigate('/aboutUs');
               },
               child: Row(
@@ -59,6 +60,7 @@ class aboutSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
+                onTap("contact_us");
                 Navigation.instance.navigate('/contactUs');
               },
               child: Row(
@@ -95,6 +97,7 @@ class aboutSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
+                onTap("privacy");
                 Navigation.instance.navigate('/privacy');
               },
               child: Row(
@@ -128,6 +131,7 @@ class aboutSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
+                onTap("refund");
                 Navigation.instance.navigate('/refundPolicy');
               },
               child: Row(
@@ -161,6 +165,7 @@ class aboutSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
+                onTap("terms_and_conditions");
                 Navigation.instance.navigate('/termsConditions');
               },
               child: Row(
@@ -197,6 +202,7 @@ class aboutSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
+                onTap("grieveance_redressal");
                 Navigation.instance.navigate('/grieveanceRedressal');
               },
               child: Row(
@@ -233,6 +239,7 @@ class aboutSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
+                onTap("advertise_with_us");
                 Navigation.instance.navigate('/advertiseWithUs');
               },
               child: Row(

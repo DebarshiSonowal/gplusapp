@@ -112,13 +112,15 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                                       setAsFavourite(
                                           data.selectedClassified?.id,
                                           'classified');
-                                      setState(() {
-                                        like = !like;
-                                      });
+                                      // setState(() {
+                                      //   like = !like;
+                                      // });
                                     },
                                     icon: Icon(
                                       FontAwesomeIcons.solidHeart,
-                                      color: like
+                                      color: data.selectedClassified
+                                                  ?.is_favourite ??
+                                              false
                                           ? Constance.secondaryColor
                                           : Colors.grey.shade400,
                                     )),
@@ -454,7 +456,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
           return AlertDialog(
             backgroundColor: Colors.white,
             title: SizedBox(
-              height: 13.h,
+              height: 7.h,
               // width: 5.w,
               child: Image.asset(
                 Constance.disclaimerIcon,
@@ -490,7 +492,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                   _launchUrl(Uri.parse('tel:$number'));
                 },
                 child: Text(
-                  "I accept",
+                  "I Accept",
                   style: Theme.of(context).textTheme.headline4?.copyWith(
                         color: Constance.primaryColor,
                         fontWeight: FontWeight.bold,

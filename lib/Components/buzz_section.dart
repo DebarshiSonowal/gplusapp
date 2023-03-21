@@ -113,7 +113,7 @@ class BuzzSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
-                onTap("buzz","buzz");
+                onTap("buzz","featured");
                 Navigation.instance
                     .navigate('/newsfrom', args: 'buzz');
               },

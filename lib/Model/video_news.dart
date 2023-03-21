@@ -12,6 +12,7 @@ class VideoNews {
       video_file_name,
       youtube_id;
   VideoGallery? videoGallery;
+  bool has_permission = false;
 
   VideoNews.fromJson(json) {
     //int
@@ -26,6 +27,8 @@ class VideoNews {
         : int.parse(json['share_count'].toString());
 
     videoGallery = VideoGallery.fromJson(json['video_gallery']);
+
+    has_permission = json['has_permission'] ?? false;
 
     title = json['title'] ?? "";
     publish_date = json['publish_date'] ?? "";

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
@@ -252,6 +253,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -263,6 +265,9 @@ class _MyAppState extends State<MyApp> {
           theme: AppTheme.getTheme(),
           navigatorKey: Navigation.instance.navigatorKey,
           onGenerateRoute: generateRoute,
+          navigatorObservers: [
+            FirebaseAnalyticsObserver(analytics: analytics), // <-- here
+          ],
         );
       }),
     );

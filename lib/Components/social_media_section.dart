@@ -6,8 +6,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../Helper/Constance.dart';
 
 class SocialMediaSection extends StatelessWidget {
-  const SocialMediaSection({Key? key}) : super(key: key);
-
+  const SocialMediaSection({Key? key, required this.onTap}) : super(key: key);
+  final Function(String,String) onTap;
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -57,6 +57,7 @@ class SocialMediaSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.w,
               onTap: () {
+                onTap("social_media","facebook");
                 _launchUrl(Uri.parse(
                     'https://www.facebook.com/guwahatiplus/'));
               },
@@ -103,6 +104,7 @@ class SocialMediaSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.w,
               onTap: () {
+                onTap("social_media","instagram");
                 _launchUrl(Uri.parse(
                     'https://www.instagram.com/guwahatiplus/'));
               },
@@ -149,6 +151,7 @@ class SocialMediaSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.w,
               onTap: () {
+                onTap("social_media","twitter");
                 _launchUrl(
                     Uri.parse('https://twitter.com/guwahatiplus'));
               },
@@ -195,6 +198,7 @@ class SocialMediaSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.w,
               onTap: () {
+                onTap("social_media","youtube");
                 _launchUrl(
                     Uri.parse('https://youtube.com/@GPlusGuwahati'));
               },
@@ -212,7 +216,7 @@ class SocialMediaSection extends StatelessWidget {
                     width: 4.w,
                   ),
                   Text(
-                    'Youtube',
+                    'YouTube',
                     style: Theme.of(context)
                         .textTheme
                         .headline6

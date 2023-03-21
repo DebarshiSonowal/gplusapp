@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +58,7 @@ class _BeAMemberState extends State<BeAMember> {
 
   void _onRefresh() async {
     // monitor network fetch
-    final response = await ApiProvider.instance.getMembership();
+    final response = await ApiProvider.instance.getMembership(Platform.isAndroid?"android":"ios");
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
@@ -226,7 +228,7 @@ class _BeAMemberState extends State<BeAMember> {
 
 
   void fetch() async {
-    final response = await ApiProvider.instance.getMembership();
+    final response = await ApiProvider.instance.getMembership(Platform.isAndroid?"android":"ios");
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
