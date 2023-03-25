@@ -267,6 +267,14 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
       Navigation.instance.navigateAndReplace('/main');
     } else {
       // showError(reponse.msg ?? "Something went wrong");
+      AlertX.instance.showAlert(
+          title: "Error",
+          msg: reponse.msg ?? "Something went wrong",
+          positiveButtonText: "Done",
+          positiveButtonPressed: () {
+            Navigation.instance.goBack();
+            Navigation.instance.goBack();
+          });
     }
   }
 

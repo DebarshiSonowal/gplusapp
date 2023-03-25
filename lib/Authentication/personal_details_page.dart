@@ -20,6 +20,7 @@ import '../Components/alert.dart';
 import '../Helper/Constance.dart';
 import '../Helper/DataProvider.dart';
 import '../Helper/Storage.dart';
+import '../Model/profile.dart';
 import '../Model/temp.dart';
 import '../Navigation/Navigate.dart';
 

@@ -350,12 +350,12 @@ class ApiProvider {
 
     try {
       Response? response = await dio?.post(url, data: jsonEncode(data));
-      debugPrint("create Profile response: ${response?.data}");
+      debugPrint("create Profile response: ${response?.data}",wrapWidth: 1024);
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ProfileResponse.fromJson(response?.data);
       } else {
         debugPrint(
-            "create Profile error: ${response?.statusCode} ${response?.data}");
+            "create Profile error: ${response?.statusCode} ${response?.data}",wrapWidth: 1024);
         return ProfileResponse.withError("Something went wrong");
       }
     } on DioError catch (e) {
@@ -365,8 +365,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint(
-          "create Profile error: ${e.response?.statusCode ?? 0} ${e.response}");
-      return ProfileResponse.withError(e.message);
+          "create Profile error: ${e.response?.statusCode ?? 0} ${e.response}",wrapWidth: 1024);
+      return ProfileResponse.withError(e.response!.data['message']);
     }
   }
 
