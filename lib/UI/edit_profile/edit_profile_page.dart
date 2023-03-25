@@ -847,7 +847,7 @@ class _EditProfileState extends State<EditProfile> {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
     // String id = await FirebaseInstallations.instance.getId();
-    print("geo $geographical \n topical $topical");
+    // debugPrint("geo $geographical \n topical $topical ${profile.id}");
     await FirebaseAnalytics.instance.logEvent(
       name: "update_profile",
       parameters: {

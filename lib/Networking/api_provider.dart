@@ -176,7 +176,7 @@ class ApiProvider {
     }
   }
 
-  Future<ProfileResponse> getprofile() async {
+  Future<ProfileResponse2> getprofile() async {
     var url = "${baseUrl}/profile";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -195,10 +195,10 @@ class ApiProvider {
       );
       debugPrint("Profile response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
-        return ProfileResponse.fromJson(response?.data);
+        return ProfileResponse2.fromJson(response?.data);
       } else {
         debugPrint("Profile error: ${response?.data}");
-        return ProfileResponse.withError("Something went wrong");
+        return ProfileResponse2.withError("Something went wrong");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -212,7 +212,7 @@ class ApiProvider {
         showError("Your blocked by our account. Please Contact G Plus Admin");
       }
       debugPrint("Profile error response: ${e.response}");
-      return ProfileResponse.withError(e.message);
+      return ProfileResponse2.withError(e.message);
     }
   }
 

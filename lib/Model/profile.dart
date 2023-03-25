@@ -245,7 +245,7 @@ class ProfileResponse {
   ProfileResponse.fromJson(json) {
     success = true;
     msg = json['message'] ?? "";
-    profile = Profile.fromJson(json['result']['data']);
+    profile = Profile.fromJson(json['result']['data']['data']);
     topicks = json['result']['data']['topics'] == null
         ? []
         : (json['result']['data']['topics'] as List)
@@ -259,6 +259,34 @@ class ProfileResponse {
   }
 
   ProfileResponse.withError(msg) {
+    success = false;
+    this.msg = msg ?? "Something went wrong";
+  }
+}
+class ProfileResponse2 {
+  bool? success;
+  String? msg;
+  Profile? profile;
+  List<Topick> topicks = [];
+  List<GeoTopick> geoTopicks = [];
+
+  ProfileResponse2.fromJson(json) {
+    success = true;
+    msg = json['message'] ?? "";
+    profile = Profile.fromJson(json['result']['data']);
+    topicks = json['result']['data']['topics'] == null
+        ? []
+        : (json['result']['data']['topics'] as List)
+            .map((e) => Topick.fromJson(e))
+            .toList();
+    geoTopicks = json['result']['data']['geo'] == null
+        ? []
+        : (json['result']['data']['geo'] as List)
+            .map((e) => GeoTopick.fromJson(e))
+            .toList();
+  }
+
+  ProfileResponse2.withError(msg) {
     success = false;
     this.msg = msg ?? "Something went wrong";
   }
