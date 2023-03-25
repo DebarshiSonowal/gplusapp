@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:badges/badges.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Model/citizen_journalist.dart';
 import 'package:image_picker/image_picker.dart';

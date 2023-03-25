@@ -6,7 +6,6 @@ import 'package:sizer/sizer.dart';
 import '../Helper/Constance.dart';
 import '../Helper/Storage.dart';
 import '../Model/search_result.dart';
-import '../Navigation/Navigate.dart';
 
 class SearchNewsItem extends StatelessWidget {
   const SearchNewsItem({

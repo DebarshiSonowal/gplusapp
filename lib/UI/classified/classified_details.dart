@@ -1,5 +1,3 @@
-import 'package:badges/badges.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -22,7 +20,6 @@ import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
-import '../Menu/berger_menu_member_page.dart';
 
 class ClassifiedDetails extends StatefulWidget {
   final int id;

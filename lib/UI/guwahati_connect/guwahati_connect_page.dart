@@ -1,12 +1,8 @@
-import 'dart:ui';
-
-import 'package:badges/badges.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:lottie/lottie.dart';

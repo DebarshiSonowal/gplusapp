@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
-import '../Helper/DataProvider.dart';
-import '../Navigation/Navigate.dart';
 
 class StoryButtonSection extends StatelessWidget {
   final int index;

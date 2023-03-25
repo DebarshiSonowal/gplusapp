@@ -1,10 +1,6 @@
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
-import 'package:gplusapp/Helper/Storage.dart';
-import 'package:gplusapp/Model/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 

@@ -5,17 +5,12 @@ import 'package:badges/badges.dart' as bd;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_html/flutter_html.dart';
-
 // import 'package:flutter_html/custom_render.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
-import 'package:gplusapp/Model/category_name.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
@@ -23,14 +18,12 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 import 'package:twitter_oembed_api/twitter_oembed_api.dart';
-
 // import 'package:twitter_cards/twitter_cards.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../Components/alert.dart';
-import '../../Components/suggestion_card.dart';
 import '../../Components/suggestion_list_view.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';

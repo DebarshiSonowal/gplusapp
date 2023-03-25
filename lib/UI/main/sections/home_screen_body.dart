@@ -273,7 +273,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.w),
                         child: Text(
-                          'This material may not be published, broadcast, rewritten, or redistributed, 2022 © G Plus. All rights reserved. Copyright © 2022 Insight Brandcom Pvt. Ltd. All rights reserved.',
+                          Constance.copyright,
                           style:
                               Theme.of(context).textTheme.headline6?.copyWith(
                                     // fontSize: 16.sp,

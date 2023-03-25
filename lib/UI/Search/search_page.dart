@@ -1,19 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
-import 'package:gplusapp/Model/search_result.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
-import 'package:gplusapp/UI/Search/Section/news_section.dart';
-import 'package:gplusapp/UI/Search/Section/others_section.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Components/alert.dart';
-import '../../Components/search_item_card.dart';
-import '../../Components/search_news_item.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
 import '../../Model/profile.dart';

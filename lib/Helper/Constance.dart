@@ -10,7 +10,6 @@ import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Model/bigdeal.dart';
 import 'package:gplusapp/Model/category_discount.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -21,7 +20,6 @@ import '../Model/connect_post.dart';
 import '../Model/listing.dart';
 import '../Model/notification.dart';
 import '../Model/profile.dart';
-import '../Model/top_picks.dart';
 import '../Navigation/Navigate.dart';
 
 class Constance {
@@ -108,6 +106,8 @@ class Constance {
     'Ipsum',
     'Lorem',
   ];
+
+  static String copyright = 'This material may not be published, broadcast, rewritten, or redistributed, ${DateTime.now().year} © G Plus. All rights reserved. Copyright © ${DateTime.now().year} Insight Brandcom Pvt. Ltd. All rights reserved.';
 
   static AppBar buildAppBar(
       String screen, bool enable, GlobalKey<ScaffoldState> key) {

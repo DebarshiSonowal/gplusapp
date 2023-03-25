@@ -1,16 +1,13 @@
-import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
-import 'package:gplusapp/Model/video_news.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Components/alert.dart';
-import '../../Components/custom_button.dart';
 import '../../Components/video_report_item.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';

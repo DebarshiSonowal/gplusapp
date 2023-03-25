@@ -5,7 +5,6 @@ import 'package:jiffy/jiffy.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
-import '../Helper/Storage.dart';
 
 class SuggestedForYouCard extends StatelessWidget {
   final TopPicks item;

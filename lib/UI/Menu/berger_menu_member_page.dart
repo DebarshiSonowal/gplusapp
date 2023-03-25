@@ -1,6 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
@@ -8,11 +7,9 @@ import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/about_section.dart';
 import '../../Components/alert.dart';
-import '../../Components/buzz_section.dart';
 import '../../Components/exclusive_section.dart';
 import '../../Components/location_section.dart';
 import '../../Components/membership_section.dart';
@@ -20,7 +17,6 @@ import '../../Components/news_from_section.dart';
 import '../../Components/refer_earn_section.dart';
 import '../../Components/settings_section.dart';
 import '../../Components/social_media_section.dart';
-import '../../Components/video_section_menu.dart';
 import '../../Helper/Constance.dart';
 import '../../Model/profile.dart';
 

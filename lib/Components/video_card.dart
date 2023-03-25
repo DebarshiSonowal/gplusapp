@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Components/video_report_card.dart';
 import 'package:gplusapp/Model/video_news.dart';
@@ -6,7 +5,6 @@ import 'package:jiffy/jiffy.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
-import '../Navigation/Navigate.dart';
 
 class VideoCard extends StatelessWidget {
   const VideoCard({

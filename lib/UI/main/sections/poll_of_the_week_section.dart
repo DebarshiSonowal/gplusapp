@@ -2,14 +2,12 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../Helper/Constance.dart';
 import '../../../Helper/DataProvider.dart';
 import '../../../Helper/Storage.dart';
 import '../../../Model/profile.dart';
-import '../../../Navigation/Navigate.dart';
 import '../../../Networking/api_provider.dart';
 
 class PollOfTheWeekSection extends StatelessWidget {
@@ -134,13 +132,18 @@ class PollOfTheWeekSection extends StatelessWidget {
                           activeColor: Colors.black,
                           groupValue: poll,
                           onChanged: (val) {
+                            if ((data.profile?.is_plan_active ?? false)) {
+                              if ((poll == ""||poll!=getOptionName(count, data))&&(checkIfExists(data,poll))) {
+                                poll = getOptionName(count, data);
+                                debugPrint(
+                                    "Title ${poll.toLowerCase().replaceAll(" ", "_")}");
+                                // update();
 
-                            if (data.profile?.is_plan_active ?? false) {
-                              poll = getOptionName(count, data);
-                              debugPrint("Title ${poll.toLowerCase().replaceAll(" ", "_")}");
-                              // update();
-
-                              postPollOfTheWeek(data.pollOfTheWeek?.id, poll);
+                                postPollOfTheWeek(data.pollOfTheWeek?.id, poll);
+                              } else {
+                                debugPrint("Who $poll");
+                                Fluttertoast.showToast(msg: "Poll already answered");
+                              }
                             } else {
                               showNotaMember();
                             }
@@ -221,7 +224,6 @@ class PollOfTheWeekSection extends StatelessWidget {
   }
 
   getOption(int count, DataProvider data) {
-
     switch (count) {
       case 0:
         return data.pollOfTheWeek?.percent1;
@@ -245,6 +247,12 @@ class PollOfTheWeekSection extends StatelessWidget {
       default:
         return data.pollOfTheWeek?.option1 ?? "";
     }
+  }
+  bool checkIfExists(data,poll){
+    if(poll==(data.pollOfTheWeek?.option1 ?? "")||poll==(data.pollOfTheWeek?.option2 ?? "")||poll==(data.pollOfTheWeek?.option3 ?? "")){
+      return false;
+    }
+    return true;
   }
 
   void postPollOfTheWeek(int? id, String poll) async {
@@ -276,7 +284,8 @@ class PollOfTheWeekSection extends StatelessWidget {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
         "user_id_event": profile.id,
-        "heading_name": heading.length>100?heading.substring(0,100):heading,
+        "heading_name":
+            heading.length > 100 ? heading.substring(0, 100) : heading,
         "article_id": thisId,
         "screen_name": "home",
         "poll_selected": getAnswer(answer),
@@ -290,6 +299,6 @@ class PollOfTheWeekSection extends StatelessWidget {
   }
 
   getAnswer(String answer) {
-   return answer;
+    return answer;
   }
 }

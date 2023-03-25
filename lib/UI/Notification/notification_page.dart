@@ -1,9 +1,5 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:gplusapp/Model/notification_in_device.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
-import 'package:gplusapp/UI/main/home_screen_page.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';

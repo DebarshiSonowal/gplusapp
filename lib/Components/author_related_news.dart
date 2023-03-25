@@ -1,17 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gplusapp/Components/toppicks_card.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
-import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/Constance.dart';
 import '../Model/article.dart';
-import '../Model/opinion.dart';
 import '../Navigation/Navigate.dart';
-import 'custom_button.dart';
 
 class AuthorRelatedNews extends StatefulWidget {
   final DataProvider data;

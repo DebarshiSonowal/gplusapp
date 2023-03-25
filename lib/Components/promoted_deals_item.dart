@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:gplusapp/Components/promoted_deal_cupon.dart';
 import 'package:gplusapp/Components/promoted_deal_item_data.dart';
 import 'package:gplusapp/Components/promoted_deal_item_image.dart';
 import 'package:provider/provider.dart';

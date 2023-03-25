@@ -156,10 +156,19 @@ void main() async {
 
 void checkVersion(String version, String buildNumber) async {
   if (Platform.isIOS) {
-    Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext!,
-            listen: false)
-        .setHide(true);
+    final response = await ApiProvider.instance.versionCheck(version, buildNumber);
+    if (response.success??false){
+      Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
+          .setHide(true);
+    }else{
+      Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
+          .setHide(false);
+    }
+
   }
+
 }
 
 void NotificationHandler(message) async {

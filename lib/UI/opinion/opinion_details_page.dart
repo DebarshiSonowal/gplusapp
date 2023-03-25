@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gplusapp/Model/opinion.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +17,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../Components/alert.dart';
-import '../../Components/custom_button.dart';
 import '../../Components/opinion_details_item.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';

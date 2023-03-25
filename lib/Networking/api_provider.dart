@@ -28,7 +28,6 @@ import '../Model/e_paper.dart';
 import '../Model/generic_response.dart';
 import '../Model/grievence_redresal_send.dart';
 import '../Model/guwahati_connect.dart';
-
 // import '../Model/login_response.dart';
 import '../Model/membership.dart';
 import '../Model/message_response.dart';
@@ -2728,7 +2727,7 @@ class ApiProvider {
   }
 
   Future<ReferEarnResponse> getReferAndEarn() async {
-    var url = "${baseUrl}/app/get-refer-n-earn";
+    var url = "${baseUrl}/app/get-refer-n-earn/${Platform.isAndroid?"android":"ios"}";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',

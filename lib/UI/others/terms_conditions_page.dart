@@ -2,7 +2,6 @@ import 'package:badges/badges.dart' as bd;
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
-
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 

@@ -7,7 +7,6 @@ import 'package:sizer/sizer.dart';
 import '../../Components/alert.dart';
 import '../../Components/custom_button.dart';
 import '../../Helper/Storage.dart';
-import '../../Model/profile.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

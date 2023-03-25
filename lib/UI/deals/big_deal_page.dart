@@ -1,4 +1,5 @@
-import 'package:badges/badges.dart';
+import 'dart:io' show Platform;
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +12,10 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
-import 'dart:io' show Platform;
+
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
 import '../../Components/promoted_deal.dart';
-import '../../Components/promoted_deals_item.dart';
 import '../../Components/shop_category_item.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';

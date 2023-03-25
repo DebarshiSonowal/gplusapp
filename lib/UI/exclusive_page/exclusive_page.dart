@@ -1,17 +1,13 @@
-import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:gplusapp/Helper/Storage.dart';
-import 'package:gplusapp/Model/article.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../Components/custom_button.dart';
-import '../../Components/exclusive_item.dart';
 import '../../Components/exclusive_suggestions.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';

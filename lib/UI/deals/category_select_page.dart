@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -239,8 +238,6 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
     );
   }
 
-
-
   getBody(DataProvider current) {
     switch (selected) {
       case 0:
@@ -335,8 +332,10 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      checkRestaurentStatus(current.details!.opening_time!,
-                          current.details!.closing_time!)?"Open Now":"Closed Now",
+                      openStatus(current.details!.opening_time!,
+                          current.details!.closing_time!),
+                      // ? "Open Now"
+                      // : "Closed Now",
                       // openStatus(
                       //     TimeFromString(
                       //         current.details?.opening_time ?? "10AM"),
@@ -624,20 +623,28 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
   }
 
   String openStatus(opening, closing) {
-    var currentTime = DateFormat.jm().format(DateTime.now());
-    debugPrint(
-        "AP ${currentTime} ${DateFormat("HH:mm a").parse(currentTime).isAfter(DateFormat("HH:mm a").parse(opening))} ${DateFormat("HH:mm a").parse(currentTime).isBefore(DateFormat("HH:mm a").parse(closing))}");
-    if ((DateFormat("HH:mm a")
-            .parse(currentTime)
-            .isAfter(DateFormat("HH:mm a").parse(opening))) &&
-        DateFormat("HH:mm a")
-            .parse(currentTime)
-            .isBefore(DateFormat("HH:mm a").parse(closing))) {
-      return 'Open Now';
-    } else {
-      return 'Closed Now';
+    var open = TimeOfDay.fromDateTime(DateFormat("HH:mm a").parse(opening));
+    var openTime = open.hour * 60 + open.minute;
+    var close = TimeOfDay.fromDateTime(DateFormat("HH:mm a").parse(closing));
+    var closeTime = close.hour * 60 + close.minute;
+    var current = TimeOfDay.fromDateTime(DateTime.now());
+    var currentTime = current.hour * 60 + current.minute;
+    if (currentTime >= openTime && currentTime <= closeTime) {
+      return "Open Now";
     }
-    // return 'Open Now';
+    // debugPrint(
+    //     "AP ${currentTime} ${DateFormat("HH:mm a").parse(currentTime).isAfter(DateFormat("HH:mm a").parse(opening))} ${DateFormat("HH:mm a").parse(currentTime).isBefore(DateFormat("HH:mm a").parse(closing))}");
+    // if ((DateFormat("HH:mm a")
+    //         .parse(currentTime)
+    //         .isAfter(DateFormat("HH:mm a").parse(opening))) &&
+    //     DateFormat("HH:mm a")
+    //         .parse(currentTime)
+    //         .isBefore(DateFormat("HH:mm a").parse(closing))) {
+    //   return 'Open Now';
+    // } else {
+    //   return 'Closed Now';
+    // }
+    return 'Closed Now';
   }
 
   TimeFromString(String closing_time) {
@@ -654,7 +661,9 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
     // 01:60PM ->13:60
     //Hrs:Min
     //if AM then its ok but if PM then? 12+time (12+10=22)
-
+    debugPrint(
+        " check IT ${openTime} ${closedTime} ${DateFormat("HH:mm a").format(DateTime.now())} ${TimeOfDay.now()}"
+        " ${TimeOfDay.fromDateTime(DateFormat("HH:mm a").parse(openTime))} $openTime");
     TimeOfDay timeNow = TimeOfDay.now();
     String openHr = openTime.substring(0, 2);
     String openMin = openTime.substring(3, 5);

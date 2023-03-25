@@ -1,10 +1,4 @@
-import 'dart:convert';
 
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:open_file_safe/open_file_safe.dart';
-
-import '../Model/notification_received.dart';
-import '../main.dart';
 
 class MethodMine{
   // static Future<void> onDidReceiveBackgroundNotificationResponse(

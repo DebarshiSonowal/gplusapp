@@ -1,12 +1,10 @@
 import 'dart:io';
 
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
-
 // import 'package:google_geocoding/google_geocoding.dart';
 import 'package:google_place/google_place.dart';
 import 'package:gplusapp/Networking/api_provider.dart';

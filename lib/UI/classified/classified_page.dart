@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +5,11 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/Storage.dart';
-import 'package:gplusapp/Model/classified.dart';
 import 'package:gplusapp/Model/locality.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
-import 'package:like_button/like_button.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Components/NavigationBar.dart';
