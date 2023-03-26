@@ -31,6 +31,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
   final textEditingController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   Timer? timer;
+
   // final _scaffoldKey = GlobalKey<ScaffoldState>();
   String? _verificationId;
 
@@ -45,7 +46,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
     try {
       timer?.cancel();
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
     super.dispose();
   }
@@ -54,21 +55,18 @@ class _VerifyOTPState extends State<VerifyOTP> {
   void initState() {
     super.initState();
 
-    verificationCompleted(PhoneAuthCredential phoneAuthCredential) async {
-      await _auth.signInWithCredential(phoneAuthCredential);
-
-      // showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
-    }
     Future.delayed(Duration.zero, () {
       phoneSignIn(phoneNumber: widget.number.toString());
     });
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("verify",false,_scaffoldKey),
+      appBar: Constance.buildAppBar("verify", false, _scaffoldKey),
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -152,22 +150,22 @@ class _VerifyOTPState extends State<VerifyOTP> {
                       color: Colors.grey.shade300,
                       fontSize: 2.h,
                     ),
-                animationDuration: Duration(milliseconds: 300),
+                animationDuration: const Duration(milliseconds: 300),
                 // backgroundColor: Colors.blue.shade50,
                 enableActiveFill: true,
                 // errorAnimationController: errorController,
                 controller: textEditingController,
                 onCompleted: (v) {
-                  print("Completed");
+                  debugPrint("Completed");
                 },
                 onChanged: (value) {
-                  print(value);
+                  debugPrint(value);
                   setState(() {
                     currentText = value;
                   });
                 },
                 beforeTextPaste: (text) {
-                  print("Allowing to paste $text");
+                  debugPrint("Allowing to paste $text");
                   //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
                   //but you can show anything you want here, like your pop up saying wrong paste format or etc
                   return true;
@@ -195,14 +193,14 @@ class _VerifyOTPState extends State<VerifyOTP> {
                           .signInWithCredential(credential)
                           .then((value) {
                         getProfile();
-                      }).catchError((e){
-                        print( _verificationId);
-                        print(e);
-                        print(textEditingController.text);
-                        showError(e??"Something went wrong");
+                      }).catchError((e) {
+                        debugPrint(_verificationId);
+                        debugPrint(e);
+                        debugPrint(textEditingController.text);
+                        showError(e ?? "Something went wrong");
                       });
                     } catch (e) {
-                      print(e);
+                      debugPrint(e.toString());
                       showError("Something went wrong");
                     }
                     // phoneSignIn(phoneNumber: widget.number.toString());
@@ -248,15 +246,6 @@ class _VerifyOTPState extends State<VerifyOTP> {
     );
   }
 
-
-
-  void GetProfile() async {
-    codeSent(String verificationId, [int? forceResendingToken]) async {
-      // showSnackbar('Please check your phone for the verification code.');
-      _verificationId = verificationId;
-    }
-  }
-
   Future<void> phoneSignIn({required String phoneNumber}) async {
     debugPrint('+91$phoneNumber');
     showLoaderDialog(context);
@@ -268,10 +257,8 @@ class _VerifyOTPState extends State<VerifyOTP> {
             codeSent: _onCodeSent,
             codeAutoRetrievalTimeout: _onCodeTimeout)
         .onError((error, stackTrace) {
-      print('error ${error} ${stackTrace}');
-    }).then((value) => {
-      print('sent')
-    });
+      debugPrint('error ${error} ${stackTrace}');
+    }).then((value) => {debugPrint('sent')});
   }
 
   _onVerificationCompleted(PhoneAuthCredential authCredential) async {
@@ -316,9 +303,9 @@ class _VerifyOTPState extends State<VerifyOTP> {
 
   _onCodeSent(String verification, int? forceResendingToken) {
     _verificationId = verification;
-    print(forceResendingToken);
-    print(forceResendingToken);
-    print("code sent ${_verificationId}");
+    // debugPrint(forceResendingToken);
+    debugPrint(forceResendingToken.toString());
+    debugPrint("code sent ${_verificationId}");
     Fluttertoast.showToast(msg: "OTP sent successfully");
     Navigation.instance.goBack();
     setTimer();
@@ -385,13 +372,14 @@ class _VerifyOTPState extends State<VerifyOTP> {
         try {
           timer?.cancel();
         } catch (e) {
-          print(e);
+          debugPrint(e.toString());
         }
         Navigation.instance.navigateAndReplace('/main');
         // Navigation.instance.navigate('/terms&conditions', args: widget.number);
       }
     } else {
-      showError("Your account has been suspended. Please contact with G Plus Admin");
+      showError(
+          "Your account has been suspended. Please contact with G Plus Admin");
     }
   }
 
@@ -430,33 +418,34 @@ class _VerifyOTPState extends State<VerifyOTP> {
       if (timer.tick == 30) {
         try {
           if (mounted) {
-                    setState(() {
-                      timer.cancel();
-                    });
-                  } else {
-                    timer.cancel();
-                  }
+            setState(() {
+              timer.cancel();
+            });
+          } else {
+            timer.cancel();
+          }
         } catch (e) {
-          print(e);
+          debugPrint(e.toString());
         }
       }
       if (mounted) {
-        print(timer.tick);
+        debugPrint(timer.tick.toString());
         try {
           setState(() {
             time = (30 - timer.tick).toString();
           });
         } catch (e) {
-          print(e);
+          debugPrint(e.toString());
           time = (30 - timer.tick).toString();
         }
       } else {
-        print(timer.tick);
+        debugPrint(timer.tick.toString());
         time = (30 - timer.tick).toString();
       }
       // print("Dekhi 5 sec por por kisu hy ni :/");
     });
   }
+
   void fetchToken() async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
     sendToken(fcmToken!);

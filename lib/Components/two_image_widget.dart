@@ -44,7 +44,7 @@ class TwoImagesWidget extends StatelessWidget {
                   // color: Colors.black,
                 );
               },
-              imageUrl: (attachment![0].file_name) ?? "",
+              imageUrl: (attachment[0].file_name) ?? "",
               fit: BoxFit.fill,
               errorWidget: (cont, _, e) {
                 return Image.network(

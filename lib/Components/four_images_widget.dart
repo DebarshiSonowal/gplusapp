@@ -62,7 +62,7 @@ class FourImagesWidget extends StatelessWidget {
                   // color: Colors.black,
                 );
               },
-              imageUrl: (attachment![1].file_name) ?? "",
+              imageUrl: (attachment[1].file_name) ?? "",
               fit: BoxFit.fitHeight,
               errorWidget: (cont, _, e) {
                 return Image.network(
