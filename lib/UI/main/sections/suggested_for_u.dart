@@ -67,9 +67,13 @@ class SuggestedForYou extends StatelessWidget {
                           // width: 20.w,
                           child: TextButton(
                             onPressed: () {
-                              logTheViewAllClick(
-                                  data.profile!, "top_picks_for_you");
-                              Navigation.instance.navigate('/toppicks');
+                              if (item.has_permission ?? false) {
+                                logTheViewAllClick(
+                                    data.profile!, "top_picks_for_you");
+                                Navigation.instance.navigate('/toppicks');
+                              }else{
+                                showNotaMember();
+                              }
                             },
                             child: Text(
                               'View All',

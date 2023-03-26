@@ -22,7 +22,7 @@ class Article {
   // AuthorProfile? author_profile;
 
   Article.fromJson(json) {
-    print(json);
+    // print(json);
 
     //int
     id = json['id'] == null ? 0 : int.parse(json['id'].toString());

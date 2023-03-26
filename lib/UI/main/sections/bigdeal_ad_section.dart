@@ -59,7 +59,13 @@ class BigDealsAdSection extends StatelessWidget {
                   ),
                   child: Center(
                     child: CachedNetworkImage(
-                      imageUrl: Constance.kfc_offer,
+                      imageUrl: Provider.of<DataProvider>(
+                                  Navigation.instance.navigatorKey
+                                          .currentContext ??
+                                      context,
+                                  listen: false)
+                              .ad_image ??
+                          Constance.kfc_offer,
                       placeholder: (cont, _) {
                         return Image.asset(
                           Constance.logoIcon,

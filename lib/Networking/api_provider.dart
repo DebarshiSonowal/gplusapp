@@ -28,6 +28,7 @@ import '../Model/e_paper.dart';
 import '../Model/generic_response.dart';
 import '../Model/grievence_redresal_send.dart';
 import '../Model/guwahati_connect.dart';
+
 // import '../Model/login_response.dart';
 import '../Model/membership.dart';
 import '../Model/message_response.dart';
@@ -350,12 +351,13 @@ class ApiProvider {
 
     try {
       Response? response = await dio?.post(url, data: jsonEncode(data));
-      debugPrint("create Profile response: ${response?.data}",wrapWidth: 1024);
+      debugPrint("create Profile response: ${response?.data}", wrapWidth: 1024);
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ProfileResponse.fromJson(response?.data);
       } else {
         debugPrint(
-            "create Profile error: ${response?.statusCode} ${response?.data}",wrapWidth: 1024);
+            "create Profile error: ${response?.statusCode} ${response?.data}",
+            wrapWidth: 1024);
         return ProfileResponse.withError("Something went wrong");
       }
     } on DioError catch (e) {
@@ -365,7 +367,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint(
-          "create Profile error: ${e.response?.statusCode ?? 0} ${e.response}",wrapWidth: 1024);
+          "create Profile error: ${e.response?.statusCode ?? 0} ${e.response}",
+          wrapWidth: 1024);
       return ProfileResponse.withError(e.response!.data['message']);
     }
   }
@@ -840,7 +843,7 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      // debugPrint("HomeAlbum response: ${response?.data}");
+      debugPrint("HomeAlbum response: ${response?.data['data'][0]}",wrapWidth: 4024);
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ArticleResponse.fromJson(response?.data);
       } else {
@@ -995,7 +998,7 @@ class ApiProvider {
         url,
         // queryParameters: data,
       );
-      // debugPrint("latest-opinions response: ${response?.data}");
+      debugPrint("latest-opinions response: ${response?.data['data'][0]}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return LatestOpinionResponse.fromJson(response?.data);
       } else {
@@ -2445,6 +2448,7 @@ class ApiProvider {
       return ShopCategoryResponse.withError(e.message);
     }
   }
+
   Future<GrievenceRedressalResponse> getGrievences() async {
     // var data = {
     //   'category': 'opinion',
@@ -2471,10 +2475,10 @@ class ApiProvider {
       );
       debugPrint("GrievenceRedressalResponse  response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
-        return GrievenceRedressalResponse .fromJson(response?.data);
+        return GrievenceRedressalResponse.fromJson(response?.data);
       } else {
         debugPrint("GrievenceRedressalResponse  error: ${response?.data}");
-        return GrievenceRedressalResponse .withError("Something Went Wrong");
+        return GrievenceRedressalResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2483,7 +2487,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("GrievenceRedressalResponse  response: ${e.response}");
-      return GrievenceRedressalResponse .withError(e.message);
+      return GrievenceRedressalResponse.withError(e.message);
     }
   }
 
@@ -2727,7 +2731,8 @@ class ApiProvider {
   }
 
   Future<ReferEarnResponse> getReferAndEarn() async {
-    var url = "${baseUrl}/app/get-refer-n-earn/${Platform.isAndroid?"android":"ios"}";
+    var url =
+        "${baseUrl}/app/get-refer-n-earn/${Platform.isAndroid ? "android" : "ios"}";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',
@@ -3819,6 +3824,46 @@ class ApiProvider {
       }
       debugPrint("verify-version error: ${e.response}");
       return GenericResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericDataResponse> getAdImage() async {
+    var url = "${baseUrl}/free-subscriber";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+
+    //attachment_list[0][file_data]
+    //attachment_list[0][file_type]
+    // debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // data: data,
+        // queryParameters: data,
+      );
+      debugPrint("free-subscriber response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericDataResponse.fromJson(response?.data);
+      } else {
+        debugPrint("free-subscriber error: ${response?.data}");
+        return GenericDataResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("free-subscriber error: ${e.response}");
+      return GenericDataResponse.withError(e.message);
     }
   }
 

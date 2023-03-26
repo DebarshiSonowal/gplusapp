@@ -107,7 +107,8 @@ class Constance {
     'Lorem',
   ];
 
-  static String copyright = 'This material may not be published, broadcast, rewritten, or redistributed, ${DateTime.now().year} © G Plus. All rights reserved. Copyright © ${DateTime.now().year} Insight Brandcom Pvt. Ltd. All rights reserved.';
+  static String copyright =
+      'This material may not be published, broadcast, rewritten, or redistributed, ${DateTime.now().year} © G Plus. All rights reserved. Copyright © ${DateTime.now().year} Insight Brandcom Pvt. Ltd. All rights reserved.';
 
   static AppBar buildAppBar(
       String screen, bool enable, GlobalKey<ScaffoldState> key) {
@@ -384,29 +385,6 @@ class Constance {
   static const kfc_offer =
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStcrxmNo-nV0Cgn9kMmOo72XfiRxHC69EYgA&usqp=CAU';
 
-  // static final topList = [
-  //   TopPicks(
-  //       'jafaosfoansfpnapsnfpnfpnaopfnapsnfpasnfpiasnfpsanpnfp',
-  //       'ADsafaflasf asfalsflafaf',
-  //       'https://images.unsplash.com/photo-1509869175650-a1d97972541a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dGVzdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-  //       '22-12-2022'),
-  //   TopPicks(
-  //       'jafaosfoansfpnapsnfpnfpnaopfnapsnfpasnfpiasnfpsanpnfp',
-  //       'ADsafaflasf asfalsflafaf',
-  //       'https://images.unsplash.com/photo-1509869175650-a1d97972541a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dGVzdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-  //       '22-12-2022'),
-  //   TopPicks(
-  //       'jafaosfoansfpnapsnfpnfpnaopfnapsnfpasnfpiasnfpsanpnfp',
-  //       'ADsafaflasf asfalsflafaf',
-  //       'https://images.unsplash.com/photo-1509869175650-a1d97972541a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dGVzdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-  //       '22-12-2022'),
-  //   TopPicks(
-  //       'jafaosfoansfpnapsnfpnfpnaopfnapsnfpasnfpiasnfpsanpnfp',
-  //       'ADsafaflasf asfalsflafaf',
-  //       'https://images.unsplash.com/photo-1509869175650-a1d97972541a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dGVzdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-  //       '22-12-2022'),
-  // ];
-
   static final bigDeals = [
     BigDeal(
         'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',
@@ -620,135 +598,136 @@ One of the leading digital news network of Guwahati,
   static showMembershipPrompt(context, function) {
     try {
       showBottomSheet<void>(
-              context: context,
-              backgroundColor: Colors.grey.shade100,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
-              ),
-              builder: (context) {
-                return Consumer<DataProvider>(builder: (context, data, _) {
-                  return StatefulBuilder(builder: (context, _) {
-                    return Container(
-                      padding: EdgeInsets.only(
-                          top: 1.h, right: 5.w, left: 5.w, bottom: 1.h),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(15.0),
-                          topRight: Radius.circular(15.0),
-                        ),
-                      ),
-                      width: double.infinity,
-                      // height: 50.h,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+          context: context,
+          backgroundColor: Colors.grey.shade100,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15.0),
+                topRight: Radius.circular(15.0)),
+          ),
+          builder: (context) {
+            return Consumer<DataProvider>(builder: (context, data, _) {
+              return StatefulBuilder(builder: (context, _) {
+                return Container(
+                  padding: EdgeInsets.only(
+                      top: 1.h, right: 5.w, left: 5.w, bottom: 1.h),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(15.0),
+                      topRight: Radius.circular(15.0),
+                    ),
+                  ),
+                  width: double.infinity,
+                  // height: 50.h,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  Navigation.instance.goBack();
-                                },
-                                icon: const Icon(Icons.close),
-                                color: Colors.black,
-                              ),
-                            ],
-                          ),
-                          Text(
-                            'Oops!',
-                            style: Theme.of(context).textTheme.headline1?.copyWith(
-                                  color: Constance.secondaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 34.sp,
-                                ),
-                          ),
-                          SizedBox(
-                            height: 1.h,
-                          ),
-                          Text(
-                            'Sorry ${data.profile?.name}',
-                            style: Theme.of(context).textTheme.headline4?.copyWith(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                          SizedBox(
-                            height: 3.h,
-                          ),
-                          Text(
-                            about,
-                            style: Theme.of(context).textTheme.headline5?.copyWith(
-                                  color: Colors.black,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text(
-                            'Do you want to be a member?',
-                            style: Theme.of(context).textTheme.headline4?.copyWith(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                          SizedBox(
-                            height: 1.h,
-                          ),
-                          Row(
-                            children: [
-                              Flexible(
-                                child: CustomButton(
-                                  txt: 'Yes, take me there',
-                                  onTap: () {
-                                    logTheSubscriptionInitiationClick(
-                                        Provider.of<DataProvider>(
-                                                Navigation.instance.navigatorKey
-                                                        .currentContext ??
-                                                    context,
-                                                listen: false)
-                                            .profile!);
-                                    Navigation.instance.navigate('/beamember');
-                                  },
-                                  size: 12.sp,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 5.w,
-                              ),
-                              Flexible(
-                                child: CustomButton(
-                                  txt: '''No, I don't want it''',
-                                  onTap: () {
-                                    logTheSubscriptionInitiationCancelClick(
-                                        Provider.of<DataProvider>(
-                                            Navigation.instance.navigatorKey
-                                                .currentContext ??
-                                                context,
-                                            listen: false)
-                                            .profile!);
-                                    Navigation.instance.goBack();
-                                  },
-                                  color: Colors.black,
-                                  size: 12.sp,
-                                  fcolor: Colors.white,
-                                ),
-                              ),
-                            ],
+                          IconButton(
+                            onPressed: () {
+                              Navigation.instance.goBack();
+                            },
+                            icon: const Icon(Icons.close),
+                            color: Colors.black,
                           ),
                         ],
                       ),
-                    );
-                  });
-                });
-              }).closed.whenComplete(() {
-            //do whatever you want after closing the bottom sheet
-            function();
-          });
+                      Text(
+                        'Oops!',
+                        style: Theme.of(context).textTheme.headline1?.copyWith(
+                              color: Constance.secondaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 34.sp,
+                            ),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Text(
+                        'Sorry ${data.profile?.name}',
+                        style: Theme.of(context).textTheme.headline4?.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      SizedBox(
+                        height: 3.h,
+                      ),
+                      Text(
+                        about,
+                        style: Theme.of(context).textTheme.headline5?.copyWith(
+                              color: Colors.black,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Text(
+                        'Do you want to be a member?',
+                        style: Theme.of(context).textTheme.headline4?.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: CustomButton(
+                              txt: 'Yes, take me there',
+                              onTap: () {
+                                logTheSubscriptionInitiationClick(
+                                    Provider.of<DataProvider>(
+                                            Navigation.instance.navigatorKey
+                                                    .currentContext ??
+                                                context,
+                                            listen: false)
+                                        .profile!);
+                                Navigation.instance.navigate('/beamember');
+                              },
+                              size: 12.sp,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          Flexible(
+                            child: CustomButton(
+                              txt: '''No, I don't want it''',
+                              onTap: () {
+                                logTheSubscriptionInitiationCancelClick(
+                                    Provider.of<DataProvider>(
+                                            Navigation.instance.navigatorKey
+                                                    .currentContext ??
+                                                context,
+                                            listen: false)
+                                        .profile!);
+                                Navigation.instance.goBack();
+                              },
+                              color: Colors.black,
+                              size: 12.sp,
+                              fcolor: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              });
+            });
+          }).closed.whenComplete(() {
+        //do whatever you want after closing the bottom sheet
+        function();
+      });
     } catch (e) {
       debugPrint(e.toString());
     }

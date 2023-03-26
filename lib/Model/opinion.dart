@@ -27,7 +27,7 @@ class Opinion {
       image_file_name,
       image_caption,
       web_url;
-
+  bool has_permission=false;
   User? user;
   VideoGallery? category_gallery;
 
@@ -57,6 +57,8 @@ class Opinion {
     share_count = json['share_count'] == null
         ? 1
         : int.parse(json['share_count'].toString());
+
+    has_permission = json['has_permission'] ?? false;
 
     //String
     title = json['title'] ?? "";

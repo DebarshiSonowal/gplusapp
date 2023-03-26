@@ -49,14 +49,13 @@ class OpinionSection extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 4.w),
             child: ListView.separated(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
               itemBuilder: (cont, count) {
                 var item = data.latestOpinions[count];
                 return GestureDetector(
                     onTap: () {
-                      if (data.profile?.is_plan_active ??
-                          false) {
+                      if (item.has_permission ?? false) {
                         logTheOpinionArticleClick(
                           data.profile!,
                           item.title!,
@@ -95,7 +94,7 @@ class OpinionSection extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  if (data.profile?.is_plan_active ?? false) {
+                  if (data.latestOpinions[0].has_permission ?? false) {
                     Navigation.instance.navigate('/opinionPage');
                   } else {
                    showNotaMember();

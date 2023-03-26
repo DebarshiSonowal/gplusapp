@@ -84,6 +84,7 @@ class DataProvider extends ChangeNotifier {
   List<BookmarkItem> bookmarks = [];
   bool hideReferEarn = false;
   GuwahatiConnect? specificGuwahatiConnect;
+  String ad_image="";
   String citizenJournalist = "",
       deal = "",
       classifiedMsg = "",
@@ -313,6 +314,10 @@ class DataProvider extends ChangeNotifier {
 
   setAds(List<Advertise> list) {
     ads = list;
+    notifyListeners();
+  }
+  setAdImage(String url) {
+    ad_image = url;
     notifyListeners();
   }
 

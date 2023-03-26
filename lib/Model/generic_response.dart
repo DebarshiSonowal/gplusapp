@@ -12,6 +12,21 @@ class GenericResponse {
     message = msg ?? "Something Went Wrong";
   }
 }
+class GenericDataResponse {
+  bool? success;
+  String? message,data;
+
+  GenericDataResponse.fromJson(json) {
+    success = json['success'].toString() == 'true' ? true : false;
+    message = json['message'] ?? "Something Went Wrong";
+    data = json['data']??"";
+  }
+
+  GenericDataResponse.withError(msg) {
+    success = false;
+    message = msg ?? "Something Went Wrong";
+  }
+}
 
 class GenericMsgResponse {
   bool? success;

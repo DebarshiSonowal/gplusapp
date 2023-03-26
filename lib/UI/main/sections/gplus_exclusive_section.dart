@@ -89,7 +89,7 @@ class GPlusExclusiveSection extends StatelessWidget {
                         } else {
                           return GestureDetector(
                             onTap: () {
-                              if (data.profile?.is_plan_active ?? false) {
+                              if (item.has_permission ?? false) {
                                 logTheExclusiveClick(
                                     data.profile!,
                                     item.title!,

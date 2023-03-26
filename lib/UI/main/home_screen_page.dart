@@ -275,6 +275,15 @@ class _HomeScreenState extends State<HomeScreen> {
       askPermissions();
       fetchNotification();
     }
+    final response1 = await ApiProvider.instance.getAdImage();
+    if (response1.success??false){
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setAdImage(response1.data!);
+    }else{
+
+    }
   }
 
   void fetchHome() async {
@@ -323,12 +332,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void fetchProfile() async {
-    print('object profile');
+    debugPrint('object profile');
     // Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getprofile();
     if (response.success ?? false) {
       // Navigation.instance.goBack();
-      print('object profile');
+      debugPrint('object profile');
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
