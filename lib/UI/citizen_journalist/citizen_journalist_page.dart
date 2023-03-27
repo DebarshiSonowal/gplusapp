@@ -22,6 +22,7 @@ class CitizenJournalistPage extends StatefulWidget {
 
 class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
   int current = 1;
+  bool has_permission = false;
   String txt =
       'Worried about the security in your area, a garbage dump in your locality,'
       ' increasing traffic on the roads, potholes, lack of access to water, and several'
@@ -35,13 +36,14 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      if (Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .citizenJournalist ==
-          "") {
-        fetchText();
-      }
+      // if (Provider.of<DataProvider>(
+      //             Navigation.instance.navigatorKey.currentContext ?? context,
+      //             listen: false)
+      //         .citizenJournalist ==
+      //     "") {
+      //   fetchText();
+      // }
+      fetchText();
     });
   }
 
@@ -58,151 +60,156 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
         screen: 'citizen_journalist',
       ),
       bottomNavigationBar: CustomNavigationBar(current, "citizen_journalist"),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.h),
-        height: double.infinity,
-        width: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Be A Journalist',
-                style: Theme.of(context).textTheme.headline1?.copyWith(
-                      color: Constance.secondaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Image.asset(
-                Constance.citizenIcon,
-                height: 12.h,
-                width: 28.w,
-                fit: BoxFit.fill,
-                color: Constance.secondaryColor,
-                // size: 15.h,
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Text(
-                'Hello ${Provider.of<DataProvider>(context).profile?.name ?? ""}',
-                style: Theme.of(context).textTheme.headline2?.copyWith(
-                      color: Storage.instance.isDarkMode
-                          ? Colors.white
-                          : Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              SizedBox(height: 1.h),
-              Consumer<DataProvider>(builder: (context, data, _) {
-                return Text(
-                  data.citizenJournalist,
-                  style: Theme.of(context).textTheme.headline4?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white70
-                            : Colors.black,
-                        // fontWeight: FontWeight.bold,
+      body: Builder(builder: (context) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.h),
+          height: double.infinity,
+          width: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Be A Journalist',
+                  style: Theme.of(context).textTheme.headline1?.copyWith(
+                        color: Constance.secondaryColor,
+                        fontWeight: FontWeight.bold,
                       ),
-                );
-              }),
-              // Spacer(),
-              SizedBox(
-                height: 2.h,
-              ),
-              SizedBox(
-                height: 5.h,
-                width: double.infinity,
-                child: CustomButton(
-                    txt: 'Submit A Story',
-                    onTap: () {
-                      if (Provider.of<DataProvider>(
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Image.asset(
+                  Constance.citizenIcon,
+                  height: 12.h,
+                  width: 28.w,
+                  fit: BoxFit.fill,
+                  color: Constance.secondaryColor,
+                  // size: 15.h,
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Text(
+                  'Hello ${Provider.of<DataProvider>(context).profile?.name ?? ""}',
+                  style: Theme.of(context).textTheme.headline2?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(height: 1.h),
+                Consumer<DataProvider>(builder: (context, data, _) {
+                  return Text(
+                    data.citizenJournalist,
+                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white70
+                              : Colors.black,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                  );
+                }),
+                // Spacer(),
+                SizedBox(
+                  height: 2.h,
+                ),
+                SizedBox(
+                  height: 5.h,
+                  width: double.infinity,
+                  child: CustomButton(
+                      txt: 'Submit A Story',
+                      onTap: () {
+                        if (has_permission ??
+                            false) {
+                          logTheCjSubmitClick(Provider.of<DataProvider>(
                                   Navigation.instance.navigatorKey
                                           .currentContext ??
                                       context,
                                   listen: false)
-                              .profile
-                              ?.is_plan_active ??
-                          false) {
-                        logTheCjSubmitClick(Provider.of<DataProvider>(
-                                Navigation
-                                        .instance.navigatorKey.currentContext ??
-                                    context,
-                                listen: false)
-                            .profile!);
-                        // Navigation.instance.navigate('/exclusivePage');
-                        Navigation.instance.navigate('/submitStory');
+                              .profile!);
+                          // Navigation.instance.navigate('/exclusivePage');
+                          Navigation.instance.navigate('/submitStory');
+                        } else {
+                          Constance.showMembershipPrompt(context, () {});
+                        }
+                      }),
+                ),
+                SizedBox(height: 2.h),
+                SizedBox(
+                  height: 5.h,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Constance.primaryColor),
+                    ),
+                    onPressed: () {
+                      if (has_permission) {
+                        logTheCjDraftsClick(Provider.of<DataProvider>(
+                                                      Navigation.instance.navigatorKey.currentContext ??
+                                                          context,
+                                                      listen: false)
+                                                  .profile!);
+                        Navigation.instance.navigate('/draftStory');
                       } else {
                         Constance.showMembershipPrompt(context, () {});
                       }
-                    }),
-              ),
-              SizedBox(height: 2.h),
-              SizedBox(
-                height: 5.h,
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Constance.primaryColor),
-                  ),
-                  onPressed: () {
-                    logTheCjDraftsClick(Provider.of<DataProvider>(
-                        Navigation
-                            .instance.navigatorKey.currentContext ??
-                            context,
-                        listen: false)
-                        .profile!);
-                    Navigation.instance.navigate('/draftStory');
-                  },
-                  child: Text(
-                    'Drafts',
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Colors.white,
-                          fontSize: 14.5.sp,
-                        ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 2.h),
-              SizedBox(
-                height: 5.h,
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.black),
-                    side: MaterialStateProperty.all(
-                      BorderSide(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.transparent,
-                      ),
+                    },
+                    child: Text(
+                      'Drafts',
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Colors.white,
+                            fontSize: 14.5.sp,
+                          ),
                     ),
                   ),
-                  onPressed: () {
-                    // Navigation.instance.goBack();
-                    logTheStoriesSubmitterClick(Provider.of<DataProvider>(
-                        Navigation.instance.navigatorKey.currentContext ?? context,
-                        listen: false).profile!);
-                    Navigation.instance.navigate('/submitedStory');
-                  },
-                  child: Text(
-                    'Stories Submitted',
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Colors.white,
-                          fontSize: 14.5.sp,
+                ),
+                SizedBox(height: 2.h),
+                SizedBox(
+                  height: 5.h,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.black),
+                      side: MaterialStateProperty.all(
+                        BorderSide(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.transparent,
                         ),
+                      ),
+                    ),
+                    onPressed: () {
+                      // Navigation.instance.goBack();
+                      if (has_permission) {
+                        logTheStoriesSubmitterClick(Provider.of<DataProvider>(
+                                                      Navigation.instance.navigatorKey.currentContext ??
+                                                          context,
+                                                      listen: false)
+                                                  .profile!);
+                        Navigation.instance.navigate('/submitedStory');
+                      } else {
+                        Constance.showMembershipPrompt(context, () {});
+                      }
+                    },
+                    child: Text(
+                      'Stories Submitted',
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Colors.white,
+                            fontSize: 14.5.sp,
+                          ),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -222,6 +229,9 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
                 Navigation.instance.navigatorKey.currentContext ?? context,
                 listen: false)
             .setCitizenJournalistText(response.desc!);
+        setState(() {
+          has_permission = response.has_permission ?? false;
+        });
         Navigation.instance.goBack();
       } else {
         Navigation.instance.goBack();
@@ -249,6 +259,7 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
       },
     );
   }
+
   void logTheCjDraftsClick(Profile profile) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
@@ -263,12 +274,13 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
         // "cta_click": cta_click,
         "screen_name": "citizen_journalist",
         "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },
     );
   }
+
   void logTheStoriesSubmitterClick(Profile profile) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
@@ -283,7 +295,7 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
         // "cta_click": cta_click,
         "screen_name": "citizen_journalist",
         "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },

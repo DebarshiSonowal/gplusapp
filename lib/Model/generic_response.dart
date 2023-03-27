@@ -43,3 +43,20 @@ class GenericMsgResponse {
     message = msg ?? "Something Went Wrong";
   }
 }
+class GenericBoolMsgResponse {
+  bool? success,has_permission;
+  String? message, desc;
+
+  GenericBoolMsgResponse.fromJson(json) {
+    success = json['success'].toString() == 'true' ? true : false;
+    message = json['message'] ?? "Something Went Wrong";
+    desc = json['result'] ?? "";
+    has_permission = json['has_permission']??false;
+  }
+
+  GenericBoolMsgResponse.withError(msg) {
+    success = false;
+    message = msg ?? "Something Went Wrong";
+    has_permission=false;
+  }
+}

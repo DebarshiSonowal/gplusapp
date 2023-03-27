@@ -440,109 +440,14 @@ class Constance {
   static List<File> attachements = [];
 
   static List<Listing> listings = [
-    Listing(
-        'Tutor Wanted',
-        null,
-        'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
-        5999,
-        'Rukmini Nagar, Guwahati',
-        false),
-    Listing(
-        'Selling Bullet',
-        150000,
-        'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
-        5999,
-        'Rukmini Nagar, Guwahati',
-        false),
-    Listing(
-        'Tutor Wanted',
-        null,
-        'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
-        5999,
-        'Rukmini Nagar, Guwahati',
-        false),
-    Listing(
-        'Selling Bullet',
-        150000,
-        'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
-        5999,
-        'Rukmini Nagar, Guwahati',
-        false),
+
   ];
 
   static List<ConnectPost> connects = [
-    ConnectPost(
-      'Rashmi Saikia',
-      'Contrary to popular belief, Lorem Ipsum is not simply random text.'
-          ' It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
-      '#rent #house',
-      null,
-      100,
-      [
-        ConnectPost(
-          'John Doe',
-          'It has roots in a piece of classical Latin literature from 45 BC',
-          '',
-          null,
-          3,
-          [],
-        ),
-        ConnectPost(
-          'John Doe',
-          'It has roots in a piece of classical Latin literature from 45 BC',
-          '',
-          null,
-          3,
-          [],
-        ),
-      ],
-    ),
-    ConnectPost(
-      'Angshuman Sharma',
-      'Contrary to popular belief, Lorem Ipsum is not simply random text.'
-          ' It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
-      '#gym #exercise',
-      'https://image.shutterstock.com/image-photo/handsome-weightlifter-preparing-training-shallow-600w-366605333.jpg',
-      100,
-      [
-        ConnectPost(
-          'John Doe',
-          'It has roots in a piece of classical Latin literature from 45 BC',
-          '',
-          null,
-          3,
-          [],
-        ),
-        ConnectPost(
-          'John Doe',
-          'It has roots in a piece of classical Latin literature from 45 BC',
-          '',
-          null,
-          3,
-          [],
-        ),
-      ],
-    ),
+
   ];
   static var notifications = [
-    MyNotification(
-      'This is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout',
-      'G Plus Connect',
-      '26-7-2022',
-      Icons.connect_without_contact,
-    ),
-    MyNotification(
-      'This is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout',
-      'Classified',
-      '26-7-2022',
-      Icons.connect_without_contact,
-    ),
-    MyNotification(
-      'This is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout',
-      'G Plus Connect',
-      '26-7-2022',
-      Icons.connect_without_contact,
-    ),
+
   ];
 
   static const String about = '''
@@ -659,7 +564,7 @@ One of the leading digital news network of Guwahati,
                         height: 3.h,
                       ),
                       Text(
-                        about,
+                        data.paywall,
                         style: Theme.of(context).textTheme.headline5?.copyWith(
                               color: Colors.black,
                               // fontWeight: FontWeight.bold,
@@ -731,5 +636,135 @@ One of the leading digital news network of Guwahati,
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  static showMembershipPrompt2(ScaffoldState state) {
+    state.showBottomSheet(
+      (context) {
+        return Consumer<DataProvider>(builder: (context, data, _) {
+          return StatefulBuilder(builder: (context, _) {
+            return Container(
+              padding:
+                  EdgeInsets.only(top: 1.h, right: 5.w, left: 5.w, bottom: 1.h),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(15.0),
+                  topRight: Radius.circular(15.0),
+                ),
+              ),
+              width: double.infinity,
+              // height: 50.h,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigation.instance.goBack();
+                        },
+                        icon: const Icon(Icons.close),
+                        color: Colors.black,
+                      ),
+                    ],
+                  ),
+                  Text(
+                    'Oops!',
+                    style: Theme.of(context).textTheme.headline1?.copyWith(
+                          color: Constance.secondaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 34.sp,
+                        ),
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  Text(
+                    'Sorry ${data.profile?.name}',
+                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  SizedBox(
+                    height: 3.h,
+                  ),
+                  Text(
+                    data.paywall,
+                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Colors.black,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Text(
+                    'Do you want to be a member?',
+                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: CustomButton(
+                          txt: 'Yes, take me there',
+                          onTap: () {
+                            logTheSubscriptionInitiationClick(
+                                Provider.of<DataProvider>(
+                                        Navigation.instance.navigatorKey
+                                                .currentContext ??
+                                            context,
+                                        listen: false)
+                                    .profile!);
+                            Navigation.instance.navigate('/beamember');
+                          },
+                          size: 12.sp,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                      Flexible(
+                        child: CustomButton(
+                          txt: '''No, I don't want it''',
+                          onTap: () {
+                            logTheSubscriptionInitiationCancelClick(
+                                Provider.of<DataProvider>(
+                                        Navigation.instance.navigatorKey
+                                                .currentContext ??
+                                            context,
+                                        listen: false)
+                                    .profile!);
+                            Navigation.instance.goBack();
+                          },
+                          color: Colors.black,
+                          size: 12.sp,
+                          fcolor: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          });
+        });
+      },
+      backgroundColor: Colors.grey.shade100,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
+      ),
+    );
   }
 }

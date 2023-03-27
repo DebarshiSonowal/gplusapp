@@ -10,7 +10,7 @@ class RedeemHistory {
       balance,
       plan_id,
       status;
-  bool? is_percent, is_one_time;
+  bool? is_percent, is_one_time,has_permission;
   String? valid_from, valid_to, title, description, code, date;
   Vendor? vendor;
 
@@ -35,6 +35,7 @@ class RedeemHistory {
     status = json['status'] == null ? 0 : int.parse(json['status'].toString());
 
     //bool
+    has_permission = json['has_permission']??false;
     is_percent = json['is_percent'] == null
         ? false
         : (json['is_percent'].toString() == '1' ? true : false);

@@ -84,7 +84,7 @@ class DataProvider extends ChangeNotifier {
   List<BookmarkItem> bookmarks = [];
   bool hideReferEarn = false;
   GuwahatiConnect? specificGuwahatiConnect;
-  String ad_image="";
+  String ad_image = "";
   String citizenJournalist = "",
       deal = "",
       classifiedMsg = "",
@@ -92,7 +92,8 @@ class DataProvider extends ChangeNotifier {
       connect = "",
       redeem = "",
       refer_history_msg = "",
-      invite = "";
+      invite = "",
+      paywall = "";
 
   setCitizenJournalistText(String txt) {
     citizenJournalist = txt;
@@ -106,6 +107,11 @@ class DataProvider extends ChangeNotifier {
 
   setDealText(String txt) {
     deal = txt;
+    notifyListeners();
+  }
+
+  setPaywallText(String txt) {
+    paywall = txt;
     notifyListeners();
   }
 
@@ -316,6 +322,7 @@ class DataProvider extends ChangeNotifier {
     ads = list;
     notifyListeners();
   }
+
   setAdImage(String url) {
     ad_image = url;
     notifyListeners();

@@ -257,7 +257,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
                                 ' , ${Jiffy(
                                     data.home_exclusive[0].publish_date?.split(
                                         " ")[0], "yyyy-MM-dd").format(
-                                    "dd MMM,yyyy")}',
+                                    "dd MMM ,yyyy")}',
                                 style: Theme
                                     .of(Navigation.instance
                                     .navigatorKey.currentContext!)

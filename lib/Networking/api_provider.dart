@@ -1417,7 +1417,7 @@ class ApiProvider {
     }
   }
 
-  Future<GenericMsgResponse> getCitizenText() async {
+  Future<GenericBoolMsgResponse> getCitizenText() async {
     var url = "${baseUrl}/be-a-journalist-msg";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -1438,10 +1438,10 @@ class ApiProvider {
       );
       debugPrint("GenericMsgResponse response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
-        return GenericMsgResponse.fromJson(response?.data);
+        return GenericBoolMsgResponse.fromJson(response?.data);
       } else {
         debugPrint("DealDetailsResponse error: ${response?.data}");
-        return GenericMsgResponse.withError("Something Went Wrong");
+        return GenericBoolMsgResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1450,7 +1450,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("GenericMsgResponse error: ${e.response}");
-      return GenericMsgResponse.withError(e.message);
+      return GenericBoolMsgResponse.withError(e.message);
     }
   }
 

@@ -85,12 +85,7 @@ class ShopTypePageItem extends StatelessWidget {
         trailing: CustomButton(
           txt: "View",
           onTap: () {
-            if (Provider.of<DataProvider>(
-                        Navigation.instance.navigatorKey.currentContext ??
-                            context,
-                        listen: false)
-                    .profile
-                    ?.is_plan_active ??
+            if (current.has_permission ??
                 false) {
               Navigation.instance.navigate('/categorySelect', args: current.id);
             } else {

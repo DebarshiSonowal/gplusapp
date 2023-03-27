@@ -61,7 +61,7 @@ class OpinionSection extends StatelessWidget {
                           item.title!,
                           "opinion",
                           item.id!,
-                          DateFormat("dd MMM,yyyy").format(
+                          DateFormat("dd MMM ,yyyy").format(
                               DateTime.parse(item.publish_date!)),
                           item.user!.name!,
                         );

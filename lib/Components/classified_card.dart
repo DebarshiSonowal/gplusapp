@@ -16,15 +16,30 @@ class ClassifiedCard extends StatelessWidget {
   final Classified current;
   bool like;
   var f = NumberFormat("###,###", "en_US");
-  ClassifiedCard({Key? key, required this.current, required this.like, required this.refreshParent})
+
+  ClassifiedCard(
+      {Key? key,
+      required this.current,
+      required this.like,
+      required this.refreshParent,
+      required this.update})
       : super(key: key);
-  final Function refreshParent;
+  final Function refreshParent, update;
+
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, _) {
       return GestureDetector(
         onTap: () {
-          Navigation.instance.navigate('/classifiedDetails', args: current.id);
+          if (current.has_permission ?? false) {
+            Navigation.instance
+                .navigate('/classifiedDetails', args: current.id);
+          } else {
+            update();
+            Constance.showMembershipPrompt(context, () {
+              update();
+            });
+          }
         },
         child: Card(
           color: Colors.white,
@@ -132,7 +147,7 @@ class ClassifiedCard extends StatelessWidget {
                   current.description ?? "",
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black54,
-                    fontSize: 11.sp,
+                        fontSize: 11.sp,
                         // fontWeight: FontWeight.bold,
                       ),
                   trimLines: 3,
@@ -147,7 +162,7 @@ class ClassifiedCard extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                     Icon(
+                    Icon(
                       Icons.remove_red_eye,
                       color: Colors.black54,
                       size: 15.sp,
@@ -179,8 +194,7 @@ class ClassifiedCard extends StatelessWidget {
                       width: 2.w,
                     ),
                     Text(
-                      current.locality?.name ??
-                          'NA',
+                      current.locality?.name ?? 'NA',
                       // overflow: TextOverflow.clip,
                       style: Theme.of(context).textTheme.headline5?.copyWith(
                             color: Colors.black54,
@@ -202,7 +216,7 @@ class ClassifiedCard extends StatelessWidget {
   void setAsFavourite(int? id, String type) async {
     final response = await ApiProvider.instance.setAsFavourite(id, type);
     if (response.success ?? false) {
-      Fluttertoast.showToast(msg: response.message??"Added to favourites");
+      Fluttertoast.showToast(msg: response.message ?? "Added to favourites");
     } else {
       showError("Something went wrong");
     }
@@ -217,5 +231,4 @@ class ClassifiedCard extends StatelessWidget {
           Navigation.instance.goBack();
         });
   }
-
 }

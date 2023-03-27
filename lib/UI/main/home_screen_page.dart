@@ -370,14 +370,14 @@ class _HomeScreenState extends State<HomeScreen> {
         () {
       // code will be here
       if (Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  Navigation.instance.navigatorKey.currentContext ?? (_scaffoldKey.currentContext!),
                   listen: false)
               .profile
               ?.is_plan_active ??
           false) {
       } else {
         // showDialogBox();
-        Constance.showMembershipPrompt(context, () {});
+        Constance.showMembershipPrompt2(_scaffoldKey.currentState!);
       }
     });
     // Future.delayed(Duration(seconds: 5), () => showDialogBox());

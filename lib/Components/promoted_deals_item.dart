@@ -24,11 +24,7 @@ class PromotedDealsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (Provider.of<DataProvider>(
-                    Navigation.instance.navigatorKey.currentContext ?? context,
-                    listen: false)
-                .profile
-                ?.is_plan_active ??
+        if (data.has_permission ??
             false) {
           logTheBigDealCategoryClick(
             Provider.of<DataProvider>(

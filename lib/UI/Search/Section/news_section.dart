@@ -21,11 +21,11 @@ class NewsSection extends StatelessWidget {
           var item = data.searchlist[count];
           return GestureDetector(
             onTap: () {
-              if (data.profile?.is_plan_active ?? false) {
+              if (item.has_permission ?? false) {
                 Navigation.instance.navigate('/story',
                     args: '${item.first_cat_name?.seo_name},${item.seo_name},news_section');
               } else {
-                Constance.showMembershipPrompt(context, () {
+                Constance.showMembershipPrompt(cont, () {
                   // setState(() {
                   //   showing = false;
                   // });

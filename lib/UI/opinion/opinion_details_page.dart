@@ -265,7 +265,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                           ),
                                           TextSpan(
                                             text:
-                                                ' , ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                                ' , ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM ,yyyy")}',
                                             style: Theme.of(Navigation
                                                     .instance
                                                     .navigatorKey

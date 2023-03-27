@@ -96,7 +96,7 @@ class VideoReportSection extends StatelessWidget {
                                   data.profile!,
                                   item.title!,
                                   item.id!,
-                                  DateFormat("dd MMM,yyyy").format(
+                                  DateFormat("dd MMM ,yyyy").format(
                                       DateTime.parse(item.publish_date!)),
                                 );
                                 Navigation.instance.navigate('/videoPlayer',

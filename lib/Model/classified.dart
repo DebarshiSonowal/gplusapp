@@ -12,7 +12,7 @@ class Classified {
   Locality? locality;
   List<AttachFile>? attach_files;
   Profile? user;
-  bool? is_post_by_me, is_favourite;
+  bool? is_post_by_me, is_favourite, has_permission;
 
   Classified.fromJson(json) {
     id = json['id'] ?? 0;
@@ -28,6 +28,8 @@ class Classified {
     classified_category_id = json['classified_category_id'] == null
         ? 0
         : int.parse(json['classified_category_id'].toString());
+
+    has_permission = json['has_permission'] ?? false;
 
     //double
     price = json['price'] == null ? 0 : double.parse(json['price'].toString());

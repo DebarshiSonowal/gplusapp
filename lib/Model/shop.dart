@@ -30,6 +30,8 @@ class Shop {
       shop_name,
       address;
 
+  bool has_permission = false;
+
   // Vendor? vendor;
 
   Shop.fromJson(json) {
@@ -74,6 +76,8 @@ class Shop {
     image_file_name = json['image_file_name'] ?? "";
     shop_name = json['shop_name'] ?? "";
     address = json['address'] ?? "";
+
+    has_permission = json["has_permission"]??false;
     //String
     code = json['code'] ?? "";
     title = json['title'] ?? "";

@@ -8,6 +8,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_html/flutter_html.dart';
+
 // import 'package:flutter_html/custom_render.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
@@ -18,6 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 import 'package:twitter_oembed_api/twitter_oembed_api.dart';
+
 // import 'package:twitter_cards/twitter_cards.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -269,7 +271,7 @@ class _StoryPageState extends State<StoryPage> {
                                   widget.slug.toString().split(",")[2],
                                   data.selectedArticle!.id!,
                                   data.selectedArticle!.author_name!,
-                                  DateFormat("dd MMM,yyyy").format(
+                                  DateFormat("dd MMM ,yyyy").format(
                                       DateTime.parse(
                                           data.selectedArticle!.publish_date!)),
                                 );
@@ -308,7 +310,7 @@ class _StoryPageState extends State<StoryPage> {
                                         ),
                                         TextSpan(
                                           text:
-                                              ' , ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                              ' , ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM ,yyyy")}',
                                           style: Theme.of(Navigation.instance
                                                   .navigatorKey.currentContext!)
                                               .textTheme
@@ -344,7 +346,7 @@ class _StoryPageState extends State<StoryPage> {
                                       "g_plus_exclusive",
                                       data.selectedArticle!.id!,
                                       data.selectedArticle!.author_name!,
-                                      DateFormat("dd MMM,yyyy").format(
+                                      DateFormat("dd MMM ,yyyy").format(
                                           DateTime.parse(data
                                               .selectedArticle!.publish_date!)),
                                     );
@@ -384,7 +386,7 @@ class _StoryPageState extends State<StoryPage> {
                                       "g_plus_exclusive",
                                       data.selectedArticle!.id!,
                                       data.selectedArticle!.author_name!,
-                                      DateFormat("dd MMM,yyyy").format(
+                                      DateFormat("dd MMM ,yyyy").format(
                                           DateTime.parse(data
                                               .selectedArticle!.publish_date!)),
                                     );
@@ -423,7 +425,7 @@ class _StoryPageState extends State<StoryPage> {
                                       "g_plus_exclusive",
                                       data.selectedArticle!.id!,
                                       data.selectedArticle!.author_name!,
-                                      DateFormat("dd MMM,yyyy").format(
+                                      DateFormat("dd MMM ,yyyy").format(
                                           DateTime.parse(data
                                               .selectedArticle!.publish_date!)),
                                     );
@@ -462,7 +464,7 @@ class _StoryPageState extends State<StoryPage> {
                                       "g_plus_exclusive",
                                       data.selectedArticle!.id!,
                                       data.selectedArticle!.author_name!,
-                                      DateFormat("dd MMM,yyyy").format(
+                                      DateFormat("dd MMM ,yyyy").format(
                                           DateTime.parse(data
                                               .selectedArticle!.publish_date!)),
                                     );
@@ -880,7 +882,7 @@ class _StoryPageState extends State<StoryPage> {
                                       "g_plus_exclusive",
                                       data.selectedArticle!.id!,
                                       data.selectedArticle!.author_name!,
-                                      DateFormat("dd MMM,yyyy").format(
+                                      DateFormat("dd MMM ,yyyy").format(
                                           DateTime.parse(data
                                               .selectedArticle!.publish_date!)),
                                     );
@@ -1329,10 +1331,15 @@ class _StoryPageState extends State<StoryPage> {
       uriPrefix: FlutterConfig.get('customHostDeepLink'),
       androidParameters: AndroidParameters(
         packageName: FlutterConfig.get("androidPackage"),
+        fallbackUrl: Uri.parse("https://guwahatiplus.com/${first_cat_name}/${seo_name}"),
       ),
       iosParameters: IOSParameters(
         bundleId: FlutterConfig.get('iosBundleId'),
+        fallbackUrl: Uri.parse("https://guwahatiplus.com/${first_cat_name}/${seo_name}"),
       ),
+      navigationInfoParameters: const NavigationInfoParameters(
+        forcedRedirectEnabled: true,
+      )
       // socialMetaTagParameters: SocialMetaTagParameters(
       //   description: description,
       //   title: seo_name?.replaceAll("-", " "),

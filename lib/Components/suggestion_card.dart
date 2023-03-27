@@ -108,7 +108,7 @@ class SuggestionCard extends StatelessWidget {
                       // ),
                       Text(
                         Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                            .format("dd MMM,yyyy"),
+                            .format("dd MMM ,yyyy"),
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                             color: Storage.instance.isDarkMode
                                 ? Colors.white

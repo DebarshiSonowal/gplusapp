@@ -152,87 +152,91 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
       //   ),
       // ),
       floatingActionButton: !showing
-          ? FloatingActionBubble(
-              // Menu items
-              items: <Bubble>[
-                // Floating action menu item
-                Bubble(
-                  title: "Ask a question",
-                  iconColor: Colors.white,
-                  bubbleColor: Constance.primaryColor,
-                  icon: Icons.question_answer,
-                  titleStyle: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                  onPress: () {
-                    logTheAskAQuestionClick(Provider.of<DataProvider>(
-                            Navigation.instance.navigatorKey.currentContext ??
-                                context,
-                            listen: false)
-                        .profile!);
-                    _animationController?.reverse();
-                    if (Provider.of<DataProvider>(
-                                Navigation
-                                        .instance.navigatorKey.currentContext ??
+          ? Builder(
+            builder: (context) {
+              return FloatingActionBubble(
+                  // Menu items
+                  items: <Bubble>[
+                    // Floating action menu item
+                    Bubble(
+                      title: "Ask a question",
+                      iconColor: Colors.white,
+                      bubbleColor: Constance.primaryColor,
+                      icon: Icons.question_answer,
+                      titleStyle: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                      onPress: () {
+                        logTheAskAQuestionClick(Provider.of<DataProvider>(
+                                Navigation.instance.navigatorKey.currentContext ??
                                     context,
                                 listen: false)
-                            .profile
-                            ?.is_plan_active ??
-                        false) {
-                      Navigation.instance.navigate('/askAQuestion');
-                    } else {
-                      Constance.showMembershipPrompt(scaffoldKey.currentState?.context, () {});
-                      // Navigation.instance.goBack();
-                      // setState(() {
-                      //   showing = true;
-                      // });
-                      // Constance.showMembershipPrompt(context,
-                      //         () {
-                      //       setState(() {
-                      //         showing = false;
-                      //       });
-                      //     });
-                    }
-                  },
-                ),
-                Bubble(
-                  title: "My List",
+                            .profile!);
+                        _animationController?.reverse();
+                        if (Provider.of<DataProvider>(
+                                    Navigation
+                                            .instance.navigatorKey.currentContext ??
+                                        context,
+                                    listen: false)
+                                .profile
+                                ?.is_plan_active ??
+                            false) {
+                          Navigation.instance.navigate('/askAQuestion');
+                        } else {
+                          // Constance.showMembershipPrompt(context, () {});
+                          // Navigation.instance.goBack();
+                          setState(() {
+                            showing = true;
+                          });
+                          Constance.showMembershipPrompt(context,
+                                  () {
+                                setState(() {
+                                  showing = false;
+                                });
+                              });
+                        }
+                      },
+                    ),
+                    Bubble(
+                      title: "My List",
+                      iconColor: Colors.white,
+                      bubbleColor: Constance.primaryColor,
+                      icon: Icons.list,
+                      titleStyle: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                      onPress: () {
+                        logTheMyListClick(Provider.of<DataProvider>(
+                                Navigation.instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .profile!);
+                        _animationController?.reverse();
+                        Navigation.instance.navigate('/guwahatiConnectsMy');
+                      },
+                    ),
+                    // Floating action menu item
+                  ],
+
+                  // animation controller
+                  animation: _animation!,
+
+                  // On pressed change animation state
+                  onPress: () => _animationController?.isCompleted ?? false
+                      ? _animationController?.reverse()
+                      : _animationController?.forward(),
+
+                  // Floating Action button Icon color
                   iconColor: Colors.white,
-                  bubbleColor: Constance.primaryColor,
-                  icon: Icons.list,
-                  titleStyle: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                  onPress: () {
-                    logTheMyListClick(Provider.of<DataProvider>(
-                            Navigation.instance.navigatorKey.currentContext ??
-                                context,
-                            listen: false)
-                        .profile!);
-                    _animationController?.reverse();
-                    Navigation.instance.navigate('/guwahatiConnectsMy');
-                  },
-                ),
-                // Floating action menu item
-              ],
 
-              // animation controller
-              animation: _animation!,
-
-              // On pressed change animation state
-              onPress: () => _animationController?.isCompleted ?? false
-                  ? _animationController?.reverse()
-                  : _animationController?.forward(),
-
-              // Floating Action button Icon color
-              iconColor: Colors.white,
-
-              // Flaoting Action button Icon
-              iconData: Icons.add,
-              backGroundColor: Constance.primaryColor,
-            )
+                  // Flaoting Action button Icon
+                  iconData: Icons.add,
+                  backGroundColor: Constance.primaryColor,
+                );
+            }
+          )
           : FloatingActionButton(
               onPressed: () {},
               backgroundColor: Constance.primaryColor,

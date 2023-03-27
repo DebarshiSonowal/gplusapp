@@ -250,7 +250,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
                                 text:
                                 ' , ${Jiffy(
                                     data.home_toppicks[0].date?.split(" ")[0],
-                                    "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                    "yyyy-MM-dd").format("dd MMM ,yyyy")}',
                                 style: Theme
                                     .of(Navigation.instance
                                     .navigatorKey.currentContext!)
@@ -505,7 +505,7 @@ class SuggestedForYouCard extends StatelessWidget {
                   Spacer(),
                   Text(
                     Jiffy(item.date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                        .format("dd MMM,yyyy"),
+                        .format("dd MMM ,yyyy"),
                     style: Theme
                         .of(context)
                         .textTheme

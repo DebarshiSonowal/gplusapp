@@ -8,7 +8,7 @@ class MessageResponse {
       guwahatiConnect,
       redeem,
       refer,
-      benifit;
+      benifit,paywall;
 
   MessageResponse.fromJson(json) {
     success = json['success'] ?? false;
@@ -21,6 +21,7 @@ class MessageResponse {
     redeem = json['result']['redeem-confirmation-msg'] ?? "";
     refer = json['result']['refer-n-earn-msg'] ?? "";
     benifit = json['result']['benifit-members-list'] ?? "";
+    paywall = json['result']['paywall-msg'] ?? "";
   }
 
   MessageResponse.withError(msg) {

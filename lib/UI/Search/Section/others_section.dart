@@ -25,10 +25,10 @@ class OthersSection extends StatelessWidget {
           var item = data.othersearchlist[count];
           return GestureDetector(
             onTap: () {
-              if (data.profile?.is_plan_active ?? false) {
+              if (item.has_permission ?? false) {
                 setAction(item, context, data);
               } else {
-                Constance.showMembershipPrompt(context, () {
+                Constance.showMembershipPrompt(cont, () {
                   // setState(() {
                   //   showing = false;
                   // });

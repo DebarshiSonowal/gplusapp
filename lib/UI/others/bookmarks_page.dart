@@ -242,7 +242,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                       ),
                                       TextSpan(
                                         text:
-                                            ' , ${Jiffy(data.bookmarks[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                            ' , ${Jiffy(data.bookmarks[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM ,yyyy")}',
                                         style: Theme.of(Navigation.instance
                                                 .navigatorKey.currentContext!)
                                             .textTheme

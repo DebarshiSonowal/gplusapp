@@ -97,7 +97,7 @@ class SuggestedForYou extends StatelessWidget {
                                 item.title!,
                                 "top_picks_for_you",
                                 item.id!,
-                                DateFormat("dd MMM,yyyy")
+                                DateFormat("dd MMM ,yyyy")
                                     .format(DateTime.parse(item.date!)),
                               );
                               Navigation.instance.navigate('/story',

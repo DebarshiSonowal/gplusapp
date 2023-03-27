@@ -135,7 +135,7 @@ class OpinionCard extends StatelessWidget {
                         // item.publish_date?.split(" ")[0] ?? "",
                         Jiffy(item.publish_date?.split(" ")[0] ?? "",
                                 "yyyy-MM-dd")
-                            .format("dd MMM,yyyy"),
+                            .format("dd MMM ,yyyy"),
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Storage.instance.isDarkMode

@@ -62,7 +62,7 @@ class VideoCard extends StatelessWidget {
                 // ),
                 Text(
                   Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                      .format("dd MMM,yyyy"),
+                      .format("dd MMM ,yyyy"),
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context)

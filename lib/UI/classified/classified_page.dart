@@ -379,6 +379,11 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                               //         ? true
                               //         : false);
                               return ClassifiedCard(
+                                  update: () {
+                                    setState(() {
+                                      showing = !showing;
+                                    });
+                                  },
                                   refreshParent: () {
                                     fetchClassified("");
                                   },
@@ -500,7 +505,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   }
 
   void fetchClassified(result) async {
-    print(result);
+    debugPrint(result);
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance
         .getClassified(getCategory(selected), result, controller.text);

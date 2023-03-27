@@ -14,6 +14,7 @@ class SearchResult {
       as_description,
       as_short_description,
       author;
+  bool has_permission=false;
   CategoryName? first_cat_name;
 
   SearchResult.fromJson(json) {
@@ -27,6 +28,7 @@ class SearchResult {
         ? 1
         : int.parse(json['share_count'].toString());
 
+    has_permission = json['has_permission']??false;
     //Others
     try {
       first_cat_name = CategoryName.fromJson(json['first_cat_name']);
@@ -56,12 +58,14 @@ class OthersSearchResult {
   // "type": "guwahati-connect"
   int? id;
   String? title, image_file_name, type;
+  bool has_permission = false;
 
   OthersSearchResult.fromJson(json) {
     id = json['id'] == null ? 0 : int.parse(json['id'].toString());
     title = json['title'] ?? "";
     type = json['type'] ?? "";
     image_file_name = json['image_file_name'] ?? "";
+    has_permission = json['has_permission']??false;
   }
 }
 

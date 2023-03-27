@@ -10,8 +10,8 @@ class PromotedDeal {
       balance,
       plan_id,
       status;
-  bool? is_percent, is_one_time;
-  String? plan_active_date, plan_expiry_date,title,description;
+  bool? is_percent, is_one_time, has_permission;
+  String? plan_active_date, plan_expiry_date, title, description;
   Vendor? vendor;
 
   PromotedDeal.fromJson(json) {
@@ -43,6 +43,8 @@ class PromotedDeal {
         ? false
         : (json['is_one_time'].toString() == '1' ? true : false);
 
+    has_permission = json['has_permission'] ?? false;
+
     //String
     plan_active_date = json['plan_active_date'] ?? "";
     plan_expiry_date = json['plan_expiry_date'] ?? "";
@@ -63,7 +65,9 @@ class PromotedDealResponse {
     message = json['message'] ?? "Something Went Wrong";
     deals = json['result'] == null
         ? []
-        : (json['result'] as List).map((e) => PromotedDeal.fromJson(e)).toList();
+        : (json['result'] as List)
+            .map((e) => PromotedDeal.fromJson(e))
+            .toList();
   }
 
   PromotedDealResponse.withError(msg) {
