@@ -132,7 +132,7 @@ class PollOfTheWeekSection extends StatelessWidget {
                           activeColor: Colors.black,
                           groupValue: poll,
                           onChanged: (val) {
-                            if ((data.profile?.is_plan_active ?? false)) {
+                            if (data.pollOfTheWeek!.has_permission ?? false) {
                               if ((poll == ""||poll!=getOptionName(count, data))&&(checkIfExists(data,poll))) {
                                 poll = getOptionName(count, data);
                                 debugPrint(

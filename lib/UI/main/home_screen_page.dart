@@ -281,6 +281,11 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigation.instance.navigatorKey.currentContext ?? context,
           listen: false)
           .setAdImage(response1.data!);
+      if(mounted){
+        setState(() {
+
+        });
+      }
     }else{
 
     }
@@ -520,6 +525,6 @@ class _HomeScreenState extends State<HomeScreen> {
     FirebaseAnalytics.instance
         .setUserProperty(name: "user_id_tvc", value: profile!.id.toString());
     FirebaseAnalytics.instance.setUserProperty(
-        name: "user_login_status", value: Storage.instance.isLoggedIn);
+        name: "user_login_status", value: Storage.instance.isLoggedIn?"logged_in":"guest");
   }
 }

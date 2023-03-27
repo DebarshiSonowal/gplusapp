@@ -182,7 +182,17 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                         false) {
                       Navigation.instance.navigate('/askAQuestion');
                     } else {
-                      Constance.showMembershipPrompt(context, () {});
+                      Constance.showMembershipPrompt(scaffoldKey.currentState?.context, () {});
+                      // Navigation.instance.goBack();
+                      // setState(() {
+                      //   showing = true;
+                      // });
+                      // Constance.showMembershipPrompt(context,
+                      //         () {
+                      //       setState(() {
+                      //         showing = false;
+                      //       });
+                      //     });
                     }
                   },
                 ),

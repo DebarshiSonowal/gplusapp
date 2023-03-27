@@ -193,7 +193,7 @@ class _NavigationBarState extends State<CustomNavigationBar> {
                 width: 6.w,
                 color: current == 4 ? Constance.secondaryColor : Colors.white,
               ),
-              label: " Classified\n ",
+              label: " Classifieds\n ",
               backgroundColor: Constance.primaryColor,
             ),
           ],

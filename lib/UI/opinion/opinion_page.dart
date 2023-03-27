@@ -47,7 +47,7 @@ class _OpinionPageState extends State<OpinionPage> {
       _refreshController.refreshCompleted();
     } else {
       setState(() {
-        isEmpty=true;
+        isEmpty = true;
       });
       _refreshController.refreshFailed();
     }
@@ -155,9 +155,13 @@ class _OpinionPageState extends State<OpinionPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigation.instance.navigate('/opinionDetails',
-                                args:
-                                    '${data.opinions[0].seo_name?.trim()},${data.opinions[0].category_gallery?.id}');
+                            if (data.opinions[0].has_permission ?? false) {
+                              Navigation.instance.navigate('/opinionDetails',
+                                  args:
+                                      '${data.opinions[0].seo_name?.trim()},${data.opinions[0].category_gallery?.id}');
+                            } else {
+                              Constance.showMembershipPrompt(context, () {});
+                            }
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 5.w),
@@ -184,7 +188,7 @@ class _OpinionPageState extends State<OpinionPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (data.profile?.is_plan_active ?? false) {
+                            if (data.opinions[0].has_permission ?? false) {
                               Navigation.instance.navigate('/opinionDetails',
                                   args:
                                       '${data.opinions[0].seo_name?.trim()},${data.opinions[0].category_gallery?.id}');
@@ -242,10 +246,14 @@ class _OpinionPageState extends State<OpinionPage> {
                                 width: 0.7.w,
                               ),
                               Expanded(
-                                child: GestureDetector (
+                                child: GestureDetector(
                                   onTap: () {
-                                    Navigation.instance.navigate('/authorPage',
-                                        args: data.opinions[0].user_id);
+                                    if (data.opinions[0].has_permission??false) {
+                                      Navigation.instance.navigate('/authorPage',
+                                                                              args: data.opinions[0].user_id);
+                                    } else {
+                                      Constance.showMembershipPrompt(context, () {});
+                                    }
                                   },
                                   child: RichText(
                                     overflow: TextOverflow.ellipsis,
@@ -256,32 +264,34 @@ class _OpinionPageState extends State<OpinionPage> {
                                           text: data.opinions[0].user?.name ??
                                               "G Plus",
                                           style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
+                                                  .navigatorKey.currentContext!)
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
-                                            color: Storage.instance.isDarkMode
-                                                ? Constance.secondaryColor
-                                                : Constance.primaryColor,
-                                            fontWeight: FontWeight.bold,
-                                            decoration:
-                                            TextDecoration.underline,
-                                          ),
+                                                color: Storage
+                                                        .instance.isDarkMode
+                                                    ? Constance.secondaryColor
+                                                    : Constance.primaryColor,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
                                         ),
                                         TextSpan(
                                           text:
-                                          ' , ${Jiffy(data.opinions[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                              ' , ${Jiffy(data.opinions[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
                                           style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
+                                                  .navigatorKey.currentContext!)
                                               .textTheme
                                               .headline5
                                               ?.copyWith(
-                                            color: Storage.instance.isDarkMode
-                                                ? Colors.white
-                                                : Colors.black,
-                                            // fontSize: 2.2.h,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
+                                                color:
+                                                    Storage.instance.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                // fontSize: 2.2.h,
+                                                // fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                       ],
                                     ),
@@ -364,7 +374,7 @@ class _OpinionPageState extends State<OpinionPage> {
                         //   ],
                         // ),
                         SizedBox(
-                          height: 3.h,
+                          height: 1.h,
                         ),
                       ],
                     ),
@@ -416,7 +426,7 @@ class _OpinionPageState extends State<OpinionPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
           },
           icon: Icon(Icons.search),
         ),
@@ -435,10 +445,10 @@ class _OpinionPageState extends State<OpinionPage> {
           _refreshController.requestRefresh();
         } else {
           print('At the bottom');
-         // _refreshController.requestLoading();
-        setState(() {
-          page_no++;
-        });
+          // _refreshController.requestLoading();
+          setState(() {
+            page_no++;
+          });
           fetchMoreOpinions();
         }
       }
@@ -471,5 +481,4 @@ class _OpinionPageState extends State<OpinionPage> {
       _refreshController.loadFailed();
     }
   }
-
 }

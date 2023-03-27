@@ -11,7 +11,7 @@ class PollOfTheWeek {
       as_option3,
       is_polled;
   double? percent1, percent2, percent3;
-
+  bool has_permission=false;
   PollOfTheWeek.fromJson(json) {
     id = json['id'] ?? 0;
     vote_count = json['vote_count'] == null
@@ -36,6 +36,8 @@ class PollOfTheWeek {
     as_option3 = json['as_option3'] ?? "";
     is_polled = json['is_polled'].toString() ?? "";
 
+
+    has_permission = json['has_permission'] ?? false;
     //double
     percent1 = json['percent1'] == null
         ? 0

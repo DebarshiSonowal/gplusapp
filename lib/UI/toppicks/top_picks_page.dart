@@ -22,7 +22,7 @@ class TopPicksPage extends StatefulWidget {
 
 class _TopPicksPageState extends State<TopPicksPage> {
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController(initialRefresh: false);
   final ScrollController controller = ScrollController();
   int page = 1;
 
@@ -51,8 +51,8 @@ class _TopPicksPageState extends State<TopPicksPage> {
     final response = await ApiProvider.instance.getTopPicks(1);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setHomeTopPicks(response.toppicks ?? []);
       _refreshController.refreshCompleted();
     } else {
@@ -74,13 +74,12 @@ class _TopPicksPageState extends State<TopPicksPage> {
       page++;
     });
     fetchMoreToppicks(page);
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:Constance.buildAppBar2("topics"),
+      appBar: Constance.buildAppBar2("topics"),
       backgroundColor: Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
@@ -112,193 +111,212 @@ class _TopPicksPageState extends State<TopPicksPage> {
         onLoading: _onLoading,
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
             padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
             child: data.home_exclusive.isNotEmpty
                 ? SingleChildScrollView(
-                    controller: controller,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            // Icon(
-                            //   Icons.star,
-                            //   color: Constance.secondaryColor,
-                            //   size: 4.h,
-                            // ),
-                            Text(
-                              'Suggested for you',
-                              style: Theme.of(Navigation
-                                      .instance.navigatorKey.currentContext!)
-                                  .textTheme
-                                  .headline3
-                                  ?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Constance.primaryColor,
-                                    // fontSize: 2.2.h,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
+              controller: controller,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      // Icon(
+                      //   Icons.star,
+                      //   color: Constance.secondaryColor,
+                      //   size: 4.h,
+                      // ),
+                      Text(
+                        'Suggested for you',
+                        style: Theme
+                            .of(Navigation
+                            .instance.navigatorKey.currentContext!)
+                            .textTheme
+                            .headline3
+                            ?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor,
+                          // fontSize: 2.2.h,
+                          fontWeight: FontWeight.bold,
                         ),
-                        SizedBox(
-                          height: 1.h,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 0.w),
+                    child: Container(
+                      height: 30.h,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 0.w),
-                          child: Container(
-                            height: 30.h,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: CachedNetworkImageProvider(
-                                  data.home_toppicks[0].image_file_name ??
-                                      'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-                                ),
-                              ),
-                            ),
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: CachedNetworkImageProvider(
+                            data.home_toppicks[0].image_file_name ??
+                                'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
                           ),
                         ),
-                        SizedBox(
-                          height: 1.h,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (data.home_toppicks[0].has_permission ?? false) {
+                        Navigation.instance.navigate('/story',
+                            args:
+                            '${data.home_toppicks[0].categories?.first
+                                .seo_name},${data.home_toppicks[0]
+                                .seo_name},home_page');
+                      } else {
+                        Constance.showMembershipPrompt(context, () {});
+                      }
+                    },
+                    child: Text(
+                      data.home_toppicks[0].title ??
+                          'It is a long established fact that a reader will be distracted by the readable content of a',
+                      style: Theme
+                          .of(Navigation
+                          .instance.navigatorKey.currentContext!)
+                          .textTheme
+                          .headline3
+                          ?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Constance.primaryColor,
+                        // fontSize: 2.2.h,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (data.home_toppicks[0].has_permission??false) {
+                        Navigation.instance.navigate('/authorPage',
+                            args: data.home_toppicks[0].author_id);
+                      } else {
+                        Constance.showMembershipPrompt(context, () {});
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          Constance.authorIcon,
+                          scale: 30,
+                          color: Constance.secondaryColor,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            if (data.profile?.is_plan_active ?? false) {
-                              Navigation.instance.navigate('/story',
-                                  args:
-                                      '${data.home_toppicks[0].categories?.first.seo_name},${data.home_toppicks[0].seo_name},home_page');
-                            } else {
-                              Constance.showMembershipPrompt(context, () {});
-                            }
-                          },
-                          child: Text(
-                            data.home_toppicks[0].title ??
-                                'It is a long established fact that a reader will be distracted by the readable content of a',
-                            style: Theme.of(Navigation
-                                    .instance.navigatorKey.currentContext!)
-                                .textTheme
-                                .headline3
-                                ?.copyWith(
+                        SizedBox(
+                          width: 0.5.w,
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text:
+                                data.home_toppicks[0].author_name ??
+                                    "G Plus",
+                                style: Theme
+                                    .of(Navigation.instance
+                                    .navigatorKey.currentContext!)
+                                    .textTheme
+                                    .headline5
+                                    ?.copyWith(
+                                  color: Constance.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  decoration:
+                                  TextDecoration.underline,
+                                ),
+                              ),
+                              TextSpan(
+                                text:
+                                ' , ${Jiffy(
+                                    data.home_toppicks[0].date?.split(" ")[0],
+                                    "yyyy-MM-dd").format("dd MMM,yyyy")}',
+                                style: Theme
+                                    .of(Navigation.instance
+                                    .navigatorKey.currentContext!)
+                                    .textTheme
+                                    .headline5
+                                    ?.copyWith(
                                   color: Storage.instance.isDarkMode
                                       ? Colors.white
-                                      : Constance.primaryColor,
+                                      : Colors.black,
                                   // fontSize: 2.2.h,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigation.instance.navigate('/authorPage',
-                                args: data.home_toppicks[0].author_id);
-                          },
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                Constance.authorIcon,
-                                scale: 30,
-                                color: Constance.secondaryColor,
-                              ),
-                              SizedBox(
-                                width: 0.5.w,
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text:
-                                          '${data.home_toppicks[0].author_name ?? "G Plus"}',
-                                      style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
-                                          .textTheme
-                                          .headline5
-                                          ?.copyWith(
-                                            color: Constance.primaryColor,
-                                            fontWeight: FontWeight.bold,
-                                            decoration:
-                                                TextDecoration.underline,
-                                          ),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          ' , ${Jiffy(data.home_toppicks[0].date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM,yyyy")}',
-                                      style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
-                                          .textTheme
-                                          .headline5
-                                          ?.copyWith(
-                                            color: Storage.instance.isDarkMode
-                                                ? Colors.white
-                                                : Colors.black,
-                                            // fontSize: 2.2.h,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ],
+                                  // fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        // Text(
-                        //   '${data.home_toppicks[0].author_name ?? "G Plus Admin"}, ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
-                        //   style: Theme.of(Navigation
-                        //           .instance.navigatorKey.currentContext!)
-                        //       .textTheme
-                        //       .headline5
-                        //       ?.copyWith(
-                        //         color: Storage.instance.isDarkMode
-                        //             ? Colors.white
-                        //             : Colors.black,
-                        //         // fontSize: 2.2.h,
-                        //         // fontWeight: FontWeight.bold,
-                        //       ),
-                        // ),
-                        Divider(
-                          color: Colors.black,
-                          thickness: 0.5.sp,
-                        ),
-                        toppickSuggestions(data:data),
-                        // SizedBox(
-                        //   height: 2.h,
-                        // ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     CustomButton(
-                        //         txt: 'Load More',
-                        //         onTap: () {
-                        //           setState(() {
-                        //             page++;
-                        //           });
-                        //           fetchMoreToppicks(page);
-                        //         }),
-                        //   ],
-                        // ),
-                        SizedBox(
-                          height: 3.h,
-                        ),
                       ],
                     ),
-                  )
-                : Center(
-                    child: SizedBox(
-                        height: 2.h,
-                        width: 2.h,
-                        child: const CircularProgressIndicator()),
                   ),
+                  // Text(
+                  //   '${data.home_toppicks[0].author_name ?? "G Plus Admin"}, ${Jiffy(data.home_exclusive[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                  //   style: Theme.of(Navigation
+                  //           .instance.navigatorKey.currentContext!)
+                  //       .textTheme
+                  //       .headline5
+                  //       ?.copyWith(
+                  //         color: Storage.instance.isDarkMode
+                  //             ? Colors.white
+                  //             : Colors.black,
+                  //         // fontSize: 2.2.h,
+                  //         // fontWeight: FontWeight.bold,
+                  //       ),
+                  // ),
+                  Divider(
+                    color: Colors.black,
+                    thickness: 0.5.sp,
+                  ),
+                  toppickSuggestions(data: data),
+                  // SizedBox(
+                  //   height: 2.h,
+                  // ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     CustomButton(
+                  //         txt: 'Load More',
+                  //         onTap: () {
+                  //           setState(() {
+                  //             page++;
+                  //           });
+                  //           fetchMoreToppicks(page);
+                  //         }),
+                  //   ],
+                  // ),
+                  SizedBox(
+                    height: 3.h,
+                  ),
+                ],
+              ),
+            )
+                : Center(
+              child: SizedBox(
+                  height: 2.h,
+                  width: 2.h,
+                  child: const CircularProgressIndicator()),
+            ),
           );
         }),
       ),
@@ -310,8 +328,8 @@ class _TopPicksPageState extends State<TopPicksPage> {
       title: GestureDetector(
         onTap: () {
           Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -330,8 +348,8 @@ class _TopPicksPageState extends State<TopPicksPage> {
     final response = await ApiProvider.instance.getTopPicks(1);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setHomeTopPicks(response.toppicks ?? []);
     }
   }
@@ -340,11 +358,11 @@ class _TopPicksPageState extends State<TopPicksPage> {
     final response = await ApiProvider.instance.getTopPicks(page);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .addHomeTopPicks(response.toppicks ?? []);
       _refreshController.loadComplete();
-    }else{
+    } else {
       _refreshController.loadFailed();
     }
   }
@@ -355,6 +373,7 @@ class toppickSuggestions extends StatelessWidget {
     Key? key, required this.data,
   }) : super(key: key);
   final DataProvider data;
+
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
@@ -406,9 +425,10 @@ class SuggestedForYouCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (data.profile?.is_plan_active ?? false) {
+        if (item.has_permission ?? false) {
           Navigation.instance.navigate('/story',
-              args: '${item.categories?.first.seo_name},${item.seo_name},home_page');
+              args: '${item.categories?.first.seo_name},${item
+                  .seo_name},home_page');
         } else {
           Constance.showMembershipPrompt(context, () {});
         }
@@ -422,7 +442,10 @@ class SuggestedForYouCard extends StatelessWidget {
           color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         ),
         height: 20.h,
-        width: MediaQuery.of(context).size.width - 7.w,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width - 7.w,
         child: Row(
           children: [
             Column(
@@ -462,7 +485,11 @@ class SuggestedForYouCard extends StatelessWidget {
                   Text(
                     item.title ?? "",
                     maxLines: 6,
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline5
+                        ?.copyWith(
                         fontWeight: FontWeight.bold,
                         overflow: TextOverflow.ellipsis,
                         color: Storage.instance.isDarkMode
@@ -479,7 +506,11 @@ class SuggestedForYouCard extends StatelessWidget {
                   Text(
                     Jiffy(item.date?.split(" ")[0] ?? "", "yyyy-MM-dd")
                         .format("dd MMM,yyyy"),
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(
                         color: Storage.instance.isDarkMode
                             ? Colors.white
                             : Colors.black),
@@ -489,7 +520,11 @@ class SuggestedForYouCard extends StatelessWidget {
                   ),
                   Text(
                     item.author_name ?? "G Plus News",
-                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(
                         color: Storage.instance.isDarkMode
                             ? Colors.white
                             : Colors.black),

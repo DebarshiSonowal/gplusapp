@@ -146,7 +146,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              if (data.profile?.is_plan_active ?? false) {
+                              if (data.bookmarks[0].has_permission ?? false) {
                                 Navigation.instance.navigate('/story',
                                     args:
                                         '${data.bookmarks[0].cat_seo_name},${data.bookmarks[0].seo_name},bookmarks_page');

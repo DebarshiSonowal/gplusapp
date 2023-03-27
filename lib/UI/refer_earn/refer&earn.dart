@@ -246,7 +246,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                           onTap: () {
                             Share.share(
                                 // "Hello I welcome you to G Plus. Join me and download their app using my referral code ${data.referEarn?.referral_link?.split('/')[3]}",
-                                "${data.invite} ${data.referEarn?.code} \n ${getStoreLink()}");
+                                "${data.invite} \"${data.referEarn?.code}\" \n ${getStoreLink()}");
                           },
                         ),
                       ),

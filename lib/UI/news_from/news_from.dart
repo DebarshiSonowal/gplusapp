@@ -162,18 +162,29 @@ class _NewsFromState extends State<NewsFrom> {
                         SizedBox(
                           height: 1.h,
                         ),
-                        Container(
-                          height: 30.h,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: CachedNetworkImageProvider(
-                                data.news_from[0].image_file_name ??
-                                    'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+                        GestureDetector(
+                          onTap: (){
+                            if(data.news_from[0].has_permission??false){
+                              Navigation.instance.navigate('/story',
+                                  args:
+                                  '${widget.categ},${data.news_from[0].seo_name},news_from');
+                            }else{
+                              Constance.showMembershipPrompt(context, () {});
+                            }
+                          },
+                          child: Container(
+                            height: 30.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: CachedNetworkImageProvider(
+                                  data.news_from[0].image_file_name ??
+                                      'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+                                ),
                               ),
                             ),
                           ),
@@ -183,7 +194,7 @@ class _NewsFromState extends State<NewsFrom> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (data.profile?.is_plan_active ?? false) {
+                            if(data.news_from[0].has_permission??false){
                               Navigation.instance.navigate('/story',
                                   args:
                                       '${widget.categ},${data.news_from[0].seo_name},news_from');
@@ -222,8 +233,13 @@ class _NewsFromState extends State<NewsFrom> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Navigation.instance.navigate('/authorPage',
-                                    args: data.news_from[0].author);
+
+                                if(data.news_from[0].has_permission??false){
+                                  Navigation.instance.navigate('/authorPage',
+                                      args: data.news_from[0].author);
+                                }else{
+                                  Constance.showMembershipPrompt(context, () {});
+                                }
                               },
                               child: RichText(
                                 text: TextSpan(

@@ -375,84 +375,85 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(
                   height: 1.5.h,
                 ),
-                Text(
-                  'Topical',
-                  style: Theme.of(context).textTheme.headline4?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Constance.primaryColor,
-                        // fontSize: 2.h,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                SizedBox(
-                  // height: 15.h,
-                  width: double.infinity,
-                  child: Wrap(
-                    children: [
-                      for (int i = 0; i < data.topicks.length; i++)
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              if (!check(selTop, data.topicks[i])) {
-                                print('add ${data.topicks[i].title}');
-                                selTop.add(data.topicks[i]);
-                              } else {
-                                // print(
-                                //     'rmv ${}');
-                                // selTop.remove(data.topicks[i]);
-                                selTop.removeWhere((element) =>
-                                    element.id == data.topicks[i].id);
-                              }
-                            });
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 6),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: selTop == null
-                                  ? Colors.white
-                                  : !check(selTop, data.topicks[i])
-                                      ? Colors.white
-                                      : Constance.secondaryColor,
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                color: selTop == null
-                                    ? Constance.primaryColor
-                                    : !check(selTop, data.topicks[i])
-                                        ? Constance.primaryColor
-                                        : Constance.secondaryColor,
-                                width: 0.5.w,
-                                // left: BorderSide(
-                                //   color: Colors.green,
-                                //   width: 1,
-                                // ),
-                              ),
-                            ),
-                            child: Text(
-                              data.topicks[i].title!,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline5
-                                  ?.copyWith(
-                                    color: Constance.primaryColor,
-                                    // fontSize: 2.h,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 1.5.h,
-                ),
+
+                // Text(
+                //   'Topical',
+                //   style: Theme.of(context).textTheme.headline4?.copyWith(
+                //         color: Storage.instance.isDarkMode
+                //             ? Colors.white
+                //             : Constance.primaryColor,
+                //         // fontSize: 2.h,
+                //         fontWeight: FontWeight.bold,
+                //       ),
+                // ),
+                // SizedBox(
+                //   height: 1.h,
+                // ),
+                // SizedBox(
+                //   // height: 15.h,
+                //   width: double.infinity,
+                //   child: Wrap(
+                //     children: [
+                //       for (int i = 0; i < data.topicks.length; i++)
+                //         GestureDetector(
+                //           onTap: () {
+                //             setState(() {
+                //               if (!check(selTop, data.topicks[i])) {
+                //                 print('add ${data.topicks[i].title}');
+                //                 selTop.add(data.topicks[i]);
+                //               } else {
+                //                 // print(
+                //                 //     'rmv ${}');
+                //                 // selTop.remove(data.topicks[i]);
+                //                 selTop.removeWhere((element) =>
+                //                     element.id == data.topicks[i].id);
+                //               }
+                //             });
+                //           },
+                //           child: Container(
+                //             margin: const EdgeInsets.symmetric(
+                //                 horizontal: 6, vertical: 6),
+                //             padding: const EdgeInsets.symmetric(
+                //                 horizontal: 6, vertical: 4),
+                //             decoration: BoxDecoration(
+                //               color: selTop == null
+                //                   ? Colors.white
+                //                   : !check(selTop, data.topicks[i])
+                //                       ? Colors.white
+                //                       : Constance.secondaryColor,
+                //               borderRadius: BorderRadius.circular(5),
+                //               border: Border.all(
+                //                 color: selTop == null
+                //                     ? Constance.primaryColor
+                //                     : !check(selTop, data.topicks[i])
+                //                         ? Constance.primaryColor
+                //                         : Constance.secondaryColor,
+                //                 width: 0.5.w,
+                //                 // left: BorderSide(
+                //                 //   color: Colors.green,
+                //                 //   width: 1,
+                //                 // ),
+                //               ),
+                //             ),
+                //             child: Text(
+                //               data.topicks[i].title!,
+                //               style: Theme.of(context)
+                //                   .textTheme
+                //                   .headline5
+                //                   ?.copyWith(
+                //                     color: Constance.primaryColor,
+                //                     // fontSize: 2.h,
+                //                     // fontWeight: FontWeight.bold,
+                //                   ),
+                //             ),
+                //           ),
+                //         ),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: 1.5.h,
+                // ),
                 // Text(
                 //   'Notification Permission',
                 //   style: Theme.of(context).textTheme.headline4?.copyWith(

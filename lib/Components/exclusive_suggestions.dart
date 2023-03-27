@@ -23,7 +23,7 @@ class exclusiveSuggestions extends StatelessWidget {
         if (count != 0) {
           return GestureDetector(
             onTap: () {
-              if (data.profile?.is_plan_active ?? false) {
+              if (item.has_permission?? false) {
                 Navigation.instance.navigate('/story',
                     args:
                     '${'exclusive-news'},${item.seo_name},g_plus_exclusive');

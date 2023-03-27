@@ -7,6 +7,7 @@ class BookmarkItem {
       cat_name,
       cat_seo_name;
   int? category_id;
+  bool has_permission = false;
 
   BookmarkItem.fromJson(json) {
     title = json['title'] ?? "";
@@ -16,6 +17,8 @@ class BookmarkItem {
     image_file_name = json['image_file_name'] ?? "";
     cat_name = json['cat_name'] ?? "";
     cat_seo_name = json['cat_seo_name'] ?? "";
+
+    has_permission = json['has_permission'] ?? false;
 
     category_id = json['category_id'] == null
         ? 0

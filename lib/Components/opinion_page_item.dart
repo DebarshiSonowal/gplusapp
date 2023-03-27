@@ -25,7 +25,7 @@ class OpionionPageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (data.profile?.is_plan_active ?? false) {
+        if (item.has_permission ?? false) {
           // Navigation.instance.navigate(
           //     '/opinionDetails',
           //     args: item.seo_name?.trim());

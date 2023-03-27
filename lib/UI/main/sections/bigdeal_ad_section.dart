@@ -58,26 +58,26 @@ class BigDealsAdSection extends StatelessWidget {
                     ),
                   ),
                   child: Center(
-                    child: CachedNetworkImage(
-                      imageUrl: Provider.of<DataProvider>(
-                                  Navigation.instance.navigatorKey
-                                          .currentContext ??
-                                      context,
-                                  listen: false)
-                              .ad_image ??
-                          Constance.kfc_offer,
-                      placeholder: (cont, _) {
-                        return Image.asset(
-                          Constance.logoIcon,
-                          // color: Colors.black,
+                    child: Consumer<DataProvider>(
+                      builder: (context,data,_) {
+                        return CachedNetworkImage(
+                          imageUrl: data
+                                  .ad_image ??
+                              Constance.kfc_offer,
+                          placeholder: (cont, _) {
+                            return Image.asset(
+                              Constance.logoIcon,
+                              // color: Colors.black,
+                            );
+                          },
+                          errorWidget: (cont, _, e) {
+                            return Image.network(
+                              Constance.defaultImage,
+                              fit: BoxFit.fitWidth,
+                            );
+                          },
                         );
-                      },
-                      errorWidget: (cont, _, e) {
-                        return Image.network(
-                          Constance.defaultImage,
-                          fit: BoxFit.fitWidth,
-                        );
-                      },
+                      }
                     ),
                   ),
                 )),

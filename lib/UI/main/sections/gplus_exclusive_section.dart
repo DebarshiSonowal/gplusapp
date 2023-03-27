@@ -61,13 +61,13 @@ class GPlusExclusiveSection extends StatelessWidget {
                           return Center(
                             child: GestureDetector(
                               onTap: () {
-                                if (item.has_permission ?? false) {
+                                // if (item.has_permission ?? false) {
                                   logTheReadMoreClick(data.profile!);
                                   Navigation.instance
                                       .navigate('/exclusivePage');
-                                } else {
-                                  showNotaMember();
-                                }
+                                // } else {
+                                //   showNotaMember();
+                                // }
                               },
                               child: Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 5.w),
