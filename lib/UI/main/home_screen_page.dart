@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'dart:math';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
@@ -19,6 +20,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
+
 // import 'package:uni_links/uni_links.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -100,6 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigation.instance.navigatorKey.currentContext ?? context,
                 listen: false)
             .setCurrent(0));
+    getDynamicLink();
     showPopUp();
     controller.addListener(() {
       if (controller.position.atEdge) {
@@ -276,19 +279,15 @@ class _HomeScreenState extends State<HomeScreen> {
       fetchNotification();
     }
     final response1 = await ApiProvider.instance.getAdImage();
-    if (response1.success??false){
+    if (response1.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setAdImage(response1.data!);
-      if(mounted){
-        setState(() {
-
-        });
+      if (mounted) {
+        setState(() {});
       }
-    }else{
-
-    }
+    } else {}
   }
 
   void fetchHome() async {
@@ -370,7 +369,8 @@ class _HomeScreenState extends State<HomeScreen> {
         () {
       // code will be here
       if (Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? (_scaffoldKey.currentContext!),
+                  Navigation.instance.navigatorKey.currentContext ??
+                      (_scaffoldKey.currentContext!),
                   listen: false)
               .profile
               ?.is_plan_active ??
@@ -525,6 +525,30 @@ class _HomeScreenState extends State<HomeScreen> {
     FirebaseAnalytics.instance
         .setUserProperty(name: "user_id_tvc", value: profile!.id.toString());
     FirebaseAnalytics.instance.setUserProperty(
-        name: "user_login_status", value: Storage.instance.isLoggedIn?"logged_in":"guest");
+        name: "user_login_status",
+        value: Storage.instance.isLoggedIn ? "logged_in" : "guest");
+  }
+
+  getDynamicLink() async {
+    final PendingDynamicLinkData? dynamicLinkData =
+        await FirebaseDynamicLinks.instance.getInitialLink();
+    if (dynamicLinkData != null) {
+      final Uri deepLink = dynamicLinkData.link;
+      debugPrint("URL link2 ${deepLink}");
+      Future.delayed(const Duration(seconds: 0), () {
+        if (Storage.instance.isLoggedIn) {
+          bool isOpinion = dynamicLinkData.link.path.split("/").length == 4;
+          sendToRoute(
+            dynamicLinkData.link.path.split("/")[1].trim(),
+            isOpinion
+                ? dynamicLinkData.link.path.split("/")[3].trim()
+                : dynamicLinkData.link.path.split("/")[2].trim(),
+            (isOpinion
+                ? dynamicLinkData.link.path.split("/")[2].trim()
+                : dynamicLinkData.link.path.split("/")[1].trim()),
+          );
+        }
+      });
+    }
   }
 }

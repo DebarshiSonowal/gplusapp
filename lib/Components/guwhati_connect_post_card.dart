@@ -223,27 +223,6 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                     ),
                                   ),
                                   PopupMenuItem<int>(
-                                    value: 2,
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.report,
-                                          color: Colors.black,
-                                        ),
-                                        SizedBox(
-                                          width: 2.w,
-                                        ),
-                                        Text(
-                                          'Report this user',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline6
-                                              ?.copyWith(color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  PopupMenuItem<int>(
                                     value: 3,
                                     child: Row(
                                       children: [
@@ -255,7 +234,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                           width: 2.w,
                                         ),
                                         Text(
-                                          'Report this post',
+                                          'Report this user',
                                           style: Theme.of(context)
                                               .textTheme
                                               .headline6

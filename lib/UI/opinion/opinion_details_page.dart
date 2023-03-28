@@ -72,8 +72,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("opinion",true,_scaffoldKey),
-      drawer: const BergerMenuMemPage(screen: "opinion",),
+      // appBar: Constance.buildAppBar("opinion",true,_scaffoldKey),
+      appBar: Constance.buildAppBar2("opinion"),
+      // drawer: const BergerMenuMemPage(screen: "opinion",),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -265,7 +266,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                           ),
                                           TextSpan(
                                             text:
-                                                ' , ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM ,yyyy")}',
+                                                ' , ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM, yyyy")}',
                                             style: Theme.of(Navigation
                                                     .instance
                                                     .navigatorKey
@@ -357,7 +358,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                       //     ? 'check out our website https://guwahatiplus.com/'
                                       //     : '${data.opinion?.web_url}');
                                       generateURL(
-                                        data.opinion?.category_id,
+                                        data.opinion?.category_gallery!.seo_name!,
                                         data.opinion?.seo_name,
                                           data.opinion?.description?.trim().split(".").sublist(0,4).join(""),
                                           data.opinion?.image_file_name
@@ -1037,7 +1038,7 @@ void generateURL(
     first_cat_name, String? seo_name, description, image_url) async {
   final dynamicLinkParams = DynamicLinkParameters(
     link: Uri.parse(
-        "${FlutterConfig.get('domain')}/link/opinion/${seo_name}/${first_cat_name}"),
+        "${FlutterConfig.get('domain')}/opinion/${first_cat_name}/${seo_name}"),
     uriPrefix: FlutterConfig.get('customHostDeepLink'),
     androidParameters: AndroidParameters(
       packageName: FlutterConfig.get("androidPackage"),

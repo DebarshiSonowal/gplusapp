@@ -94,6 +94,7 @@ class PromotedDealItemData extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline5?.copyWith(
                               color: Colors.white,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                             ),
                         // ),

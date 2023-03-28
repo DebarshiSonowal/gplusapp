@@ -78,7 +78,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If `onMessage` is triggered with a notification, construct our own
   // local notification to show to users using the created channel.
   if (notification != null && android != null) {
-    debugPrint("1st case ${DateFormat("dd MM, yyyy HH:MM:SS a").format(DateTime.now())}");
+    debugPrint(
+        "1st case ${DateFormat("dd MM, yyyy HH:MM:SS a").format(DateTime.now())}");
     // flutterLocalNotificationsPlugin.show(
     //   notification.hashCode,
     //   notification.title,
@@ -156,22 +157,23 @@ void main() async {
 
 void checkVersion(String version, String buildNumber) async {
   if (Platform.isIOS) {
-    final response = await ApiProvider.instance.versionCheck(version, buildNumber);
-    if (response.success??false){
-      Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext!,
-          listen: false)
+    final response =
+        await ApiProvider.instance.versionCheck(version, buildNumber);
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
           .setHide(true);
-    }else{
-      Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext!,
-          listen: false)
+    } else {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
           .setHide(false);
     }
-
   }
-
 }
 
-void NotificationHandler(message) async {
+void NotificationHandler(RemoteMessage? message) async {
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
@@ -192,10 +194,12 @@ void NotificationHandler(message) async {
   // If `onMessage` is triggered with a notification, construct our own
   // local notification to show to users using the created channel.
   if (notification != null && android != null) {
-    debugPrint("2nd case ${DateFormat("dd MM, yyyy HH:MM:SS a").format(DateTime.now())}");
+    debugPrint(
+        "2nd case ${notification.title} ${notification.body} ${message?.category}");
     flutterLocalNotificationsPlugin.show(
       notification.hashCode,
-      notification.title,
+      // notification.title,
+      "G Plus",
       notification.body,
       NotificationDetails(
         android: AndroidNotificationDetails(
@@ -248,7 +252,7 @@ void setUpFirebase() async {
     NotificationHandler(message);
   });
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.instance.getInitialMessage().then((message) {
+  FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
     debugPrint('killed notification');
     NotificationHandler(message);
   }); //
@@ -263,6 +267,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -301,34 +306,22 @@ class _MyAppState extends State<MyApp> {
   void initDeepLink() async {
     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
       debugPrint("URL link ${dynamicLinkData.link.path.split("/")}");
-      sendToRoute(
-        dynamicLinkData.link.path.split("/")[2].trim(),
-        dynamicLinkData.link.path.split("/")[3].trim(),
-        (dynamicLinkData.link.path.split("/").length <= 4
-            ? ""
-            : dynamicLinkData.link.path.split("/")[4].trim()),
-      );
+      if (Storage.instance.isLoggedIn) {
+        bool isOpinion = dynamicLinkData.link.path.split("/").length == 4;
+        sendToRoute(
+          dynamicLinkData.link.path.split("/")[1].trim(),
+          isOpinion
+              ? dynamicLinkData.link.path.split("/")[3].trim()
+              : dynamicLinkData.link.path.split("/")[2].trim(),
+          (isOpinion
+              ? dynamicLinkData.link.path.split("/")[2].trim()
+              : dynamicLinkData.link.path.split("/")[1].trim()),
+        );
+      }
     }).onError((error) {
       // Handle errors
       debugPrint("URL link ${error}");
     });
-    final PendingDynamicLinkData? initialLink =
-        await FirebaseDynamicLinks.instance.getInitialLink();
-    if (initialLink == null) {
-    } else {
-      final Uri deepLink = initialLink.link;
-      debugPrint("URL link2 ${deepLink}");
-      Future.delayed(const Duration(seconds: 5), () {
-        sendToRoute(
-          deepLink.path.split("/")[2].trim(),
-          deepLink.path.split("/")[3].trim(),
-          (deepLink.path.split("/").length <= 4
-              ? ""
-              : deepLink.path.split("/")[4].trim()),
-        );
-      });
-      // Example of using the dynamic link to push the user to a different screen
-    }
   }
 }
 
@@ -441,23 +434,18 @@ void sendToDestination(
 }
 
 void sendToRoute(String route, data, String? category) async {
-  debugPrint("link 1 our route ${route}");
+  debugPrint("link 1 our route ${route} ${category} ${data}");
   switch (route) {
-    case "story":
-      // Navigation.instance.navigate('/main');
-      debugPrint("this route1");
-      Navigation.instance
-          .navigate('/story', args: '${category},${data},home_page');
-      break;
     case "opinion":
       // Navigation.instance.navigate('/main');
-      debugPrint("this route2 ${category},${data}");
+      //   debugPrint("this route2 ${category},${data}");
       Navigation.instance
           .navigate('/opinionDetails', args: '${data},${category}');
       break;
     default:
-      debugPrint("deeplink failed 1 ${route}");
-      Navigation.instance.navigate('/main', args: "");
+      // Navigation.instance.navigate('/main');
+      Navigation.instance
+          .navigate('/story', args: '${category},${data},home_page');
       break;
   }
 }

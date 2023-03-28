@@ -28,7 +28,7 @@ class newsfrom_suggestion extends StatelessWidget {
           if (count != 0) {
             return GestureDetector(
               onTap: () {
-                if (data.profile?.is_plan_active ?? false) {
+                if (item.has_permission?? false) {
                   Navigation.instance.navigate('/story',
                       args:
                       '${widget.categ},${item.seo_name},news_from');

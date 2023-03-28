@@ -263,7 +263,7 @@ class _NewsFromState extends State<NewsFrom> {
                                     ),
                                     TextSpan(
                                       text:
-                                          ' , ${Jiffy(data.news_from[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM ,yyyy")}',
+                                          ' , ${Jiffy(data.news_from[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM, yyyy")}',
                                       style: Theme.of(Navigation.instance
                                               .navigatorKey.currentContext!)
                                           .textTheme

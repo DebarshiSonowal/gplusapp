@@ -271,7 +271,7 @@ class _StoryPageState extends State<StoryPage> {
                                   widget.slug.toString().split(",")[2],
                                   data.selectedArticle!.id!,
                                   data.selectedArticle!.author_name!,
-                                  DateFormat("dd MMM ,yyyy").format(
+                                  DateFormat("dd MMM, yyyy").format(
                                       DateTime.parse(
                                           data.selectedArticle!.publish_date!)),
                                 );
@@ -310,7 +310,7 @@ class _StoryPageState extends State<StoryPage> {
                                         ),
                                         TextSpan(
                                           text:
-                                              ' , ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM ,yyyy")}',
+                                              ' , ${Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM, yyyy")}',
                                           style: Theme.of(Navigation.instance
                                                   .navigatorKey.currentContext!)
                                               .textTheme
@@ -346,7 +346,7 @@ class _StoryPageState extends State<StoryPage> {
                                       "g_plus_exclusive",
                                       data.selectedArticle!.id!,
                                       data.selectedArticle!.author_name!,
-                                      DateFormat("dd MMM ,yyyy").format(
+                                      DateFormat("dd MMM, yyyy").format(
                                           DateTime.parse(data
                                               .selectedArticle!.publish_date!)),
                                     );
@@ -386,7 +386,7 @@ class _StoryPageState extends State<StoryPage> {
                                       "g_plus_exclusive",
                                       data.selectedArticle!.id!,
                                       data.selectedArticle!.author_name!,
-                                      DateFormat("dd MMM ,yyyy").format(
+                                      DateFormat("dd MMM, yyyy").format(
                                           DateTime.parse(data
                                               .selectedArticle!.publish_date!)),
                                     );
@@ -425,7 +425,7 @@ class _StoryPageState extends State<StoryPage> {
                                       "g_plus_exclusive",
                                       data.selectedArticle!.id!,
                                       data.selectedArticle!.author_name!,
-                                      DateFormat("dd MMM ,yyyy").format(
+                                      DateFormat("dd MMM, yyyy").format(
                                           DateTime.parse(data
                                               .selectedArticle!.publish_date!)),
                                     );
@@ -464,7 +464,7 @@ class _StoryPageState extends State<StoryPage> {
                                       "g_plus_exclusive",
                                       data.selectedArticle!.id!,
                                       data.selectedArticle!.author_name!,
-                                      DateFormat("dd MMM ,yyyy").format(
+                                      DateFormat("dd MMM, yyyy").format(
                                           DateTime.parse(data
                                               .selectedArticle!.publish_date!)),
                                     );
@@ -882,7 +882,7 @@ class _StoryPageState extends State<StoryPage> {
                                       "g_plus_exclusive",
                                       data.selectedArticle!.id!,
                                       data.selectedArticle!.author_name!,
-                                      DateFormat("dd MMM ,yyyy").format(
+                                      DateFormat("dd MMM, yyyy").format(
                                           DateTime.parse(data
                                               .selectedArticle!.publish_date!)),
                                     );
@@ -1327,15 +1327,16 @@ class _StoryPageState extends State<StoryPage> {
     //     await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
     final dynamicLinkParams = DynamicLinkParameters(
       link: Uri.parse(
-          "${FlutterConfig.get('domain')}/link/story/${seo_name}/${first_cat_name}"),
+          // "${FlutterConfig.get('domain')}/link/story/${seo_name}/${first_cat_name}"),
+          "${FlutterConfig.get('domain')}/${first_cat_name}/${seo_name}"),
       uriPrefix: FlutterConfig.get('customHostDeepLink'),
       androidParameters: AndroidParameters(
         packageName: FlutterConfig.get("androidPackage"),
-        fallbackUrl: Uri.parse("https://guwahatiplus.com/${first_cat_name}/${seo_name}"),
+        // fallbackUrl: Uri.parse("https://guwahatiplus.com/${first_cat_name}/${seo_name}"),
       ),
       iosParameters: IOSParameters(
         bundleId: FlutterConfig.get('iosBundleId'),
-        fallbackUrl: Uri.parse("https://guwahatiplus.com/${first_cat_name}/${seo_name}"),
+        // fallbackUrl: Uri.parse("https://guwahatiplus.com/${first_cat_name}/${seo_name}"),
       ),
       navigationInfoParameters: const NavigationInfoParameters(
         forcedRedirectEnabled: true,

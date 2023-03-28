@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
@@ -278,31 +279,36 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
           SizedBox(
             height: 1.h,
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(
-                Icons.phone,
-                color: Storage.instance.isDarkMode
-                    ? Constance.secondaryColor
-                    : Colors.black,
-              ),
-              SizedBox(
-                width: 4.w,
-              ),
-              Expanded(
-                child: Text(
-                  '+91${current.details?.mobile.toString() ?? '7838372617'}',
-                  // overflow: TextOverflow.clip,
-                  style: Theme.of(context).textTheme.headline4?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
-                      ),
+          GestureDetector(
+            onTap: (){
+              _launchUrl(Uri.parse('tel:${current.details?.mobile}'));
+            },
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.phone,
+                  color: Storage.instance.isDarkMode
+                      ? Constance.secondaryColor
+                      : Colors.black,
                 ),
-              ),
-            ],
+                SizedBox(
+                  width: 4.w,
+                ),
+                Expanded(
+                  child: Text(
+                    '+91${current.details?.mobile.toString() ?? '7838372617'}',
+                    // overflow: TextOverflow.clip,
+                    style: Theme.of(context).textTheme.headline4?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                  ),
+                ),
+              ],
+            ),
           ),
           SizedBox(
             height: 2.h,
@@ -331,30 +337,30 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      openStatus(current.details!.opening_time!,
-                          current.details!.closing_time!),
-                      // ? "Open Now"
-                      // : "Closed Now",
-                      // openStatus(
-                      //     TimeFromString(
-                      //         current.details?.opening_time ?? "10AM"),
-                      //     TimeFromString(
-                      //         current.details?.closing_time ?? "11PM"),
-                      // ),
-                      // overflow: TextOverflow.clip,
-                      style: Theme.of(context).textTheme.headline4?.copyWith(
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
+                    // Text(
+                    //   openStatus(current.details!.opening_time!,
+                    //       current.details!.closing_time!),
+                    //   // ? "Open Now"
+                    //   // : "Closed Now",
+                    //   // openStatus(
+                    //   //     TimeFromString(
+                    //   //         current.details?.opening_time ?? "10AM"),
+                    //   //     TimeFromString(
+                    //   //         current.details?.closing_time ?? "11PM"),
+                    //   // ),
+                    //   // overflow: TextOverflow.clip,
+                    //   style: Theme.of(context).textTheme.headline4?.copyWith(
+                    //         color: Storage.instance.isDarkMode
+                    //             ? Colors.white
+                    //             : Colors.black,
+                    //         fontWeight: FontWeight.bold,
+                    //       ),
+                    // ),
                   ],
                 ),
-                SizedBox(
-                  width: 4.w,
-                ),
+                // SizedBox(
+                //   width: 4.w,
+                // ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -736,5 +742,10 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
     }
 
     return false;
+  }
+  Future<void> _launchUrl(_url) async {
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
   }
 }

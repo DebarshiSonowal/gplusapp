@@ -28,7 +28,7 @@ class ShopTypePageItem extends StatelessWidget {
           child: CachedNetworkImage(
             // height: 6.h,
             height: 14.h,
-            width: 14.w,
+            width: 22.w,
             fit: BoxFit.fill,
             imageUrl: current.image_file_name ?? "",
             placeholder: (cont, _) {
