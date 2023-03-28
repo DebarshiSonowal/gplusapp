@@ -34,7 +34,8 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("notification", true, _scaffoldKey),
+      appBar: Constance.buildAppBar2("notification"),
+      // appBar: Constance.buildAppBar("notification", true, _scaffoldKey),
       // drawer: BergerMenuMemPage(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Constance.primaryColor,
@@ -46,9 +47,9 @@ class _NotificationPageState extends State<NotificationPage> {
           color: Constance.secondaryColor,
         ),
       ),
-      drawer: const BergerMenuMemPage(
-        screen: "notification",
-      ),
+      // drawer: const BergerMenuMemPage(
+      //   screen: "notification",
+      // ),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           height: MediaQuery.of(context).size.height,

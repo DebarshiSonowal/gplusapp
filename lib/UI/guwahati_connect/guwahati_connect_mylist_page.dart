@@ -126,8 +126,9 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("guwahati", true, scaffoldKey),
-      drawer: const BergerMenuMemPage(screen: "guwahati"),
+      // appBar: Constance.buildAppBar("guwahati", true, scaffoldKey),
+      appBar: Constance.buildAppBar2("guwahati"),
+      // drawer: const BergerMenuMemPage(screen: "guwahati"),
       key: scaffoldKey,
       // drawer: BergerMenuMemPage(),
 

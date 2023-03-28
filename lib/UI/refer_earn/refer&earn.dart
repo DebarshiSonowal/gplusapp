@@ -32,10 +32,11 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
       key: _scaffoldKey,
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar("redeem_offer", true, _scaffoldKey),
-      drawer: const BergerMenuMemPage(
-        screen: "redeem_offer",
-      ),
+      // appBar: Constance.buildAppBar("redeem_offer", true, _scaffoldKey),
+      appBar: Constance.buildAppBar2("redeem_offer"),
+      // drawer: const BergerMenuMemPage(
+      //   screen: "redeem_offer",
+      // ),
       body: Container(
         height: double.infinity,
         width: double.infinity,

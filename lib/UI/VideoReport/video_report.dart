@@ -90,8 +90,9 @@ class _VideoReportState extends State<VideoReport> {
       key: _scaffoldKey,
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar("video", true, _scaffoldKey),
-      drawer: const BergerMenuMemPage(screen: "video",),
+      // appBar: Constance.buildAppBar("video", true, _scaffoldKey),
+      appBar: Constance.buildAppBar2("video"),
+      // drawer: const BergerMenuMemPage(screen: "video",),
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
         enablePullDown: true,
@@ -184,19 +185,19 @@ class _VideoReportState extends State<VideoReport> {
                                           ),
                                           GestureDetector(
                                             onTap: () {
-                                              if (data.profile
-                                                      ?.is_plan_active ??
-                                                  false) {
+                                              // if (data.profile
+                                              //         ?.is_plan_active ??
+                                              //     false) {
                                                 Navigation.instance.navigate(
                                                     '/videoPlayer',
                                                     args:
                                                         '${data.video_news[0].youtube_id},${'2'}');
-                                              } else {
-                                                Constance.showMembershipPrompt(
-                                                    context, () {
-                                                  setState(() {});
-                                                });
-                                              }
+                                              // } else {
+                                              //   Constance.showMembershipPrompt(
+                                              //       context, () {
+                                              //     setState(() {});
+                                              //   });
+                                              // }
                                             },
                                             child: Text(
                                               'Play Now',
@@ -269,14 +270,14 @@ class _VideoReportState extends State<VideoReport> {
                                 }
                                 return GestureDetector(
                                   onTap: () {
-                                    if (data.profile?.is_plan_active ?? false) {
+                                    // if (data.profile?.is_plan_active ?? false) {
                                       Navigation.instance.navigate(
                                           '/videoPlayer',
                                           args: '${item.youtube_id},${2}');
-                                    } else {
-                                      Constance.showMembershipPrompt(
-                                          context, () {});
-                                    }
+                                    // } else {
+                                    //   Constance.showMembershipPrompt(
+                                    //       context, () {});
+                                    // }
                                   },
                                   child: VideoReportItem(item: item),
                                 );

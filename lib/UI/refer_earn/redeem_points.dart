@@ -31,10 +31,11 @@ class _RedeemPointsState extends State<RedeemPoints> {
       key: _scaffoldKey,
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar("redeem_offer", true, _scaffoldKey),
-      drawer: const BergerMenuMemPage(
-        screen: "redeem_offer",
-      ),
+      appBar: Constance.buildAppBar2("redeem_offer"),
+      // appBar: Constance.buildAppBar("redeem_offer", true, _scaffoldKey),
+      // drawer: const BergerMenuMemPage(
+      //   screen: "redeem_offer",
+      // ),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           padding: EdgeInsets.symmetric(

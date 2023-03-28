@@ -88,9 +88,10 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Constance.buildAppBar("classified",true,scaffoldKey),
+      // appBar: Constance.buildAppBar("classified",true,scaffoldKey),
+      appBar: Constance.buildAppBar2("classified"),
       key: scaffoldKey,
-      drawer: const BergerMenuMemPage(screen: "classified"),
+      // drawer: const BergerMenuMemPage(screen: "classified"),
       // drawer: BergerMenuMemPage(),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,

@@ -52,10 +52,11 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("settings", true, _scaffoldKey),
-      drawer: const BergerMenuMemPage(
-        screen: "settings",
-      ),
+      // appBar: Constance.buildAppBar("settings", true, _scaffoldKey),
+      appBar: Constance.buildAppBar2("settings"),
+      // drawer: const BergerMenuMemPage(
+      //   screen: "settings",
+      // ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

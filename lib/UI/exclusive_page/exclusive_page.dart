@@ -84,7 +84,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: Constance.buildAppBar2("exclusive"),
-      drawer: const BergerMenuMemPage(screen: "exclusive"),
+      // drawer: const BergerMenuMemPage(screen: "exclusive"),
       backgroundColor: Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(

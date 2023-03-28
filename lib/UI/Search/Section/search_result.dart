@@ -7,16 +7,14 @@ import 'others_section.dart';
 
 class SearchResultWidget extends StatelessWidget {
   final int selected;
-
-  const SearchResultWidget({super.key, required this.selected});
+  final bool isEmpty;
+  const SearchResultWidget({super.key, required this.selected, required this.isEmpty});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DataProvider>(builder: (context, data, _) {
-      return Expanded(
-        child:
-        selected == 0 ? NewsSection(data: data) : OthersSection(data: data),
-      );
-    });
+    return Expanded(
+      child:
+      selected == 0 ? NewsSection(isEmpty: isEmpty,) : OthersSection(isEmpty: isEmpty,),
+    );
   }
 }

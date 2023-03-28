@@ -29,8 +29,9 @@ class _BlockedUsersListPageState extends State<BlockedUsersListPage> {
       key: _scaffoldKey,
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar("blocked",true,_scaffoldKey),
-      drawer: const BergerMenuMemPage(screen: "blocked",),
+      // appBar: Constance.buildAppBar("blocked",true,_scaffoldKey),
+      appBar: Constance.buildAppBar2("blocked"),
+      // drawer: const BergerMenuMemPage(screen: "blocked",),
       body: Container(
         height: double.infinity,
         width: double.infinity,

@@ -82,8 +82,9 @@ class _NewsFromState extends State<NewsFrom> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("news_from",true,_scaffoldKey),
-      drawer: const BergerMenuMemPage(screen: "news_from",),
+      // appBar: Constance.buildAppBar("news_from",true,_scaffoldKey),
+      appBar: Constance.buildAppBar2("news_from"),
+      // drawer: const BergerMenuMemPage(screen: "news_from",),
       backgroundColor: Storage.instance.isDarkMode?Colors.black:Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(

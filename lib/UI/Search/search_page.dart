@@ -43,16 +43,18 @@ class _SearchPageState extends State<SearchPage> {
     _searchQueryController.dispose();
   }
 
+  bool isEmpty = false;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("search", true, _scaffoldKey),
-      drawer: const BergerMenuMemPage(
-        screen: "profile",
-      ),
+      // appBar: Constance.buildAppBar("search", true, _scaffoldKey),
+      appBar: Constance.buildAppBar2("search"),
+      // drawer: const BergerMenuMemPage(
+      //   screen: "profile",
+      // ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -228,6 +230,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             SearchResultWidget(
               selected: selected,
+              isEmpty: isEmpty,
             ),
           ],
         ),
@@ -246,23 +249,17 @@ class _SearchPageState extends State<SearchPage> {
                     listen: false)
                 .profile!,
             query);
-        if (response.data?.isNotEmpty ?? false) {
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .setSearchResult(response.data ?? []);
-        } else {
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .setSearchResult([]);
-        }
-
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .setSearchResult(response.data ?? []);
         Navigation.instance.goBack();
         try {
-          setState(() {});
+          setState(() {
+            isEmpty = false;
+          });
         } catch (e) {
-          print(e);
+          debugPrint(e.toString());
         }
       } else {
         logTheSearchCompletionClick(
@@ -271,7 +268,14 @@ class _SearchPageState extends State<SearchPage> {
                     listen: false)
                 .profile!,
             query);
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .setSearchResult(response.data ?? []);
         Navigation.instance.goBack();
+        setState(() {
+          isEmpty = true;
+        });
       }
     } else {
       final response = await ApiProvider.instance.Otherssearch(query, type);

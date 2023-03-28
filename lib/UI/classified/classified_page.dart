@@ -52,14 +52,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
       if (!Storage.instance.isClassified) {
         showDialogBox();
       }
-      print('init');
     });
-    // Future.delayed(
-    //     Duration.zero,
-    //         () => Provider.of<DataProvider>(
-    //         Navigation.instance.navigatorKey.currentContext ?? context,
-    //         listen: false)
-    //         .setCurrent(4));
   }
 
   void _onRefresh() async {
@@ -373,11 +366,6 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                             itemCount: data.classified.length,
                             itemBuilder: (cont, count) {
                               var current = data.classified[count];
-                              // bool like = (selected == 2
-                              //     ? true
-                              //     : (current.is_favourite ?? false)
-                              //         ? true
-                              //         : false);
                               return ClassifiedCard(
                                   update: () {
                                     setState(() {
@@ -505,6 +493,9 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   }
 
   void fetchClassified(result) async {
+    setState(() {
+      isEmpty = false;
+    });
     debugPrint(result);
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance
@@ -514,10 +505,15 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setClassified(response.classifieds ?? []);
-
+      setState(() {
+        isEmpty = true;
+      });
       Navigation.instance.goBack();
     } else {
       Navigation.instance.goBack();
+      setState(() {
+        isEmpty = true;
+      });
     }
   }
 
