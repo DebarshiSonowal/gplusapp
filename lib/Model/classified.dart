@@ -58,13 +58,14 @@ class Classified {
 }
 
 class ClassifiedResponse {
-  bool? success;
+  bool? success,has_permission=false;
   String? message;
   List<Classified>? classifieds;
 
   ClassifiedResponse.fromJson(json) {
     success = json['success'].toString() == 'true' ? true : false;
     message = json['message'] ?? "Something Went Wrong";
+    has_permission = json['has_permission']??false;
     classifieds = json['data'] == null
         ? []
         : (json['data'] as List).map((e) => Classified.fromJson(e)).toList();

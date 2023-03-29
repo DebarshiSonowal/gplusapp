@@ -26,7 +26,7 @@ import 'multiple_image_widget.dart';
 class GuwahatiConnectPostCard extends StatelessWidget {
   GuwahatiConnect data;
   int count, type;
-  bool like, dislike, is_mine;
+  bool like, dislike, is_mine, has_permission;
   final GlobalKey<ScaffoldState> scaffoldKey;
   final _searchQueryController = TextEditingController();
   final void Function() fetchGuwahatiConnect, showMembership;
@@ -35,18 +35,18 @@ class GuwahatiConnectPostCard extends StatelessWidget {
   final ScrollController _controller = ScrollController();
 
   GuwahatiConnectPostCard(
-    this.data,
-    this.count,
-    this.like,
-    this.dislike,
-    this.scaffoldKey,
-    this.fetchGuwahatiConnect,
-    this.postLike,
-    this.showing,
-    this.type,
-    this.is_mine,
-    this.showMembership,
-  );
+      this.data,
+      this.count,
+      this.like,
+      this.dislike,
+      this.scaffoldKey,
+      this.fetchGuwahatiConnect,
+      this.postLike,
+      this.showing,
+      this.type,
+      this.is_mine,
+      this.showMembership,
+      this.has_permission);
 
   void _scrollDown() {
     Future.delayed(const Duration(seconds: 1), () {
@@ -358,7 +358,6 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                               type: MaterialType.transparency,
                               child: IconButton(
                                 onPressed: () {
-
                                   postLike(data.id!, 1);
                                   _(() {
                                     like = !like;
@@ -368,12 +367,12 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                   });
                                   logTheReactionPostClick(
                                     Provider.of<DataProvider>(
-                                        Navigation.instance.navigatorKey
-                                            .currentContext ??
-                                            context,
-                                        listen: false)
+                                            Navigation.instance.navigatorKey
+                                                    .currentContext ??
+                                                context,
+                                            listen: false)
                                         .profile!,
-                                    data.question!,
+                                    data.question!.length>100?data.question!.substring(0,100):data.question!,
                                     like ? "like" : "dislike",
                                   );
                                   debugPrint('${like}');
@@ -396,14 +395,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                               type: MaterialType.transparency,
                               child: IconButton(
                                 onPressed: () {
-                                  if (Provider.of<DataProvider>(
-                                              Navigation.instance.navigatorKey
-                                                      .currentContext ??
-                                                  context,
-                                              listen: false)
-                                          .profile
-                                          ?.is_plan_active ??
-                                      false) {
+                                  if (has_permission ?? false) {
                                     showComments(count, context);
                                   } else {
                                     showMembership();
@@ -639,7 +631,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
         "user_id_event": profile.id,
-        "post": post,
+        "post": post.length>100?post.substring(0,100):post,
         // "cta_click": cta_click,
         "screen_name": "guwahati",
         "user_login_status":
@@ -798,7 +790,7 @@ void logTheEditAPostClick(Profile profile, String post) async {
       "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
       "client_id_event": id,
       "user_id_event": profile.id,
-      "post": post,
+      "post": post.length>100?post.substring(0,100):post,
       // "cta_click": cta_click,
       "screen_name": "guwahati",
       "user_login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
@@ -839,7 +831,7 @@ void logTheReportPostClick(
       "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
       "client_id_event": id,
       "user_id_event": profile.id,
-      "post": post,
+      "post": post.length>100?post.substring(0,100):post,
       "cta_click": cta_click,
       "screen_name": "guwahati",
       "user_login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",

@@ -89,14 +89,15 @@ class _BeAMemberState extends State<BeAMember> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("subscription",true,_scaffoldKey),
-      drawer: const BergerMenuMemPage(screen: "subscription",),
+      // appBar: Constance.buildAppBar("subscription",true,_scaffoldKey),
+      appBar: Constance.buildAppBar2("subscription"),
+      // drawer: const BergerMenuMemPage(screen: "subscription",),
       backgroundColor: Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
-        header: WaterDropHeader(),
+        header: const WaterDropHeader(),
         footer: CustomFooter(
           builder: (BuildContext context, LoadStatus? mode) {
             Widget body;

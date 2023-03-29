@@ -88,6 +88,17 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         ),
                         GestureDetector(
                           onTap: () {
+                            logTheHambergerOptionClick(
+                              Provider.of<DataProvider>(
+                                      Navigation.instance.navigatorKey
+                                              .currentContext ??
+                                          context,
+                                      listen: false)
+                                  .profile!,
+                              widget.screen,
+                              "view_profile",
+                              "NA",
+                            );
                             Navigation.instance.navigate('/editProfile');
                           },
                           child: Text(
@@ -113,6 +124,18 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                 // ),
                 LocationSection(
                   data: data,
+                  onTap: () {
+                    logTheHambergerOptionClick(
+                      Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .profile!,
+                      widget.screen,
+                      "location",
+                      "NA",
+                    );
+                  },
                 ),
                 const Divider(
                   color: Colors.white,
@@ -163,30 +186,31 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   padding: EdgeInsets.symmetric(vertical: 1.0.h),
                   child: GestureDetector(
                     onTap: () {
-                      if (Provider.of<DataProvider>(
-                                  Navigation.instance.navigatorKey
-                                          .currentContext ??
-                                      context,
-                                  listen: false)
-                              .profile
-                              ?.is_plan_active ??
-                          false) {
-                        logTheHambergerOptionClick(
-                          Provider.of<DataProvider>(
-                                  Navigation.instance.navigatorKey
-                                          .currentContext ??
-                                      context,
-                                  listen: false)
-                              .profile!,
-                          widget.screen,
-                          "bookmark",
-                          "NA",
-                        );
-                        Navigation.instance.navigate('/bookmarks');
-                        // showError("Oops! You are not a member yet");
-                      } else {
-                        showError("Oops! You are not a member yet");
-                      }
+                      // if (Provider.of<DataProvider>(
+                      //             Navigation.instance.navigatorKey
+                      //                     .currentContext ??
+                      //                 context,
+                      //             listen: false)
+                      //         .profile
+                      //         ?.is_plan_active ??
+                      //     false) {
+                      //
+                      //   // showError("Oops! You are not a member yet");
+                      // } else {
+                      //   showError("Oops! You are not a member yet");
+                      // }
+                      logTheHambergerOptionClick(
+                        Provider.of<DataProvider>(
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .profile!,
+                        widget.screen,
+                        "bookmark",
+                        "NA",
+                      );
+                      Navigation.instance.navigate('/bookmarks');
                     },
                     child: Row(
                       children: [
@@ -226,6 +250,17 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             .profile
                             ?.is_plan_active ??
                         false) {
+                      logTheHambergerOptionClick(
+                        Provider.of<DataProvider>(
+                            Navigation.instance.navigatorKey
+                                .currentContext ??
+                                context,
+                            listen: false)
+                            .profile!,
+                        widget.screen,
+                        "e-paper",
+                        "NA",
+                      );
                       downloadEpaper();
                       // showError("Oops! You are not a member yet");
                     } else {
@@ -260,7 +295,19 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   color: Colors.white,
                   thickness: 0.2,
                 ),
-                MembershipSection(data: data),
+                MembershipSection(data: data,onTap:(){
+                  logTheHambergerOptionClick(
+                    Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey
+                            .currentContext ??
+                            context,
+                        listen: false)
+                        .profile!,
+                    widget.screen,
+                    "membership",
+                    "NA",
+                  );
+                }),
 
                 (!Provider.of<DataProvider>(
                             Navigation.instance.navigatorKey.currentContext!)
@@ -332,9 +379,9 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   onTap: (opt) {
                     logTheHambergerOptionClick(
                       Provider.of<DataProvider>(
-                          Navigation.instance.navigatorKey.currentContext ??
-                              context,
-                          listen: false)
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
                           .profile!,
                       widget.screen,
                       opt,

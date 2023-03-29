@@ -97,7 +97,7 @@ class aboutSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
-                onTap("privacy");
+                onTap("privacy_policy");
                 Navigation.instance.navigate('/privacy');
               },
               child: Row(
@@ -131,7 +131,7 @@ class aboutSection extends StatelessWidget {
               splashColor: Constance.secondaryColor,
               radius: 15.h,
               onTap: () {
-                onTap("refund");
+                onTap("refund_policy");
                 Navigation.instance.navigate('/refundPolicy');
               },
               child: Row(

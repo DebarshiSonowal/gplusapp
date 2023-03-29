@@ -141,18 +141,20 @@ class _SearchPageState extends State<SearchPage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        selected = 0;
-                      });
-                      logTheSearchCategoryClick(
-                          Provider.of<DataProvider>(
-                                  Navigation.instance.navigatorKey
-                                          .currentContext ??
-                                      context,
-                                  listen: false)
-                              .profile!,
-                          "news");
-                      search(_searchQueryController.text, selected);
+                      if (selected != 0) {
+                        setState(() {
+                          selected = 0;
+                        });
+                        logTheSearchCategoryClick(
+                            Provider.of<DataProvider>(
+                                    Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                        context,
+                                    listen: false)
+                                .profile!,
+                            "news");
+                        search(_searchQueryController.text, selected);
+                      }
                     },
                     child: Container(
                       height: 5.h,
@@ -178,18 +180,20 @@ class _SearchPageState extends State<SearchPage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        selected = 1;
-                      });
-                      logTheSearchCategoryClick(
-                          Provider.of<DataProvider>(
-                                  Navigation.instance.navigatorKey
-                                          .currentContext ??
-                                      context,
-                                  listen: false)
-                              .profile!,
-                          "others");
-                      search(_searchQueryController.text, selected);
+                      if (selected != 1) {
+                        setState(() {
+                          selected = 1;
+                        });
+                        logTheSearchCategoryClick(
+                            Provider.of<DataProvider>(
+                                    Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                        context,
+                                    listen: false)
+                                .profile!,
+                            "others");
+                        search(_searchQueryController.text, selected);
+                      }
                     },
                     child: Container(
                       height: 5.h,

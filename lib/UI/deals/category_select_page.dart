@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -14,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 
@@ -103,135 +105,137 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
           color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
           padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
           child: Consumer<DataProvider>(builder: (context, current, _) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: CachedNetworkImage(
-                      placeholder: (cont, _) {
-                        return Image.asset(
-                          Constance.logoIcon,
-                          // color: Colors.black,
-                        );
-                      },
-                      errorWidget: (cont, _, e) {
-                        return Image.network(
-                          Constance.defaultImage,
-                          fit: BoxFit.fitWidth,
-                        );
-                      },
-                      height: 27.h,
-                      width: double.infinity,
-                      imageUrl: current.details?.image_file_name ??
-                          Constance.salonImage,
-                      fit: BoxFit.fill,
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        placeholder: (cont, _) {
+                          return Image.asset(
+                            Constance.logoIcon,
+                            // color: Colors.black,
+                          );
+                        },
+                        errorWidget: (cont, _, e) {
+                          return Image.network(
+                            Constance.defaultImage,
+                            fit: BoxFit.fitWidth,
+                          );
+                        },
+                        height: 27.h,
+                        width: double.infinity,
+                        imageUrl: current.details?.image_file_name ??
+                            Constance.salonImage,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Text(
-                  current.details?.shop_name ?? 'The Looks Salon',
-                  style: Theme.of(context).textTheme.headline2?.copyWith(
-                      color: Storage.instance.isDarkMode
-                          ? Colors.white
-                          : Colors.black,
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selected = 0;
-                          });
-                        },
-                        child: Container(
-                          height: 5.h,
-                          decoration: BoxDecoration(
-                            color: selected == 0
-                                ? Constance.secondaryColor
-                                : Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
-                            // borderRadius: BorderRadius.circular(),
-                            borderRadius: const BorderRadius.only(
-                              // topRight: Radius.circular(5.0),
-                              // bottomRight: Radius.circular(5.0),
-                              topLeft: Radius.circular(5.0),
-                              bottomLeft: Radius.circular(5.0),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Text(
+                    current.details?.shop_name ?? 'The Looks Salon',
+                    style: Theme.of(context).textTheme.headline2?.copyWith(
+                        color: Storage.instance.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selected = 0;
+                            });
+                          },
+                          child: Container(
+                            height: 5.h,
+                            decoration: BoxDecoration(
+                              color: selected == 0
+                                  ? Constance.secondaryColor
+                                  : Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
+                              // borderRadius: BorderRadius.circular(),
+                              borderRadius: const BorderRadius.only(
+                                // topRight: Radius.circular(5.0),
+                                // bottomRight: Radius.circular(5.0),
+                                topLeft: Radius.circular(5.0),
+                                bottomLeft: Radius.circular(5.0),
+                              ),
                             ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Details',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4
-                                  ?.copyWith(
-                                    color: selected == 0
-                                        ? Colors.black
-                                        : Storage.instance.isDarkMode
-                                            ? Colors.black
-                                            : Colors.white,
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selected = 1;
-                          });
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: selected == 1
-                                ? Constance.secondaryColor
-                                : Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
-                            // borderRadius: BorderRadius.circular(),
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5.0),
-                              bottomRight: Radius.circular(5.0),
-                              // topLeft: Radius.circular(40.0),
-                              // bottomLeft: Radius.circular(40.0),
-                            ),
-                          ),
-                          height: 5.h,
-                          child: Center(
-                            child: Text(
-                              'Offer',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4
-                                  ?.copyWith(
-                                    color: selected == 1
-                                        ? Colors.black
-                                        : Storage.instance.isDarkMode
-                                            ? Colors.black
-                                            : Colors.white,
-                                  ),
+                            child: Center(
+                              child: Text(
+                                'Details',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4
+                                    ?.copyWith(
+                                      color: selected == 0
+                                          ? Colors.black
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.black
+                                              : Colors.white,
+                                    ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                getBody(current),
-              ],
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selected = 1;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: selected == 1
+                                  ? Constance.secondaryColor
+                                  : Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
+                              // borderRadius: BorderRadius.circular(),
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(5.0),
+                                bottomRight: Radius.circular(5.0),
+                                // topLeft: Radius.circular(40.0),
+                                // bottomLeft: Radius.circular(40.0),
+                              ),
+                            ),
+                            height: 5.h,
+                            child: Center(
+                              child: Text(
+                                'Offer',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4
+                                    ?.copyWith(
+                                      color: selected == 1
+                                          ? Colors.black
+                                          : Storage.instance.isDarkMode
+                                              ? Colors.black
+                                              : Colors.white,
+                                    ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  getBody(current),
+                ],
+              ),
             );
           }),
         ),
@@ -280,7 +284,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
             height: 1.h,
           ),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               _launchUrl(Uri.parse('tel:${current.details?.mobile}'));
             },
             child: Row(
@@ -579,11 +583,39 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
         // Navigation.instance.goBack();
         // _refreshController.refreshCompleted();
       }
+      logTheRedeemOfferClick(Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .profile!);
       Navigation.instance.navigate('/redeemOfferPage');
     } else {
       Navigation.instance.goBack();
       showError(response.message ?? "Something went wrong");
     }
+  }
+
+  void logTheRedeemOfferClick(
+    Profile profile,
+    // String sort_applied,
+  ) async {
+    debugPrint("LOGGING OFFER");
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "redeem_offer",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        // "sort_applied": sort_applied,
+        "screen_name": "redeem_offer",
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 
   void fetchHistory() async {
@@ -743,6 +775,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
 
     return false;
   }
+
   Future<void> _launchUrl(_url) async {
     if (!await launchUrl(_url)) {
       throw 'Could not launch $_url';

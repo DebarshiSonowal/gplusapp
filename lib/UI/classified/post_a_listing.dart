@@ -735,7 +735,7 @@ class _PostAListingState extends State<PostAListing> {
         "user_id_event": profile.id,
         "story_category_selected": story_category_selected,
         "locality": locality,
-        "title": title,
+        "title": title.length>100?title.substring(0,100):title,
         "field_entered": field_entered.length > 100
             ? field_entered.toString().substring(0, 100)
             : field_entered,

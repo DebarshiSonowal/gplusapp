@@ -67,13 +67,14 @@ class GCAttachment {
 }
 
 class GuwahatiConnectResponse {
-  bool? success;
+  bool? success, has_permission = false;
   String? message;
   List<GuwahatiConnect> posts = [];
 
   GuwahatiConnectResponse.fromJson(json) {
     success = json['success'] ?? false;
     message = json['message'] ?? "";
+    has_permission = json['has_permission'] ?? false;
     posts = json['data'] == null
         ? []
         : (json['data'] as List)
@@ -86,6 +87,7 @@ class GuwahatiConnectResponse {
     message = msg ?? "Something went wrong";
   }
 }
+
 class GuwahatiConnectSpecificResponse {
   bool? success;
   String? message;

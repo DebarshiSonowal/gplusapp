@@ -1360,7 +1360,7 @@ class ApiProvider {
     try {
       Response? response = await dio?.get(
         url,
-        // queryParameters: data,
+        queryParameters: data,
       );
       debugPrint("ShopResponse response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {

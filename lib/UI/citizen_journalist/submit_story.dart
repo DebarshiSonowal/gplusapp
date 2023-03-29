@@ -631,8 +631,8 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
         "client_id_event": id,
         "user_id_event": profile.id,
         // "post": post,
-        "title": title,
-        "field_entered": field_entered,
+        "title": title.length>100?title.substring(0,100):title,
+        "field_entered": field_entered.length>100?field_entered.substring(0,100):field_entered,
         "cta_click": "save_as_draft",
         "screen_name": "citizen_journalist",
         "user_login_status":

@@ -214,7 +214,7 @@ class CommentUI extends StatelessWidget {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
         "user_id_event": profile.id,
-        "post": post,
+        "post": post.length>100?post.substring(0,100):post,
         // "cta_click": cta_click,
         "screen_name": "guwahati",
         "user_login_status":

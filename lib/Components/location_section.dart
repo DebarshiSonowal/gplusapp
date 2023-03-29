@@ -8,10 +8,10 @@ import '../Navigation/Navigate.dart';
 
 class LocationSection extends StatelessWidget {
   final DataProvider data;
-
+  final Function onTap;
   const LocationSection({
     Key? key,
-    required this.data,
+    required this.data, required this.onTap,
   }) : super(key: key);
 
   @override
@@ -46,6 +46,7 @@ class LocationSection extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
+              onTap();
               Navigation.instance.navigate('/editSavedAddresses', args: 1);
             },
             child: Row(

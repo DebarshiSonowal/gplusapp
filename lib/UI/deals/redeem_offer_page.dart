@@ -289,9 +289,9 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
                                       horizontal: 4.w, vertical: 1.h),
                                   child: Text(
                                     data.redeemDetails?.disclaimer ??
-                                    ' is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using '
-                                    '\'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum '
-                                    'as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose',
+                                        ' is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using '
+                                            '\'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum '
+                                            'as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline5
@@ -374,10 +374,7 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
                   child: CustomButton(
                       txt: 'Go Ahead',
                       onTap: () {
-                        logTheRedeemOfferClick(Provider.of<DataProvider>(
-                            Navigation.instance.navigatorKey.currentContext ?? context,
-                            listen: false)
-                                .profile!);
+
                         Navigation.instance.goBack();
                         Navigation.instance.navigate('/redeemOfferPage');
                       }),
@@ -410,28 +407,9 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
       },
     );
   }
-  void logTheRedeemOfferClick(
-      Profile profile,
-      // String sort_applied,
-      ) async {
-    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
-    // String id = await FirebaseInstallations.instance.getId();
-    await FirebaseAnalytics.instance.logEvent(
-      name: "redeem_offer",
-      parameters: {
-        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
-        "client_id_event": id,
-        "user_id_event": profile.id,
-        // "sort_applied": sort_applied,
-        "screen_name": "redeem_offer",
-        "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
-        "client_id": id,
-        "user_id_tvc": profile.id,
-      },
-    );
-  }
+
+
+
   void fetchDeals() async {
     final response = await ApiProvider.instance.getPromotedDeals();
     if (response.success ?? false) {

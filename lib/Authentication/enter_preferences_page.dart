@@ -284,10 +284,10 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
       if (i == 0) {
         temp = '${list[i].seo_name},';
       } else {
-        temp += '${list[i].seo_name}';
+        temp += '${list[i].seo_name},';
       }
     }
-    print(temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp);
+    debugPrint(temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp);
 
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }

@@ -7,6 +7,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
+import '../../Model/locality.dart';
 import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
@@ -159,20 +160,22 @@ class _FilterPageState extends State<FilterPage> {
                 }),
               ],
             ),
-            _map.isNotEmpty &&
-                    _map.values
-                        .toList()
-                        .where((element) => element == true)
-                        .isNotEmpty
-                ? Container(
-                    margin: EdgeInsets.only(bottom: 2.h, ),
-                    width: 80.w,
-                    height: 5.h,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: CustomButton(
+            Container(
+              margin: EdgeInsets.only(
+                bottom: 2.h,
+              ),
+              width: 80.w,
+              height: 5.h,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: _map.isNotEmpty &&
+                            _map.values
+                                .toList()
+                                .where((element) => element == true)
+                                .isNotEmpty
+                        ? CustomButton(
                             color: Colors.white,
                             txt: 'Clear',
                             onTap: () {
@@ -181,48 +184,53 @@ class _FilterPageState extends State<FilterPage> {
                                 _map.clear();
                               });
                             },
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        Expanded(
-
-                          child: CustomButton(
-                            txt: 'Done',
-                            onTap: () {
-                              Storage.instance.setFilter(getComaSeparated(
-                                _map.keys.toList(),
-                                _map.values.toList(),
-                              ));
-                              logTheFilterAppliedClick(
-                                  Provider.of<DataProvider>(
-                                          Navigation.instance.navigatorKey
-                                                  .currentContext ??
-                                              context,
-                                          listen: false)
-                                      .profile!,
-                                  getComaSeparatedName(
+                          )
+                        : Container(),
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  Expanded(
+                    child: CustomButton(
+                      txt: 'Done',
+                      onTap: () {
+                        Storage.instance.setFilter(getComaSeparated(
+                          _map.keys.toList(),
+                          _map.values.toList(),
+                        ));
+                        logTheFilterAppliedClick(
+                            Provider.of<DataProvider>(
+                                    Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                        context,
+                                    listen: false)
+                                .profile!,
+                            _map.isNotEmpty
+                                ? getComaSeparatedName(
                                     _map.keys.toList(),
                                     _map.values.toList(),
-                                  ));
-                              Navigator.pop(
-                                  context,
-                                  getComaSeparated(
+                                    Provider.of<DataProvider>(context,
+                                            listen: false)
+                                        .locality)
+                                : "clear");
+                        Navigator.pop(
+                            context,
+                            _map.isNotEmpty
+                                ? getComaSeparated(
                                     _map.keys.toList(),
                                     _map.values.toList(),
-                                  ));
-                              //  _map.keys.toList()_map.keys.toList()
-                              // print(
-                              //
-                              // );
-                            },
-                          ),
-                        ),
-                      ],
+                                  )
+                                : "");
+                        //  _map.keys.toList()_map.keys.toList()
+                        // print(
+                        //
+                        // );
+                      },
                     ),
-                  )
-                : Container(),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -243,14 +251,17 @@ class _FilterPageState extends State<FilterPage> {
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
 
-  String getComaSeparatedName(List<dynamic> list, List<dynamic> list2) {
+  String getComaSeparatedName(
+      List<dynamic> list, List<dynamic> list2, List<Locality> list3) {
     String temp = "";
     for (int i = 0; i < list.length; i++) {
       if (list2[i] == true) {
         if (i == 0) {
-          temp = '${list[i]},';
+          temp =
+              '${list3.firstWhere((element) => element.id == list[i]).name},';
         } else {
-          temp += '${list[i]},';
+          temp +=
+              '${list3.firstWhere((element) => element.id == list[i]).name},';
         }
       }
     }
@@ -262,7 +273,7 @@ class _FilterPageState extends State<FilterPage> {
     final response = await ApiProvider.instance.getClassifiedCategory();
     if (response.success ?? false) {
       // Navigation.instance.goBack();
-      print(response.categories);
+      debugPrint(response.categories.toString());
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
@@ -288,7 +299,9 @@ class _FilterPageState extends State<FilterPage> {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
         "user_id_event": profile.id,
-        "filter_applied": filter_applied,
+        "filter_applied": filter_applied.length > 100
+            ? filter_applied.substring(0, 100)
+            : filter_applied,
         // "cta_click": cta_click,
         "screen_name": "filtered",
         "user_login_status":

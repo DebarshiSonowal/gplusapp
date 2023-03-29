@@ -26,7 +26,7 @@ class PromotedDealItemData extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: 45.w,
+                      width: 46.w,
                       child: Text(
                         data.vendor?.shop_name ?? "",
                         maxLines: 2,
@@ -39,7 +39,7 @@ class PromotedDealItemData extends StatelessWidget {
                     //   height: 0.5.h,
                     // ),
                     SizedBox(
-                      width: 45.w,
+                      width: 46.w,
                       child: Text(
                         data.vendor?.address ?? "",
                         maxLines: 1,
@@ -86,7 +86,7 @@ class PromotedDealItemData extends StatelessWidget {
                     color: Constance.thirdColor,
                   ),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         data.title ?? "",

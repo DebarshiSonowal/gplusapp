@@ -93,19 +93,27 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                               children: [
                                 IconButton(
                                     onPressed: () {
-                                      logTheAddToFavouritesClick(
-                                        Provider.of<DataProvider>(
-                                                Navigation.instance.navigatorKey
-                                                        .currentContext ??
-                                                    context,
-                                                listen: false)
-                                            .profile!,
-                                        data.selectedClassified!.title!,
-                                        data.selectedClassified!.description!,
-                                        data.selectedClassified!.locality!.name!
-                                            .toLowerCase(),
-                                        data.selectedClassified!.total_views!,
-                                      );
+                                      if ((data.selectedClassified
+                                              ?.is_favourite ??
+                                          false)) {
+                                      } else {
+                                        logTheAddToFavouritesClick(
+                                          Provider.of<DataProvider>(
+                                                  Navigation
+                                                          .instance
+                                                          .navigatorKey
+                                                          .currentContext ??
+                                                      context,
+                                                  listen: false)
+                                              .profile!,
+                                          data.selectedClassified!.title!,
+                                          data.selectedClassified!.description!,
+                                          data.selectedClassified!.locality!
+                                              .name!
+                                              .toLowerCase(),
+                                          data.selectedClassified!.total_views!,
+                                        );
+                                      }
                                       setAsFavourite(
                                           data.selectedClassified?.id,
                                           'classified');
@@ -115,9 +123,9 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                                     },
                                     icon: Icon(
                                       FontAwesomeIcons.solidHeart,
-                                      color: data.selectedClassified
+                                      color: (data.selectedClassified
                                                   ?.is_favourite ??
-                                              false
+                                              false)
                                           ? Constance.secondaryColor
                                           : Colors.grey.shade400,
                                     )),
@@ -652,7 +660,8 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
   void setAsFavourite(int? id, String type) async {
     final response = await ApiProvider.instance.setAsFavourite(id, type);
     if (response.success ?? false) {
-      Fluttertoast.showToast(msg: "Added to favourites");
+      fetchDetails();
+      Fluttertoast.showToast(msg: response.message ?? "Added to favourites");
     } else {
       showError("Something went wrong");
     }

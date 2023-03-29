@@ -572,7 +572,8 @@ class _EditProfileState extends State<EditProfile> {
                     txt: 'Save & Continue',
                     onTap: () {
                       saveDetails();
-
+                      // debugPrint(getComaSeparatedName(selGeo));
+                      // debugPrint(getComaSeparatedName(selTop));
                       // Navigation.instance.navigateAndReplace('/enterPreferences');
                     },
                   ),
@@ -719,7 +720,7 @@ class _EditProfileState extends State<EditProfile> {
       if (i == 0) {
         temp = '${list[i].seo_name},';
       } else {
-        temp += '${list[i].seo_name}';
+        temp += '${list[i].seo_name},';
       }
     }
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;

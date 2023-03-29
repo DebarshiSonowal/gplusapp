@@ -95,6 +95,7 @@ class OpinionSection extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   if (data.latestOpinions[0].has_permission ?? false) {
+                    logTheReadMoreClick(data.profile!);
                     Navigation.instance.navigate('/opinionPage');
                   } else {
                    showNotaMember();
@@ -142,6 +143,24 @@ class OpinionSection extends StatelessWidget {
         "title": "opinion",
         "author_name": author_name,
         "published_date": published_date,
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+  void logTheReadMoreClick(Profile profile) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "read_more_click",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "screen_name": "home",
         "user_login_status":
         Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,

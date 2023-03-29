@@ -49,7 +49,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                      , queries about accommodations, eateries, hospitals, places 
                      to visit etc. and someone will definitely help you out.''';
 
-  bool isEmpty = false;
+  bool isEmpty = false, has_permission = false;
 
   @override
   void initState() {
@@ -115,6 +115,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
           .setGuwahatiConnect(response.posts);
       setState(() {
         isEmpty = (response.posts.isEmpty ?? false) ? true : false;
+        has_permission = (response.has_permission ?? false);
       });
       _refreshController.refreshCompleted();
     } else {
@@ -152,91 +153,81 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
       //   ),
       // ),
       floatingActionButton: !showing
-          ? Builder(
-            builder: (context) {
+          ? Builder(builder: (context) {
               return FloatingActionBubble(
-                  // Menu items
-                  items: <Bubble>[
-                    // Floating action menu item
-                    Bubble(
-                      title: "Ask a question",
-                      iconColor: Colors.white,
-                      bubbleColor: Constance.primaryColor,
-                      icon: Icons.question_answer,
-                      titleStyle: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                      onPress: () {
-                        logTheAskAQuestionClick(Provider.of<DataProvider>(
-                                Navigation.instance.navigatorKey.currentContext ??
-                                    context,
-                                listen: false)
-                            .profile!);
-                        _animationController?.reverse();
-                        if (Provider.of<DataProvider>(
-                                    Navigation
-                                            .instance.navigatorKey.currentContext ??
-                                        context,
-                                    listen: false)
-                                .profile
-                                ?.is_plan_active ??
-                            false) {
-                          Navigation.instance.navigate('/askAQuestion');
-                        } else {
-                          // Constance.showMembershipPrompt(context, () {});
-                          // Navigation.instance.goBack();
+                // Menu items
+                items: <Bubble>[
+                  // Floating action menu item
+                  Bubble(
+                    title: "Ask a question",
+                    iconColor: Colors.white,
+                    bubbleColor: Constance.primaryColor,
+                    icon: Icons.question_answer,
+                    titleStyle: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                    onPress: () {
+                      logTheAskAQuestionClick(Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .profile!);
+                      _animationController?.reverse();
+                      if (has_permission ?? false) {
+                        Navigation.instance.navigate('/askAQuestion');
+                      } else {
+                        // Constance.showMembershipPrompt(context, () {});
+                        // Navigation.instance.goBack();
+                        setState(() {
+                          showing = true;
+                        });
+                        Constance.showMembershipPrompt(context, () {
                           setState(() {
-                            showing = true;
+                            showing = false;
                           });
-                          Constance.showMembershipPrompt(context,
-                                  () {
-                                setState(() {
-                                  showing = false;
-                                });
-                              });
-                        }
-                      },
+                        });
+                      }
+                    },
+                  ),
+                  Bubble(
+                    title: "My List",
+                    iconColor: Colors.white,
+                    bubbleColor: Constance.primaryColor,
+                    icon: Icons.list,
+                    titleStyle: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
                     ),
-                    Bubble(
-                      title: "My List",
-                      iconColor: Colors.white,
-                      bubbleColor: Constance.primaryColor,
-                      icon: Icons.list,
-                      titleStyle: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                      onPress: () {
-                        logTheMyListClick(Provider.of<DataProvider>(
-                                Navigation.instance.navigatorKey.currentContext ??
-                                    context,
-                                listen: false)
-                            .profile!);
-                        _animationController?.reverse();
-                        Navigation.instance.navigate('/guwahatiConnectsMy');
-                      },
-                    ),
-                    // Floating action menu item
-                  ],
+                    onPress: () {
+                      logTheMyListClick(Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .profile!);
+                      _animationController?.reverse();
+                      Navigation.instance.navigate('/guwahatiConnectsMy');
+                    },
+                  ),
+                  // Floating action menu item
+                ],
 
-                  // animation controller
-                  animation: _animation!,
+                // animation controller
+                animation: _animation!,
 
-                  // On pressed change animation state
-                  onPress: () => _animationController?.isCompleted ?? false
-                      ? _animationController?.reverse()
-                      : _animationController?.forward(),
+                // On pressed change animation state
+                onPress: () => _animationController?.isCompleted ?? false
+                    ? _animationController?.reverse()
+                    : _animationController?.forward(),
 
-                  // Floating Action button Icon color
-                  iconColor: Colors.white,
+                // Floating Action button Icon color
+                iconColor: Colors.white,
 
-                  // Flaoting Action button Icon
-                  iconData: Icons.add,
-                  backGroundColor: Constance.primaryColor,
-                );
-            }
-          )
+                // Flaoting Action button Icon
+                iconData: Icons.add,
+                backGroundColor: Constance.primaryColor,
+              );
+            })
           : FloatingActionButton(
               onPressed: () {},
               backgroundColor: Constance.primaryColor,
@@ -364,50 +355,21 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                               bool like = data.is_liked ?? false,
                                   dislike = false;
                               return GuwahatiConnectPostCard(
-                                  data,
-                                  count,
-                                  like,
-                                  dislike,
-                                  scaffoldKey,
-                                  () {
-                                    fetchGuwahatiConnect();
-                                  },
-                                  (id, val) {
-                                    if (Provider.of<DataProvider>(
-                                                Navigation.instance.navigatorKey
-                                                        .currentContext ??
-                                                    context,
-                                                listen: false)
-                                            .profile
-                                            ?.is_plan_active ??
-                                        false) {
-                                      // Navigation.instance.navigate('/exclusivePage');
-                                      postLike(id, val, () {
-                                        like = !like;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        showing = true;
-                                      });
-                                      Constance.showMembershipPrompt(context,
-                                          () {
-                                        setState(() {
-                                          showing = false;
-                                        });
-                                      });
-                                    }
-                                  },
-                                  (id) {
-                                    if (id == 0) {
-                                    } else {
-                                      // setState(() {
-                                      //   showing = true;
-                                      // });
-                                    }
-                                  },
-                                  0,
-                                  false,
-                                  () {
+                                data,
+                                count,
+                                like,
+                                dislike,
+                                scaffoldKey,
+                                () {
+                                  fetchGuwahatiConnect();
+                                },
+                                (id, val) {
+                                  if (has_permission ?? false) {
+                                    // Navigation.instance.navigate('/exclusivePage');
+                                    postLike(id, val, () {
+                                      like = !like;
+                                    });
+                                  } else {
                                     setState(() {
                                       showing = true;
                                     });
@@ -416,7 +378,30 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                                         showing = false;
                                       });
                                     });
+                                  }
+                                },
+                                (id) {
+                                  if (id == 0) {
+                                  } else {
+                                    // setState(() {
+                                    //   showing = true;
+                                    // });
+                                  }
+                                },
+                                0,
+                                false,
+                                () {
+                                  setState(() {
+                                    showing = true;
                                   });
+                                  Constance.showMembershipPrompt(context, () {
+                                    setState(() {
+                                      showing = false;
+                                    });
+                                  });
+                                },
+                                has_permission,
+                              );
                             },
                             separatorBuilder:
                                 (BuildContext context, int index) {
@@ -580,6 +565,10 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setGuwahatiConnect(response.posts);
+      setState(() {
+        has_permission = (response.has_permission ?? false);
+      });
+      debugPrint("PERM STAT ${response.has_permission}");
     } else {
       Navigation.instance.goBack();
       Provider.of<DataProvider>(
@@ -609,162 +598,6 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
-  }
-
-  void checkIt() async {
-    if (Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .profile
-            ?.is_plan_active ??
-        false) {
-      Navigation.instance.navigate('/askAQuestion');
-    } else {
-      setState(() {
-        showing = true;
-      });
-      scaffoldKey.currentState
-          ?.showBottomSheet(
-            enableDrag: true,
-            (context) {
-              return Consumer<DataProvider>(builder: (context, data, _) {
-                return StatefulBuilder(builder: (context, _) {
-                  return Container(
-                    padding: EdgeInsets.only(
-                        top: 1.h, right: 5.w, left: 5.w, bottom: 1.h),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(15.0),
-                        topRight: Radius.circular(15.0),
-                      ),
-                    ),
-                    width: double.infinity,
-                    // height: 50.h,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigation.instance.goBack();
-                              },
-                              icon: const Icon(Icons.close),
-                              color: Colors.black,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          'Oops!',
-                          style:
-                              Theme.of(context).textTheme.headline1?.copyWith(
-                                    color: Constance.secondaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 34.sp,
-                                  ),
-                        ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        Text(
-                          'Sorry ${data.profile?.name}',
-                          style:
-                              Theme.of(context).textTheme.headline4?.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        SizedBox(
-                          height: 3.h,
-                        ),
-                        Text(
-                          Constance.about,
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Colors.black,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          'Do you want to be a member?',
-                          style:
-                              Theme.of(context).textTheme.headline4?.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: CustomButton(
-                                txt: 'Yes, take me there',
-                                onTap: () {
-                                  logTheSubscriptionInitiationClick(
-                                      Provider.of<DataProvider>(
-                                              Navigation.instance.navigatorKey
-                                                      .currentContext ??
-                                                  context,
-                                              listen: false)
-                                          .profile!);
-                                  Navigation.instance.navigate('/beamember');
-                                },
-                                size: 12.sp,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5.w,
-                            ),
-                            Flexible(
-                              child: CustomButton(
-                                txt: '''No, I don't want it''',
-                                onTap: () {
-                                  logTheSubscriptionInitiationCancelClick(
-                                      Provider.of<DataProvider>(
-                                              Navigation.instance.navigatorKey
-                                                      .currentContext ??
-                                                  context,
-                                              listen: false)
-                                          .profile!);
-                                  Navigation.instance.goBack();
-                                },
-                                color: Colors.black,
-                                size: 12.sp,
-                                fcolor: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                });
-              });
-            },
-            // context: context,
-            backgroundColor: Colors.grey.shade100,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15.0),
-                  topRight: Radius.circular(15.0)),
-            ),
-          )
-          .closed
-          .then((value) {
-            setState(() {
-              showing = false;
-            });
-          });
-    }
   }
 
   void logTheSubscriptionInitiationClick(Profile profile) async {

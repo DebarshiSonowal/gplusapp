@@ -150,6 +150,11 @@ class _FoodDealPageState extends State<FoodDealPage> {
                             locality = result;
                           });
                           fetchCategories();
+                        }else{
+                          setState(() {
+                            locality = result;
+                          });
+                          fetchCategories();
                         }
                       },
                       child: Row(

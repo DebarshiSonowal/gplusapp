@@ -9,16 +9,17 @@ import '../Navigation/Navigate.dart';
 class MembershipSection extends StatelessWidget {
   const MembershipSection({
     Key? key,
-    required this.data,
+    required this.data, required this.onTap,
   }) : super(key: key);
   final DataProvider data;
-
+  final Function onTap;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: Constance.secondaryColor,
       radius: 15.h,
       onTap: () {
+        onTap();
         if (data.profile?.is_plan_active ?? false) {
           Navigation.instance.navigate('/profile');
         } else {

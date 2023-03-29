@@ -81,9 +81,11 @@ class HomeSliderItem extends StatelessWidget {
                         EdgeInsets.symmetric(horizontal: 2.w, vertical: 0.5.h),
                     color: Constance.primaryColor,
                     child: Text(
-                      current.first_cat_name?.seo_name
-                              ?.capitalize()
-                              .replaceFirst("-", " ") ??
+                      (current.first_cat_name?.seo_name
+                              ?.replaceFirst("-", " ").split(" ").length??0)>1?"${current.first_cat_name?.seo_name
+                          ?.replaceFirst("-", " ").split(" ")[0].capitalize()} ${current.first_cat_name?.seo_name
+                          ?.replaceFirst("-", " ").split(" ")[1].capitalize()}":current.first_cat_name?.seo_name
+                          ?.replaceFirst("-", " ").capitalize() ??
                           'Big Deals\nand Offers',
                       style: Theme.of(context).textTheme.headline4?.copyWith(
                             color: Colors.grey.shade200,

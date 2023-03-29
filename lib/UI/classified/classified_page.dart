@@ -38,9 +38,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   String result = '';
   final controller = TextEditingController();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  bool showing = false;
-
-  bool isEmpty = false;
+  bool showing = false, isEmpty = false, has_permission = false;
 
   @override
   void initState() {
@@ -67,6 +65,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
           .setClassified(response.classifieds ?? []);
       setState(() {
         isEmpty = (response.classifieds?.isEmpty ?? false) ? true : false;
+        has_permission = (response.has_permission ?? false);
       });
       _refreshController.refreshCompleted();
     } else {
@@ -96,10 +95,6 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          logThePostAListingClick(Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .profile!);
           checkIt();
         },
         icon: const Icon(Icons.add),
@@ -374,6 +369,16 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                                   },
                                   refreshParent: () {
                                     fetchClassified("");
+                                    if ((current.is_favourite ?? false)) {
+                                    } else {
+                                      logTheAddToFavouritesClick(
+                                        data.profile!,
+                                        current.title!,
+                                        current.description!,
+                                        current.locality!.name!.toLowerCase(),
+                                        current.total_views!,
+                                      );
+                                    }
                                   },
                                   current: current,
                                   like: (current.is_favourite ?? false)
@@ -507,6 +512,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
           .setClassified(response.classifieds ?? []);
       setState(() {
         isEmpty = true;
+        has_permission = response.has_permission ?? false;
       });
       Navigation.instance.goBack();
     } else {
@@ -515,6 +521,37 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
         isEmpty = true;
       });
     }
+  }
+
+  void logTheAddToFavouritesClick(
+    Profile profile,
+    String title,
+    String field_entered,
+    String locality,
+    int views,
+  ) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "add_to_favourites",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "title": title.length > 100 ? title.substring(0, 100) : title,
+        "field_entered": field_entered.length > 100
+            ? field_entered.substring(0, 100)
+            : field_entered,
+        "locality": locality,
+        "screen_name": "classified",
+        "views": views,
+        "user_login_status":
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
   }
 
   getCategory(int current) {
@@ -561,12 +598,11 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   }
 
   void checkIt() async {
-    if (Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .profile
-            ?.is_plan_active ??
-        false) {
+    if (has_permission ?? false) {
+      logThePostAListingClick(Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .profile!);
       final resp = await Navigation.instance.navigate('/postClassified');
       if (resp == null) {
         fetchClassified(result);

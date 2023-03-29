@@ -522,7 +522,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
         "user_id_event": profile.id,
-        "field_entered": field_entered,
+        "field_entered": field_entered.length>100?field_entered.substring(0,100):field_entered,
         // "cta_click": cta_click,
         "screen_name": "ask_a_question",
         "user_login_status":

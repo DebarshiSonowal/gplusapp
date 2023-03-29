@@ -231,4 +231,5 @@ class ClassifiedCard extends StatelessWidget {
           Navigation.instance.goBack();
         });
   }
+
 }
