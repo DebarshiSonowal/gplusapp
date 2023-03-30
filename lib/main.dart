@@ -23,6 +23,7 @@ import 'Components/alert.dart';
 import 'Helper/AppTheme.dart';
 import 'Helper/Constance.dart';
 import 'Helper/DataProvider.dart';
+import 'Helper/FirebaseHelper.dart';
 import 'Helper/method_mine.dart';
 import 'Helper/store_config.dart';
 import 'Model/notification_received.dart';
@@ -34,124 +35,32 @@ import 'Networking/api_provider.dart';
 import 'UI/main/home_screen_page.dart';
 import 'firebase_options.dart';
 
+late AndroidNotificationChannel channel;
+late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+bool isFlutterLocalNotificationsInitialized = false;
+
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    description: 'This channel is used for important notifications.',
-    // description
-    importance: Importance.max,
-  );
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@drawable/ic_notification');
-  const DarwinInitializationSettings initializationSettingsIos =
-      DarwinInitializationSettings(
-    requestAlertPermission: true,
-    requestBadgePermission: true,
-    requestSoundPermission: true,
-  );
-
-  const InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsIos,
-  );
-
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    onDidReceiveNotificationResponse:
-        (NotificationResponse notificationResponse) =>
-            onDidReceiveNotificationResponse(notificationResponse),
-    // onDidReceiveBackgroundNotificationResponse: (notificationResponse) =>
-    //     notificationTapBackground,
-  );
-  RemoteNotification? notification = message.notification;
-  AndroidNotification? android = message.notification?.android;
-  debugPrint("test background message is coming ${message.data}");
-  // If `onMessage` is triggered with a notification, construct our own
-  // local notification to show to users using the created channel.
-  if (notification != null && android != null) {
-    debugPrint(
-        "1st case ${DateFormat("dd MM, yyyy HH:MM:SS a").format(DateTime.now())}");
-    // flutterLocalNotificationsPlugin.show(
-    //   notification.hashCode,
-    //   notification.title,
-    //   notification.body,
-    //   NotificationDetails(
-    //     android: AndroidNotificationDetails(
-    //       channel.id,
-    //       channel.name,
-    //       channelDescription: channel.description,
-    //       // icon: android.smallIcon,
-    //       icon: "@drawable/ic_notification",
-    //       // other properties...
-    //     ),
-    //     iOS: DarwinNotificationDetails(
-    //       // badgeNumber: int.parse(channel.id),
-    //       subtitle: channel.name,
-    //       interruptionLevel: InterruptionLevel.critical,
-    //     ),
-    //   ),
-    //   payload: '${message.data}',
-    // );
-  }
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await setupFlutterNotifications();
+  // showFlutterNotification(message);
 }
 
-Future<void> onDidReceiveNotificationResponse(
-    NotificationResponse notificationResponse) async {
-  var details =
-      await FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails();
-  debugPrint(
-      "onDidReceiveNotificationResponse ${details?.notificationResponse?.payload}");
-  if (details?.didNotificationLaunchApp ?? false) {
-    if (details?.notificationResponse?.payload != 'downloading') {
-      OpenFile.open(details?.notificationResponse?.payload);
-    }
-  }
-  debugPrint("Notification Payload ${notificationResponse.payload}");
-  var jsData = notificationResponse.payload ?? "";
-  jsData = jsData.replaceAll('{', '{"');
-  jsData = jsData.replaceAll(': ', '": "');
-  jsData = jsData.replaceAll(', ', '", "');
-  jsData = jsData.replaceAll('}', '"}');
-  debugPrint(jsData);
-  NotificationReceived notification =
-      NotificationReceived.fromJson(jsonDecode(jsData));
-  // Navigation.instance.navigate('');
-
-  setRead(
-      notification.notification_id,
-      notification.seo_name,
-      notification.seo_name_category,
-      notification.type,
-      notification.post_id,
-      notification.vendor_id,
-      notification.category_id);
-}
-
-void main() async {
-  // final FirebaseMessaging _firebaseMessaging;
-  //Initializations
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    // name: "GPlusNewApp",
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await FlutterConfig.loadEnvVariables();
-  setUpFirebase();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Set the background messaging handler early on, as a named top-level function
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  await setupFlutterNotifications();
+
   Storage.instance.initializeStorage();
+  await FlutterConfig.loadEnvVariables();
   StoreConfig(
     store: Store.appleStore,
     apiKey: FlutterConfig.get('revenueCatIOSKey') ?? "",
   );
-  // final PendingDynamicLinkData? initialLink = await FirebaseDynamicLinks.instance.getInitialLink();
+
   runApp(const MyApp());
 }
 
@@ -173,89 +82,91 @@ void checkVersion(String version, String buildNumber) async {
   }
 }
 
-void notificationHandler(RemoteMessage? message) async {
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+Future<void> setupFlutterNotifications() async {
+  if (isFlutterLocalNotificationsInitialized) {
+    return;
+  }
+  channel = const AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    description: 'This channel is used for important notifications.',
-    // description
-    importance: Importance.max,
+    description:
+        'This channel is used for important notifications.', // description
+    importance: Importance.high,
   );
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
 
+  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  /// Create an Android Notification Channel.
+  ///
+  /// We use this channel in the `AndroidManifest.xml` file to override the
+  /// default FCM channel to enable heads up notifications.
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
-  RemoteNotification? notification = message?.notification;
-  AndroidNotification? android = message?.notification?.android;
-  // debugPrint("test message is coming ${message?.data} ${android?.imageUrl??"!"} ${android!.smallIcon}");
-  // If `onMessage` is triggered with a notification, construct our own
-  // local notification to show to users using the created channel.
-  if (notification != null && android != null) {
-    debugPrint(
-        "2nd case ${notification.title} ${notification.body} ${message?.category} ${message?.data}");
-    flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
-      notification.title,
-      // "G Plus",
-      notification.body,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channelDescription: channel.description,
-          icon: "@drawable/ic_notification",
-          // other properties...
-        ),
-        iOS: DarwinNotificationDetails(
-          // badgeNumber: int.parse(channel.id),
-          subtitle: channel.name,
-        ),
-      ),
-      payload: '${message?.data}',
-    );
-  }
-}
-
-void setUpFirebase() async {
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@drawable/ic_notification');
-  const DarwinInitializationSettings initializationSettingsIos =
-      DarwinInitializationSettings(
-    requestAlertPermission: true,
-    requestBadgePermission: true,
-    requestSoundPermission: true,
-  );
-
-  const InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsIos,
-  );
 
   await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
+    NotificationHelper.initializationSettings,
     onDidReceiveNotificationResponse:
         (NotificationResponse notificationResponse) =>
-            onDidReceiveNotificationResponse(notificationResponse),
-    // onDidReceiveBackgroundNotificationResponse: (notificationResponse) =>
-    //     notificationTapBackground,
+            NotificationHelper.onDidReceiveNotificationResponse(
+                notificationResponse),
   );
-  await FirebaseMessaging.instance.getToken();
-  // print("test message is coming firebase set up}");
 
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    debugPrint('notification on front');
+  /// Update the iOS foreground notification presentation options to allow
+  /// heads up notifications.
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+  isFlutterLocalNotificationsInitialized = true;
+}
 
-    notificationHandler(message);
-  });
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
-    debugPrint('killed notification');
-    notificationHandler(message);
-  }); //
+void notificationHandler(RemoteMessage? message, String msg) async {
+  var details =
+      await FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails();
+  debugPrint(
+      "onDidReceiveNotificationResponse ${details?.notificationResponse?.payload}");
+  if (details?.didNotificationLaunchApp ?? false) {
+    if (details?.notificationResponse?.payload != 'downloading') {
+      OpenFile.open(details?.notificationResponse?.payload);
+    }
+  }
+  debugPrint("Notification Payload ${message?.data}");
+  var jsData = message?.data.toString() ?? "";
+  jsData = jsData.replaceAll('{', '{"');
+  jsData = jsData.replaceAll(': ', '": "');
+  jsData = jsData.replaceAll(', ', '", "');
+  jsData = jsData.replaceAll('}', '"}');
+  debugPrint(jsData);
+  NotificationReceived notification =
+      NotificationReceived.fromJson(jsonDecode(jsData));
+  // Navigation.instance.navigate('');
+
+  NotificationHelper.setRead(
+      notification.notification_id,
+      notification.seo_name,
+      notification.seo_name_category,
+      notification.type,
+      notification.post_id,
+      notification.vendor_id,
+      notification.category_id);
+}
+
+void showFlutterNotification(RemoteMessage message) {
+  debugPrint(
+      "Showing notification ${message.data} ${message.notification?.title} ${message.notification?.body}");
+  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+  flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      // notification.title,
+      message.data['title'],
+      // notification.body,
+      message.data['body'],
+      NotificationHelper.notificationDetails,
+      payload: "${message.data}");
 }
 
 class MyApp extends StatefulWidget {
@@ -267,6 +178,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  String? initialMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -290,9 +202,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // initUniLinks();
     initValues();
     initDeepLink();
+
+
+    FirebaseMessaging.onMessage.listen(showFlutterNotification);
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) =>
+        notificationHandler(message, "Opened Firebase Notification"));
   }
 
   void initValues() async {
@@ -319,118 +236,19 @@ class _MyAppState extends State<MyApp> {
         );
       }
     }).onError((error) {
-      // Handle errors
       debugPrint("URL link ${error}");
     });
   }
 }
 
-void setRead(String? id, seoName, categoryName, type, postId, vendorId,
-    categoryId) async {
-  final response = await ApiProvider.instance.notificationRead(id);
-  if (response.success ?? false) {
-    fetchNotification();
-    sendToDestination(
-        seoName, categoryName, type, postId, vendorId, categoryId);
-  } else {
-    showError(response.message ?? "Something went wrong");
-  }
-}
-
-void fetchNotification() async {
-  final response = await ApiProvider.instance.getNotifications();
-  if (response.success ?? false) {
-    Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext!,
-            listen: false)
-        .setNotificationInDevice(response.notification);
-    // fetchReportMsg();
-  } else {
-    // fetchReportMsg();
-  }
-}
-
-void sendToDestination(
-    seoName, categoryName, type, id, vendorId, categoryId) async {
-  switch (type) {
-    case "news":
-      debugPrint("News clicked ${categoryName},${seoName} ");
-      Navigation.instance.navigate("/main");
-      Navigation.instance
-          .navigate('/story', args: '${categoryName},${seoName},home_page');
-      break;
-    case "opinion":
-      Navigation.instance.navigate("/main");
-      Navigation.instance.navigate('/opinionPage');
-      Navigation.instance
-          .navigate('/opinionDetails', args: '${seoName},${categoryId}');
-      break;
-    case "ghy_connect":
-      Navigation.instance.navigate("/main");
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
-          .setCurrent(2);
-      Navigation.instance.navigate('/guwahatiConnects');
-      Navigation.instance
-          .navigate('/allImagesPage', args: int.parse(id.toString()));
-      break;
-    case "ghy_connect_status":
-      Navigation.instance.navigate("/main");
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
-          .setCurrent(2);
-      Navigation.instance.navigate('/guwahatiConnects');
-      Navigation.instance
-          .navigate('/allImagesPage', args: int.parse(id.toString()));
-      break;
-    case "citizen_journalist":
-      Navigation.instance.navigate("/main");
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
-          .setCurrent(3);
-      Navigation.instance.navigate('/citizenJournalist');
-      break;
-    case "ctz_journalist_status":
-      Navigation.instance.navigate("/main");
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
-          .setCurrent(3);
-      Navigation.instance.navigate('/citizenJournalist');
-      Navigation.instance.navigate('/submitedStory');
-      Navigation.instance
-          .navigate('/viewStoryPage', args: int.parse(id.toString()));
-      break;
-    case "deals":
-      Navigation.instance.navigate("/main");
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
-          .setCurrent(1);
-      Navigation.instance.navigate('/bigdealpage');
-      Navigation.instance
-          .navigate('/categorySelect', args: int.parse(vendorId));
-      break;
-    case "classified":
-      Navigation.instance.navigate("/main");
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
-          .setCurrent(4);
-      Navigation.instance.navigate('/classified');
-      Navigation.instance.navigate('/classifiedDetails', args: int.parse(id));
-      break;
-    case "locality":
-      Navigation.instance.navigate("/main");
-      Navigation.instance
-          .navigate('/story', args: '${categoryName},${seoName},home_page');
-      break;
-
-    default:
-      break;
-  }
+void showError(String msg) {
+  AlertX.instance.showAlert(
+      title: "Error",
+      msg: msg,
+      positiveButtonText: "Done",
+      positiveButtonPressed: () {
+        Navigation.instance.goBack();
+      });
 }
 
 void sendToRoute(String route, data, String? category) async {
@@ -448,14 +266,4 @@ void sendToRoute(String route, data, String? category) async {
           .navigate('/story', args: '${category},${data},home_page');
       break;
   }
-}
-
-void showError(String msg) {
-  AlertX.instance.showAlert(
-      title: "Error",
-      msg: msg,
-      positiveButtonText: "Done",
-      positiveButtonPressed: () {
-        Navigation.instance.goBack();
-      });
 }

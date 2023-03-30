@@ -1,14 +1,17 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io' show Platform;
 import 'dart:math';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/FirebaseHelper.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:gplusapp/UI/main/sections/home_screen_body.dart';
@@ -27,8 +30,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/NavigationBar.dart';
 import '../../Helper/Constance.dart';
+import '../../Model/notification_received.dart';
 import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
+import '../../main.dart';
 import '../Menu/berger_menu_member_page.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -96,12 +101,44 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchGPlusExcl();
     fetchPoll();
     fetchNotification();
-    Future.delayed(
-        Duration.zero,
-        () => Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
-            .setCurrent(0));
+    Future.delayed(Duration.zero, () {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setCurrent(0);
+    });
+    Future.delayed(const Duration(seconds: 10), () {
+      FirebaseMessaging.instance.getInitialMessage().then(
+            (RemoteMessage? value) => setState(
+              () {
+                debugPrint("Initial!@8 1$value");
+                String initialMessage = "${value?.data}";
+                debugPrint("Initial!@8 2$initialMessage");
+                if (value!.data.isNotEmpty) {
+                  debugPrint("Notification Payload ${value.data}");
+                  var jsData = "${value.data}";
+                  jsData = jsData.replaceAll('{', '{"');
+                  jsData = jsData.replaceAll(': ', '": "');
+                  jsData = jsData.replaceAll(', ', '", "');
+                  jsData = jsData.replaceAll('}', '"}');
+                  debugPrint(jsData);
+                  NotificationReceived notification =
+                      NotificationReceived.fromJson(jsonDecode(jsData));
+                  // Navigation.instance.navigate('');
+
+                  NotificationHelper.setRead(
+                      notification.notification_id,
+                      notification.seo_name,
+                      notification.seo_name_category,
+                      notification.type,
+                      notification.post_id,
+                      notification.vendor_id,
+                      notification.category_id);
+                }
+              },
+            ),
+          );
+    });
     getDynamicLink();
     showPopUp();
     controller.addListener(() {
@@ -504,15 +541,15 @@ class _HomeScreenState extends State<HomeScreen> {
           .setRedeemText(response1.desc ?? "");
     } else {}
     final response2 = await ApiProvider.instance.getCitizenText();
-    if(response2.success ?? false) {
+    if (response2.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setCitizenJournalistText(response2.desc!);
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
-          .setCitizenJournalistPermission(response2.has_permission??false);
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setCitizenJournalistPermission(response2.has_permission ?? false);
     }
   }
 

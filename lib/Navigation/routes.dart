@@ -14,7 +14,8 @@ import '../Components/FadeTransitionBuilder.dart';
 import '../Components/loading_dialog.dart';
 import '../Components/story_view.dart';
 import '../Components/video_player_screen.dart';
-import '../OnBoarding/on_boarding_page.dart';
+
+// import '../OnBoarding/on_boarding_page.dart';
 import '../UI/Member/be_a_membe_page.dart';
 import '../UI/Notification/notification_page.dart';
 import '../UI/Search/search_page.dart';
@@ -81,9 +82,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'splash_screen');
       return FadeTransitionPageRouteBuilder(page: const SplashScreen());
-    case '/onboarding':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'on_boarding');
-      return FadeTransitionPageRouteBuilder(page: const OnBoardingPage());
+    // case '/onboarding':
+    //   FirebaseAnalytics.instance.setCurrentScreen(screenName: 'on_boarding');
+    //   return FadeTransitionPageRouteBuilder(page: const OnBoardingPage());
 
     //login pages
     case '/login':
@@ -137,15 +138,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'view_image');
       return FadeTransitionPageRouteBuilder(
           page: ViewImagePage(settings.arguments as String));
-    case '/websitePayment':
-      return FadeTransitionPageRouteBuilder(
-          page: WebviewPayment(url: settings.arguments as String));
+    // case '/websitePayment':
+    //   return FadeTransitionPageRouteBuilder(
+    //       page: WebviewPayment(url: settings.arguments as String));
 
     case '/bigdealpage':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'bigdeal');
       return FadeTransitionPageRouteBuilder(page: const BigDealPage());
     case '/redeemOfferPage':
-          FirebaseAnalytics.instance.setCurrentScreen(screenName: 'cupon_details');
+      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'cupon_details');
       return FadeTransitionPageRouteBuilder(page: const RedeemOfferPage());
     case '/fooddealpage':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'deal');
@@ -170,7 +171,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(
           page: CategoryDetails(slug: settings.arguments as String));
     case '/paymentProcessing':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'payment_processing');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'payment_processing');
       return FadeTransitionPageRouteBuilder(
           page: PaymentProcessingPage(settings.arguments as String));
     // case '/paymentProcessingIOS':
@@ -226,10 +228,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(page: const ContactUsPage());
 
     case '/submitStory':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'citizen_journalist');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'citizen_journalist');
       return FadeTransitionPageRouteBuilder(page: const SubmitStoryPage());
     case '/submitedStory':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'submitted_story');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'submitted_story');
       return FadeTransitionPageRouteBuilder(page: const StoriesSubmitted());
     case '/draftStory':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'drafts');
@@ -256,7 +260,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'redeem_points');
       return FadeTransitionPageRouteBuilder(page: const RedeemPoints());
     case '/classifiedDetails':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'classified_details');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'classified_details');
       return FadeTransitionPageRouteBuilder(
           page: ClassifiedDetails(settings.arguments as int));
     case '/editAddress':
@@ -264,32 +269,41 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(
           page: EditAddressPage(settings.arguments as int));
     case '/classifiedMyListDetails':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'my_classified_page');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'my_classified_page');
       return FadeTransitionPageRouteBuilder(page: const ClassifiedMyList());
     case '/citizenJournalist':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'citizen_journalist');
-      return FadeTransitionPageRouteBuilder(page: const CitizenJournalistPage());
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'citizen_journalist');
+      return FadeTransitionPageRouteBuilder(
+          page: const CitizenJournalistPage());
     case '/editCitizenJournalist':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'edit_citizen_journalist');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'edit_citizen_journalist');
       return FadeTransitionPageRouteBuilder(
           page: EditStory(settings.arguments as int));
     case '/viewStoryPage':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'view_story_page');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'view_story_page');
       return FadeTransitionPageRouteBuilder(
           page: ViewStoryPage(settings.arguments as int));
     case '/postClassified':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'post_classified');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'post_classified');
       return FadeTransitionPageRouteBuilder(page: const PostAListing());
     case '/editingAListing':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'editing_listing');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'editing_listing');
       return FadeTransitionPageRouteBuilder(
           page: EditAListingPost(settings.arguments as int));
     case '/guwahatiConnects':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'guwahati');
       return FadeTransitionPageRouteBuilder(page: const GuwahatiConnectPage());
     case '/guwahatiConnectsMy':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'my_guwahati_connect');
-      return FadeTransitionPageRouteBuilder(page: const GuwahatiConnectMylistPage());
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'my_guwahati_connect');
+      return FadeTransitionPageRouteBuilder(
+          page: const GuwahatiConnectMylistPage());
     case '/allImagesPage':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'allimages_page');
       return FadeTransitionPageRouteBuilder(
@@ -298,7 +312,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'ask_a_question');
       return FadeTransitionPageRouteBuilder(page: const AskAQuestionPage());
     case '/editAskAQuestion':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'edit_a_question');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'edit_a_question');
       return FadeTransitionPageRouteBuilder(
           page: EditAskAQuestionPage(settings.arguments as String));
     case '/search':
@@ -312,20 +327,24 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'refund_policy');
       return FadeTransitionPageRouteBuilder(page: const ReturnPolicyPage());
     case '/termsConditions':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'terms_conditions');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'terms_conditions');
       return FadeTransitionPageRouteBuilder(page: const TermsConditionsPage());
     case '/privacy':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'privacy_policy');
       return FadeTransitionPageRouteBuilder(page: const PrivacyPolicyPage());
     case '/grieveanceRedressal':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'grieveance_redressal');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'grieveance_redressal');
       return FadeTransitionPageRouteBuilder(page: const GrieveanceRedressal());
 
     case '/advertiseWithUs':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'advertise_with_us');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'advertise_with_us');
       return FadeTransitionPageRouteBuilder(page: const AdvertiseWithUsPage());
     case '/blockedUserList':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'blocked_userlist');
+      FirebaseAnalytics.instance
+          .setCurrentScreen(screenName: 'blocked_userlist');
       return FadeTransitionPageRouteBuilder(page: const BlockedUserListPage());
 
     //Main

@@ -14,7 +14,7 @@ class FadeTransitionPageRouteBuilder extends PageRouteBuilder {
     barrierColor:null,
     barrierLabel:null,
     maintainState:true,
-    transitionDuration: Duration(milliseconds: 100),
+    transitionDuration: const Duration(milliseconds: 100),
     transitionsBuilder: (
         BuildContext context,
         Animation<double> animation,
