@@ -414,7 +414,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          Jiffy(data.updated_at, "yyyy-MM-dd hh:mm:ss")
+                          Jiffy(data.created_at, "yyyy-MM-dd hh:mm:ss")
                                   .fromNow() ??
                               '${15} mins ago' ??
                               "",

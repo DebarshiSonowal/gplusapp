@@ -881,7 +881,7 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      // debugPrint("StoryResponse response: ${response?.data}");
+      debugPrint("StoryResponse response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return StoryResponse.fromJson(response?.data);
       } else {
@@ -2528,7 +2528,7 @@ class ApiProvider {
         Navigation.instance.navigateAndRemoveUntil('/login');
         showError("Oops! Your session expired. Please Login Again");
       }
-      debugPrint("RedeemHistoryResponse response: ${e.response}");
+      debugPrint("RedeemHistoryResponse error 2: ${e.response}");
       return RedeemHistoryResponse.withError(e.message);
     }
   }

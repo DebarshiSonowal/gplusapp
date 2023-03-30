@@ -1,13 +1,7 @@
 class Story {
-//     "id": 1,
-//             "user_id": 97379,
-//             "title": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-//             "image_file_name": "https://www.guwahatiplus.com/storage/app/public/stories/1/large/11dd2f4d54ba926720cd257690261aae.jpeg",
-//             "status": 1,
-//             "created_at": "2022-11-17T05:08:19.000000Z",
-//             "updated_at": "2022-11-17T05:08:19.000000Z"
   int? id, user_id, status;
   String? title, image_file_name, web_url, btn_text, btn_color;
+  bool? has_permission = false;
 
   Story.fromJson(json) {
     id = json['id'] ?? 0;
@@ -18,6 +12,7 @@ class Story {
     btn_color = json['btn_color'] ?? "";
     web_url = json['web_url'] ?? "https://guwahatiplus.com/";
     image_file_name = json['image_file_name'] ?? "";
+    has_permission = json['has_permission'] ?? false;
   }
 }
 

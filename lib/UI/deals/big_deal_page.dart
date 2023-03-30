@@ -99,20 +99,25 @@ class _BigDealPageState extends State<BigDealPage> {
       // fetchDeals();
     });
     controller.addListener(() {
-      var currentScroll = ((controller.position.pixels / controller.position.maxScrollExtent) * 100).toInt();
-      if(currentScroll==25||currentScroll==50||currentScroll==75||currentScroll==100){
+      var currentScroll =
+          ((controller.position.pixels / controller.position.maxScrollExtent) *
+                  100)
+              .toInt();
+      if (currentScroll == 25 ||
+          currentScroll == 50 ||
+          currentScroll == 75 ||
+          currentScroll == 100) {
         if (currentScrollPercent != currentScroll) {
           debugPrint("scrolling $currentScroll");
           currentScrollPercent = currentScroll;
           logTheScrollClick(
             Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
+                    Navigation.instance.navigatorKey.currentContext ?? context,
+                    listen: false)
                 .profile!,
             "$currentScroll%",
           );
         }
-
       }
     });
     fetchHistory();
@@ -326,9 +331,7 @@ class _BigDealPageState extends State<BigDealPage> {
                           SizedBox(
                             height: 1.h,
                           ),
-                          HistorySection(
-                            current: current,
-                          ),
+                          const HistorySection(),
                           getSpace(),
                         ],
                       ),

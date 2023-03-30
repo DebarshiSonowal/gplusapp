@@ -64,22 +64,22 @@ class ShopTypePageItem extends StatelessWidget {
                     ),
               ),
             ),
-            SizedBox(
-              height: 1.5.h,
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: Text(
-                current.address ?? "",
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.headline6?.copyWith(
-                      color: Storage.instance.isDarkMode
-                          ? Colors.white
-                          : Colors.grey.shade800,
-                      fontSize: 1.5.h, // fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ),
+            // SizedBox(
+            //   height: 1.5.h,
+            // ),
+            // SizedBox(
+            //   width: double.infinity,
+            //   child: Text(
+            //     current.address ?? "",
+            //     overflow: TextOverflow.ellipsis,
+            //     style: Theme.of(context).textTheme.headline6?.copyWith(
+            //           color: Storage.instance.isDarkMode
+            //               ? Colors.white
+            //               : Colors.grey.shade800,
+            //           fontSize: 1.5.h, // fontWeight: FontWeight.bold,
+            //         ),
+            //   ),
+            // ),
           ],
         ),
         trailing: CustomButton(

@@ -145,7 +145,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'bigdeal');
       return FadeTransitionPageRouteBuilder(page: const BigDealPage());
     case '/redeemOfferPage':
-      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'redeem_offer');
+          FirebaseAnalytics.instance.setCurrentScreen(screenName: 'cupon_details');
       return FadeTransitionPageRouteBuilder(page: const RedeemOfferPage());
     case '/fooddealpage':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'deal');

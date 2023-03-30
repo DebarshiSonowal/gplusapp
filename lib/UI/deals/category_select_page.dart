@@ -234,6 +234,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                     ],
                   ),
                   getBody(current),
+                  SizedBox(height: 7.h,),
                 ],
               ),
             );
@@ -417,8 +418,11 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
           ),
         ]);
       default:
-        return Padding(
-          padding: EdgeInsets.symmetric(vertical: 2.h),
+        return Container(
+          // height: 58.h,
+          // height: double.infinity,
+          margin: EdgeInsets.only(bottom:5.h),
+          padding: EdgeInsets.only(top:1.h),
           child: ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,

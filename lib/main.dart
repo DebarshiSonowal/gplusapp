@@ -173,7 +173,7 @@ void checkVersion(String version, String buildNumber) async {
   }
 }
 
-void NotificationHandler(RemoteMessage? message) async {
+void notificationHandler(RemoteMessage? message) async {
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
@@ -195,11 +195,11 @@ void NotificationHandler(RemoteMessage? message) async {
   // local notification to show to users using the created channel.
   if (notification != null && android != null) {
     debugPrint(
-        "2nd case ${notification.title} ${notification.body} ${message?.category}");
+        "2nd case ${notification.title} ${notification.body} ${message?.category} ${message?.data}");
     flutterLocalNotificationsPlugin.show(
       notification.hashCode,
-      // notification.title,
-      "G Plus",
+      notification.title,
+      // "G Plus",
       notification.body,
       NotificationDetails(
         android: AndroidNotificationDetails(
@@ -249,12 +249,12 @@ void setUpFirebase() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     debugPrint('notification on front');
 
-    NotificationHandler(message);
+    notificationHandler(message);
   });
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
     debugPrint('killed notification');
-    NotificationHandler(message);
+    notificationHandler(message);
   }); //
 }
 

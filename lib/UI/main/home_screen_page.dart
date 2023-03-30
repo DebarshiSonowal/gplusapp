@@ -503,6 +503,17 @@ class _HomeScreenState extends State<HomeScreen> {
               listen: false)
           .setRedeemText(response1.desc ?? "");
     } else {}
+    final response2 = await ApiProvider.instance.getCitizenText();
+    if(response2.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setCitizenJournalistText(response2.desc!);
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setCitizenJournalistPermission(response2.has_permission??false);
+    }
   }
 
   void fetchNotification() async {

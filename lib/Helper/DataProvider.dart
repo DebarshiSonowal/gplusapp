@@ -82,7 +82,7 @@ class DataProvider extends ChangeNotifier {
   List<Shop> shops = [];
   SwitchStatus? status;
   List<BookmarkItem> bookmarks = [];
-  bool hideReferEarn = false;
+  bool hideReferEarn = false,is_citizen_journalist=false;
   GuwahatiConnect? specificGuwahatiConnect;
   String ad_image = "";
   String citizenJournalist = "",
@@ -97,6 +97,11 @@ class DataProvider extends ChangeNotifier {
 
   setCitizenJournalistText(String txt) {
     citizenJournalist = txt;
+    notifyListeners();
+  }
+
+  setCitizenJournalistPermission(bool val) {
+    is_citizen_journalist = val;
     notifyListeners();
   }
 

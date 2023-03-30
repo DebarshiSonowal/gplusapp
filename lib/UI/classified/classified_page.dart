@@ -93,18 +93,22 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
       ),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          checkIt();
-        },
-        icon: const Icon(Icons.add),
-        label: Text(
-          "Post a listing",
-          style: Theme.of(context).textTheme.headline5?.copyWith(
-                color: Colors.black,
-                // fontWeight: FontWeight.bold,
-              ),
-        ),
+      floatingActionButton: Builder(
+        builder: (context) {
+          return FloatingActionButton.extended(
+            onPressed: () {
+              checkIt(context);
+            },
+            icon: const Icon(Icons.add),
+            label: Text(
+              "Post a listing",
+              style: Theme.of(context).textTheme.headline5?.copyWith(
+                    color: Colors.black,
+                    // fontWeight: FontWeight.bold,
+                  ),
+            ),
+          );
+        }
       ),
       floatingActionButtonLocation: !showing
           ? FloatingActionButtonLocation.miniEndFloat
@@ -597,7 +601,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
         });
   }
 
-  void checkIt() async {
+  void checkIt(context) async {
     if (has_permission ?? false) {
       logThePostAListingClick(Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
@@ -611,26 +615,11 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
       setState(() {
         showing = true;
       });
-      scaffoldKey.currentState
-          ?.showBottomSheet(
-            (context) {
-              return const ClassifiedPopUp();
-            },
-            // context: context,
-            backgroundColor: Colors.grey.shade100,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15.0),
-                topRight: Radius.circular(15.0),
-              ),
-            ),
-          )
-          .closed
-          .then((value) {
-            setState(() {
-              showing = false;
-            });
-          });
+      Constance.showMembershipPrompt(context, () {
+        setState(() {
+          showing = false;
+        });
+      });
     }
   }
 

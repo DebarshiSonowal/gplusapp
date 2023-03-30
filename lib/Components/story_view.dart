@@ -100,7 +100,7 @@ class _StoryViewPageState extends State<StoryViewPage> {
                                   child: CachedNetworkImage(
                                     height: 90.h,
                                     width: MediaQuery.of(context).size.width,
-                                    fit: BoxFit.fitHeight,
+                                    fit: BoxFit.fitWidth,
                                     imageUrl: data
                                             .stories[idx].image_file_name ??
                                         "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",

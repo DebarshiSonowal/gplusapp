@@ -651,12 +651,22 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setClassifiedDetails(response.classifieds!);
+      fetchClassified();
       Navigation.instance.goBack();
     } else {
       Navigation.instance.goBack();
     }
   }
-
+  void fetchClassified() async {
+    final response = await ApiProvider.instance
+        .getClassified("list-by", "", "");
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setClassified(response.classifieds ?? []);
+    }
+  }
   void setAsFavourite(int? id, String type) async {
     final response = await ApiProvider.instance.setAsFavourite(id, type);
     if (response.success ?? false) {

@@ -60,7 +60,7 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
         screen: 'citizen_journalist',
       ),
       bottomNavigationBar: CustomNavigationBar(current, "citizen_journalist"),
-      body: Builder(builder: (context) {
+      body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.h),
           height: double.infinity,
@@ -123,8 +123,7 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
                   child: CustomButton(
                       txt: 'Submit A Story',
                       onTap: () {
-                        if (has_permission ??
-                            false) {
+                        if (data.is_citizen_journalist ?? false) {
                           logTheCjSubmitClick(Provider.of<DataProvider>(
                                   Navigation.instance.navigatorKey
                                           .currentContext ??
@@ -148,12 +147,13 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
                           MaterialStateProperty.all(Constance.primaryColor),
                     ),
                     onPressed: () {
-                      if (has_permission) {
+                      if (data.is_citizen_journalist) {
                         logTheCjDraftsClick(Provider.of<DataProvider>(
-                                                      Navigation.instance.navigatorKey.currentContext ??
-                                                          context,
-                                                      listen: false)
-                                                  .profile!);
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .profile!);
                         Navigation.instance.navigate('/draftStory');
                       } else {
                         Constance.showMembershipPrompt(context, () {});
@@ -185,12 +185,13 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
                     ),
                     onPressed: () {
                       // Navigation.instance.goBack();
-                      if (has_permission) {
+                      if (data.is_citizen_journalist) {
                         logTheStoriesSubmitterClick(Provider.of<DataProvider>(
-                                                      Navigation.instance.navigatorKey.currentContext ??
-                                                          context,
-                                                      listen: false)
-                                                  .profile!);
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .profile!);
                         Navigation.instance.navigate('/submitedStory');
                       } else {
                         Constance.showMembershipPrompt(context, () {});
@@ -232,6 +233,10 @@ class _CitizenJournalistPageState extends State<CitizenJournalistPage> {
         setState(() {
           has_permission = response.has_permission ?? false;
         });
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext ?? context,
+                listen: false)
+            .setCitizenJournalistPermission(response.has_permission ?? false);
         Navigation.instance.goBack();
       } else {
         Navigation.instance.goBack();

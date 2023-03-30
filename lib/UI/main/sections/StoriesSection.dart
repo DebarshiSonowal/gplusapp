@@ -49,8 +49,14 @@ class _StoriesSectionState extends State<StoriesSection> {
                       var current = widget.data.stories[index];
                       return GestureDetector(
                         onTap: () {
-                          Navigation.instance
-                              .navigate('/storyviewPage', args: index);
+                          if (current.has_permission ?? false) {
+                            Navigation.instance
+                                .navigate('/storyviewPage', args: index);
+                          } else {
+                            Constance.showMembershipPrompt(cont, () {
+
+                            });
+                          }
                         },
                         child: Container(
                           decoration: const BoxDecoration(
