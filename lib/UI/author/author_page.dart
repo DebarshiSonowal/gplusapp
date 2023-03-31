@@ -33,8 +33,9 @@ class _AuthorPageState extends State<AuthorPage> {
       key: _scaffoldKey,
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      appBar: Constance.buildAppBar("author",true,_scaffoldKey),
-      drawer: const BergerMenuMemPage(screen: "author"),
+      // appBar: Constance.buildAppBar("author",true,_scaffoldKey),
+      appBar: Constance.buildAppBar2("author"),
+      // drawer: const BergerMenuMemPage(screen: "author"),
       body: Consumer<DataProvider>(builder: (context, data, _) {
         return Container(
           padding: EdgeInsets.symmetric(
@@ -81,7 +82,7 @@ class _AuthorPageState extends State<AuthorPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Spacer(),
+                          const Spacer(),
                           SizedBox(
                             width: 50.w,
                             child: Text(
@@ -140,6 +141,9 @@ class _AuthorPageState extends State<AuthorPage> {
                                   size: 30,
                                 ),
                               ),
+                              SizedBox(
+                                width: 3.w,
+                              ),
                               GestureDetector(
                                 onTap: () {
                                   _launchUrl(Uri.parse(data
@@ -153,6 +157,9 @@ class _AuthorPageState extends State<AuthorPage> {
                                       : Constance.primaryColor,
                                   size: 30,
                                 ),
+                              ),
+                              SizedBox(
+                                width: 3.w,
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -179,7 +186,7 @@ class _AuthorPageState extends State<AuthorPage> {
                   ),
                 ),
                 (data.author?.description?.isNotEmpty ?? false)
-                    ? Container(
+                    ? SizedBox(
                         width: double.infinity,
                         height: 20.h,
                         child: Html(
@@ -243,7 +250,7 @@ class _AuthorPageState extends State<AuthorPage> {
 
 
   Future<void> _launchUrl(_url) async {
-    if (!await launchUrl(_url, mode: LaunchMode.inAppWebView)) {
+    if (!await launchUrl(Uri.parse(_url), mode: LaunchMode.inAppWebView)) {
       throw 'Could not launch $_url';
     }
   }

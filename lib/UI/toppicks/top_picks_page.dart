@@ -135,7 +135,7 @@ class _TopPicksPageState extends State<TopPicksPage> {
                       //   size: 4.h,
                       // ),
                       Text(
-                        'Suggested for you',
+                        'Top Picks For You',
                         style: Theme
                             .of(Navigation
                             .instance.navigatorKey.currentContext!)

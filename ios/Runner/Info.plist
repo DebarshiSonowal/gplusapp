@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
-	<true/>
+	<false/>
 	<key>FirebaseAutomaticScreenReportingEnabled</key>
 	<false/>
 	<key>FirebaseDynamicLinksCustomDomains</key>

@@ -14,11 +14,11 @@ override func application(
 _ application: UIApplication,
 didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
 ) -> Bool {
-    var newArguments = ProcessInfo.processInfo.arguments
-            newArguments.append("-FIRAnalyticsDebugEnabled")
-            newArguments.append("-FIRDebugEnabled")
-            newArguments.append("-FIRAnalyticsVerboseLoggingEnabled")
-            ProcessInfo.processInfo.setValue(newArguments, forKey: "arguments")
+//    var newArguments = ProcessInfo.processInfo.arguments
+//            newArguments.append("-FIRAnalyticsDebugEnabled")
+//            newArguments.append("-FIRDebugEnabled")
+//            newArguments.append("-FIRAnalyticsVerboseLoggingEnabled")
+//            ProcessInfo.processInfo.setValue(newArguments, forKey: "arguments")
     FirebaseApp.configure()
     GMSServices.provideAPIKey(FlutterConfigPlugin.env(for: "iosMapKey"))
     GeneratedPluginRegistrant.register(with: self)

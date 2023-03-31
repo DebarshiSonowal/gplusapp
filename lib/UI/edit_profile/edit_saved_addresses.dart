@@ -84,7 +84,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                         fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                    width: 4.w,
+                    width:0.5.w,
                   ),
                   Icon(
                     Icons.location_on,
