@@ -585,7 +585,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                                     items: categories.map((String items) {
                                       return DropdownMenuItem(
                                         value: items,
-                                        child: Text(items.capitalize()),
+                                        child: Text(items),
                                       );
                                     }).toList(),
                                     // After selecting the desired option,it will

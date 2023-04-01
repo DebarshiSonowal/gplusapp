@@ -599,7 +599,7 @@ class _StoryPageState extends State<StoryPage> {
                                               context.tree.attributes['href'] ??
                                                   "https://guwahatiplus.com/"));
                                         } catch (e) {
-                                          print(e);
+                                          debugPrint(e.toString());
                                         }
                                       }
                                     },
@@ -1003,7 +1003,7 @@ class _StoryPageState extends State<StoryPage> {
                                     items: categories.map((String items) {
                                       return DropdownMenuItem(
                                         value: items,
-                                        child: Text(items
+                                        child: Text(items.split("-").length>=2?"${items.split("-")[0].capitalize()} ${items.split("-")[1].capitalize()}":items
                                             .capitalize()
                                             .replaceFirst("-", " ")),
                                       );

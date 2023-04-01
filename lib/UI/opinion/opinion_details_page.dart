@@ -90,7 +90,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                         "assets/images/no_data.png",
                         // fit: BoxFit.fitWidth,
                         // width: 35.w,
-              scale: 4,
+                        scale: 4,
                       )
                     : Lottie.asset(
                         Constance.searchingIcon,
@@ -744,86 +744,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             SizedBox(
                               height: 2.h,
                             ),
-                            // Row(
-                            //   children: [
-                            //     Text(
-                            //       'Sort by categories',
-                            //       style: Theme.of(Navigation.instance
-                            //               .navigatorKey.currentContext!)
-                            //           .textTheme
-                            //           .headline5
-                            //           ?.copyWith(
-                            //             color: Storage.instance.isDarkMode
-                            //                 ? Colors.white
-                            //                 : Colors.black,
-                            //             // fontSize: 2.2.h,
-                            //             // fontWeight: FontWeight.bold,
-                            //           ),
-                            //     ),
-                            //     SizedBox(
-                            //       width: 4.w,
-                            //     ),
-                            //     Container(
-                            //       decoration: BoxDecoration(
-                            //         border: Border.all(
-                            //           color: Storage.instance.isDarkMode
-                            //               ? Colors.white
-                            //               : Colors
-                            //                   .black26, //                   <--- border color
-                            //           // width: 5.0,
-                            //         ),
-                            //         borderRadius: const BorderRadius.all(
-                            //             Radius.circular(
-                            //                 5.0) //                 <--- border radius here
-                            //             ),
-                            //       ),
-                            //       padding:
-                            //           EdgeInsets.symmetric(horizontal: 1.5.w),
-                            //       child: DropdownButton(
-                            //         isExpanded: false,
-                            //         dropdownColor: !Storage.instance.isDarkMode
-                            //             ? Colors.white
-                            //             : Colors.black,
-                            //         style: Theme.of(context)
-                            //             .textTheme
-                            //             .headline5
-                            //             ?.copyWith(
-                            //               color: Storage.instance.isDarkMode
-                            //                   ? Colors.white
-                            //                   : Constance.primaryColor,
-                            //             ),
-                            //         underline: SizedBox.shrink(),
-                            //         // Initial Value
-                            //         value: dropdownvalue,
-                            //
-                            //         // Down Arrow Icon
-                            //         icon: Icon(
-                            //           Icons.keyboard_arrow_down,
-                            //           color: Storage.instance.isDarkMode
-                            //               ? Colors.white
-                            //               : Colors.black,
-                            //         ),
-                            //
-                            //         // Array list of items
-                            //         items: categories.map((String items) {
-                            //           return DropdownMenuItem(
-                            //             value: items,
-                            //             child: Text(items),
-                            //           );
-                            //         }).toList(),
-                            //         // After selecting the desired option,it will
-                            //         // change button value to selected value
-                            //         onChanged: (String? newValue) {
-                            //           setState(() {
-                            //             dropdownvalue = newValue!;
-                            //             page = 1;
-                            //           });
-                            //           fetchContent();
-                            //         },
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
+
                             ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),

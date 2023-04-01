@@ -119,9 +119,9 @@ class _OpinionPageState extends State<OpinionPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Constance.fifthColor,
+                          // color: Storage.instance.isDarkMode
+                          //     ? Colors.white
+                          //     : Constance.fifthColor,
                           padding: EdgeInsets.symmetric(
                               vertical: 1.h, horizontal: 5.w),
                           child: Row(
@@ -129,8 +129,8 @@ class _OpinionPageState extends State<OpinionPage> {
                               Icon(
                                 Icons.newspaper,
                                 color: Storage.instance.isDarkMode
-                                    ? Constance.secondaryColor
-                                    : Colors.white,
+                                    ? Colors.black
+                                    : Constance.secondaryColor,
                                 size: 4.h,
                               ),
                               Text(
@@ -140,9 +140,9 @@ class _OpinionPageState extends State<OpinionPage> {
                                     .textTheme
                                     .headline3
                                     ?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.black
-                                          : Colors.white,
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.black
+                                      : Constance.primaryColor,
                                       // fontSize: 2.2.h,
                                       fontWeight: FontWeight.bold,
                                     ),
