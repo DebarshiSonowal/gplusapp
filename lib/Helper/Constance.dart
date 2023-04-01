@@ -531,106 +531,108 @@ One of the leading digital news network of Guwahati,
               ),
               width: double.infinity,
               // height: 50.h,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigation.instance.goBack();
-                        },
-                        icon: const Icon(Icons.close),
-                        color: Colors.black,
-                      ),
-                    ],
-                  ),
-                  Text(
-                    'Oops!',
-                    style: Theme.of(context).textTheme.headline1?.copyWith(
-                          color: Constance.secondaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 34.sp,
-                        ),
-                  ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  Text(
-                    'Sorry ${data.profile?.name}',
-                    style: Theme.of(context).textTheme.headline4?.copyWith(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  SizedBox(
-                    height: 3.h,
-                  ),
-                  Text(
-                    data.paywall,
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Colors.black,
-                          // fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  Text(
-                    'Do you want to be a member?',
-                    style: Theme.of(context).textTheme.headline4?.copyWith(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: CustomButton(
-                          txt: 'Yes, take me there',
-                          onTap: () {
-                            logTheSubscriptionInitiationClick(
-                                Provider.of<DataProvider>(
-                                        Navigation.instance.navigatorKey
-                                                .currentContext ??
-                                            context,
-                                        listen: false)
-                                    .profile!);
-                            Navigation.instance.navigate('/beamember');
-                          },
-                          size: 12.sp,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5.w,
-                      ),
-                      Flexible(
-                        child: CustomButton(
-                          txt: '''No, I don't want it''',
-                          onTap: () {
-                            logTheSubscriptionInitiationCancelClick(
-                                Provider.of<DataProvider>(
-                                        Navigation.instance.navigatorKey
-                                                .currentContext ??
-                                            context,
-                                        listen: false)
-                                    .profile!);
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () {
                             Navigation.instance.goBack();
                           },
+                          icon: const Icon(Icons.close),
                           color: Colors.black,
-                          size: 12.sp,
-                          fcolor: Colors.white,
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                    Text(
+                      'Oops!',
+                      style: Theme.of(context).textTheme.headline1?.copyWith(
+                            color: Constance.secondaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 34.sp,
+                          ),
+                    ),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    Text(
+                      'Sorry ${data.profile?.name}',
+                      style: Theme.of(context).textTheme.headline4?.copyWith(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    SizedBox(
+                      height: 3.h,
+                    ),
+                    Text(
+                      data.paywall,
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Colors.black,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    Text(
+                      'Do you want to be a member?',
+                      style: Theme.of(context).textTheme.headline4?.copyWith(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: CustomButton(
+                            txt: 'Yes, take me there',
+                            onTap: () {
+                              logTheSubscriptionInitiationClick(
+                                  Provider.of<DataProvider>(
+                                          Navigation.instance.navigatorKey
+                                                  .currentContext ??
+                                              context,
+                                          listen: false)
+                                      .profile!);
+                              Navigation.instance.navigate('/beamember');
+                            },
+                            size: 12.sp,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Flexible(
+                          child: CustomButton(
+                            txt: '''No, I don't want it''',
+                            onTap: () {
+                              logTheSubscriptionInitiationCancelClick(
+                                  Provider.of<DataProvider>(
+                                          Navigation.instance.navigatorKey
+                                                  .currentContext ??
+                                              context,
+                                          listen: false)
+                                      .profile!);
+                              Navigation.instance.goBack();
+                            },
+                            color: Colors.black,
+                            size: 12.sp,
+                            fcolor: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             );
           });

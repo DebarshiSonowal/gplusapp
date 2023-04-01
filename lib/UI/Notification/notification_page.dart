@@ -82,9 +82,15 @@ class _NotificationPageState extends State<NotificationPage> {
                     );
                   },
                 )
-              : Lottie.asset(
-                  isEmpty ? Constance.noDataLoader : Constance.searchingIcon,
-                ),
+              : (isEmpty
+                  ? Image.asset(
+                      "assets/images/no_data.png",
+                      // fit: BoxFit.fill,
+                      scale: 4,
+                    )
+                  : Lottie.asset(
+                      Constance.searchingIcon,
+                    )),
         );
       }),
     );
@@ -109,8 +115,8 @@ class _NotificationPageState extends State<NotificationPage> {
     switch (type) {
       case "news":
         debugPrint("News clicked ${categoryName},${seoName} ");
-        Navigation.instance
-            .navigate('/story', args: '${categoryName},${seoName},notification_page');
+        Navigation.instance.navigate('/story',
+            args: '${categoryName},${seoName},notification_page');
         break;
       case "opinion":
         Navigation.instance.navigate('/opinionPage');
@@ -170,8 +176,8 @@ class _NotificationPageState extends State<NotificationPage> {
         Navigation.instance.navigate('/classifiedDetails', args: int.parse(id));
         break;
       case "locality":
-        Navigation.instance
-            .navigate('/story', args: '${categoryName},${seoName},notification_page');
+        Navigation.instance.navigate('/story',
+            args: '${categoryName},${seoName},notification_page');
         break;
 
       default:

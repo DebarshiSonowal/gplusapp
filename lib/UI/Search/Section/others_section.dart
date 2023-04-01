@@ -56,9 +56,14 @@ class OthersSection extends StatelessWidget {
                 );
               },
               itemCount: data.othersearchlist.length)
-          : Lottie.asset(
-              isEmpty ? Constance.noDataLoader : Constance.searchingIcon,
-            );
+          : (isEmpty
+              ? Image.asset(
+                  "assets/images/no_data.png",
+                  scale: 4,
+                )
+              : Lottie.asset(
+                  Constance.searchingIcon,
+                ));
     });
   }
 

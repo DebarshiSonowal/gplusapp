@@ -336,11 +336,14 @@ class _BigDealPageState extends State<BigDealPage> {
                         ],
                       ),
                     )
+                  : (isEmpty
+                  ? Image.asset(
+                "assets/images/no_data.png",
+                scale: 4,
+              )
                   : Lottie.asset(
-                      isEmpty
-                          ? Constance.noDataLoader
-                          : Constance.searchingIcon,
-                    );
+                Constance.searchingIcon,
+              ));
             }),
           ),
         ),

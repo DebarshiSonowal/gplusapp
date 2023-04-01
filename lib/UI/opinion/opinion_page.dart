@@ -248,11 +248,14 @@ class _OpinionPageState extends State<OpinionPage> {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () {
-                                    if (data.opinions[0].has_permission??false) {
-                                      Navigation.instance.navigate('/authorPage',
-                                                                              args: data.opinions[0].user_id);
+                                    if (data.opinions[0].has_permission ??
+                                        false) {
+                                      Navigation.instance.navigate(
+                                          '/authorPage',
+                                          args: data.opinions[0].user_id);
                                     } else {
-                                      Constance.showMembershipPrompt(context, () {});
+                                      Constance.showMembershipPrompt(
+                                          context, () {});
                                     }
                                   },
                                   child: RichText(
@@ -379,9 +382,14 @@ class _OpinionPageState extends State<OpinionPage> {
                       ],
                     ),
                   )
-                : Lottie.asset(
-                    isEmpty ? Constance.noDataLoader : Constance.searchingIcon,
-                  ),
+                : (isEmpty
+                    ? Image.asset(
+                        "assets/images/no_data.png",
+                        scale: 4,
+                      )
+                    : Lottie.asset(
+                        Constance.searchingIcon,
+                      )),
           );
         }),
       ),

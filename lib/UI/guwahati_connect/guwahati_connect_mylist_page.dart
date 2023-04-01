@@ -235,11 +235,14 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
                 Consumer<DataProvider>(builder: (context, current, _) {
                   return current.myGuwahatiConnect.isEmpty
                       ? Center(
-                          child: Lottie.asset(
-                            isEmpty
-                                ? Constance.noDataLoader
-                                : Constance.searchingIcon,
-                          ),
+                          child: (isEmpty
+                              ? Image.asset(
+                            "assets/images/no_data.png",
+                            scale: 4,
+                          )
+                              : Lottie.asset(
+                            Constance.searchingIcon,
+                          )),
                         )
                       : Padding(
                           padding: EdgeInsets.symmetric(horizontal: 2.w),

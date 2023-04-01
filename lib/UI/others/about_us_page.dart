@@ -4,6 +4,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
@@ -25,84 +26,104 @@ class _AboutUsPageState extends State<AboutUsPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Storage.instance.isDarkMode
-            ? Colors.black
-            :Colors.white,
+        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
-        child: Consumer<DataProvider>(
-          builder: (context,data,_) {
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.people,
-                        color: Constance.secondaryColor,
-                        size: 3.5.h,
-                      ),
-                      SizedBox(
-                        width: 4.w,
-                      ),
-                      Text(
-                        'About Us',
-                        style: Theme.of(context).textTheme.headline2?.copyWith(
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                :Constance.primaryColor,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
+        child: Consumer<DataProvider>(builder: (context, data, _) {
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.people,
+                      color: Constance.secondaryColor,
+                      size: 3.5.h,
+                    ),
+                    SizedBox(
+                      width: 4.w,
+                    ),
+                    Text(
+                      'About Us',
+                      style: Theme.of(context).textTheme.headline2?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 1.5.h,
+                ),
+                SizedBox(
+                  height: 1.h,
+                  child: Divider(
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Colors.black,
+                    thickness: 0.4.sp,
                   ),
-                  SizedBox(
-                    height: 1.5.h,
-                  ),
-                  SizedBox(
-                    height: 1.h,
-                    child: Divider(
+                ),
+                SizedBox(
+                  height: 1.5.h,
+                ),
+                // Center(
+                //   child: Text(
+                //     Constance.about,
+                //     style: Theme.of(context).textTheme.headline6?.copyWith(
+                //           color: Colors.black45,
+                //           // fontWeight: FontWeight.bold,
+                //         ),
+                //   ),
+                // ),
+                SizedBox(
+                  height: 1.5.h,
+                ),
+                Html(
+                  data: data.aboutUs?.content?.trim() ?? "",
+                  shrinkWrap: true,
+                  customRender: {
+                    "a": (context, child) {
+                      return GestureDetector(
+                        onTap: () {
+                          debugPrint("${context.tree.attributes}");
+                          _launchUrl(Uri.parse(context.tree.attributes['href']??"https://guwahatiplus.com/"));
+                        },
+                        child: Text(
+                          context.tree.element?.innerHtml
+                              .split("=")[0]
+                              .toString() ??
+                              "",
+                          style: Theme.of(Navigation.instance
+                              .navigatorKey.currentContext!)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(
+                            color: Constance.primaryColor,
+                            fontWeight: FontWeight.bold,
+                            decoration:
+                            TextDecoration.underline,
+                          ),
+                        ),
+                      );
+                    },
+                  },
+                  style: {
+                    '#': Style(
+                      // fontSize: FontSize(_counterValue),
+                      // maxLines: 20,
                       color: Storage.instance.isDarkMode
                           ? Colors.white
-                          :Colors.black,
-                      thickness: 0.4.sp,
+                          : Colors.black,
+                      // textOverflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  SizedBox(
-                    height: 1.5.h,
-                  ),
-                  // Center(
-                  //   child: Text(
-                  //     Constance.about,
-                  //     style: Theme.of(context).textTheme.headline6?.copyWith(
-                  //           color: Colors.black45,
-                  //           // fontWeight: FontWeight.bold,
-                  //         ),
-                  //   ),
-                  // ),
-                  SizedBox(
-                    height: 1.5.h,
-                  ),
-                  Html(
-                    data: data.aboutUs?.content?.trim() ?? "",
-                    shrinkWrap: true,
-
-                    style: {
-                      '#': Style(
-                        // fontSize: FontSize(_counterValue),
-                        // maxLines: 20,
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            :Colors.black,
-                        // textOverflow: TextOverflow.ellipsis,
-                      ),
-                    },
-                  ),
-
-                ],
-              ),
-            );
-          }
-        ),
+                  },
+                ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
@@ -116,10 +137,10 @@ class _AboutUsPageState extends State<AboutUsPage> {
       //   icon: Icon(Icons.menu),
       // ),
       title: GestureDetector(
-        onTap: (){
+        onTap: () {
           Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+                  Navigation.instance.navigatorKey.currentContext ?? context,
+                  listen: false)
               .setCurrent(0);
           Navigation.instance.navigate('/main');
         },
@@ -142,8 +163,8 @@ class _AboutUsPageState extends State<AboutUsPage> {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -151,7 +172,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
           },
           icon: Icon(Icons.search),
         ),
@@ -176,8 +197,13 @@ class _AboutUsPageState extends State<AboutUsPage> {
               listen: false)
           .setAboutUs(response.aboutUs!);
       Navigation.instance.goBack();
-    }else{
+    } else {
       Navigation.instance.goBack();
+    }
+  }
+  Future<void> _launchUrl(_url) async {
+    if (!await launchUrl(_url,mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $_url';
     }
   }
 }

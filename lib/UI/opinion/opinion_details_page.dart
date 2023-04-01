@@ -67,7 +67,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
       }
     });
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,9 +85,16 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
           return SingleChildScrollView(
             controller: controller,
             child: data.opinion == null
-                ? Lottie.asset(
-                    isEmpty ? Constance.noDataLoader : Constance.searchingIcon,
-                  )
+                ? (isEmpty
+                    ? Image.asset(
+                        "assets/images/no_data.png",
+                        // fit: BoxFit.fitWidth,
+                        // width: 35.w,
+              scale: 4,
+                      )
+                    : Lottie.asset(
+                        Constance.searchingIcon,
+                      ))
                 : Column(
                     children: [
                       Stack(
@@ -358,11 +367,15 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                       //     ? 'check out our website https://guwahatiplus.com/'
                                       //     : '${data.opinion?.web_url}');
                                       generateURL(
-                                        data.opinion?.category_gallery!.seo_name!,
-                                        data.opinion?.seo_name,
-                                          data.opinion?.description?.trim().split(".").sublist(0,4).join(""),
-                                          data.opinion?.image_file_name
-                                      );
+                                          data.opinion?.category_gallery!
+                                              .seo_name!,
+                                          data.opinion?.seo_name,
+                                          data.opinion?.description
+                                              ?.trim()
+                                              .split(".")
+                                              .sublist(0, 4)
+                                              .join(""),
+                                          data.opinion?.image_file_name);
                                     },
                                     splashRadius: 10.0,
                                     splashColor: Constance.secondaryColor,
@@ -691,9 +704,12 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     generateURL(
                                         data.opinion?.category_id,
                                         data.opinion?.seo_name,
-                                        data.opinion?.description?.trim().split(".").sublist(0,4).join(""),
-                                        data.opinion?.image_file_name
-                                    );
+                                        data.opinion?.description
+                                            ?.trim()
+                                            .split(".")
+                                            .sublist(0, 4)
+                                            .join(""),
+                                        data.opinion?.image_file_name);
                                   },
                                   splashRadius: 10.0,
                                   splashColor: Constance.secondaryColor,

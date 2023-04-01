@@ -12,6 +12,7 @@ import '../../../Navigation/Navigate.dart';
 class NewsSection extends StatelessWidget {
   const NewsSection({Key? key, required this.isEmpty}) : super(key: key);
   final bool isEmpty;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<DataProvider>(builder: (context, data, _) {
@@ -29,11 +30,7 @@ class NewsSection extends StatelessWidget {
                           args:
                               '${item.first_cat_name?.seo_name},${item.seo_name},news_section');
                     } else {
-                      Constance.showMembershipPrompt(cont, () {
-                        // setState(() {
-                        //   showing = false;
-                        // });
-                      });
+                      Constance.showMembershipPrompt(cont, () {});
                     }
                   },
                   child: SearchNewsItem(item: item),
@@ -54,8 +51,20 @@ class NewsSection extends StatelessWidget {
                 );
               },
               itemCount: data.searchlist.length)
-          : Lottie.asset(
-              isEmpty ? Constance.noDataLoader : Constance.searchingIcon,
+          : Center(
+              child: isEmpty
+                  ? Image.asset(
+                      "assets/images/no_data.png",
+                      fit: BoxFit.fitWidth,
+                      width: 35.w,
+                    )
+                  : Lottie.asset(
+                      Constance.searchingIcon,
+                      // height: 2.h,
+                      fit: BoxFit.fitWidth,
+
+                      width: 35.w,
+                    ),
             );
     });
   }

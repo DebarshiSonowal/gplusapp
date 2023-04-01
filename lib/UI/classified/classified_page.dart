@@ -350,11 +350,14 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                   ),
                   data.classified.isEmpty
                       ? Center(
-                          child: Lottie.asset(
-                            isEmpty
-                                ? Constance.noDataLoader
-                                : Constance.searchingIcon,
-                          ),
+                          child: (isEmpty
+                              ? Image.asset(
+                            "assets/images/no_data.png",
+                            scale: 4,
+                          )
+                              : Lottie.asset(
+                            Constance.searchingIcon,
+                          )),
                         )
                       : Padding(
                           padding: EdgeInsets.symmetric(

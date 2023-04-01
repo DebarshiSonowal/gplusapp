@@ -55,11 +55,14 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                 ),
                 data.citizenlist.isEmpty
                     ? Center(
-                        child: Lottie.asset(
-                          isEmpty
-                              ? Constance.noDataLoader
-                              : Constance.searchingIcon,
-                        ),
+                        child: (isEmpty
+                            ? Image.asset(
+                          "assets/images/no_data.png",
+                          scale: 4,
+                        )
+                            : Lottie.asset(
+                          Constance.searchingIcon,
+                        )),
                       )
                     : ListView.separated(
                         shrinkWrap: true,

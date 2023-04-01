@@ -23,6 +23,7 @@ class BlockedUsersListPage extends StatefulWidget {
 class _BlockedUsersListPageState extends State<BlockedUsersListPage> {
   bool isEmpty = false;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,11 +71,14 @@ class _BlockedUsersListPageState extends State<BlockedUsersListPage> {
             Consumer<DataProvider>(builder: (context, data, widg) {
               return data.blockedUsers.isEmpty
                   ? Center(
-                      child: Lottie.asset(
-                        isEmpty
-                            ? Constance.noDataLoader
-                            : Constance.searchingIcon,
-                      ),
+                      child: (isEmpty
+                          ? Image.asset(
+                              "assets/images/no_data.png",
+                              scale: 4,
+                            )
+                          : Lottie.asset(
+                              Constance.searchingIcon,
+                            )),
                     )
                   : Expanded(
                       child: ListView.separated(
@@ -111,7 +115,7 @@ class _BlockedUsersListPageState extends State<BlockedUsersListPage> {
                               child: CustomButton(
                                 txt: 'Unblock',
                                 onTap: () {
-                                  unblockUser(item.user_id,item.block_for);
+                                  unblockUser(item.user_id, item.block_for);
                                 },
                                 size: 10.sp,
                               ),
@@ -165,13 +169,13 @@ class _BlockedUsersListPageState extends State<BlockedUsersListPage> {
     }
   }
 
-  void unblockUser(int? id, String? categ) async{
+  void unblockUser(int? id, String? categ) async {
     final response = await ApiProvider.instance.unblockUser(id, categ);
-    if(response.success??false){
-      Fluttertoast.showToast(msg: response.message??"");
+    if (response.success ?? false) {
+      Fluttertoast.showToast(msg: response.message ?? "");
       fetchBlockedUsersList();
-    }else{
-      Fluttertoast.showToast(msg: response.message??"Something went wrong");
+    } else {
+      Fluttertoast.showToast(msg: response.message ?? "Something went wrong");
     }
   }
 }

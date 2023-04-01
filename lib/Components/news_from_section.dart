@@ -21,8 +21,9 @@ class NewsFromSection extends StatelessWidget {
         child: ExpansionTile(
           title: Row(
             children: [
-              const Icon(
-                Icons.backpack,
+              Image.asset(
+                "assets/images/news.png",
+                scale: 20,
                 color: Constance.secondaryColor,
               ),
               SizedBox(

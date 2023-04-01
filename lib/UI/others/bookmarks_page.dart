@@ -232,7 +232,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                             .textTheme
                                             .headline5
                                             ?.copyWith(
-                                              color:  Storage.instance.isDarkMode
+                                              color: Storage.instance.isDarkMode
                                                   ? Constance.secondaryColor
                                                   : Constance.primaryColor,
                                               fontWeight: FontWeight.bold,
@@ -328,11 +328,14 @@ class _BookmarksPageState extends State<BookmarksPage> {
                         ],
                       ),
                     )
-                  : Lottie.asset(
-                      isEmpty
-                          ? Constance.noDataLoader
-                          : Constance.searchingIcon,
-                    ));
+                  : (isEmpty
+                      ? Image.asset(
+                          "assets/images/no_data.png",
+                          scale: 4,
+                        )
+                      : Lottie.asset(
+                          Constance.searchingIcon,
+                        )));
         }),
       ),
     );
@@ -415,5 +418,3 @@ class _BookmarksPageState extends State<BookmarksPage> {
     // Future.delayed(Duration.zero, () => fetchBookmarks());
   }
 }
-
-

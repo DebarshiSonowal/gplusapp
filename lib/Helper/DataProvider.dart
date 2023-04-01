@@ -43,7 +43,9 @@ class DataProvider extends ChangeNotifier {
     // BlockedUser(),
   ];
   List<ReportModel> reportCategories = [];
-  List<NotificationInDevice> notifications = [];
+  List<NotificationInDevice> notifications = [
+
+  ];
   List<Opinion> opinions = [];
   List<Story> stories = [];
   List<Article> home_albums = [],

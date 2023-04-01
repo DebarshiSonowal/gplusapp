@@ -142,9 +142,14 @@ class _StoryPageState extends State<StoryPage> {
           return SingleChildScrollView(
             controller: controller,
             child: data.selectedArticle == null
-                ? Lottie.asset(
-                    isEmpty ? Constance.noDataLoader : Constance.searchingIcon,
-                  )
+                ? (isEmpty
+                    ? Image.asset(
+                        "assets/images/no_data.png",
+                        scale: 4,
+                      )
+                    : Lottie.asset(
+                        Constance.searchingIcon,
+                      ))
                 : Column(
                     children: [
                       Stack(
@@ -567,7 +572,6 @@ class _StoryPageState extends State<StoryPage> {
                                 "a": (context, child) {
                                   return GestureDetector(
                                     onTap: () {
-                                      print("https://www.gmcpropertytax.com");
                                       if (context.tree.attributes['href']
                                               .toString()
                                               .split("/")[2]
@@ -592,7 +596,8 @@ class _StoryPageState extends State<StoryPage> {
                                       } else {
                                         try {
                                           _launchUrl(Uri.parse(
-                                              "https://www.gmcpropertytax.com"));
+                                              context.tree.attributes['href'] ??
+                                                  "https://guwahatiplus.com/"));
                                         } catch (e) {
                                           print(e);
                                         }
@@ -1326,27 +1331,27 @@ class _StoryPageState extends State<StoryPage> {
     // final dynamicLink =
     //     await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
     final dynamicLinkParams = DynamicLinkParameters(
-      link: Uri.parse(
-          // "${FlutterConfig.get('domain')}/link/story/${seo_name}/${first_cat_name}"),
-          "${FlutterConfig.get('domain')}/${first_cat_name}/${seo_name}"),
-      uriPrefix: FlutterConfig.get('customHostDeepLink'),
-      androidParameters: AndroidParameters(
-        packageName: FlutterConfig.get("androidPackage"),
-        // fallbackUrl: Uri.parse("https://guwahatiplus.com/${first_cat_name}/${seo_name}"),
-      ),
-      iosParameters: IOSParameters(
-        bundleId: FlutterConfig.get('iosBundleId'),
-        // fallbackUrl: Uri.parse("https://guwahatiplus.com/${first_cat_name}/${seo_name}"),
-      ),
-      navigationInfoParameters: const NavigationInfoParameters(
-        forcedRedirectEnabled: true,
-      )
-      // socialMetaTagParameters: SocialMetaTagParameters(
-      //   description: description,
-      //   title: seo_name?.replaceAll("-", " "),
-      //   imageUrl: Uri.parse(image_url),
-      // ),
-    );
+        link: Uri.parse(
+            // "${FlutterConfig.get('domain')}/link/story/${seo_name}/${first_cat_name}"),
+            "${FlutterConfig.get('domain')}/${first_cat_name}/${seo_name}"),
+        uriPrefix: FlutterConfig.get('customHostDeepLink'),
+        androidParameters: AndroidParameters(
+          packageName: FlutterConfig.get("androidPackage"),
+          // fallbackUrl: Uri.parse("https://guwahatiplus.com/${first_cat_name}/${seo_name}"),
+        ),
+        iosParameters: IOSParameters(
+          bundleId: FlutterConfig.get('iosBundleId'),
+          // fallbackUrl: Uri.parse("https://guwahatiplus.com/${first_cat_name}/${seo_name}"),
+        ),
+        navigationInfoParameters: const NavigationInfoParameters(
+          forcedRedirectEnabled: true,
+        )
+        // socialMetaTagParameters: SocialMetaTagParameters(
+        //   description: description,
+        //   title: seo_name?.replaceAll("-", " "),
+        //   imageUrl: Uri.parse(image_url),
+        // ),
+        );
     final dynamicLink = await FirebaseDynamicLinks.instance.buildShortLink(
       dynamicLinkParams,
       shortLinkType: ShortDynamicLinkType.unguessable,
