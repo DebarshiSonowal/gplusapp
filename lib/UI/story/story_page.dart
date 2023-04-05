@@ -232,6 +232,7 @@ class _StoryPageState extends State<StoryPage> {
                                     color: Storage.instance.isDarkMode
                                         ? Colors.white
                                         : Colors.black,
+                                    fontStyle: FontStyle.italic,
                                     // fontSize: 25.sp,
                                     // fontWeight: FontWeight.bold,
                                     // fontStyle: FontStyle.italic,
@@ -507,6 +508,12 @@ class _StoryPageState extends State<StoryPage> {
                                 print(exception);
                               },
                               customRender: {
+                                // "img": (context, child) {
+                                //   return Text(
+                                //       "${context.tree.attributes['src']}",style:Theme.of(Navigation.instance.navigatorKey.currentContextcontext).textTheme.headline5?.copyWith(
+                                //     color: Colors.black,
+                                //   ));
+                                // },
                                 "table": (context, child) {
                                   return SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
@@ -1003,9 +1010,11 @@ class _StoryPageState extends State<StoryPage> {
                                     items: categories.map((String items) {
                                       return DropdownMenuItem(
                                         value: items,
-                                        child: Text(items.split("-").length>=2?"${items.split("-")[0].capitalize()} ${items.split("-")[1].capitalize()}":items
-                                            .capitalize()
-                                            .replaceFirst("-", " ")),
+                                        child: Text(items.split("-").length >= 2
+                                            ? "${items.split("-")[0].capitalize()} ${items.split("-")[1].capitalize()}"
+                                            : items
+                                                .capitalize()
+                                                .replaceFirst("-", " ")),
                                       );
                                     }).toList(),
                                     // After selecting the desired option,it will

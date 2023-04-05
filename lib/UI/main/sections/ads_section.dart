@@ -48,7 +48,7 @@ class AdsSection extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(left: 4.w, right: 5.w, bottom: 0.9.h),
                 child: CachedNetworkImage(
-                  height: 6.h,
+                  // height: 6.h,
                   fit: BoxFit.fill,
                   imageUrl: data.ads[random].image_file_name ?? '',
                   placeholder: (cont, _) {

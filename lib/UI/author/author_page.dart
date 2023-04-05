@@ -27,6 +27,7 @@ class AuthorPage extends StatefulWidget {
 
 class _AuthorPageState extends State<AuthorPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,8 +68,7 @@ class _AuthorPageState extends State<AuthorPage> {
                             image: DecorationImage(
                               fit: BoxFit.fill,
                               image: CachedNetworkImageProvider(
-                                data.author?.image_file_name ??
-                                    "",
+                                data.author?.image_file_name ?? "",
                                 scale: 1,
                               ),
                             ),
@@ -87,30 +87,50 @@ class _AuthorPageState extends State<AuthorPage> {
                             width: 50.w,
                             child: Text(
                               data.author?.name ?? '',
-                              style:(data.author?.name ?? '').length>60? Theme.of(Navigation
-                                      .instance.navigatorKey.currentContext!)
-                                  .textTheme
-                                  .headline3
-                                  ?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Constance.primaryColor,
-                                    // fontSize: 11.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ):Theme.of(Navigation
-                                  .instance.navigatorKey.currentContext!)
-                                  .textTheme
-                                  .headline5
-                                  ?.copyWith(
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Constance.primaryColor,
-                                // fontSize: 11.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: (data.author?.name ?? '').length > 60
+                                  ? Theme.of(Navigation.instance.navigatorKey
+                                          .currentContext!)
+                                      .textTheme
+                                      .headline3
+                                      ?.copyWith(
+                                        color: Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
+                                        // fontSize: 11.sp,
+                                        fontWeight: FontWeight.bold,
+                                      )
+                                  : Theme.of(Navigation.instance.navigatorKey
+                                          .currentContext!)
+                                      .textTheme
+                                      .headline5
+                                      ?.copyWith(
+                                        color: Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Constance.primaryColor,
+                                        // fontSize: 11.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                             ),
                           ),
-                          Spacer(),
+                          SizedBox(
+                            height: 0.5.h,
+                          ),
+                          (data.author?.description?.isNotEmpty ?? false)
+                              ? SizedBox(
+                                  width: 50.w,
+                                  height: 6.h,
+                                  child: Text(
+                                    data.author?.description ?? "",
+                                    overflow: TextOverflow.clip,
+                                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                                )
+                              : const Spacer(),
                           Text(
                             'Follow on',
                             style: Theme.of(Navigation
@@ -122,7 +142,7 @@ class _AuthorPageState extends State<AuthorPage> {
                                       ? Colors.white
                                       : Colors.black,
                                   // fontSize: 11.sp,
-                                  // fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.bold,
                                 ),
                           ),
                           Row(
@@ -185,15 +205,6 @@ class _AuthorPageState extends State<AuthorPage> {
                     ],
                   ),
                 ),
-                (data.author?.description?.isNotEmpty ?? false)
-                    ? SizedBox(
-                        width: double.infinity,
-                        height: 20.h,
-                        child: Html(
-                          data: data.author?.description ?? "",
-                        ),
-                      )
-                    : Container(),
                 SizedBox(
                   height: 1.h,
                 ),
@@ -246,8 +257,6 @@ class _AuthorPageState extends State<AuthorPage> {
           Navigation.instance.goBack();
         });
   }
-
-
 
   Future<void> _launchUrl(_url) async {
     if (!await launchUrl(Uri.parse(_url), mode: LaunchMode.inAppWebView)) {

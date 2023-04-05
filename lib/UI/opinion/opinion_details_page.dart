@@ -176,6 +176,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     color: Storage.instance.isDarkMode
                                         ? Colors.white
                                         : Colors.black,
+                                    fontStyle: FontStyle.italic,
                                     // fontSize: 25.sp,
                                     // fontWeight: FontWeight.bold,
                                     // fontStyle: FontStyle.italic,
