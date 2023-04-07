@@ -49,7 +49,7 @@ class VideoReportSection extends StatelessWidget {
               ? Container(
                   margin: EdgeInsets.only(left: 4.w),
                   width: 95.w,
-                  height: 21.h,
+                  height: 17.h,
                   // height: 21.h,
                   // width: double.infinity,
                   child: ListView.separated(

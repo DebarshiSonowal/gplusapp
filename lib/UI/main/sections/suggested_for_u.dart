@@ -22,7 +22,7 @@ class SuggestedForYou extends StatelessWidget {
     return data.home_toppicks.isEmpty
         ? Container()
         : Container(
-            height: 27.h,
+            height: 26.h,
             width: double.infinity,
             color: Constance.secondaryColor,
             padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -47,7 +47,7 @@ class SuggestedForYou extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.only(left: 4.w),
                   width: 95.w,
-                  height: 20.h,
+                  height: 18.h,
                   child: ListView.separated(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,

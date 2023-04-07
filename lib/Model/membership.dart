@@ -3,10 +3,12 @@ class Membership {
   double? base_price, discount, discount_value, price_after_discount;
   String? name,
       duration,
+      description,
       plan_type,
       bg_color,
       plan_active_date,
-      plan_expiry_date,inapp_identifier;
+      plan_expiry_date,
+      inapp_identifier;
   bool? is_currently_active;
 
   Membership.fromJson(json) {
@@ -36,10 +38,12 @@ class Membership {
 
     //String
     name = json['name'] ?? "";
+    description = json['description'] ?? "";
     duration = json['duration'] ?? "";
     plan_type = json['plan_type'] ?? "";
     bg_color = json['bg_color'] ?? "";
-    inapp_identifier = json['inapp_identifier'] ?? "gplus_subscription_one_month_non";
+    inapp_identifier =
+        json['inapp_identifier'] ?? "gplus_subscription_one_month_non";
     plan_active_date = json['plan_active_date'] ?? "";
     plan_expiry_date = json['plan_expiry_date'] ?? "";
   }
@@ -64,6 +68,7 @@ class MembershipResponse {
     message = msg ?? "Something Went Wrong";
   }
 }
+
 class MembershipResponse2 {
   bool? success;
   String? message, be_a_member, benifit_members;

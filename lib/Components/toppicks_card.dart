@@ -30,7 +30,7 @@ class SuggestedForYouCard extends StatelessWidget {
           ),
           color: Colors.white,
         ),
-        height: 12.h,
+        height: 11.h,
         width: MediaQuery.of(context).size.width - 10.w,
         child: Row(
           children: [
@@ -72,22 +72,34 @@ class SuggestedForYouCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // Center(
+                  //   child: Text(
+                  //     item.title ??
+                  //         "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient.",
+                  //     maxLines: 8,
+                  //     style: (item.title?.length ?? 0) > 80
+                  //         ? Theme.of(context).textTheme.headline6?.copyWith(
+                  //             fontSize: 11.sp,
+                  //             fontWeight: FontWeight.bold,
+                  //             overflow: TextOverflow.ellipsis,
+                  //             color: Constance.primaryColor)
+                  //         : Theme.of(context).textTheme.headline4?.copyWith(
+                  //             fontSize: 12.sp,
+                  //             fontWeight: FontWeight.bold,
+                  //             overflow: TextOverflow.ellipsis,
+                  //             color: Constance.primaryColor),
+                  //   ),
+                  // ),
                   Center(
                     child: Text(
                       item.title ??
                           "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient.",
-                      maxLines: 8,
-                      style: (item.title?.length ?? 0) > 80
-                          ? Theme.of(context).textTheme.headline6?.copyWith(
-                              fontSize: 11.sp,
-                              fontWeight: FontWeight.bold,
-                              overflow: TextOverflow.ellipsis,
-                              color: Constance.primaryColor)
-                          : Theme.of(context).textTheme.headline4?.copyWith(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.bold,
-                              overflow: TextOverflow.ellipsis,
-                              color: Constance.primaryColor),
+                      maxLines: 4,
+                      style:Theme.of(context).textTheme.headline6?.copyWith(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
+                          color: Constance.primaryColor),
                     ),
                   ),
                   // SizedBox(

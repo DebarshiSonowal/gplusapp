@@ -76,13 +76,26 @@ class BeMemberCard extends StatelessWidget {
               height: 1.5.h,
             ),
             Text(
+              current.description??"",
+              style: Theme.of(context)
+                  .textTheme
+                  .headline6
+                  ?.copyWith(color: Colors.white, fontStyle: FontStyle.italic
+                // fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            SizedBox(
+              height: 0.5.h,
+            ),
+            Text(
               'Subscription is for one time purchase only.\nWe do not renew you subscription automatically.',
               style: Theme.of(context)
                   .textTheme
                   .headline5
                   ?.copyWith(color: Colors.white, fontStyle: FontStyle.italic
-                      // fontWeight: FontWeight.bold,
-                      ),
+                // fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(
               height: 1.5.h,
@@ -92,7 +105,6 @@ class BeMemberCard extends StatelessWidget {
               child: CustomButton(
                 txt: 'Get it',
                 onTap: () {
-
                   if (current.id == 1) {
                     logTheOneMonthSubscriptionClick(Provider.of<DataProvider>(
                             Navigation.instance.navigatorKey.currentContext ??

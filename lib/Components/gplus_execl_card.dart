@@ -78,17 +78,8 @@ class GPlusExecCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       item.title ?? "",
-                      maxLines: 7,
-                      style: (item.title?.length ?? 0) > 70
-                          ? Theme.of(context).textTheme.headline5?.copyWith(
-                                fontSize: 11.sp,
-                                fontWeight: FontWeight.bold,
-                                overflow: TextOverflow.ellipsis,
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Constance.primaryColor,
-                              )
-                          : Theme.of(context).textTheme.headline4?.copyWith(
+                      maxLines: 4,
+                      style: Theme.of(context).textTheme.headline4?.copyWith(
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
                                 overflow: TextOverflow.ellipsis,
@@ -96,6 +87,24 @@ class GPlusExecCard extends StatelessWidget {
                                     ? Colors.white
                                     : Constance.primaryColor,
                               ),
+                      // maxLines: 7,
+                      // style: (item.title?.length ?? 0) > 70
+                      //     ? Theme.of(context).textTheme.headline5?.copyWith(
+                      //           fontSize: 11.sp,
+                      //           fontWeight: FontWeight.bold,
+                      //           overflow: TextOverflow.ellipsis,
+                      //           color: Storage.instance.isDarkMode
+                      //               ? Colors.white
+                      //               : Constance.primaryColor,
+                      //         )
+                      //     : Theme.of(context).textTheme.headline4?.copyWith(
+                      //           fontSize: 12.sp,
+                      //           fontWeight: FontWeight.bold,
+                      //           overflow: TextOverflow.ellipsis,
+                      //           color: Storage.instance.isDarkMode
+                      //               ? Colors.white
+                      //               : Constance.primaryColor,
+                      //         ),
                     ),
                   ),
                   SizedBox(
