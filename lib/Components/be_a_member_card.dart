@@ -35,7 +35,7 @@ class BeMemberCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Get the ${current.name}',
+              'Get ${current.name}',
               style: Theme.of(context).textTheme.headline5?.copyWith(
                     color: Colors.white,
                     // fontWeight: FontWeight.bold,
@@ -86,7 +86,7 @@ class BeMemberCard extends StatelessWidget {
             ),
 
             SizedBox(
-              height: 0.5.h,
+              height: 1.h,
             ),
             Text(
               'Subscription is for one time purchase only.\nWe do not renew you subscription automatically.',
