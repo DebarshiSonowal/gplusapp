@@ -17,6 +17,7 @@ class PromotedDealItemImage extends StatelessWidget {
       flex: 4,
       child: Container(
         decoration: BoxDecoration(
+          color: Colors.white,
           borderRadius: const BorderRadius.only(
             topRight: Radius.circular(
               10.0,
@@ -32,7 +33,7 @@ class PromotedDealItemImage extends StatelessWidget {
             // ),
           ),
           image: DecorationImage(
-            fit: BoxFit.fill,
+            fit: BoxFit.fitHeight,
             image: CachedNetworkImageProvider(
               data.vendor?.image_file_name ??
                   "https://source.unsplash.com/user/c_v_r/1900x800",

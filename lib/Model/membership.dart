@@ -1,6 +1,6 @@
 class Membership {
   int? id, status, free_coupons, discount_in, referral_points;
-  double? base_price, discount, discount_value, price_after_discount;
+  double? base_price, discount, discount_value, price_after_discount,grand_total,gst;
   String? name,
       duration,
       description,
@@ -8,7 +8,7 @@ class Membership {
       bg_color,
       plan_active_date,
       plan_expiry_date,
-      inapp_identifier;
+      inapp_identifier,plan_duration_type;
   bool? is_currently_active;
 
   Membership.fromJson(json) {
@@ -24,6 +24,12 @@ class Membership {
         ? 0
         : double.parse(json['price_after_discount'].toString());
     base_price = double.parse(json['base_price']);
+    grand_total = json['grand_total'] == null
+        ? 0
+        : double.parse(json['grand_total'].toString());
+    gst  = json['gst'] == null
+        ? 0
+        : double.parse(json['gst'].toString());
     discount = json['discount'] == null
         ? 0
         : double.parse(json['discount'].toString());
@@ -40,6 +46,7 @@ class Membership {
     name = json['name'] ?? "";
     description = json['description'] ?? "";
     duration = json['duration'] ?? "";
+    plan_duration_type = json['plan_duration_type'] ?? "";
     plan_type = json['plan_type'] ?? "";
     bg_color = json['bg_color'] ?? "";
     inapp_identifier =

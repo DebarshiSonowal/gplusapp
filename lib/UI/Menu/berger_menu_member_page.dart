@@ -430,7 +430,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
         try {
           if (await Permission.storage.request().isGranted) {
             await ApiProvider.instance
-                .download2(response.e_paper?.news_pdf ?? "");
+                .download2(response.e_paper?.news_pdf ?? "",response.e_paper?.title??"");
           } else {
             Navigation.instance.goBack();
             showError("We require storage permissions");
@@ -442,7 +442,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
         }
         // We didn't ask for permission yet or the permission has been denied before but not permanently.
       } else {
-        await ApiProvider.instance.download2(response.e_paper?.news_pdf ?? "");
+        await ApiProvider.instance.download2(response.e_paper?.news_pdf ?? "",response.e_paper?.title??"");
       }
     } else {
       showError("Failed to download E-paper");

@@ -47,14 +47,14 @@ class BeMemberCard extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Rs ${current.base_price}/',
+                  'Rs ${current.price_after_discount}/',
                   style: Theme.of(context).textTheme.headline1?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
                 Text(
-                  current.duration?.split(" ")[1] ?? "",
+                  (current.plan_duration_type??""),
                   style: Theme.of(context).textTheme.headline4?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -66,36 +66,36 @@ class BeMemberCard extends StatelessWidget {
               height: 1.5.h,
             ),
             Text(
-              'You save Rs ${current.discount}',
-              style: Theme.of(context).textTheme.headline6?.copyWith(
-                    color: Colors.white,
-                    // fontWeight: FontWeight.bold,
-                  ),
-            ),
-            SizedBox(
-              height: 1.5.h,
-            ),
-            Text(
-              current.description??"",
+              current.description ?? "",
               style: Theme.of(context)
                   .textTheme
                   .headline6
                   ?.copyWith(color: Colors.white, fontStyle: FontStyle.italic
-                // fontWeight: FontWeight.bold,
-              ),
+                      // fontWeight: FontWeight.bold,
+                      ),
+            ),
+            SizedBox(
+              height: 1.5.h,
             ),
 
-            SizedBox(
-              height: 1.h,
-            ),
+            // Text(
+            //   'You save Rs ${current.discount}',
+            //   style: Theme.of(context).textTheme.headline6?.copyWith(
+            //     color: Colors.white,
+            //     // fontWeight: FontWeight.bold,
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: 1.h,
+            // ),
             Text(
               'Subscription is for one time purchase only.\nWe do not renew you subscription automatically.',
               style: Theme.of(context)
                   .textTheme
-                  .headline5
+                  .headline6
                   ?.copyWith(color: Colors.white, fontStyle: FontStyle.italic
-                // fontWeight: FontWeight.bold,
-              ),
+                      // fontWeight: FontWeight.bold,
+                      ),
             ),
             SizedBox(
               height: 1.5.h,

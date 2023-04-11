@@ -508,12 +508,16 @@ class _StoryPageState extends State<StoryPage> {
                                 print(exception);
                               },
                               customRender: {
-                                // "img": (context, child) {
-                                //   return Text(
-                                //       "${context.tree.attributes['src']}",style:Theme.of(Navigation.instance.navigatorKey.currentContextcontext).textTheme.headline5?.copyWith(
-                                //     color: Colors.black,
-                                //   ));
-                                // },
+                                "img": (contextRender, child) {
+                                  return Text(
+                                      "${contextRender.tree.attributes['src']}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Colors.black,
+                                          ));
+                                },
                                 "table": (context, child) {
                                   return SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
@@ -577,56 +581,120 @@ class _StoryPageState extends State<StoryPage> {
                                   );
                                 },
                                 "a": (context, child) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      if (context.tree.attributes['href']
+                                  return (context.tree.element?.innerHtml
                                               .toString()
-                                              .split("/")[2]
-                                              .trim() ==
-                                          "www.guwahatiplus.com") {
-                                        if (context.tree.attributes['href']
-                                                .toString()
-                                                .split("/")
-                                                .length >=
-                                            5) {
-                                          Navigation.instance.navigate('/story',
-                                              args:
-                                                  '${context.tree.attributes['href'].toString().split("/")[3]},${context.tree.attributes['href'].toString().split("/")[4]},story_page');
-                                        } else {
-                                          Navigation.instance.navigate(
-                                              '/newsfrom',
-                                              args: context
-                                                  .tree.attributes['href']
-                                                  .toString()
-                                                  .split("/")[3]);
-                                        }
-                                      } else {
-                                        try {
-                                          _launchUrl(Uri.parse(
-                                              context.tree.attributes['href'] ??
-                                                  "https://guwahatiplus.com/"));
-                                        } catch (e) {
-                                          debugPrint(e.toString());
-                                        }
-                                      }
-                                    },
-                                    child: Text(
-                                      context.tree.element?.innerHtml
-                                              .split("=")[0]
-                                              .toString() ??
-                                          "",
-                                      style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
-                                          .textTheme
-                                          .headline5
-                                          ?.copyWith(
-                                            color: Constance.primaryColor,
-                                            fontWeight: FontWeight.bold,
-                                            decoration:
-                                                TextDecoration.underline,
+                                              .contains("ad_managers") ??
+                                          false)
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            // print();
+                                            _launchUrl(Uri.parse(
+                                              context.tree.element?.outerHtml
+                                                      .split("href=")[1]
+                                                      .substring(
+                                                          1,
+                                                          (context.tree.element
+                                                                      ?.outerHtml
+                                                                      .split(
+                                                                          "href=")[1]
+                                                                      .length ??
+                                                                  6) -
+                                                              6) ??
+                                                  "",
+                                            ));
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 2.w,
+                                            ),
+                                            child: CachedNetworkImage(
+                                              fit: BoxFit.fill,
+                                              imageUrl: context
+                                                      .tree.element?.innerHtml
+                                                      .split("=")[1]
+                                                      .toString()
+                                                      .substring(
+                                                          1,
+                                                          (context.tree.element
+                                                                      ?.innerHtml
+                                                                      .split(
+                                                                          "=")[1]
+                                                                      .toString()
+                                                                      .length ??
+                                                                  0) -
+                                                              2) ??
+                                                  "",
+                                              placeholder: (cont, _) {
+                                                return Image.asset(
+                                                  Constance.logoIcon,
+                                                  // color: Colors.black,
+                                                );
+                                              },
+                                              errorWidget: (cont, _, e) {
+                                                return Image.network(
+                                                  Constance.defaultImage,
+                                                  fit: BoxFit.fitWidth,
+                                                );
+                                              },
+                                            ),
                                           ),
-                                    ),
-                                  );
+                                        )
+                                      : GestureDetector(
+                                          onTap: () {
+                                            if (context.tree.attributes['href']
+                                                    .toString()
+                                                    .split("/")[2]
+                                                    .trim() ==
+                                                "www.guwahatiplus.com") {
+                                              if (context
+                                                      .tree.attributes['href']
+                                                      .toString()
+                                                      .split("/")
+                                                      .length >=
+                                                  5) {
+                                                Navigation.instance.navigate(
+                                                    '/story',
+                                                    args:
+                                                        '${context.tree.attributes['href'].toString().split("/")[3]},${context.tree.attributes['href'].toString().split("/")[4]},story_page');
+                                              } else {
+                                                Navigation.instance.navigate(
+                                                    '/newsfrom',
+                                                    args: context
+                                                        .tree.attributes['href']
+                                                        .toString()
+                                                        .split("/")[3]);
+                                              }
+                                            } else {
+                                              try {
+                                                _launchUrl(Uri.parse(context
+                                                        .tree
+                                                        .attributes['href'] ??
+                                                    "https://guwahatiplus.com/"));
+                                              } catch (e) {
+                                                debugPrint(e.toString());
+                                              }
+                                            }
+                                          },
+                                          child: Text(
+                                            // context.tree.element?.innerHtml.toString().contains("ad_managers").toString()??"",
+                                            context.tree.element?.innerHtml
+                                                    .split("=")[0]
+                                                    .toString() ??
+                                                "",
+                                            style: Theme.of(Navigation
+                                                    .instance
+                                                    .navigatorKey
+                                                    .currentContext!)
+                                                .textTheme
+                                                .headline5
+                                                ?.copyWith(
+                                                  color: Constance.primaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                ),
+                                          ),
+                                        );
                                 },
                                 "blockquote": (context, child) {
                                   return context.tree.element?.innerHtml

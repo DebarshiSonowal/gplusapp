@@ -4326,11 +4326,11 @@ class ApiProvider {
     }
   }
 
-  Future download2(String url) async {
+  Future download2(String url,String title) async {
     Navigation.instance.goBack();
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var tempDir = "/storage/emulated/0/Download";
-    DateTime now = new DateTime.now();
+    DateTime now = DateTime.now();
     DateTime date = DateTime(
         now.year, now.month, now.day, now.hour, now.minute, now.second);
     String fullPath = tempDir +
@@ -4338,7 +4338,8 @@ class ApiProvider {
         "gplus_edition_"
             "${date.toString().split(" ")[0].replaceAll("-", "").replaceAll(".", "")}" +
         "_${date.toString().split(" ")[1].replaceAll(":", "").replaceAll(".", "")}.pdf";
-    print('full path ${fullPath}');
+    String actualPath = "$tempDir/$title.pdf";
+    print('full path ${fullPath} ${actualPath}');
     try {
       Response? response = await dio?.get(
         url,
@@ -4351,7 +4352,7 @@ class ApiProvider {
               return status! < 500;
             }),
       );
-      print(response?.headers);
+      debugPrint(response?.headers.toString());
       File file = File(fullPath);
       var raf = file.openSync(mode: FileMode.write);
       // response.data is List<int> type
