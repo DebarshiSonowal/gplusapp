@@ -358,7 +358,7 @@ class ApiProvider {
         debugPrint(
             "create Profile error: ${response?.statusCode} ${response?.data}",
             wrapWidth: 1024);
-        return ProfileResponse.withError("Something went wrong");
+        return ProfileResponse.withError(response?.data['message']??"Something went wrong");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -369,7 +369,7 @@ class ApiProvider {
       debugPrint(
           "create Profile error: ${e.response?.statusCode ?? 0} ${e.response}",
           wrapWidth: 1024);
-      return ProfileResponse.withError(e.response!.data['message']);
+      return ProfileResponse.withError(e.response!.data['message']??"Something went wrong");
     }
   }
 

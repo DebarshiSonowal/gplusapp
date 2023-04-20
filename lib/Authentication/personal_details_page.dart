@@ -47,6 +47,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   String dropdownvalue = 'Male';
   double longitude = 0, latitude = 0;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   // List of items in our dropdown menu
   var items = [
     'Male',
@@ -92,7 +93,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("personal_details",false,_scaffoldKey),
+      appBar: Constance.buildAppBar("personal_details", false, _scaffoldKey),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -198,9 +199,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                 onTap: () async {
                   var datePicked = await DatePicker.showSimpleDatePicker(
                     context,
-                    initialDate: DateTime(currentY,currentM,currentD),
-                    firstDate: DateTime(year,1,1),
-                    lastDate: DateTime(max,12,31),
+                    initialDate: DateTime(currentY, currentM, currentD),
+                    firstDate: DateTime(year, 1, 1),
+                    lastDate: DateTime(max, 12, 31),
                     dateFormat: "dd-MMMM-yyyy",
                     itemTextStyle:
                         Theme.of(context).textTheme.headline6?.copyWith(
@@ -592,7 +593,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                   onTap: () {
                     if (first_name.text.isNotEmpty &&
                         last_name.text.isNotEmpty) {
-                      if (email.text.isNotEmpty && isValidEmail(email.text)) {
+                      if (email.text.isNotEmpty && isValidEmail(email.text.trim())) {
                         if (date != "") {
                           if (address != "" &&
                               latitude != 0 &&
@@ -630,6 +631,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       ),
     );
   }
+
   void logTheSignupFlowClick() async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
@@ -642,19 +644,18 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         "user_id_event": "NA",
         "screen_name": "register",
         "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": "NA",
       },
     );
   }
+
   bool isValidEmail(email) {
     return RegExp(
             r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
         .hasMatch(email);
   }
-
-
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -667,6 +668,8 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       // accessing the position and request users of the
       // App to enable the location services.
       debugPrint('got locations2');
+      // Navigation.instance.goBack();
+      showError("Please Enable Location Services");
       return Future.error('Location services are disabled.');
     }
 
@@ -679,12 +682,59 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
+        // Navigation.instance.goBack();
+        showError("We require Location permissions");
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
+      // Navigation.instance.goBack();
+      showError("We require Location permissions");
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+  Future<Position> _determinePositionAgain() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      debugPrint('got locations2');
+      Navigation.instance.goBack();
+      showError("Please Enable Location Services");
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        Navigation.instance.goBack();
+        showError("We require Location permissions");
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      Navigation.instance.goBack();
+      showError("We require Location permissions");
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
@@ -701,7 +751,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     if (status.isDenied) {
       if (await Permission.location.request().isGranted) {
         debugPrint('got1 locations1');
-        final position = await _determinePosition();
+        final position = await _determinePositionAgain();
         longitude = position.longitude;
         latitude = position.latitude;
         debugPrint('got locations ${longitude} ${latitude}');
@@ -716,7 +766,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       // We didn't ask for permission yet or the permission has been denied before but not permanently.
     } else {
       debugPrint('got1 locations1');
-      final position = await _determinePosition();
+      final position = await _determinePositionAgain();
       longitude = position.longitude;
       latitude = position.latitude;
       debugPrint('got locations ${longitude} ${latitude}');
@@ -726,6 +776,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       getAddress(position.latitude, position.longitude);
     }
   }
+
   void getLocationsWithoutLoader() async {
     // showLoaderDialog(context);
     debugPrint('got locations1');
@@ -788,9 +839,10 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     });
     Navigation.instance.goBack();
   }
+
   Future<void> getAddressNoGoBack(latitude, longitude) async {
     List<Placemark> placemarks =
-    await placemarkFromCoordinates(latitude, longitude);
+        await placemarkFromCoordinates(latitude, longitude);
     Placemark place = placemarks[0];
     String street = place.street ?? "";
     String thoroughfare = place.thoroughfare ?? "";
@@ -831,7 +883,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     // debugPrint(result1?.results?.length.toString());
     latitude = locations[0].latitude ?? 0;
     longitude = locations[0].longitude ?? 0;
-    addAddress(address);
+    // addAddress(address);
   }
 
   void addAddress(String? address) async {
@@ -845,7 +897,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       address_id = response.addresses.last.id.toString();
       // Navigator.of(context).pop(response.addresses.last.id);
     } else {
-      showError("Something went wrong");
+      // showError("Something went wrong");
     }
   }
 
