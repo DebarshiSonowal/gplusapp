@@ -30,6 +30,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/NavigationBar.dart';
 import '../../Helper/Constance.dart';
+import '../../Helper/UpgraderTextCustom.dart';
 import '../../Model/notification_received.dart';
 import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
@@ -189,8 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return UpgradeAlert(
       upgrader: Upgrader(
         debugDisplayAlways: true,
+        debugDisplayOnce: true,
         dialogStyle: UpgradeDialogStyle.cupertino,
-
+        messages: MyCustomMessages(),
       ),
       child: Scaffold(
         key: _scaffoldKey,
