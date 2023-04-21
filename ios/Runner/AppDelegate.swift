@@ -20,6 +20,7 @@ didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: An
 //            newArguments.append("-FIRAnalyticsVerboseLoggingEnabled")
 //            ProcessInfo.processInfo.setValue(newArguments, forKey: "arguments")
     FirebaseApp.configure()
+    self.window.makeSecure() //Add this line
     GMSServices.provideAPIKey(FlutterConfigPlugin.env(for: "iosMapKey"))
     GeneratedPluginRegistrant.register(with: self)
     if #available(iOS 10.0, *) {
@@ -91,5 +92,16 @@ dict["payment_response"] = dictChild
 return dict
 }
 
+}
+extension UIWindow {
+func makeSecure() {
+    let field = UITextField()
+    field.isSecureTextEntry = true
+    self.addSubview(field)
+    field.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+    field.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+    self.layer.superlayer?.addSublayer(field.layer)
+    field.layer.sublayers?.first?.addSublayer(self.layer)
+  }
 }
 

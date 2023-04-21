@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:intl/intl.dart';
+import 'package:new_version/new_version.dart';
 import 'package:open_file_safe/open_file_safe.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -204,7 +205,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     initValues();
     initDeepLink();
-
+    // checkForUpdate();
 
     FirebaseMessaging.onMessage.listen(showFlutterNotification);
 
@@ -238,6 +239,27 @@ class _MyAppState extends State<MyApp> {
     }).onError((error) {
       debugPrint("URL link ${error}");
     });
+  }
+
+  void checkForUpdate() async {
+    final newVersion = NewVersion(
+        // iOSId: 'com.google.Vespa',
+        // androidId: 'com.appbazooka.gplus',
+        );
+    final status = await newVersion.getVersionStatus();
+    if (status != null) {
+      debugPrint(status.releaseNotes);
+      debugPrint(status.appStoreLink);
+      debugPrint(status.localVersion);
+      debugPrint(status.storeVersion);
+      debugPrint(status.canUpdate.toString());
+      newVersion.showUpdateDialog(
+        context: context,
+        versionStatus: status,
+        dialogTitle: 'Custom Title',
+        dialogText: 'Custom Text',
+      );
+    }
   }
 }
 

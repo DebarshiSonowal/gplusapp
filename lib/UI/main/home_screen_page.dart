@@ -188,9 +188,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return UpgradeAlert(
       upgrader: Upgrader(
-          dialogStyle: Platform.isAndroid
-              ? UpgradeDialogStyle.material
-              : UpgradeDialogStyle.cupertino),
+        debugDisplayAlways: true,
+        dialogStyle: UpgradeDialogStyle.cupertino,
+
+      ),
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor:

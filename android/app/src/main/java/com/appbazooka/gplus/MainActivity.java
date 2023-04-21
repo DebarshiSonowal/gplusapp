@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 //import io.flutter.app.FlutterActivity;
 import androidx.annotation.NonNull;
-
+import android.view.WindowManager.LayoutParams;
 import com.easebuzz.payment.kit.PWECouponsActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -39,6 +39,7 @@ public class MainActivity extends FlutterActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(LayoutParams.FLAG_SECURE);
         GeneratedPluginRegister.registerGeneratedPlugins(getFlutterEngine());
         start_payment = true;
 
