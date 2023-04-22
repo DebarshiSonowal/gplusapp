@@ -11,6 +11,7 @@ import '../Helper/Storage.dart';
 import '../Model/profile.dart';
 import '../Navigation/Navigate.dart';
 import '../Networking/api_provider.dart';
+import 'alert.dart';
 
 class HistorySection extends StatelessWidget {
   const HistorySection({super.key});
@@ -294,7 +295,15 @@ class HistorySection extends StatelessWidget {
       showError(response.message ?? "Something went wrong");
     }
   }
-
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
+  }
   void fetchDetails(id) async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getDealDetails(id);

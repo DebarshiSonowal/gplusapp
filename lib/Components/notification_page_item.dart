@@ -9,6 +9,7 @@ import '../Model/notification_in_device.dart';
 import '../Navigation/Navigate.dart';
 import '../Networking/api_provider.dart';
 import '../main.dart';
+import 'alert.dart';
 
 class NotificationPageItem extends StatelessWidget {
   const NotificationPageItem({Key? key, required this.current})
@@ -168,7 +169,15 @@ class NotificationPageItem extends StatelessWidget {
       showError(response.message ?? "Something went wrong");
     }
   }
-
+  void showError(String msg) {
+    AlertX.instance.showAlert(
+        title: "Error",
+        msg: msg,
+        positiveButtonText: "Done",
+        positiveButtonPressed: () {
+          Navigation.instance.goBack();
+        });
+  }
   void fetchNotification() async {
     final response = await ApiProvider.instance.getNotifications();
     if (response.success ?? false) {

@@ -959,7 +959,15 @@ void reportPost_Comment(context, id, report_type, type) async {
     showError(response.message ?? "Unable to report");
   }
 }
-
+void showError(String msg) {
+  AlertX.instance.showAlert(
+      title: "Error",
+      msg: msg,
+      positiveButtonText: "Done",
+      positiveButtonPressed: () {
+        Navigation.instance.goBack();
+      });
+}
 //  StatefulBuilder CommentItem(
 //       Comment current, BuildContext context, bool liked) {
 //     bool like = liked;

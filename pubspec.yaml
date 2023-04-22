@@ -110,7 +110,7 @@ dependencies:
   flutter_launcher_icons: ^0.11.0
   flutter_stories: ^0.3.1
   images_picker: ^1.2.11
-  new_version: ^0.3.1
+#  new_version: ^0.3.1
 #  flutter_app_version_checker: ^0.3.2
 #  workmanager: ^0.5.1
 #  twitter_cards: ^0.0.2

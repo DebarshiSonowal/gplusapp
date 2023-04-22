@@ -1104,14 +1104,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
-  new_version:
-    dependency: "direct main"
-    description:
-      name: new_version
-      sha256: "2eabd66e53c882dbaab4f3f8824d139a35a0521e2e04b8fd6d9fb358112691e9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.1"
   nm:
     dependency: transitive
     description:
