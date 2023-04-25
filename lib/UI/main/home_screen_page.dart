@@ -189,8 +189,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return UpgradeAlert(
       upgrader: Upgrader(
-        debugDisplayAlways: true,
-        debugDisplayOnce: true,
+        // debugDisplayAlways: true,
+        // debugDisplayOnce: true,
+        durationUntilAlertAgain: const Duration(days: 3),
         dialogStyle: UpgradeDialogStyle.cupertino,
         messages: MyCustomMessages(),
       ),

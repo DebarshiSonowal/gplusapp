@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:intl/intl.dart';
+
 // import 'package:new_version/new_version.dart';
 import 'package:open_file_safe/open_file_safe.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -216,8 +217,7 @@ class _MyAppState extends State<MyApp> {
   void initValues() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     debugPrint(
-        "version:${packageInfo.version} buildNumber:${packageInfo
-            .buildNumber}");
+        "version:${packageInfo.version} buildNumber:${packageInfo.buildNumber}");
     //notification
     checkVersion(packageInfo.version, packageInfo.buildNumber);
   }
@@ -226,9 +226,7 @@ class _MyAppState extends State<MyApp> {
     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
       debugPrint("URL link ${dynamicLinkData.link.path.split("/")}");
       if (Storage.instance.isLoggedIn) {
-        bool isOpinion = dynamicLinkData.link.path
-            .split("/")
-            .length == 4;
+        bool isOpinion = dynamicLinkData.link.path.split("/").length == 4;
         sendToRoute(
           dynamicLinkData.link.path.split("/")[1].trim(),
           isOpinion
@@ -280,13 +278,13 @@ class _MyAppState extends State<MyApp> {
     debugPrint("link 1 our route ${route} ${category} ${data}");
     switch (route) {
       case "opinion":
-      // Navigation.instance.navigate('/main');
-      //   debugPrint("this route2 ${category},${data}");
+        // Navigation.instance.navigate('/main');
+        //   debugPrint("this route2 ${category},${data}");
         Navigation.instance
             .navigate('/opinionDetails', args: '${data},${category}');
         break;
       default:
-      // Navigation.instance.navigate('/main');
+        // Navigation.instance.navigate('/main');
         Navigation.instance
             .navigate('/story', args: '${category},${data},home_page');
         break;
