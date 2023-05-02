@@ -50,6 +50,9 @@ class Storage {
     await sharedpreferences.setBool("dark", selected);
     print('setDarkMode');
   }
+  Future<void> setLastDisplayed(String val) async {
+    await sharedpreferences.setString("lastDisplayed", val);
+  }
 
   Future<void> setGuwahatiConnect() async {
     await sharedpreferences.setBool("isGuwahatiConnect", true);
@@ -72,6 +75,8 @@ class Storage {
   get isOnBoarding => sharedpreferences.getBool("isOnBoarding") ?? false;
 
   get token => sharedpreferences.getString("token") ?? "";
+
+  get lastDisplayed => sharedpreferences.getString("lastDisplayed") ?? "";
 
   get filters => sharedpreferences.getString("filter") ?? "";
 

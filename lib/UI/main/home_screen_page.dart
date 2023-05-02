@@ -16,6 +16,7 @@ import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:gplusapp/UI/main/sections/home_screen_body.dart';
 import 'package:gplusapp/UI/main/sections/internet_issue_screen.dart';
+import 'package:intl/intl.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
@@ -191,6 +192,24 @@ class _HomeScreenState extends State<HomeScreen> {
       upgrader: Upgrader(
         // debugDisplayAlways: true,
         // debugDisplayOnce: true,
+        willDisplayUpgrade: (
+            {String? appStoreVersion,
+            bool? display,
+            String? installedVersion,
+            String? minAppVersion}) async {
+          // print(
+          //     "#123 $appStoreVersion | $display | $installedVersion | $minAppVersion");
+          if ((Storage.instance.lastDisplayed == "" ||
+                  (DateFormat("dd/MM/yyyy").format(
+                          DateTime.parse(Storage.instance.lastDisplayed)) ==
+                      DateFormat("dd/MM/yyyy").format(DateTime.now()))) &&
+              (display ?? false)) {
+            Storage.instance.setLastDisplayed(
+                DateFormat("dd/MM/yyyy").format(DateTime.now()));
+            return Future(() => true);
+          }
+          return Future(() => false);
+        },
         durationUntilAlertAgain: const Duration(days: 3),
         dialogStyle: UpgradeDialogStyle.cupertino,
         messages: MyCustomMessages(),
@@ -326,7 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
               listen: false)
           .setAdImage(response1.data!);
       if (mounted) {
-        setState(() {});
+        // setState(() {});
       }
     } else {}
   }

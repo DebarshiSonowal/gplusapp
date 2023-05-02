@@ -1,40 +1,33 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_config/flutter_config.dart';
-import 'package:android_intent_plus/android_intent.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Helper/Storage.dart';
-import 'package:intl/intl.dart';
-
 // import 'package:new_version/new_version.dart';
 import 'package:open_file_safe/open_file_safe.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
 // import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 // import 'package:uni_links/uni_links.dart';
 // import 'dart:io';
 import 'Components/alert.dart';
 import 'Helper/AppTheme.dart';
-import 'Helper/Constance.dart';
 import 'Helper/DataProvider.dart';
 import 'Helper/FirebaseHelper.dart';
-import 'Helper/method_mine.dart';
 import 'Helper/store_config.dart';
 import 'Model/notification_received.dart';
 import 'Navigation/Navigate.dart';
 import 'Navigation/routes.dart';
-import 'package:sizer/sizer.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'Networking/api_provider.dart';
-import 'UI/main/home_screen_page.dart';
 import 'firebase_options.dart';
 
 late AndroidNotificationChannel channel;
