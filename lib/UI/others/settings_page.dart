@@ -1,3 +1,6 @@
+
+import 'dart:io';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +11,7 @@ import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Components/alert.dart';
 import '../../Helper/Constance.dart';
@@ -270,6 +274,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       onTap: () async {
                         if (await inAppReview.isAvailable()) {
                           inAppReview.requestReview();
+                        } else if(Platform.isAndroid) {
+                          _launchURL("https://play.google.com/store/apps/details?id=com.appbazooka.gplus");
+                        }else{
+                          _launchURL("https://apps.apple.com/us/app/keynote/id6444875975");
                         }
                       },
                       child: AbsorbPointer(
@@ -577,5 +585,13 @@ class _SettingsPageState extends State<SettingsPage> {
         "user_id_tvc": profile.id,
       },
     );
+  }
+
+  Future<void> _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
