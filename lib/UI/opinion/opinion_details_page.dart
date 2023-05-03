@@ -538,65 +538,65 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             // SizedBox(
                             //   height: 1.5.h,
                             // ),
-                            data.ads.isNotEmpty
-                                ? Row(
-                                    children: [
-                                      Container(
-                                        color: Constance.secondaryColor,
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 0.2.h, horizontal: 1.w),
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 2.w),
-                                        child: Text(
-                                          'Ad',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline3
-                                              ?.copyWith(
-                                                fontSize: 9.sp,
-                                                color: Colors.white,
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Container(),
-                            data.ads.isNotEmpty
-                                ? SizedBox(
-                                    // height: 10.h,
-                                    width: double.infinity,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        _launchUrl(Uri.parse(
-                                            data.ads[random].link.toString()));
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 2.w,
-                                        ),
-                                        child: CachedNetworkImage(
-                                          fit: BoxFit.fill,
-                                          imageUrl: data.ads[random]
-                                                  .image_file_name ??
-                                              '',
-                                          placeholder: (cont, _) {
-                                            return Image.asset(
-                                              Constance.logoIcon,
-                                              // color: Colors.black,
-                                            );
-                                          },
-                                          errorWidget: (cont, _, e) {
-                                            return Image.network(
-                                              Constance.defaultImage,
-                                              fit: BoxFit.fitWidth,
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : Container(),
+                            // data.ads.isNotEmpty
+                            //     ? Row(
+                            //         children: [
+                            //           Container(
+                            //             color: Constance.secondaryColor,
+                            //             padding: EdgeInsets.symmetric(
+                            //                 vertical: 0.2.h, horizontal: 1.w),
+                            //             margin: EdgeInsets.symmetric(
+                            //                 horizontal: 2.w),
+                            //             child: Text(
+                            //               'Ad',
+                            //               style: Theme.of(context)
+                            //                   .textTheme
+                            //                   .headline3
+                            //                   ?.copyWith(
+                            //                     fontSize: 9.sp,
+                            //                     color: Colors.white,
+                            //                     // fontWeight: FontWeight.bold,
+                            //                   ),
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       )
+                            //     : Container(),
+                            // data.ads.isNotEmpty
+                            //     ? SizedBox(
+                            //         // height: 10.h,
+                            //         width: double.infinity,
+                            //         child: GestureDetector(
+                            //           onTap: () {
+                            //             _launchUrl(Uri.parse(
+                            //                 data.ads[random].link.toString()));
+                            //           },
+                            //           child: Padding(
+                            //             padding: EdgeInsets.symmetric(
+                            //               horizontal: 2.w,
+                            //             ),
+                            //             child: CachedNetworkImage(
+                            //               fit: BoxFit.fill,
+                            //               imageUrl: data.ads[random]
+                            //                       .image_file_name ??
+                            //                   '',
+                            //               placeholder: (cont, _) {
+                            //                 return Image.asset(
+                            //                   Constance.logoIcon,
+                            //                   // color: Colors.black,
+                            //                 );
+                            //               },
+                            //               errorWidget: (cont, _, e) {
+                            //                 return Image.network(
+                            //                   Constance.defaultImage,
+                            //                   fit: BoxFit.fitWidth,
+                            //                 );
+                            //               },
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       )
+                            //     : Container(),
                             // SizedBox(
                             //   height: 1.5.h,
                             // ),
