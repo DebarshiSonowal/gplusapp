@@ -278,20 +278,15 @@ class _VerifyOTPState extends State<VerifyOTP> {
           await _auth.signInWithCredential(authCredential);
 
       if (_authResult.additionalUserInfo?.isNewUser ?? false) {
+        Storage.instance
+            .setIsNew(_authResult.additionalUserInfo?.isNewUser ?? true);
         Navigation.instance
             .navigateAndReplace('/terms&conditions', args: widget.number);
       } else {
+        Storage.instance
+            .setIsNew(_authResult.additionalUserInfo?.isNewUser ?? false);
         getProfile();
       }
-
-      //   }
-      // }
-
-      // setState(() {
-      //   isLoading = false;
-      // });
-      // Navigator.pushNamedAndRemoveUntil(
-      //     context, Constants.homeNavigate, (route) => false);
     }
   }
 
@@ -354,9 +349,6 @@ class _VerifyOTPState extends State<VerifyOTP> {
   void getProfile() async {
     final reponse = await ApiProvider.instance.login(widget.number.toString());
     if (reponse.status ?? false) {
-      setState(() {
-        Storage.instance.setUser(reponse.access_token ?? "");
-      });
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
@@ -365,7 +357,9 @@ class _VerifyOTPState extends State<VerifyOTP> {
       // Navigation.instance.navigateAndReplace('/main');
       if (reponse.profile?.email == null ||
           reponse.profile?.email == "" ||
+          reponse.profile?.l_name == "" ||
           reponse.profile?.is_new == 1) {
+        Storage.instance.setToken(reponse.access_token ?? "");
         Navigation.instance.navigate('/terms&conditions', args: widget.number);
       } else {
         fetchToken();
@@ -374,6 +368,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
         } catch (e) {
           debugPrint(e.toString());
         }
+        Storage.instance.setUser(reponse.access_token ?? "");
         Navigation.instance.navigateAndReplace('/main');
         // Navigation.instance.navigate('/terms&conditions', args: widget.number);
       }

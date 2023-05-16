@@ -314,7 +314,8 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
               listen: false)
           .setProfile(reponse.profile!);
       // Navigation.instance.goBack();
-      Navigation.instance.navigateAndReplace('/main');
+      Future.delayed(const Duration(seconds: 1),
+          () => Navigation.instance.navigateAndReplace('/main'));
     } else {
       // Navigation.instance.navigateAndReplace('/terms&conditions');
       showError("Something went wrong");
