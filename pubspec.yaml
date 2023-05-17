@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 #version: 3.5.22+30522
-version: 3.5.29+30529
+version: 3.5.30+30530
 
 environment:
   sdk: ">=2.17.5 <3.0.0"
@@ -111,6 +111,7 @@ dependencies:
   flutter_launcher_icons: ^0.11.0
   flutter_stories: ^0.3.1
   images_picker: ^1.2.11
+  open_settings: ^2.0.2
 #  new_version: ^0.3.1
 #  flutter_app_version_checker: ^0.3.2
 #  workmanager: ^0.5.1

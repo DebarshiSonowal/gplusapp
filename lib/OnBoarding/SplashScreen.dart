@@ -92,6 +92,7 @@ class _SplashScreenState extends State<SplashScreen> {
           .setMyGeoTopicks(response.geoTopicks);
       if (response.profile?.email == null ||
           response.profile?.email == "" ||
+          response.profile?.l_name == "" ||
           response.profile?.is_new == 0) {
         fetchToken();
         Navigation.instance.navigateAndRemoveUntil('/main');
@@ -120,8 +121,8 @@ class _SplashScreenState extends State<SplashScreen> {
               listen: false)
           .setGuwahatiText(response.guwahatiConnect ?? "");
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setPaywallText(response.paywall ?? "");
     }
   }

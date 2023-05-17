@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
+import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -593,7 +594,8 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                   onTap: () {
                     if (first_name.text.isNotEmpty &&
                         last_name.text.isNotEmpty) {
-                      if (email.text.isNotEmpty && isValidEmail(email.text.trim())) {
+                      if (email.text.isNotEmpty &&
+                          isValidEmail(email.text.trim())) {
                         if (date != "") {
                           if (address != "" &&
                               latitude != 0 &&
@@ -608,16 +610,17 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                                 address,
                                 refer.text ?? "");
                           } else {
-                            showError("Please select your location");
+                            showError(
+                                "Please select your location", null, null);
                           }
                         } else {
-                          showError("Enter your birth date");
+                          showError("Enter your birth date", null, null);
                         }
                       } else {
-                        showError("Enter an actual email address");
+                        showError("Enter an actual email address", null, null);
                       }
                     } else {
-                      showError("Enter the names correctly");
+                      showError("Enter the names correctly", null, null);
                     }
                   },
                 ),
@@ -669,7 +672,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       // App to enable the location services.
       debugPrint('got locations2');
       // Navigation.instance.goBack();
-      showError("Please Enable Location Services");
+      showError("Please Enable Location Services from Settings", () {
+        OpenSettings.openLocationSourceSetting();
+      },  "Location Services");
       return Future.error('Location services are disabled.');
     }
 
@@ -683,7 +688,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
         // Navigation.instance.goBack();
-        showError("We require Location permissions");
+        showError("Please enable permissions for G Plus application from settings", () {
+          OpenSettings.openAppSetting();
+        },  "We require Location permissions");
         return Future.error('Location permissions are denied');
       }
     }
@@ -691,7 +698,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
       // Navigation.instance.goBack();
-      showError("We require Location permissions");
+      showError("Please enable permissions for G Plus application from settings", () {
+        OpenSettings.openAppSetting();
+      },  "We require Location permissions");
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
@@ -700,6 +709,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
   }
+
   Future<Position> _determinePositionAgain() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -712,7 +722,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       // App to enable the location services.
       debugPrint('got locations2');
       Navigation.instance.goBack();
-      showError("Please Enable Location Services");
+      showError("Please Enable Location Services from Settings", () {
+        OpenSettings.openLocationSourceSetting();
+      },  "Location Services");
       return Future.error('Location services are disabled.');
     }
 
@@ -726,7 +738,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
         Navigation.instance.goBack();
-        showError("We require Location permissions");
+        showError("Please enable permissions for G Plus application from settings", () {
+          OpenSettings.openAppSetting();
+        },  "We require Location permissions");
         return Future.error('Location permissions are denied');
       }
     }
@@ -734,7 +748,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
       Navigation.instance.goBack();
-      showError("We require Location permissions");
+      showError("Please enable permissions for G Plus application from settings", () {
+        OpenSettings.openAppSetting();
+      },  "We require Location permissions");
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
@@ -761,7 +777,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         getAddress(position.latitude, position.longitude);
       } else {
         Navigation.instance.goBack();
-        showError("We require Location permissions");
+        showError("Please enable permissions for G Plus application from settings", () {
+          OpenSettings.openAppSetting();
+        },  "We require Location permissions");
       }
       // We didn't ask for permission yet or the permission has been denied before but not permanently.
     } else {
@@ -794,7 +812,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         getAddressNoGoBack(position.latitude, position.longitude);
       } else {
         // Navigation.instance.goBack();
-        showError("We require Location permissions");
+        showError("Please enable permissions for G Plus application from settings", () {
+          OpenSettings.openAppSetting();
+        },  "We require Location permissions");
       }
       // We didn't ask for permission yet or the permission has been denied before but not permanently.
     } else {
@@ -810,13 +830,18 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     }
   }
 
-  void showError(String msg) {
+  void showError(String msg, Function? onTap, String? title) {
     AlertX.instance.showAlert(
-        title: "Error",
+        title: title ?? "Error",
         msg: msg,
         positiveButtonText: "Done",
         positiveButtonPressed: () {
-          Navigation.instance.goBack();
+          if (onTap == null) {
+            Navigation.instance.goBack();
+          } else {
+            Navigation.instance.goBack();
+            onTap();
+          }
         });
   }
 
@@ -833,7 +858,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     String address1 =
         "${(street.isEmpty) ? "" : "$street, "}${(thoroughfare.isEmpty) ? "" : "$thoroughfare, "}${(locality.isEmpty) ? "" : "$locality, "}${(subLocality.isEmpty) ? "" : "$subLocality, "}${(state.isEmpty) ? "" : "$state, "}${(pincode.isEmpty) ? "" : "$pincode."}";
 
-    print('city pincode ${pincode}  ${street}');
+    debugPrint('city pincode ${pincode}  ${street}');
     setState(() {
       address = address1;
     });
@@ -853,7 +878,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     String address1 =
         "${(street.isEmpty) ? "" : "$street, "}${(thoroughfare.isEmpty) ? "" : "$thoroughfare, "}${(locality.isEmpty) ? "" : "$locality, "}${(subLocality.isEmpty) ? "" : "$subLocality, "}${(state.isEmpty) ? "" : "$state, "}${(pincode.isEmpty) ? "" : "$pincode."}";
 
-    print('city pincode ${pincode}  ${street}');
+    debugPrint('city pincode ${pincode}  ${street}');
     setState(() {
       address = address1;
     });
@@ -865,15 +890,9 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       temp(mobile, fname, lname, email, dob, address, longitude, latitude,
           address_id, dropdownvalue, refer),
     );
-    // Storage.instance.signUpdata?.f_name = fname;
-    // Storage.instance.signUpdata?.l_name = lname;
-    // Storage.instance.signUpdata?.email = email;
-    // Storage.instance.signUpdata?.dob = dob;
-    // Storage.instance.signUpdata?.address = address;
-    // Storage.instance.signUpdata?.longitude = longitude;
-    // Storage.instance.signUpdata?.latitude = latitude;
-    print(Storage.instance.signUpdata?.mobile);
-    print(Storage.instance.signUpdata?.f_name);
+
+    debugPrint("${Storage.instance.signUpdata?.mobile}");
+    debugPrint("${Storage.instance.signUpdata?.f_name}");
     Navigation.instance.navigate('/enterPreferences');
   }
 

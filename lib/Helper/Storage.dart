@@ -24,9 +24,14 @@ class Storage {
     await sharedpreferences.setString("token", token);
     await sharedpreferences.setBool("isLoggedIn", true);
   }
+
   Future<void> setToken(String token) async {
     await sharedpreferences.setString("token", token);
   }
+
+  // Future<void> setLogInStatus(int val) async {
+  //   await sharedpreferences.setInt("logInStatus", val);
+  // }
 
   Future<void> setFilter(String filters) async {
     print('set filters ${filters.toString()}');
@@ -53,6 +58,7 @@ class Storage {
     await sharedpreferences.setBool("dark", selected);
     print('setDarkMode');
   }
+
   Future<void> setLastDisplayed(String val) async {
     await sharedpreferences.setString("lastDisplayed", val);
   }
@@ -80,6 +86,8 @@ class Storage {
   get isDarkMode => sharedpreferences.getBool("dark") ?? false;
 
   get isNew => sharedpreferences.getBool("isNew") ?? false;
+
+  // get logInStatus => sharedpreferences.getInt("logInStatus") ?? 0;
 
   get isOnBoarding => sharedpreferences.getBool("isOnBoarding") ?? false;
 
