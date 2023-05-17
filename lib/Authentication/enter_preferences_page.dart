@@ -178,6 +178,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
                   txt: 'Save & Continue',
                   onTap: () {
                     if (selGeo.isNotEmpty && selTop.isNotEmpty) {
+                      Navigation.instance.navigate("/loadingDialog");
                       signUp();
                       // debugPrint("SELGEO");
                       // for(var i in selGeo) {
@@ -267,6 +268,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
       Navigation.instance.navigateAndReplace('/main');
     } else {
       // showError(reponse.msg ?? "Something went wrong");
+      Navigation.instance.goBack();
       AlertX.instance.showAlert(
           title: "Error",
           msg: reponse.msg ?? "Something went wrong",
