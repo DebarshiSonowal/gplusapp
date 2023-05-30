@@ -255,7 +255,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                         height: 2.h,
                       ),
                       Card(
-                        color: Color(0xff001f34),
+                        color: const Color(0xff001f34),
                         child: ExpansionTile(
                           title: Text(
                             'Offer Details',
@@ -533,25 +533,27 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  current.is_subscription == 1
-                                                      ? 'Redeem for subscription'
-                                                      : 'Referral',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.start,
-                                                  style: Theme.of(Navigation
-                                                          .instance
-                                                          .navigatorKey
-                                                          .currentContext!)
-                                                      .textTheme
-                                                      .headline5
-                                                      ?.copyWith(
-                                                        color: Colors.black,
-                                                        // fontSize: 11.sp,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
+                                                SizedBox(
+                                                  width:55.w,
+                                                  child: Text(
+                                                    current.title??"",
+                                                    overflow: TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.start,
+                                                    style: Theme.of(Navigation
+                                                        .instance
+                                                        .navigatorKey
+                                                        .currentContext!)
+                                                        .textTheme
+                                                        .headline5
+                                                        ?.copyWith(
+                                                      color: Storage
+                                                          .instance.isDarkMode
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontSize: 11.sp,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
                                                 ),
                                                 Text(
                                                   '${current.points ?? '250'} points',

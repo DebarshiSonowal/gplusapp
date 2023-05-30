@@ -112,14 +112,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: CustomButton(
                     txt: 'Continue',
                     onTap: () {
-
-                      // sendOTP(_mobile.text);
-                      // Navigation.instance.navigate('/verifyOtp',args: int.parse('8638372157'));
                       if (_mobile.text.isNotEmpty &&
                           _mobile.text.length == 10) {
-                        // sendOTP(_mobile.text);
                         logTheSignupInitiateClick();
-                        // logTheSignupInitiateClick(Profile profile);
                         Navigation.instance.navigate('/verifyOtp',
                             args: int.parse(_mobile.text));
                       } else {
@@ -134,18 +129,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // void sendOTP(String text) async {
-  //   final response = await ApiProvider.instance.login(text);
-  //   if (response.status ?? false) {
-  //     Fluttertoast.showToast(
-  //       msg: 'OTP sent successfully',
-  //       // fontSize: th
-  //     );
-  //     Navigation.instance.navigate('/verifyOtp', args: int.parse(text));
-  //   } else {
-  //     showError(response.message ?? "Something went wrong");
-  //   }
-  // }
   void logTheSignupInitiateClick() async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";

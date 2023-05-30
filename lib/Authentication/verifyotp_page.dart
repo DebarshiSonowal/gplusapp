@@ -197,11 +197,11 @@ class _VerifyOTPState extends State<VerifyOTP> {
                         debugPrint(_verificationId);
                         debugPrint(e);
                         debugPrint(textEditingController.text);
-                        showError(e ?? "Something went wrong");
+                        showError(e ?? "1st Something went wrong");
                       });
                     } catch (e) {
                       debugPrint(e.toString());
-                      showError("Something went wrong");
+                      showError("${e.toString()} 2nd Something went wrong");
                     }
                     // phoneSignIn(phoneNumber: widget.number.toString());
                   }),
@@ -263,7 +263,8 @@ class _VerifyOTPState extends State<VerifyOTP> {
 
   _onVerificationCompleted(PhoneAuthCredential authCredential) async {
     // print("verification completed ${authCredential.smsCode}");
-    User? user = FirebaseAuth.instance.currentUser;
+    // User? user = FirebaseAuth.instance.currentUser;
+    debugPrint('Verification completed ${authCredential.smsCode}');
     setState(() {
       textEditingController.text = authCredential.smsCode!;
     });

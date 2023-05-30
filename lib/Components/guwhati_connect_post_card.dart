@@ -84,6 +84,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                     color: Storage.instance.isDarkMode
                                         ? Colors.white
                                         : Constance.primaryColor,
+                                    fontSize: 16.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),

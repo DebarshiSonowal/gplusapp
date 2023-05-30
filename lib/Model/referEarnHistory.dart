@@ -9,7 +9,7 @@ class ReferEarnHistory {
       plan_id,
       is_credit,
       status;
-  String? created_at, updated_at;
+  String? created_at, updated_at, title;
 
   ReferEarnHistory.fromJson(json) {
     id = json['id'] ?? 0;
@@ -22,6 +22,7 @@ class ReferEarnHistory {
     status = int.parse((json['status'] ?? 0).toString());
 
     //String
+    title = json['title'] ?? "";
     updated_at = json['updated_at'] == null
         ? ""
         : '${json['updated_at'].toString().split("T")[0]}';
@@ -33,9 +34,8 @@ class ReferEarnHistory {
 
 class ReferEarnHistoryResponse {
   bool? success;
-  String? message,empty,invite;
+  String? message, empty, invite;
   List<ReferEarnHistory> history = [];
-
 
   ReferEarnHistoryResponse.withJson(json) {
     success = json['success'] ?? false;

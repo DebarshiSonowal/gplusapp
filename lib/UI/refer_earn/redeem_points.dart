@@ -272,26 +272,27 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              current.is_subscription == 1
-                                                  ? 'Redeem for subscription'
-                                                  : 'Referral',
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.start,
-                                              style: Theme.of(Navigation
-                                                      .instance
-                                                      .navigatorKey
-                                                      .currentContext!)
-                                                  .textTheme
-                                                  .headline5
-                                                  ?.copyWith(
-                                                    color: Storage
-                                                            .instance.isDarkMode
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                    // fontSize: 11.sp,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            SizedBox(
+                                              width:55.w,
+                                              child: Text(
+                                                current.title??"",
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.start,
+                                                style: Theme.of(Navigation
+                                                        .instance
+                                                        .navigatorKey
+                                                        .currentContext!)
+                                                    .textTheme
+                                                    .headline5
+                                                    ?.copyWith(
+                                                      color: Storage
+                                                              .instance.isDarkMode
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontSize: 11.sp,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                              ),
                                             ),
                                             Text(
                                               '${current.is_credit == 1 ? '+' : '-'}${current.points ?? '250'} points',
