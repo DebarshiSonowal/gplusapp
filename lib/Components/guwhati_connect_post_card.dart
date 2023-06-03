@@ -78,7 +78,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          data.user?.name ?? "G Plus Author",
+                          data.title ?? "",
                           style:
                               Theme.of(context).textTheme.headline3?.copyWith(
                                     color: Storage.instance.isDarkMode
@@ -302,8 +302,46 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                   SizedBox(
                     height: 1.h,
                   ),
+
                   SizedBox(
-                    height: 0.5.h,
+                    height: 1.h,
+                  ),
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text:"Query by ",
+                        style: Theme.of(context).textTheme.headline3?.copyWith(
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Constance.primaryColor,
+                              fontSize: 11.sp,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      TextSpan(
+                        text:data.user?.name ?? "G Plus Author",
+                        style: Theme.of(context).textTheme.headline3?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor,
+                          fontSize: 11.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text:" ${data.user?.l_name??""}",
+                        style: Theme.of(context).textTheme.headline3?.copyWith(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Constance.primaryColor,
+                          fontSize: 11.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ]),
+                  ),
+                  SizedBox(
+                    height: 1.h,
                   ),
                   Container(
                     width: double.infinity,
@@ -321,11 +359,11 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                   .textTheme
                                   .headline6
                                   ?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                                // fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
@@ -336,12 +374,12 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                           child: Text(
                             '${data.total_comment} comments' ?? "",
                             style:
-                                Theme.of(context).textTheme.headline6?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
+                            Theme.of(context).textTheme.headline6?.copyWith(
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                              // fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
@@ -373,7 +411,9 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                                 context,
                                             listen: false)
                                         .profile!,
-                                    data.question!.length>100?data.question!.substring(0,100):data.question!,
+                                    data.question!.length > 100
+                                        ? data.question!.substring(0, 100)
+                                        : data.question!,
                                     like ? "like" : "dislike",
                                   );
                                   debugPrint('${like}');
@@ -632,7 +672,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
         "user_id_event": profile.id,
-        "post": post.length>100?post.substring(0,100):post,
+        "post": post.length > 100 ? post.substring(0, 100) : post,
         // "cta_click": cta_click,
         "screen_name": "guwahati",
         "user_login_status":
@@ -791,7 +831,7 @@ void logTheEditAPostClick(Profile profile, String post) async {
       "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
       "client_id_event": id,
       "user_id_event": profile.id,
-      "post": post.length>100?post.substring(0,100):post,
+      "post": post.length > 100 ? post.substring(0, 100) : post,
       // "cta_click": cta_click,
       "screen_name": "guwahati",
       "user_login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
@@ -832,7 +872,7 @@ void logTheReportPostClick(
       "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
       "client_id_event": id,
       "user_id_event": profile.id,
-      "post": post.length>100?post.substring(0,100):post,
+      "post": post.length > 100 ? post.substring(0, 100) : post,
       "cta_click": cta_click,
       "screen_name": "guwahati",
       "user_login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
@@ -960,6 +1000,7 @@ void reportPost_Comment(context, id, report_type, type) async {
     showError(response.message ?? "Unable to report");
   }
 }
+
 void showError(String msg) {
   AlertX.instance.showAlert(
       title: "Error",

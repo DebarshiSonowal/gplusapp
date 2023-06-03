@@ -25,6 +25,7 @@ import '../Model/comment.dart';
 import '../Model/contact_us.dart';
 import '../Model/deal_details.dart';
 import '../Model/e_paper.dart';
+import '../Model/full_screen_ad.dart';
 import '../Model/generic_response.dart';
 import '../Model/grievence_redresal_send.dart';
 import '../Model/guwahati_connect.dart';
@@ -358,7 +359,8 @@ class ApiProvider {
         debugPrint(
             "create Profile error: ${response?.statusCode} ${response?.data}",
             wrapWidth: 1024);
-        return ProfileResponse.withError(response?.data['message']??"Something went wrong");
+        return ProfileResponse.withError(
+            response?.data['message'] ?? "Something went wrong");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -369,7 +371,8 @@ class ApiProvider {
       debugPrint(
           "create Profile error: ${e.response?.statusCode ?? 0} ${e.response}",
           wrapWidth: 1024);
-      return ProfileResponse.withError(e.response!.data['message']??"Something went wrong");
+      return ProfileResponse.withError(
+          e.response!.data['message'] ?? "Something went wrong");
     }
   }
 
@@ -843,7 +846,8 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      debugPrint("HomeAlbum response: ${response?.data['data'][0]}",wrapWidth: 4024);
+      debugPrint("HomeAlbum response: ${response?.data['data'][0]}",
+          wrapWidth: 4024);
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ArticleResponse.fromJson(response?.data);
       } else {
@@ -2575,6 +2579,48 @@ class ApiProvider {
     }
   }
 
+  Future<FullScreenAdResponse> getFullScreenAdvertise() async {
+    // var data = {
+    //   'category': 'opinion',
+    //   'per_page': per_page,
+    //   'page': page,
+    // };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${homeUrl}/full-screen-ad";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {'Authorization': 'Bearer ${Storage.instance.token}'};
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        // queryParameters: data,
+      );
+      // debugPrint("advertise response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return FullScreenAdResponse.fromJson(response?.data);
+      } else {
+        debugPrint("full advertise error: ${response?.data}");
+        return FullScreenAdResponse.withError("Something Went Wrong");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("full advertise error: ${e.response}");
+      return FullScreenAdResponse.withError(e.message);
+    }
+  }
+
   Future<TopPicksResponse> getTopPicks(page) async {
     var url = "${baseUrl}/app/top-picks";
     BaseOptions option =
@@ -3827,7 +3873,7 @@ class ApiProvider {
     }
   }
 
-  Future<GenericDataResponse> getAdImage() async {
+  Future<FullScreenAdResponse> getAdImage() async {
     var url = "${baseUrl}/free-subscriber";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -3851,10 +3897,10 @@ class ApiProvider {
       );
       debugPrint("free-subscriber response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
-        return GenericDataResponse.fromJson(response?.data);
+        return FullScreenAdResponse.fromJson(response?.data);
       } else {
         debugPrint("free-subscriber error: ${response?.data}");
-        return GenericDataResponse.withError("Something Went Wrong");
+        return FullScreenAdResponse.withError("Something Went Wrong");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3863,7 +3909,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("free-subscriber error: ${e.response}");
-      return GenericDataResponse.withError(e.message);
+      return FullScreenAdResponse.withError(e.message);
     }
   }
 
@@ -4210,7 +4256,7 @@ class ApiProvider {
   }
 
   Future<GenericResponse> postGuwhahatiConnect(
-      question, List<File> files) async {
+      question, List<File> files, String title) async {
     var url = "${baseUrl}/app/guwahati-connect";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -4223,6 +4269,7 @@ class ApiProvider {
     debugPrint(url.toString());
     FormData data = FormData.fromMap({
       'question': question,
+      'title': title,
     });
     for (int i = 0; i < files.length; i++) {
       var type = lookupMimeType(files[i].path, headerBytes: [0xFF, 0xD8])!;
@@ -4326,7 +4373,7 @@ class ApiProvider {
     }
   }
 
-  Future download2(String url,String title) async {
+  Future download2(String url, String title) async {
     Navigation.instance.goBack();
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var tempDir = "/storage/emulated/0/Download";

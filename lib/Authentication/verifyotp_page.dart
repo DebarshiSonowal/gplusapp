@@ -195,13 +195,13 @@ class _VerifyOTPState extends State<VerifyOTP> {
                         getProfile();
                       }).catchError((e) {
                         debugPrint(_verificationId);
-                        debugPrint(e);
+                        debugPrint("s ${e}");
                         debugPrint(textEditingController.text);
-                        showError(e ?? "1st Something went wrong");
+                        showError("$e");
                       });
-                    } catch (e) {
+                    } on FirebaseAuthException catch (_, e) {
                       debugPrint(e.toString());
-                      showError("${e.toString()} 2nd Something went wrong");
+                      showError("${e} 2nd Something went wrong");
                     }
                     // phoneSignIn(phoneNumber: widget.number.toString());
                   }),

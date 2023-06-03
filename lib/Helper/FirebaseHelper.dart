@@ -59,15 +59,46 @@ class NotificationHelper {
     }
     debugPrint("Notification Payload ${notificationResponse.payload} ${notificationResponse.input}");
     var jsData = notificationResponse.payload ?? "";
+    var jsData1 = notificationResponse.payload ?? "";
     jsData = jsData.replaceAll('{', '{"');
     jsData = jsData.replaceAll(': ', '": "');
     jsData = jsData.replaceAll(', ', '", "');
     jsData = jsData.replaceAll('}', '"}');
-    debugPrint(jsData);
-    NotificationReceived notification =
-        NotificationReceived.fromJson(jsonDecode(jsData));
-    // Navigation.instance.navigate('');
+    jsData = jsData.replaceAll('{', '{"');
 
+    testThis("${notificationResponse.payload}");
+    // jsData = jsData.replaceAll('category_name: ', 'category_name: "');
+    // jsData = jsData.replaceAll('seo_name_category: ', 'seo_name_category: "');
+    // jsData = jsData.replaceAll('notification_id: ', 'notification_id: "');
+    // jsData = jsData.replaceAll('body: ', 'body: "');
+    // jsData = jsData.replaceAll('type: ', 'type: "');
+    // jsData = jsData.replaceAll('title: ', 'title: "');
+    // jsData = jsData.replaceAll('click_action: ', 'click_action: "');
+    // jsData = jsData.replaceAll(', ', '", "');
+    // jsData = jsData.replaceAll('}', '"}');
+    // debugPrint(jsData);
+
+    //
+    // jsData1 = jsData1.replaceAll('{', '{"');
+    // jsData1 = jsData1.replaceAll(': ', '": "');
+    // jsData1 = jsData1.replaceAll(', ', '", "');
+    // jsData1 = jsData1.replaceAll('}', '"}');
+    // jsData1 = jsData1.replaceAll('*%', ',');
+    // jsData1 = jsData1.replaceAll('%*', ':');
+    // debugPrint(jsData1);
+    var propertyPattern = RegExp(r'(\w+): ([^,]+)');
+
+    var json = <String, String?>{};
+
+    propertyPattern.allMatches("${notificationResponse.payload}").forEach((match) {
+      var propertyName = match.group(1);
+      var propertyValue = match.group(2);
+
+      json[propertyName!] = propertyValue!.trim();
+    });
+    NotificationReceived notification =
+    // NotificationReceived.fromJson(jsonDecode(jsData1));
+    NotificationReceived.fromJson(json);
     setRead(
         notification.notification_id,
         notification.seo_name,
@@ -76,6 +107,33 @@ class NotificationHelper {
         notification.post_id,
         notification.vendor_id,
         notification.category_id);
+    // try {
+    //   NotificationReceived notification =
+    //           NotificationReceived.fromJson(jsonDecode(jsData));
+    //   setRead(
+    //       notification.notification_id,
+    //       notification.seo_name,
+    //       notification.seo_name_category,
+    //       notification.type,
+    //       notification.post_id,
+    //       notification.vendor_id,
+    //       notification.category_id);
+    // } catch (e) {
+    //   print(e);
+    //   NotificationReceived notification =
+    //   NotificationReceived.fromJson(jsonDecode(jsData1));
+    //   setRead(
+    //       notification.notification_id,
+    //       notification.seo_name,
+    //       notification.seo_name_category,
+    //       notification.type,
+    //       notification.post_id,
+    //       notification.vendor_id,
+    //       notification.category_id);
+    // }
+    // Navigation.instance.navigate('');
+
+
   }
 
   static void setRead(String? id, seoName, categoryName, type, postId, vendorId,
@@ -195,5 +253,38 @@ class NotificationHelper {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  static void testThis(String s) {
+    var propertyPattern = RegExp(r'(\w+): ([^,}]+)');
+
+    var json = <String, String?>{};
+
+    propertyPattern.allMatches(s).forEach((match) {
+      var propertyName = match.group(1);
+      var propertyValue = match.group(2);
+
+      json[propertyName!] = propertyValue!.trim();
+    });
+
+    // Access the values
+    String? categoryName = json['category_name'];
+    String? seoName = json['seo_name'];
+    String? seoNameCategory = json['seo_name_category'];
+    String? notificationId = json['notification_id'];
+    String? body = json['body'];
+    String? type = json['type'];
+    String? title = json['title'];
+    String? clickAction = s.split('click_action: ')[1].split('}')[0];
+
+    // Print the values
+    print('category_name: $categoryName');
+    print('seo_name: $seoName');
+    print('seo_name_category: $seoNameCategory');
+    print('notification_id: $notificationId');
+    print('body: $body');
+    print('type: $type');
+    print('title: $title');
+    print('click_action: $clickAction');
   }
 }

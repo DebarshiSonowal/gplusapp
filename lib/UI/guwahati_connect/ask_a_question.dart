@@ -33,6 +33,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
   // var title = TextEditingController();
 
   final desc = TextEditingController();
+  final title = TextEditingController();
 
   var current = 3;
 
@@ -53,9 +54,11 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    title.dispose();
+    desc.dispose();
     super.dispose();
     // title.dispose();
-    desc.dispose();
+
   }
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -83,7 +86,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
-        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+        padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 5.w),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,6 +107,33 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
               ),
               TextFormField(
                 style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Colors.black,
+                  // fontSize: 1.6.h,
+                ),
+                controller: title,
+                keyboardType: TextInputType.text,
+                maxLines: null,
+                minLines: 2,
+                textAlign: TextAlign.start,
+                textAlignVertical: TextAlignVertical.top,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  labelText: 'Write a topic',
+                  labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                    color: Colors.black45,
+                    // fontSize: 1.5.h,
+                  ),
+                  border: const OutlineInputBorder(),
+                  enabledBorder: const OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(
+                height: 1.h,
+              ),
+              TextFormField(
+                style: Theme.of(context).textTheme.headline5?.copyWith(
                       color: Colors.black,
                       // fontSize: 1.6.h,
                     ),
@@ -119,7 +149,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   labelText: 'Ask a question',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.black,
+                    color: Colors.black45,
                         // fontSize: 1.5.h,
                       ),
                   border: const OutlineInputBorder(),
@@ -249,7 +279,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
                 child: CustomButton(
                   onTap: () {
                     // showDialogBox();
-                    if (desc.text.isNotEmpty) {
+                    if (desc.text.isNotEmpty&&title.text.isNotEmpty) {
                       logTheAskAQuestionClick(
                         Provider.of<DataProvider>(
                                 Navigation
@@ -479,7 +509,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
   void postQuestion() async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance
-        .postGuwhahatiConnect(desc.text, attachements);
+        .postGuwhahatiConnect(desc.text, attachements,title.text);
     if (response.success ?? false) {
       print("post success ${response.success} ${response.message}");
       Fluttertoast.showToast(msg: "Your post has been submitted for review");
@@ -547,17 +577,21 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
     Map<Permission, PermissionStatus> statuses = await [
       Permission.storage,
       Permission.camera,
+      Permission.photos,
     ].request();
+    setState(() {
+      try {
+        showPhotoBottomSheet(getProfileImage);
+      } catch (e) {
+        // ImagePicker().retrieveLostData();
+        print(e);
+      }
+    });
     if (await Permission.storage.request().isGranted) {
-      setState(() {
-        try {
-          showPhotoBottomSheet(getProfileImage);
-        } catch (e) {
-          // ImagePicker().retrieveLostData();
-          print(e);
-        }
-      });
+
       // Either the permission was already granted before or the user just granted it you
+    }else{
+      debugPrint("asda ${await Permission.storage.request().isGranted}");
     }
   }
 }

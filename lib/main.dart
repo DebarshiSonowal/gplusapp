@@ -129,14 +129,27 @@ void notificationHandler(RemoteMessage? message, String msg) async {
     }
   }
   debugPrint("Notification Payload ${message?.data}");
-  var jsData = message?.data.toString() ?? "";
-  jsData = jsData.replaceAll('{', '{"');
-  jsData = jsData.replaceAll(': ', '": "');
-  jsData = jsData.replaceAll(', ', '", "');
-  jsData = jsData.replaceAll('}', '"}');
-  debugPrint(jsData);
+  // var jsData = message?.data.toString() ?? "";
+  // jsData = jsData.replaceAll('{', '{"');
+  // jsData = jsData.replaceAll(': ', '": "');
+  // jsData = jsData.replaceAll(', ', '", "');
+  // jsData = jsData.replaceAll('}', '"}');
+  // debugPrint(jsData);
+  // NotificationReceived notification =
+  //     NotificationReceived.fromJson(jsonDecode(jsData));
+  var propertyPattern = RegExp(r'(\w+): ([^,]+)');
+
+  var json = <String, String?>{};
+
+  propertyPattern.allMatches("${details?.notificationResponse?.payload}").forEach((match) {
+    var propertyName = match.group(1);
+    var propertyValue = match.group(2);
+
+    json[propertyName!] = propertyValue!.trim();
+  });
   NotificationReceived notification =
-      NotificationReceived.fromJson(jsonDecode(jsData));
+  // NotificationReceived.fromJson(jsonDecode(jsData1));
+  NotificationReceived.fromJson(json);
   // Navigation.instance.navigate('');
 
   NotificationHelper.setRead(

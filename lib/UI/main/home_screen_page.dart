@@ -96,53 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
             listen: false)
         .profile);
     // secureScreen();
-    Future.delayed(Duration.zero, () => fetchProfile());
-    fetchStories();
-    fetchHome();
-    fetchOpinion();
-    fetchGPlusExcl();
-    fetchPoll();
-    fetchNotification();
-    Future.delayed(Duration.zero, () {
-      Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .setCurrent(0);
-    });
-    Future.delayed(const Duration(seconds: 10), () {
-      FirebaseMessaging.instance.getInitialMessage().then(
-            (RemoteMessage? value) => setState(
-              () {
-                debugPrint("Initial!@8 1$value");
-                String initialMessage = "${value?.data}";
-                debugPrint("Initial!@8 2$initialMessage");
-                if (value!.data.isNotEmpty) {
-                  debugPrint("Notification Payload ${value.data}");
-                  var jsData = "${value.data}";
-                  jsData = jsData.replaceAll('{', '{"');
-                  jsData = jsData.replaceAll(': ', '": "');
-                  jsData = jsData.replaceAll(', ', '", "');
-                  jsData = jsData.replaceAll('}', '"}');
-                  debugPrint(jsData);
-                  NotificationReceived notification =
-                      NotificationReceived.fromJson(jsonDecode(jsData));
-                  // Navigation.instance.navigate('');
-
-                  NotificationHelper.setRead(
-                      notification.notification_id,
-                      notification.seo_name,
-                      notification.seo_name_category,
-                      notification.type,
-                      notification.post_id,
-                      notification.vendor_id,
-                      notification.category_id);
-                }
-              },
-            ),
-          );
-    });
-    getDynamicLink();
-    showPopUp();
+    Future.delayed(Duration.zero, () => fetchDetails(context));
     controller.addListener(() {
       if (controller.position.atEdge) {
         bool isTop = controller.position.pixels == 0;
@@ -266,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void fetchOpinion() async {
+  Future<void> fetchOpinion() async {
     final response = await ApiProvider.instance.getLatestOpinion();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -291,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void fetchGPlusExcl() async {
+  Future<void> fetchGPlusExcl() async {
     final response = await ApiProvider.instance.getArticle('exclusive-news');
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -303,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void fetchPoll() async {
+  Future<void> fetchPoll() async {
     final response = await ApiProvider.instance.getPollOfTheWeek();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -343,14 +297,21 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
-          .setAdImage(response1.data!);
+          .setAdImage(response1.link!, response1.data!);
       if (mounted) {
         // setState(() {});
       }
     } else {}
+    final response2 = await ApiProvider.instance.getFullScreenAdvertise();
+    if (response2.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setFullAd(response2.link!, response2.data!);
+    }
   }
 
-  void fetchHome() async {
+  Future<void> fetchHome() async {
     final result = await ApiProvider.instance.getHomeAlbum();
     if (result.success ?? false) {
       Provider.of<DataProvider>(
@@ -395,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void fetchProfile() async {
+  Future<void> fetchProfile() async {
     debugPrint('object profile');
     // Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getprofile();
@@ -513,7 +474,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 
-  void fetchStories() async {
+  Future<void> fetchStories() async {
     final response = await ApiProvider.instance.getStories();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -576,7 +537,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void fetchNotification() async {
+  Future<void> fetchNotification() async {
     final response = await ApiProvider.instance.getNotifications();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -600,7 +561,7 @@ class _HomeScreenState extends State<HomeScreen> {
         value: Storage.instance.isLoggedIn ? "logged_in" : "guest");
   }
 
-  getDynamicLink() async {
+  Future<void> getDynamicLink() async {
     final PendingDynamicLinkData? dynamicLinkData =
         await FirebaseDynamicLinks.instance.getInitialLink();
     if (dynamicLinkData != null) {
@@ -621,5 +582,97 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
     }
+  }
+
+  void fetchDetails(BuildContext context) async {
+    Provider.of<DataProvider>(
+            Navigation.instance.navigatorKey.currentContext ?? context,
+            listen: false)
+        .setCurrent(0);
+    await fetchProfile();
+    FirebaseMessaging.instance.getInitialMessage().then(
+          (RemoteMessage? value) => setState(
+            () {
+              debugPrint("Initial!@8 1$value");
+              String initialMessage = "${value?.data}";
+              debugPrint("Initial!@8 2$initialMessage");
+              if (value!.data.isNotEmpty) {
+                debugPrint("Notification Payload ${value.data}");
+                // var jsData = "${value.data}";
+                // jsData = jsData.replaceAll('{', '{"');
+                // jsData = jsData.replaceAll(': ', '": "');
+                // jsData = jsData.replaceAll(', ', '", "');
+                // jsData = jsData.replaceAll('}', '"}');
+                // debugPrint(jsData);
+                // NotificationReceived notification =
+                //     NotificationReceived.fromJson(jsonDecode(jsData));
+                var propertyPattern = RegExp(r'(\w+): ([^,]+)');
+
+                var json = <String, String?>{};
+
+                propertyPattern.allMatches("${value.data}").forEach((match) {
+                  var propertyName = match.group(1);
+                  var propertyValue = match.group(2);
+
+                  json[propertyName!] = propertyValue!.trim();
+                });
+                NotificationReceived notification =
+                // NotificationReceived.fromJson(jsonDecode(jsData1));
+                NotificationReceived.fromJson(json);
+                // Navigation.instance.navigate('');
+
+                NotificationHelper.setRead(
+                    notification.notification_id,
+                    notification.seo_name,
+                    notification.seo_name_category,
+                    notification.type,
+                    notification.post_id,
+                    notification.vendor_id,
+                    notification.category_id);
+              }
+            },
+          ),
+        );
+    await fetchStories();
+    await fetchHome();
+    await fetchOpinion();
+    await fetchGPlusExcl();
+    await fetchPoll();
+    await fetchNotification();
+
+    // Future.delayed(const Duration(seconds: 10), () {
+    //   FirebaseMessaging.instance.getInitialMessage().then(
+    //         (RemoteMessage? value) => setState(
+    //           () {
+    //             debugPrint("Initial!@8 1$value");
+    //             String initialMessage = "${value?.data}";
+    //             debugPrint("Initial!@8 2$initialMessage");
+    //             if (value!.data.isNotEmpty) {
+    //               debugPrint("Notification Payload ${value.data}");
+    //               var jsData = "${value.data}";
+    //               jsData = jsData.replaceAll('{', '{"');
+    //               jsData = jsData.replaceAll(': ', '": "');
+    //               jsData = jsData.replaceAll(', ', '", "');
+    //               jsData = jsData.replaceAll('}', '"}');
+    //               debugPrint(jsData);
+    //               NotificationReceived notification =
+    //                   NotificationReceived.fromJson(jsonDecode(jsData));
+    //               // Navigation.instance.navigate('');
+    //
+    //               NotificationHelper.setRead(
+    //                   notification.notification_id,
+    //                   notification.seo_name,
+    //                   notification.seo_name_category,
+    //                   notification.type,
+    //                   notification.post_id,
+    //                   notification.vendor_id,
+    //                   notification.category_id);
+    //             }
+    //           },
+    //         ),
+    //       );
+    // });
+    getDynamicLink();
+    showPopUp();
   }
 }

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../Helper/Constance.dart';
 import '../../../Helper/DataProvider.dart';
@@ -58,12 +59,16 @@ class BigDealsAdSection extends StatelessWidget {
                     ),
                   ),
                   child: Center(
-                    child: Consumer<DataProvider>(
-                      builder: (context,data,_) {
-                        return CachedNetworkImage(
-                          imageUrl: data
-                                  .ad_image ??
-                              Constance.kfc_offer,
+                    child: Consumer<DataProvider>(builder: (context, data, _) {
+                      return GestureDetector(
+                        onTap: () {
+                          if (data.smallImage?.link!=null) {
+                            _launchURL(data.smallImage?.link ?? "");
+                          }
+                        },
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              data.smallImage?.data ?? Constance.kfc_offer,
                           placeholder: (cont, _) {
                             return Image.asset(
                               Constance.logoIcon,
@@ -76,9 +81,9 @@ class BigDealsAdSection extends StatelessWidget {
                               fit: BoxFit.fitWidth,
                             );
                           },
-                        );
-                      }
-                    ),
+                        ),
+                      );
+                    }),
                   ),
                 )),
               ],
@@ -87,5 +92,13 @@ class BigDealsAdSection extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

@@ -70,6 +70,7 @@ import '../UI/refer_earn/redeem_points.dart';
 import '../UI/refer_earn/refer&earn.dart';
 import '../UI/story/story_page.dart';
 import '../UI/toppicks/top_picks_page.dart';
+import '../UI/view/full_screen_advertisement.dart';
 import '../UI/view/view_image_page.dart';
 import '../UI/view/webview_payment.dart';
 import 'Navigate.dart';
@@ -130,6 +131,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '/loadingDialog':
       return FadeTransitionPageRouteBuilder(page: LoadingDialog());
+    case '/fullScreenAd':
+      return FadeTransitionPageRouteBuilder(page: FullScreenAdvertisement());
     case '/videoPlayer':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'video_player');
       return FadeTransitionPageRouteBuilder(

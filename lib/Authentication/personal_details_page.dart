@@ -894,6 +894,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     debugPrint("${Storage.instance.signUpdata?.mobile}");
     debugPrint("${Storage.instance.signUpdata?.f_name}");
     Navigation.instance.navigate('/enterPreferences');
+    // signUp();
   }
 
   void findLocation(String? address) async {
@@ -997,5 +998,48 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         return alert;
       },
     );
+  }
+  void signUp() async {
+    final reponse = await ApiProvider.instance.createProfile(
+        '0',
+        Storage.instance.signUpdata?.mobile,
+        Storage.instance.signUpdata?.f_name,
+        Storage.instance.signUpdata?.l_name,
+        Storage.instance.signUpdata?.email,
+        Storage.instance.signUpdata?.dob,
+        Storage.instance.signUpdata?.address,
+        Storage.instance.signUpdata?.longitude,
+        Storage.instance.signUpdata?.latitude,
+        "",
+        "",
+        0,
+        0,
+        0,
+        Storage.instance.signUpdata?.gender,
+        Storage.instance.signUpdata?.refer,
+        1);
+    if (reponse.success ?? false) {
+      // setPreferences();
+
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setProfile(reponse.profile!);
+      debugPrint("Profile Created ${reponse.profile!.id}");
+      // logTheSignUpSuccessClick("",
+      //     "", reponse.profile!);
+      Navigation.instance.navigateAndReplace('/main');
+    } else {
+      // showError(reponse.msg ?? "Something went wrong");
+      Navigation.instance.goBack();
+      AlertX.instance.showAlert(
+          title: "Error",
+          msg: reponse.msg ?? "Something went wrong",
+          positiveButtonText: "Done",
+          positiveButtonPressed: () {
+            Navigation.instance.goBack();
+            Navigation.instance.goBack();
+          });
+    }
   }
 }

@@ -57,16 +57,7 @@ class LocationSection extends StatelessWidget {
                 SizedBox(
                   width: 45.w,
                   child: Text(
-                    data.profile?.addresses
-                        .where((element) => element.is_primary == 1)
-                        .isEmpty ??
-                        false
-                        ? data.profile?.addresses.first.address ?? ""
-                        : data.profile?.addresses
-                        .where((element) => element.is_primary == 1)
-                        .first
-                        .address ??
-                        '',
+                      getAddress(),
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Colors.white,
@@ -88,5 +79,24 @@ class LocationSection extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String getAddress() {
+    if(data.profile==null){
+      return "";
+    }
+    if(data.profile!.addresses.isEmpty){
+      return "";
+    }
+    return data.profile?.addresses
+        .where((element) => element.is_primary == 1)
+        .isEmpty ??
+        false
+        ? data.profile?.addresses.first.address ?? ""
+        : data.profile?.addresses
+        .where((element) => element.is_primary == 1)
+        .first
+        .address ??
+        '';
   }
 }

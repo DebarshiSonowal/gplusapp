@@ -24,6 +24,7 @@ import 'package:gplusapp/Model/video_news.dart';
 
 import '../Model/blocked_user.dart';
 import '../Model/contact_us.dart';
+import '../Model/full_screen_ad.dart';
 import '../Model/guwahati_connect.dart';
 import '../Model/membership.dart';
 import '../Model/notification_in_device.dart';
@@ -43,9 +44,7 @@ class DataProvider extends ChangeNotifier {
     // BlockedUser(),
   ];
   List<ReportModel> reportCategories = [];
-  List<NotificationInDevice> notifications = [
-
-  ];
+  List<NotificationInDevice> notifications = [];
   List<Opinion> opinions = [];
   List<Story> stories = [];
   List<Article> home_albums = [],
@@ -84,9 +83,8 @@ class DataProvider extends ChangeNotifier {
   List<Shop> shops = [];
   SwitchStatus? status;
   List<BookmarkItem> bookmarks = [];
-  bool hideReferEarn = false,is_citizen_journalist=false;
+  bool hideReferEarn = false, is_citizen_journalist = false;
   GuwahatiConnect? specificGuwahatiConnect;
-  String ad_image = "";
   String citizenJournalist = "",
       deal = "",
       classifiedMsg = "",
@@ -96,6 +94,7 @@ class DataProvider extends ChangeNotifier {
       refer_history_msg = "",
       invite = "",
       paywall = "";
+  FullScreenAd? full_screen_ad, smallImage;
 
   setCitizenJournalistText(String txt) {
     citizenJournalist = txt;
@@ -330,8 +329,8 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  setAdImage(String url) {
-    ad_image = url;
+  void setAdImage(String s, String t) {
+    smallImage = FullScreenAd(t, s);
     notifyListeners();
   }
 
@@ -437,6 +436,11 @@ class DataProvider extends ChangeNotifier {
 
   void setSwitch(SwitchStatus? val) {
     status = val;
+    notifyListeners();
+  }
+
+  void setFullAd(String s, String t) {
+    full_screen_ad = FullScreenAd(t, s);
     notifyListeners();
   }
 }

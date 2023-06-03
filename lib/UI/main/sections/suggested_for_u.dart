@@ -71,6 +71,7 @@ class SuggestedForYou extends StatelessWidget {
                                 logTheViewAllClick(
                                     data.profile!, "top_picks_for_you");
                                 Navigation.instance.navigate('/toppicks');
+                                // Navigation.instance.navigate('/fullScreenAd');
                               }else{
                                 showNotaMember();
                               }
