@@ -385,23 +385,23 @@ class _HomeScreenState extends State<HomeScreen> {
   void showPopUp() {
     double doubleInRange(Random source, num start, num end) =>
         source.nextDouble() * (end - start) + start;
-    Future.delayed(
-        Duration(milliseconds: doubleInRange(Random(), 10000, 20000).toInt()),
-        () {
-      // code will be here
-      if (Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ??
-                      (_scaffoldKey.currentContext!),
-                  listen: false)
-              .profile
-              ?.is_plan_active ??
-          false) {
-      } else {
-        // showDialogBox();
-        Constance.showMembershipPrompt2(_scaffoldKey.currentState!);
-      }
-    });
-    // Future.delayed(Duration(seconds: 5), () => showDialogBox());
+    // Future.delayed(
+    //     Duration(milliseconds: doubleInRange(Random(), 10000, 20000).toInt()),
+    //     () {
+    //   // code will be here
+    //   if (Provider.of<DataProvider>(
+    //               Navigation.instance.navigatorKey.currentContext ??
+    //                   (_scaffoldKey.currentContext!),
+    //               listen: false)
+    //           .profile
+    //           ?.is_plan_active ??
+    //       false) {
+    //   } else {
+    //     // showDialogBox();
+    //     Constance.showMembershipPrompt2(_scaffoldKey.currentState!);
+    //   }
+    // });
+    // Future.delayed(Duration(seconds: 5), () => Navigation.instance.navigate("/fullScreenAd"));
   }
 
   void showExitDialog() {

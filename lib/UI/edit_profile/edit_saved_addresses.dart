@@ -109,6 +109,11 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                     cursorColor: Storage.instance.isDarkMode
                         ? Colors.white
                         : Constance.primaryColor,
+                    onSubmitted: (value){
+                      if (value.isNotEmpty) {
+                        autoCompleteSearch(value);
+                      }
+                    },
                     decoration: InputDecoration(
                       labelText: "Search",
                       labelStyle: Theme.of(context)
@@ -163,7 +168,6 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
               predictions.isEmpty
                   ? Container()
                   : ListView.builder(
-
                       shrinkWrap: true,
                       itemCount: predictions.length,
                       itemBuilder: (context, index) {
@@ -441,12 +445,13 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
   void autoCompleteSearch(String value) async {
     var result = await googlePlace.autocomplete.get(value);
     if (result != null && result.predictions != null && mounted) {
+      debugPrint("Success ${result?.status} ${result?.predictions}");
       setState(() {
         predictions = result.predictions!;
       });
       // addAddress();
     } else {
-      print(result);
+      debugPrint("${result?.status} ${result?.predictions}");
     }
   }
 
