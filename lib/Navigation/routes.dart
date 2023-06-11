@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/OnBoarding/SplashScreen.dart';
 import 'package:gplusapp/UI/classified/classified_mylist_page.dart';
+import 'package:gplusapp/UI/view/no_internet_connection_page.dart';
 
 import '../Authentication/Signin/login_page.dart';
 import '../Authentication/Signup/signup_page.dart';
@@ -131,6 +132,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case '/loadingDialog':
       return FadeTransitionPageRouteBuilder(page: LoadingDialog());
+    case '/no_internet':
+      return FadeTransitionPageRouteBuilder(page: const NoInternetConnectionScreen());
     case '/fullScreenAd':
       return FadeTransitionPageRouteBuilder(page: FullScreenAdvertisement());
     case '/videoPlayer':

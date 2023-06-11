@@ -597,9 +597,11 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                       if (email.text.isNotEmpty &&
                           isValidEmail(email.text.trim())) {
                         if (date != "") {
-                          if (address != "" &&
-                              latitude != 0 &&
-                              longitude != 0) {
+                          if (
+                              // address != "" &&
+                              //     latitude != 0 &&
+                              //     longitude != 0
+                              true) {
                             logTheSignupFlowClick();
                             setData(
                                 widget.mobile,
@@ -674,7 +676,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       // Navigation.instance.goBack();
       showError("Please Enable Location Services from Settings", () {
         OpenSettings.openLocationSourceSetting();
-      },  "Location Services");
+      }, "Location Services");
       return Future.error('Location services are disabled.');
     }
 
@@ -688,9 +690,11 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
         // Navigation.instance.goBack();
-        showError("Please enable permissions for G Plus application from settings", () {
+        showError(
+            "Please enable permissions for G Plus application from settings",
+            () {
           OpenSettings.openAppSetting();
-        },  "We require Location permissions");
+        }, "We require Location permissions");
         return Future.error('Location permissions are denied');
       }
     }
@@ -698,9 +702,10 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
       // Navigation.instance.goBack();
-      showError("Please enable permissions for G Plus application from settings", () {
+      showError(
+          "Please enable permissions for G Plus application from settings", () {
         OpenSettings.openAppSetting();
-      },  "We require Location permissions");
+      }, "We require Location permissions");
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
@@ -724,7 +729,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       Navigation.instance.goBack();
       showError("Please Enable Location Services from Settings", () {
         OpenSettings.openLocationSourceSetting();
-      },  "Location Services");
+      }, "Location Services");
       return Future.error('Location services are disabled.');
     }
 
@@ -738,9 +743,11 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
         Navigation.instance.goBack();
-        showError("Please enable permissions for G Plus application from settings", () {
+        showError(
+            "Please enable permissions for G Plus application from settings",
+            () {
           OpenSettings.openAppSetting();
-        },  "We require Location permissions");
+        }, "We require Location permissions");
         return Future.error('Location permissions are denied');
       }
     }
@@ -748,9 +755,10 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
       Navigation.instance.goBack();
-      showError("Please enable permissions for G Plus application from settings", () {
+      showError(
+          "Please enable permissions for G Plus application from settings", () {
         OpenSettings.openAppSetting();
-      },  "We require Location permissions");
+      }, "We require Location permissions");
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
@@ -777,9 +785,11 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         getAddress(position.latitude, position.longitude);
       } else {
         Navigation.instance.goBack();
-        showError("Please enable permissions for G Plus application from settings", () {
+        showError(
+            "Please enable permissions for G Plus application from settings",
+            () {
           OpenSettings.openAppSetting();
-        },  "We require Location permissions");
+        }, "We require Location permissions");
       }
       // We didn't ask for permission yet or the permission has been denied before but not permanently.
     } else {
@@ -812,9 +822,11 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         getAddressNoGoBack(position.latitude, position.longitude);
       } else {
         // Navigation.instance.goBack();
-        showError("Please enable permissions for G Plus application from settings", () {
+        showError(
+            "Please enable permissions for G Plus application from settings",
+            () {
           OpenSettings.openAppSetting();
-        },  "We require Location permissions");
+        }, "We require Location permissions");
       }
       // We didn't ask for permission yet or the permission has been denied before but not permanently.
     } else {
@@ -893,8 +905,8 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
 
     debugPrint("${Storage.instance.signUpdata?.mobile}");
     debugPrint("${Storage.instance.signUpdata?.f_name}");
-    Navigation.instance.navigate('/enterPreferences');
-    // signUp();
+    // Navigation.instance.navigate('/enterPreferences');
+    signUp();
   }
 
   void findLocation(String? address) async {
@@ -999,6 +1011,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       },
     );
   }
+
   void signUp() async {
     final reponse = await ApiProvider.instance.createProfile(
         '0',
@@ -1022,8 +1035,8 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       // setPreferences();
 
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setProfile(reponse.profile!);
       debugPrint("Profile Created ${reponse.profile!.id}");
       // logTheSignUpSuccessClick("",

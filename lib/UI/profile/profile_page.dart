@@ -52,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ((data.profile?.is_plan_active ?? false) &&
                               data.memberships.isNotEmpty)
                           ? ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: data.memberships.length,
                               itemBuilder: (cont, count) {

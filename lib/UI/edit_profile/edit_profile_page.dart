@@ -260,7 +260,7 @@ class _EditProfileState extends State<EditProfile> {
                   },
                   child: Row(
                     children: [
-                      SizedBox(
+                      address==""?Container():SizedBox(
                         width: 70.w,
                         child: Text(
                           address,

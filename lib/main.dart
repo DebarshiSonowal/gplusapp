@@ -10,9 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+
 // import 'package:new_version/new_version.dart';
 import 'package:open_file_safe/open_file_safe.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
 // import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -28,11 +30,13 @@ import 'Model/notification_received.dart';
 import 'Navigation/Navigate.dart';
 import 'Navigation/routes.dart';
 import 'Networking/api_provider.dart';
+import 'Networking/connection_checker.dart';
 import 'firebase_options.dart';
 
 late AndroidNotificationChannel channel;
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 bool isFlutterLocalNotificationsInitialized = false;
+final NetworkConnectivity _networkConnectivity = NetworkConnectivity.instance;
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -46,6 +50,12 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // Set the background messaging handler early on, as a named top-level function
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  _networkConnectivity.initialise();
+  _networkConnectivity.myStream.listen((event) {
+    debugPrint("Connect ${event}");
+    // Navigation.instance.navigateAndRemoveUntil("/no_internet");
+  });
 
   await setupFlutterNotifications();
 
@@ -141,15 +151,17 @@ void notificationHandler(RemoteMessage? message, String msg) async {
 
   var json = <String, String?>{};
 
-  propertyPattern.allMatches("${details?.notificationResponse?.payload}").forEach((match) {
+  propertyPattern
+      .allMatches("${details?.notificationResponse?.payload}")
+      .forEach((match) {
     var propertyName = match.group(1);
     var propertyValue = match.group(2);
 
     json[propertyName!] = propertyValue!.trim();
   });
   NotificationReceived notification =
-  // NotificationReceived.fromJson(jsonDecode(jsData1));
-  NotificationReceived.fromJson(json);
+      // NotificationReceived.fromJson(jsonDecode(jsData1));
+      NotificationReceived.fromJson(json);
   // Navigation.instance.navigate('');
 
   NotificationHelper.setRead(

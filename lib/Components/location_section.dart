@@ -51,10 +51,10 @@ class LocationSection extends StatelessWidget {
             },
             child: Row(
               children: [
-                SizedBox(
+                getAddress()==""?Container():SizedBox(
                   width: 8.w,
                 ),
-                SizedBox(
+                getAddress()==""?Container():SizedBox(
                   width: 45.w,
                   child: Text(
                       getAddress(),
@@ -66,7 +66,7 @@ class LocationSection extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                getAddress()==""?Container():SizedBox(
                   width: 2.w,
                 ),
                 const Icon(

@@ -345,7 +345,8 @@ class ApiProvider {
       'referred_by_code': referal,
       'is_new': is_new
     };
-    var url = "${baseUrl}/profile";
+    var url = "${baseUrl}/profile-new";
+    // var url = "${baseUrl}/profile";
     dio = Dio(option);
     debugPrint(url.toString());
     debugPrint(jsonEncode(data));
@@ -664,7 +665,7 @@ class ApiProvider {
       }
       debugPrint(
           "address delete response: ${e.response} ${e.response?.headers}");
-      return AddressResponse.withError(e.message);
+      return AddressResponse.withError(e.response!.data['message']);
     }
   }
 
