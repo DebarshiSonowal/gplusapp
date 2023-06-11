@@ -333,6 +333,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   height: 1.5.h,
                 ),
                 TextFormField(
+                  autofocus: false,
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
                         // fontSize: 1.6.h,
@@ -340,6 +341,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   controller: _controller,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
+                  textInputAction: TextInputAction.go,
                   minLines: 5,
                   decoration: InputDecoration(
                     filled: true,
@@ -365,6 +367,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         if (_controller.text.isNotEmpty) {
                           postFeedBack(_controller.text);
                           _controller.text = "";
+                          FocusScope.of(context).unfocus();
                         } else {
                           showError("Enter something");
                         }
@@ -589,7 +592,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _launchURL(String url) async {
     if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+      await launchUrl(Uri.parse(url),mode: LaunchMode.externalApplication);
     } else {
       throw 'Could not launch $url';
     }

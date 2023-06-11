@@ -201,7 +201,10 @@ class _VerifyOTPState extends State<VerifyOTP> {
                       });
                     } on FirebaseAuthException catch (_, e) {
                       debugPrint(e.toString());
+                      // if(dev)
                       showError("${e} 2nd Something went wrong");
+                      // else
+                      //    simple
                     }
                     // phoneSignIn(phoneNumber: widget.number.toString());
                   }),
@@ -214,7 +217,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
               style: Theme.of(context).textTheme.headline6?.copyWith(
                     color: Colors.black,
                     fontSize: 15.sp,
-                    // fontWeight: FontWeight.bold,
+                    // fontWeight: FontWe ight.bold,
                   ),
             ),
             TextButton(
