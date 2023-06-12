@@ -193,16 +193,17 @@ class _VerifyOTPState extends State<VerifyOTP> {
                           .signInWithCredential(credential)
                           .then((value) {
                         getProfile();
-                      }).catchError((e) {
-                        debugPrint(_verificationId);
-                        debugPrint("s ${e}");
-                        debugPrint(textEditingController.text);
-                        showError("$e");
                       });
+                      //     .catchError((e) {
+                      //   debugPrint(_verificationId);
+                      //   debugPrint("s ${e}");
+                      //   debugPrint(textEditingController.text);
+                      //   showError("$e");
+                      // });
                     } on FirebaseAuthException catch (_, e) {
-                      debugPrint(e.toString());
+                      debugPrint(_.code);
                       // if(dev)
-                      showError("${e} 2nd Something went wrong");
+                      showError("${_.message}");
                       // else
                       //    simple
                     }

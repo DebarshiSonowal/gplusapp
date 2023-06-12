@@ -53,8 +53,13 @@ Future<void> main() async {
 
   _networkConnectivity.initialise();
   _networkConnectivity.myStream.listen((event) {
-    debugPrint("Connect ${event}");
-    // Navigation.instance.navigateAndRemoveUntil("/no_internet");
+    debugPrint("Connect ${event} ${event['status']}");
+    if (event['status'].toString() == "false") {
+      debugPrint("MIN");
+      Future.delayed(const Duration(seconds: 3),(){
+        Navigation.instance.navigate("/no_internet");
+      });
+    }
   });
 
   await setupFlutterNotifications();
