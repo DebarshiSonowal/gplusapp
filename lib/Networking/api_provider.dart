@@ -764,6 +764,7 @@ class ApiProvider {
     var url = "${homeUrl}/opinion-list";
     dio = Dio(option);
     debugPrint(url.toString());
+    debugPrint('Bearer ${Storage.instance.token}');
     debugPrint(jsonEncode(data));
 
     try {
@@ -771,7 +772,7 @@ class ApiProvider {
         url,
         queryParameters: data,
       );
-      // debugPrint("Article response: ${response?.data}");
+      debugPrint("Article response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return OpinionResponse.fromJson(response?.data);
       } else {

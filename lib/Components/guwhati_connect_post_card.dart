@@ -10,7 +10,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:timeago/timeago.dart' as timeago;
 import '../Helper/Constance.dart';
 import '../Helper/DataProvider.dart';
 import '../Helper/Storage.dart';
@@ -302,14 +302,13 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                   SizedBox(
                     height: 1.h,
                   ),
-
                   SizedBox(
                     height: 1.h,
                   ),
                   RichText(
                     text: TextSpan(children: [
                       TextSpan(
-                        text:"Query by ",
+                        text: "Query by ",
                         style: Theme.of(context).textTheme.headline3?.copyWith(
                               color: Storage.instance.isDarkMode
                                   ? Colors.white
@@ -319,24 +318,24 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                             ),
                       ),
                       TextSpan(
-                        text:data.user?.name ?? "G Plus Author",
+                        text: data.user?.name ?? "G Plus Author",
                         style: Theme.of(context).textTheme.headline3?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Constance.primaryColor,
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Constance.primaryColor,
+                              fontSize: 11.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       TextSpan(
-                        text:" ${data.user?.l_name??""}",
+                        text: " ${data.user?.l_name ?? ""}",
                         style: Theme.of(context).textTheme.headline3?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Constance.primaryColor,
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Constance.primaryColor,
+                              fontSize: 11.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ]),
                   ),
@@ -359,11 +358,11 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                   .textTheme
                                   .headline6
                                   ?.copyWith(
-                                color: Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
-                                // fontWeight: FontWeight.bold,
-                              ),
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ],
                         ),
@@ -374,12 +373,12 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                           child: Text(
                             '${data.total_comment} comments' ?? "",
                             style:
-                            Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
-                              // fontWeight: FontWeight.bold,
-                            ),
+                                Theme.of(context).textTheme.headline6?.copyWith(
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
                           ),
                         ),
                       ],
@@ -455,10 +454,14 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          Jiffy(data.created_at, "yyyy-MM-dd hh:mm:ss")
-                                  .fromNow() ??
-                              '${15} mins ago' ??
-                              "",
+                          // Jiffy(data.updated_at).fromNow() ??
+                          // "${data.updated_at}"
+                          // '${15} mins ago' ??
+                          // "",
+                          (data.updated_at == null || data.updated_at == "")
+                              ? ""
+                              : getTimeDifference(
+                                  DateTime.parse(data.updated_at!)),
                           style:
                               Theme.of(context).textTheme.headline6?.copyWith(
                                     color: Storage.instance.isDarkMode
@@ -530,7 +533,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
     _scrollDown();
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
-      enableDrag: false,
+      enableDrag: true,
       isDismissible: true,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -1000,6 +1003,14 @@ void reportPost_Comment(context, id, report_type, type) async {
     showError(response.message ?? "Unable to report");
   }
 }
+
+String getTimeDifference(DateTime dateTime) {
+  final now = DateTime.now();
+  final difference = now.difference(dateTime);
+  final ago = now.subtract(difference);
+  return timeago.format(ago, locale: 'en');
+}
+
 
 void showError(String msg) {
   AlertX.instance.showAlert(

@@ -184,6 +184,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                   txt: 'Submit',
                   onTap: () async {
                     // GetProfile();
+                    Navigation.instance.navigate("/loadingDialog");
                     try {
                       PhoneAuthCredential credential =
                           PhoneAuthProvider.credential(
@@ -203,6 +204,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                     } on FirebaseAuthException catch (_, e) {
                       debugPrint(_.code);
                       // if(dev)
+                      Navigation.instance.goBack();
                       showError("${_.message}");
                       // else
                       //    simple
@@ -365,7 +367,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
           reponse.profile?.l_name == "" ||
           reponse.profile?.is_new == 1) {
         Storage.instance.setToken(reponse.access_token ?? "");
-        Navigation.instance.navigate('/terms&conditions', args: widget.number);
+        Navigation.instance.navigateAndReplace('/terms&conditions', args: widget.number);
       } else {
         fetchToken();
         try {

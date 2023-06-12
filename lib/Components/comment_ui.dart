@@ -88,85 +88,79 @@ class CommentUI extends StatelessWidget {
                 ),
                 Expanded(
                   // height: 35.h,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5.w),
-                    child: ListView.builder(
-                        // physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        controller: controller,
-                        itemCount: data.guwahatiConnect[count].comments.length,
-                        itemBuilder: (cont, ind) {
-                          var current =
-                              data.guwahatiConnect[count].comments[ind];
-                          return CommentItem(
-                              current: current,
-                              context: context,
-                              liked: current.is_liked);
-                        }),
-                  ),
+                  child: ListView.builder(
+                      // physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      controller: controller,
+                      itemCount: data.guwahatiConnect[count].comments.length,
+                      itemBuilder: (cont, ind) {
+                        var current =
+                            data.guwahatiConnect[count].comments[ind];
+                        return CommentItem(
+                            current: current,
+                            context: context,
+                            liked: current.is_liked);
+                      }),
                 ),
                 Container(
                   height: 8.h,
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(horizontal: 2.w),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Card(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 5.w, vertical: 0.5.h),
-                        child: TextField(
-                          controller: searchQueryController,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: "Write a comment",
-                            border: InputBorder.none,
-                            hintStyle: const TextStyle(color: Colors.black26),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                if (searchQueryController.text.isNotEmpty) {
-                                  // search(_searchQueryController.text);
+                  child: Card(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 5.w, vertical: 0.5.h),
+                      child: TextField(
+                        controller: searchQueryController,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          hintText: "Write a comment",
+                          border: InputBorder.none,
+                          hintStyle: const TextStyle(color: Colors.black26),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              if (searchQueryController.text.isNotEmpty) {
+                                // search(_searchQueryController.text);
 
-                                  if (Provider.of<DataProvider>(
-                                              Navigation.instance.navigatorKey
-                                                      .currentContext ??
-                                                  context,
-                                              listen: false)
-                                          .profile
-                                          ?.is_plan_active ??
-                                      false) {
-                                    // Navigation.instance.navigate('/exclusivePage');
-                                    _(() {
-                                      logTheCommentPostClick(
-                                        data.profile!,
-                                        data.guwahatiConnect[count].question!,
-                                      );
-                                      postComment(
-                                          data.guwahatiConnect[count].id,
-                                          'guwahati-connect',
-                                          searchQueryController.text);
-                                    });
-                                  } else {
-                                    Constance.showMembershipPrompt(
-                                        context, () {});
-                                  }
+                                if (Provider.of<DataProvider>(
+                                            Navigation.instance.navigatorKey
+                                                    .currentContext ??
+                                                context,
+                                            listen: false)
+                                        .profile
+                                        ?.is_plan_active ??
+                                    false) {
+                                  // Navigation.instance.navigate('/exclusivePage');
+                                  _(() {
+                                    logTheCommentPostClick(
+                                      data.profile!,
+                                      data.guwahatiConnect[count].question!,
+                                    );
+                                    postComment(
+                                        data.guwahatiConnect[count].id,
+                                        'guwahati-connect',
+                                        searchQueryController.text,context);
+                                  });
                                 } else {
-                                  showError('Enter something to search');
+                                  Constance.showMembershipPrompt(
+                                      context, () {});
                                 }
-                              },
-                              icon: const Icon(
-                                Icons.send,
-                                color: Colors.black,
-                              ),
+                              } else {
+                                showError('Enter something to search');
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.send,
+                              color: Colors.black,
                             ),
                           ),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline4
-                              ?.copyWith(color: Colors.black),
-                          onChanged: (query) => {},
                         ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline4
+                            ?.copyWith(color: Colors.black),
+                        onChanged: (query) => {},
                       ),
                     ),
                   ),
@@ -189,7 +183,7 @@ class CommentUI extends StatelessWidget {
         });
   }
 
-  void postComment(int? id, String s, String text) async {
+  void postComment(int? id, String s, String text,BuildContext context) async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.postComment(id, s, text);
     if (response.success ?? false) {
@@ -197,6 +191,7 @@ class CommentUI extends StatelessWidget {
       fetchGuwahatiConnect();
       searchQueryController.text = '';
     } else {
+      FocusScope.of(context).requestFocus(FocusNode());
       Navigation.instance.goBack();
     }
   }

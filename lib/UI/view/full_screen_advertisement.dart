@@ -48,6 +48,7 @@ class FullScreenAdvertisement extends StatelessWidget {
                 return GestureDetector(
                   onTap: () {
                     if (data.full_screen_ad?.link==null) {
+                      Navigation.instance.goBack();
                       _launchURL(data.full_screen_ad!.link);
                     }
                   },

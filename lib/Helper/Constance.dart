@@ -140,7 +140,7 @@ class Constance {
             Navigation.instance.navigate('/notification');
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return bd.Badge(
+            return data.notifications.isNotEmpty?bd.Badge(
               badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',
@@ -150,7 +150,7 @@ class Constance {
                     ?.copyWith(color: Constance.primaryColor, fontSize: 8.sp),
               ),
               child: const Icon(Icons.notifications),
-            );
+            ):const Icon(Icons.notifications);
           }),
         ),
         IconButton(

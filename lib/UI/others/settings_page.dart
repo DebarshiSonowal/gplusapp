@@ -257,48 +257,55 @@ class _SettingsPageState extends State<SettingsPage> {
                 SizedBox(
                   height: 1.5.h,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Rate Us',
-                      style: Theme.of(context).textTheme.headline3?.copyWith(
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Constance.primaryColor,
-                            // fontSize: 2.h,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        if (await inAppReview.isAvailable()) {
-                          inAppReview.requestReview();
-                        } else if(Platform.isAndroid) {
-                          _launchURL("https://play.google.com/store/apps/details?id=com.appbazooka.gplus");
-                        }else{
-                          _launchURL("https://apps.apple.com/us/app/keynote/id6444875975");
-                        }
-                      },
-                      child: AbsorbPointer(
-                        child: RatingBar.builder(
-                          unratedColor: Colors.grey.shade300,
-                          initialRating: 0,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemSize: 24.sp,
-                          itemPadding: EdgeInsets.symmetric(horizontal: 0.5.w),
-                          itemBuilder: (context, _) => const Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                          ),
-                          onRatingUpdate: (rating) {},
-                        ),
+                GestureDetector(
+                  onTap: () async {
+                    debugPrint("onTap");
+                    Navigation.instance.navigate("/loadingDialog");
+                    if (await inAppReview.isAvailable()) {
+                      debugPrint("onTap1");
+                      Navigation.instance.goBack();
+                      // await inAppReview.requestReview();
+                      await inAppReview.openStoreListing(appStoreId: '6444875975');
+                    } else if(Platform.isAndroid) {
+                      debugPrint("onTap2");
+                      Navigation.instance.goBack();
+                      _launchURL("https://play.google.com/store/apps/details?id=com.appbazooka.gplus");
+                    }else{
+                      debugPrint("onTap3");
+                      Navigation.instance.goBack();
+                      _launchURL("https://apps.apple.com/us/app/keynote/id6444875975");
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Rate Us',
+                        style: Theme.of(context).textTheme.headline3?.copyWith(
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Constance.primaryColor,
+                              // fontSize: 2.h,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
-                    ),
-                  ],
+                      RatingBar.builder(
+                        unratedColor: Colors.grey.shade300,
+                        initialRating: 0,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemSize: 24.sp,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 0.5.w),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) {},
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 1.5.h,

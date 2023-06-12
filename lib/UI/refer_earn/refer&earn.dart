@@ -25,6 +25,7 @@ class ReferAndEarn extends StatefulWidget {
 
 class _ReferAndEarnState extends State<ReferAndEarn> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  int currentLength = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -405,82 +406,6 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                   );
                                 },
                                 itemCount: data.referEarn?.plans.length ?? 0),
-                            // Padding(
-                            //   padding: EdgeInsets.symmetric(
-                            //       horizontal: 4.w, vertical: 1.h),
-                            //   child: Row(
-                            //     mainAxisAlignment:
-                            //         MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       Text(
-                            //         '500 points',
-                            //         overflow: TextOverflow.ellipsis,
-                            //         textAlign: TextAlign.start,
-                            //         style: Theme.of(Navigation.instance
-                            //                 .navigatorKey.currentContext!)
-                            //             .textTheme
-                            //             .headline4
-                            //             ?.copyWith(
-                            //               color: Colors.white,
-                            //               // fontSize: 11.sp,
-                            //               fontWeight: FontWeight.bold,
-                            //             ),
-                            //       ),
-                            //       Text(
-                            //         '2 month',
-                            //         overflow: TextOverflow.ellipsis,
-                            //         textAlign: TextAlign.start,
-                            //         style: Theme.of(Navigation.instance
-                            //                 .navigatorKey.currentContext!)
-                            //             .textTheme
-                            //             .headline4
-                            //             ?.copyWith(
-                            //               color: Colors.white,
-                            //               // fontSize: 11.sp,
-                            //               // fontWeight: FontWeight.bold,
-                            //             ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-                            // Padding(
-                            //   padding: EdgeInsets.symmetric(
-                            //       horizontal: 4.w, vertical: 1.h),
-                            //   child: Row(
-                            //     mainAxisAlignment:
-                            //         MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       Text(
-                            //         '1000 points',
-                            //         overflow: TextOverflow.ellipsis,
-                            //         textAlign: TextAlign.start,
-                            //         style: Theme.of(Navigation.instance
-                            //                 .navigatorKey.currentContext!)
-                            //             .textTheme
-                            //             .headline4
-                            //             ?.copyWith(
-                            //               color: Colors.white,
-                            //               // fontSize: 11.sp,
-                            //               fontWeight: FontWeight.bold,
-                            //             ),
-                            //       ),
-                            //       Text(
-                            //         '7 month',
-                            //         overflow: TextOverflow.ellipsis,
-                            //         textAlign: TextAlign.start,
-                            //         style: Theme.of(Navigation.instance
-                            //                 .navigatorKey.currentContext!)
-                            //             .textTheme
-                            //             .headline4
-                            //             ?.copyWith(
-                            //               color: Colors.white,
-                            //               // fontSize: 11.sp,
-                            //               // fontWeight: FontWeight.bold,
-                            //             ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
                             SizedBox(
                               height: 1.h,
                             ),
@@ -519,6 +444,8 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                             ),
                             data.referHistory.isNotEmpty
                                 ? ListView.separated(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemBuilder: (cont, count) {
                                       var current = data.referHistory[count];
@@ -534,25 +461,28 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 SizedBox(
-                                                  width:55.w,
+                                                  width: 55.w,
                                                   child: Text(
-                                                    current.title??"",
-                                                    overflow: TextOverflow.ellipsis,
+                                                    current.title ?? "",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     textAlign: TextAlign.start,
                                                     style: Theme.of(Navigation
-                                                        .instance
-                                                        .navigatorKey
-                                                        .currentContext!)
+                                                            .instance
+                                                            .navigatorKey
+                                                            .currentContext!)
                                                         .textTheme
                                                         .headline5
                                                         ?.copyWith(
-                                                      color: Storage
-                                                          .instance.isDarkMode
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                      fontSize: 11.sp,
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
+                                                          color: !Storage
+                                                                  .instance
+                                                                  .isDarkMode
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                          fontSize: 11.sp,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                   ),
                                                 ),
                                                 Text(
@@ -567,7 +497,10 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                                       .textTheme
                                                       .headline6
                                                       ?.copyWith(
-                                                        color: Colors.black,
+                                                        color: !Storage.instance
+                                                                .isDarkMode
+                                                            ? Colors.white
+                                                            : Colors.black,
                                                         // fontSize: 11.sp,
                                                         // fontWeight: FontWeight.bold,
                                                       ),
@@ -602,7 +535,8 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                         height: 1.h,
                                       );
                                     },
-                                    itemCount: data.referHistory.length)
+                                    itemCount: currentLength,
+                                  )
                                 : Center(
                                     child: Text(
                                       data.refer_history_msg,
@@ -624,23 +558,33 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 4.w, vertical: 1.h),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'See More',
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.start,
-                                    style: Theme.of(Navigation.instance
-                                            .navigatorKey.currentContext!)
-                                        .textTheme
-                                        .headline4
-                                        ?.copyWith(
-                                          color: Constance.secondaryColor,
-                                          // fontSize: 11.sp,
-                                          // fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                ],
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (currentLength * 2 <=
+                                      data.referHistory.length) {
+                                    setState(() {
+                                      currentLength = currentLength * 2;
+                                    });
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'See More',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.start,
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline4
+                                          ?.copyWith(
+                                            color: Constance.secondaryColor,
+                                            // fontSize: 11.sp,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -709,6 +653,8 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
     Future.delayed(Duration.zero, () {
       fetchReferEarn();
       fetchHistory();
+      currentLength =
+          Provider.of<DataProvider>(context, listen: false).referHistory.length;
     });
   }
 

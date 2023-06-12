@@ -73,7 +73,7 @@ class NotificationPageItem extends StatelessWidget {
                       size: Size.fromRadius(1.3.h), // Image radius
                       child: Image.asset(
                         getIcon(current.type ?? "news"),
-                        fit: BoxFit.cover,
+                        fit: BoxFit.scaleDown,
                         color: Colors.white,
                       ),
                     ),

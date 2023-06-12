@@ -39,7 +39,8 @@ class CommentItem extends StatelessWidget {
                 menuItemExtent: 45,
                 menuBoxDecoration: BoxDecoration(
                   color:
-                      Storage.instance.isDarkMode ? Colors.black : Colors.grey,
+                      // Storage.instance.isDarkMode ? Colors.black : Colors.grey,
+                  Constance.secondaryColor,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(15.0),
                   ),
@@ -99,78 +100,77 @@ class CommentItem extends StatelessWidget {
                 child: body(context, _, data.profile?.id),
               )
             : FocusedMenuHolder(
-          blurSize: 5.0,
-          menuItemExtent: 45,
-          menuBoxDecoration: BoxDecoration(
-            color:
-            Storage.instance.isDarkMode ? Colors.black : Colors.grey,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(15.0),
-            ),
-          ),
-          duration: const Duration(milliseconds: 100),
-          animateMenuItems: true,
-          blurBackgroundColor: Colors.black54,
-          openWithTap: false,
-          // Open Focused-Menu on Tap rather than Long Press
-          menuOffset: 10.0,
-          // Offset value to show menuItem from the selected item
-          bottomOffsetHeight: 80.0,
-          // Offset hei
-          onPressed: () {
-
-          },
-          menuItems: <FocusedMenuItem>[
-            // Add Each FocusedMenuItem  for Menu Options
-            FocusedMenuItem(
-              title: Text(
-                "Block user",
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black,
+                blurSize: 5.0,
+                menuItemExtent: 45,
+                menuBoxDecoration: BoxDecoration(
+                  color:
+                      Storage.instance.isDarkMode ? Colors.black : Colors.grey,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(15.0),
+                  ),
                 ),
-              ),
-              trailingIcon: Icon(
-                Icons.block,
-                color: Storage.instance.isDarkMode
-                    ? Colors.white
-                    : Colors.black,
-              ),
-              onPressed: () {
-
-                // Navigator.push(context, MaterialPageRoute(builder: (context)=>ScreenTwo()));
-              },
-            ),
-            FocusedMenuItem(
-              title: Text(
-                "Report this comment",
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black,
-                ),
-              ),
-              trailingIcon: const Icon(
-                Icons.report,
-                color: Constance.thirdColor,
-              ),
-              onPressed: () {
-                _showAlertDialog(context, current.id);
-                // Navigator.push(context, MaterialPageRoute(builder: (context)=>ScreenTwo()));
-              },
-            ),
-          ],
-          child: body(context, _, data.profile?.id),
-        );
+                duration: const Duration(milliseconds: 100),
+                animateMenuItems: true,
+                blurBackgroundColor: Colors.black54,
+                openWithTap: false,
+                // Open Focused-Menu on Tap rather than Long Press
+                menuOffset: 10.0,
+                // Offset value to show menuItem from the selected item
+                bottomOffsetHeight: 80.0,
+                // Offset hei
+                onPressed: () {},
+                menuItems: <FocusedMenuItem>[
+                  // Add Each FocusedMenuItem  for Menu Options
+                  FocusedMenuItem(
+                    title: Text(
+                      "Block user",
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                    ),
+                    trailingIcon: Icon(
+                      Icons.block,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                    onPressed: () {
+                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>ScreenTwo()));
+                    },
+                  ),
+                  FocusedMenuItem(
+                    title: Text(
+                      "Report this comment",
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                    ),
+                    trailingIcon: const Icon(
+                      Icons.report,
+                      color: Constance.thirdColor,
+                    ),
+                    onPressed: () {
+                      _showAlertDialog(context, current.id);
+                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>ScreenTwo()));
+                    },
+                  ),
+                ],
+                child: body(context, _, data.profile?.id),
+              );
       });
     });
   }
 
-  SizedBox body(BuildContext context, StateSetter _,int? id) {
-    return SizedBox(
-      height: 16.h,
+  Container body(BuildContext context, StateSetter _, int? id) {
+    return Container(
+      color: Colors.white,
+      // height: 16.h,
       width: 40.w,
+      padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 0.4.h,),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -267,9 +267,9 @@ class CommentItem extends StatelessWidget {
             ),
           ),
 
-          SizedBox(
-            height: 1.h,
-          ),
+          // SizedBox(
+          //   height: 1.h,
+          // ),
         ],
       ),
     );
@@ -283,9 +283,13 @@ class CommentItem extends StatelessWidget {
         like = is_like == 0 ? false : true;
       });
       // fetchGuwahatiConnect();
+
     } else {
       showError("Something went wrong");
     }
+    Future.delayed(const Duration(seconds: 2),(){
+      FocusScope.of(context).requestFocus(FocusNode());
+    });
   }
 
   void showError(String msg) {
@@ -301,7 +305,7 @@ class CommentItem extends StatelessWidget {
   Future<void> _displayTextInputDialog(
       BuildContext context, int? id, String? text) async {
     String valueText = "";
-    _textFieldController.text = text??"";
+    _textFieldController.text = text ?? "";
     return showDialog(
         context: context,
         builder: (context) {
@@ -388,10 +392,13 @@ class CommentItem extends StatelessWidget {
     final response = await ApiProvider.instance.deleteComment(id!);
     if (response.success ?? false) {
       Navigation.instance.goBack();
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
     } else {
       Navigation.instance.goBack();
     }
+    Future.delayed(const Duration(seconds: 2),(){
+      FocusScope.of(context).requestFocus(FocusNode());
+    });
   }
 
   void updateComment(int? id, String comment) async {
@@ -399,13 +406,17 @@ class CommentItem extends StatelessWidget {
     if (response.success ?? false) {
       Fluttertoast.showToast(msg: response.message ?? "");
       Navigation.instance.goBack();
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
     } else {
       Navigation.instance.goBack();
-      Navigation.instance.goBack();
+      // Navigation.instance.goBack();
       showError(response.message ?? "Something went wrong");
     }
+    Future.delayed(const Duration(seconds: 2),(){
+      FocusScope.of(context).requestFocus(FocusNode());
+    });
   }
+
   Future<void> _showAlertDialog(context, id) async {
     return showDialog<void>(
       context: context,
@@ -413,15 +424,16 @@ class CommentItem extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor:
-          Storage.instance.isDarkMode ? Colors.black : Colors.white,
+              Storage.instance.isDarkMode ? Colors.black : Colors.white,
           // <-- SEE HERE
           title: Text(
             'Please select a problem',
             style: Theme.of(context).textTheme.headline5?.copyWith(
-              fontWeight: FontWeight.bold,
-              color:
-              !Storage.instance.isDarkMode ? Colors.black : Colors.white,
-            ),
+                  fontWeight: FontWeight.bold,
+                  color: !Storage.instance.isDarkMode
+                      ? Colors.black
+                      : Colors.white,
+                ),
           ),
           content: SizedBox(
             height: 27.h,
@@ -431,10 +443,10 @@ class CommentItem extends StatelessWidget {
                 Text(
                   "If someone is in immediate danger, get help before reporting to G Plus. Don't wait.",
                   style: Theme.of(context).textTheme.headline6?.copyWith(
-                    color: !Storage.instance.isDarkMode
-                        ? Colors.black
-                        : Colors.white,
-                  ),
+                        color: !Storage.instance.isDarkMode
+                            ? Colors.black
+                            : Colors.white,
+                      ),
                 ),
                 SizedBox(
                   height: 9.h,
@@ -455,10 +467,10 @@ class CommentItem extends StatelessWidget {
                       child: Text(
                         item.name ?? "",
                         style: Theme.of(context).textTheme.headline6?.copyWith(
-                          color: !Storage.instance.isDarkMode
-                              ? Colors.black
-                              : Colors.white,
-                        ),
+                              color: !Storage.instance.isDarkMode
+                                  ? Colors.black
+                                  : Colors.white,
+                            ),
                       ),
                     );
                   },
@@ -482,8 +494,10 @@ class CommentItem extends StatelessWidget {
               child: Text(
                 'Cancel',
                 style: Theme.of(context).textTheme.headline4?.copyWith(
-                  color: !Storage.instance.isDarkMode?Colors.black:Colors.white,
-                ),
+                      color: !Storage.instance.isDarkMode
+                          ? Colors.black
+                          : Colors.white,
+                    ),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -501,14 +515,15 @@ class CommentItem extends StatelessWidget {
     );
   }
 
-  void reportPost_Comment(context,id, report_type, type) async{
-    final response = await ApiProvider.instance.reportPost_Comment(id,report_type,type);
-    if(response.success??false){
+  void reportPost_Comment(context, id, report_type, type) async {
+    final response =
+        await ApiProvider.instance.reportPost_Comment(id, report_type, type);
+    if (response.success ?? false) {
       Navigator.of(context).pop();
-      Fluttertoast.showToast(msg: response.message??"Something went wrong");
-    }else{
+      Fluttertoast.showToast(msg: response.message ?? "Something went wrong");
+    } else {
       Navigator.of(context).pop();
-      showError(response.message??"Unable to report");
+      showError(response.message ?? "Unable to report");
     }
   }
 }

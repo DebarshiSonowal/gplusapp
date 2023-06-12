@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gplusapp/UI/main/sections/poll_of_the_week_section.dart';
 import 'package:gplusapp/UI/main/sections/suggested_for_u.dart';
 import 'package:provider/provider.dart';
@@ -81,14 +82,22 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
       child: SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
-        header: const WaterDropHeader(),
+        header: WaterDropHeader(
+          waterDropColor: Storage.instance.isDarkMode
+              ? Colors.white
+              : Constance.primaryColor,
+        ),
         footer: CustomFooter(
           builder: (BuildContext context, LoadStatus? mode) {
             Widget body;
             if (mode == LoadStatus.idle) {
               body = Text("pull up load");
             } else if (mode == LoadStatus.loading) {
-              body = const CupertinoActivityIndicator();
+              body = CupertinoActivityIndicator(
+                color: Storage.instance.isDarkMode
+                    ? Colors.white
+                    : Constance.primaryColor,
+              );
             } else if (mode == LoadStatus.failed) {
               body = const Text("Load Failed!Click retry!");
             } else if (mode == LoadStatus.canLoading) {
@@ -110,8 +119,12 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
           child: Consumer<DataProvider>(builder: (context, data, _) {
             return WillPopScope(
               onWillPop: () async {
-                widget.showExitDialog();
-
+                // widget.showExitDialog();
+                if (Navigator.of(context).canPop()) {
+                  return true;
+                } else {
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                }
                 return false;
               },
               child: Container(

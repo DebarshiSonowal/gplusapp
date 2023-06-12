@@ -402,6 +402,10 @@ class _HomeScreenState extends State<HomeScreen> {
     //   }
     // });
     // Future.delayed(Duration(seconds: 5), () => Navigation.instance.navigate("/fullScreenAd"));
+    if(!Storage.instance.isFullScreenAd){
+      Navigation.instance.navigate("/fullScreenAd");
+      Storage.instance.setFullScreenAd(true);
+    }
   }
 
   void showExitDialog() {

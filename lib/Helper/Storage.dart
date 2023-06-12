@@ -38,6 +38,11 @@ class Storage {
     await sharedpreferences.setString("filter", filters);
   }
 
+  Future<void> setFullScreenAd(bool val) async {
+    // print('set filters ${filters.toString()}');
+    await sharedpreferences.setBool("fullscreen", val);
+  }
+
   Future<void> setOnBoarding() async {
     await sharedpreferences.setBool("isOnBoarding", true);
   }
@@ -84,6 +89,8 @@ class Storage {
   get isLoggedIn => sharedpreferences.getBool("isLoggedIn") ?? false;
 
   get isDarkMode => sharedpreferences.getBool("dark") ?? false;
+
+  get isFullScreenAd => sharedpreferences.getBool("fullscreen") ?? false;
 
   get isNew => sharedpreferences.getBool("isNew") ?? false;
 
