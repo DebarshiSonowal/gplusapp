@@ -42,10 +42,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // secureScreen();
-    Future.delayed(Duration.zero, () {
-      fetchDealMsg();
-    });
-    Future.delayed(const Duration(seconds: 1), () {
+    // Future.delayed(Duration.zero, () {
+    //   fetchDealMsg();
+    // });
+    Future.delayed(const Duration(seconds: 0), () async {
+      await fetchAds();
+      await fetchDealMsg();
       if (Storage.instance.isLoggedIn) {
         fetchSwitchStatus();
 
@@ -105,7 +107,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  void fetchDealMsg() async {
+  Future<void> fetchDealMsg() async {
     final response = await ApiProvider.instance.fetchMessages();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -144,5 +146,34 @@ class _SplashScreenState extends State<SplashScreen> {
     final response = await ApiProvider.instance.updateDeviceToken(fcmToken);
     if (response.success ?? false) {
     } else {}
+  }
+
+  Future<void> fetchAds() async {
+    final response = await ApiProvider.instance.getAdvertise();
+    if (response.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setAds(response.ads ?? []);
+      // random = Random().nextInt(response.ads?.length ?? 0);
+      // fetchAds();
+    }
+    final response1 = await ApiProvider.instance.getAdImage();
+    if (response1.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setAdImage(response1.link!, response1.data!);
+      if (mounted) {
+        // setState(() {});
+      }
+    } else {}
+    final response2 = await ApiProvider.instance.getFullScreenAdvertise();
+    if (response2.success ?? false) {
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setFullAd(response2.link!, response2.data!);
+    }
   }
 }

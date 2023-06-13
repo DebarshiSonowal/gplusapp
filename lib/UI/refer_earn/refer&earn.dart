@@ -464,6 +464,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                                   width: 55.w,
                                                   child: Text(
                                                     current.title ?? "",
+                                                    maxLines: 2,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     textAlign: TextAlign.start,
@@ -474,16 +475,15 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                                         .textTheme
                                                         .headline5
                                                         ?.copyWith(
-                                                          color: !Storage
-                                                                  .instance
-                                                                  .isDarkMode
-                                                              ? Colors.white
-                                                              : Colors.black,
+                                                          color: Colors.black,
                                                           fontSize: 11.sp,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                         ),
                                                   ),
+                                                ),
+                                                SizedBox(
+                                                  height: 1.h,
                                                 ),
                                                 Text(
                                                   '${current.points ?? '250'} points',
@@ -497,10 +497,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                                       .textTheme
                                                       .headline6
                                                       ?.copyWith(
-                                                        color: !Storage.instance
-                                                                .isDarkMode
-                                                            ? Colors.white
-                                                            : Colors.black,
+                                                        color:Colors.black,
                                                         // fontSize: 11.sp,
                                                         // fontWeight: FontWeight.bold,
                                                       ),

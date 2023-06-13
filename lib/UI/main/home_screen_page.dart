@@ -239,9 +239,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setHomeTopPicks(response.toppicks ?? []);
-      fetchAds();
+      // fetchAds();
     } else {
-      fetchAds();
+      // fetchAds();
     }
   }
 

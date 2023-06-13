@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gplusapp/Helper/Constance.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -26,6 +27,7 @@ class FullScreenAdvertisement extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.transparent,
           onPressed: () {
+            Storage.instance.setFullScreenAd(true);
             Navigation.instance.goBack();
           },
           child: const Icon(
