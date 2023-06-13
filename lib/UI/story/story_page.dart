@@ -1073,7 +1073,7 @@ class _StoryPageState extends State<StoryPage> {
                                               ? Colors.black
                                               : Colors.white,
                                         ),
-                                    underline: SizedBox.shrink(),
+                                    underline: const SizedBox.shrink(),
                                     // Initial Value
                                     value: dropdownvalue,
 

@@ -44,9 +44,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
   void initState() {
     // String apiKey = DotEnv().env['API_KEY'];
 
-    googlePlace = GooglePlace(Platform.isAndroid
-        ? FlutterConfig.get('androidMapKey')
-        : FlutterConfig.get('iosMapKey'));
+    googlePlace = GooglePlace(FlutterConfig.get('MapKey'));
 
     super.initState();
     Future.delayed(Duration.zero, () {
