@@ -49,8 +49,8 @@ class _AllImagePageState extends State<AllImagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("guwahati", true, _scaffoldKey),
-      drawer: const BergerMenuMemPage(screen: "guwahati"),
+      appBar: Constance.buildAppBar2("guwahati"),
+      // drawer: const BergerMenuMemPage(screen: "guwahati"),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       body: Consumer<DataProvider>(builder: (context, data, _) {

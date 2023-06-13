@@ -259,7 +259,7 @@ class _AuthorPageState extends State<AuthorPage> {
   }
 
   Future<void> _launchUrl(_url) async {
-    if (!await launchUrl(Uri.parse(_url), mode: LaunchMode.inAppWebView)) {
+    if (!await launchUrl(Uri.parse(_url), mode: LaunchMode.externalApplication)) {
       throw 'Could not launch $_url';
     }
   }

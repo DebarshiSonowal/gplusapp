@@ -33,6 +33,8 @@ class _SearchPageState extends State<SearchPage> {
       if ((widget.query?.isNotEmpty ?? false) && widget.query != "") {
         _searchQueryController.text = widget.query ?? "";
         search(_searchQueryController.text, selected);
+      } else {
+        search(_searchQueryController.text, selected);
       }
     });
   }
@@ -87,6 +89,9 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                   controller: _searchQueryController,
                   autofocus: true,
+                  onSubmitted: (val) {
+                    search(_searchQueryController.text, selected);
+                  },
                   decoration: InputDecoration(
                     hintText: "Search",
                     border: InputBorder.none,

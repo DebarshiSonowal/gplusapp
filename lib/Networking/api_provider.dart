@@ -114,7 +114,6 @@ class ApiProvider {
     dio = Dio(option);
     debugPrint(url.toString());
     debugPrint(jsonEncode(data));
-
     try {
       Response? response = await dio?.get(
         url,
@@ -690,7 +689,7 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      debugPrint("Article Details response: ");
+      debugPrint("Article Details response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return ArticleDetailsResponse.fromJson(response?.data);
       } else {

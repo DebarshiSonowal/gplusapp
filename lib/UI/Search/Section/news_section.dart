@@ -18,6 +18,7 @@ class NewsSection extends StatelessWidget {
     return Consumer<DataProvider>(builder: (context, data, _) {
       return data.searchlist.isNotEmpty
           ? ListView.separated(
+              padding: EdgeInsets.only(bottom: 3.h),
               shrinkWrap: true,
               // physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,

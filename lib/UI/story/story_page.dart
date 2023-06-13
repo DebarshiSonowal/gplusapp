@@ -508,16 +508,16 @@ class _StoryPageState extends State<StoryPage> {
                                 print(exception);
                               },
                               customRender: {
-                                "img": (contextRender, child) {
-                                  return Text(
-                                      "${contextRender.tree.attributes['src']}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline5
-                                          ?.copyWith(
-                                            color: Colors.black,
-                                          ));
-                                },
+                                // "img": (contextRender, child) {
+                                //   return Text(
+                                //       "${contextRender.tree.attributes['src']}",
+                                //       style: Theme.of(context)
+                                //           .textTheme
+                                //           .headline5
+                                //           ?.copyWith(
+                                //             color: Colors.black,
+                                //           ));
+                                // },
                                 "table": (context, child) {
                                   return SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
@@ -581,10 +581,10 @@ class _StoryPageState extends State<StoryPage> {
                                   );
                                 },
                                 "a": (context, child) {
-                                  return (context.tree.element?.innerHtml
+                                  return ((context.tree.element?.innerHtml
                                               .toString()
                                               .contains("ad_managers") ??
-                                          false)
+                                          false))
                                       ? GestureDetector(
                                           onTap: () {
                                             // print();
@@ -641,11 +641,15 @@ class _StoryPageState extends State<StoryPage> {
                                         )
                                       : GestureDetector(
                                           onTap: () {
-                                            if (context.tree.attributes['href']
+                                            if ((context.tree.attributes['href']
                                                     .toString()
                                                     .split("/")[2]
                                                     .trim() ==
-                                                "www.guwahatiplus.com") {
+                                                "www.guwahatiplus.com")||(context.tree.attributes['href']
+                                                .toString()
+                                                .split("/")[2]
+                                                .trim() ==
+                                                "guwahatiplus.com")) {
                                               if (context
                                                       .tree.attributes['href']
                                                       .toString()
@@ -696,6 +700,12 @@ class _StoryPageState extends State<StoryPage> {
                                           ),
                                         );
                                 },
+                                // "img": (context, child) {
+                                //   return Container(
+                                //     child: Text("${context.tree.element?.outerHtml.split("src=").toList()
+                                //         .toString()}",style: const TextStyle(color: Colors.black54),),
+                                //   );
+                                // },
                                 "blockquote": (context, child) {
                                   return context.tree.element?.innerHtml
                                               .split("=")
