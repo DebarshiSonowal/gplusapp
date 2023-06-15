@@ -9,6 +9,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:images_picker/images_picker.dart';
+import 'package:open_settings/open_settings.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -303,9 +305,7 @@ class _PostAListingState extends State<PostAListing> {
                   (pos) => (pos == attachements.length)
                       ? GestureDetector(
                           onTap: () {
-                            setState(() {
-                              showPhotoBottomSheet(getProfileImage);
-                            });
+                            request();
                           },
                           child: Container(
                             height: 8.h,
@@ -563,29 +563,29 @@ class _PostAListingState extends State<PostAListing> {
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      // final pickedFile = await _picker.pickImage(
-      //   source: ImageSource.camera,
-      //   imageQuality: 70,
-      // );
+      final pickedFile = await _picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 70,
+      );
       // if (pickedFile != null) {
       //   setState(() {
       //     var profileImage = File(pickedFile.path);
       //     attachements.add(profileImage);
       //   });
       // }
-      final pickedFile = await ImagesPicker.openCamera(
-        pickType: PickType.image,
-        quality: 0.7,
-      );
+      // final pickedFile = await ImagesPicker.openCamera(
+      //   pickType: PickType.image,
+      //   quality: 0.7,
+      // );
 
       if (pickedFile != null) {
-        for (var i in pickedFile) {
-          setState(() {
-            attachements.add(
-              File(i.path),
-            );
-          });
-        }
+        // for (var i in pickedFile) {
+        setState(() {
+          attachements.add(
+            File(pickedFile.path),
+          );
+        });
+        // }
       }
     } else {
       final pickedFile = await _picker.pickMultiImage(
@@ -735,7 +735,7 @@ class _PostAListingState extends State<PostAListing> {
         "user_id_event": profile.id,
         "story_category_selected": story_category_selected,
         "locality": locality,
-        "title": title.length>100?title.substring(0,100):title,
+        "title": title.length > 100 ? title.substring(0, 100) : title,
         "field_entered": field_entered.length > 100
             ? field_entered.toString().substring(0, 100)
             : field_entered,
@@ -778,5 +778,45 @@ class _PostAListingState extends State<PostAListing> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  void request() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.storage,
+      Permission.camera,
+      Permission.photos,
+    ].request();
+    statuses.forEach((permission, status) {
+      if (status.isGranted) {
+        // Permission granted
+        setState(() {
+          showPhotoBottomSheet(getProfileImage);
+        });
+        debugPrint('${permission.toString()} granted.');
+      } else if (status.isDenied) {
+        // Permission denied
+        showErrorStorage('${permission.toString()} denied.');
+        debugPrint('${permission.toString()} denied.');
+      } else if (status.isPermanentlyDenied) {
+        // Permission permanently denied
+        showErrorStorage('${permission.toString()} permanently denied.');
+        debugPrint('${permission.toString()} permanently denied.');
+      }
+    });
+  }
+  void showErrorStorage(String msg) {
+    AlertX.instance.showAlert(
+      title: msg,
+      msg: "Please Go To Settings and Provide the Storage Permission",
+      negativeButtonText: "Close",
+      negativeButtonPressed: () {
+        Navigation.instance.goBack();
+      },
+      positiveButtonText: "Go to Settings",
+      positiveButtonPressed: () async {
+        Navigation.instance.goBack();
+        await OpenSettings.openAppSetting();
+      },
+    );
   }
 }

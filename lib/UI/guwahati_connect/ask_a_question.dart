@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:images_picker/images_picker.dart';
+import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -58,12 +59,12 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
     desc.dispose();
     super.dispose();
     // title.dispose();
-
   }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     print("didChangeAppLifecycleState $state");
-    if(state == AppLifecycleState.resumed){
+    if (state == AppLifecycleState.resumed) {
       print("didChangeAppLifecycleState inside $state");
       try {
         getLostData();
@@ -72,7 +73,6 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
       }
     }
   }
-
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -107,9 +107,9 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
               ),
               TextFormField(
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Colors.black,
-                  // fontSize: 1.6.h,
-                ),
+                      color: Colors.black,
+                      // fontSize: 1.6.h,
+                    ),
                 controller: title,
                 keyboardType: TextInputType.text,
                 maxLines: null,
@@ -122,9 +122,9 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   labelText: 'Write a topic',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
-                    color: Colors.black45,
-                    // fontSize: 1.5.h,
-                  ),
+                        color: Colors.black45,
+                        // fontSize: 1.5.h,
+                      ),
                   border: const OutlineInputBorder(),
                   enabledBorder: const OutlineInputBorder(),
                 ),
@@ -149,7 +149,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   labelText: 'Ask a question',
                   labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
-                    color: Colors.black45,
+                        color: Colors.black45,
                         // fontSize: 1.5.h,
                       ),
                   border: const OutlineInputBorder(),
@@ -188,9 +188,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
                   (attachements.length ?? 0) + 1,
                   (pos) => (pos == attachements.length)
                       ? GestureDetector(
-                          onTap: () {
-                            reqest();
-                          },
+                          onTap: () => request(),
                           child: Container(
                             height: 8.h,
                             width: 20.w,
@@ -279,7 +277,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
                 child: CustomButton(
                   onTap: () {
                     // showDialogBox();
-                    if (desc.text.isNotEmpty&&title.text.isNotEmpty) {
+                    if (desc.text.isNotEmpty && title.text.isNotEmpty) {
                       logTheAskAQuestionClick(
                         Provider.of<DataProvider>(
                                 Navigation
@@ -302,52 +300,6 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
       bottomNavigationBar: CustomNavigationBar(current, "guwahati"),
     );
   }
-
-  // AppBar buildAppBar() {
-  //   return AppBar(
-  //     title: GestureDetector(
-  //       onTap: () {
-  //         Provider.of<DataProvider>(
-  //                 Navigation.instance.navigatorKey.currentContext ?? context,
-  //                 listen: false)
-  //             .setCurrent(0);
-  //         Navigation.instance.navigate('/main');
-  //       },
-  //       child: Image.asset(
-  //         Constance.logoIcon,
-  //         fit: BoxFit.fill,
-  //         scale: 2,
-  //       ),
-  //     ),
-  //     centerTitle: true,
-  //     backgroundColor: Constance.primaryColor,
-  //     actions: [
-  //       IconButton(
-  //         onPressed: () {
-  //           Navigation.instance.navigate('/notification');
-  //         },
-  //         icon: Consumer<DataProvider>(builder: (context, data, _) {
-  //           return Badge(
-  //             badgeColor: Constance.secondaryColor,
-  //             badgeContent: Text(
-  //               '${data.notifications.length}',
-  //               style: Theme.of(context).textTheme.headline5?.copyWith(
-  //                     color: Constance.thirdColor,
-  //                   ),
-  //             ),
-  //             child: const Icon(Icons.notifications),
-  //           );
-  //         }),
-  //       ),
-  //       IconButton(
-  //         onPressed: () {
-  //           Navigation.instance.navigate('/search',args: "");
-  //         },
-  //         icon: const Icon(Icons.search),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   void showPhotoBottomSheet(Function(int) getImage) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -457,51 +409,42 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      final pickedFile = await ImagesPicker.openCamera(
-        pickType: PickType.image,
-        quality: 0.7,
-
-        // record video max time
-      );
-      // final pickedFile = await _picker.pickImage(
-      //   source: ImageSource.camera,
-      //   imageQuality: 70,
-      // ).catchError((er){
-      //   print("error $er}");
-      // });
-      if (pickedFile != null) {
-        // setState(() {
-        //   var profileImage = File(pickedFile!.path);
-        //   attachements.add(profileImage);
-        // });
-        for (var i in pickedFile) {
+      if (await Permission.camera.request().isGranted) {
+        final pickedFile = await _picker
+            .pickImage(
+          source: ImageSource.camera,
+          imageQuality: 70,
+        )
+            .catchError((er) {
+          debugPrint("error $er}");
+        });
+        if (pickedFile != null) {
           setState(() {
             attachements.add(
-              File(i.path),
+              File(pickedFile.path),
             );
+          });
+          // }
+        }
+      } else {
+        showErrorStorage('Permission Denied');
+      }
+    } else {
+      if ((await Permission.photos.request().isGranted)) {
+        final pickedFile = await _picker.pickMultiImage(
+          imageQuality: 70,
+        );
+        if (pickedFile != null) {
+          setState(() {
+            for (var i in pickedFile) {
+              attachements.add(
+                File(i.path),
+              );
+            }
           });
         }
       } else {
-        // _picker = ImagePicker();
-        getLostData();
-        print("error $pickedFile}");
-      }
-    } else {
-      final pickedFile = await _picker.pickMultiImage(
-        imageQuality: 70,
-      );
-      if (pickedFile != null) {
-        setState(() {
-          for (var i in pickedFile) {
-            attachements.add(
-              File(i.path),
-            );
-          }
-        });
-      } else {
-        // _picker = ImagePicker();
-        getLostData();
-        print("error $pickedFile}");
+        showErrorStorage('Permission Denied');
       }
     }
   }
@@ -509,7 +452,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
   void postQuestion() async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance
-        .postGuwhahatiConnect(desc.text, attachements,title.text);
+        .postGuwhahatiConnect(desc.text, attachements, title.text);
     if (response.success ?? false) {
       print("post success ${response.success} ${response.message}");
       Fluttertoast.showToast(msg: "Your post has been submitted for review");
@@ -552,7 +495,9 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
         "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id_event": id,
         "user_id_event": profile.id,
-        "field_entered": field_entered.length>100?field_entered.substring(0,100):field_entered,
+        "field_entered": field_entered.length > 100
+            ? field_entered.substring(0, 100)
+            : field_entered,
         // "cta_click": cta_click,
         "screen_name": "ask_a_question",
         "user_login_status":
@@ -573,25 +518,45 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
         });
   }
 
-  void reqest() async {
+  void request() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.storage,
       Permission.camera,
       Permission.photos,
     ].request();
-    setState(() {
-      try {
-        showPhotoBottomSheet(getProfileImage);
-      } catch (e) {
-        // ImagePicker().retrieveLostData();
-        print(e);
+    statuses.forEach((permission, status) {
+      if (status.isGranted) {
+        // Permission granted
+
+        debugPrint('${permission.toString()} granted.');
+      } else if (status.isDenied) {
+        // Permission denied
+        // showErrorStorage('${permission.toString()} denied.');
+        debugPrint('${permission.toString()} denied.');
+      } else if (status.isPermanentlyDenied) {
+        // Permission permanently denied
+
+        debugPrint('${permission.toString()} permanently denied.');
       }
     });
-    if (await Permission.storage.request().isGranted) {
+    setState(() {
+      showPhotoBottomSheet(getProfileImage);
+    });
+  }
 
-      // Either the permission was already granted before or the user just granted it you
-    }else{
-      debugPrint("asda ${await Permission.storage.request().isGranted}");
-    }
+  void showErrorStorage(String msg) {
+    AlertX.instance.showAlert(
+      title: msg,
+      msg: "Please Go To Settings and Provide the Storage Permission",
+      negativeButtonText: "Close",
+      negativeButtonPressed: () {
+        Navigation.instance.goBack();
+      },
+      positiveButtonText: "Go to Settings",
+      positiveButtonPressed: () async {
+        Navigation.instance.goBack();
+        await OpenSettings.openAppSetting();
+      },
+    );
   }
 }

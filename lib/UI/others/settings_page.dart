@@ -375,7 +375,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         if (_controller.text.isNotEmpty) {
                           postFeedBack(_controller.text);
                           _controller.text = "";
-                          FocusScope.of(context).unfocus();
+
                         } else {
                           showError("Enter something");
                         }
@@ -562,9 +562,11 @@ class _SettingsPageState extends State<SettingsPage> {
     if (response.success ?? false) {
       Navigation.instance.goBack();
       Fluttertoast.showToast(msg: "Feedback posted successfully");
+      FocusScope.of(context).unfocus();
     } else {
       Navigation.instance.goBack();
       showError(response.message ?? "Something went wrong");
+      FocusScope.of(context).unfocus();
     }
   }
 

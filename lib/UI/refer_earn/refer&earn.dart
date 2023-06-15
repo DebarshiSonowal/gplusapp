@@ -486,7 +486,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                                   height: 1.h,
                                                 ),
                                                 Text(
-                                                  '${current.points ?? '250'} points',
+                                                  '${current.is_credit == 1 ? '+' : '-'}${current.points ?? '250'} points',
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   textAlign: TextAlign.start,
@@ -497,7 +497,12 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                                       .textTheme
                                                       .headline6
                                                       ?.copyWith(
-                                                        color:Colors.black,
+                                                        color:
+                                                            current.is_credit ==
+                                                                    1
+                                                                ? Colors.green
+                                                                : Constance
+                                                                    .thirdColor,
                                                         // fontSize: 11.sp,
                                                         // fontWeight: FontWeight.bold,
                                                       ),
@@ -647,16 +652,14 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      fetchReferEarn();
-      fetchHistory();
-      currentLength =
-          Provider.of<DataProvider>(context, listen: false).referHistory.length;
+    Future.delayed(Duration.zero, () async {
+      Navigation.instance.navigate('/loadingDialog');
+      await fetchHistory();
+      await fetchReferEarn();
     });
   }
 
-  void fetchReferEarn() async {
-    Navigation.instance.navigate('/loadingDialog');
+  Future<void> fetchReferEarn() async {
     final response = await ApiProvider.instance.getReferAndEarn();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -669,7 +672,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
     }
   }
 
-  void fetchHistory() async {
+  Future<void> fetchHistory() async {
     final response = await ApiProvider.instance.fetchReferEarnHistory();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -677,6 +680,11 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
               listen: false)
           .setReferEarnHistory(
               response.history, response.empty!, response.invite!);
+      setState(() {
+        currentLength = Provider.of<DataProvider>(context, listen: false)
+            .referHistory
+            .length;
+      });
     } else {}
   }
 

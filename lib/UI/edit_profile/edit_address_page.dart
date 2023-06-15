@@ -322,8 +322,8 @@ class _EditAddressPageState extends State<EditAddressPage> {
     String address =
         "${(street.isEmpty) ? "" : "$street, "}${(thoroughfare.isEmpty) ? "" : "$thoroughfare, "}${(locality.isEmpty) ? "" : "$locality, "}${(subLocality.isEmpty) ? "" : "$subLocality, "}${(state.isEmpty) ? "" : "$state, "}${(pincode.isEmpty) ? "" : "$pincode."}";
     locationName = address;
-    print('city pincode ${pincode}  ${street}');
-    // setState(() {});
+    debugPrint('city pincode ${pincode}  ${street}');
+    setState(() {});
     // Navigator.pop(Navigation.instance.navigatorKey.currentContext ?? context,
     //     locationName);
 

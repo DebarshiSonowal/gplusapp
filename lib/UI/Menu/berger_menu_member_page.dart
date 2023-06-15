@@ -4,6 +4,7 @@ import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -252,10 +253,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         false) {
                       logTheHambergerOptionClick(
                         Provider.of<DataProvider>(
-                            Navigation.instance.navigatorKey
-                                .currentContext ??
-                                context,
-                            listen: false)
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
                             .profile!,
                         widget.screen,
                         "e-paper",
@@ -295,19 +296,21 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   color: Colors.white,
                   thickness: 0.2,
                 ),
-                MembershipSection(data: data,onTap:(){
-                  logTheHambergerOptionClick(
-                    Provider.of<DataProvider>(
-                        Navigation.instance.navigatorKey
-                            .currentContext ??
-                            context,
-                        listen: false)
-                        .profile!,
-                    widget.screen,
-                    "membership",
-                    "NA",
-                  );
-                }),
+                MembershipSection(
+                    data: data,
+                    onTap: () {
+                      logTheHambergerOptionClick(
+                        Provider.of<DataProvider>(
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .profile!,
+                        widget.screen,
+                        "membership",
+                        "NA",
+                      );
+                    }),
 
                 (!Provider.of<DataProvider>(
                             Navigation.instance.navigatorKey.currentContext!)
@@ -429,20 +432,22 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
       if (status.isDenied) {
         try {
           if (await Permission.storage.request().isGranted) {
-            await ApiProvider.instance
-                .download2(response.e_paper?.news_pdf ?? "",response.e_paper?.title??"");
+            await ApiProvider.instance.download2(
+                response.e_paper?.news_pdf ?? "",
+                response.e_paper?.title ?? "");
           } else {
             Navigation.instance.goBack();
-            showError("We require storage permissions");
+            showErrorStorage("We require storage permissions",);
           }
         } catch (e) {
           print(e);
           Navigation.instance.goBack();
-          showError("We require storage permissions");
+          showErrorStorage("We require storage permissions");
         }
         // We didn't ask for permission yet or the permission has been denied before but not permanently.
       } else {
-        await ApiProvider.instance.download2(response.e_paper?.news_pdf ?? "",response.e_paper?.title??"");
+        await ApiProvider.instance.download2(
+            response.e_paper?.news_pdf ?? "", response.e_paper?.title ?? "");
       }
     } else {
       showError("Failed to download E-paper");
@@ -487,6 +492,22 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  void showErrorStorage(String msg) {
+    AlertX.instance.showAlert(
+      title: msg,
+      msg: "Please Go To Settings and Provide the Storage Permission",
+      negativeButtonText: "Close",
+      negativeButtonPressed: () {
+        Navigation.instance.goBack();
+      },
+      positiveButtonText: "Go to Settings",
+      positiveButtonPressed: () async {
+        Navigation.instance.goBack();
+        await OpenSettings.openAppSetting();
+      },
+    );
   }
 
   Future<void> _launchSocialMediaAppIfInstalled({

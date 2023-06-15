@@ -40,7 +40,7 @@ class AlertX {
               content: Text(
                 msg,
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Colors.black,
+                      color: Colors.black87,
                     ),
               ),
               actions: [
@@ -49,7 +49,10 @@ class AlertX {
                     onPressed: negativeButtonPressed,
                     child: Text(
                       negativeButtonText,
-                      style: TextStyle(color: Colors.grey.shade500),
+                      style: Theme.of(context).textTheme.headline4?.copyWith(
+                        color: Colors.grey.shade700,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 TextButton(

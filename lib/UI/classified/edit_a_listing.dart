@@ -6,6 +6,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:images_picker/images_picker.dart';
+import 'package:open_settings/open_settings.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -350,9 +352,7 @@ class _EditAListingPostState extends State<EditAListingPost> {
                   (pos) => (pos == attachements.length)
                       ? GestureDetector(
                           onTap: () {
-                            setState(() {
-                              showPhotoBottomSheet(getProfileImage);
-                            });
+                            request();
                           },
                           child: Container(
                             height: 8.h,
@@ -868,5 +868,44 @@ class _EditAListingPostState extends State<EditAListingPost> {
       }
     }
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
+  }
+  void request() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.storage,
+      Permission.camera,
+      Permission.photos,
+    ].request();
+    statuses.forEach((permission, status) {
+      if (status.isGranted) {
+        // Permission granted
+        setState(() {
+          showPhotoBottomSheet(getProfileImage);
+        });
+        debugPrint('${permission.toString()} granted.');
+      } else if (status.isDenied) {
+        // Permission denied
+        showErrorStorage('${permission.toString()} denied.');
+        debugPrint('${permission.toString()} denied.');
+      } else if (status.isPermanentlyDenied) {
+        // Permission permanently denied
+        showErrorStorage('${permission.toString()} permanently denied.');
+        debugPrint('${permission.toString()} permanently denied.');
+      }
+    });
+  }
+  void showErrorStorage(String msg) {
+    AlertX.instance.showAlert(
+      title: msg,
+      msg: "Please Go To Settings and Provide the Storage Permission",
+      negativeButtonText: "Close",
+      negativeButtonPressed: () {
+        Navigation.instance.goBack();
+      },
+      positiveButtonText: "Go to Settings",
+      positiveButtonPressed: () async {
+        Navigation.instance.goBack();
+        await OpenSettings.openAppSetting();
+      },
+    );
   }
 }

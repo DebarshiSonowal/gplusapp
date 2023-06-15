@@ -276,6 +276,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                               width:55.w,
                                               child: Text(
                                                 current.title??"",
+                                                maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.start,
                                                 style: Theme.of(Navigation

@@ -82,12 +82,13 @@ class Profile {
     addresses = json['addresses'] == null
         ? []
         : (json['addresses'] as List).map((e) => Address.fromJson(e)).toList();
-    is_plan_active =
-        (json['plan_active_date'] == null || json['plan_expiry_date'] == null)
-            ? false
-            : check(json['plan_active_date'], json['plan_expiry_date'])
-                ? true
-                : false;
+    // is_plan_active =
+    //     (json['plan_active_date'] == null || json['plan_expiry_date'] == null)
+    //         ? false
+    //         : check(json['plan_active_date'], json['plan_expiry_date'])
+    //             ? true
+    //             : false;
+    is_plan_active = json['is_plan_active']??false;
   }
 
   bool check(start_date, end_date) {
