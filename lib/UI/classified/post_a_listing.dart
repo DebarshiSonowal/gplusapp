@@ -70,408 +70,377 @@ class _PostAListingState extends State<PostAListing> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: Constance.buildAppBar2("classified"),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
-        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Post a story',
-                style: Theme.of(context).textTheme.headline2?.copyWith(
-                    color: Storage.instance.isDarkMode
-                        ? Colors.white
-                        : Constance.primaryColor,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Text(
-                'Category',
-                style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Storage.instance.isDarkMode
-                        ? Colors.white
-                        : Constance.primaryColor,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Consumer<DataProvider>(builder: (context, data, _) {
-                return DropdownButtonFormField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                  isExpanded: true,
-                  dropdownColor:
-                      Storage.instance.isDarkMode ? Colors.black : Colors.white,
-                  // Initial Value
-                  value: selectedCategory,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: Constance.buildAppBar2("classified"),
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
+          padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Post a story',
+                  style: Theme.of(context).textTheme.headline2?.copyWith(
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Constance.primaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Text(
+                  'Category',
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Constance.primaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Consumer<DataProvider>(builder: (context, data, _) {
+                  return Container(
+                    constraints: const BoxConstraints(maxHeight: 100),
+                    child: DropdownButtonFormField(
+                      menuMaxHeight: 50.h,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                      isExpanded: true,
+                      dropdownColor: Storage.instance.isDarkMode
+                          ? Colors.black
+                          : Colors.white,
+                      // Initial Value
+                      value: selectedCategory,
 
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
+                      // Down Arrow Icon
+                      icon: const Icon(Icons.keyboard_arrow_down),
 
-                  // Array list of items
-                  items: data.classified_category
-                      .map((e) => DropdownMenuItem(
-                            value: e.id.toString(),
+                      items: [
+                        for (var i in data.classified_category)
+                          DropdownMenuItem(
+                            value: i.id.toString(),
                             child: Text(
-                              e.title ?? "",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4
-                                  ?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white70
-                                        : Constance.primaryColor,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
+                              i.title ?? "",
+                              style:
+                                  Theme.of(context).textTheme.headline4?.copyWith(
+                                        color: Storage.instance.isDarkMode
+                                            ? Colors.white70
+                                            : Constance.primaryColor,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
                             ),
-                          ))
-                      .toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (newValue) {
-                    print("value: $newValue");
-                    setState(() {
-                      selectedCategory = newValue!;
-                    });
-                  },
-                );
-              }),
-              SizedBox(
-                height: 1.h,
-              ),
-              Text(
-                'Add your locality',
-                style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Storage.instance.isDarkMode
-                        ? Colors.white
-                        : Constance.primaryColor,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              // Consumer<DataProvider>(builder: (context, data, _) {
-              //   return DropdownButtonFormField(
-              //     decoration: const InputDecoration(
-              //       border: OutlineInputBorder(),
-              //     ),
-              //     // underline: Container( height: 0.5.sp, color: Constance.primaryColor,),
-              //     isExpanded: true,
-              //     dropdownColor:
-              //         Storage.instance.isDarkMode ? Colors.black : Colors.white,
-              //     // Initial Value
-              //     value: selectedLocality,
-              //
-              //     // Down Arrow Icon
-              //     icon: const Icon(Icons.keyboard_arrow_down),
-              //
-              //     // Array list of items
-              //     items: data.locality
-              //         .map((e) => DropdownMenuItem(
-              //               value: e.id.toString(),
-              //               child: Text(
-              //                 e.name ?? "",
-              //                 style: Theme.of(context)
-              //                     .textTheme
-              //                     .headline4
-              //                     ?.copyWith(
-              //                       color: Storage.instance.isDarkMode
-              //                           ? Colors.white70
-              //                           : Constance.primaryColor,
-              //                       // fontWeight: FontWeight.bold,
-              //                     ),
-              //               ),
-              //             ))
-              //         .toList(),
-              //     // After selecting the desired option,it will
-              //     // change button value to selected value
-              //     onChanged: ( newValue) {
-              //       setState(() {
-              //         selectedLocality = newValue!;
-              //       });
-              //     },
-              //   );
-              // }),
-              TextFormField(
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Colors.black,
-                      // fontSize: 1.6.h,
+                          )
+                      ],
+                      // After selecting the desired option,it will
+                      // change button value to selected value
+                      onChanged: (newValue) {
+                        print("value: $newValue");
+                        setState(() {
+                          selectedCategory = newValue!;
+                        });
+                      },
                     ),
-                controller: localityEditor,
-                maxLines: 1,
-                keyboardType: TextInputType.name,
-                decoration: InputDecoration(
-                  filled: true,
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  fillColor: Colors.white,
-                  labelText: 'Enter your locality',
-                  labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.black,
-                        // fontSize: 1.5.h,
-                      ),
-                  border: const OutlineInputBorder(),
-                  enabledBorder: const OutlineInputBorder(),
+                  );
+                }),
+                SizedBox(
+                  height: 1.h,
                 ),
-              ),
-              SizedBox(
-                height: 3.h,
-              ),
-              TextFormField(
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Colors.black,
-                      // fontSize: 1.6.h,
-                    ),
-                controller: title,
-                maxLines: 1,
-                keyboardType: TextInputType.name,
-                decoration: InputDecoration(
-                  filled: true,
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  fillColor: Colors.white,
-                  labelText: 'Enter the title',
-                  labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.black,
-                        // fontSize: 1.5.h,
-                      ),
-                  border: const OutlineInputBorder(),
-                  enabledBorder: const OutlineInputBorder(),
+                Text(
+                  'Add your locality',
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Constance.primaryColor,
+                      fontWeight: FontWeight.bold),
                 ),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              TextFormField(
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Colors.black,
-                      // fontSize: 1.6.h,
-                    ),
-                controller: desc,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                minLines: 10,
-                decoration: InputDecoration(
-                  filled: true,
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  fillColor: Colors.white,
-                  labelText: 'Enter the details',
-                  labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.black,
-                        // fontSize: 1.5.h,
-                      ),
-                  border: const OutlineInputBorder(),
-                  enabledBorder: const OutlineInputBorder(),
+                SizedBox(
+                  height: 1.h,
                 ),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.attach_file,
-                    color: Storage.instance.isDarkMode
-                        ? Constance.secondaryColor
-                        : Colors.black,
-                  ),
-                  Text(
-                    'Add attachments',
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
-                          // fontSize: 1.6.h,
+                TextFormField(
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.black,
+                        // fontSize: 1.6.h,
+                      ),
+                  controller: localityEditor,
+                  maxLines: 1,
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    filled: true,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    fillColor: Colors.white,
+                    labelText: 'Enter your locality',
+                    labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.black,
+                          // fontSize: 1.5.h,
                         ),
+                    border: const OutlineInputBorder(),
+                    enabledBorder: const OutlineInputBorder(),
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: List.generate(
-                  (attachements.length ?? 0) + 1,
-                  (pos) => (pos == attachements.length)
-                      ? GestureDetector(
-                          onTap: () {
-                            request();
-                          },
-                          child: Container(
-                            height: 8.h,
-                            width: 20.w,
-                            color: Colors.grey.shade200,
-                            child: const Center(
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        )
-                      : Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            Container(
-                              height: 8.h,
-                              width: 20.w,
-                              color: Colors.grey.shade200,
-                              child: Center(
-                                child: Image.file(
-                                  attachements[pos],
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  attachements.removeAt(pos);
-                                });
-                              },
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                color: Colors.white,
-                                child: Icon(
-                                  Icons.remove,
-                                  color: Constance.thirdColor,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
                 ),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Text(
-                'Add Price',
-                style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Storage.instance.isDarkMode
-                        ? Colors.white
-                        : Constance.primaryColor,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 0.5.h,
-              ),
-
-              TextFormField(
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Colors.black,
-                      // fontSize: 1.6.h,
-                    ),
-                controller: price,
-                maxLines: 1,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  filled: true,
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  fillColor: Colors.white,
-                  labelText: 'Enter the price',
-                  labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                SizedBox(
+                  height: 3.h,
+                ),
+                TextFormField(
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: Colors.black,
-                        // fontSize: 1.5.h,
+                        // fontSize: 1.6.h,
                       ),
-                  border: const OutlineInputBorder(),
-                  enabledBorder: const OutlineInputBorder(),
+                  controller: title,
+                  maxLines: 1,
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.name,
+                  decoration: InputDecoration(
+                    filled: true,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    fillColor: Colors.white,
+                    labelText: 'Enter the title',
+                    labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.black,
+                          // fontSize: 1.5.h,
+                        ),
+                    border: const OutlineInputBorder(),
+                    enabledBorder: const OutlineInputBorder(),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              RichText(
-                text: TextSpan(
+                SizedBox(
+                  height: 2.h,
+                ),
+                TextFormField(
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.black,
+                        // fontSize: 1.6.h,
+                      ),
+                  controller: desc,
+                  // textInputAction: TextInputAction.done,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  minLines: 10,
+                  decoration: InputDecoration(
+                    filled: true,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    fillColor: Colors.white,
+                    labelText: 'Enter the details',
+                    labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.black,
+                          // fontSize: 1.5.h,
+                        ),
+                    border: const OutlineInputBorder(),
+                    enabledBorder: const OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Row(
                   children: [
-                    TextSpan(
-                      text: 'By clicking "Go ahead" you agreed to our ',
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Colors.black54,
-                            // fontSize: 1.6.h,
-                          ),
+                    Icon(
+                      Icons.attach_file,
+                      color: Storage.instance.isDarkMode
+                          ? Constance.secondaryColor
+                          : Colors.black,
                     ),
-                    TextSpan(
-                      text: 'Terms & Conditions.',
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            fontWeight: FontWeight.bold,
+                    Text(
+                      'Add attachments',
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
                             color: Storage.instance.isDarkMode
                                 ? Colors.white
                                 : Colors.black,
                             // fontSize: 1.6.h,
                           ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigation.instance.navigate('/termsConditions');
-                        },
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: CustomButton(
-                  onTap: () {
-                    // showDialogBox();
-                    if (title.text.isNotEmpty &&
-                        desc.text.isNotEmpty &&
-                        price.text.isNotEmpty &&
-                        localityEditor.text.isNotEmpty) {
-                      logTheClassifiedSubmitClick(
-                        Provider.of<DataProvider>(
-                                Navigation
-                                        .instance.navigatorKey.currentContext ??
-                                    context,
-                                listen: false)
-                            .profile!,
-                        (Provider.of<DataProvider>(
-                                Navigation
-                                        .instance.navigatorKey.currentContext ??
-                                    context,
-                                listen: false)
-                            .classified_category
-                            .firstWhere((element) =>
-                                element.id.toString().trim() ==
-                                selectedCategory
-                                    .toString()
-                                    .trim())).title.toString().toLowerCase(),
-                        localityEditor.text,
-                        title.text,
-                        desc.text,
-                        price.text,
-                      );
-                      postClassified(selectedCategory, localityEditor.text,
-                          title.text, desc.text, price.text, attachements);
-                    } else {
-                      showError(
-                          "Title, Description and Price is mandatory to post");
-                    }
-                  },
-                  txt: 'Submit',
+                SizedBox(
+                  height: 2.h,
                 ),
-              ),
-            ],
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: List.generate(
+                    (attachements.length ?? 0) + 1,
+                    (pos) => (pos == attachements.length)
+                        ? GestureDetector(
+                            onTap: () {
+                              request();
+                            },
+                            child: Container(
+                              height: 8.h,
+                              width: 20.w,
+                              color: Colors.grey.shade200,
+                              child: const Center(
+                                child: Icon(
+                                  Icons.add,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Stack(
+                            alignment: Alignment.topRight,
+                            children: [
+                              Container(
+                                height: 8.h,
+                                width: 20.w,
+                                color: Colors.grey.shade200,
+                                child: Center(
+                                  child: Image.file(
+                                    attachements[pos],
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    attachements.removeAt(pos);
+                                  });
+                                },
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  color: Colors.white,
+                                  child: Icon(
+                                    Icons.remove,
+                                    color: Constance.thirdColor,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                  ),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Text(
+                  'Add Price',
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Constance.primaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 0.5.h,
+                ),
+                TextFormField(
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.black,
+                        // fontSize: 1.6.h,
+                      ),
+                  controller: price,
+                  maxLines: 1,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    filled: true,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    fillColor: Colors.white,
+                    labelText: 'Enter the price',
+                    labelStyle: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Colors.black,
+                          // fontSize: 1.5.h,
+                        ),
+                    border: const OutlineInputBorder(),
+                    enabledBorder: const OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'By clicking "Go ahead" you agreed to our ',
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black54,
+                              // fontSize: 1.6.h,
+                            ),
+                      ),
+                      TextSpan(
+                        text: 'Terms & Conditions.',
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                              // fontSize: 1.6.h,
+                            ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigation.instance.navigate('/termsConditions');
+                          },
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: CustomButton(
+                    onTap: () {
+                      // showDialogBox();
+                      if (title.text.isNotEmpty &&
+                          desc.text.isNotEmpty &&
+                          price.text.isNotEmpty &&
+                          localityEditor.text.isNotEmpty) {
+                        logTheClassifiedSubmitClick(
+                          Provider.of<DataProvider>(
+                                  Navigation
+                                          .instance.navigatorKey.currentContext ??
+                                      context,
+                                  listen: false)
+                              .profile!,
+                          (Provider.of<DataProvider>(
+                                  Navigation
+                                          .instance.navigatorKey.currentContext ??
+                                      context,
+                                  listen: false)
+                              .classified_category
+                              .firstWhere((element) =>
+                                  element.id.toString().trim() ==
+                                  selectedCategory
+                                      .toString()
+                                      .trim())).title.toString().toLowerCase(),
+                          localityEditor.text,
+                          title.text,
+                          desc.text,
+                          price.text,
+                        );
+                        postClassified(selectedCategory, localityEditor.text,
+                            title.text, desc.text, price.text, attachements);
+                      } else {
+                        showError(
+                            "Title, Description and Price is mandatory to post");
+                      }
+                    },
+                    txt: 'Submit',
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
+        bottomNavigationBar: CustomNavigationBar(current, "classified"),
       ),
-      bottomNavigationBar: CustomNavigationBar(current, "classified"),
     );
   }
 
@@ -563,42 +532,42 @@ class _PostAListingState extends State<PostAListing> {
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      final pickedFile = await _picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 70,
-      );
-      // if (pickedFile != null) {
-      //   setState(() {
-      //     var profileImage = File(pickedFile.path);
-      //     attachements.add(profileImage);
-      //   });
-      // }
-      // final pickedFile = await ImagesPicker.openCamera(
-      //   pickType: PickType.image,
-      //   quality: 0.7,
-      // );
-
-      if (pickedFile != null) {
-        // for (var i in pickedFile) {
-        setState(() {
-          attachements.add(
-            File(pickedFile.path),
-          );
+      if (await Permission.camera.request().isGranted) {
+        final pickedFile = await _picker
+            .pickImage(
+          source: ImageSource.camera,
+          imageQuality: 70,
+        )
+            .catchError((er) {
+          debugPrint("error $er}");
         });
-        // }
+        if (pickedFile != null) {
+          setState(() {
+            attachements.add(
+              File(pickedFile.path),
+            );
+          });
+          // }
+        }
+      } else {
+        showErrorStorage('Permission Denied');
       }
     } else {
-      final pickedFile = await _picker.pickMultiImage(
-        imageQuality: 70,
-      );
-      if (pickedFile != null) {
-        setState(() {
-          for (var i in pickedFile) {
-            attachements.add(
-              File(i.path),
-            );
-          }
-        });
+      if ((await Permission.photos.request().isGranted)) {
+        final pickedFile = await _picker.pickMultiImage(
+          imageQuality: 70,
+        );
+        if (pickedFile != null) {
+          setState(() {
+            for (var i in pickedFile) {
+              attachements.add(
+                File(i.path),
+              );
+            }
+          });
+        }
+      } else {
+        showErrorStorage('Permission Denied');
       }
     }
   }
@@ -789,21 +758,23 @@ class _PostAListingState extends State<PostAListing> {
     statuses.forEach((permission, status) {
       if (status.isGranted) {
         // Permission granted
-        setState(() {
-          showPhotoBottomSheet(getProfileImage);
-        });
+
         debugPrint('${permission.toString()} granted.');
       } else if (status.isDenied) {
         // Permission denied
-        showErrorStorage('${permission.toString()} denied.');
+        // showErrorStorage('${permission.toString()} denied.');
         debugPrint('${permission.toString()} denied.');
       } else if (status.isPermanentlyDenied) {
         // Permission permanently denied
-        showErrorStorage('${permission.toString()} permanently denied.');
+
         debugPrint('${permission.toString()} permanently denied.');
       }
     });
+    setState(() {
+      showPhotoBottomSheet(getProfileImage);
+    });
   }
+
   void showErrorStorage(String msg) {
     AlertX.instance.showAlert(
       title: msg,

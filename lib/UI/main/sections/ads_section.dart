@@ -38,32 +38,30 @@ class AdsSection extends StatelessWidget {
           // SizedBox(
           //   height: 1.h,
           // ),
-          SizedBox(
-            // height: 8.5.h,
-            width: double.infinity,
-            child: GestureDetector(
-              onTap: () {
-                _launchUrl(Uri.parse(data.ads[random].link.toString()));
-              },
-              child: Padding(
-                padding: EdgeInsets.only(left: 4.w, right: 5.w, bottom: 0.9.h),
-                child: CachedNetworkImage(
-                  // height: 6.h,
-                  fit: BoxFit.fill,
-                  imageUrl: data.ads[random].image_file_name ?? '',
-                  placeholder: (cont, _) {
-                    return Image.asset(
-                      Constance.logoIcon,
-                      // color: Colors.black,
-                    );
-                  },
-                  errorWidget: (cont, _, e) {
-                    return Image.network(
-                      Constance.defaultImage,
-                      fit: BoxFit.fitWidth,
-                    );
-                  },
-                ),
+          GestureDetector(
+            onTap: () {
+              _launchUrl(Uri.parse(data.ads[random].link.toString()));
+            },
+            child: Container(
+              width: 100.w,
+              padding: EdgeInsets.only(left: 4.w, right: 5.w, bottom: 0.9.h),
+              child: CachedNetworkImage(
+                // height: 6.h,
+                // fit: BoxFit.contain,
+                fit: BoxFit.fitWidth,
+                imageUrl: data.ads[random].image_file_name ?? '',
+                placeholder: (cont, _) {
+                  return Image.asset(
+                    Constance.logoIcon,
+                    // color: Colors.black,
+                  );
+                },
+                errorWidget: (cont, _, e) {
+                  return Image.network(
+                    Constance.defaultImage,
+                    fit: BoxFit.fitWidth,
+                  );
+                },
               ),
             ),
           ),

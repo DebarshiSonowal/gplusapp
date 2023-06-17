@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Model/locality.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:gplusapp/UI/category/category_details.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -93,23 +94,21 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
       ),
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
-      floatingActionButton: Builder(
-        builder: (context) {
-          return FloatingActionButton.extended(
-            onPressed: () {
-              checkIt(context);
-            },
-            icon: const Icon(Icons.add),
-            label: Text(
-              "Post a listing",
-              style: Theme.of(context).textTheme.headline5?.copyWith(
-                    color: Colors.black,
-                    // fontWeight: FontWeight.bold,
-                  ),
-            ),
-          );
-        }
-      ),
+      floatingActionButton: Builder(builder: (context) {
+        return FloatingActionButton.extended(
+          onPressed: () {
+            checkIt(context);
+          },
+          icon: const Icon(Icons.add),
+          label: Text(
+            "Post a listing",
+            style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: Colors.black,
+                  // fontWeight: FontWeight.bold,
+                ),
+          ),
+        );
+      }),
       floatingActionButtonLocation: !showing
           ? FloatingActionButtonLocation.miniEndFloat
           : FloatingActionButtonLocation.miniStartFloat,
@@ -352,12 +351,12 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                       ? Center(
                           child: (isEmpty
                               ? Image.asset(
-                            "assets/images/no_data.png",
-                            scale: 4,
-                          )
+                                  "assets/images/no_data.png",
+                                  scale: 4,
+                                )
                               : Lottie.asset(
-                            Constance.searchingIcon,
-                          )),
+                                  Constance.searchingIcon,
+                                )),
                         )
                       : Padding(
                           padding: EdgeInsets.symmetric(
@@ -453,7 +452,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                 ),
                 SizedBox(height: 1.h),
                 Text(
-                  'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
+                  'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name?.capitalize()}',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,

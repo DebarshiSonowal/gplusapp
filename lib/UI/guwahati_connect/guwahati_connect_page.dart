@@ -20,6 +20,12 @@ import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
 
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  }
+}
+
 class GuwahatiConnectPage extends StatefulWidget {
   const GuwahatiConnectPage({Key? key}) : super(key: key);
 
@@ -516,7 +522,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                 ),
                 SizedBox(height: 1.h),
                 Text(
-                  'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
+                  'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name?.capitalize()}',
                   style: Theme.of(context).textTheme.headline3?.copyWith(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,

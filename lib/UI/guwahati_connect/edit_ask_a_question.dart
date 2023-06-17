@@ -411,41 +411,45 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      // final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-      // if (pickedFile != null) {
-      //   setState(() {
-      //     var profileImage = File(pickedFile.path);
-      //     attachements.add(profileImage);
-      //   });
-      // }
-      final pickedFile = await ImagesPicker.openCamera(
-        pickType: PickType.image,
-        quality: 0.7,
-      );
-
-      if (pickedFile != null) {
-        for (var i in pickedFile) {
+      if (await Permission.camera.request().isGranted) {
+        final pickedFile = await _picker
+            .pickImage(
+          source: ImageSource.camera,
+          imageQuality: 70,
+        )
+            .catchError((er) {
+          debugPrint("error $er}");
+        });
+        if (pickedFile != null) {
           setState(() {
             attachements.add(
-              File(i.path),
+              File(pickedFile.path),
             );
           });
+          // }
         }
+      } else {
+        showErrorStorage('Permission Denied');
       }
     } else {
-      final pickedFile = await _picker.pickMultiImage();
-      if (pickedFile != null) {
-        setState(() {
-          for (var i in pickedFile) {
-            attachements.add(
-              File(i.path),
-            );
-          }
-        });
+      if ((await Permission.photos.request().isGranted)) {
+        final pickedFile = await _picker.pickMultiImage(
+          imageQuality: 70,
+        );
+        if (pickedFile != null) {
+          setState(() {
+            for (var i in pickedFile) {
+              attachements.add(
+                File(i.path),
+              );
+            }
+          });
+        }
+      } else {
+        showErrorStorage('Permission Denied');
       }
     }
   }
-
   void updateQuestion(id) async {
     Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.updateGuwahatiConnect(
@@ -523,6 +527,7 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
           Navigation.instance.goBack();
         });
   }
+
   void request() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.storage,
@@ -532,21 +537,23 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
     statuses.forEach((permission, status) {
       if (status.isGranted) {
         // Permission granted
-       setState(() {
-         showPhotoBottomSheet(getProfileImage);
-       });
+
         debugPrint('${permission.toString()} granted.');
       } else if (status.isDenied) {
         // Permission denied
-        showErrorStorage('${permission.toString()} denied.');
+        // showErrorStorage('${permission.toString()} denied.');
         debugPrint('${permission.toString()} denied.');
       } else if (status.isPermanentlyDenied) {
         // Permission permanently denied
-        showErrorStorage('${permission.toString()} permanently denied.');
+
         debugPrint('${permission.toString()} permanently denied.');
       }
     });
+    setState(() {
+      showPhotoBottomSheet(getProfileImage);
+    });
   }
+
   void showErrorStorage(String msg) {
     AlertX.instance.showAlert(
       title: msg,

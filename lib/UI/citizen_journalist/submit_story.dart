@@ -10,6 +10,8 @@ import 'package:gplusapp/Components/custom_button.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:images_picker/images_picker.dart';
+import 'package:open_settings/open_settings.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -169,9 +171,10 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
                   (pos) => (pos == attachements.length)
                       ? GestureDetector(
                           onTap: () {
-                            setState(() {
-                              showPhotoBottomSheet(getProfileImage);
-                            });
+                            // setState(() {
+                            //   showPhotoBottomSheet(getProfileImage);
+                            // });
+                            request();
                           },
                           child: Container(
                             height: 8.h,
@@ -439,84 +442,88 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
     );
   }
 
+
+  void request() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.storage,
+      Permission.camera,
+      Permission.photos,
+    ].request();
+    statuses.forEach((permission, status) {
+      if (status.isGranted) {
+        // Permission granted
+
+        debugPrint('${permission.toString()} granted.');
+      } else if (status.isDenied) {
+        // Permission denied
+        // showErrorStorage('${permission.toString()} denied.');
+        debugPrint('${permission.toString()} denied.');
+      } else if (status.isPermanentlyDenied) {
+        // Permission permanently denied
+
+        debugPrint('${permission.toString()} permanently denied.');
+      }
+    });
+    setState(() {
+      showPhotoBottomSheet(getProfileImage);
+    });
+  }
+  void showErrorStorage(String msg) {
+    AlertX.instance.showAlert(
+      title: msg,
+      msg: "Please Go To Settings and Provide the Storage Permission",
+      negativeButtonText: "Close",
+      negativeButtonPressed: () {
+        Navigation.instance.goBack();
+      },
+      positiveButtonText: "Go to Settings",
+      positiveButtonPressed: () async {
+        Navigation.instance.goBack();
+        await OpenSettings.openAppSetting();
+      },
+    );
+  }
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      // final pickedFile = await _picker.pickImage(
-      //   source: ImageSource.camera,
-      //   imageQuality: 70,
-      // );
-      // if (pickedFile != null) {
-      //   setState(() {
-      //     var profileImage = File(pickedFile.path);
-      //     attachements.add(profileImage);
-      //   });
-      // }
-      final pickedFile = await ImagesPicker.openCamera(
-        pickType: PickType.image,
-        quality: 0.7,
-      );
-
-      if (pickedFile != null) {
-        for (var i in pickedFile) {
-          setState(() {
-            attachements.add(
-              File(i.path),
-            );
-          });
-        }
-      }
-    } else if (index == 1) {
-      final pickedFile = await _picker.pickMultiImage(
-        imageQuality: 70,
-      );
-      if (pickedFile != null) {
-        setState(() {
-          for (var i in pickedFile) {
-            attachements.add(
-              File(i.path),
-            );
-          }
+      if (await Permission.camera.request().isGranted) {
+        final pickedFile = await _picker
+            .pickImage(
+          source: ImageSource.camera,
+          imageQuality: 70,
+        )
+            .catchError((er) {
+          debugPrint("error $er}");
         });
-      }
-    } else if (index == 2) {
-      // final pickedFile = await _picker.pickVideo(
-      //   source: ImageSource.camera,
-      //   maxDuration: const Duration(seconds: 30),
-      // );
-      // if (pickedFile != null) {
-      //   setState(() {
-      //     var profileImage = File(pickedFile.path);
-      //     attachements.add(profileImage);
-      //   });
-      // }
-      final pickedFile = await ImagesPicker.openCamera(
-        pickType: PickType.video,
-        quality: 0.7,
-        maxTime: 30,
-      );
-
-      if (pickedFile != null) {
-        for (var i in pickedFile) {
+        if (pickedFile != null) {
           setState(() {
             attachements.add(
-              File(i.path),
+              File(pickedFile.path),
             );
           });
+          // }
         }
+      } else {
+        showErrorStorage('Permission Denied');
       }
     } else {
-      final pickedFile = await _picker.pickVideo(
-        source: ImageSource.gallery,
-      );
-      if (pickedFile != null) {
-        setState(() {
-          var profileImage = File(pickedFile.path);
-          attachements.add(profileImage);
-        });
+      if ((await Permission.photos.request().isGranted)) {
+        final pickedFile = await _picker.pickMultiImage(
+          imageQuality: 70,
+        );
+        if (pickedFile != null) {
+          setState(() {
+            for (var i in pickedFile) {
+              attachements.add(
+                File(i.path),
+              );
+            }
+          });
+        }
+      } else {
+        showErrorStorage('Permission Denied');
       }
     }
   }
-
   void showDialogBox() {
     showDialog(
       context: context,

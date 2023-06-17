@@ -616,46 +616,45 @@ class _EditAListingPostState extends State<EditAListingPost> {
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
-      // final pickedFile = await _picker.pickImage(
-      //   source: ImageSource.camera,
-      //   imageQuality: 70,
-      // );
-      // if (pickedFile != null) {
-      //   setState(() {
-      //     var profileImage = File(pickedFile.path);
-      //     attachements.add(profileImage);
-      //   });
-      // }
-      final pickedFile = await ImagesPicker.openCamera(
-        pickType: PickType.image,
-        quality: 0.7,
-      );
-
-      if (pickedFile != null) {
-        for (var i in pickedFile) {
+      if (await Permission.camera.request().isGranted) {
+        final pickedFile = await _picker
+            .pickImage(
+          source: ImageSource.camera,
+          imageQuality: 70,
+        )
+            .catchError((er) {
+          debugPrint("error $er}");
+        });
+        if (pickedFile != null) {
           setState(() {
             attachements.add(
-              File(i.path),
+              File(pickedFile.path),
             );
           });
+          // }
         }
+      } else {
+        showErrorStorage('Permission Denied');
       }
     } else {
-      final pickedFile = await _picker.pickMultiImage(
-        imageQuality: 70,
-      );
-      if (pickedFile != null) {
-        setState(() {
-          for (var i in pickedFile) {
-            attachements.add(
-              File(i.path),
-            );
-          }
-        });
+      if ((await Permission.photos.request().isGranted)) {
+        final pickedFile = await _picker.pickMultiImage(
+          imageQuality: 70,
+        );
+        if (pickedFile != null) {
+          setState(() {
+            for (var i in pickedFile) {
+              attachements.add(
+                File(i.path),
+              );
+            }
+          });
+        }
+      } else {
+        showErrorStorage('Permission Denied');
       }
     }
   }
-
   void showDialogBox() {
     showDialog(
       context: context,
@@ -869,6 +868,7 @@ class _EditAListingPostState extends State<EditAListingPost> {
     }
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
+
   void request() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.storage,
@@ -878,19 +878,20 @@ class _EditAListingPostState extends State<EditAListingPost> {
     statuses.forEach((permission, status) {
       if (status.isGranted) {
         // Permission granted
-        setState(() {
-          showPhotoBottomSheet(getProfileImage);
-        });
+
         debugPrint('${permission.toString()} granted.');
       } else if (status.isDenied) {
         // Permission denied
-        showErrorStorage('${permission.toString()} denied.');
+        // showErrorStorage('${permission.toString()} denied.');
         debugPrint('${permission.toString()} denied.');
       } else if (status.isPermanentlyDenied) {
         // Permission permanently denied
-        showErrorStorage('${permission.toString()} permanently denied.');
+
         debugPrint('${permission.toString()} permanently denied.');
       }
+    });
+    setState(() {
+      showPhotoBottomSheet(getProfileImage);
     });
   }
   void showErrorStorage(String msg) {
