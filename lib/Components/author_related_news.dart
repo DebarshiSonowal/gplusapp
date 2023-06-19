@@ -209,7 +209,7 @@ class _AuthorRelatedNewsState extends State<AuthorRelatedNews> {
                                       SizedBox(
                                         height: 0.5.h,
                                       ),
-                                      Row(
+                                      Row(crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Image.asset(
                                             Constance.authorIcon,
@@ -220,16 +220,19 @@ class _AuthorRelatedNewsState extends State<AuthorRelatedNews> {
                                           SizedBox(
                                             width: 1.w,
                                           ),
-                                          Text(
-                                            item.author_name ?? "",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                ?.copyWith(
-                                                    color: Storage
-                                                            .instance.isDarkMode
-                                                        ? Colors.white
-                                                        : Colors.black54),
+                                          SizedBox(
+                                            width: 35.w,
+                                            child: Text(
+                                              item.author_name ?? "",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  ?.copyWith(
+                                                      color: Storage
+                                                              .instance.isDarkMode
+                                                          ? Colors.white
+                                                          : Colors.black54),
+                                            ),
                                           ),
                                         ],
                                       ),

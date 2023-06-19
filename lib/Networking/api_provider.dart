@@ -3090,7 +3090,7 @@ class ApiProvider {
         url,
         // queryParameters: data,
       );
-      debugPrint("guwahati-connect my response: ");
+      debugPrint("guwahati-connect my response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return GuwahatiConnectResponse.fromJson(response?.data);
       } else {

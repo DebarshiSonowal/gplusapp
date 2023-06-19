@@ -360,7 +360,7 @@ You can parse it accordingly to handle response */
         return Padding(
           padding: MediaQuery.of(context).viewInsets,
           child: Container(
-            height: 40.h,
+            height: 42.h,
             width: 40.w,
             padding: EdgeInsets.only(
               top: 2.h,
@@ -380,7 +380,7 @@ You can parse it accordingly to handle response */
                             : Colors.white,
                       ),
                 ),
-                SizedBox(height: 2.h),
+                SizedBox(height: 3.h),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 26.0),
                   child: Container(
@@ -521,7 +521,7 @@ You can parse it accordingly to handle response */
                     ),
                   ),
                 ),
-                SizedBox(height: 1.h),
+                const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

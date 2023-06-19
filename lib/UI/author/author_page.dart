@@ -165,7 +165,7 @@ class _AuthorPageState extends State<AuthorPage> {
                                 ),
                               ),
                               SizedBox(
-                                width:5.w,
+                                width:3.w,
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -182,7 +182,7 @@ class _AuthorPageState extends State<AuthorPage> {
                                 ),
                               ),
                               SizedBox(
-                                width:5.w,
+                                width:3.w,
                               ),
                               GestureDetector(
                                 onTap: () {
