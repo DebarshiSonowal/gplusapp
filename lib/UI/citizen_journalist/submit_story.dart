@@ -30,7 +30,7 @@ class SubmitStoryPage extends StatefulWidget {
   State<SubmitStoryPage> createState() => _SubmitStoryPageState();
 }
 
-class _SubmitStoryPageState extends State<SubmitStoryPage> {
+class _SubmitStoryPageState extends State<SubmitStoryPage> with WidgetsBindingObserver {
   var title = TextEditingController();
 
   var desc = TextEditingController();
@@ -52,6 +52,42 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> {
   }
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    debugPrint("didChangeAppLifecycleState $state");
+    if (state == AppLifecycleState.resumed) {
+      debugPrint("didChangeAppLifecycleState inside $state");
+      try {
+        getLostData();
+      } catch (e) {
+        debugPrint("what error $e");
+      }
+    }
+  }
+
+
+  Future<void> getLostData() async {
+    if(await Permission.storage.request().isGranted){
+      final LostDataResponse response = await _picker.retrieveLostData();
+      if (response.isEmpty) {
+        debugPrint("didChangeAppLifecycleState isEmpty");
+        return;
+      }
+      if (response.files != null) {
+        debugPrint("didChangeAppLifecycleState isNotEmpty");
+        for (final XFile file in response.files!) {
+          setState(() {
+            attachements.add(
+              File(file.path),
+            );
+          });
+        }
+      } else {
+        debugPrint("${response.exception!}");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

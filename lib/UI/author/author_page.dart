@@ -122,12 +122,15 @@ class _AuthorPageState extends State<AuthorPage> {
                                   child: Text(
                                     data.author?.description ?? "",
                                     overflow: TextOverflow.clip,
-                                    style: Theme.of(context).textTheme.headline6?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontStyle: FontStyle.italic,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        ?.copyWith(
+                                          color: Storage.instance.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontStyle: FontStyle.italic,
+                                        ),
                                   ),
                                 )
                               : const Spacer(),
@@ -162,13 +165,13 @@ class _AuthorPageState extends State<AuthorPage> {
                                 ),
                               ),
                               SizedBox(
-                                width: 3.w,
+                                width:5.w,
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  _launchUrl(Uri.parse(data
-                                          .author?.insta_link ??
-                                      "https://www.instagram.com/guwahatiplus/"));
+                                  _launchUrl(data.author?.insta_link ??
+                                      Uri.parse(
+                                          "https://www.instagram.com/guwahatiplus/"));
                                 },
                                 child: Icon(
                                   FontAwesomeIcons.instagramSquare,
@@ -179,12 +182,12 @@ class _AuthorPageState extends State<AuthorPage> {
                                 ),
                               ),
                               SizedBox(
-                                width: 3.w,
+                                width:5.w,
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  _launchUrl(Uri.parse(
-                                      data.author?.insta_link ??
+                                  _launchUrl(data.author?.twitter_link ??
+                                      Uri.parse(
                                           "https://twitter.com/guwahatiplus"));
                                 },
                                 child: Icon(
@@ -259,7 +262,9 @@ class _AuthorPageState extends State<AuthorPage> {
   }
 
   Future<void> _launchUrl(_url) async {
-    if (!await launchUrl(Uri.parse(_url), mode: LaunchMode.externalApplication)) {
+    debugPrint(_url);
+    if (!await launchUrl(Uri.parse(_url),
+        mode: LaunchMode.externalApplication)) {
       throw 'Could not launch $_url';
     }
   }

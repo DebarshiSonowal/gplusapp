@@ -10,6 +10,7 @@ import 'package:gplusapp/Model/profile.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../Components/alert.dart';
 import '../Model/about_us.dart';
@@ -4377,15 +4378,13 @@ class ApiProvider {
   Future download2(String url, String title) async {
     Navigation.instance.goBack();
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    var tempDir = "/storage/emulated/0/Download";
+    Directory documents = await getApplicationDocumentsDirectory();
+    var tempDir =
+        Platform.isAndroid ? "/storage/emulated/0/Download" : documents.path;
     DateTime now = DateTime.now();
     DateTime date = DateTime(
         now.year, now.month, now.day, now.hour, now.minute, now.second);
-    String fullPath = tempDir +
-        "/" +
-        "gplus_edition_"
-            "${date.toString().split(" ")[0].replaceAll("-", "").replaceAll(".", "")}" +
-        "_${date.toString().split(" ")[1].replaceAll(":", "").replaceAll(".", "")}.pdf";
+    String fullPath = "$tempDir/gplus_edition_${date.toString().split(" ")[0].replaceAll("-", "").replaceAll(".", "")}_${date.toString().split(" ")[1].replaceAll(":", "").replaceAll(".", "")}.pdf";
     String actualPath = "$tempDir/$title.pdf";
     print('full path ${fullPath} ${actualPath}');
     try {

@@ -30,7 +30,7 @@ class PostAListing extends StatefulWidget {
   State<PostAListing> createState() => _PostAListingState();
 }
 
-class _PostAListingState extends State<PostAListing> {
+class _PostAListingState extends State<PostAListing> with WidgetsBindingObserver {
   final title = TextEditingController();
   final localityEditor = TextEditingController();
 
@@ -67,6 +67,42 @@ class _PostAListingState extends State<PostAListing> {
   }
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    debugPrint("didChangeAppLifecycleState $state");
+    if (state == AppLifecycleState.resumed) {
+      debugPrint("didChangeAppLifecycleState inside $state");
+      try {
+        getLostData();
+      } catch (e) {
+        debugPrint("what error $e");
+      }
+    }
+  }
+
+
+  Future<void> getLostData() async {
+    if(await Permission.storage.request().isGranted){
+      final LostDataResponse response = await _picker.retrieveLostData();
+      if (response.isEmpty) {
+        debugPrint("didChangeAppLifecycleState isEmpty");
+        return;
+      }
+      if (response.files != null) {
+        debugPrint("didChangeAppLifecycleState isNotEmpty");
+        for (final XFile file in response.files!) {
+          setState(() {
+            attachements.add(
+              File(file.path),
+            );
+          });
+        }
+      } else {
+        debugPrint("${response.exception!}");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -63,13 +63,13 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print("didChangeAppLifecycleState $state");
+    debugPrint("didChangeAppLifecycleState $state");
     if (state == AppLifecycleState.resumed) {
-      print("didChangeAppLifecycleState inside $state");
+      debugPrint("didChangeAppLifecycleState inside $state");
       try {
         getLostData();
       } catch (e) {
-        print("what error $e");
+        debugPrint("what error $e");
       }
     }
   }
@@ -388,22 +388,24 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
   }
 
   Future<void> getLostData() async {
-    final LostDataResponse response = await _picker.retrieveLostData();
-    if (response.isEmpty) {
-      print("didChangeAppLifecycleState isEmpty");
-      return;
-    }
-    if (response.files != null) {
-      print("didChangeAppLifecycleState isNotEmpty");
-      for (final XFile file in response.files!) {
-        setState(() {
-          attachements.add(
-            File(file.path),
-          );
-        });
+    if(await Permission.storage.request().isGranted){
+      final LostDataResponse response = await _picker.retrieveLostData();
+      if (response.isEmpty) {
+        debugPrint("didChangeAppLifecycleState isEmpty");
+        return;
       }
-    } else {
-      print(response.exception!);
+      if (response.files != null) {
+        debugPrint("didChangeAppLifecycleState isNotEmpty");
+        for (final XFile file in response.files!) {
+          setState(() {
+            attachements.add(
+              File(file.path),
+            );
+          });
+        }
+      } else {
+        debugPrint("${response.exception!}");
+      }
     }
   }
 
@@ -434,15 +436,13 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
         final pickedFile = await _picker.pickMultiImage(
           imageQuality: 70,
         );
-        if (pickedFile != null) {
-          setState(() {
-            for (var i in pickedFile) {
-              attachements.add(
-                File(i.path),
-              );
-            }
-          });
-        }
+        setState(() {
+          for (var i in pickedFile) {
+            attachements.add(
+              File(i.path),
+            );
+          }
+        });
       } else {
         showErrorStorage('Permission Denied');
       }

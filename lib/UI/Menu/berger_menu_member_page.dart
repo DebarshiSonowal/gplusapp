@@ -430,22 +430,25 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     if (response.success ?? false) {
       var status = await Permission.storage.status;
       if (status.isDenied) {
+        debugPrint("First case");
         try {
           if (await Permission.storage.request().isGranted) {
-            await ApiProvider.instance.download2(
-                response.e_paper?.news_pdf ?? "",
-                response.e_paper?.title ?? "");
+            debugPrint("Third case");
+
           } else {
+            debugPrint("Fourth case ${await Permission.storage.request().isGranted}");
             Navigation.instance.goBack();
             showErrorStorage("We require storage permissions",);
           }
         } catch (e) {
+          debugPrint("Fifth case");
           print(e);
           Navigation.instance.goBack();
           showErrorStorage("We require storage permissions");
         }
         // We didn't ask for permission yet or the permission has been denied before but not permanently.
       } else {
+        debugPrint("Second case");
         await ApiProvider.instance.download2(
             response.e_paper?.news_pdf ?? "", response.e_paper?.title ?? "");
       }

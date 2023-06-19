@@ -31,7 +31,7 @@ class EditStory extends StatefulWidget {
   State<EditStory> createState() => _EditStoryState();
 }
 
-class _EditStoryState extends State<EditStory> {
+class _EditStoryState extends State<EditStory> with WidgetsBindingObserver {
   var title = TextEditingController();
   CitizenJournalist? local;
   var desc = TextEditingController();
@@ -53,6 +53,20 @@ class _EditStoryState extends State<EditStory> {
     title.dispose();
     desc.dispose();
   }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    debugPrint("didChangeAppLifecycleState $state");
+    if (state == AppLifecycleState.resumed) {
+      debugPrint("didChangeAppLifecycleState inside $state");
+      try {
+        getLostData();
+      } catch (e) {
+        debugPrint("what error $e");
+      }
+    }
+  }
+
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -439,58 +453,7 @@ class _EditStoryState extends State<EditStory> {
                                 ),
                               ],
                             )),
-                        // InkWell(
-                        //     onTap: () {
-                        //       Navigation.instance.goBack();
-                        //       getImage(2);
-                        //     },
-                        //     child: Column(
-                        //       children: [
-                        //         Container(
-                        //           padding: const EdgeInsets.all(10),
-                        //           margin: EdgeInsets.only(bottom: 4),
-                        //           decoration: BoxDecoration(
-                        //               borderRadius: BorderRadius.circular(30),
-                        //               color: Colors.purple.shade300),
-                        //           child: const Icon(
-                        //             Icons.videocam,
-                        //             color: Colors.white,
-                        //           ),
-                        //         ),
-                        //         Text(
-                        //           "Videocam",
-                        //           style: TextStyle(
-                        //             fontSize: 8.sp,
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     )),
-                        // InkWell(
-                        //     onTap: () {
-                        //       Navigation.instance.goBack();
-                        //       getImage(3);
-                        //     },
-                        //     child: Column(
-                        //       children: [
-                        //         Container(
-                        //           padding: const EdgeInsets.all(10),
-                        //           margin: EdgeInsets.only(bottom: 4),
-                        //           decoration: BoxDecoration(
-                        //               borderRadius: BorderRadius.circular(30),
-                        //               color: Colors.purple.shade300),
-                        //           child: const Icon(
-                        //             Icons.video_library,
-                        //             color: Colors.white,
-                        //           ),
-                        //         ),
-                        //         Text(
-                        //           "Video Roll",
-                        //           style: TextStyle(
-                        //             fontSize: 8.sp,
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     )),
+
                       ],
                     ),
                   ],
@@ -541,6 +504,27 @@ class _EditStoryState extends State<EditStory> {
     }
   }
 
+  Future<void> getLostData() async {
+    if(await Permission.storage.request().isGranted){
+      final LostDataResponse response = await _picker.retrieveLostData();
+      if (response.isEmpty) {
+        debugPrint("didChangeAppLifecycleState isEmpty");
+        return;
+      }
+      if (response.files != null) {
+        debugPrint("didChangeAppLifecycleState isNotEmpty");
+        for (final XFile file in response.files!) {
+          setState(() {
+            attachements.add(
+              File(file.path),
+            );
+          });
+        }
+      } else {
+        debugPrint("${response.exception!}");
+      }
+    }
+  }
 
   void request() async {
     Map<Permission, PermissionStatus> statuses = await [
@@ -584,83 +568,6 @@ class _EditStoryState extends State<EditStory> {
     );
   }
 
-  // void showDialogBox() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         insetPadding: EdgeInsets.zero,
-  //         contentPadding: EdgeInsets.zero,
-  //         clipBehavior: Clip.antiAliasWithSaveLayer,
-  //         shape: const RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.all(
-  //             Radius.circular(10.0),
-  //           ),
-  //         ),
-  //         backgroundColor: Colors.white,
-  //         title: Text(
-  //           'Be a journalist!',
-  //           style: Theme.of(context).textTheme.headline1?.copyWith(
-  //                 color: Constance.secondaryColor,
-  //                 fontWeight: FontWeight.bold,
-  //               ),
-  //         ),
-  //         content: Container(
-  //           padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
-  //           // height: 50.h,
-  //           width: 80.w,
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             mainAxisAlignment: MainAxisAlignment.start,
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Icon(
-  //                 FontAwesomeIcons.podcast,
-  //                 color: Constance.secondaryColor,
-  //                 size: 15.h,
-  //               ),
-  //               Text(
-  //                 'Hello ${Provider.of<DataProvider>(context).profile?.name ?? ""}',
-  //                 style: Theme.of(context).textTheme.headline3?.copyWith(
-  //                       color: Colors.black,
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //               ),
-  //               SizedBox(height: 1.h),
-  //               Text(
-  //                 'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-  //                 ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-  //                 ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-  //                 ' remaining essentially unchanged',
-  //                 style: Theme.of(context).textTheme.headline5?.copyWith(
-  //                       color: Colors.black,
-  //                       // fontWeight: FontWeight.bold,
-  //                     ),
-  //               ),
-  //               SizedBox(height: 1.h),
-  //               Text(
-  //                 'is simply dummy text of the printing and typesetting industry',
-  //                 style: Theme.of(context).textTheme.headline5?.copyWith(
-  //                       color: Colors.black,
-  //                       // fontWeight: FontWeight.bold,
-  //                     ),
-  //               ),
-  //               SizedBox(height: 1.h),
-  //               SizedBox(
-  //                 width: double.infinity,
-  //                 child: CustomButton(
-  //                     txt: 'Go Ahead',
-  //                     onTap: () {
-  //                       Navigation.instance.goBack();
-  //                     }),
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   void postStory(id, is_story_submit) async {
     Navigation.instance.navigate('/loadingDialog');

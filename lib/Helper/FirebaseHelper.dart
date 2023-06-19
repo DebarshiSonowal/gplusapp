@@ -66,7 +66,36 @@ class NotificationHelper {
     jsData = jsData.replaceAll('}', '"}');
     jsData = jsData.replaceAll('{', '{"');
 
-    testThis("${notificationResponse.payload}");
+    if (notificationResponse.payload!.contains("click_action:")) {
+      testThis("${notificationResponse.payload}");
+      var propertyPattern = RegExp(r'(\w+): ([^,]+)');
+
+      var json = <String, String?>{};
+
+      propertyPattern.allMatches("${notificationResponse.payload}").forEach((match) {
+        var propertyName = match.group(1);
+        var propertyValue = match.group(2);
+
+        json[propertyName!] = propertyValue!.trim();
+      });
+      NotificationReceived notification =
+      // NotificationReceived.fromJson(jsonDecode(jsData1));
+      NotificationReceived.fromJson(json);
+      setRead(
+          notification.notification_id,
+          notification.seo_name,
+          notification.seo_name_category,
+          notification.type,
+          notification.post_id,
+          notification.vendor_id,
+          notification.category_id);
+    }else{
+      try {
+        OpenFile.open(notificationResponse.payload!);
+      } catch (e) {
+        print(e);
+      }
+    }
     // jsData = jsData.replaceAll('category_name: ', 'category_name: "');
     // jsData = jsData.replaceAll('seo_name_category: ', 'seo_name_category: "');
     // jsData = jsData.replaceAll('notification_id: ', 'notification_id: "');
@@ -86,27 +115,7 @@ class NotificationHelper {
     // jsData1 = jsData1.replaceAll('*%', ',');
     // jsData1 = jsData1.replaceAll('%*', ':');
     // debugPrint(jsData1);
-    var propertyPattern = RegExp(r'(\w+): ([^,]+)');
 
-    var json = <String, String?>{};
-
-    propertyPattern.allMatches("${notificationResponse.payload}").forEach((match) {
-      var propertyName = match.group(1);
-      var propertyValue = match.group(2);
-
-      json[propertyName!] = propertyValue!.trim();
-    });
-    NotificationReceived notification =
-    // NotificationReceived.fromJson(jsonDecode(jsData1));
-    NotificationReceived.fromJson(json);
-    setRead(
-        notification.notification_id,
-        notification.seo_name,
-        notification.seo_name_category,
-        notification.type,
-        notification.post_id,
-        notification.vendor_id,
-        notification.category_id);
     // try {
     //   NotificationReceived notification =
     //           NotificationReceived.fromJson(jsonDecode(jsData));

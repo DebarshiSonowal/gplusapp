@@ -31,7 +31,7 @@ class EditAListingPost extends StatefulWidget {
   State<EditAListingPost> createState() => _EditAListingPostState();
 }
 
-class _EditAListingPostState extends State<EditAListingPost> {
+class _EditAListingPostState extends State<EditAListingPost> with WidgetsBindingObserver {
   final title = TextEditingController();
 
   final desc = TextEditingController();
@@ -70,6 +70,44 @@ class _EditAListingPostState extends State<EditAListingPost> {
     localityEditor.dispose();
   }
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    debugPrint("didChangeAppLifecycleState $state");
+    if (state == AppLifecycleState.resumed) {
+      debugPrint("didChangeAppLifecycleState inside $state");
+      try {
+        getLostData();
+      } catch (e) {
+        debugPrint("what error $e");
+      }
+    }
+  }
+
+
+  Future<void> getLostData() async {
+    if(await Permission.storage.request().isGranted){
+      final LostDataResponse response = await _picker.retrieveLostData();
+      if (response.isEmpty) {
+        debugPrint("didChangeAppLifecycleState isEmpty");
+        return;
+      }
+      if (response.files != null) {
+        debugPrint("didChangeAppLifecycleState isNotEmpty");
+        for (final XFile file in response.files!) {
+          setState(() {
+            attachements.add(
+              File(file.path),
+            );
+          });
+        }
+      } else {
+        debugPrint("${response.exception!}");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
