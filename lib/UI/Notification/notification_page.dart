@@ -192,8 +192,9 @@ class _NotificationPageState extends State<NotificationPage> {
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
           .setNotificationInDevice(response.notification);
+
       setState(() {
-        isEmpty = response.notification.isEmpty ? true : false;
+
       });
     } else {
       setState(() {

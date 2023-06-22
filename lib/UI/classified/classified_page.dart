@@ -39,7 +39,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   String result = '';
   final controller = TextEditingController();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  bool showing = false, isEmpty = false, has_permission = false;
+  bool showing = false, isEmpty = false, has_permission = false,enabled = false;
 
   @override
   void initState() {
@@ -69,11 +69,17 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
         has_permission = (response.has_permission ?? false);
       });
       _refreshController.refreshCompleted();
+      setState(() {
+        enabled = true;
+      });
     } else {
       setState(() {
         isEmpty = true;
       });
       _refreshController.refreshFailed();
+      setState(() {
+        enabled = true;
+      });
     }
     // if failed,use refreshFailed()
   }
@@ -97,7 +103,9 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
       floatingActionButton: Builder(builder: (context) {
         return FloatingActionButton.extended(
           onPressed: () {
-            checkIt(context);
+            if (enabled) {
+              checkIt(context);
+            }
           },
           icon: const Icon(Icons.add),
           label: Text(

@@ -66,160 +66,158 @@ class HistorySection extends StatelessWidget {
                             ?.copyWith(color: Constance.thirdColor),
                       ),
                     )
-                  : SizedBox(
-                      height: 10.h,
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        itemBuilder: (cont, count) {
-                          var current = data.history.reversed.toList()[count];
-                          return GestureDetector(
-                            onTap: () {
-                              if (current.has_permission ?? false) {
-                                redeem(current.vendor_id!, current.code);
-                              } else {
-                                Constance.showMembershipPrompt(cont, () {});
-                              }
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 4.w, vertical: 1.h),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                  : ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (cont, count) {
+                      var current = data.history.reversed.toList()[count];
+                      return GestureDetector(
+                        onTap: () {
+                          if (current.has_permission ?? false) {
+                            redeem(current.vendor_id!, current.code);
+                          } else {
+                            Constance.showMembershipPrompt(cont, () {});
+                          }
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 4.w, vertical: 1.h),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: 44.w,
-                                        child: Text(
-                                          current.title ?? '25% OFF',
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.start,
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline5
-                                              ?.copyWith(
-                                                color: Colors.black,
-                                                // fontSize: 11.sp,
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 0.5.h,
-                                      ),
-                                      SizedBox(
-                                        width: 44.w,
-                                        child: Text(
-                                          current.vendor?.shop_name ?? "",
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.start,
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline4
-                                              ?.copyWith(
-                                                color: Colors.black,
-                                                // fontSize: 11.sp,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 0.5.h,
-                                      ),
-                                      SizedBox(
-                                        width: 40.w,
-                                        child: Text(
-                                          current.vendor?.address ??
-                                              'RGB road, Zoo tiniali',
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.start,
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline5
-                                              ?.copyWith(
-                                                color: Colors.black,
-                                                // fontSize: 11.sp,
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ),
-                                    ],
+                                  SizedBox(
+                                    width: 44.w,
+                                    child: Text(
+                                      current.title ?? '25% OFF',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.start,
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Colors.black,
+                                            // fontSize: 11.sp,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
                                   ),
-                                  const Spacer(),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      SizedBox(
-                                        width: 30.w,
-                                        child: Text(
-                                          current.code ?? '8486',
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.end,
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline5
-                                              ?.copyWith(
-                                                color: Colors.grey.shade800,
-                                                // fontSize: 11.sp,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 0.5.h,
-                                      ),
-                                      Text(
-                                        'From: ${Jiffy(current.valid_from.toString().split('T')[0] ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      SizedBox(
-                                        height: 0.5.h,
-                                      ),
-                                      Text(
-                                        'To: ${Jiffy(current.valid_to.toString().split('T')[0] ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                        style: Theme.of(Navigation.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline5
-                                            ?.copyWith(
-                                              color: Colors.black,
-                                              // fontSize: 11.sp,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ],
+                                  SizedBox(
+                                    height: 0.5.h,
+                                  ),
+                                  SizedBox(
+                                    width: 44.w,
+                                    child: Text(
+                                      current.vendor?.shop_name ?? "",
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.start,
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline4
+                                          ?.copyWith(
+                                            color: Colors.black,
+                                            // fontSize: 11.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 0.5.h,
+                                  ),
+                                  SizedBox(
+                                    width: 40.w,
+                                    child: Text(
+                                      current.vendor?.address ??
+                                          'RGB road, Zoo tiniali',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.start,
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Colors.black,
+                                            // fontSize: 11.sp,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                          );
-                        },
-                        separatorBuilder: (cont, count) {
-                          return SizedBox(
-                            height: 1.h,
-                          );
-                        },
-                        itemCount: data.history.length,
-                      ),
-                    ),
+                              const Spacer(),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  SizedBox(
+                                    width: 30.w,
+                                    child: Text(
+                                      current.code ?? '8486',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.end,
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Colors.grey.shade800,
+                                            // fontSize: 11.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 0.5.h,
+                                  ),
+                                  Text(
+                                    'From: ${Jiffy(current.valid_from.toString().split('T')[0] ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.start,
+                                    style: Theme.of(Navigation.instance
+                                            .navigatorKey.currentContext!)
+                                        .textTheme
+                                        .headline5
+                                        ?.copyWith(
+                                          color: Colors.black,
+                                          // fontSize: 11.sp,
+                                          // fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  SizedBox(
+                                    height: 0.5.h,
+                                  ),
+                                  Text(
+                                    'To: ${Jiffy(current.valid_to.toString().split('T')[0] ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.start,
+                                    style: Theme.of(Navigation.instance
+                                            .navigatorKey.currentContext!)
+                                        .textTheme
+                                        .headline5
+                                        ?.copyWith(
+                                          color: Colors.black,
+                                          // fontSize: 11.sp,
+                                          // fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (cont, count) {
+                      return SizedBox(
+                        height: 1.h,
+                      );
+                    },
+                    itemCount: data.history.length,
+                  ),
               data.history.isEmpty
                   ? Container()
                   : Padding(

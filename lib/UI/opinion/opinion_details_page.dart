@@ -15,6 +15,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../Components/alert.dart';
 import '../../Components/opinion_details_item.dart';
@@ -407,6 +408,16 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                               data: data.opinion?.description?.trim() ?? "",
                               shrinkWrap: true,
                               customRender: {
+                                // "img": (contextRender, child) {
+                                //   return Text(
+                                //       "${contextRender.tree.attributes['src']}",
+                                //       style: Theme.of(context)
+                                //           .textTheme
+                                //           .headline5
+                                //           ?.copyWith(
+                                //             color: Colors.black,
+                                //           ));
+                                // },
                                 "table": (context, child) {
                                   return SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
@@ -414,23 +425,141 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                         .toWidget(context),
                                   );
                                 },
+                                "iframe": (context, child) {
+                                  return YoutubePlayer(
+                                    // controller: _controller = YoutubePlayerController(
+                                    //   initialVideoId: current.youtube_id!,
+                                    //   flags: const YoutubePlayerFlags(
+                                    //     autoPlay: false,
+                                    //     mute: false,
+                                    //   ),
+                                    // ),
+                                    controller: YoutubePlayerController(
+                                      initialVideoId: context
+                                          .tree.attributes['src']
+                                          .toString()
+                                          .split("/")[4]
+                                          .toString(),
+                                      flags: const YoutubePlayerFlags(
+                                        hideControls: false,
+                                        // hideThumbnail: true,
+                                        autoPlay: false,
+                                      ),
+                                    ),
+                                    showVideoProgressIndicator: true,
+
+                                    thumbnail: Image.network(
+                                      getYoutubeThumbnail(context
+                                          .tree.attributes['src']
+                                          .toString()
+                                          .split("/")[4]
+                                          .toString()),
+                                      fit: BoxFit.fill,
+                                    ),
+                                    // aspectRatio: 16 / 10,
+                                    // videoProgressIndicatorColor: Colors.amber,
+                                    progressColors: const ProgressBarColors(
+                                      playedColor: Colors.amber,
+                                      handleColor: Colors.amberAccent,
+                                    ),
+                                    onReady: () {
+                                      // print('R12345&d');
+                                      // _controller
+                                      //     .addListener(() {});
+                                      // _controller!.play();
+                                      // setState(() {
+                                      //   controller.play();
+                                      // });
+                                    },
+                                  );
+                                  return Text(
+                                    context.tree.attributes['src']
+                                        .toString()
+                                        .split("/")[4]
+                                        .toString(),
+                                    style: TextStyle(color: Colors.black54),
+                                  );
+                                },
                                 "a": (context, child) {
-                                  return GestureDetector(
+                                  return ((context.tree.element?.innerHtml
+                                      .toString()
+                                      .contains("ad_managers") ??
+                                      false))
+                                      ? GestureDetector(
                                     onTap: () {
-                                      print("https://www.gmcpropertytax.com");
-                                      if (context.tree.attributes['href']
-                                              .toString()
-                                              .split("/")[2]
-                                              .trim() ==
-                                          "www.guwahatiplus.com") {
-                                        if (context.tree.attributes['href']
+                                      // print();
+                                      _launchUrl(Uri.parse(
+                                        context.tree.element?.outerHtml
+                                            .split("href=")[1]
+                                            .substring(
+                                            1,
+                                            (context.tree.element
+                                                ?.outerHtml
+                                                .split(
+                                                "href=")[1]
+                                                .length ??
+                                                6) -
+                                                6) ??
+                                            "",
+                                      ));
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 2.w,
+                                      ),
+                                      child: CachedNetworkImage(
+                                        fit: BoxFit.fill,
+                                        imageUrl: context
+                                            .tree.element?.innerHtml
+                                            .split("=")[1]
+                                            .toString()
+                                            .substring(
+                                            1,
+                                            (context.tree.element
+                                                ?.innerHtml
+                                                .split(
+                                                "=")[1]
                                                 .toString()
-                                                .split("/")
-                                                .length >=
+                                                .length ??
+                                                0) -
+                                                2) ??
+                                            "",
+                                        placeholder: (cont, _) {
+                                          return Image.asset(
+                                            Constance.logoIcon,
+                                            // color: Colors.black,
+                                          );
+                                        },
+                                        errorWidget: (cont, _, e) {
+                                          return Image.network(
+                                            Constance.defaultImage,
+                                            fit: BoxFit.fitWidth,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                      : GestureDetector(
+                                    onTap: () {
+                                      if ((context.tree.attributes['href']
+                                          .toString()
+                                          .split("/")[2]
+                                          .trim() ==
+                                          "www.guwahatiplus.com")||(context.tree.attributes['href']
+                                          .toString()
+                                          .split("/")[2]
+                                          .trim() ==
+                                          "guwahatiplus.com")) {
+                                        if (context
+                                            .tree.attributes['href']
+                                            .toString()
+                                            .split("/")
+                                            .length >=
                                             5) {
-                                          Navigation.instance.navigate('/story',
+                                          Navigation.instance.navigate(
+                                              '/story',
                                               args:
-                                                  '${context.tree.attributes['href'].toString().split("/")[3]},${context.tree.attributes['href'].toString().split("/")[4]},opinion_details');
+                                              '${context.tree.attributes['href'].toString().split("/")[3]},${context.tree.attributes['href'].toString().split("/")[4]},story_page');
                                         } else {
                                           Navigation.instance.navigate(
                                               '/newsfrom',
@@ -441,50 +570,57 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                         }
                                       } else {
                                         try {
-                                          _launchUrl(Uri.parse(
-                                              "https://www.gmcpropertytax.com"));
+                                          _launchUrl(Uri.parse(context
+                                              .tree
+                                              .attributes['href'] ??
+                                              "https://guwahatiplus.com/"));
                                         } catch (e) {
-                                          print(e);
+                                          debugPrint(e.toString());
                                         }
                                       }
                                     },
                                     child: Text(
+                                      // context.tree.element?.innerHtml.toString().contains("ad_managers").toString()??"",
                                       context.tree.element?.innerHtml
-                                              .split("=")[0]
-                                              .toString() ??
+                                          .split("=")[0]
+                                          .toString() ??
                                           "",
-                                      style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
+                                      style: Theme.of(Navigation
+                                          .instance
+                                          .navigatorKey
+                                          .currentContext!)
                                           .textTheme
                                           .headline5
                                           ?.copyWith(
-                                            color: Constance.primaryColor,
-                                            fontWeight: FontWeight.bold,
-                                            decoration:
-                                                TextDecoration.underline,
-                                          ),
+                                        color: Constance.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        decoration:
+                                        TextDecoration.underline,
+                                      ),
                                     ),
                                   );
                                 },
-                                // "blockquote": (context, child) {
-                                //   return setupSummaryCard(
-                                //     title: 'Small Island Developing States Photo Submission',
-                                //     site: '@flickr',
-                                //     description: 'View the album on Flickr.',
-                                //     imageUrl: 'https://farm6.staticflickr.com/5510/14338202952_93595258ff_z.jpg',
+                                // "img": (context, child) {
+                                //   return Container(
+                                //     child: Text("${context.tree.element?.outerHtml.split("src=").toList()
+                                //         .toString()}",style: const TextStyle(color: Colors.black54),),
                                 //   );
                                 // },
                                 "blockquote": (context, child) {
-                                  return SizedBox(
+                                  return context.tree.element?.innerHtml
+                                      .split("=")
+                                      .length ==
+                                      3
+                                      ? SizedBox(
                                     height: 28.h,
                                     // width: 90.h,
                                     child: GestureDetector(
                                       onTap: () {
                                         _launchUrl(Uri.parse(context
-                                                .tree.element?.innerHtml
-                                                .split("=")[3]
-                                                .split("?")[0]
-                                                .substring(1) ??
+                                            .tree.element?.innerHtml
+                                            .split("=")[3]
+                                            .split("?")[0]
+                                            .substring(1) ??
                                             ""));
 
                                         // print(context.tree.element?.innerHtml
@@ -503,15 +639,16 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                                 .split("/")
                                                 .last),
                                             mimeType: 'text/html',
-                                            encoding:
-                                                Encoding.getByName('utf-8'),
+                                            encoding: Encoding.getByName(
+                                                'utf-8'),
                                           ).toString(),
                                           javascriptMode:
-                                              JavascriptMode.unrestricted,
+                                          JavascriptMode.unrestricted,
                                         ),
                                       ),
                                     ),
-                                  );
+                                  )
+                                      : Container();
                                   // return Container(
                                   //     child: Text(
                                   //   '${context.tree.element?.innerHtml.split("=")[3].split("?")[0].split("/").last}',
@@ -971,7 +1108,9 @@ String getHtmlString(String? tweetId) {
       </html>
     """;
 }
-
+String getYoutubeThumbnail(var id) {
+  return 'https://img.youtube.com/vi/${id}/0.jpg';
+}
 void generateURL(
     first_cat_name, String? seo_name, description, image_url) async {
   final dynamicLinkParams = DynamicLinkParameters(

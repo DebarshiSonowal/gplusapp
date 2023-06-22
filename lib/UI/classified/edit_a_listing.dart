@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -48,13 +49,14 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
   var selectedLocality = '';
   var locality = ['Rukminigaon', 'Khanapara', 'Beltola', ''];
   final localityEditor = TextEditingController();
-  final ImagePicker _picker = ImagePicker();
+  ImagePicker _picker = ImagePicker();
   List<AttachFile> images = [];
   List<File> attachements = [];
-
+  AndroidDeviceInfo? androidInfo;
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     Future.delayed(Duration.zero, () {
       fetchDetails();
       fetchClassified();
@@ -63,6 +65,7 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
     title.dispose();
     desc.dispose();
@@ -78,7 +81,7 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
     if (state == AppLifecycleState.resumed) {
       debugPrint("didChangeAppLifecycleState inside $state");
       try {
-        getLostData();
+        getIsNotAndroid13() ? getLostData() : () {};
       } catch (e) {
         debugPrint("what error $e");
       }
@@ -516,58 +519,8 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
     );
   }
 
-  // AppBar buildAppBar() {
-  //   return AppBar(
-  //     // leading: IconButton(
-  //     //   onPressed: () {
-  //     //     Navigation.instance.navigate('/bergerMenuMem');
-  //     //   },
-  //     //   icon: Icon(Icons.menu),
-  //     // ),
-  //     title: GestureDetector(
-  //       onTap: () {
-  //         Provider.of<DataProvider>(
-  //                 Navigation.instance.navigatorKey.currentContext ?? context,
-  //                 listen: false)
-  //             .setCurrent(0);
-  //         Navigation.instance.navigate('/main');
-  //       },
-  //       child: Image.asset(
-  //         Constance.logoIcon,
-  //         fit: BoxFit.fill,
-  //         scale: 2,
-  //       ),
-  //     ),
-  //     centerTitle: true,
-  //     backgroundColor: Constance.primaryColor,
-  //     actions: [
-  //       IconButton(
-  //         onPressed: () {
-  //           Navigation.instance.navigate('/notification');
-  //         },
-  //         icon: Consumer<DataProvider>(builder: (context, data, _) {
-  //           return Badge(
-  //             badgeColor: Constance.secondaryColor,
-  //             badgeContent: Text(
-  //               '${data.notifications.length}',
-  //               style: Theme.of(context).textTheme.headline5?.copyWith(
-  //                 color: Constance.thirdColor,
-  //               ),
-  //             ),
-  //             child: const Icon(Icons.notifications),
-  //           );
-  //         }),
-  //       ),
-  //       IconButton(
-  //         onPressed: () {},
-  //         icon: Icon(Icons.search),
-  //       ),
-  //     ],
-  //   );
-  // }
-
   void showPhotoBottomSheet(Function(int) getImage) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
     BuildContext? context = Navigation.instance.navigatorKey.currentContext;
@@ -579,9 +532,9 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
             return AlertDialog(
                 title: const Center(
                     child: Text(
-                  "Add Photo",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                )),
+                      "Add Photo",
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                    )),
                 contentPadding: const EdgeInsets.only(top: 24, bottom: 30),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -589,34 +542,38 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                            onTap: () {
-                              Navigation.instance.goBack();
-                              getImage(0);
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(12),
-                                  margin: const EdgeInsets.only(bottom: 4),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.pink.shade300),
-                                  child: const Icon(
-                                    Icons.camera_alt_rounded,
-                                    color: Colors.white,
-                                  ),
+                        getIsNotAndroid13()
+                            ? InkWell(
+                          onTap: () {
+                            Navigation.instance.goBack();
+                            getImage(0);
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                margin: const EdgeInsets.only(bottom: 4),
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.circular(30),
+                                    color: Colors.pink.shade300),
+                                child: const Icon(
+                                  Icons.camera_alt_rounded,
+                                  color: Colors.white,
                                 ),
-                                const Text(
-                                  "Camera",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
+                              ),
+                              const Text(
+                                "Camera",
+                                style: TextStyle(
+                                  fontSize: 14,
                                 ),
-                              ],
-                            )),
-                        const SizedBox(
-                          width: 42,
+                              ),
+                            ],
+                          ),
+                        )
+                            : Container(),
+                        SizedBox(
+                          width: getIsNotAndroid13() ? 42 : 0,
                         ),
                         InkWell(
                             onTap: () {
@@ -655,18 +612,21 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
       if (await Permission.camera.request().isGranted) {
-        final pickedFile = await _picker
-            .pickImage(
-          source: ImageSource.camera,
-          imageQuality: 70,
-        )
-            .catchError((er) {
-          debugPrint("error $er}");
-        });
-        if (pickedFile != null) {
+        // final pickedFile = await _picker
+        //     .pickImage(
+        //   source: ImageSource.camera,
+        //   imageQuality: 70,
+        // )
+        //     .catchError((er) {
+        //   debugPrint("error $er}");
+        // });
+        List<Media>? res = await ImagesPicker.openCamera(
+          pickType: PickType.image,
+        );
+        if (res != null) {
           setState(() {
             attachements.add(
-              File(pickedFile.path),
+              File(res[0].path),
             );
           });
           // }
@@ -675,24 +635,180 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
         showErrorStorage('Permission Denied');
       }
     } else {
-      if ((await Permission.photos.request().isGranted)) {
-        final pickedFile = await _picker.pickMultiImage(
-          imageQuality: 70,
-        );
-        if (pickedFile != null) {
-          setState(() {
-            for (var i in pickedFile) {
-              attachements.add(
-                File(i.path),
-              );
-            }
-          });
+      if (getIsNotAndroid13()
+          ? (await Permission.storage.request().isGranted)
+          : (await Permission.photos.request().isGranted)) {
+        if (getIsNotAndroid13()) {
+          List<Media>? res = await ImagesPicker.pick(
+            count: 3,
+            pickType: PickType.image,
+          );
+          if (res != null) {
+            setState(() {
+              for (var i in res) {
+                attachements.add(
+                  File(i.path),
+                );
+              }
+            });
+          }
+        } else {
+          _picker = ImagePicker();
+          final pickedFile = await _picker.pickMultiImage(
+            imageQuality: 70,
+          );
+          if (pickedFile != null) {
+            setState(() {
+              for (var i in pickedFile) {
+                attachements.add(
+                  File(i.path),
+                );
+              }
+            });
+          }
         }
       } else {
         showErrorStorage('Permission Denied');
       }
     }
   }
+
+  getIsNotAndroid13() {
+    if (Platform.isAndroid) {
+      return ((androidInfo?.version.sdkInt ?? 0) < 32);
+    } else {
+      return true;
+    }
+  }
+
+  // void showPhotoBottomSheet(Function(int) getImage) {
+  //   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //     statusBarColor: Colors.transparent,
+  //   ));
+  //   BuildContext? context = Navigation.instance.navigatorKey.currentContext;
+  //   if (context != null) {
+  //     showDialog(
+  //         barrierDismissible: true,
+  //         context: context,
+  //         builder: (BuildContext context) {
+  //           return AlertDialog(
+  //               title: const Center(
+  //                   child: Text(
+  //                 "Add Photo",
+  //                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+  //               )),
+  //               contentPadding: const EdgeInsets.only(top: 24, bottom: 30),
+  //               content: Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   Row(
+  //                     mainAxisAlignment: MainAxisAlignment.center,
+  //                     children: [
+  //                       InkWell(
+  //                           onTap: () {
+  //                             Navigation.instance.goBack();
+  //                             getImage(0);
+  //                           },
+  //                           child: Column(
+  //                             children: [
+  //                               Container(
+  //                                 padding: const EdgeInsets.all(12),
+  //                                 margin: const EdgeInsets.only(bottom: 4),
+  //                                 decoration: BoxDecoration(
+  //                                     borderRadius: BorderRadius.circular(30),
+  //                                     color: Colors.pink.shade300),
+  //                                 child: const Icon(
+  //                                   Icons.camera_alt_rounded,
+  //                                   color: Colors.white,
+  //                                 ),
+  //                               ),
+  //                               const Text(
+  //                                 "Camera",
+  //                                 style: TextStyle(
+  //                                   fontSize: 14,
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           )),
+  //                       const SizedBox(
+  //                         width: 42,
+  //                       ),
+  //                       InkWell(
+  //                           onTap: () {
+  //                             Navigation.instance.goBack();
+  //                             getImage(1);
+  //                           },
+  //                           child: Column(
+  //                             children: [
+  //                               Container(
+  //                                 padding: EdgeInsets.all(12),
+  //                                 margin: EdgeInsets.only(bottom: 4),
+  //                                 decoration: BoxDecoration(
+  //                                     borderRadius: BorderRadius.circular(30),
+  //                                     color: Colors.purple.shade300),
+  //                                 child: const Icon(
+  //                                   Icons.image,
+  //                                   color: Colors.white,
+  //                                 ),
+  //                               ),
+  //                               const Text(
+  //                                 "Gallery",
+  //                                 style: TextStyle(
+  //                                   fontSize: 14,
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           )),
+  //                     ],
+  //                   ),
+  //                 ],
+  //               ));
+  //         });
+  //   }
+  // }
+  //
+  // Future<void> getProfileImage(int index) async {
+  //   if (index == 0) {
+  //     if (await Permission.camera.request().isGranted) {
+  //       final pickedFile = await _picker
+  //           .pickImage(
+  //         source: ImageSource.camera,
+  //         imageQuality: 70,
+  //       )
+  //           .catchError((er) {
+  //         debugPrint("error $er}");
+  //       });
+  //       if (pickedFile != null) {
+  //         setState(() {
+  //           attachements.add(
+  //             File(pickedFile.path),
+  //           );
+  //         });
+  //         // }
+  //       }
+  //     } else {
+  //       showErrorStorage('Permission Denied');
+  //     }
+  //   } else {
+  //     if ((await Permission.photos.request().isGranted)) {
+  //       final pickedFile = await _picker.pickMultiImage(
+  //         imageQuality: 70,
+  //       );
+  //       if (pickedFile != null) {
+  //         setState(() {
+  //           for (var i in pickedFile) {
+  //             attachements.add(
+  //               File(i.path),
+  //             );
+  //           }
+  //         });
+  //       }
+  //     } else {
+  //       showErrorStorage('Permission Denied');
+  //     }
+  //   }
+  // }
+
   void showDialogBox() {
     showDialog(
       context: context,
@@ -947,4 +1063,5 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
       },
     );
   }
+
 }

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
@@ -5,6 +8,7 @@ import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:open_settings/open_settings.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -30,6 +34,16 @@ class BergerMenuMemPage extends StatefulWidget {
 }
 
 class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
+
+  String? versionCode="";
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchVersion();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<DataProvider>(builder: (context, data, _) {
@@ -392,6 +406,26 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     );
                   },
                 ),
+                const Divider(
+                  color: Colors.white,
+                  thickness: 0.2,
+                ),
+                SizedBox(
+                  height: 4.h,
+                  child: Column(
+                    children: [
+                      Text(
+                        'Version Code: ${versionCode}',
+                        style:
+                        Theme.of(context).textTheme.headline4?.copyWith(
+                          color: Colors.white,
+                          // fontSize: 19.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -516,4 +550,15 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
   Future<void> _launchSocialMediaAppIfInstalled({
     required String url,
   }) async {}
+
+  void fetchVersion() async{
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      versionCode = "${packageInfo.version}";
+    });
+  }
+
+
+
+
 }

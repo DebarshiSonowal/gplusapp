@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -30,13 +31,15 @@ class PostAListing extends StatefulWidget {
   State<PostAListing> createState() => _PostAListingState();
 }
 
-class _PostAListingState extends State<PostAListing> with WidgetsBindingObserver {
+class _PostAListingState extends State<PostAListing>
+    with WidgetsBindingObserver {
   final title = TextEditingController();
   final localityEditor = TextEditingController();
 
   final desc = TextEditingController();
 
   final price = TextEditingController();
+  AndroidDeviceInfo? androidInfo;
 
   var current = 3;
 
@@ -48,18 +51,20 @@ class _PostAListingState extends State<PostAListing> with WidgetsBindingObserver
   var selectedLocality;
   var locality = ['Rukminigaon', 'Khanapara', 'Beltola', ''];
 
-  final ImagePicker _picker = ImagePicker();
+  ImagePicker _picker = ImagePicker();
 
   List<File> attachements = [];
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     fetchClassified();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
     title.dispose();
     desc.dispose();
@@ -74,16 +79,15 @@ class _PostAListingState extends State<PostAListing> with WidgetsBindingObserver
     if (state == AppLifecycleState.resumed) {
       debugPrint("didChangeAppLifecycleState inside $state");
       try {
-        getLostData();
+        getIsNotAndroid13() ? getLostData() : () {};
       } catch (e) {
         debugPrint("what error $e");
       }
     }
   }
 
-
   Future<void> getLostData() async {
-    if(await Permission.storage.request().isGranted){
+    if (await Permission.storage.request().isGranted) {
       final LostDataResponse response = await _picker.retrieveLostData();
       if (response.isEmpty) {
         debugPrint("didChangeAppLifecycleState isEmpty");
@@ -169,13 +173,15 @@ class _PostAListingState extends State<PostAListing> with WidgetsBindingObserver
                             value: i.id.toString(),
                             child: Text(
                               i.title ?? "",
-                              style:
-                                  Theme.of(context).textTheme.headline4?.copyWith(
-                                        color: Storage.instance.isDarkMode
-                                            ? Colors.white70
-                                            : Constance.primaryColor,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  ?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white70
+                                        : Constance.primaryColor,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           )
                       ],
@@ -440,22 +446,23 @@ class _PostAListingState extends State<PostAListing> with WidgetsBindingObserver
                           localityEditor.text.isNotEmpty) {
                         logTheClassifiedSubmitClick(
                           Provider.of<DataProvider>(
-                                  Navigation
-                                          .instance.navigatorKey.currentContext ??
+                                  Navigation.instance.navigatorKey
+                                          .currentContext ??
                                       context,
                                   listen: false)
                               .profile!,
                           (Provider.of<DataProvider>(
-                                  Navigation
-                                          .instance.navigatorKey.currentContext ??
-                                      context,
-                                  listen: false)
-                              .classified_category
-                              .firstWhere((element) =>
-                                  element.id.toString().trim() ==
-                                  selectedCategory
-                                      .toString()
-                                      .trim())).title.toString().toLowerCase(),
+                                      Navigation.instance.navigatorKey
+                                              .currentContext ??
+                                          context,
+                                      listen: false)
+                                  .classified_category
+                                  .firstWhere((element) =>
+                                      element.id.toString().trim() ==
+                                      selectedCategory.toString().trim()))
+                              .title
+                              .toString()
+                              .toLowerCase(),
                           localityEditor.text,
                           title.text,
                           desc.text,
@@ -481,7 +488,7 @@ class _PostAListingState extends State<PostAListing> with WidgetsBindingObserver
   }
 
   void showPhotoBottomSheet(Function(int) getImage) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
     BuildContext? context = Navigation.instance.navigatorKey.currentContext;
@@ -503,34 +510,38 @@ class _PostAListingState extends State<PostAListing> with WidgetsBindingObserver
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                            onTap: () {
-                              Navigation.instance.goBack();
-                              getImage(0);
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(12),
-                                  margin: const EdgeInsets.only(bottom: 4),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.pink.shade300),
-                                  child: const Icon(
-                                    Icons.camera_alt_rounded,
-                                    color: Colors.white,
-                                  ),
+                        getIsNotAndroid13()
+                            ? InkWell(
+                                onTap: () {
+                                  Navigation.instance.goBack();
+                                  getImage(0);
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      margin: const EdgeInsets.only(bottom: 4),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          color: Colors.pink.shade300),
+                                      child: const Icon(
+                                        Icons.camera_alt_rounded,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const Text(
+                                      "Camera",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const Text(
-                                  "Camera",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            )),
-                        const SizedBox(
-                          width: 42,
+                              )
+                            : Container(),
+                        SizedBox(
+                          width: getIsNotAndroid13() ? 42 : 0,
                         ),
                         InkWell(
                             onTap: () {
@@ -569,18 +580,21 @@ class _PostAListingState extends State<PostAListing> with WidgetsBindingObserver
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
       if (await Permission.camera.request().isGranted) {
-        final pickedFile = await _picker
-            .pickImage(
-          source: ImageSource.camera,
-          imageQuality: 70,
-        )
-            .catchError((er) {
-          debugPrint("error $er}");
-        });
-        if (pickedFile != null) {
+        // final pickedFile = await _picker
+        //     .pickImage(
+        //   source: ImageSource.camera,
+        //   imageQuality: 70,
+        // )
+        //     .catchError((er) {
+        //   debugPrint("error $er}");
+        // });
+        List<Media>? res = await ImagesPicker.openCamera(
+          pickType: PickType.image,
+        );
+        if (res != null) {
           setState(() {
             attachements.add(
-              File(pickedFile.path),
+              File(res[0].path),
             );
           });
           // }
@@ -589,22 +603,49 @@ class _PostAListingState extends State<PostAListing> with WidgetsBindingObserver
         showErrorStorage('Permission Denied');
       }
     } else {
-      if ((await Permission.photos.request().isGranted)) {
-        final pickedFile = await _picker.pickMultiImage(
-          imageQuality: 70,
-        );
-        if (pickedFile != null) {
-          setState(() {
-            for (var i in pickedFile) {
-              attachements.add(
-                File(i.path),
-              );
-            }
-          });
+      if (getIsNotAndroid13()
+          ? (await Permission.storage.request().isGranted)
+          : (await Permission.photos.request().isGranted)) {
+        if (getIsNotAndroid13()) {
+          List<Media>? res = await ImagesPicker.pick(
+            count: 3,
+            pickType: PickType.image,
+          );
+          if (res != null) {
+            setState(() {
+              for (var i in res) {
+                attachements.add(
+                  File(i.path),
+                );
+              }
+            });
+          }
+        } else {
+          _picker = ImagePicker();
+          final pickedFile = await _picker.pickMultiImage(
+            imageQuality: 70,
+          );
+          if (pickedFile != null) {
+            setState(() {
+              for (var i in pickedFile) {
+                attachements.add(
+                  File(i.path),
+                );
+              }
+            });
+          }
         }
       } else {
         showErrorStorage('Permission Denied');
       }
+    }
+  }
+
+  getIsNotAndroid13() {
+    if (Platform.isAndroid) {
+      return ((androidInfo?.version.sdkInt ?? 0) < 32);
+    } else {
+      return true;
     }
   }
 
@@ -687,6 +728,7 @@ class _PostAListingState extends State<PostAListing> with WidgetsBindingObserver
   }
 
   void fetchClassified() async {
+    androidInfo = await DeviceInfoPlugin().androidInfo;
     // showLoaderDialog(context);
     final response = await ApiProvider.instance.getClassifiedCategory();
     if (response.success ?? false) {
@@ -787,9 +829,8 @@ class _PostAListingState extends State<PostAListing> with WidgetsBindingObserver
 
   void request() async {
     Map<Permission, PermissionStatus> statuses = await [
-      Permission.storage,
+      getIsNotAndroid13() ? Permission.storage : Permission.photos,
       Permission.camera,
-      Permission.photos,
     ].request();
     statuses.forEach((permission, status) {
       if (status.isGranted) {

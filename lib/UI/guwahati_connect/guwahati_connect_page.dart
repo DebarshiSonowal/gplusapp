@@ -55,7 +55,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                      , queries about accommodations, eateries, hospitals, places 
                      to visit etc. and someone will definitely help you out.''';
 
-  bool isEmpty = false, has_permission = false;
+  bool isEmpty = false, has_permission = false, is_enabled = false;
 
   @override
   void initState() {
@@ -122,12 +122,14 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
       setState(() {
         isEmpty = (response.posts.isEmpty ?? false) ? true : false;
         has_permission = (response.has_permission ?? false);
+        is_enabled=true;
       });
       _refreshController.refreshCompleted();
     } else {
       // Navigation.instance.goBack();
       setState(() {
         isEmpty = true;
+        is_enabled=true;
       });
       // Provider.of<DataProvider>(
       //         Navigation.instance.navigatorKey.currentContext ?? context,
@@ -174,25 +176,27 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                       color: Colors.white,
                     ),
                     onPress: () {
-                      logTheAskAQuestionClick(Provider.of<DataProvider>(
-                              Navigation.instance.navigatorKey.currentContext ??
-                                  context,
-                              listen: false)
-                          .profile!);
-                      _animationController?.reverse();
-                      if (has_permission ?? false) {
-                        Navigation.instance.navigate('/askAQuestion');
-                      } else {
-                        // Constance.showMembershipPrompt(context, () {});
-                        // Navigation.instance.goBack();
-                        setState(() {
-                          showing = true;
-                        });
-                        Constance.showMembershipPrompt(context, () {
+                      if (is_enabled) {
+                        logTheAskAQuestionClick(Provider.of<DataProvider>(
+                                                      Navigation.instance.navigatorKey.currentContext ??
+                                                          context,
+                                                      listen: false)
+                                                  .profile!);
+                        _animationController?.reverse();
+                        if (has_permission ?? false) {
+                          Navigation.instance.navigate('/askAQuestion');
+                        } else {
+                          // Constance.showMembershipPrompt(context, () {});
+                          // Navigation.instance.goBack();
                           setState(() {
-                            showing = false;
+                            showing = true;
                           });
-                        });
+                          Constance.showMembershipPrompt(context, () {
+                            setState(() {
+                              showing = false;
+                            });
+                          });
+                        }
                       }
                     },
                   ),

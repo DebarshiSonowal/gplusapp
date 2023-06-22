@@ -1530,7 +1530,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("notifications error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -1716,7 +1716,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("RedeemDetailsResponse error: ${e.response}");
-      return RedeemDetailsResponse.withError(e.message);
+      return RedeemDetailsResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -1758,7 +1758,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("enterPreferences error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -1840,7 +1840,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("device_token error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -1882,7 +1882,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("user-report error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -1920,7 +1920,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("update-device-token error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -1958,7 +1958,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("unblock-user-by-user error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -2038,7 +2038,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("comment-delete error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -2078,7 +2078,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("comment-edit error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -2118,7 +2118,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("notifications/read error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -2159,7 +2159,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("setAsFavourite error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -2200,7 +2200,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("Swtich set error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -2337,7 +2337,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("verifyPayment error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -2409,7 +2409,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("verifyPayment error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -3259,7 +3259,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postPollOfTheWeek error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -3305,7 +3305,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("advertiseWithUs error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -3345,7 +3345,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("feedback error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -3385,7 +3385,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("deactiveAccount error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -3473,7 +3473,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postLike error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -3516,7 +3516,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("addBookmark error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -3646,7 +3646,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postLike error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -3691,7 +3691,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postComment error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -3739,7 +3739,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("CreateOrderResponse2 error: ${e.response} ${e.message}");
-      return CreateOrderResponse.withError(e.message);
+      return CreateOrderResponse.withError(e.response?.data['message']);
     }
   }
 
@@ -3783,7 +3783,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("citizen-journalist-delete error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -3827,7 +3827,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("deleteClassified error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -3871,7 +3871,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("verify-version error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -3955,7 +3955,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("guwahati-connect-delete error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -4009,7 +4009,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postGrievance error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -4068,7 +4068,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postClassified error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -4136,7 +4136,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("update Classified error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -4196,7 +4196,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postCitizenJournalist error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -4253,7 +4253,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postCitizenJournalist error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -4311,7 +4311,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postguwahati-connect error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 
@@ -4371,7 +4371,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("update guwahati-connect error: ${e.response}");
-      return GenericResponse.withError(e.message);
+      return GenericResponse.withError(e.response?.data['message']??e.message);
     }
   }
 

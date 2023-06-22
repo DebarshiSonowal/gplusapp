@@ -16,80 +16,126 @@ class BigDealsAdSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 20.h,
-      padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 8.w),
-      child: GestureDetector(
-        onTap: () {
-          Navigation.instance.navigate('/bigdealpage');
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .setCurrent(1);
-        },
-        child: Card(
-          color: Constance.thirdColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 0.5.h),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'Big Deals\nand Offers',
-                      style: Theme.of(context).textTheme.headline3?.copyWith(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
+      padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
+      // child: GestureDetector(
+      //   onTap: () {
+      //     Navigation.instance.navigate('/bigdealpage');
+      //     Provider.of<DataProvider>(
+      //             Navigation.instance.navigatorKey.currentContext ?? context,
+      //             listen: false)
+      //         .setCurrent(1);
+      //   },
+      //   child: Card(
+      //     color: Constance.thirdColor,
+      //     shape: RoundedRectangleBorder(
+      //       borderRadius: BorderRadius.circular(10),
+      //     ),
+      //     child: Container(
+      //       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 0.5.h),
+      //       decoration: const BoxDecoration(
+      //         borderRadius: BorderRadius.all(
+      //           Radius.circular(10),
+      //         ),
+      //       ),
+      //       child: Row(
+      //         children: [
+      //           Expanded(
+      //             child: Center(
+      //               child: Text(
+      //                 'Big Deals\nand Offers',
+      //                 style: Theme.of(context).textTheme.headline3?.copyWith(
+      //                     color: Colors.white, fontWeight: FontWeight.bold),
+      //               ),
+      //             ),
+      //           ),
+      //           Expanded(
+      //               child: Container(
+      //             decoration: BoxDecoration(
+      //               border: Border.all(
+      //                 color: Colors.white,
+      //               ),
+      //               borderRadius: const BorderRadius.all(
+      //                 Radius.circular(5),
+      //               ),
+      //             ),
+      //             child: Center(
+      //               child: Consumer<DataProvider>(builder: (context, data, _) {
+      //                 return GestureDetector(
+      //                   onTap: () {
+      //                     if (data.smallImage?.link!=null) {
+      //                       _launchURL(data.smallImage?.link ?? "");
+      //                     }
+      //                   },
+      //                   child: CachedNetworkImage(
+      //                     imageUrl:
+      //                         data.smallImage?.data ?? Constance.kfc_offer,
+      //                     placeholder: (cont, _) {
+      //                       return Image.asset(
+      //                         Constance.logoIcon,
+      //                         // color: Colors.black,
+      //                       );
+      //                     },
+      //                     errorWidget: (cont, _, e) {
+      //                       return Image.network(
+      //                         Constance.defaultImage,
+      //                         fit: BoxFit.fitWidth,
+      //                       );
+      //                     },
+      //                   ),
+      //                 );
+      //               }),
+      //             ),
+      //           )),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                color: Constance.secondaryColor,
+                padding: EdgeInsets.symmetric(vertical: 0.2.h, horizontal: 1.w),
+                // margin: EdgeInsets.symmetric(horizontal: 4.w),
+                child: Text(
+                  'Ad',
+                  style: Theme.of(context).textTheme.headline3?.copyWith(
+                    fontSize: 7.sp,
+                    color: Colors.white,
+                    // fontWeight: FontWeight.bold,
                   ),
                 ),
-                Expanded(
-                    child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white,
-                    ),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(5),
-                    ),
-                  ),
-                  child: Center(
-                    child: Consumer<DataProvider>(builder: (context, data, _) {
-                      return GestureDetector(
-                        onTap: () {
-                          if (data.smallImage?.link!=null) {
-                            _launchURL(data.smallImage?.link ?? "");
-                          }
-                        },
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              data.smallImage?.data ?? Constance.kfc_offer,
-                          placeholder: (cont, _) {
-                            return Image.asset(
-                              Constance.logoIcon,
-                              // color: Colors.black,
-                            );
-                          },
-                          errorWidget: (cont, _, e) {
-                            return Image.network(
-                              Constance.defaultImage,
-                              fit: BoxFit.fitWidth,
-                            );
-                          },
-                        ),
-                      );
-                    }),
-                  ),
-                )),
-              ],
-            ),
+              ),
+            ],
           ),
-        ),
+          Consumer<DataProvider>(builder: (context, data, _) {
+            return GestureDetector(
+              onTap: () {
+                if (data.smallImage?.link!=null) {
+                  _launchURL(data.smallImage?.link ?? "");
+                }
+              },
+              child: CachedNetworkImage(
+                imageUrl:
+                data.smallImage?.data ?? Constance.kfc_offer,
+                placeholder: (cont, _) {
+                  return Image.asset(
+                    Constance.logoIcon,
+                    // color: Colors.black,
+                  );
+                },
+                errorWidget: (cont, _, e) {
+                  return Image.network(
+                    Constance.defaultImage,
+                    fit: BoxFit.fitWidth,
+                  );
+                },
+              ),
+            );
+          }),
+        ],
       ),
     );
   }

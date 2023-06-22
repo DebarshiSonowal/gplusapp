@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,23 +36,25 @@ class _EditStoryState extends State<EditStory> with WidgetsBindingObserver {
   var title = TextEditingController();
   CitizenJournalist? local;
   var desc = TextEditingController();
-
+  AndroidDeviceInfo? androidInfo;
   var current = 3;
-  final ImagePicker _picker = ImagePicker();
+  ImagePicker _picker = ImagePicker();
   List<File> attachements = [];
   List<CJAttachment> images = [];
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     Future.delayed(Duration.zero, () => fetchDetails());
   }
 
   @override
   void dispose() {
-    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     title.dispose();
     desc.dispose();
+    super.dispose();
   }
 
   @override
@@ -60,13 +63,12 @@ class _EditStoryState extends State<EditStory> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       debugPrint("didChangeAppLifecycleState inside $state");
       try {
-        getLostData();
+        getIsNotAndroid13() ? getLostData() : () {};
       } catch (e) {
         debugPrint("what error $e");
       }
     }
   }
-
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -177,8 +179,7 @@ class _EditStoryState extends State<EditStory> with WidgetsBindingObserver {
                   (images.length ?? 0),
                   (pos) => (pos == images.length)
                       ? GestureDetector(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           child: Container(
                             height: 8.h,
                             width: 20.w,
@@ -386,46 +387,48 @@ class _EditStoryState extends State<EditStory> with WidgetsBindingObserver {
             return AlertDialog(
                 title: const Center(
                     child: Text(
-                  "Add Photo/Video",
+                  "Add Photo",
                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                 )),
-                contentPadding:
-                    EdgeInsets.only(top: 24, bottom: 30, left: 2.w, right: 2.w),
+                contentPadding: const EdgeInsets.only(top: 24, bottom: 30),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                            onTap: () {
-                              Navigation.instance.goBack();
-                              getImage(0);
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  margin: const EdgeInsets.only(bottom: 4),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.pink.shade300),
-                                  child: const Icon(
-                                    Icons.camera_alt_rounded,
-                                    color: Colors.white,
-                                  ),
+                        getIsNotAndroid13()
+                            ? InkWell(
+                                onTap: () {
+                                  Navigation.instance.goBack();
+                                  getImage(0);
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      margin: const EdgeInsets.only(bottom: 4),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          color: Colors.pink.shade300),
+                                      child: const Icon(
+                                        Icons.camera_alt_rounded,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const Text(
+                                      "Camera",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  "Camera",
-                                  style: TextStyle(
-                                    fontSize: 8.sp,
-                                  ),
-                                ),
-                              ],
-                            )),
+                              )
+                            : Container(),
                         SizedBox(
-                          width: 10.w,
+                          width: getIsNotAndroid13() ? 42 : 0,
                         ),
                         InkWell(
                             onTap: () {
@@ -435,7 +438,7 @@ class _EditStoryState extends State<EditStory> with WidgetsBindingObserver {
                             child: Column(
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.all(10),
+                                  padding: EdgeInsets.all(12),
                                   margin: EdgeInsets.only(bottom: 4),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
@@ -445,15 +448,14 @@ class _EditStoryState extends State<EditStory> with WidgetsBindingObserver {
                                     color: Colors.white,
                                   ),
                                 ),
-                                Text(
+                                const Text(
                                   "Gallery",
                                   style: TextStyle(
-                                    fontSize: 8.sp,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ],
                             )),
-
                       ],
                     ),
                   ],
@@ -465,18 +467,21 @@ class _EditStoryState extends State<EditStory> with WidgetsBindingObserver {
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
       if (await Permission.camera.request().isGranted) {
-        final pickedFile = await _picker
-            .pickImage(
-          source: ImageSource.camera,
-          imageQuality: 70,
-        )
-            .catchError((er) {
-          debugPrint("error $er}");
-        });
-        if (pickedFile != null) {
+        // final pickedFile = await _picker
+        //     .pickImage(
+        //   source: ImageSource.camera,
+        //   imageQuality: 70,
+        // )
+        //     .catchError((er) {
+        //   debugPrint("error $er}");
+        // });
+        List<Media>? res = await ImagesPicker.openCamera(
+          pickType: PickType.image,
+        );
+        if (res != null) {
           setState(() {
             attachements.add(
-              File(pickedFile.path),
+              File(res[0].path),
             );
           });
           // }
@@ -485,18 +490,37 @@ class _EditStoryState extends State<EditStory> with WidgetsBindingObserver {
         showErrorStorage('Permission Denied');
       }
     } else {
-      if ((await Permission.photos.request().isGranted)) {
-        final pickedFile = await _picker.pickMultiImage(
-          imageQuality: 70,
-        );
-        if (pickedFile != null) {
-          setState(() {
-            for (var i in pickedFile) {
-              attachements.add(
-                File(i.path),
-              );
-            }
-          });
+      if (getIsNotAndroid13()
+          ? (await Permission.storage.request().isGranted)
+          : (await Permission.photos.request().isGranted)) {
+        if (getIsNotAndroid13()) {
+          List<Media>? res = await ImagesPicker.pick(
+            count: 3,
+            pickType: PickType.image,
+          );
+          if (res != null) {
+            setState(() {
+              for (var i in res) {
+                attachements.add(
+                  File(i.path),
+                );
+              }
+            });
+          }
+        } else {
+          _picker = ImagePicker();
+          final pickedFile = await _picker.pickMultiImage(
+            imageQuality: 70,
+          );
+          if (pickedFile != null) {
+            setState(() {
+              for (var i in pickedFile) {
+                attachements.add(
+                  File(i.path),
+                );
+              }
+            });
+          }
         }
       } else {
         showErrorStorage('Permission Denied');
@@ -504,8 +528,16 @@ class _EditStoryState extends State<EditStory> with WidgetsBindingObserver {
     }
   }
 
+  getIsNotAndroid13() {
+    if (Platform.isAndroid) {
+      return ((androidInfo?.version.sdkInt ?? 0) < 32);
+    } else {
+      return true;
+    }
+  }
+
   Future<void> getLostData() async {
-    if(await Permission.storage.request().isGranted){
+    if (await Permission.storage.request().isGranted) {
       final LostDataResponse response = await _picker.retrieveLostData();
       if (response.isEmpty) {
         debugPrint("didChangeAppLifecycleState isEmpty");
@@ -567,7 +599,6 @@ class _EditStoryState extends State<EditStory> with WidgetsBindingObserver {
       },
     );
   }
-
 
   void postStory(id, is_story_submit) async {
     Navigation.instance.navigate('/loadingDialog');

@@ -1013,6 +1013,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   }
 
   void signUp() async {
+    Navigation.instance.navigate("/loadingDialog");
     final reponse = await ApiProvider.instance.createProfile(
         '0',
         Storage.instance.signUpdata?.mobile,

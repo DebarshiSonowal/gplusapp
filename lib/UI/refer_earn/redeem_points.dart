@@ -24,6 +24,7 @@ class RedeemPoints extends StatefulWidget {
 
 class _RedeemPointsState extends State<RedeemPoints> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  int currentLength = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -147,42 +148,46 @@ class _RedeemPointsState extends State<RedeemPoints> {
                             return Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      current?.name ?? '1 Month Subscription',
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.start,
-                                      style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
-                                          .textTheme
-                                          .headline6
-                                          ?.copyWith(
-                                            color: Colors.white,
-                                            // fontSize: 11.sp,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    SizedBox(
-                                      height: 1.h,
-                                    ),
-                                    Text(
-                                      '${current?.buying_points ?? 50} points',
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.start,
-                                      style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
-                                          .textTheme
-                                          .headline6
-                                          ?.copyWith(
-                                            color: Colors.white,
-                                            // fontSize: 11.sp,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ],
+                                SizedBox(
+                                  width:40.w,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        current?.name ?? '1 Month Subscription',
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.start,
+                                        style: Theme.of(Navigation.instance
+                                                .navigatorKey.currentContext!)
+                                            .textTheme
+                                            .headline6
+                                            ?.copyWith(
+                                              color: Colors.white,
+                                              // fontSize: 11.sp,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                      SizedBox(
+                                        height: 1.h,
+                                      ),
+                                      Text(
+                                        '${current?.buying_points ?? 50} points',
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.start,
+                                        style: Theme.of(Navigation.instance
+                                                .navigatorKey.currentContext!)
+                                            .textTheme
+                                            .headline6
+                                            ?.copyWith(
+                                              color: Colors.white,
+                                              // fontSize: 11.sp,
+                                              // fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 const Spacer(),
                                 CustomButton(
@@ -273,9 +278,9 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              width:55.w,
+                                              width: 55.w,
                                               child: Text(
-                                                current.title??"",
+                                                current.title ?? "",
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.start,
@@ -286,12 +291,13 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                                     .textTheme
                                                     .headline5
                                                     ?.copyWith(
-                                                      color: Storage
-                                                              .instance.isDarkMode
+                                                      color: Storage.instance
+                                                              .isDarkMode
                                                           ? Colors.white
                                                           : Colors.black,
                                                       fontSize: 11.sp,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
                                               ),
                                             ),
@@ -345,7 +351,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                     height: 1.h,
                                   );
                                 },
-                                itemCount: data.referHistory.length)
+                          itemCount: currentLength,)
                             : Center(
                                 child: Text(
                                   data.refer_history_msg,
@@ -365,25 +371,38 @@ class _RedeemPointsState extends State<RedeemPoints> {
                         Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 4.w, vertical: 1.h),
-                          child: Row(
-                            children: [
-                              Text(
-                                'See More',
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(Navigation
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline4
-                                    ?.copyWith(
-                                      color: Storage.instance.isDarkMode
-                                          ? Colors.white
-                                          : Constance.secondaryColor,
-                                      // fontSize: 11.sp,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
+                          child: GestureDetector(
+                            onTap: () {
+                              if (currentLength * 2 <=
+                                  data.referHistory.length) {
+                                setState(() {
+                                  currentLength = currentLength * 2;
+                                });
+                              }else{
+                                setState(() {
+                                  currentLength = 5;
+                                });
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  currentLength * 2 <=
+                                      data.referHistory.length?'See More':"See Less",
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.start,
+                                  style: Theme.of(Navigation.instance
+                                          .navigatorKey.currentContext!)
+                                      .textTheme
+                                      .headline4
+                                      ?.copyWith(
+                                        color: Constance.secondaryColor,
+                                        // fontSize: 11.sp,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(

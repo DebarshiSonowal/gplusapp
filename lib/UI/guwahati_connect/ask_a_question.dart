@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -35,16 +36,18 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
 
   final desc = TextEditingController();
   final title = TextEditingController();
-
+  AndroidDeviceInfo? androidInfo;
   var current = 3;
 
-  final ImagePicker _picker = ImagePicker();
+  ImagePicker _picker = ImagePicker();
   List<File> attachements = [];
 
   @override
   void initState() {
+
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    getLostData();
   }
 
   @override
@@ -61,13 +64,15 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
     // title.dispose();
   }
 
+  // @override
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     debugPrint("didChangeAppLifecycleState $state");
+    super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       debugPrint("didChangeAppLifecycleState inside $state");
       try {
-        getLostData();
+        // getLostData();
       } catch (e) {
         debugPrint("what error $e");
       }
@@ -181,60 +186,64 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
               SizedBox(
                 height: 2.h,
               ),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: List.generate(
-                  (attachements.length ?? 0) + 1,
-                  (pos) => (pos == attachements.length)
-                      ? GestureDetector(
-                          onTap: () => request(),
-                          child: Container(
-                            height: 8.h,
-                            width: 20.w,
-                            color: Colors.grey.shade200,
-                            child: const Center(
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        )
-                      : Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            Container(
-                              height: 8.h,
-                              width: 20.w,
-                              color: Colors.grey.shade200,
-                              child: Center(
-                                child: Image.file(
-                                  attachements[pos],
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  attachements.removeAt(pos);
-                                });
-                              },
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                color: Colors.white,
-                                child: const Icon(
-                                  Icons.remove,
-                                  color: Constance.thirdColor,
+              Builder(
+                builder: (context) {
+                  return Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: List.generate(
+                      (attachements.length ?? 0) + 1,
+                      (pos) => (pos == attachements.length)
+                          ? GestureDetector(
+                              onTap: () => request(),
+                              child: Container(
+                                height: 8.h,
+                                width: 20.w,
+                                color: Colors.grey.shade200,
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             )
-                          ],
-                        ),
-                ),
+                          : Stack(
+                              alignment: Alignment.topRight,
+                              children: [
+                                Container(
+                                  height: 8.h,
+                                  width: 20.w,
+                                  color: Colors.grey.shade200,
+                                  child: Center(
+                                    child: Image.file(
+                                      attachements[pos],
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      attachements.removeAt(pos);
+                                    });
+                                  },
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    color: Colors.white,
+                                    child: const Icon(
+                                      Icons.remove,
+                                      color: Constance.thirdColor,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                    ),
+                  );
+                }
               ),
               SizedBox(
                 height: 2.h,
@@ -293,6 +302,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
                   txt: 'Submit',
                 ),
               ),
+
             ],
           ),
         ),
@@ -314,9 +324,9 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
             return AlertDialog(
                 title: const Center(
                     child: Text(
-                  "Add Photo",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                )),
+                      "Add Photo",
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                    )),
                 contentPadding: const EdgeInsets.only(top: 24, bottom: 30),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -324,34 +334,38 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                            onTap: () {
-                              Navigation.instance.goBack();
-                              getImage(0);
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(12),
-                                  margin: const EdgeInsets.only(bottom: 4),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.pink.shade300),
-                                  child: const Icon(
-                                    Icons.camera_alt_rounded,
-                                    color: Colors.white,
-                                  ),
+                        getIsNotAndroid13()
+                            ? InkWell(
+                          onTap: () {
+                            Navigation.instance.goBack();
+                            getImage(0);
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                margin: const EdgeInsets.only(bottom: 4),
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.circular(30),
+                                    color: Colors.pink.shade300),
+                                child: const Icon(
+                                  Icons.camera_alt_rounded,
+                                  color: Colors.white,
                                 ),
-                                const Text(
-                                  "Camera",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
+                              ),
+                              const Text(
+                                "Camera",
+                                style: TextStyle(
+                                  fontSize: 14,
                                 ),
-                              ],
-                            )),
-                        const SizedBox(
-                          width: 42,
+                              ),
+                            ],
+                          ),
+                        )
+                            : Container(),
+                        SizedBox(
+                          width: getIsNotAndroid13() ? 42 : 0,
                         ),
                         InkWell(
                             onTap: () {
@@ -387,8 +401,83 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
     }
   }
 
+  Future<void> getProfileImage(int index) async {
+    if (index == 0) {
+      if (await Permission.camera.request().isGranted) {
+        // final pickedFile = await _picker
+        //     .pickImage(
+        //   source: ImageSource.camera,
+        //   imageQuality: 70,
+        // )
+        //     .catchError((er) {
+        //   debugPrint("error $er}");
+        // });
+        List<Media>? res = await ImagesPicker.openCamera(
+          pickType: PickType.image,
+        );
+        if (res != null) {
+          setState(() {
+            attachements.add(
+              File(res[0].path),
+            );
+          });
+          // }
+        }
+      } else {
+        showErrorStorage('Permission Denied');
+      }
+    } else {
+      if (getIsNotAndroid13()
+          ? (await Permission.storage.request().isGranted)
+          : (await Permission.photos.request().isGranted)) {
+        if (getIsNotAndroid13()) {
+          List<Media>? res = await ImagesPicker.pick(
+            count: 3,
+            pickType: PickType.image,
+          );
+          if (res != null) {
+            setState(() {
+              for (var i in res) {
+                attachements.add(
+                  File(i.path),
+                );
+              }
+            });
+          }
+        } else {
+          _picker = ImagePicker();
+          final pickedFile = await _picker.pickMultiImage(
+            imageQuality: 70,
+          );
+          if (pickedFile != null) {
+            setState(() {
+              for (var i in pickedFile) {
+                attachements.add(
+                  File(i.path),
+                );
+              }
+            });
+          }
+        }
+      } else {
+        showErrorStorage('Permission Denied');
+      }
+    }
+  }
+
+  getIsNotAndroid13() {
+    if (Platform.isAndroid) {
+      return ((androidInfo?.version.sdkInt ?? 0) < 32);
+    } else {
+      return true;
+    }
+  }
+
+
   Future<void> getLostData() async {
+    // Navigation.instance.navigate("/loadingDialog");
     if(await Permission.storage.request().isGranted){
+      // Navigation.instance.goBack();
       final LostDataResponse response = await _picker.retrieveLostData();
       if (response.isEmpty) {
         debugPrint("didChangeAppLifecycleState isEmpty");
@@ -406,48 +495,52 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
       } else {
         debugPrint("${response.exception!}");
       }
+    }else{
+      // Navigation.instance.goBack();
     }
   }
 
-  Future<void> getProfileImage(int index) async {
-    if (index == 0) {
-      if (await Permission.camera.request().isGranted) {
-        final pickedFile = await _picker
-            .pickImage(
-          source: ImageSource.camera,
-          imageQuality: 70,
-        )
-            .catchError((er) {
-          debugPrint("error $er}");
-        });
-        if (pickedFile != null) {
-          setState(() {
-            attachements.add(
-              File(pickedFile.path),
-            );
-          });
-          // }
-        }
-      } else {
-        showErrorStorage('Permission Denied');
-      }
-    } else {
-      if ((await Permission.photos.request().isGranted)) {
-        final pickedFile = await _picker.pickMultiImage(
-          imageQuality: 70,
-        );
-        setState(() {
-          for (var i in pickedFile) {
-            attachements.add(
-              File(i.path),
-            );
-          }
-        });
-      } else {
-        showErrorStorage('Permission Denied');
-      }
-    }
-  }
+  // Future<void> getProfileImage(int index) async {
+  //   if (index == 0) {
+  //     if (await Permission.camera.request().isGranted) {
+  //       final pickedFile = await _picker
+  //           .pickImage(
+  //         source: ImageSource.camera,
+  //         imageQuality: 70,
+  //       )
+  //           .catchError((er) {
+  //         debugPrint("error $er}");
+  //       });
+  //       if (pickedFile != null) {
+  //         setState(() {
+  //           attachements.add(
+  //             File(pickedFile.path),
+  //           );
+  //         });
+  //         // }
+  //       }
+  //     } else {
+  //       showErrorStorage('Permission Denied');
+  //     }
+  //   } else {
+  //     if ((await Permission.photos.request().isGranted)) {
+  //       final pickedFile = await _picker.pickMultiImage(
+  //         imageQuality: 70,
+  //       );
+  //       if (pickedFile != null) {
+  //         setState(() {
+  //           for (var i in pickedFile) {
+  //             attachements.add(
+  //               File(i.path),
+  //             );
+  //           }
+  //         });
+  //       }
+  //     } else {
+  //       showErrorStorage('Permission Denied');
+  //     }
+  //   }
+  // }
 
   void postQuestion() async {
     Navigation.instance.navigate('/loadingDialog');

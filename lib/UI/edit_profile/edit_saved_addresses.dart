@@ -5,6 +5,7 @@ import 'package:flutter_config/flutter_config.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart';
+
 // import 'package:google_geocoding/google_geocoding.dart';
 import 'package:google_place/google_place.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
@@ -82,7 +83,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                         fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                    width:0.5.w,
+                    width: 0.5.w,
                   ),
                   Icon(
                     Icons.location_on,
@@ -107,7 +108,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
                     cursorColor: Storage.instance.isDarkMode
                         ? Colors.white
                         : Constance.primaryColor,
-                    onSubmitted: (value){
+                    onSubmitted: (value) {
                       if (value.isNotEmpty) {
                         autoCompleteSearch(value);
                       }
@@ -441,9 +442,14 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
   // }
 
   void autoCompleteSearch(String value) async {
-    var result = await googlePlace.autocomplete.get(value);
+    var result = await googlePlace.autocomplete.get(
+      value,
+      region: "in",
+      location: const LatLon(26.1158, 91.7086),
+      radius: 20000,
+    );
     if (result != null && result.predictions != null && mounted) {
-      debugPrint("Success ${result?.status} ${result?.predictions}");
+      debugPrint("Success ${result?.status} ${result.predictions}");
       setState(() {
         predictions = result.predictions!;
       });
@@ -639,7 +645,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
       fetchAddress();
     } else {
       Navigation.instance.goBack();
-      showError(response.message??"Something went wrong");
+      showError(response.message ?? "Something went wrong");
     }
   }
 }

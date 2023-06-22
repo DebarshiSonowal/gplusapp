@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -30,45 +31,48 @@ class SubmitStoryPage extends StatefulWidget {
   State<SubmitStoryPage> createState() => _SubmitStoryPageState();
 }
 
-class _SubmitStoryPageState extends State<SubmitStoryPage> with WidgetsBindingObserver {
+class _SubmitStoryPageState extends State<SubmitStoryPage>
+    with WidgetsBindingObserver {
   var title = TextEditingController();
-
+  bool _isImagePickerActive = false;
   var desc = TextEditingController();
-
+  AndroidDeviceInfo? androidInfo;
   var current = 3;
-  final ImagePicker _picker = ImagePicker();
+  ImagePicker _picker = ImagePicker();
   List<File> attachements = [];
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    getIsNotAndroid13()? getLostData():(){};
   }
 
   @override
   void dispose() {
-    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     title.dispose();
     desc.dispose();
+    super.dispose();
   }
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    debugPrint("didChangeAppLifecycleState $state");
-    if (state == AppLifecycleState.resumed) {
-      debugPrint("didChangeAppLifecycleState inside $state");
-      try {
-        getLostData();
-      } catch (e) {
-        debugPrint("what error $e");
-      }
-    }
-  }
-
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   debugPrint("didChangeAppLifecycleState $state");
+  //   if (state == AppLifecycleState.resumed) {
+  //     debugPrint("didChangeAppLifecycleState inside $state");
+  //     try {
+  //       getLostData();
+  //     } catch (e) {
+  //       debugPrint("what error $e");
+  //     }
+  //   }
+  // }
 
   Future<void> getLostData() async {
-    if(await Permission.storage.request().isGranted){
+    if (await Permission.storage.request().isGranted) {
       final LostDataResponse response = await _picker.retrieveLostData();
       if (response.isEmpty) {
         debugPrint("didChangeAppLifecycleState isEmpty");
@@ -199,69 +203,76 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> with WidgetsBindingOb
               SizedBox(
                 height: 2.h,
               ),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: List.generate(
-                  (attachements.length ?? 0) + 1,
-                  (pos) => (pos == attachements.length)
-                      ? GestureDetector(
-                          onTap: () {
-                            // setState(() {
-                            //   showPhotoBottomSheet(getProfileImage);
-                            // });
-                            request();
-                          },
-                          child: Container(
-                            height: 8.h,
-                            width: 20.w,
-                            color: Colors.grey.shade200,
-                            child: const Center(
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        )
-                      : Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            Container(
-                              height: 8.h,
-                              width: 20.w,
-                              color: Colors.grey.shade200,
-                              child: Center(
-                                child: Image.file(
-                                  attachements[pos],
-                                  fit: BoxFit.fill,
-                                  errorBuilder: (err, cont, st) {
-                                    return Image.asset(Constance.logoIcon);
-                                  },
+              FutureBuilder(
+                  future: getLostData(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<void> snapshot) {
+                    return Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: List.generate(
+                        (attachements.length ?? 0) + 1,
+                        (pos) => (pos == attachements.length)
+                            ? GestureDetector(
+                                onTap: () {
+                                  // setState(() {
+                                  //   showPhotoBottomSheet(getProfileImage);
+                                  // });
+                                  request();
+                                },
+                                child: Container(
+                                  height: 8.h,
+                                  width: 20.w,
+                                  color: Colors.grey.shade200,
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.add,
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                 ),
+                              )
+                            : Stack(
+                                alignment: Alignment.topRight,
+                                children: [
+                                  Container(
+                                    height: 8.h,
+                                    width: 20.w,
+                                    color: Colors.grey.shade200,
+                                    child: Center(
+                                      child: Image.file(
+                                        attachements[pos],
+                                        fit: BoxFit.fill,
+                                        errorBuilder: (err, cont, st) {
+                                          return Image.asset(
+                                              Constance.logoIcon);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        attachements.removeAt(pos);
+                                      });
+                                    },
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      color: Colors.white,
+                                      child: const Icon(
+                                        Icons.remove,
+                                        color: Constance.thirdColor,
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  attachements.removeAt(pos);
-                                });
-                              },
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                color: Colors.white,
-                                child: const Icon(
-                                  Icons.remove,
-                                  color: Constance.thirdColor,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                ),
-              ),
+                      ),
+                    );
+                  }),
               SizedBox(
                 height: 2.h,
               ),
@@ -382,46 +393,48 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> with WidgetsBindingOb
             return AlertDialog(
                 title: const Center(
                     child: Text(
-                  "Add Photo/Video",
+                  "Add Photo",
                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                 )),
-                contentPadding:
-                    EdgeInsets.only(top: 24, bottom: 30, left: 2.w, right: 2.w),
+                contentPadding: const EdgeInsets.only(top: 24, bottom: 30),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                            onTap: () {
-                              Navigation.instance.goBack();
-                              getImage(0);
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  margin: const EdgeInsets.only(bottom: 4),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.pink.shade300),
-                                  child: const Icon(
-                                    Icons.camera_alt_rounded,
-                                    color: Colors.white,
-                                  ),
+                        getIsNotAndroid13()
+                            ? InkWell(
+                                onTap: () {
+                                  Navigation.instance.goBack();
+                                  getImage(0);
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      margin: const EdgeInsets.only(bottom: 4),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          color: Colors.pink.shade300),
+                                      child: const Icon(
+                                        Icons.camera_alt_rounded,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const Text(
+                                      "Camera",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  "Camera",
-                                  style: TextStyle(
-                                    fontSize: 8.sp,
-                                  ),
-                                ),
-                              ],
-                            )),
+                              )
+                            : Container(),
                         SizedBox(
-                          width: 10.w,
+                          width: getIsNotAndroid13() ? 42 : 0,
                         ),
                         InkWell(
                             onTap: () {
@@ -431,7 +444,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> with WidgetsBindingOb
                             child: Column(
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.all(10),
+                                  padding: EdgeInsets.all(12),
                                   margin: EdgeInsets.only(bottom: 4),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
@@ -441,10 +454,10 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> with WidgetsBindingOb
                                     color: Colors.white,
                                   ),
                                 ),
-                                Text(
+                                const Text(
                                   "Gallery",
                                   style: TextStyle(
-                                    fontSize: 8.sp,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ],
@@ -454,6 +467,78 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> with WidgetsBindingOb
                   ],
                 ));
           });
+    }
+  }
+
+  Future<void> getProfileImage(int index) async {
+    if (index == 0) {
+      if (await Permission.camera.request().isGranted) {
+        // final pickedFile = await _picker
+        //     .pickImage(
+        //   source: ImageSource.camera,
+        //   imageQuality: 70,
+        // )
+        //     .catchError((er) {
+        //   debugPrint("error $er}");
+        // });
+        List<Media>? res = await ImagesPicker.openCamera(
+          pickType: PickType.image,
+        );
+        if (res != null) {
+          setState(() {
+            attachements.add(
+              File(res[0].path),
+            );
+          });
+          // }
+        }
+      } else {
+        showErrorStorage('Permission Denied');
+      }
+    } else {
+      if (getIsNotAndroid13()
+          ? (await Permission.storage.request().isGranted)
+          : (await Permission.photos.request().isGranted)) {
+        if (getIsNotAndroid13()) {
+          List<Media>? res = await ImagesPicker.pick(
+            count: 3,
+            pickType: PickType.image,
+          );
+          if (res != null) {
+            setState(() {
+              for (var i in res) {
+                attachements.add(
+                  File(i.path),
+                );
+              }
+            });
+          }
+        } else {
+          _picker = ImagePicker();
+          final pickedFile = await _picker.pickMultiImage(
+            imageQuality: 70,
+          );
+          if (pickedFile != null) {
+            setState(() {
+              for (var i in pickedFile) {
+                attachements.add(
+                  File(i.path),
+                );
+              }
+            });
+          }
+        }
+      } else {
+        showErrorStorage('Permission Denied');
+      }
+    }
+  }
+
+  getIsNotAndroid13() {
+    if (Platform.isAndroid) {
+      return ((androidInfo?.version.sdkInt ?? 0) < 32);
+    } else {
+      return true;
     }
   }
 
@@ -477,7 +562,6 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> with WidgetsBindingOb
       },
     );
   }
-
 
   void request() async {
     Map<Permission, PermissionStatus> statuses = await [
@@ -504,6 +588,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> with WidgetsBindingOb
       showPhotoBottomSheet(getProfileImage);
     });
   }
+
   void showErrorStorage(String msg) {
     AlertX.instance.showAlert(
       title: msg,
@@ -519,47 +604,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> with WidgetsBindingOb
       },
     );
   }
-  Future<void> getProfileImage(int index) async {
-    if (index == 0) {
-      if (await Permission.camera.request().isGranted) {
-        final pickedFile = await _picker
-            .pickImage(
-          source: ImageSource.camera,
-          imageQuality: 70,
-        )
-            .catchError((er) {
-          debugPrint("error $er}");
-        });
-        if (pickedFile != null) {
-          setState(() {
-            attachements.add(
-              File(pickedFile.path),
-            );
-          });
-          // }
-        }
-      } else {
-        showErrorStorage('Permission Denied');
-      }
-    } else {
-      if ((await Permission.photos.request().isGranted)) {
-        final pickedFile = await _picker.pickMultiImage(
-          imageQuality: 70,
-        );
-        if (pickedFile != null) {
-          setState(() {
-            for (var i in pickedFile) {
-              attachements.add(
-                File(i.path),
-              );
-            }
-          });
-        }
-      } else {
-        showErrorStorage('Permission Denied');
-      }
-    }
-  }
+
   void showDialogBox() {
     showDialog(
       context: context,
@@ -674,8 +719,10 @@ class _SubmitStoryPageState extends State<SubmitStoryPage> with WidgetsBindingOb
         "client_id_event": id,
         "user_id_event": profile.id,
         // "post": post,
-        "title": title.length>100?title.substring(0,100):title,
-        "field_entered": field_entered.length>100?field_entered.substring(0,100):field_entered,
+        "title": title.length > 100 ? title.substring(0, 100) : title,
+        "field_entered": field_entered.length > 100
+            ? field_entered.substring(0, 100)
+            : field_entered,
         "cta_click": "save_as_draft",
         "screen_name": "citizen_journalist",
         "user_login_status":
