@@ -15,7 +15,7 @@ class BigDealsAdSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 20.h,
+      // height: 25.h,
       padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
       // child: GestureDetector(
       //   onTap: () {
@@ -115,6 +115,12 @@ class BigDealsAdSection extends StatelessWidget {
               onTap: () {
                 if (data.smallImage?.link!=null) {
                   _launchURL(data.smallImage?.link ?? "");
+                }else{
+                      Navigation.instance.navigate('/bigdealpage');
+                      Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ?? context,
+                              listen: false)
+                          .setCurrent(1);
                 }
               },
               child: CachedNetworkImage(

@@ -31,7 +31,7 @@ class ReferAndEarnSection extends StatelessWidget {
               width: 2.w,
             ),
             Text(
-              'Refer and Earn',
+              'Refers and Earn',
               style: Theme.of(context)
                   .textTheme
                   .headline4

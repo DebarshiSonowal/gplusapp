@@ -20,6 +20,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 // import 'package:flutter_html_all/flutter_html_all.dart';
 import '../../Components/alert.dart';
+import '../../Components/embeded_link_extenion.dart';
 import '../../Components/opinion_details_item.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
@@ -27,6 +28,7 @@ import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 import '../Menu/berger_menu_member_page.dart';
+import '../view/blockquote_extention.dart';
 
 class OpinionDetailsPage extends StatefulWidget {
   final String? slug;
@@ -659,8 +661,11 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                               //   },
                               // },
                               extensions: const [
+                                IframeHtmlExtension(),
                                 TableHtmlExtension(),
                                 VideoHtmlExtension(),
+                                EmbeddedLinkExtension(2),
+                                BlockquoteExtension(),
                               ],
                               onLinkTap: (str, map, elment) {
                                 // print("${str}");

@@ -8,10 +8,14 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html_iframe/flutter_html_iframe.dart';
+import 'package:flutter_html_table/flutter_html_table.dart';
+import 'package:flutter_html_video/flutter_html_video.dart';
 
 // import 'package:flutter_html/custom_render.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/UI/view/blockquote_extention.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
@@ -26,6 +30,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../Components/alert.dart';
+import '../../Components/embeded_link_extenion.dart';
 import '../../Components/suggestion_list_view.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/Storage.dart';
@@ -753,13 +758,22 @@ class _StoryPageState extends State<StoryPage> {
                               //     // ));
                               //   },
                               // },
-                              extensions: [
-
+                              extensions: const [
+                                IframeHtmlExtension(),
+                                TableHtmlExtension(),
+                                VideoHtmlExtension(),
+                                EmbeddedLinkExtension(1),
+                                BlockquoteExtension(),
                               ],
                               onLinkTap: (str, map, elment) {
                                 // print("${str}");
                                 // print("${elment?.text}");
-                                print(str);
+                                //https://www.guwahatiplus.com/api/v1/assam/assam-driving-licences-of-individuals-involved-in-traffic-accidents-suspended
+                                // debugPrint(
+                                //     "${str?.split("/")[str.split("/").length - 2]},${str?.split("/").last}");
+                                // Navigation.instance.navigate('/story',
+                                //     args:
+                                //         '${str?.split("/")[str.split("/").length - 2]},${str?.split("/").last},story_page');
                               },
                               data: data.selectedArticle?.description?.trim() ??
                                   "",
