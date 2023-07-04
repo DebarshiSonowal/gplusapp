@@ -232,7 +232,7 @@ class _GrieveanceRedressalState extends State<GrieveanceRedressal> {
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
             return bd.Badge(
-              badgeColor: Constance.secondaryColor,
+              // badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(

@@ -360,7 +360,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                       : Padding(
                           padding: EdgeInsets.symmetric(horizontal: 2.w),
                           child: ListView.separated(
-                            padding: EdgeInsets.only(bottom: 8.h),
+                            padding: EdgeInsets.only(bottom: 5.h),
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: current.guwahatiConnect.length,

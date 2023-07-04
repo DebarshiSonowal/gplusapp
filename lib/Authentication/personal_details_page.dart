@@ -427,21 +427,21 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
                     decoration: const InputDecoration.collapsed(hintText: ''),
                     isExpanded: false,
 
-                    buttonHeight: 5.h,
-                    buttonWidth: 20.w,
-                    buttonPadding:
-                        EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.5.h),
-                    buttonDecoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey.shade700,
-                      ),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
+                    // buttonHeight: 5.h,
+                    // buttonWidth: 20.w,
+                    // buttonPadding:
+                    //     EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.5.h),
+                    // buttonDecoration: BoxDecoration(
+                    //   border: Border.all(
+                    //     color: Colors.grey.shade700,
+                    //   ),
+                    //   borderRadius: BorderRadius.circular(5.0),
+                    // ),
                     // Initial Value
                     value: dropdownvalue,
 
                     // Down Arrow Icon
-                    icon: const Icon(Icons.keyboard_arrow_down),
+                    // icon: const Icon(Icons.keyboard_arrow_down),
 
                     // Array list of items
                     items: items.map((String items) {
@@ -1031,7 +1031,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         0,
         Storage.instance.signUpdata?.gender,
         Storage.instance.signUpdata?.refer,
-        1);
+        1,);
     if (reponse.success ?? false) {
       // setPreferences();
 

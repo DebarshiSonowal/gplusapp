@@ -343,8 +343,11 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                         )
                       : Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 5.w, vertical: 1.h),
+                              horizontal: 5.w, ),
                           child: ListView.separated(
+                            padding: EdgeInsets.only(
+                              bottom: 4.h,
+                            ),
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: data.classified.length,

@@ -85,15 +85,18 @@ class _FoodDealPageState extends State<FoodDealPage> {
                     SizedBox(
                       width: 5.w,
                     ),
-                    Text(
-                      '${data.category.firstWhere((element) => element.id == widget.id).name}',
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Storage.instance.isDarkMode
-                                ? Colors.white
-                                : Constance.primaryColor,
-                            fontSize: 3.h,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    SizedBox(
+                      width: 70.w,
+                      child: Text(
+                        '${data.category.firstWhere((element) => element.id == widget.id).name}',
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Constance.primaryColor,
+                              fontSize: 3.h,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
                     ),
                   ],
                 ),

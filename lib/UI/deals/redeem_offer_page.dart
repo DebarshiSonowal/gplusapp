@@ -196,7 +196,7 @@ class _RedeemOfferPageState extends State<RedeemOfferPage> {
                                 height: 2.h,
                               ),
                               Text(
-                                '* The offer expires of ${Jiffy(data.redeemDetails?.valid_to ?? "0000-00-00", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                                '* The offer expires of ${Jiffy.parse(data.redeemDetails?.valid_to ?? "0000-00-00", pattern: "yyyy-MM-dd").format(pattern: "dd/MM/yyyy")}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline6

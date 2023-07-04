@@ -407,6 +407,11 @@ class _EditAskAQuestionPageState extends State<EditAskAQuestionPage> {
                             )),
                       ],
                     ),
+                    Container(
+                      margin: EdgeInsets.only(top: 1.5.h),
+                      width: 50.w,
+                      child: Constance.androidWarning,
+                    ),
                   ],
                 ));
           });

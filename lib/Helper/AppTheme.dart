@@ -12,15 +12,11 @@ class AppTheme {
     );
     final ThemeData base = ThemeData.dark();
     return base.copyWith(
-      colorScheme: colorScheme,
       primaryColor: primaryColor,
-      buttonColor: primaryColor,
       indicatorColor: Colors.white,
       splashColor: Colors.white24,
       splashFactory: InkRipple.splashFactory,
-      accentColor: secondaryColor,
       canvasColor: Colors.white,
-      backgroundColor: Colors.grey[850],
       scaffoldBackgroundColor: Colors.black,
       buttonTheme: ButtonThemeData(
         colorScheme: colorScheme,
@@ -29,8 +25,7 @@ class AppTheme {
       // cursorColor: primaryColor,
       textTheme: _buildTextTheme(base.textTheme),
       primaryTextTheme: _buildTextTheme(base.primaryTextTheme),
-      accentTextTheme: _buildTextTheme(base.accentTextTheme),
-      platform: TargetPlatform.iOS,
+      platform: TargetPlatform.iOS, colorScheme: colorScheme.copyWith(background: Colors.grey[850]).copyWith(secondary: secondaryColor),
     );
   }
 

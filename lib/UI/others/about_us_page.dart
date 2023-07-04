@@ -82,33 +82,39 @@ class _AboutUsPageState extends State<AboutUsPage> {
                 ),
                 Html(
                   data: data.aboutUs?.content?.trim() ?? "",
+
+                  // tagsList: Html.tags..addAll(["bird", "flutter"]),
                   shrinkWrap: true,
-                  customRender: {
-                    "a": (context, child) {
-                      return GestureDetector(
-                        onTap: () {
-                          debugPrint("${context.tree.attributes}");
-                          _launchUrl(Uri.parse(context.tree.attributes['href']??"https://guwahatiplus.com/"));
-                        },
-                        child: Text(
-                          context.tree.element?.innerHtml
-                              .split("=")[0]
-                              .toString() ??
-                              "",
-                          style: Theme.of(Navigation.instance
-                              .navigatorKey.currentContext!)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(
-                            color: Constance.primaryColor,
-                            fontWeight: FontWeight.bold,
-                            decoration:
-                            TextDecoration.underline,
-                          ),
-                        ),
-                      );
-                    },
-                  },
+
+                  extensions: [
+
+                  ],
+                  // customRender: {
+                  //   "a": (context, child) {
+                  //     return GestureDetector(
+                  //       onTap: () {
+                  //         debugPrint("${context.tree.attributes}");
+                  //         _launchUrl(Uri.parse(context.tree.attributes['href']??"https://guwahatiplus.com/"));
+                  //       },
+                  //       child: Text(
+                  //         context.tree.element?.innerHtml
+                  //             .split("=")[0]
+                  //             .toString() ??
+                  //             "",
+                  //         style: Theme.of(Navigation.instance
+                  //             .navigatorKey.currentContext!)
+                  //             .textTheme
+                  //             .headline5
+                  //             ?.copyWith(
+                  //           color: Constance.primaryColor,
+                  //           fontWeight: FontWeight.bold,
+                  //           decoration:
+                  //           TextDecoration.underline,
+                  //         ),
+                  //       ),
+                  //     );
+                  //   },
+                  // },
                   style: {
                     '#': Style(
                       // fontSize: FontSize(_counterValue),
@@ -159,7 +165,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
             return bd.Badge(
-              badgeColor: Constance.secondaryColor,
+              // badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(

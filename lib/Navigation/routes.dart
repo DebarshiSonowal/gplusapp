@@ -17,6 +17,7 @@ import '../Components/story_view.dart';
 import '../Components/video_player_screen.dart';
 
 // import '../OnBoarding/on_boarding_page.dart';
+import '../Payment/payment_processing_page.dart';
 import '../UI/Member/be_a_membe_page.dart';
 import '../UI/Notification/notification_page.dart';
 import '../UI/Search/search_page.dart';
@@ -64,7 +65,6 @@ import '../UI/others/privacy_policy_page.dart';
 import '../UI/others/refund_policy_page.dart';
 import '../UI/others/settings_page.dart';
 import '../UI/others/terms_conditions_page.dart';
-import '../UI/payment_processing_page.dart';
 import '../UI/poll_of_the week/poll_page.dart';
 import '../UI/profile/profile_page.dart';
 import '../UI/refer_earn/redeem_points.dart';
@@ -133,7 +133,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/loadingDialog':
       return FadeTransitionPageRouteBuilder(page: LoadingDialog());
     case '/no_internet':
-      return FadeTransitionPageRouteBuilder(page: const NoInternetConnectionScreen());
+      return FadeTransitionPageRouteBuilder(
+          page: const NoInternetConnectionScreen());
     case '/fullScreenAd':
       return FadeTransitionPageRouteBuilder(page: FullScreenAdvertisement());
     case '/videoPlayer':
@@ -180,7 +181,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       FirebaseAnalytics.instance
           .setCurrentScreen(screenName: 'payment_processing');
       return FadeTransitionPageRouteBuilder(
-          page: PaymentProcessingPage(settings.arguments as String));
+          page: paymentProcessingPage(settings.arguments as String));
     // case '/paymentProcessingIOS':
     //   return FadeTransitionPageRouteBuilder(
     //       page: Webview_payment(url: settings.arguments as String));
@@ -400,53 +401,5 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           page: LinkFailedPage(
         path: (settings.arguments ?? "") as String,
       ));
-    // return MaterialPageRoute(builder: (_) {
-    //   debugPrint("deeplink failed 3 settings ${settings.name}");
-    //   // return LinkFailedPage(path: settings.name as String,);
-    //   if (settings.name!.contains("/link")) {
-    //     Navigation.instance.goBack();
-    //   }
-    //   // return FadeTransitionPageRouteBuilder(
-    //   //     page: LinkFailedPage(
-    //   //       path: settings.arguments as String,
-    //   //     ));
-    //   // Navigation.instance.navigate(
-    //   //     sendToRoute(
-    //   //             settings.name.toString().split("/")[4].trim(),
-    //   //             settings.name.toString().split("/")[5].trim(),
-    //   //             (settings.name.toString().split("/").length <= 6
-    //   //                 ? ""
-    //   //                 : settings.name.toString().split("/")[6].trim()))
-    //   //         .split(".")[0],
-    //   //     args: sendToRoute(
-    //   //             settings.name.toString().split("/")[4].trim(),
-    //   //             settings.name.toString().split("/")[5].trim(),
-    //   //             (settings.name.toString().split("/").length <= 6
-    //   //                 ? ""
-    //   //                 : settings.name.toString().split("/")[6].trim()))
-    //   //         .split(".")[1]);
-    // });
   }
 }
-
-// String sendToRoute(String route, data, String? category) {
-//   print("our route ${route}");
-//   switch (route) {
-//     case "story":
-//       // Navigation.instance.navigate('/main');
-//       print("this route");
-//       // Navigation.instance.navigate('/story', args: '${category},${data}');
-//       return "/story.${category},${data}";
-//     // break;
-//     case "opinion":
-//       // Navigation.instance
-//       //     .navigate('/opinionDetails', args: '${data},${category}');
-//       return "/opinionDetails.${data},${category}";
-//     // break;
-//     default:
-//       debugPrint("deeplink failed 1 ${route}");
-//       // Navigation.instance.navigate('/main', args: "");
-//       return "/main.";
-//     // break;
-//   }
-// }

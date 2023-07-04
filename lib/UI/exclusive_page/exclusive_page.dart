@@ -24,7 +24,7 @@ class ExclusivePage extends StatefulWidget {
 
 class _ExclusivePageState extends State<ExclusivePage> {
   final RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
   final ScrollController controller = ScrollController();
   int skip = 10;
 
@@ -54,8 +54,8 @@ class _ExclusivePageState extends State<ExclusivePage> {
     final response = await ApiProvider.instance.getArticle('exclusive-news');
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setHomeExecl(response.articles ?? []);
       _refreshController.refreshCompleted();
     } else {
@@ -116,202 +116,192 @@ class _ExclusivePageState extends State<ExclusivePage> {
         onLoading: _onLoading,
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
             color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
             padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
             child: data.home_exclusive.isNotEmpty
                 ? SingleChildScrollView(
-              controller: controller,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Image.asset(
-                        Constance.exclusiveIcon,
-                        color: Constance.secondaryColor,
-                        scale: 20,
-                      ),
-                      SizedBox(
-                        width: 1.w,
-                      ),
-                      Text(
-                        'G Plus Exclusive',
-                        style: Theme
-                            .of(Navigation
-                            .instance.navigatorKey.currentContext!)
-                            .textTheme
-                            .headline3
-                            ?.copyWith(
-                          color: Storage.instance.isDarkMode
-                              ? Colors.white
-                              : Constance.primaryColor,
-                          // fontSize: 2.2.h,
-                          fontWeight: FontWeight.bold,
+                    controller: controller,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Image.asset(
+                              Constance.exclusiveIcon,
+                              color: Constance.secondaryColor,
+                              scale: 20,
+                            ),
+                            SizedBox(
+                              width: 1.w,
+                            ),
+                            Text(
+                              'G Plus Exclusive',
+                              style: Theme.of(Navigation
+                                      .instance.navigatorKey.currentContext!)
+                                  .textTheme
+                                  .headline3
+                                  ?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white
+                                        : Constance.primaryColor,
+                                    // fontSize: 2.2.h,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  Container(
-                    height: 30.h,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: CachedNetworkImageProvider(
-                          data.home_exclusive[0].image_file_name ??
-                              'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+                        SizedBox(
+                          height: 1.h,
                         ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if (data.home_exclusive[0].has_permission ?? false) {
-                        Navigation.instance.navigate('/story',
-                            args:
-                            '${'exclusive-news'},${data.home_exclusive[0]
-                                .seo_name},exclusive_page');
-                      } else {
-                        Constance.showMembershipPrompt(context, () {});
-                      }
-                    },
-                    child: Text(
-                      data.home_exclusive[0].title ??
-                          'It is a long established fact that a reader will be distracted by the readable content of a',
-                      style: Theme
-                          .of(Navigation
-                          .instance.navigatorKey.currentContext!)
-                          .textTheme
-                          .headline3
-                          ?.copyWith(
-                        color: Storage.instance.isDarkMode
-                            ? Colors.white
-                            : Constance.primaryColor,
-                        // fontSize: 2.2.h,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  Row(
-                    children: [
-                      Image.asset(
-                        Constance.authorIcon,
-                        scale: 35,
-                        color: Constance.secondaryColor,
-                      ),
-                      SizedBox(
-                        width: 0.5.w,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          if (data.home_exclusive[0].has_permission ?? false) {
-                            Navigation.instance.navigate('/authorPage',
-                                args: data.home_exclusive[0].author);
-                          } else {
-                            Constance.showMembershipPrompt(context, () {});
-                          }
-                        },
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text:
-                                data.home_exclusive[0].author_name ??
-                                    "G Plus",
-                                style: Theme
-                                    .of(Navigation.instance
-                                    .navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                  color: Storage.instance.isDarkMode
-                                      ? Constance.secondaryColor
-                                      : Constance.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  decoration:
-                                  TextDecoration.underline,
-                                ),
+                        Container(
+                          height: 30.h,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: CachedNetworkImageProvider(
+                                data.home_exclusive[0].image_file_name ??
+                                    'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bW9uZXklMjBwbGFudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
                               ),
-                              TextSpan(
-                                text:
-                                ' , ${Jiffy(
-                                    data.home_exclusive[0].publish_date?.split(
-                                        " ")[0], "yyyy-MM-dd").format(
-                                    "dd MMM, yyyy")}',
-                                style: Theme
-                                    .of(Navigation.instance
-                                    .navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  // fontSize: 2.2.h,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  Divider(
-                    color: Storage.instance.isDarkMode
-                        ? Colors.white
-                        : Colors.black,
-                    thickness: 0.5.sp,
-                  ),
-                  exclusiveSuggestions(data: data),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                ],
-              ),
-            )
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            if (data.home_exclusive[0].has_permission ??
+                                false) {
+                              Navigation.instance.navigate('/story',
+                                  args:
+                                      '${'exclusive-news'},${data.home_exclusive[0].seo_name},exclusive_page');
+                            } else {
+                              Constance.showMembershipPrompt(context, () {});
+                            }
+                          },
+                          child: Text(
+                            data.home_exclusive[0].title ??
+                                'It is a long established fact that a reader will be distracted by the readable content of a',
+                            style: Theme.of(Navigation
+                                    .instance.navigatorKey.currentContext!)
+                                .textTheme
+                                .headline3
+                                ?.copyWith(
+                                  color: Storage.instance.isDarkMode
+                                      ? Colors.white
+                                      : Constance.primaryColor,
+                                  // fontSize: 2.2.h,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        Row(
+                          children: [
+                            Image.asset(
+                              Constance.authorIcon,
+                              scale: 35,
+                              color: Constance.secondaryColor,
+                            ),
+                            SizedBox(
+                              width: 0.5.w,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                if (data.home_exclusive[0].has_permission ??
+                                    false) {
+                                  Navigation.instance.navigate('/authorPage',
+                                      args: data.home_exclusive[0].author);
+                                } else {
+                                  Constance.showMembershipPrompt(
+                                      context, () {});
+                                }
+                              },
+                              child: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          data.home_exclusive[0].author_name ??
+                                              "G Plus",
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Storage.instance.isDarkMode
+                                                ? Constance.secondaryColor
+                                                : Constance.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          ' , ${Jiffy.parse(data.home_exclusive[0].publish_date!.split(" ")[0], pattern: "yyyy-MM-dd").format(
+                                        pattern: "dd MMM, yyyy",
+                                      )}',
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Storage.instance.isDarkMode
+                                                ? Colors.white
+                                                : Colors.black,
+                                            // fontSize: 2.2.h,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Divider(
+                          color: Storage.instance.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
+                          thickness: 0.5.sp,
+                        ),
+                        exclusiveSuggestions(data: data),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                      ],
+                    ),
+                  )
                 : Center(
-              child: SizedBox(
-                  height: 2.h,
-                  width: 2.h,
-                  child: const CircularProgressIndicator()),
-            ),
+                    child: SizedBox(
+                        height: 2.h,
+                        width: 2.h,
+                        child: const CircularProgressIndicator()),
+                  ),
           );
         }),
       ),
     );
   }
 
-
   void fetchGplus() async {
     final response = await ApiProvider.instance.getArticle('exclusive-news');
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setHomeExecl(response.articles ?? []);
       // _refreshController.refreshCompleted();
     } else {
@@ -322,12 +312,12 @@ class _ExclusivePageState extends State<ExclusivePage> {
   void fetchMoreContent() async {
     Navigation.instance.navigate('/loadingDialog');
     final response =
-    await ApiProvider.instance.getMoreArticle('exclusive-news', 5, 1, skip);
+        await ApiProvider.instance.getMoreArticle('exclusive-news', 5, 1, skip);
     if (response.success ?? false) {
       Navigation.instance.goBack();
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .addHomeExecl(response.articles ?? []);
       // _refreshController.refreshCompleted();
       _refreshController.loadComplete();

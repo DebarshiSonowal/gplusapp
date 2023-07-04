@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:math';
-
+import 'package:flutter_html_iframe/flutter_html_iframe.dart';
 import 'package:badges/badges.dart' as bd;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html_table/flutter_html_table.dart';
+import 'package:flutter_html_video/flutter_html_video.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
@@ -16,7 +18,7 @@ import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
+// import 'package:flutter_html_all/flutter_html_all.dart';
 import '../../Components/alert.dart';
 import '../../Components/opinion_details_item.dart';
 import '../../Helper/Constance.dart';
@@ -277,7 +279,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                           ),
                                           TextSpan(
                                             text:
-                                                ' , ${Jiffy(data.opinion?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM, yyyy")}',
+                                                ' , ${Jiffy.parse(data.opinion?.publish_date!.split(" ")[0]??"", pattern: "yyyy-MM-dd").format(pattern: "dd MMM, yyyy")}',
                                             style: Theme.of(Navigation
                                                     .instance
                                                     .navigatorKey
@@ -407,259 +409,263 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             Html(
                               data: data.opinion?.description?.trim() ?? "",
                               shrinkWrap: true,
-                              customRender: {
-                                // "img": (contextRender, child) {
-                                //   return Text(
-                                //       "${contextRender.tree.attributes['src']}",
-                                //       style: Theme.of(context)
-                                //           .textTheme
-                                //           .headline5
-                                //           ?.copyWith(
-                                //             color: Colors.black,
-                                //           ));
-                                // },
-                                "table": (context, child) {
-                                  return SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: (context.tree as TableLayoutElement)
-                                        .toWidget(context),
-                                  );
-                                },
-                                "iframe": (context, child) {
-                                  return YoutubePlayer(
-                                    // controller: _controller = YoutubePlayerController(
-                                    //   initialVideoId: current.youtube_id!,
-                                    //   flags: const YoutubePlayerFlags(
-                                    //     autoPlay: false,
-                                    //     mute: false,
-                                    //   ),
-                                    // ),
-                                    controller: YoutubePlayerController(
-                                      initialVideoId: context
-                                          .tree.attributes['src']
-                                          .toString()
-                                          .split("/")[4]
-                                          .toString(),
-                                      flags: const YoutubePlayerFlags(
-                                        hideControls: false,
-                                        // hideThumbnail: true,
-                                        autoPlay: false,
-                                      ),
-                                    ),
-                                    showVideoProgressIndicator: true,
-
-                                    thumbnail: Image.network(
-                                      getYoutubeThumbnail(context
-                                          .tree.attributes['src']
-                                          .toString()
-                                          .split("/")[4]
-                                          .toString()),
-                                      fit: BoxFit.fill,
-                                    ),
-                                    // aspectRatio: 16 / 10,
-                                    // videoProgressIndicatorColor: Colors.amber,
-                                    progressColors: const ProgressBarColors(
-                                      playedColor: Colors.amber,
-                                      handleColor: Colors.amberAccent,
-                                    ),
-                                    onReady: () {
-                                      // print('R12345&d');
-                                      // _controller
-                                      //     .addListener(() {});
-                                      // _controller!.play();
-                                      // setState(() {
-                                      //   controller.play();
-                                      // });
-                                    },
-                                  );
-                                  return Text(
-                                    context.tree.attributes['src']
-                                        .toString()
-                                        .split("/")[4]
-                                        .toString(),
-                                    style: TextStyle(color: Colors.black54),
-                                  );
-                                },
-                                "a": (context, child) {
-                                  return ((context.tree.element?.innerHtml
-                                      .toString()
-                                      .contains("ad_managers") ??
-                                      false))
-                                      ? GestureDetector(
-                                    onTap: () {
-                                      // print();
-                                      _launchUrl(Uri.parse(
-                                        context.tree.element?.outerHtml
-                                            .split("href=")[1]
-                                            .substring(
-                                            1,
-                                            (context.tree.element
-                                                ?.outerHtml
-                                                .split(
-                                                "href=")[1]
-                                                .length ??
-                                                6) -
-                                                6) ??
-                                            "",
-                                      ));
-                                    },
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 2.w,
-                                      ),
-                                      child: CachedNetworkImage(
-                                        fit: BoxFit.fill,
-                                        imageUrl: context
-                                            .tree.element?.innerHtml
-                                            .split("=")[1]
-                                            .toString()
-                                            .substring(
-                                            1,
-                                            (context.tree.element
-                                                ?.innerHtml
-                                                .split(
-                                                "=")[1]
-                                                .toString()
-                                                .length ??
-                                                0) -
-                                                2) ??
-                                            "",
-                                        placeholder: (cont, _) {
-                                          return Image.asset(
-                                            Constance.logoIcon,
-                                            // color: Colors.black,
-                                          );
-                                        },
-                                        errorWidget: (cont, _, e) {
-                                          return Image.network(
-                                            Constance.defaultImage,
-                                            fit: BoxFit.fitWidth,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  )
-                                      : GestureDetector(
-                                    onTap: () {
-                                      if ((context.tree.attributes['href']
-                                          .toString()
-                                          .split("/")[2]
-                                          .trim() ==
-                                          "www.guwahatiplus.com")||(context.tree.attributes['href']
-                                          .toString()
-                                          .split("/")[2]
-                                          .trim() ==
-                                          "guwahatiplus.com")) {
-                                        if (context
-                                            .tree.attributes['href']
-                                            .toString()
-                                            .split("/")
-                                            .length >=
-                                            5) {
-                                          Navigation.instance.navigate(
-                                              '/story',
-                                              args:
-                                              '${context.tree.attributes['href'].toString().split("/")[3]},${context.tree.attributes['href'].toString().split("/")[4]},story_page');
-                                        } else {
-                                          Navigation.instance.navigate(
-                                              '/newsfrom',
-                                              args: context
-                                                  .tree.attributes['href']
-                                                  .toString()
-                                                  .split("/")[3]);
-                                        }
-                                      } else {
-                                        try {
-                                          _launchUrl(Uri.parse(context
-                                              .tree
-                                              .attributes['href'] ??
-                                              "https://guwahatiplus.com/"));
-                                        } catch (e) {
-                                          debugPrint(e.toString());
-                                        }
-                                      }
-                                    },
-                                    child: Text(
-                                      // context.tree.element?.innerHtml.toString().contains("ad_managers").toString()??"",
-                                      context.tree.element?.innerHtml
-                                          .split("=")[0]
-                                          .toString() ??
-                                          "",
-                                      style: Theme.of(Navigation
-                                          .instance
-                                          .navigatorKey
-                                          .currentContext!)
-                                          .textTheme
-                                          .headline5
-                                          ?.copyWith(
-                                        color: Constance.primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                        decoration:
-                                        TextDecoration.underline,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                // "img": (context, child) {
-                                //   return Container(
-                                //     child: Text("${context.tree.element?.outerHtml.split("src=").toList()
-                                //         .toString()}",style: const TextStyle(color: Colors.black54),),
-                                //   );
-                                // },
-                                "blockquote": (context, child) {
-                                  return context.tree.element?.innerHtml
-                                      .split("=")
-                                      .length ==
-                                      3
-                                      ? SizedBox(
-                                    height: 28.h,
-                                    // width: 90.h,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        _launchUrl(Uri.parse(context
-                                            .tree.element?.innerHtml
-                                            .split("=")[3]
-                                            .split("?")[0]
-                                            .substring(1) ??
-                                            ""));
-
-                                        // print(context.tree.element?.innerHtml
-                                        //     .split("=")[3]
-                                        //     .split("?")[0]);
-                                      },
-                                      child: AbsorbPointer(
-                                        child: WebView(
-                                          gestureNavigationEnabled: false,
-                                          zoomEnabled: true,
-                                          initialUrl: Uri.dataFromString(
-                                            getHtmlString(context
-                                                .tree.element?.innerHtml
-                                                .split("=")[3]
-                                                .split("?")[0]
-                                                .split("/")
-                                                .last),
-                                            mimeType: 'text/html',
-                                            encoding: Encoding.getByName(
-                                                'utf-8'),
-                                          ).toString(),
-                                          javascriptMode:
-                                          JavascriptMode.unrestricted,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                      : Container();
-                                  // return Container(
-                                  //     child: Text(
-                                  //   '${context.tree.element?.innerHtml.split("=")[3].split("?")[0].split("/").last}',
-                                  //   style: TextStyle(color: Colors.black),
-                                  // ));
-                                },
-                              },
-                              onLinkTap: (str, contxt, map, elment) {
+                              // customRender: {
+                              //   // "img": (contextRender, child) {
+                              //   //   return Text(
+                              //   //       "${contextRender.tree.attributes['src']}",
+                              //   //       style: Theme.of(context)
+                              //   //           .textTheme
+                              //   //           .headline5
+                              //   //           ?.copyWith(
+                              //   //             color: Colors.black,
+                              //   //           ));
+                              //   // },
+                              //   "table": (context, child) {
+                              //     return SingleChildScrollView(
+                              //       scrollDirection: Axis.horizontal,
+                              //       child: (context.tree as TableLayoutElement)
+                              //           .toWidget(context),
+                              //     );
+                              //   },
+                              //   "iframe": (context, child) {
+                              //     return YoutubePlayer(
+                              //       // controller: _controller = YoutubePlayerController(
+                              //       //   initialVideoId: current.youtube_id!,
+                              //       //   flags: const YoutubePlayerFlags(
+                              //       //     autoPlay: false,
+                              //       //     mute: false,
+                              //       //   ),
+                              //       // ),
+                              //       controller: YoutubePlayerController(
+                              //         initialVideoId: context
+                              //             .tree.attributes['src']
+                              //             .toString()
+                              //             .split("/")[4]
+                              //             .toString(),
+                              //         flags: const YoutubePlayerFlags(
+                              //           hideControls: false,
+                              //           // hideThumbnail: true,
+                              //           autoPlay: false,
+                              //         ),
+                              //       ),
+                              //       showVideoProgressIndicator: true,
+                              //
+                              //       thumbnail: Image.network(
+                              //         getYoutubeThumbnail(context
+                              //             .tree.attributes['src']
+                              //             .toString()
+                              //             .split("/")[4]
+                              //             .toString()),
+                              //         fit: BoxFit.fill,
+                              //       ),
+                              //       // aspectRatio: 16 / 10,
+                              //       // videoProgressIndicatorColor: Colors.amber,
+                              //       progressColors: const ProgressBarColors(
+                              //         playedColor: Colors.amber,
+                              //         handleColor: Colors.amberAccent,
+                              //       ),
+                              //       onReady: () {
+                              //         // print('R12345&d');
+                              //         // _controller
+                              //         //     .addListener(() {});
+                              //         // _controller!.play();
+                              //         // setState(() {
+                              //         //   controller.play();
+                              //         // });
+                              //       },
+                              //     );
+                              //     return Text(
+                              //       context.tree.attributes['src']
+                              //           .toString()
+                              //           .split("/")[4]
+                              //           .toString(),
+                              //       style: TextStyle(color: Colors.black54),
+                              //     );
+                              //   },
+                              //   "a": (context, child) {
+                              //     return ((context.tree.element?.innerHtml
+                              //         .toString()
+                              //         .contains("ad_managers") ??
+                              //         false))
+                              //         ? GestureDetector(
+                              //       onTap: () {
+                              //         // print();
+                              //         _launchUrl(Uri.parse(
+                              //           context.tree.element?.outerHtml
+                              //               .split("href=")[1]
+                              //               .substring(
+                              //               1,
+                              //               (context.tree.element
+                              //                   ?.outerHtml
+                              //                   .split(
+                              //                   "href=")[1]
+                              //                   .length ??
+                              //                   6) -
+                              //                   6) ??
+                              //               "",
+                              //         ));
+                              //       },
+                              //       child: Padding(
+                              //         padding: EdgeInsets.symmetric(
+                              //           horizontal: 2.w,
+                              //         ),
+                              //         child: CachedNetworkImage(
+                              //           fit: BoxFit.fill,
+                              //           imageUrl: context
+                              //               .tree.element?.innerHtml
+                              //               .split("=")[1]
+                              //               .toString()
+                              //               .substring(
+                              //               1,
+                              //               (context.tree.element
+                              //                   ?.innerHtml
+                              //                   .split(
+                              //                   "=")[1]
+                              //                   .toString()
+                              //                   .length ??
+                              //                   0) -
+                              //                   2) ??
+                              //               "",
+                              //           placeholder: (cont, _) {
+                              //             return Image.asset(
+                              //               Constance.logoIcon,
+                              //               // color: Colors.black,
+                              //             );
+                              //           },
+                              //           errorWidget: (cont, _, e) {
+                              //             return Image.network(
+                              //               Constance.defaultImage,
+                              //               fit: BoxFit.fitWidth,
+                              //             );
+                              //           },
+                              //         ),
+                              //       ),
+                              //     )
+                              //         : GestureDetector(
+                              //       onTap: () {
+                              //         if ((context.tree.attributes['href']
+                              //             .toString()
+                              //             .split("/")[2]
+                              //             .trim() ==
+                              //             "www.guwahatiplus.com")||(context.tree.attributes['href']
+                              //             .toString()
+                              //             .split("/")[2]
+                              //             .trim() ==
+                              //             "guwahatiplus.com")) {
+                              //           if (context
+                              //               .tree.attributes['href']
+                              //               .toString()
+                              //               .split("/")
+                              //               .length >=
+                              //               5) {
+                              //             Navigation.instance.navigate(
+                              //                 '/story',
+                              //                 args:
+                              //                 '${context.tree.attributes['href'].toString().split("/")[3]},${context.tree.attributes['href'].toString().split("/")[4]},story_page');
+                              //           } else {
+                              //             Navigation.instance.navigate(
+                              //                 '/newsfrom',
+                              //                 args: context
+                              //                     .tree.attributes['href']
+                              //                     .toString()
+                              //                     .split("/")[3]);
+                              //           }
+                              //         } else {
+                              //           try {
+                              //             _launchUrl(Uri.parse(context
+                              //                 .tree
+                              //                 .attributes['href'] ??
+                              //                 "https://guwahatiplus.com/"));
+                              //           } catch (e) {
+                              //             debugPrint(e.toString());
+                              //           }
+                              //         }
+                              //       },
+                              //       child: Text(
+                              //         // context.tree.element?.innerHtml.toString().contains("ad_managers").toString()??"",
+                              //         context.tree.element?.innerHtml
+                              //             .split("=")[0]
+                              //             .toString() ??
+                              //             "",
+                              //         style: Theme.of(Navigation
+                              //             .instance
+                              //             .navigatorKey
+                              //             .currentContext!)
+                              //             .textTheme
+                              //             .headline5
+                              //             ?.copyWith(
+                              //           color: Constance.primaryColor,
+                              //           fontWeight: FontWeight.bold,
+                              //           decoration:
+                              //           TextDecoration.underline,
+                              //         ),
+                              //       ),
+                              //     );
+                              //   },
+                              //   // "img": (context, child) {
+                              //   //   return Container(
+                              //   //     child: Text("${context.tree.element?.outerHtml.split("src=").toList()
+                              //   //         .toString()}",style: const TextStyle(color: Colors.black54),),
+                              //   //   );
+                              //   // },
+                              //   "blockquote": (context, child) {
+                              //     return context.tree.element?.innerHtml
+                              //         .split("=")
+                              //         .length ==
+                              //         3
+                              //         ? SizedBox(
+                              //       height: 28.h,
+                              //       // width: 90.h,
+                              //       child: GestureDetector(
+                              //         onTap: () {
+                              //           _launchUrl(Uri.parse(context
+                              //               .tree.element?.innerHtml
+                              //               .split("=")[3]
+                              //               .split("?")[0]
+                              //               .substring(1) ??
+                              //               ""));
+                              //
+                              //           // print(context.tree.element?.innerHtml
+                              //           //     .split("=")[3]
+                              //           //     .split("?")[0]);
+                              //         },
+                              //         child: AbsorbPointer(
+                              //           child: WebView(
+                              //             gestureNavigationEnabled: false,
+                              //             zoomEnabled: true,
+                              //             initialUrl: Uri.dataFromString(
+                              //               getHtmlString(context
+                              //                   .tree.element?.innerHtml
+                              //                   .split("=")[3]
+                              //                   .split("?")[0]
+                              //                   .split("/")
+                              //                   .last),
+                              //               mimeType: 'text/html',
+                              //               encoding: Encoding.getByName(
+                              //                   'utf-8'),
+                              //             ).toString(),
+                              //             javascriptMode:
+                              //             JavascriptMode.unrestricted,
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     )
+                              //         : Container();
+                              //     // return Container(
+                              //     //     child: Text(
+                              //     //   '${context.tree.element?.innerHtml.split("=")[3].split("?")[0].split("/").last}',
+                              //     //   style: TextStyle(color: Colors.black),
+                              //     // ));
+                              //   },
+                              // },
+                              extensions: const [
+                                TableHtmlExtension(),
+                                VideoHtmlExtension(),
+                              ],
+                              onLinkTap: (str, map, elment) {
                                 // print("${str}");
                                 // print("${elment?.text}");
-                                print(str);
+                                debugPrint(str);
                               },
                               style: {
                                 '#': Style(
@@ -672,100 +678,6 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                 ),
                               },
                             ),
-                            // SizedBox(
-                            //   height: 1.5.h,
-                            // ),
-                            // data.ads.isNotEmpty
-                            //     ? Row(
-                            //         children: [
-                            //           Container(
-                            //             color: Constance.secondaryColor,
-                            //             padding: EdgeInsets.symmetric(
-                            //                 vertical: 0.2.h, horizontal: 1.w),
-                            //             margin: EdgeInsets.symmetric(
-                            //                 horizontal: 2.w),
-                            //             child: Text(
-                            //               'Ad',
-                            //               style: Theme.of(context)
-                            //                   .textTheme
-                            //                   .headline3
-                            //                   ?.copyWith(
-                            //                     fontSize: 9.sp,
-                            //                     color: Colors.white,
-                            //                     // fontWeight: FontWeight.bold,
-                            //                   ),
-                            //             ),
-                            //           ),
-                            //         ],
-                            //       )
-                            //     : Container(),
-                            // data.ads.isNotEmpty
-                            //     ? SizedBox(
-                            //         // height: 10.h,
-                            //         width: double.infinity,
-                            //         child: GestureDetector(
-                            //           onTap: () {
-                            //             _launchUrl(Uri.parse(
-                            //                 data.ads[random].link.toString()));
-                            //           },
-                            //           child: Padding(
-                            //             padding: EdgeInsets.symmetric(
-                            //               horizontal: 2.w,
-                            //             ),
-                            //             child: CachedNetworkImage(
-                            //               fit: BoxFit.fill,
-                            //               imageUrl: data.ads[random]
-                            //                       .image_file_name ??
-                            //                   '',
-                            //               placeholder: (cont, _) {
-                            //                 return Image.asset(
-                            //                   Constance.logoIcon,
-                            //                   // color: Colors.black,
-                            //                 );
-                            //               },
-                            //               errorWidget: (cont, _, e) {
-                            //                 return Image.network(
-                            //                   Constance.defaultImage,
-                            //                   fit: BoxFit.fitWidth,
-                            //                 );
-                            //               },
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       )
-                            //     : Container(),
-                            // SizedBox(
-                            //   height: 1.5.h,
-                            // ),
-                            // Text(
-                            //   data.selectedArticle?.description
-                            //           ?.split('</p>')[3]
-                            //           .trim() ??
-                            //       "",
-                            //   style: Theme.of(context)
-                            //       .textTheme
-                            //       .headline5
-                            //       ?.copyWith(
-                            //         color: Colors.black45,
-                            //         // fontWeight: FontWeight.bold,
-                            //       ),
-                            // ),
-                            // SizedBox(
-                            //   height: 20.h,
-                            //   child: WebView(
-                            //     initialUrl: 'about:blank',
-                            //     onWebViewCreated:
-                            //         (WebViewController
-                            //     webViewController) {
-                            //       _controller = webViewController;
-                            //       _controller?.loadHtmlString(data.selectedArticle?.description??"");
-                            //     },
-                            //   ),
-                            // ),
-                            // SizedBox(
-                            //   height: 1.5.h,
-                            // ),
-                            //
                             SizedBox(
                               height: 1.h,
                             ),
@@ -970,7 +882,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
             return bd.Badge(
-              badgeColor: Constance.secondaryColor,
+              // badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(

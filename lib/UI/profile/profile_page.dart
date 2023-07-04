@@ -227,8 +227,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   getExpires(Membership current) {
     try {
-      return Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd")
-          .format("dd/MM/yyyy");
+      return Jiffy.parse(current.plan_expiry_date ?? "", pattern: "yyyy-MM-dd")
+          .format(pattern: "dd/MM/yyyy");
     } catch (e) {
       print(e);
       return "";
@@ -238,12 +238,12 @@ class _ProfilePageState extends State<ProfilePage> {
   getLeft(Membership current) {
     return DateTime.parse(current.plan_expiry_date!).difference(DateTime.now()).inDays;
 
-    try {
-      return Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd")
-          .format("dd/MM/yyyy");
-    } catch (e) {
-      print(e);
-      return "";
-    }
+    // try {
+    //   return Jiffy(current.plan_expiry_date ?? "", "yyyy-MM-dd")
+    //       .format("dd/MM/yyyy");
+    // } catch (e) {
+    //   print(e);
+    //   return "";
+    // }
   }
 }

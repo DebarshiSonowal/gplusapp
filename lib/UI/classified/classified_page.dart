@@ -8,6 +8,7 @@ import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Model/locality.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:gplusapp/UI/category/category_details.dart';
+import 'package:lottie/lottie.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -368,8 +369,9 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                         )
                       : Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 5.w, vertical: 1.h),
+                              horizontal: 5.w,),
                           child: ListView.separated(
+                            padding: EdgeInsets.only(bottom: 4.h),
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: data.classified.length,
@@ -407,9 +409,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                             },
                           ),
                         ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
+
                 ],
               ),
             ),

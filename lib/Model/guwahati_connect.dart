@@ -3,7 +3,7 @@ import 'package:gplusapp/Model/profile.dart';
 
 class GuwahatiConnect {
   int? id, user_id, total_liked, total_disliked, total_comment, status;
-  String? question, updated_at, created_at,title;
+  String? question, updated_at, created_at,title,remarks;
   List<GCAttachment>? attachment;
   Profile? user;
   bool? is_post_by_me, is_liked;
@@ -42,6 +42,7 @@ class GuwahatiConnect {
         : (json['comments'] as List).map((e) => Comment.fromJson(e)).toList();
     //other
     is_post_by_me = json['is_post_by_me'] ?? false;
+    remarks = json['remarks']??"";
     is_liked = json['is_liked'] ?? false;
     try {
       user = Profile.fromJson(json['user']);

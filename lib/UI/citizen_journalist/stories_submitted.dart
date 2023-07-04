@@ -149,9 +149,9 @@ class _StoriesSubmittedState extends State<StoriesSubmitted> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              Jiffy(item.created_at ?? "",
-                                                      "yyyy-MM-dd")
-                                                  .format("dd/MM/yyyy"),
+                                              Jiffy.parse(item.created_at ?? "",
+                                                      pattern: "yyyy-MM-dd")
+                                                  .format(pattern: "dd/MM/yyyy"),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: Theme.of(context)

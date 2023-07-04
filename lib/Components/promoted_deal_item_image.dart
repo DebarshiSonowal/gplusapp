@@ -14,7 +14,7 @@ class PromotedDealItemImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 4,
+      flex: 3,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,

@@ -138,7 +138,7 @@ class _ReturnPolicyPageState extends State<ReturnPolicyPage> {
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
             return bd.Badge(
-              badgeColor: Constance.secondaryColor,
+              // badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(

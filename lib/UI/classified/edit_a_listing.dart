@@ -32,7 +32,8 @@ class EditAListingPost extends StatefulWidget {
   State<EditAListingPost> createState() => _EditAListingPostState();
 }
 
-class _EditAListingPostState extends State<EditAListingPost> with WidgetsBindingObserver {
+class _EditAListingPostState extends State<EditAListingPost>
+    with WidgetsBindingObserver {
   final title = TextEditingController();
 
   final desc = TextEditingController();
@@ -53,6 +54,7 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
   List<AttachFile> images = [];
   List<File> attachements = [];
   AndroidDeviceInfo? androidInfo;
+
   @override
   void initState() {
     super.initState();
@@ -72,8 +74,8 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
     price.dispose();
     localityEditor.dispose();
   }
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -88,9 +90,8 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
     }
   }
 
-
   Future<void> getLostData() async {
-    if(await Permission.storage.request().isGranted){
+    if (await Permission.storage.request().isGranted) {
       final LostDataResponse response = await _picker.retrieveLostData();
       if (response.isEmpty) {
         debugPrint("didChangeAppLifecycleState isEmpty");
@@ -515,7 +516,7 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current,"classified"),
+      bottomNavigationBar: CustomNavigationBar(current, "classified"),
     );
   }
 
@@ -531,10 +532,11 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
           builder: (BuildContext context) {
             return AlertDialog(
                 title: const Center(
-                    child: Text(
-                      "Add Photo",
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                    )),
+                  child: Text(
+                    "Add Photo",
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  ),
+                ),
                 contentPadding: const EdgeInsets.only(top: 24, bottom: 30),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -544,33 +546,33 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
                       children: [
                         getIsNotAndroid13()
                             ? InkWell(
-                          onTap: () {
-                            Navigation.instance.goBack();
-                            getImage(0);
-                          },
-                          child: Column(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(12),
-                                margin: const EdgeInsets.only(bottom: 4),
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(30),
-                                    color: Colors.pink.shade300),
-                                child: const Icon(
-                                  Icons.camera_alt_rounded,
-                                  color: Colors.white,
+                                onTap: () {
+                                  Navigation.instance.goBack();
+                                  getImage(0);
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      margin: const EdgeInsets.only(bottom: 4),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          color: Colors.pink.shade300),
+                                      child: const Icon(
+                                        Icons.camera_alt_rounded,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const Text(
+                                      "Camera",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              const Text(
-                                "Camera",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
+                              )
                             : Container(),
                         SizedBox(
                           width: getIsNotAndroid13() ? 42 : 0,
@@ -602,6 +604,11 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
                               ],
                             )),
                       ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 1.5.h),
+                      width: 50.w,
+                      child: Constance.androidWarning,
                     ),
                   ],
                 ));
@@ -1048,6 +1055,7 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
       showPhotoBottomSheet(getProfileImage);
     });
   }
+
   void showErrorStorage(String msg) {
     AlertX.instance.showAlert(
       title: msg,
@@ -1063,5 +1071,4 @@ class _EditAListingPostState extends State<EditAListingPost> with WidgetsBinding
       },
     );
   }
-
 }

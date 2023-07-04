@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:gplusapp/Model/swtich_status.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
@@ -95,9 +96,8 @@ class _AllImagePageState extends State<AllImagePage> {
                                     height: 0.7.h,
                                   ),
                                   Text(
-                                    Jiffy("${data.specificGuwahatiConnect
-                                        ?.updated_at}",
-                                                "yyyy-MM-dd")
+                                    Jiffy.parse("${data.specificGuwahatiConnect?.updated_at}",
+                                                pattern: "yyyy-MM-dd")
                                             .fromNow() ??
                                         '${15} mins ago' ??
                                         "",
@@ -142,6 +142,29 @@ class _AllImagePageState extends State<AllImagePage> {
                         ),
                         SizedBox(
                           height: 1.h,
+                        ),
+                        Text(
+                          statusText(data.specificGuwahatiConnect!.status!),
+                          style:
+                              Theme.of(context).textTheme.labelMedium?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white70
+                                        : Colors.black45,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Text(
+                          data.specificGuwahatiConnect!.remarks ?? "",
+                          style:
+                              Theme.of(context).textTheme.headline4?.copyWith(
+                                    color: Storage.instance.isDarkMode
+                                        ? Colors.white70
+                                        : Colors.black45,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     ),
@@ -679,6 +702,17 @@ class _AllImagePageState extends State<AllImagePage> {
       //     Navigation.instance.navigatorKey.currentContext ?? context,
       //     listen: false)
       //     .setGuwahatiConnect(response.posts);
+    }
+  }
+
+  String statusText(int status) {
+    switch (status) {
+      case 1:
+        return 'Accepted';
+      case 2:
+        return 'Rejected';
+      default:
+        return 'Pending';
     }
   }
 }

@@ -242,7 +242,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                       ),
                                       TextSpan(
                                         text:
-                                            ' , ${Jiffy(data.bookmarks[0].publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd MMM, yyyy")}',
+                                            ' , ${Jiffy.parse(data.bookmarks[0].publish_date?.split(" ")[0] ?? "", pattern: "yyyy-MM-dd").format(pattern: "dd MMM, yyyy")}',
                                         style: Theme.of(Navigation.instance
                                                 .navigatorKey.currentContext!)
                                             .textTheme
@@ -366,7 +366,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
             return bd.Badge(
-              badgeColor: Constance.secondaryColor,
+              // badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(

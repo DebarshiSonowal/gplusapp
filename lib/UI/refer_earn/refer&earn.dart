@@ -217,7 +217,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                             GestureDetector(
                               onTap: () {
                                 Clipboard.setData(ClipboardData(
-                                  text: data.referEarn?.code,
+                                  text: data.referEarn!.code!,
                                 )).then((_) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -511,9 +511,9 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                             ),
                                             const Spacer(),
                                             Text(
-                                              Jiffy(current.updated_at,
-                                                      "yyyy-MM-dd")
-                                                  .format("dd/MM/yyyy"),
+                                              Jiffy.parse(current.updated_at??"",
+                                                      pattern: "yyyy-MM-dd")
+                                                  .format(pattern: "dd/MM/yyyy"),
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.start,
                                               style: Theme.of(Navigation
@@ -628,7 +628,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
             return bd.Badge(
-              badgeColor: Constance.secondaryColor,
+              // badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(

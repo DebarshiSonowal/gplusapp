@@ -44,10 +44,9 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
 
   @override
   void initState() {
-
+    initializeAndroidInfo();
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    getLostData();
   }
 
   @override
@@ -186,65 +185,63 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
               SizedBox(
                 height: 2.h,
               ),
-              Builder(
-                builder: (context) {
-                  return Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: List.generate(
-                      (attachements.length ?? 0) + 1,
-                      (pos) => (pos == attachements.length)
-                          ? GestureDetector(
-                              onTap: () => request(),
-                              child: Container(
+              Builder(builder: (context) {
+                return Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: List.generate(
+                    (attachements.length ?? 0) + 1,
+                    (pos) => (pos == attachements.length)
+                        ? GestureDetector(
+                            onTap: () => request(),
+                            child: Container(
+                              height: 8.h,
+                              width: 20.w,
+                              color: Colors.grey.shade200,
+                              child: const Center(
+                                child: Icon(
+                                  Icons.add,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Stack(
+                            alignment: Alignment.topRight,
+                            children: [
+                              Container(
                                 height: 8.h,
                                 width: 20.w,
                                 color: Colors.grey.shade200,
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.add,
-                                    color: Colors.black,
+                                child: Center(
+                                  child: Image.file(
+                                    attachements[pos],
+                                    fit: BoxFit.fill,
                                   ),
                                 ),
                               ),
-                            )
-                          : Stack(
-                              alignment: Alignment.topRight,
-                              children: [
-                                Container(
-                                  height: 8.h,
-                                  width: 20.w,
-                                  color: Colors.grey.shade200,
-                                  child: Center(
-                                    child: Image.file(
-                                      attachements[pos],
-                                      fit: BoxFit.fill,
-                                    ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    attachements.removeAt(pos);
+                                  });
+                                },
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  color: Colors.white,
+                                  child: const Icon(
+                                    Icons.remove,
+                                    color: Constance.thirdColor,
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      attachements.removeAt(pos);
-                                    });
-                                  },
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    color: Colors.white,
-                                    child: const Icon(
-                                      Icons.remove,
-                                      color: Constance.thirdColor,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                    ),
-                  );
-                }
-              ),
+                              )
+                            ],
+                          ),
+                  ),
+                );
+              }),
               SizedBox(
                 height: 2.h,
               ),
@@ -302,7 +299,6 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
                   txt: 'Submit',
                 ),
               ),
-
             ],
           ),
         ),
@@ -324,9 +320,9 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
             return AlertDialog(
                 title: const Center(
                     child: Text(
-                      "Add Photo",
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                    )),
+                  "Add Photo",
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                )),
                 contentPadding: const EdgeInsets.only(top: 24, bottom: 30),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -336,33 +332,33 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
                       children: [
                         getIsNotAndroid13()
                             ? InkWell(
-                          onTap: () {
-                            Navigation.instance.goBack();
-                            getImage(0);
-                          },
-                          child: Column(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(12),
-                                margin: const EdgeInsets.only(bottom: 4),
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(30),
-                                    color: Colors.pink.shade300),
-                                child: const Icon(
-                                  Icons.camera_alt_rounded,
-                                  color: Colors.white,
+                                onTap: () {
+                                  Navigation.instance.goBack();
+                                  getImage(0);
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      margin: const EdgeInsets.only(bottom: 4),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          color: Colors.pink.shade300),
+                                      child: const Icon(
+                                        Icons.camera_alt_rounded,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const Text(
+                                      "Camera",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              const Text(
-                                "Camera",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
+                              )
                             : Container(),
                         SizedBox(
                           width: getIsNotAndroid13() ? 42 : 0,
@@ -394,6 +390,11 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
                               ],
                             )),
                       ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 1.5.h),
+                      width: 50.w,
+                      child: Constance.androidWarning,
                     ),
                   ],
                 ));
@@ -473,10 +474,10 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
     }
   }
 
-
   Future<void> getLostData() async {
+    androidInfo = await DeviceInfoPlugin().androidInfo;
     // Navigation.instance.navigate("/loadingDialog");
-    if(await Permission.storage.request().isGranted){
+    if (await Permission.storage.request().isGranted) {
       // Navigation.instance.goBack();
       final LostDataResponse response = await _picker.retrieveLostData();
       if (response.isEmpty) {
@@ -495,7 +496,7 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
       } else {
         debugPrint("${response.exception!}");
       }
-    }else{
+    } else {
       // Navigation.instance.goBack();
     }
   }
@@ -613,9 +614,8 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
 
   void request() async {
     Map<Permission, PermissionStatus> statuses = await [
-      Permission.storage,
+      getIsNotAndroid13() ? Permission.storage : Permission.photos,
       Permission.camera,
-      Permission.photos,
     ].request();
     statuses.forEach((permission, status) {
       if (status.isGranted) {
@@ -651,5 +651,9 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
         await OpenSettings.openAppSetting();
       },
     );
+  }
+
+  void initializeAndroidInfo() async {
+    androidInfo = await DeviceInfoPlugin().androidInfo;
   }
 }

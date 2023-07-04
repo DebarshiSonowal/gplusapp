@@ -71,7 +71,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             current.seo_name_category,
                             current.vendor_id,
                             current.type,
-                            current.notification_id);
+                            current.category_id);
                       },
                       child: NotificationPageItem(current: current),
                     );

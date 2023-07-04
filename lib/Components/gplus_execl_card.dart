@@ -116,9 +116,9 @@ class GPlusExecCard extends StatelessWidget {
                       //   width: 4.w,
                       // ),
                       Text(
-                        Jiffy(item.publish_date?.split(" ")[0] ?? "",
-                                "yyyy-MM-dd")
-                            .format("dd MMM, yyyy"),
+                        Jiffy.parse(item.publish_date?.split(" ")[0] ?? "",
+                                pattern: "yyyy-MM-dd")
+                            .format(pattern: "dd MMM, yyyy"),
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                             color: Storage.instance.isDarkMode
                                 ? Colors.white

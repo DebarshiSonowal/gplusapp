@@ -110,13 +110,13 @@ class BookmarkItemWidget extends StatelessWidget {
                 //   height: 1.h,
                 // ),
                 Text(
-                  Jiffy(
+                  Jiffy.parse(
                       item.publish_date
                           ?.split(
                           " ")[0] ??
                           "",
-                      "yyyy-MM-dd")
-                      .format("dd MMM, yyyy"),
+                      pattern: "yyyy-MM-dd")
+                      .format(pattern: "dd MMM, yyyy"),
                   style: Theme.of(context)
                       .textTheme
                       .headline6

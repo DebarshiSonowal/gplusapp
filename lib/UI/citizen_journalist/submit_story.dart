@@ -45,7 +45,7 @@ class _SubmitStoryPageState extends State<SubmitStoryPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    getIsNotAndroid13()? getLostData():(){};
+    getIsNotAndroid13() ? getLostData() : () {};
   }
 
   @override
@@ -463,6 +463,11 @@ class _SubmitStoryPageState extends State<SubmitStoryPage>
                               ],
                             )),
                       ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 1.5.h),
+                      width: 50.w,
+                      child: Constance.androidWarning,
                     ),
                   ],
                 ));

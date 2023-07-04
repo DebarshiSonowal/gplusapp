@@ -124,8 +124,8 @@ class VideoReportItem extends StatelessWidget {
                 Text(
                   // item.publish_date?.split(" ")[0] ??
                   //     "",
-                  Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                      .format("dd/MM/yyyy"),
+                  Jiffy.parse(item.publish_date?.split(" ")[0] ?? "", pattern: "yyyy-MM-dd")
+                      .format(pattern: "dd/MM/yyyy"),
                   style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Storage.instance.isDarkMode
                           ? Colors.white

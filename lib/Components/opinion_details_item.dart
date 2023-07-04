@@ -24,7 +24,7 @@ class OpinionDetailsItem extends StatelessWidget {
         //     args:
         //         '$dropdownvalue,${item.seo_name}');
         Navigation.instance
-            .navigate('/opinionDetails', args: item.seo_name?.trim());
+            .navigate('/opinionDetails', args: "${item.seo_name?.trim()},${item.category_gallery?.id}");
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
@@ -87,8 +87,8 @@ class OpinionDetailsItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    Jiffy(item.publish_date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                        .format("dd MMM, yyyy"),
+                    Jiffy.parse(item.publish_date?.split(" ")[0] ?? "", pattern: "yyyy-MM-dd")
+                        .format(pattern: "dd MMM, yyyy"),
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Storage.instance.isDarkMode
                             ? Colors.white

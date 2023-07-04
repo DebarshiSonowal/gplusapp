@@ -91,7 +91,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
           builder: (BuildContext context, LoadStatus? mode) {
             Widget body;
             if (mode == LoadStatus.idle) {
-              body = Text("pull up load");
+              body = const Text("pull up load");
             } else if (mode == LoadStatus.loading) {
               body = CupertinoActivityIndicator(
                 color: Storage.instance.isDarkMode

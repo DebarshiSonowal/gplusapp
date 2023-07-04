@@ -24,8 +24,7 @@ class PromotedDealsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (data.has_permission ??
-            false) {
+        if (data.has_permission ?? false) {
           logTheBigDealCategoryClick(
             Provider.of<DataProvider>(
                     Navigation.instance.navigatorKey.currentContext ?? context,
@@ -55,7 +54,7 @@ class PromotedDealsItem extends StatelessWidget {
             color: Storage.instance.isDarkMode
                 ? Constance.secondaryColor
                 : Constance.forthColor,
-            child: Container(
+            child: SizedBox(
               width: 83.w,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +63,10 @@ class PromotedDealsItem extends StatelessWidget {
                   // SizedBox(
                   //   height: 1.h,
                   // ),
-                  PromotedDealItemData(data: data),
+                  SizedBox(
+                    height: 8.5.h,
+                    child: PromotedDealItemData(data: data),
+                  ),
                 ],
               ),
             ),

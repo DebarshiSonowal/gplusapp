@@ -248,9 +248,9 @@ class _TopPicksPageState extends State<TopPicksPage> {
                               ),
                               TextSpan(
                                 text:
-                                ' , ${Jiffy(
-                                    data.home_toppicks[0].date?.split(" ")[0],
-                                    "yyyy-MM-dd").format("dd MMM, yyyy")}',
+                                ' , ${Jiffy.parse(
+                                    data.home_toppicks[0].date?.split(" ")[0]??"",
+                                    pattern: "yyyy-MM-dd").format(pattern: "dd MMM, yyyy")}',
                                 style: Theme
                                     .of(Navigation.instance
                                     .navigatorKey.currentContext!)
@@ -504,8 +504,8 @@ class SuggestedForYouCard extends StatelessWidget {
                   // ),
                   Spacer(),
                   Text(
-                    Jiffy(item.date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                        .format("dd MMM, yyyy"),
+                    Jiffy.parse(item.date?.split(" ")[0] ?? "", pattern: "yyyy-MM-dd")
+                        .format(pattern: "dd MMM, yyyy"),
                     style: Theme
                         .of(context)
                         .textTheme

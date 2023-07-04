@@ -571,6 +571,11 @@ class _PostAListingState extends State<PostAListing>
                             )),
                       ],
                     ),
+                    Container(
+                      margin: EdgeInsets.only(top: 1.5.h),
+                      width: 50.w,
+                      child: Constance.androidWarning,
+                    ),
                   ],
                 ));
           });
@@ -728,7 +733,9 @@ class _PostAListingState extends State<PostAListing>
   }
 
   void fetchClassified() async {
-    androidInfo = await DeviceInfoPlugin().androidInfo;
+    if (Platform.isAndroid) {
+      androidInfo = await DeviceInfoPlugin().androidInfo;
+    }
     // showLoaderDialog(context);
     final response = await ApiProvider.instance.getClassifiedCategory();
     if (response.success ?? false) {

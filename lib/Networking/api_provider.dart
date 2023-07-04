@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -11,8 +12,10 @@ import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../Components/alert.dart';
+import '../Helper/FirebaseHelper.dart';
 import '../Model/about_us.dart';
 import '../Model/address.dart';
 import '../Model/advertise.dart';
@@ -125,7 +128,8 @@ class ApiProvider {
         return SearchResultResponse.fromJson(response?.data);
       } else {
         debugPrint("SearchResultResponse  error: ${response?.data}");
-        return SearchResultResponse.withError("Something went wrong");
+        return SearchResultResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -165,7 +169,8 @@ class ApiProvider {
         return OthersSearchResultResponse.fromJson(response?.data);
       } else {
         debugPrint("OthersSearchResultResponse  error: ${response?.data}");
-        return OthersSearchResultResponse.withError("Something went wrong");
+        return OthersSearchResultResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -200,7 +205,7 @@ class ApiProvider {
         return ProfileResponse2.fromJson(response?.data);
       } else {
         debugPrint("Profile error: ${response?.data}");
-        return ProfileResponse2.withError("Something went wrong");
+        return ProfileResponse2.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -244,7 +249,7 @@ class ApiProvider {
         return AuthorResponse.fromJson(response?.data);
       } else {
         debugPrint("AuthorResponse error: ${response?.data}");
-        return AuthorResponse.withError("Something went wrong");
+        return AuthorResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -284,7 +289,7 @@ class ApiProvider {
         return CommentResponse.fromJson(response?.data);
       } else {
         debugPrint("CommentResponse error: ${response?.data}");
-        return CommentResponse.withError("Something went wrong");
+        return CommentResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -361,7 +366,7 @@ class ApiProvider {
             "create Profile error: ${response?.statusCode} ${response?.data}",
             wrapWidth: 1024);
         return ProfileResponse.withError(
-            response?.data['message'] ?? "Something went wrong");
+            response?.data['message'] ?? "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -373,7 +378,7 @@ class ApiProvider {
           "create Profile error: ${e.response?.statusCode ?? 0} ${e.response}",
           wrapWidth: 1024);
       return ProfileResponse.withError(
-          e.response!.data['message'] ?? "Something went wrong");
+          e.response!.data['message'] ?? "Your Internet Connection is Slo");
     }
   }
 
@@ -402,7 +407,7 @@ class ApiProvider {
         return ArticleResponse.fromJson(response?.data);
       } else {
         debugPrint("Article error: ${response?.data}");
-        return ArticleResponse.withError("Something Went Wrong");
+        return ArticleResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -448,7 +453,8 @@ class ApiProvider {
         return CategoryArticleResponse.fromJson(response?.data);
       } else {
         debugPrint("topics/${categ_name} Article error: ${response?.data}");
-        return CategoryArticleResponse.withError("Something Went Wrong");
+        return CategoryArticleResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -493,7 +499,7 @@ class ApiProvider {
         return ArticleResponse.fromJson(response?.data);
       } else {
         debugPrint("More Article error: ${response?.data}");
-        return ArticleResponse.withError("Something Went Wrong");
+        return ArticleResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -531,7 +537,7 @@ class ApiProvider {
         return AddressResponse.fromJson(response?.data);
       } else {
         debugPrint("address-list error: ${response?.data}");
-        return AddressResponse.withError("Something Went Wrong");
+        return AddressResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -572,7 +578,7 @@ class ApiProvider {
         return AddressResponse.fromJson(response?.data);
       } else {
         debugPrint("address error: ${response?.data}");
-        return AddressResponse.withError("Something Went Wrong");
+        return AddressResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -614,7 +620,7 @@ class ApiProvider {
         return AddressResponse.fromJson(response?.data);
       } else {
         debugPrint("address error: ${response?.data}");
-        return AddressResponse.withError("Something Went Wrong");
+        return AddressResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -655,7 +661,7 @@ class ApiProvider {
         return AddressResponse.fromJson(response?.data);
       } else {
         debugPrint("address delete error: ${response?.data}");
-        return AddressResponse.withError("Something Went Wrong");
+        return AddressResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -695,7 +701,8 @@ class ApiProvider {
         return ArticleDetailsResponse.fromJson(response?.data);
       } else {
         debugPrint("Article Details error: ${response?.data}");
-        return ArticleDetailsResponse.withError("Something Went Wrong");
+        return ArticleDetailsResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -735,7 +742,8 @@ class ApiProvider {
         return ArticleDetailsResponse.fromJson(response?.data);
       } else {
         debugPrint("topic/${categ_name}/${slug} error: ${response?.data}");
-        return ArticleDetailsResponse.withError("Something Went Wrong");
+        return ArticleDetailsResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -777,7 +785,7 @@ class ApiProvider {
         return OpinionResponse.fromJson(response?.data);
       } else {
         debugPrint("Article error: ${response?.data}");
-        return OpinionResponse.withError("Something Went Wrong");
+        return OpinionResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -815,7 +823,7 @@ class ApiProvider {
         return ArticleDescResponse.fromJson(response?.data);
       } else {
         debugPrint("Article desc error: ${response?.data}");
-        return ArticleDescResponse.withError("Something Went Wrong");
+        return ArticleDescResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -854,7 +862,7 @@ class ApiProvider {
         return ArticleResponse.fromJson(response?.data);
       } else {
         debugPrint("HomeAlbum error: ${response?.data}");
-        return ArticleResponse.withError("Something Went Wrong");
+        return ArticleResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -892,7 +900,7 @@ class ApiProvider {
         return StoryResponse.fromJson(response?.data);
       } else {
         debugPrint("StoryResponse error: ${response?.data}");
-        return StoryResponse.withError("Something Went Wrong");
+        return StoryResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -925,12 +933,13 @@ class ApiProvider {
       Response? response = await dio?.get(
         url,
       );
-      // debugPrint("getNotifications response: ${response?.data}");
+      debugPrint("getNotifications response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
         return NotificationInDeviceResponse.fromJson(response?.data);
       } else {
         debugPrint("getNotifications error: ${response?.data}");
-        return NotificationInDeviceResponse.withError("Something Went Wrong");
+        return NotificationInDeviceResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -968,7 +977,7 @@ class ApiProvider {
         return VideoNewsResponse.fromJson(response?.data);
       } else {
         debugPrint("Weekly error: ${response?.data}");
-        return VideoNewsResponse.withError("Something Went Wrong");
+        return VideoNewsResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1009,7 +1018,8 @@ class ApiProvider {
         return LatestOpinionResponse.fromJson(response?.data);
       } else {
         debugPrint("latest-opinions error: ${response?.data}");
-        return LatestOpinionResponse.withError("Something Went Wrong");
+        return LatestOpinionResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1052,7 +1062,8 @@ class ApiProvider {
         return OpinionDetailsResponse.fromJson(response?.data);
       } else {
         debugPrint("OpinionDetailsResponse error: ${response?.data}");
-        return OpinionDetailsResponse.withError("Something Went Wrong");
+        return OpinionDetailsResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1093,7 +1104,8 @@ class ApiProvider {
         return ClassifiedDetailsResponse.fromJson(response?.data);
       } else {
         debugPrint("ClassifiedDetailsResponse error: ${response?.data}");
-        return ClassifiedDetailsResponse.withError("Something Went Wrong");
+        return ClassifiedDetailsResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1134,7 +1146,7 @@ class ApiProvider {
         return E_paperRepsonse.fromJson(response?.data);
       } else {
         debugPrint("E_paper error: ${response?.data}");
-        return E_paperRepsonse.withError("Something Went Wrong");
+        return E_paperRepsonse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1172,7 +1184,7 @@ class ApiProvider {
         return VideoNewsResponse.fromJson(response?.data);
       } else {
         debugPrint("video-news error: ${response?.data}");
-        return VideoNewsResponse.withError("Something Went Wrong");
+        return VideoNewsResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1210,7 +1222,8 @@ class ApiProvider {
         return MoreVideoNewsResponse.fromJson(response?.data);
       } else {
         debugPrint("video-news error: ${response?.data}");
-        return MoreVideoNewsResponse.withError("Something Went Wrong");
+        return MoreVideoNewsResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1252,7 +1265,7 @@ class ApiProvider {
         return MembershipResponse2.fromJson(response?.data);
       } else {
         debugPrint("subscriptions error: ${response?.data}");
-        return MembershipResponse2.withError("Something Went Wrong");
+        return MembershipResponse2.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1294,7 +1307,7 @@ class ApiProvider {
         return MembershipResponse.fromJson(response?.data);
       } else {
         debugPrint("subscriptions error: ${response?.data}");
-        return MembershipResponse.withError("Something Went Wrong");
+        return MembershipResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1331,7 +1344,8 @@ class ApiProvider {
         return PromotedDealResponse.fromJson(response?.data);
       } else {
         debugPrint("promoted-deal-list error: ${response?.data}");
-        return PromotedDealResponse.withError("Something Went Wrong");
+        return PromotedDealResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1373,7 +1387,7 @@ class ApiProvider {
         return ShopResponse.fromJson(response?.data);
       } else {
         debugPrint("ShopResponse error: ${response?.data}");
-        return ShopResponse.withError("Something Went Wrong");
+        return ShopResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1410,7 +1424,7 @@ class ApiProvider {
         return DealDetailsResponse.fromJson(response?.data);
       } else {
         debugPrint("DealDetailsResponse error: ${response?.data}");
-        return DealDetailsResponse.withError("Something Went Wrong");
+        return DealDetailsResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1447,7 +1461,8 @@ class ApiProvider {
         return GenericBoolMsgResponse.fromJson(response?.data);
       } else {
         debugPrint("DealDetailsResponse error: ${response?.data}");
-        return GenericBoolMsgResponse.withError("Something Went Wrong");
+        return GenericBoolMsgResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1484,7 +1499,7 @@ class ApiProvider {
         return GenericMsgResponse.fromJson(response?.data);
       } else {
         debugPrint("DealDetailsResponse error: ${response?.data}");
-        return GenericMsgResponse.withError("Something Went Wrong");
+        return GenericMsgResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1521,7 +1536,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("notifications error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1530,7 +1545,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("notifications error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -1558,7 +1574,7 @@ class ApiProvider {
         return GenericMsgResponse.fromJson(response?.data);
       } else {
         debugPrint("DealDetailsResponse error: ${response?.data}");
-        return GenericMsgResponse.withError("Something Went Wrong");
+        return GenericMsgResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1595,7 +1611,7 @@ class ApiProvider {
         return ReportResponse.fromJson(response?.data);
       } else {
         debugPrint("user-report-list error: ${response?.data}");
-        return ReportResponse.withError("Something Went Wrong");
+        return ReportResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1632,7 +1648,7 @@ class ApiProvider {
         return GenericMsgResponse.fromJson(response?.data);
       } else {
         debugPrint("user-security-msg error: ${response?.data}");
-        return GenericMsgResponse.withError("Something Went Wrong");
+        return GenericMsgResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1669,7 +1685,7 @@ class ApiProvider {
         return GenericMsgResponse.fromJson(response?.data);
       } else {
         debugPrint("GuwahatiConnect error: ${response?.data}");
-        return GenericMsgResponse.withError("Something Went Wrong");
+        return GenericMsgResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1707,7 +1723,8 @@ class ApiProvider {
         return RedeemDetailsResponse.fromJson(response?.data);
       } else {
         debugPrint("RedeemDetailsResponse error: ${response?.data}");
-        return RedeemDetailsResponse.withError("Something Went Wrong");
+        return RedeemDetailsResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1716,7 +1733,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("RedeemDetailsResponse error: ${e.response}");
-      return RedeemDetailsResponse.withError(e.response?.data['message']??e.message);
+      return RedeemDetailsResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -1749,7 +1767,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("enterPreferences error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1758,7 +1776,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("enterPreferences error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -1791,7 +1810,7 @@ class ApiProvider {
         return BlockedUserResponse.fromJson(response?.data);
       } else {
         debugPrint("BlockedUserResponse error: ${response?.data}");
-        return BlockedUserResponse.withError("Something Went Wrong");
+        return BlockedUserResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1831,7 +1850,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("device_token error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1840,7 +1859,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("device_token error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -1873,7 +1893,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("user-report error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1882,7 +1902,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("user-report error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -1911,7 +1932,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("block-user-by-user error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1920,7 +1941,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("update-device-token error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -1949,7 +1971,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("unblock-user-by-user error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1958,7 +1980,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("unblock-user-by-user error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -1987,7 +2010,7 @@ class ApiProvider {
         return BlockedUserResponse.fromJson(response?.data);
       } else {
         debugPrint("blocked-user-list error: ${response?.data}");
-        return BlockedUserResponse.withError("Something Went Wrong");
+        return BlockedUserResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2029,7 +2052,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("comment-delete error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2038,7 +2061,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("comment-delete error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -2069,7 +2093,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("comment-edit error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2078,7 +2102,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("comment-edit error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -2109,7 +2134,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("notifications/read error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2118,7 +2143,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("notifications/read error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -2150,7 +2176,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("setAsFavourite error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2159,7 +2185,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("setAsFavourite error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -2191,7 +2218,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("Swtich set error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2200,7 +2227,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("Swtich set error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -2227,7 +2255,8 @@ class ApiProvider {
         return SwitchStatusResponse.fromJson(response?.data);
       } else {
         debugPrint("Switch get error: ${response?.data}");
-        return SwitchStatusResponse.withError("Something Went Wrong");
+        return SwitchStatusResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2258,7 +2287,7 @@ class ApiProvider {
         return RazorpayResponse.fromJson(response?.data);
       } else {
         debugPrint("Razorpay error: ${response?.data}");
-        return RazorpayResponse.withError("Something Went Wrong");
+        return RazorpayResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2328,7 +2357,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("verifyPayment error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2337,7 +2366,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("verifyPayment error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -2400,7 +2430,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("verifyPayment error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2409,7 +2439,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("verifyPayment error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -2442,7 +2473,8 @@ class ApiProvider {
         return ShopCategoryResponse.fromJson(response?.data);
       } else {
         debugPrint("shop-categories error: ${response?.data}");
-        return ShopCategoryResponse.withError("Something Went Wrong");
+        return ShopCategoryResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2484,7 +2516,8 @@ class ApiProvider {
         return GrievenceRedressalResponse.fromJson(response?.data);
       } else {
         debugPrint("GrievenceRedressalResponse  error: ${response?.data}");
-        return GrievenceRedressalResponse.withError("Something Went Wrong");
+        return GrievenceRedressalResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2526,7 +2559,8 @@ class ApiProvider {
         return RedeemHistoryResponse.fromJson(response?.data);
       } else {
         debugPrint("RedeemHistoryResponse error: ${response?.data}");
-        return RedeemHistoryResponse.withError("Something Went Wrong");
+        return RedeemHistoryResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2568,7 +2602,7 @@ class ApiProvider {
         return AdvertiseResponse.fromJson(response?.data);
       } else {
         debugPrint("advertise error: ${response?.data}");
-        return AdvertiseResponse.withError("Something Went Wrong");
+        return AdvertiseResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2610,7 +2644,8 @@ class ApiProvider {
         return FullScreenAdResponse.fromJson(response?.data);
       } else {
         debugPrint("full advertise error: ${response?.data}");
-        return FullScreenAdResponse.withError("Something Went Wrong");
+        return FullScreenAdResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2651,7 +2686,7 @@ class ApiProvider {
         return TopPicksResponse.fromJson(response?.data);
       } else {
         debugPrint("toppicks error: ${response?.data}");
-        return TopPicksResponse.withError("Something Went Wrong");
+        return TopPicksResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2688,7 +2723,7 @@ class ApiProvider {
         return TopickResponse.fromJson(response?.data);
       } else {
         debugPrint("topicks error: ${response?.data}");
-        return TopickResponse.withError("Something Went Wrong");
+        return TopickResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2728,7 +2763,7 @@ class ApiProvider {
         return ClassifiedResponse.fromJson(response?.data);
       } else {
         debugPrint("ClassifiedResponse error: ${response?.data}");
-        return ClassifiedResponse.withError("Something Went Wrong");
+        return ClassifiedResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2765,7 +2800,8 @@ class ApiProvider {
         return ClassifiedCategoryResponse.fromJson(response?.data);
       } else {
         debugPrint("ClassifiedCategoryResponse error: ${response?.data}");
-        return ClassifiedCategoryResponse.withError("Something Went Wrong");
+        return ClassifiedCategoryResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2803,7 +2839,7 @@ class ApiProvider {
         return ReferEarnResponse.fromJson(response?.data);
       } else {
         debugPrint("ReferEarnResponse error: ${response?.data}");
-        return ReferEarnResponse.withError("Something Went Wrong");
+        return ReferEarnResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       debugPrint("ReferEarnResponse response: ${e.response}");
@@ -2835,7 +2871,7 @@ class ApiProvider {
         return AboutUsResponse.fromJson(response?.data);
       } else {
         debugPrint("AboutUsResponse error: ${response?.data}");
-        return AboutUsResponse.withError("Something Went Wrong");
+        return AboutUsResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2872,7 +2908,7 @@ class ApiProvider {
         return AboutUsResponse.fromJson(response?.data);
       } else {
         debugPrint("AboutUsResponse error: ${response?.data}");
-        return AboutUsResponse.withError("Something Went Wrong");
+        return AboutUsResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2909,7 +2945,7 @@ class ApiProvider {
         return AboutUsResponse.fromJson(response?.data);
       } else {
         debugPrint("AboutUsResponse error: ${response?.data}");
-        return AboutUsResponse.withError("Something Went Wrong");
+        return AboutUsResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2946,7 +2982,7 @@ class ApiProvider {
         return AboutUsResponse.fromJson(response?.data);
       } else {
         debugPrint("privacy-n-policy error: ${response?.data}");
-        return AboutUsResponse.withError("Something Went Wrong");
+        return AboutUsResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2983,7 +3019,7 @@ class ApiProvider {
         return ContactUsResponse.fromJson(response?.data);
       } else {
         debugPrint("ContactUsResponse error: ${response?.data}");
-        return ContactUsResponse.withError("Something Went Wrong");
+        return ContactUsResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3020,7 +3056,8 @@ class ApiProvider {
         return GuwahatiConnectResponse.fromJson(response?.data);
       } else {
         debugPrint("guwahati-connect error: ${response?.data}");
-        return GuwahatiConnectResponse.withError("Something Went Wrong");
+        return GuwahatiConnectResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3058,7 +3095,7 @@ class ApiProvider {
       } else {
         debugPrint("guwahati-connect error: ${response?.data}");
         return GuwahatiConnectSpecificResponse.withError(
-            "Something Went Wrong");
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3095,7 +3132,8 @@ class ApiProvider {
         return GuwahatiConnectResponse.fromJson(response?.data);
       } else {
         debugPrint("guwahati-connect my error: ${response?.data}");
-        return GuwahatiConnectResponse.withError("Something Went Wrong");
+        return GuwahatiConnectResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3132,7 +3170,8 @@ class ApiProvider {
         return CitizenJournalistResponse.fromJson(response?.data);
       } else {
         debugPrint("citizen-journalist-list error: ${response?.data}");
-        return CitizenJournalistResponse.withError("Something Went Wrong");
+        return CitizenJournalistResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3169,7 +3208,8 @@ class ApiProvider {
         return CitizenJournalistResponse.fromJson(response?.data);
       } else {
         debugPrint("citizen-journalist-list error: ${response?.data}");
-        return CitizenJournalistResponse.withError("Something Went Wrong");
+        return CitizenJournalistResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3206,7 +3246,8 @@ class ApiProvider {
         return PollOfTheWeekResponse.fromJson(response?.data);
       } else {
         debugPrint("PollOfTheWeekResponse error: ${response?.data}");
-        return PollOfTheWeekResponse.withError("Something Went Wrong");
+        return PollOfTheWeekResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3250,7 +3291,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postPollOfTheWeek error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3259,7 +3300,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postPollOfTheWeek error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -3296,7 +3338,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("advertiseWithUs error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3305,7 +3347,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("advertiseWithUs error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -3336,7 +3379,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("feedback error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3345,7 +3388,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("feedback error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -3376,7 +3420,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("deactiveAccount error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3385,7 +3429,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("deactiveAccount error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -3421,7 +3466,8 @@ class ApiProvider {
         return ReferEarnHistoryResponse.withJson(response?.data);
       } else {
         debugPrint("ReferEarnHistoryResponse error: ${response?.data}");
-        return ReferEarnHistoryResponse.withError("Something Went Wrong");
+        return ReferEarnHistoryResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3464,7 +3510,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postLike error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3473,7 +3519,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postLike error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -3507,7 +3554,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("addBookmark error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3516,7 +3563,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("addBookmark error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -3550,7 +3598,8 @@ class ApiProvider {
         return BookmarkItemsResponse.fromJson(response?.data);
       } else {
         debugPrint("BookmarkItems error: ${response?.data}");
-        return BookmarkItemsResponse.withError("Something Went Wrong");
+        return BookmarkItemsResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3593,7 +3642,7 @@ class ApiProvider {
         return MessageResponse.fromJson(response?.data);
       } else {
         debugPrint("MessageResponse  error: ${response?.data}");
-        return MessageResponse.withError("Something Went Wrong");
+        return MessageResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3637,7 +3686,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postLike error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3646,7 +3695,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postLike error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -3682,7 +3732,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postComment error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3691,7 +3741,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postComment error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -3730,7 +3781,7 @@ class ApiProvider {
         return CreateOrderResponse.fromJson(response?.data);
       } else {
         debugPrint("CreateOrderResponse1 error: ${response?.data}");
-        return CreateOrderResponse.withError("Something Went Wrong");
+        return CreateOrderResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3774,7 +3825,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("citizen-journalist-delete error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3783,7 +3834,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("citizen-journalist-delete error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -3818,7 +3870,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("deleteClassified error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3827,7 +3879,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("deleteClassified error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -3862,7 +3915,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("verify-version error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3871,7 +3924,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("verify-version error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -3902,7 +3956,8 @@ class ApiProvider {
         return FullScreenAdResponse.fromJson(response?.data);
       } else {
         debugPrint("free-subscriber error: ${response?.data}");
-        return FullScreenAdResponse.withError("Something Went Wrong");
+        return FullScreenAdResponse.withError(
+            "Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3946,7 +4001,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("guwahati-connect-delete error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3955,7 +4010,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("guwahati-connect-delete error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -4000,7 +4056,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postGrievance error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4009,7 +4065,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postGrievance error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -4059,7 +4116,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postClassified error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4068,7 +4125,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postClassified error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -4127,7 +4185,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("update Classified error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4136,7 +4194,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("update Classified error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -4187,7 +4246,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postCitizenJournalist error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4196,7 +4255,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postCitizenJournalist error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -4244,7 +4304,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postCitizenJournalist error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4253,7 +4313,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postCitizenJournalist error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -4302,7 +4363,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postguwahati-connect error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4311,7 +4372,8 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("postguwahati-connect error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
@@ -4362,7 +4424,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("update guwahati-connect error: ${response?.data}");
-        return GenericResponse.withError("Something Went Wrong");
+        return GenericResponse.withError("Your Internet Connection is Slo");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4371,33 +4433,35 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("update guwahati-connect error: ${e.response}");
-      return GenericResponse.withError(e.response?.data['message']??e.message);
+      return GenericResponse.withError(
+          e.response?.data['message'] ?? e.message);
     }
   }
 
-  Future download2(String url, String title) async {
+  Future<void> download2(String url, String title) async {
     Navigation.instance.goBack();
-    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    Directory documents = await getApplicationDocumentsDirectory();
-    var tempDir =
-        Platform.isAndroid ? "/storage/emulated/0/Download" : documents.path;
+    // final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    // Directory documents = await getApplicationDocumentsDirectory();
+    var tempDir = await _getDownloadDirectory();
     DateTime now = DateTime.now();
     DateTime date = DateTime(
         now.year, now.month, now.day, now.hour, now.minute, now.second);
-    String fullPath = "$tempDir/gplus_edition_${date.toString().split(" ")[0].replaceAll("-", "").replaceAll(".", "")}_${date.toString().split(" ")[1].replaceAll(":", "").replaceAll(".", "")}.pdf";
+    String fullPath =
+        "$tempDir/gplus_edition_${date.toString().split(" ")[0].replaceAll("-", "").replaceAll(".", "")}_${date.toString().split(" ")[1].replaceAll(":", "").replaceAll(".", "")}.pdf";
     String actualPath = "$tempDir/$title.pdf";
-    print('full path ${fullPath} ${actualPath}');
+    debugPrint('full path ${fullPath} ${actualPath}');
     try {
       Response? response = await dio?.get(
         url,
         onReceiveProgress: showDownloadProgress,
-        //Received data with List<int> s
+        // Received data with List<int> s
         options: Options(
-            responseType: ResponseType.bytes,
-            followRedirects: false,
-            validateStatus: (status) {
-              return status! < 500;
-            }),
+          responseType: ResponseType.bytes,
+          followRedirects: false,
+          validateStatus: (status) {
+            return status! < 500;
+          },
+        ),
       );
       debugPrint(response?.headers.toString());
       File file = File(fullPath);
@@ -4405,19 +4469,81 @@ class ApiProvider {
       // response.data is List<int> type
       raf.writeFromSync(response?.data);
       await raf.close();
-      Future.delayed(Duration(seconds: 2), () {
-        showCompleteDownload(fullPath);
+      Future.delayed(const Duration(seconds: 1), () async {
+        var status = await Permission.notification.status;
+
+        // If permission is not granted, request it.
+        if (status != PermissionStatus.granted) {
+          await Permission.notification.request();
+        }
+
+        // If permission is granted, show a notification.
+        if (status == PermissionStatus.granted) {
+          showCompleteDownload(fullPath);
+        }
       });
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<String> _getDownloadDirectory() async {
+    if (Platform.isAndroid) {
+      if (await _isStoragePermissionGranted()) {
+        // return "/Android/data/com.appbazooka.gplus/files";
+        return (await getApplicationDocumentsDirectory()).path;
+      } else {
+        // return (await getApplicationDocumentsDirectory()).path;
+        return (await getApplicationDocumentsDirectory()).path;
+      }
+    } else {
+      return (await getApplicationDocumentsDirectory()).path;
+    }
+  }
+
+  getIsNotAndroid13() async {
+    AndroidDeviceInfo androidInfo = await DeviceInfoPlugin().androidInfo;
+    if (Platform.isAndroid) {
+      return ((androidInfo.version.sdkInt ?? 0) < 32);
+    } else {
+      return true;
+    }
+  }
+
+  Future<bool> _isStoragePermissionGranted() async {
+    var status = await Permission.storage.status;
+    if (status.isGranted) {
+      return true;
+    } else if (status.isDenied) {
+      return await Permission.storage.request().isGranted;
+    } else {
+      return false;
+    }
+  }
+
+  void showProgress(received, total) async {
+    var status = await Permission.notification.status;
+
+    // If permission is not granted, request it.
+    if (status != PermissionStatus.granted) {
+      await Permission.notification.request();
+    }
+
+    // If permission is granted, show a notification.
+    if (status == PermissionStatus.granted) {
+      showDownloadProgress(received, total);
     }
   }
 
   void showDownloadProgress(received, total) async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     if (total != -1) {
-      print((received / total * 100).toStringAsFixed(0) + "%");
+      debugPrint((received / total * 100).toStringAsFixed(0) + "%");
       await Future<void>.delayed(const Duration(seconds: 1), () async {
+        const darwin_details = DarwinNotificationDetails(
+          // badgeNumber: int.parse(channel.id),
+          subtitle: 'progress channel',
+        );
         final AndroidNotificationDetails androidPlatformChannelSpecifics =
             AndroidNotificationDetails('progress channel', 'progress channel',
                 channelShowBadge: false,
@@ -4428,10 +4554,17 @@ class ApiProvider {
                 maxProgress: total,
                 progress: received);
         final NotificationDetails platformChannelSpecifics =
-            NotificationDetails(android: androidPlatformChannelSpecifics);
+            NotificationDetails(
+          android: androidPlatformChannelSpecifics,
+          iOS: darwin_details,
+        );
         await flutterLocalNotificationsPlugin.show(
-            0, 'Saving E-paper', 'Downloading', platformChannelSpecifics,
-            payload: 'item x');
+          0,
+          'Saving E-paper',
+          'Downloading',
+          platformChannelSpecifics,
+          payload: 'item x',
+        );
       });
     }
   }

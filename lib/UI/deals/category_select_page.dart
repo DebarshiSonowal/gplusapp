@@ -447,7 +447,7 @@ class _CategorySelectPageState extends State<CategorySelectPage> {
                       ),
                       Text(
                         data?.description ?? "",
-                        // maxLines: 2,
+                        maxLines: 8,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Storage.instance.isDarkMode

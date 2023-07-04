@@ -455,7 +455,7 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                         ),
                         Text(
                           // Jiffy(data.updated_at).fromNow() ??
-                          // "${data.updated_at}"
+                          // "${data.updated_at}",
                           // '${15} mins ago' ??
                           // "",
                           (data.updated_at == null || data.updated_at == "")
@@ -484,6 +484,18 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                                     // fontWeight: FontWeight.bold,
                                   ),
                         )
+                      : Container(),
+                  is_mine
+                      ? Text(
+                    data.remarks??"",
+                    style:
+                    Theme.of(context).textTheme.headline6?.copyWith(
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white70
+                          : Colors.black45,
+                      // fontWeight: FontWeight.bold,
+                    ),
+                  )
                       : Container(),
                 ],
               ),

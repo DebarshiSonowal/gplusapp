@@ -55,7 +55,9 @@ class _CategoryDetailsState extends State<CategoryDetails> {
     });
     fetchAds();
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,7 +127,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                               child: Text(
                                 '${data.selectedArticle?.author_name ?? "G Plus"}, ${
                                 // Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()
-                                Jiffy(data.selectedArticle?.publish_date?.split(" ")[0], "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                                Jiffy.parse(data.selectedArticle?.publish_date?.split(" ")[0] ?? "", pattern: "yyyy-MM-dd").format(pattern: "dd/MM/yyyy")}',
                                 style: Theme.of(Navigation
                                         .instance.navigatorKey.currentContext!)
                                     .textTheme
@@ -262,11 +264,8 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                               height: 1.5.h,
                             ),*/
                             Html(
-                              onImageError:
-                                  (Object exception, StackTrace? stackTrace) {
-                                print(exception);
-                              },
-                              onLinkTap: (str, contxt, map, elment) {
+                              onLinkTap: (String? str,
+                                  Map<String, String> map, elment) {
                                 // print("${str}");
                                 // print("${elment?.text}");
                                 _launchUrl(Uri.parse(str ?? ""));
@@ -683,7 +682,6 @@ class _CategoryDetailsState extends State<CategoryDetails> {
               listen: false)
           .setSuggestion(response.articles ?? []);
       // _refreshController.refreshCompleted();
-
     } else {
       Navigation.instance.goBack();
       // _refreshController.refreshFailed();

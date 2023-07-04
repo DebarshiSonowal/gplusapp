@@ -95,7 +95,7 @@ class SuggestedForYouCard extends StatelessWidget {
                       item.title ??
                           "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient.",
                       maxLines: 4,
-                      style:Theme.of(context).textTheme.headline6?.copyWith(
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,
@@ -112,8 +112,9 @@ class SuggestedForYouCard extends StatelessWidget {
                       //   width: 4.w,
                       // ),
                       Text(
-                        Jiffy(item.date?.split(" ")[0] ?? "", "yyyy-MM-dd")
-                            .format("dd MMM, yyyy"),
+                        Jiffy.parse(item.date?.split(" ")[0] ?? "",
+                                pattern: "yyyy-MM-dd")
+                            .format(pattern: "dd MMM, yyyy"),
                         style: Theme.of(context)
                             .textTheme
                             .headline6

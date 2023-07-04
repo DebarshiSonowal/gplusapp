@@ -9,6 +9,7 @@ import 'package:gplusapp/Components/custom_button.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+
 // import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,16 +24,16 @@ import '../Model/profile.dart';
 import '../Navigation/Navigate.dart';
 import '../Networking/api_provider.dart';
 
-class PaymentProcessingPage extends StatefulWidget {
+class paymentProcessingPage extends StatefulWidget {
   String input;
 
-  PaymentProcessingPage(this.input);
+  paymentProcessingPage(this.input);
 
   @override
-  State<PaymentProcessingPage> createState() => _PaymentProcessingPageState();
+  State<paymentProcessingPage> createState() => _paymentProcessingPageState();
 }
 
-class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
+class _paymentProcessingPageState extends State<paymentProcessingPage> {
   double tempTotal = 0;
   var temp_order_id = "";
   static const MethodChannel _channel = MethodChannel('easebuzz');
@@ -601,42 +602,6 @@ You can parse it accordingly to handle response */
                 ListView(
                   shrinkWrap: true,
                   children: [
-                    // ListTile(
-                    //   leading: const Icon(Icons.web),
-                    //   onTap: () {
-                    //     fetchKeys(
-                    //       widget.input.split(',')[0],
-                    //       Provider.of<DataProvider>(
-                    //               Navigation.instance.navigatorKey
-                    //                       .currentContext ??
-                    //                   context,
-                    //               listen: false)
-                    //           .profile!
-                    //           .name,
-                    //       Provider.of<DataProvider>(
-                    //               Navigation.instance.navigatorKey
-                    //                       .currentContext ??
-                    //                   context,
-                    //               listen: false)
-                    //           .profile!
-                    //           .email,
-                    //       Provider.of<DataProvider>(
-                    //               Navigation.instance.navigatorKey
-                    //                       .currentContext ??
-                    //                   context,
-                    //               listen: false)
-                    //           .profile!
-                    //           .mobile,
-                    //     );
-                    //     Navigation.instance.goBack();
-                    //   },
-                    //   title: Text(
-                    //     'Pay at our website',
-                    //     style: Theme.of(context).textTheme.headline5?.copyWith(
-                    //           color: Colors.green,
-                    //         ),
-                    //   ),
-                    // ),
                     ListTile(
                       leading: const Icon(Icons.apple),
                       onTap: () {
@@ -730,27 +695,6 @@ You can parse it accordingly to handle response */
     return await InAppPurchase.instance.restorePurchases();
   }
 
-//   void initiateIOSpurchase() async {
-//     final Set<String> _kIds = <String>{widget.input.split(',')[0].toString()};
-//     final ProductDetailsResponse response =
-//         await InAppPurchase.instance.queryProductDetails(_kIds);
-//     if (response.notFoundIDs.isNotEmpty) {
-//       showError("Product Details not found");
-//     }
-//     List<ProductDetails> products = response.productDetails;
-//     final ProductDetails productDetails =
-//         response.productDetails[0]; // Saved earlier from queryProductDetails().
-//     final PurchaseParam purchaseParam =
-//         PurchaseParam(productDetails: productDetails);
-//     // if (_isConsumable(productDetails)) {
-//     // InAppPurchase.instance.buyConsumable(purchaseParam: purchaseParam);
-//     // } else {
-//     // InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
-//     // }
-//     InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
-// // From here the purchase flow will be handled by the underlying store.
-// // Updates will be delivered to the `InAppPurchase.instance.purchaseStream`.
-//   }
   void fetchKeysInapp(subscription_id, name, email, phone, transaction_id,
       purchase_date) async {
     final response = await ApiProvider.instance.createOrder(
@@ -784,7 +728,8 @@ You can parse it accordingly to handle response */
         ..observerMode = false;
     } else {
       configuration = PurchasesConfiguration(StoreConfig.instance.apiKey)
-        ..appUserID = null
+        ..appUserID =
+            "${Provider.of<DataProvider>(context, listen: false).profile?.id}"
         ..observerMode = false;
     }
     await Purchases.configure(configuration);
@@ -806,73 +751,23 @@ You can parse it accordingly to handle response */
       //   setState(() {});
       // }
     });
-    try {
-      // CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-      // await Purchases.purchaseProduct("gplus_subscription_one_month_non");
-    } catch (e) {
-      print(e);
-    }
+
     Offerings offerings;
     try {
       offerings = await Purchases.getOfferings();
       debugPrint("Packages1 ${offerings.current!.availablePackages}");
-      try {
-        debugPrint(
-            "Packages2 ${offerings.getOffering("subscriptions")!.annual!}");
-      } catch (e) {
-        print(e);
-      }
-      try {
-        debugPrint(
-            "Packages3 ${offerings.getOffering("subscriptions")!.monthly!}");
-      } catch (e) {
-        print(e);
-      }
-      try {
-        debugPrint(
-            "Packages4 ${offerings.getOffering("subscriptions")!.getPackage(widget.input.split(',')[2])}");
-      } catch (e) {
-        print(e);
-      }
-      // debugPrint(
-      //     "Packages2 ${offerings.getOffering(widget.input.split(',')[2])}");
-      // debugPrint(
-      //     "Packages3 ${offerings.getOffering(widget.input.split(',')[2])!.availablePackages}");
-      // debugPrint("Packages4 ${widget.input.split(',')[2]}");
-      // // debugPrint("Packages ${offerings.current!.availablePackages.length}");
-      // debugPrint(
-      //     "Packages annual ${offerings.all[widget.input.split(',')[2]]?.availablePackages.where((element) => element.identifier == widget.input.split(',')[2])}");
-      // debugPrint(
-      //     "Packages monthly ${offerings.all["gplus_subscription_one_month_non"]?.availablePackages}");
-      // debugPrint("Packages all ${offerings.all.length}");
-      // debugPrint("Packages all ${offerings.all.keys}");
-      // CustomerInfo customerInfo = await Purchases.purchasePackage(
-      //     offerings.current!.availablePackages[0]);
-      CustomerInfo customerInfo = await Purchases.purchasePackage(offerings
-          .getOffering("subscriptions")!
-          .availablePackages
-          .firstWhere((element) =>
-              element.storeProduct.identifier == widget.input.split(',')[2]));
-      // appData.entitlementIsActive = customerInfo
-      //     .entitlements.all[FlutterConfig.get('entitlementId')]!.isActive;
-      // debugPrint(
-      //     "Payment1 PurchasedProduct ${customerInfo.allPurchasedProductIdentifiers.toString()}");
-      // debugPrint(
-      //     "Payment1 purchaseDate ${customerInfo.allPurchaseDates.toString()}");
-      // debugPrint(
-      //     "Payment1 revenueCatIdentifier ${customerInfo.activeSubscriptions.toString()}"
-      //     // " : ${customerInfo.allPurchaseDates} : "
-      //     // "${customerInfo.allPurchasedProductIdentifiers}"
-      //     );
-      // debugPrint(
-      //     "Payment productIdentifier ${customerInfo.nonSubscriptionTransactions[0].productIdentifier}");
-      // debugPrint(
-      //     "Payment purchaseDate ${customerInfo.nonSubscriptionTransactions[0].purchaseDate}");
-      // debugPrint(
-      //     "Payment revenueCatIdentifier ${customerInfo.nonSubscriptionTransactions[0].revenueCatIdentifier}"
-      // " : ${customerInfo.allPurchaseDates} : "
-      // "${customerInfo.allPurchasedProductIdentifiers}"
-      // );
+      final response = await Purchases.appUserID;
+      debugPrint("1st ${response}");
+      debugPrint("2nd ${offerings.getOffering("subscriptions")}");
+      debugPrint("3rd ${widget.input.split(',')[2]}");
+      CustomerInfo customerInfo =
+          await Purchases.purchaseProduct(widget.input.split(',')[2]);
+      // purchasePackage(offerings
+      //       .getOffering("subscriptions")!
+      //       .availablePackages
+      //       .firstWhere((element) =>
+      //           element.storeProduct.identifier == widget.input.split(',')[2]));
+
       fetchKeysInapp(
           widget.input.split(',')[0],
           Provider.of<DataProvider>(

@@ -61,11 +61,11 @@ class _HomeScreenState extends State<HomeScreen> {
   StreamSubscription? _sub;
 
   void sendToRoute(String route, data, String? category) async {
-    print("our route ${route}");
+    // print("our route ${route}");
     switch (route) {
       case "story":
         // Navigation.instance.navigate('/main');
-        print("this route");
+        // print("this route");
         Navigation.instance
             .navigate('/story', args: '${category},${data},home_page');
         break;
@@ -402,12 +402,12 @@ class _HomeScreenState extends State<HomeScreen> {
     //   }
     // });
     // Future.delayed(Duration(seconds: 5), () => Navigation.instance.navigate("/fullScreenAd"));
-   Timer.periodic(const Duration(hours: 2), (timer) {
-     if(!Storage.instance.isFullScreenAd){
-       Navigation.instance.navigate("/fullScreenAd");
-       Storage.instance.setFullScreenAd(true);
-     }
-   });
+    Timer.periodic(const Duration(hours: 2), (timer) {
+      if (!Storage.instance.isFullScreenAd) {
+        Navigation.instance.navigate("/fullScreenAd");
+        Storage.instance.setFullScreenAd(true);
+      }
+    });
   }
 
   void showExitDialog() {
@@ -591,54 +591,57 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void fetchDetails(BuildContext context) async {
+    var status = await Permission.notification.status;
+
+    // If permission is not granted, request it.
+    if (status != PermissionStatus.granted) {
+      await Permission.notification.request();
+    }
+
+    // If permission is granted, show a notification.
+    if (status == PermissionStatus.granted) {
+      FirebaseMessaging.instance.getInitialMessage().then(
+            (RemoteMessage? value) => setState(
+              () {
+                debugPrint("Initial!@8 1$value");
+                String initialMessage = "${value?.data}";
+                debugPrint("Initial!@8 2$initialMessage");
+                if (value!.data.isNotEmpty) {
+                  debugPrint("Notification Payload ${value.data}");
+                  var propertyPattern = RegExp(r'(\w+): ([^,]+)');
+
+                  var json = <String, String?>{};
+
+                  propertyPattern.allMatches("${value.data}").forEach((match) {
+                    var propertyName = match.group(1);
+                    var propertyValue = match.group(2);
+
+                    json[propertyName!] = propertyValue!.trim();
+                  });
+                  NotificationReceived notification =
+                      // NotificationReceived.fromJson(jsonDecode(jsData1));
+                      NotificationReceived.fromJson(json);
+                  // Navigation.instance.navigate('');
+
+                  NotificationHelper.setRead(
+                      notification.notification_id,
+                      notification.seo_name,
+                      notification.seo_name_category,
+                      notification.type,
+                      notification.post_id,
+                      notification.vendor_id,
+                      notification.category_id);
+                }
+              },
+            ),
+          );
+    }
     Provider.of<DataProvider>(
             Navigation.instance.navigatorKey.currentContext ?? context,
             listen: false)
         .setCurrent(0);
     await fetchProfile();
-    FirebaseMessaging.instance.getInitialMessage().then(
-          (RemoteMessage? value) => setState(
-            () {
-              debugPrint("Initial!@8 1$value");
-              String initialMessage = "${value?.data}";
-              debugPrint("Initial!@8 2$initialMessage");
-              if (value!.data.isNotEmpty) {
-                debugPrint("Notification Payload ${value.data}");
-                // var jsData = "${value.data}";
-                // jsData = jsData.replaceAll('{', '{"');
-                // jsData = jsData.replaceAll(': ', '": "');
-                // jsData = jsData.replaceAll(', ', '", "');
-                // jsData = jsData.replaceAll('}', '"}');
-                // debugPrint(jsData);
-                // NotificationReceived notification =
-                //     NotificationReceived.fromJson(jsonDecode(jsData));
-                var propertyPattern = RegExp(r'(\w+): ([^,]+)');
 
-                var json = <String, String?>{};
-
-                propertyPattern.allMatches("${value.data}").forEach((match) {
-                  var propertyName = match.group(1);
-                  var propertyValue = match.group(2);
-
-                  json[propertyName!] = propertyValue!.trim();
-                });
-                NotificationReceived notification =
-                // NotificationReceived.fromJson(jsonDecode(jsData1));
-                NotificationReceived.fromJson(json);
-                // Navigation.instance.navigate('');
-
-                NotificationHelper.setRead(
-                    notification.notification_id,
-                    notification.seo_name,
-                    notification.seo_name_category,
-                    notification.type,
-                    notification.post_id,
-                    notification.vendor_id,
-                    notification.category_id);
-              }
-            },
-          ),
-        );
     await fetchStories();
     await fetchHome();
     await fetchOpinion();
@@ -646,38 +649,6 @@ class _HomeScreenState extends State<HomeScreen> {
     await fetchPoll();
     await fetchNotification();
 
-    // Future.delayed(const Duration(seconds: 10), () {
-    //   FirebaseMessaging.instance.getInitialMessage().then(
-    //         (RemoteMessage? value) => setState(
-    //           () {
-    //             debugPrint("Initial!@8 1$value");
-    //             String initialMessage = "${value?.data}";
-    //             debugPrint("Initial!@8 2$initialMessage");
-    //             if (value!.data.isNotEmpty) {
-    //               debugPrint("Notification Payload ${value.data}");
-    //               var jsData = "${value.data}";
-    //               jsData = jsData.replaceAll('{', '{"');
-    //               jsData = jsData.replaceAll(': ', '": "');
-    //               jsData = jsData.replaceAll(', ', '", "');
-    //               jsData = jsData.replaceAll('}', '"}');
-    //               debugPrint(jsData);
-    //               NotificationReceived notification =
-    //                   NotificationReceived.fromJson(jsonDecode(jsData));
-    //               // Navigation.instance.navigate('');
-    //
-    //               NotificationHelper.setRead(
-    //                   notification.notification_id,
-    //                   notification.seo_name,
-    //                   notification.seo_name_category,
-    //                   notification.type,
-    //                   notification.post_id,
-    //                   notification.vendor_id,
-    //                   notification.category_id);
-    //             }
-    //           },
-    //         ),
-    //       );
-    // });
     getDynamicLink();
     showPopUp();
   }

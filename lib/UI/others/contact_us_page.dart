@@ -25,12 +25,20 @@ class ContactUsPage extends StatefulWidget {
 class _ContactUsPageState extends State<ContactUsPage> {
   Completer<GoogleMapController> _controller = Completer();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-
+  WebViewController controller = WebViewController();
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       fetchContactUs();
+      controller.loadHtmlString(
+        """
+        <html><body><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.6220674969863!2d91.75290802615376!3d26.176435144780122!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a598111600481%3A0xb90bf25d769e96f7!2sG%20Plus!5'
+              'e0!3m2!1sen!2sin!4v1664103997060!5m2!1sen!2sin" '
+              'width="1000" height="600" style="border:0;" allowfullscreen="true" '
+              'loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></body></html>
+        """
+      );
     });
   }
 
@@ -83,15 +91,16 @@ class _ContactUsPageState extends State<ContactUsPage> {
                           5.0) //                 <--- border radius here
                       ),
                 ),
-                child: WebView(
-                  initialUrl: Uri.dataFromString(
-                          '<html><body><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.6220674969863!2d91.75290802615376!3d26.176435144780122!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a598111600481%3A0xb90bf25d769e96f7!2sG%20Plus!5'
-                          'e0!3m2!1sen!2sin!4v1664103997060!5m2!1sen!2sin" '
-                          'width="1000" height="600" style="border:0;" allowfullscreen="true" '
-                          'loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></body></html>',
-                          mimeType: 'text/html')
-                      .toString(),
-                  javascriptMode: JavascriptMode.unrestricted,
+                child: WebViewWidget(
+                  // initialUrl: Uri.dataFromString(
+                  //         '<html><body><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.6220674969863!2d91.75290802615376!3d26.176435144780122!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a598111600481%3A0xb90bf25d769e96f7!2sG%20Plus!5'
+                  //         'e0!3m2!1sen!2sin!4v1664103997060!5m2!1sen!2sin" '
+                  //         'width="1000" height="600" style="border:0;" allowfullscreen="true" '
+                  //         'loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></body></html>',
+                  //         mimeType: 'text/html')
+                  //     .toString(),
+                  // javascriptMode: JavascriptMode.unrestricted,
+                  controller: controller,
                 ),
               ),
               SizedBox(
@@ -161,7 +170,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                               Theme.of(context).textTheme.headline5?.copyWith(
                                     color: Storage.instance.isDarkMode
                                         ? Colors.white
-                                        :Colors.black,
+                                        : Colors.black,
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
@@ -180,7 +189,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                     Icons.phone,
                     color: Storage.instance.isDarkMode
                         ? Constance.secondaryColor
-                        :Colors.black,
+                        : Colors.black,
                   ),
                   SizedBox(
                     width: 4.w,
@@ -201,7 +210,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                 Theme.of(context).textTheme.headline5?.copyWith(
                                       color: Storage.instance.isDarkMode
                                           ? Colors.white
-                                          :Colors.black,
+                                          : Colors.black,
                                     ),
                           ),
                           Text(
@@ -211,7 +220,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                 Theme.of(context).textTheme.headline5?.copyWith(
                                       color: Storage.instance.isDarkMode
                                           ? Colors.white
-                                          :Colors.black,
+                                          : Colors.black,
                                       fontWeight: FontWeight.bold,
                                     ),
                           ),
@@ -231,7 +240,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                     Icons.email,
                     color: Storage.instance.isDarkMode
                         ? Constance.secondaryColor
-                        :Colors.black,
+                        : Colors.black,
                   ),
                   SizedBox(
                     width: 4.w,
@@ -252,7 +261,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                 Theme.of(context).textTheme.headline5?.copyWith(
                                       color: Storage.instance.isDarkMode
                                           ? Colors.white
-                                          :Colors.black,
+                                          : Colors.black,
                                     ),
                           ),
                           Text(
@@ -262,7 +271,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                                 Theme.of(context).textTheme.headline5?.copyWith(
                                       color: Storage.instance.isDarkMode
                                           ? Colors.white
-                                          :Colors.black,
+                                          : Colors.black,
                                       fontWeight: FontWeight.bold,
                                     ),
                           ),
@@ -310,12 +319,12 @@ class _ContactUsPageState extends State<ContactUsPage> {
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
             return bd.Badge(
-              badgeColor: Constance.secondaryColor,
+              // badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Constance.thirdColor,
-                ),
+                      color: Constance.thirdColor,
+                    ),
               ),
               child: const Icon(Icons.notifications),
             );
@@ -323,7 +332,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
         ),
         IconButton(
           onPressed: () {
-            Navigation.instance.navigate('/search',args: "");
+            Navigation.instance.navigate('/search', args: "");
             // showSearch(
             //   context: context,
             //   delegate: SearchPage<Listing>(

@@ -246,15 +246,6 @@ class _BigDealPageState extends State<BigDealPage> {
                               : SizedBox(
                                   width: double.infinity,
                                   child: Center(
-                                    // child: CustomButton(
-                                    //     txt: expandCateg
-                                    //         ? 'Show less'
-                                    //         : 'View More',
-                                    //     onTap: () {
-                                    //       setState(() {
-                                    //         expandCateg = !expandCateg;
-                                    //       });
-                                    //     }),
                                     child: GestureDetector(
                                       onTap: () {
                                         if (!expandCateg) {
@@ -337,13 +328,13 @@ class _BigDealPageState extends State<BigDealPage> {
                       ),
                     )
                   : (isEmpty
-                  ? Image.asset(
-                "assets/images/no_data.png",
-                scale: 4,
-              )
-                  : Lottie.asset(
-                Constance.searchingIcon,
-              ));
+                      ? Image.asset(
+                          "assets/images/no_data.png",
+                          scale: 4,
+                        )
+                      : Lottie.asset(
+                          Constance.searchingIcon,
+                        ));
             }),
           ),
         ),

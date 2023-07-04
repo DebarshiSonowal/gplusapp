@@ -324,9 +324,9 @@ class _RedeemPointsState extends State<RedeemPoints> {
                                         ),
                                         const Spacer(),
                                         Text(
-                                          Jiffy(current.updated_at,
-                                                  "yyyy-MM-dd")
-                                              .format("dd/MM/yyyy"),
+                                          Jiffy.parse(current.updated_at??"",
+                                                  pattern: "yyyy-MM-dd")
+                                              .format(pattern: "dd/MM/yyyy"),
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.start,
                                           style: Theme.of(Navigation.instance
@@ -597,7 +597,7 @@ class _RedeemPointsState extends State<RedeemPoints> {
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
             return bd.Badge(
-              badgeColor: Constance.secondaryColor,
+              // badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(

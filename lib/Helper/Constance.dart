@@ -78,6 +78,16 @@ class Constance {
   static String copyright =
       'This material may not be published, broadcast, rewritten, or redistributed, ${DateTime.now().year} © G Plus. All rights reserved. Copyright © ${DateTime.now().year} Insight Brandcom Pvt. Ltd. All rights reserved.';
 
+  static Widget androidWarning = Padding(
+    padding: EdgeInsets.symmetric(
+      horizontal: 4.w,
+    ),
+    child: const Text(
+      "For users with Android 12 & above, we recommend that you upload the media from the Gallery to avoid any crashes",
+      style: TextStyle(fontStyle: FontStyle.italic, fontSize: 8),
+    ),
+  );
+
   static AppBar buildAppBar(
       String screen, bool enable, GlobalKey<ScaffoldState> key) {
     return AppBar(
@@ -140,17 +150,17 @@ class Constance {
             Navigation.instance.navigate('/notification');
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
-            return data.notifications.isNotEmpty?bd.Badge(
-              badgeColor: Constance.secondaryColor,
-              badgeContent: Text(
-                '${data.notifications.length}',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6
-                    ?.copyWith(color: Constance.primaryColor, fontSize: 8.sp),
-              ),
-              child: const Icon(Icons.notifications),
-            ):const Icon(Icons.notifications);
+            return data.notifications.isNotEmpty
+                ? bd.Badge(
+                    // badgeColor: Constance.secondaryColor,
+                    badgeContent: Text(
+                      '${data.notifications.length}',
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Constance.primaryColor, fontSize: 8.sp),
+                    ),
+                    child: const Icon(Icons.notifications),
+                  )
+                : const Icon(Icons.notifications);
           }),
         ),
         IconButton(
@@ -209,7 +219,7 @@ class Constance {
           },
           icon: Consumer<DataProvider>(builder: (context, data, _) {
             return bd.Badge(
-              badgeColor: Constance.secondaryColor,
+              // badgeColor: Constance.secondaryColor,
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(

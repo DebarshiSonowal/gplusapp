@@ -198,7 +198,7 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                 height: 2.h,
               ),
               Text(
-                'Posted on ${Jiffy(local?.created_at ?? "2020-06-21", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                'Posted on ${Jiffy.parse(local?.created_at ?? "2020-06-21", pattern: "yyyy-MM-dd").format(pattern: "dd/MM/yyyy")}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
                       color: Storage.instance.isDarkMode
                           ? Colors.white70

@@ -90,9 +90,10 @@ class HistorySection extends StatelessWidget {
                                     CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(
-                                    width: 44.w,
+                                    width: 45.w,
                                     child: Text(
                                       current.title ?? '25% OFF',
+                                      maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.start,
                                       style: Theme.of(Navigation.instance
@@ -101,7 +102,7 @@ class HistorySection extends StatelessWidget {
                                           .headline5
                                           ?.copyWith(
                                             color: Colors.black,
-                                            // fontSize: 11.sp,
+                                        fontSize: 10.sp,
                                             // fontWeight: FontWeight.bold,
                                           ),
                                     ),
@@ -110,9 +111,10 @@ class HistorySection extends StatelessWidget {
                                     height: 0.5.h,
                                   ),
                                   SizedBox(
-                                    width: 44.w,
+                                    width: 45.w,
                                     child: Text(
                                       current.vendor?.shop_name ?? "",
+                                      maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.start,
                                       style: Theme.of(Navigation.instance
@@ -121,29 +123,8 @@ class HistorySection extends StatelessWidget {
                                           .headline4
                                           ?.copyWith(
                                             color: Colors.black,
-                                            // fontSize: 11.sp,
+                                            fontSize: 11.sp,
                                             fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 0.5.h,
-                                  ),
-                                  SizedBox(
-                                    width: 40.w,
-                                    child: Text(
-                                      current.vendor?.address ??
-                                          'RGB road, Zoo tiniali',
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.start,
-                                      style: Theme.of(Navigation.instance
-                                              .navigatorKey.currentContext!)
-                                          .textTheme
-                                          .headline5
-                                          ?.copyWith(
-                                            color: Colors.black,
-                                            // fontSize: 11.sp,
-                                            // fontWeight: FontWeight.bold,
                                           ),
                                     ),
                                   ),
@@ -151,21 +132,21 @@ class HistorySection extends StatelessWidget {
                               ),
                               const Spacer(),
                               Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(
-                                    width: 30.w,
+                                    width: 35.w,
                                     child: Text(
                                       current.code ?? '8486',
                                       overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.end,
+                                      textAlign: TextAlign.start,
                                       style: Theme.of(Navigation.instance
                                               .navigatorKey.currentContext!)
                                           .textTheme
                                           .headline5
                                           ?.copyWith(
                                             color: Colors.grey.shade800,
-                                            // fontSize: 11.sp,
+                                            fontSize: 10.sp,
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
@@ -174,7 +155,7 @@ class HistorySection extends StatelessWidget {
                                     height: 0.5.h,
                                   ),
                                   Text(
-                                    'From: ${Jiffy(current.valid_from.toString().split('T')[0] ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
+                                    Jiffy.parse(current.valid_from.toString().split('T')[0] ?? "", pattern: "yyyy-MM-dd").format(pattern: "dd/MM/yyyy"),
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.start,
                                     style: Theme.of(Navigation.instance
@@ -183,24 +164,7 @@ class HistorySection extends StatelessWidget {
                                         .headline5
                                         ?.copyWith(
                                           color: Colors.black,
-                                          // fontSize: 11.sp,
-                                          // fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                  SizedBox(
-                                    height: 0.5.h,
-                                  ),
-                                  Text(
-                                    'To: ${Jiffy(current.valid_to.toString().split('T')[0] ?? "", "yyyy-MM-dd").format("dd/MM/yyyy")}',
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.start,
-                                    style: Theme.of(Navigation.instance
-                                            .navigatorKey.currentContext!)
-                                        .textTheme
-                                        .headline5
-                                        ?.copyWith(
-                                          color: Colors.black,
-                                          // fontSize: 11.sp,
+                                          fontSize: 11.sp,
                                           // fontWeight: FontWeight.bold,
                                         ),
                                   ),

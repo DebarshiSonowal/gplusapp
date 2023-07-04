@@ -57,12 +57,14 @@ class _CategoryPageState extends State<CategoryPage> {
   void _onLoading() async {
     _refreshController.loadComplete();
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("category",true,_scaffoldKey),
+      appBar: Constance.buildAppBar("category", true, _scaffoldKey),
       drawer: const BergerMenuMemPage(screen: "category"),
       backgroundColor: Colors.white,
       // drawer: BergerMenuMemPage(),
@@ -182,7 +184,7 @@ class _CategoryPageState extends State<CategoryPage> {
                           height: 2.h,
                         ),
                         Text(
-                          '${data.news_from[0].author_name}, ${Jiffy(data.news_from[0].publish_date?.split(" ")[0], "yyyy-MM-dd").fromNow()}',
+                          '${data.news_from[0].author_name}, ${Jiffy.parse(data.news_from[0].publish_date?.split(" ")[0] ?? "", pattern: "yyyy-MM-dd").fromNow()}',
                           style: Theme.of(Navigation
                                   .instance.navigatorKey.currentContext!)
                               .textTheme
@@ -211,7 +213,8 @@ class _CategoryPageState extends State<CategoryPage> {
                                 return GestureDetector(
                                   onTap: () {
                                     if (data.profile?.is_plan_active ?? false) {
-                                      Navigation.instance.navigate('/categoryStory',
+                                      Navigation.instance.navigate(
+                                          '/categoryStory',
                                           args:
                                               '${widget.categ},${item.seo_name}');
                                     } else {
@@ -266,13 +269,14 @@ class _CategoryPageState extends State<CategoryPage> {
                                                 // item.publish_date
                                                 //         ?.split(" ")[0] ??
                                                 //     "",
-                                                Jiffy(
+                                                Jiffy.parse(
                                                         item.publish_date
                                                                 ?.split(
                                                                     " ")[0] ??
                                                             "",
-                                                        "yyyy-MM-dd")
-                                                    .format("dd/MM/yyyy"),
+                                                        pattern: "yyyy-MM-dd")
+                                                    .format(
+                                                        pattern: "dd/MM/yyyy"),
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .headline6
@@ -388,8 +392,6 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
-
-
   String capitalize(String str) {
     return "${str[0].toUpperCase()}${str.substring(1).toLowerCase()}";
   }
@@ -412,7 +414,8 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   void fetchContent() async {
-    final response = await ApiProvider.instance.getCategoryArticle(widget.categ, page_no);
+    final response =
+        await ApiProvider.instance.getCategoryArticle(widget.categ, page_no);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,

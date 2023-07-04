@@ -463,23 +463,24 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     final response = await ApiProvider.instance.getEpaper();
     if (response.success ?? false) {
       var status = await Permission.storage.status;
-      if (status.isDenied) {
+      if (status.isDenied || status.isPermanentlyDenied) {
         debugPrint("First case");
-        try {
-          if (await Permission.storage.request().isGranted) {
-            debugPrint("Third case");
-
-          } else {
-            debugPrint("Fourth case ${await Permission.storage.request().isGranted}");
-            Navigation.instance.goBack();
-            showErrorStorage("We require storage permissions",);
-          }
-        } catch (e) {
-          debugPrint("Fifth case");
-          print(e);
-          Navigation.instance.goBack();
-          showErrorStorage("We require storage permissions");
-        }
+        // try {
+        //   if (await Permission.storage.request().isGranted) {
+        //     debugPrint("Third case");
+        //   } else {
+        //     debugPrint("Fourth case ${await Permission.storage.request().isGranted}");
+        //     Navigation.instance.goBack();
+        //     showErrorStorage("We require storage permissions");
+        //   }
+        // } catch (e) {
+        //   debugPrint("Fifth case");
+        //   print(e);
+        //   Navigation.instance.goBack();
+        //   showErrorStorage("We require storage permissions");
+        // }
+        await ApiProvider.instance.download2(
+            response.e_paper?.news_pdf ?? "", response.e_paper?.title ?? "");
         // We didn't ask for permission yet or the permission has been denied before but not permanently.
       } else {
         debugPrint("Second case");
@@ -490,6 +491,9 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
       showError("Failed to download E-paper");
     }
   }
+
+
+
 
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
