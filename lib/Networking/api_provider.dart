@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Helper/Storage.dart';
@@ -129,7 +130,7 @@ class ApiProvider {
       } else {
         debugPrint("SearchResultResponse  error: ${response?.data}");
         return SearchResultResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -170,7 +171,7 @@ class ApiProvider {
       } else {
         debugPrint("OthersSearchResultResponse  error: ${response?.data}");
         return OthersSearchResultResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -205,7 +206,7 @@ class ApiProvider {
         return ProfileResponse2.fromJson(response?.data);
       } else {
         debugPrint("Profile error: ${response?.data}");
-        return ProfileResponse2.withError("Your Internet Connection is Slo");
+        return ProfileResponse2.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -249,7 +250,7 @@ class ApiProvider {
         return AuthorResponse.fromJson(response?.data);
       } else {
         debugPrint("AuthorResponse error: ${response?.data}");
-        return AuthorResponse.withError("Your Internet Connection is Slo");
+        return AuthorResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -289,7 +290,7 @@ class ApiProvider {
         return CommentResponse.fromJson(response?.data);
       } else {
         debugPrint("CommentResponse error: ${response?.data}");
-        return CommentResponse.withError("Your Internet Connection is Slo");
+        return CommentResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -350,7 +351,97 @@ class ApiProvider {
       'referred_by_code': referal,
       'is_new': is_new
     };
-    var url = "${baseUrl}/profile-new";
+    var url = "${baseUrl}/profile-store";
+    // var url = "${baseUrl}/profile";
+    dio = Dio(option);
+    dio?.interceptors.add(RetryInterceptor(
+      dio: dio!,
+      logPrint: print, // specify log function
+      retries: 3, // retry count
+      retryDelays: const [
+        Duration(seconds: 1), // wait 1 sec before first retry
+        Duration(seconds: 2), // wait 2 sec before second retry
+        Duration(seconds: 3), // wait 3 sec before third retry
+      ],
+    ));
+    debugPrint(url.toString());
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(url, data: jsonEncode(data));
+      debugPrint("create Profile response: ${response?.data}", wrapWidth: 1024);
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ProfileResponse.fromJson(response?.data);
+      } else {
+        debugPrint(
+            "create Profile error: ${response?.statusCode} ${response?.data}",
+            wrapWidth: 1024);
+        return ProfileResponse.withError(
+            response?.data['message'] ?? "Your Internet Connection is Slow ${response?.statusCode} ${response?.data}");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint(
+          "create Profile error: ${e.response?.statusCode ?? 0} ${e.response}",
+          wrapWidth: 1024);
+      return ProfileResponse.withError(
+          e.response!.data['message'] ?? "Your Internet Connection is Slow");
+    }
+  }
+
+  Future<ProfileResponse> updateProfile(
+      address_id,
+      mobile,
+      f_name,
+      l_name,
+      email,
+      dob,
+      address,
+      longitude,
+      latitude,
+      topic_ids,
+      geo_ids,
+      has_deal_notify_perm,
+      has_ghy_connect_notify_perm,
+      has_classified_notify_perm,
+      gender,
+      referal,
+      is_new) async {
+    BaseOptions option =
+    BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var data = {
+      'mobile': mobile,
+      'f_name': f_name,
+      'l_name': l_name,
+      'email': email,
+      'dob': dob,
+      'gender': gender == 'Male'
+          ? 1
+          : gender == 'Female'
+          ? 2
+          : 0,
+      'address': address,
+      'longitude': longitude,
+      'latitude': latitude,
+      'address_id': address_id,
+      'topic_ids': topic_ids,
+      'geo_ids': geo_ids,
+      'has_deal_notify_perm': has_deal_notify_perm,
+      'has_ghy_connect_notify_perm': has_ghy_connect_notify_perm,
+      'has_classified_notify_perm': has_classified_notify_perm,
+      'referred_by_code': referal,
+      'is_new': is_new
+    };
+    var url = "${baseUrl}/profile-update";
     // var url = "${baseUrl}/profile";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -366,7 +457,7 @@ class ApiProvider {
             "create Profile error: ${response?.statusCode} ${response?.data}",
             wrapWidth: 1024);
         return ProfileResponse.withError(
-            response?.data['message'] ?? "Your Internet Connection is Slo");
+            response?.data['message'] ?? "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -378,7 +469,7 @@ class ApiProvider {
           "create Profile error: ${e.response?.statusCode ?? 0} ${e.response}",
           wrapWidth: 1024);
       return ProfileResponse.withError(
-          e.response!.data['message'] ?? "Your Internet Connection is Slo");
+          e.response!.data['message'] ?? "Your Internet Connection is Slow");
     }
   }
 
@@ -407,7 +498,7 @@ class ApiProvider {
         return ArticleResponse.fromJson(response?.data);
       } else {
         debugPrint("Article error: ${response?.data}");
-        return ArticleResponse.withError("Your Internet Connection is Slo");
+        return ArticleResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -454,7 +545,7 @@ class ApiProvider {
       } else {
         debugPrint("topics/${categ_name} Article error: ${response?.data}");
         return CategoryArticleResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -499,7 +590,7 @@ class ApiProvider {
         return ArticleResponse.fromJson(response?.data);
       } else {
         debugPrint("More Article error: ${response?.data}");
-        return ArticleResponse.withError("Your Internet Connection is Slo");
+        return ArticleResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -537,7 +628,7 @@ class ApiProvider {
         return AddressResponse.fromJson(response?.data);
       } else {
         debugPrint("address-list error: ${response?.data}");
-        return AddressResponse.withError("Your Internet Connection is Slo");
+        return AddressResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -578,7 +669,7 @@ class ApiProvider {
         return AddressResponse.fromJson(response?.data);
       } else {
         debugPrint("address error: ${response?.data}");
-        return AddressResponse.withError("Your Internet Connection is Slo");
+        return AddressResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -620,7 +711,7 @@ class ApiProvider {
         return AddressResponse.fromJson(response?.data);
       } else {
         debugPrint("address error: ${response?.data}");
-        return AddressResponse.withError("Your Internet Connection is Slo");
+        return AddressResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -661,7 +752,7 @@ class ApiProvider {
         return AddressResponse.fromJson(response?.data);
       } else {
         debugPrint("address delete error: ${response?.data}");
-        return AddressResponse.withError("Your Internet Connection is Slo");
+        return AddressResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -702,7 +793,7 @@ class ApiProvider {
       } else {
         debugPrint("Article Details error: ${response?.data}");
         return ArticleDetailsResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -743,7 +834,7 @@ class ApiProvider {
       } else {
         debugPrint("topic/${categ_name}/${slug} error: ${response?.data}");
         return ArticleDetailsResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -785,7 +876,7 @@ class ApiProvider {
         return OpinionResponse.fromJson(response?.data);
       } else {
         debugPrint("Article error: ${response?.data}");
-        return OpinionResponse.withError("Your Internet Connection is Slo");
+        return OpinionResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -823,7 +914,7 @@ class ApiProvider {
         return ArticleDescResponse.fromJson(response?.data);
       } else {
         debugPrint("Article desc error: ${response?.data}");
-        return ArticleDescResponse.withError("Your Internet Connection is Slo");
+        return ArticleDescResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -862,7 +953,7 @@ class ApiProvider {
         return ArticleResponse.fromJson(response?.data);
       } else {
         debugPrint("HomeAlbum error: ${response?.data}");
-        return ArticleResponse.withError("Your Internet Connection is Slo");
+        return ArticleResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -900,7 +991,7 @@ class ApiProvider {
         return StoryResponse.fromJson(response?.data);
       } else {
         debugPrint("StoryResponse error: ${response?.data}");
-        return StoryResponse.withError("Your Internet Connection is Slo");
+        return StoryResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -939,7 +1030,7 @@ class ApiProvider {
       } else {
         debugPrint("getNotifications error: ${response?.data}");
         return NotificationInDeviceResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -977,7 +1068,7 @@ class ApiProvider {
         return VideoNewsResponse.fromJson(response?.data);
       } else {
         debugPrint("Weekly error: ${response?.data}");
-        return VideoNewsResponse.withError("Your Internet Connection is Slo");
+        return VideoNewsResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1019,7 +1110,7 @@ class ApiProvider {
       } else {
         debugPrint("latest-opinions error: ${response?.data}");
         return LatestOpinionResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1063,7 +1154,7 @@ class ApiProvider {
       } else {
         debugPrint("OpinionDetailsResponse error: ${response?.data}");
         return OpinionDetailsResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1105,7 +1196,7 @@ class ApiProvider {
       } else {
         debugPrint("ClassifiedDetailsResponse error: ${response?.data}");
         return ClassifiedDetailsResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1146,7 +1237,7 @@ class ApiProvider {
         return E_paperRepsonse.fromJson(response?.data);
       } else {
         debugPrint("E_paper error: ${response?.data}");
-        return E_paperRepsonse.withError("Your Internet Connection is Slo");
+        return E_paperRepsonse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1184,7 +1275,7 @@ class ApiProvider {
         return VideoNewsResponse.fromJson(response?.data);
       } else {
         debugPrint("video-news error: ${response?.data}");
-        return VideoNewsResponse.withError("Your Internet Connection is Slo");
+        return VideoNewsResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1223,7 +1314,7 @@ class ApiProvider {
       } else {
         debugPrint("video-news error: ${response?.data}");
         return MoreVideoNewsResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1265,7 +1356,7 @@ class ApiProvider {
         return MembershipResponse2.fromJson(response?.data);
       } else {
         debugPrint("subscriptions error: ${response?.data}");
-        return MembershipResponse2.withError("Your Internet Connection is Slo");
+        return MembershipResponse2.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1307,7 +1398,7 @@ class ApiProvider {
         return MembershipResponse.fromJson(response?.data);
       } else {
         debugPrint("subscriptions error: ${response?.data}");
-        return MembershipResponse.withError("Your Internet Connection is Slo");
+        return MembershipResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1345,7 +1436,7 @@ class ApiProvider {
       } else {
         debugPrint("promoted-deal-list error: ${response?.data}");
         return PromotedDealResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1387,7 +1478,7 @@ class ApiProvider {
         return ShopResponse.fromJson(response?.data);
       } else {
         debugPrint("ShopResponse error: ${response?.data}");
-        return ShopResponse.withError("Your Internet Connection is Slo");
+        return ShopResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1424,7 +1515,7 @@ class ApiProvider {
         return DealDetailsResponse.fromJson(response?.data);
       } else {
         debugPrint("DealDetailsResponse error: ${response?.data}");
-        return DealDetailsResponse.withError("Your Internet Connection is Slo");
+        return DealDetailsResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1462,7 +1553,7 @@ class ApiProvider {
       } else {
         debugPrint("DealDetailsResponse error: ${response?.data}");
         return GenericBoolMsgResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1499,7 +1590,7 @@ class ApiProvider {
         return GenericMsgResponse.fromJson(response?.data);
       } else {
         debugPrint("DealDetailsResponse error: ${response?.data}");
-        return GenericMsgResponse.withError("Your Internet Connection is Slo");
+        return GenericMsgResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1536,7 +1627,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("notifications error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1574,7 +1665,7 @@ class ApiProvider {
         return GenericMsgResponse.fromJson(response?.data);
       } else {
         debugPrint("DealDetailsResponse error: ${response?.data}");
-        return GenericMsgResponse.withError("Your Internet Connection is Slo");
+        return GenericMsgResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1611,7 +1702,7 @@ class ApiProvider {
         return ReportResponse.fromJson(response?.data);
       } else {
         debugPrint("user-report-list error: ${response?.data}");
-        return ReportResponse.withError("Your Internet Connection is Slo");
+        return ReportResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1648,7 +1739,7 @@ class ApiProvider {
         return GenericMsgResponse.fromJson(response?.data);
       } else {
         debugPrint("user-security-msg error: ${response?.data}");
-        return GenericMsgResponse.withError("Your Internet Connection is Slo");
+        return GenericMsgResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1685,7 +1776,7 @@ class ApiProvider {
         return GenericMsgResponse.fromJson(response?.data);
       } else {
         debugPrint("GuwahatiConnect error: ${response?.data}");
-        return GenericMsgResponse.withError("Your Internet Connection is Slo");
+        return GenericMsgResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1724,7 +1815,7 @@ class ApiProvider {
       } else {
         debugPrint("RedeemDetailsResponse error: ${response?.data}");
         return RedeemDetailsResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1767,7 +1858,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("enterPreferences error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1810,7 +1901,7 @@ class ApiProvider {
         return BlockedUserResponse.fromJson(response?.data);
       } else {
         debugPrint("BlockedUserResponse error: ${response?.data}");
-        return BlockedUserResponse.withError("Your Internet Connection is Slo");
+        return BlockedUserResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1850,7 +1941,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("device_token error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1893,7 +1984,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("user-report error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1932,7 +2023,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("block-user-by-user error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1971,7 +2062,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("unblock-user-by-user error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2010,7 +2101,7 @@ class ApiProvider {
         return BlockedUserResponse.fromJson(response?.data);
       } else {
         debugPrint("blocked-user-list error: ${response?.data}");
-        return BlockedUserResponse.withError("Your Internet Connection is Slo");
+        return BlockedUserResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2052,7 +2143,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("comment-delete error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2093,7 +2184,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("comment-edit error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2134,7 +2225,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("notifications/read error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2176,7 +2267,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("setAsFavourite error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2218,7 +2309,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("Swtich set error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2256,7 +2347,7 @@ class ApiProvider {
       } else {
         debugPrint("Switch get error: ${response?.data}");
         return SwitchStatusResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2287,7 +2378,7 @@ class ApiProvider {
         return RazorpayResponse.fromJson(response?.data);
       } else {
         debugPrint("Razorpay error: ${response?.data}");
-        return RazorpayResponse.withError("Your Internet Connection is Slo");
+        return RazorpayResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2357,7 +2448,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("verifyPayment error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2430,7 +2521,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("verifyPayment error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2474,7 +2565,7 @@ class ApiProvider {
       } else {
         debugPrint("shop-categories error: ${response?.data}");
         return ShopCategoryResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2517,7 +2608,7 @@ class ApiProvider {
       } else {
         debugPrint("GrievenceRedressalResponse  error: ${response?.data}");
         return GrievenceRedressalResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2560,7 +2651,7 @@ class ApiProvider {
       } else {
         debugPrint("RedeemHistoryResponse error: ${response?.data}");
         return RedeemHistoryResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2602,7 +2693,7 @@ class ApiProvider {
         return AdvertiseResponse.fromJson(response?.data);
       } else {
         debugPrint("advertise error: ${response?.data}");
-        return AdvertiseResponse.withError("Your Internet Connection is Slo");
+        return AdvertiseResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2645,7 +2736,7 @@ class ApiProvider {
       } else {
         debugPrint("full advertise error: ${response?.data}");
         return FullScreenAdResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2686,7 +2777,7 @@ class ApiProvider {
         return TopPicksResponse.fromJson(response?.data);
       } else {
         debugPrint("toppicks error: ${response?.data}");
-        return TopPicksResponse.withError("Your Internet Connection is Slo");
+        return TopPicksResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2723,7 +2814,7 @@ class ApiProvider {
         return TopickResponse.fromJson(response?.data);
       } else {
         debugPrint("topicks error: ${response?.data}");
-        return TopickResponse.withError("Your Internet Connection is Slo");
+        return TopickResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2763,7 +2854,7 @@ class ApiProvider {
         return ClassifiedResponse.fromJson(response?.data);
       } else {
         debugPrint("ClassifiedResponse error: ${response?.data}");
-        return ClassifiedResponse.withError("Your Internet Connection is Slo");
+        return ClassifiedResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2801,7 +2892,7 @@ class ApiProvider {
       } else {
         debugPrint("ClassifiedCategoryResponse error: ${response?.data}");
         return ClassifiedCategoryResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2839,7 +2930,7 @@ class ApiProvider {
         return ReferEarnResponse.fromJson(response?.data);
       } else {
         debugPrint("ReferEarnResponse error: ${response?.data}");
-        return ReferEarnResponse.withError("Your Internet Connection is Slo");
+        return ReferEarnResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       debugPrint("ReferEarnResponse response: ${e.response}");
@@ -2871,7 +2962,7 @@ class ApiProvider {
         return AboutUsResponse.fromJson(response?.data);
       } else {
         debugPrint("AboutUsResponse error: ${response?.data}");
-        return AboutUsResponse.withError("Your Internet Connection is Slo");
+        return AboutUsResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2908,7 +2999,7 @@ class ApiProvider {
         return AboutUsResponse.fromJson(response?.data);
       } else {
         debugPrint("AboutUsResponse error: ${response?.data}");
-        return AboutUsResponse.withError("Your Internet Connection is Slo");
+        return AboutUsResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2945,7 +3036,7 @@ class ApiProvider {
         return AboutUsResponse.fromJson(response?.data);
       } else {
         debugPrint("AboutUsResponse error: ${response?.data}");
-        return AboutUsResponse.withError("Your Internet Connection is Slo");
+        return AboutUsResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2982,7 +3073,7 @@ class ApiProvider {
         return AboutUsResponse.fromJson(response?.data);
       } else {
         debugPrint("privacy-n-policy error: ${response?.data}");
-        return AboutUsResponse.withError("Your Internet Connection is Slo");
+        return AboutUsResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3019,7 +3110,7 @@ class ApiProvider {
         return ContactUsResponse.fromJson(response?.data);
       } else {
         debugPrint("ContactUsResponse error: ${response?.data}");
-        return ContactUsResponse.withError("Your Internet Connection is Slo");
+        return ContactUsResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3057,7 +3148,7 @@ class ApiProvider {
       } else {
         debugPrint("guwahati-connect error: ${response?.data}");
         return GuwahatiConnectResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3095,7 +3186,7 @@ class ApiProvider {
       } else {
         debugPrint("guwahati-connect error: ${response?.data}");
         return GuwahatiConnectSpecificResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3133,7 +3224,7 @@ class ApiProvider {
       } else {
         debugPrint("guwahati-connect my error: ${response?.data}");
         return GuwahatiConnectResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3171,7 +3262,7 @@ class ApiProvider {
       } else {
         debugPrint("citizen-journalist-list error: ${response?.data}");
         return CitizenJournalistResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3209,7 +3300,7 @@ class ApiProvider {
       } else {
         debugPrint("citizen-journalist-list error: ${response?.data}");
         return CitizenJournalistResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3247,7 +3338,7 @@ class ApiProvider {
       } else {
         debugPrint("PollOfTheWeekResponse error: ${response?.data}");
         return PollOfTheWeekResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3291,7 +3382,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postPollOfTheWeek error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3338,7 +3429,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("advertiseWithUs error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3379,7 +3470,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("feedback error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3420,7 +3511,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("deactiveAccount error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3467,7 +3558,7 @@ class ApiProvider {
       } else {
         debugPrint("ReferEarnHistoryResponse error: ${response?.data}");
         return ReferEarnHistoryResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3510,7 +3601,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postLike error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3554,7 +3645,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("addBookmark error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3599,7 +3690,7 @@ class ApiProvider {
       } else {
         debugPrint("BookmarkItems error: ${response?.data}");
         return BookmarkItemsResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3642,7 +3733,7 @@ class ApiProvider {
         return MessageResponse.fromJson(response?.data);
       } else {
         debugPrint("MessageResponse  error: ${response?.data}");
-        return MessageResponse.withError("Your Internet Connection is Slo");
+        return MessageResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3686,7 +3777,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postLike error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3732,7 +3823,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postComment error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3781,7 +3872,7 @@ class ApiProvider {
         return CreateOrderResponse.fromJson(response?.data);
       } else {
         debugPrint("CreateOrderResponse1 error: ${response?.data}");
-        return CreateOrderResponse.withError("Your Internet Connection is Slo");
+        return CreateOrderResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3825,7 +3916,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("citizen-journalist-delete error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3870,7 +3961,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("deleteClassified error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3915,7 +4006,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("verify-version error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -3957,7 +4048,7 @@ class ApiProvider {
       } else {
         debugPrint("free-subscriber error: ${response?.data}");
         return FullScreenAdResponse.withError(
-            "Your Internet Connection is Slo");
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4001,7 +4092,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("guwahati-connect-delete error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4056,7 +4147,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postGrievance error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4116,7 +4207,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postClassified error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4185,7 +4276,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("update Classified error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4246,7 +4337,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postCitizenJournalist error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4304,7 +4395,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postCitizenJournalist error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4363,7 +4454,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("postguwahati-connect error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4424,7 +4515,7 @@ class ApiProvider {
         return GenericResponse.fromJson(response?.data);
       } else {
         debugPrint("update guwahati-connect error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slo");
+        return GenericResponse.withError("Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {

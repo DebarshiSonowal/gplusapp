@@ -8,7 +8,7 @@ class Classified {
   int? id, user_id, classified_category_id, locality_id, status, total_views;
   double? price;
   CategoryName? categoryName;
-  String? title, description, disclaimer;
+  String? title, description, disclaimer,remarks;
   Locality? locality;
   List<AttachFile>? attach_files;
   Profile? user;
@@ -54,6 +54,7 @@ class Classified {
     title = json['title'] ?? "";
     description = json['description'] ?? "";
     disclaimer = json['call_disclaimer'] ?? "";
+    remarks = json['remarks'] ?? "";
   }
 }
 

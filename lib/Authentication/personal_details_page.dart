@@ -1034,7 +1034,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
         1,);
     if (reponse.success ?? false) {
       // setPreferences();
-
+      Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
@@ -1042,12 +1042,12 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
       debugPrint("Profile Created ${reponse.profile!.id}");
       // logTheSignUpSuccessClick("",
       //     "", reponse.profile!);
-      Navigation.instance.navigateAndReplace('/main');
+      Navigation.instance.navigateAndRemoveUntil('/main');
     } else {
       // showError(reponse.msg ?? "Something went wrong");
       Navigation.instance.goBack();
       AlertX.instance.showAlert(
-          title: "Error",
+          title: "Error in Creating Profile",
           msg: reponse.msg ?? "Something went wrong",
           positiveButtonText: "Done",
           positiveButtonPressed: () {

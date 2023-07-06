@@ -407,7 +407,7 @@ class _PostAListingState extends State<PostAListing>
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'By clicking "Go ahead" you agreed to our ',
+                        text: 'By clicking "Submit" you agreed to our ',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: Storage.instance.isDarkMode
                                   ? Colors.white

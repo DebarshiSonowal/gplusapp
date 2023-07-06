@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:gplusapp/Helper/string_extension.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
@@ -71,7 +72,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                             width: 5.w,
                           ),
                           Text(
-                            'Refers & Earn',
+                            'Refer & Earn',
                             style: Theme.of(Navigation
                                     .instance.navigatorKey.currentContext!)
                                 .textTheme
@@ -158,7 +159,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                         height: 2.h,
                       ),
                       Text(
-                        'Hi ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile!.name}!\n\n${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).refer_earn}',
+                        'Hi ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile!.name!.capitalize()}!\n\n${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).refer_earn}',
                         style: Theme.of(Navigation
                                 .instance.navigatorKey.currentContext!)
                             .textTheme
@@ -511,9 +512,11 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                             ),
                                             const Spacer(),
                                             Text(
-                                              Jiffy.parse(current.updated_at??"",
+                                              Jiffy.parse(
+                                                      current.updated_at ?? "",
                                                       pattern: "yyyy-MM-dd")
-                                                  .format(pattern: "dd/MM/yyyy"),
+                                                  .format(
+                                                      pattern: "dd/MM/yyyy"),
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.start,
                                               style: Theme.of(Navigation

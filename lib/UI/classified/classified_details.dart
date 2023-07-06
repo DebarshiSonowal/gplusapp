@@ -338,17 +338,59 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                                   .textTheme
                                   .headline5
                                   ?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black54,
-                                  ),
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black54,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.notes,
+                              color: Storage.instance.isDarkMode
+                                  ? Constance.secondaryColor
+                                  : Colors.black54,
+                              size: 15.sp,
+                            ),
+                            SizedBox(
+                              width: 2.w,
+                            ),
+                            ReadMoreText(
+                              data.selectedClassified?.description ??
+                                  'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
+                                      ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+                                      ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+                                      ' remaining essentially unchanged',
+                              style:
+                                  Theme.of(context).textTheme.headline5?.copyWith(
+                                        color: Storage.instance.isDarkMode
+                                            ? Colors.white70
+                                            : Colors.black54,
+                                        // fontWeight: FontWeight.bold,
+                                        fontSize: 11.sp,
+                                      ),
+                              trimLines: 5,
+                              colorClickableText: Constance.secondaryColor,
+                              trimMode: TrimMode.Line,
+                              trimCollapsedText: 'Show more',
+                              trimExpandedText: 'Show less',
                             ),
                           ],
                         ),
                       ),
                       SizedBox(
-                        height: 1.h,
+                        height: 2.h,
                       ),
+
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.w),
                         child: Row(
@@ -372,43 +414,47 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                                   .textTheme
                                   .headline6
                                   ?.copyWith(
-                                    color: getStatusColour(
-                                        data.selectedClassified?.status ?? 0),
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                color: getStatusColour(
+                                    data.selectedClassified?.status ?? 0),
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.w),
-                        child: ReadMoreText(
-                          data.selectedClassified?.description ??
-                              'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                                  ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                                  ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                                  ' remaining essentially unchanged',
-                          style:
-                              Theme.of(context).textTheme.headline5?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white70
-                                        : Colors.black54,
-                                    // fontWeight: FontWeight.bold,
-                                    fontSize: 11.sp,
-                                  ),
-                          trimLines: 5,
-                          colorClickableText: Constance.secondaryColor,
-                          trimMode: TrimMode.Line,
-                          trimCollapsedText: 'Show more',
-                          trimExpandedText: 'Show less',
-                        ),
-                      ),
-                      SizedBox(
+                      (data.selectedClassified?.is_post_by_me??true)?SizedBox(
                         height: 1.h,
-                      ),
+                      ):Container(),
+                      (data.selectedClassified?.is_post_by_me??true)?Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.notifications,
+                              color: Storage.instance.isDarkMode
+                                  ? Constance.secondaryColor
+                                  : Colors.black54,
+                              size: 15.sp,
+                            ),
+                            SizedBox(
+                              width: 2.w,
+                            ),
+                            Text(
+                              data.selectedClassified?.remarks??"",
+                              // overflow: TextOverflow.clip,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                color: Storage.instance.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black54,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ):Container(),
 
                       // SizedBox(
                       //   height: 1.5.h,

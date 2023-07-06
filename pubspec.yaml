@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 #version: 3.5.22+30522
-version: 3.5.52+30552
+version: 3.5.56+30556
 
 environment:
   sdk: ">=3.0.5 <4.0.0"
@@ -115,6 +115,7 @@ dependencies:
   flutter_html_iframe: ^3.0.0-alpha.4
   flutter_html_table: ^3.0.0-beta.2
   flutter_html_video: ^3.0.0-beta.2
+  dio_smart_retry: ^1.4.0
 
 dependency_overrides:
   package_info_plus: any

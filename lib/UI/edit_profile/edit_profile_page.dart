@@ -644,7 +644,7 @@ class _EditProfileState extends State<EditProfile> {
 
   void saveDetails() async {
     Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.createProfile(
+    final response = await ApiProvider.instance.updateProfile(
         id.toString(),
         Provider.of<DataProvider>(
                 Navigation.instance.navigatorKey.currentContext ?? context,

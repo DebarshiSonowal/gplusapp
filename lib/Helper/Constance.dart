@@ -82,10 +82,10 @@ class Constance {
     padding: EdgeInsets.symmetric(
       horizontal: 4.w,
     ),
-    child: const Text(
+    child: Platform.isAndroid? const Text(
       "For users with Android 12 & above, we recommend that you upload the media from the Gallery to avoid any crashes",
       style: TextStyle(fontStyle: FontStyle.italic, fontSize: 8),
-    ),
+    ):Container(),
   );
 
   static AppBar buildAppBar(
@@ -156,7 +156,7 @@ class Constance {
                     badgeContent: Text(
                       '${data.notifications.length}',
                       style: Theme.of(context).textTheme.headline6?.copyWith(
-                          color: Constance.primaryColor, fontSize: 8.sp),
+                          color: Colors.white, fontSize: 8.sp),
                     ),
                     child: const Icon(Icons.notifications),
                   )
@@ -223,7 +223,7 @@ class Constance {
               badgeContent: Text(
                 '${data.notifications.length}',
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Constance.primaryColor,
+                      color: Colors.white,
                       fontSize: 8.sp,
                     ),
               ),
