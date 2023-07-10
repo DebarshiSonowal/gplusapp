@@ -58,8 +58,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
               (videoId) => YoutubePlayerController(
                 initialVideoId: videoId.youtube_id!,
                 flags: const YoutubePlayerFlags(
-                    hideControls: false,
+                    // hideControls: true,
                     isLive: false,
+
                     // hideThumbnail: true,
                     autoPlay: true,
                     showLiveFullscreenButton: false),
@@ -202,6 +203,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                     controller: _controllers[index],
                                     showVideoProgressIndicator: true,
                                     aspectRatio: 16 / 9,
+                                    bottomActions: [
+                                      CurrentPosition(),
+                                      ProgressBar(isExpanded: true),
+                                      RemainingDuration(),
+                                      // Put here just the actions you want show
+                                    ],
                                     thumbnail: Image.network(
                                       getYoutubeThumbnail(current.youtube_id),
                                       fit: BoxFit.fill,
@@ -381,224 +388,211 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   Container LandscapeSection(DataProvider data, BuildContext context) {
     return Container(
-                padding: EdgeInsets.only(
-                  top: 0.h,
-                ),
-                child: PageView.builder(
-                  itemCount: _controllers.length,
-                  scrollDirection: Axis.horizontal,
-                  controller: controller,
-                  itemBuilder: (BuildContext context, int index) {
-                    var current =
-                        (widget.input.toString().split(',')[1] == '1'
-                            ? data.home_weekly
-                            : data.video_news)[index];
-                    // _controller = PodPlayerController(
-                    //   playVideoFrom: PlayVideoFrom.youtube(
-                    //       'https://youtu.be/${current.youtube_id}'),
-                    // _controller?.load(current.youtube_id!);
-                    currentId = current.youtube_id!;
+      padding: EdgeInsets.only(
+        top: 0.h,
+      ),
+      child: PageView.builder(
+        itemCount: _controllers.length,
+        scrollDirection: Axis.horizontal,
+        controller: controller,
+        itemBuilder: (BuildContext context, int index) {
+          var current = (widget.input.toString().split(',')[1] == '1'
+              ? data.home_weekly
+              : data.video_news)[index];
+          // _controller = PodPlayerController(
+          //   playVideoFrom: PlayVideoFrom.youtube(
+          //       'https://youtu.be/${current.youtube_id}'),
+          // _controller?.load(current.youtube_id!);
+          currentId = current.youtube_id!;
 
-                    return Stack(
-                      // alignment: Alignment.bottomCenter,
-                      children: [
-                        Center(
-                          child: SizedBox(
-                            // color: Colors.white,
-                            // height: 70.h,
-                            height: 100.h,
-                            width: double.infinity,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                top: 8.h,
-                                bottom: 8.h,
-                              ),
-                              child: DefaultTextStyle(
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                      color: Colors.white,
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                child: YoutubePlayer(
-                                  // controller: _controller = YoutubePlayerController(
-                                  //   initialVideoId: current.youtube_id!,
-                                  //   flags: const YoutubePlayerFlags(
-                                  //     autoPlay: false,
-                                  //     mute: false,
-                                  //   ),
-                                  // ),
-                                  controller: _controllers[index],
-                                  showVideoProgressIndicator: true,
-                                  // aspectRatio: 16 / 9,
-                                  thumbnail: Image.network(
-                                    getYoutubeThumbnail(current.youtube_id),
-                                    // fit: BoxFit.fill,
-                                  ),
-                                  // aspectRatio: 16 / 10,
-                                  // videoProgressIndicatorColor: Colors.amber,
-                                  progressColors: const ProgressBarColors(
-                                    playedColor: Colors.amber,
-                                    handleColor: Colors.amberAccent,
-                                  ),
+          return Stack(
+            // alignment: Alignment.bottomCenter,
+            children: [
+              Center(
+                child: SizedBox(
+                  // color: Colors.white,
+                  // height: 70.h,
+                  height: 100.h,
+                  width: double.infinity,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: 8.h,
+                      bottom: 8.h,
+                    ),
+                    child: DefaultTextStyle(
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Colors.white,
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                      child: YoutubePlayer(
+                        // controller: _controller = YoutubePlayerController(
+                        //   initialVideoId: current.youtube_id!,
+                        //   flags: const YoutubePlayerFlags(
+                        //     autoPlay: false,
+                        //     mute: false,
+                        //   ),
+                        // ),
+                        controller: _controllers[index],
+                        showVideoProgressIndicator: true,
+                        // aspectRatio: 16 / 9,
+                        thumbnail: Image.network(
+                          getYoutubeThumbnail(current.youtube_id),
+                          // fit: BoxFit.fill,
+                        ),
+                        // aspectRatio: 16 / 10,
+                        // videoProgressIndicatorColor: Colors.amber,
+                        progressColors: const ProgressBarColors(
+                          playedColor: Colors.amber,
+                          handleColor: Colors.amberAccent,
+                        ),
 
-                                  onReady: () {
-                                    // print('R12345&d');
-                                    // _controller
-                                    //     .addListener(() {});
-                                    // _controller!.play();
-                                    _controllers[index].play();
-                                    // setState(() {
-                                    //
-                                    // });
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: -32.h,
-                          left: 10,
-                          right: 10,
-                          bottom: 0,
-                          child: Container(
-                            width: double.infinity,
-                            height: 6.h,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Divider(
-                                    thickness: 0.1.h,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Container(
-                                  height: 4.h,
-                                  width: 4.w,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Colors.white,
-                                      width: 0.2.h,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 1.w),
-                                  child: Text(
-                                    "${page + 1} of ${(widget.input.toString().split(',')[1] == '1' ? data.home_weekly : data.video_news).length}",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline3
-                                        ?.copyWith(
-                                          fontSize: 12.sp,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Divider(
-                                    thickness: 0.1.h,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: -36.h,
-                          left: 10,
-                          right: 10,
-                          bottom: 0,
-                          child: Container(
-                            width: double.infinity,
-                            height: 6.h,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    Share.share(
-                                        'http://www.youtube.com/watch?v=${current.youtube_id}');
-                                  },
-                                  icon: const Icon(Icons.share),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    Navigation.instance.goBack();
-                                  },
-                                  icon: const Icon(Icons.close),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 39.h,
-                          left: 20,
-                          right: 10,
-                          bottom: 1.h,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 0.2.h, horizontal: 2.w),
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [Colors.transparent, Colors.black]),
-                            ),
-                            child: Center(
-                              child: Text(
-                                current.title?.trim() ?? "",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline3
-                                    ?.copyWith(
-                                      fontSize: 16.sp,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                  onPageChanged: (count) {
-                    setState(() {
-                      page = count;
-                    });
-                    Future.delayed(Duration(seconds: 2), () {
-                      setState(() {
-                        currentId =
-                            (widget.input.toString().split(',')[1] == '1'
-                                    ? Provider.of<DataProvider>(
-                                            Navigation.instance.navigatorKey
-                                                    .currentContext ??
-                                                context,
-                                            listen: false)
-                                        .home_weekly
-                                    : Provider.of<DataProvider>(
-                                            Navigation.instance.navigatorKey
-                                                    .currentContext ??
-                                                context,
-                                            listen: false)
-                                        .video_news)[count]
-                                .youtube_id!;
-                      });
-                    });
-                  },
+                        onReady: () {
+                          // print('R12345&d');
+                          // _controller
+                          //     .addListener(() {});
+                          // _controller!.play();
+                          _controllers[index].play();
+                          // setState(() {
+                          //
+                          // });
+                        },
+                      ),
+                    ),
+                  ),
                 ),
-              );
+              ),
+              Positioned(
+                top: -32.h,
+                left: 10,
+                right: 10,
+                bottom: 0,
+                child: Container(
+                  width: double.infinity,
+                  height: 6.h,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          thickness: 0.1.h,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Container(
+                        height: 4.h,
+                        width: 4.w,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 0.2.h,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 1.w),
+                        child: Text(
+                          "${page + 1} of ${(widget.input.toString().split(',')[1] == '1' ? data.home_weekly : data.video_news).length}",
+                          style:
+                              Theme.of(context).textTheme.headline3?.copyWith(
+                                    fontSize: 12.sp,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Divider(
+                          thickness: 0.1.h,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                top: -36.h,
+                left: 10,
+                right: 10,
+                bottom: 0,
+                child: Container(
+                  width: double.infinity,
+                  height: 6.h,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Share.share(
+                              'http://www.youtube.com/watch?v=${current.youtube_id}');
+                        },
+                        icon: const Icon(Icons.share),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Navigation.instance.goBack();
+                        },
+                        icon: const Icon(Icons.close),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 39.h,
+                left: 20,
+                right: 10,
+                bottom: 1.h,
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 0.2.h, horizontal: 2.w),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.transparent, Colors.black]),
+                  ),
+                  child: Center(
+                    child: Text(
+                      current.title?.trim() ?? "",
+                      style: Theme.of(context).textTheme.headline3?.copyWith(
+                            fontSize: 16.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+        onPageChanged: (count) {
+          setState(() {
+            page = count;
+          });
+          Future.delayed(Duration(seconds: 2), () {
+            setState(() {
+              currentId = (widget.input.toString().split(',')[1] == '1'
+                      ? Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .home_weekly
+                      : Provider.of<DataProvider>(
+                              Navigation.instance.navigatorKey.currentContext ??
+                                  context,
+                              listen: false)
+                          .video_news)[count]
+                  .youtube_id!;
+            });
+          });
+        },
+      ),
+    );
   }
 
   String getYoutubeThumbnail(var id) {

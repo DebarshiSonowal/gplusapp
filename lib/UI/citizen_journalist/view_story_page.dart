@@ -41,15 +41,16 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      if (Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
-          .citizenJournalist
-          .isNotEmpty) {
-        fetchDetails();
-      } else {
-        fetchData();
-      }
+      // if (Provider.of<DataProvider>(
+      //         Navigation.instance.navigatorKey.currentContext ?? context,
+      //         listen: false)
+      //     .citizenJournalist
+      //     .isNotEmpty) {
+      //   fetchDetails();
+      // } else {
+      //   fetchData();
+      // }
+      fetchData();
     });
   }
 
@@ -207,7 +208,29 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
                     ),
               ),
               SizedBox(
-                height: 5.h,
+                height: 4.h,
+              ),
+              Text(
+                getStatusText(local?.status??0),
+                style: Theme.of(context).textTheme.headline6?.copyWith(
+                  color: Storage.instance.isDarkMode
+                      ? Colors.white
+                      : Colors.black,
+                  // fontSize: 1.6.h,
+                ),
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
+              Text(
+                local?.remarks??"",
+                style: Theme.of(context).textTheme.headline6?.copyWith(
+                  fontStyle: FontStyle.italic,
+                  color: Storage.instance.isDarkMode
+                      ? Colors.white
+                      : Colors.black,
+                  // fontSize: 1.6.h,
+                ),
               ),
             ],
           ),
@@ -217,51 +240,7 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
     );
   }
 
-  // AppBar buildAppBar() {
-  //   return AppBar(
-  //     title: GestureDetector(
-  //       onTap: () {
-  //         Provider.of<DataProvider>(
-  //                 Navigation.instance.navigatorKey.currentContext ?? context,
-  //                 listen: false)
-  //             .setCurrent(0);
-  //         Navigation.instance.navigate('/main');
-  //       },
-  //       child: Image.asset(
-  //         Constance.logoIcon,
-  //         fit: BoxFit.fill,
-  //         scale: 2,
-  //       ),
-  //     ),
-  //     centerTitle: true,
-  //     backgroundColor: Constance.primaryColor,
-  //     actions: [
-  //       IconButton(
-  //         onPressed: () {
-  //           Navigation.instance.navigate('/notification');
-  //         },
-  //         icon: Consumer<DataProvider>(builder: (context, data, _) {
-  //           return Badge(
-  //             badgeColor: Constance.secondaryColor,
-  //             badgeContent: Text(
-  //               '${data.notifications.length}',
-  //               style: Theme.of(context).textTheme.headline6?.copyWith(
-  //                     color: Constance.thirdColor,
-  //                   ),
-  //             ),
-  //             child: const Icon(Icons.notifications),
-  //           );
-  //         }),
-  //       ),
-  //       IconButton(
-  //         onPressed: () {
-  //           Navigation.instance.navigate('/search', args: "");
-  //         },
-  //         icon: Icon(Icons.search),
-  //       ),
-  //     ],
-  //   );
-  // }
+
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
@@ -390,6 +369,7 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
       desc = local?.story ?? "";
       // attachements.add(File(''));
       images = local?.attach_files ?? [];
+      debugPrint("lkocal?.");
     });
   }
 
@@ -404,23 +384,38 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
   }
 
   void fetchData() async {
+    Navigation.instance.navigate("/loadingDialog");
     final response = await ApiProvider.instance.getCitizenJournalistApproved();
     if (response.success ?? false) {
+      Navigation.instance.goBack();
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setCitizenJournalist(response.posts);
       // Fluttertoast.showToast(msg: "G successfully");
-      // Navigation.instance.goBack();
+
       // setState(() {
       //   isEmpty = response.posts.isEmpty ? true : false;
       // });
       fetchDetails();
     } else {
+      Navigation.instance.goBack();
       // setState(() {
       //   isEmpty = true;
       // });
       // Navigation.instance.goBack();
+    }
+  }
+  String getStatusText(int? status) {
+    switch (status) {
+      case 1:
+        return "Authenticity Check";
+      case 2:
+        return "Published";
+      case 3:
+        return "Rejected";
+      default:
+        return "Pending";
     }
   }
 }

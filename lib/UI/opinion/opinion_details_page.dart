@@ -18,6 +18,7 @@ import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
 // import 'package:flutter_html_all/flutter_html_all.dart';
 import '../../Components/alert.dart';
 import '../../Components/embeded_link_extenion.dart';
@@ -281,7 +282,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                           ),
                                           TextSpan(
                                             text:
-                                                ' , ${Jiffy.parse(data.opinion?.publish_date!.split(" ")[0]??"", pattern: "yyyy-MM-dd").format(pattern: "dd MMM, yyyy")}',
+                                                ' , ${Jiffy.parse(data.opinion?.publish_date!.split(" ")[0] ?? "", pattern: "yyyy-MM-dd").format(pattern: "dd MMM, yyyy")}',
                                             style: Theme.of(Navigation
                                                     .instance
                                                     .navigatorKey
@@ -805,7 +806,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 scrollDirection: Axis.vertical,
                                 itemBuilder: (cont, count) {
-                                  var item = data.opinions[count];
+                                  var item = data.suggestedOpinions[count];
                                   if (count != 0) {
                                     return OpinionDetailsItem(item: item);
                                   } else {
@@ -827,7 +828,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     );
                                   }
                                 },
-                                itemCount: data.opinions.length),
+                                itemCount: data.suggestedOpinions.length),
                             SizedBox(
                               height: 2.h,
                             ),
@@ -947,12 +948,25 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   }
 
   void fetchContent() async {
-    final response = await ApiProvider.instance.getOpinion(5, page);
+    final response = await ApiProvider.instance.getOpinionRecomended(
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext!,
+                listen: false)
+            .opinion
+            ?.category_gallery
+            ?.seo_name,
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext!,
+                listen: false)
+            .opinion
+            ?.seo_name,
+        5,
+        page);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
-          .setOpinions(response.opinion ?? []);
+          .setSuggestedOpinions(response.opinion ?? []);
       // _refreshController.refreshCompleted();
     } else {
       // _refreshController.refreshFailed();
@@ -960,12 +974,25 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   }
 
   void fetchMoreContent() async {
-    final response = await ApiProvider.instance.getOpinion(5, page);
+    final response = await ApiProvider.instance.getOpinionRecomended(
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext!,
+                listen: false)
+            .opinion
+            ?.category_gallery
+            ?.seo_name,
+        Provider.of<DataProvider>(
+                Navigation.instance.navigatorKey.currentContext!,
+                listen: false)
+            .opinion
+            ?.seo_name,
+        5,
+        page);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
               listen: false)
-          .setMoreOpinions(response.opinion ?? []);
+          .setMoreSuggestedOpinions(response.opinion ?? []);
       // _refreshController.refreshCompleted();
     } else {
       // _refreshController.refreshFailed();
@@ -1025,9 +1052,11 @@ String getHtmlString(String? tweetId) {
       </html>
     """;
 }
+
 String getYoutubeThumbnail(var id) {
   return 'https://img.youtube.com/vi/${id}/0.jpg';
 }
+
 void generateURL(
     first_cat_name, String? seo_name, description, image_url) async {
   final dynamicLinkParams = DynamicLinkParameters(

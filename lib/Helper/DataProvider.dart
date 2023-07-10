@@ -46,6 +46,7 @@ class DataProvider extends ChangeNotifier {
   List<ReportModel> reportCategories = [];
   List<NotificationInDevice> notifications = [];
   List<Opinion> opinions = [];
+  List<Opinion> suggestedOpinions = [];
   List<Story> stories = [];
   List<Article> home_albums = [],
       home_exclusive = [],
@@ -398,9 +399,17 @@ class DataProvider extends ChangeNotifier {
     opinions = list;
     notifyListeners();
   }
-
+  setSuggestedOpinions(List<Opinion> list) {
+    suggestedOpinions = list;
+    notifyListeners();
+  }
   setMoreOpinions(List<Opinion> list) {
     opinions.addAll(list);
+    notifyListeners();
+  }
+
+  setMoreSuggestedOpinions(List<Opinion> list) {
+    suggestedOpinions.addAll(list);
     notifyListeners();
   }
 

@@ -16,6 +16,9 @@ class SuggestionListView extends StatelessWidget {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
+        padding: EdgeInsets.only(
+          bottom: 2.h
+        ),
         itemBuilder: (cont, count) {
           var item = data.suggestion[count];
           if (count != 0) {

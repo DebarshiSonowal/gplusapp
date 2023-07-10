@@ -312,7 +312,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                               child: Row(
                                 children: [
                                   Text(
-                                    '${data.referEarn?.subscriber_added_point ?? '0'} points',
+                                    '${data.referEarn?.subscriber_added_point ?? '0'} Points',
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.start,
                                     style: Theme.of(Navigation.instance
@@ -334,7 +334,7 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                               child: Row(
                                 children: [
                                   Text(
-                                    'added per subscriber',
+                                    'added per download',
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.start,
                                     style: Theme.of(Navigation.instance
@@ -570,12 +570,19 @@ class _ReferAndEarnState extends State<ReferAndEarn> {
                                     setState(() {
                                       currentLength = currentLength * 2;
                                     });
+                                  }else{
+                                    setState(() {
+                                      currentLength = currentLength ~/ 2;
+                                    });
                                   }
                                 },
                                 child: Row(
                                   children: [
                                     Text(
-                                      'See More',
+                                      (currentLength * 2 <=
+                                              data.referHistory.length)
+                                          ? 'See More'
+                                          : 'See Less',
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.start,
                                       style: Theme.of(Navigation.instance

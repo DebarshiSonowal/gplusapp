@@ -376,8 +376,8 @@ class ApiProvider {
         debugPrint(
             "create Profile error: ${response?.statusCode} ${response?.data}",
             wrapWidth: 1024);
-        return ProfileResponse.withError(
-            response?.data['message'] ?? "Your Internet Connection is Slow ${response?.statusCode} ${response?.data}");
+        return ProfileResponse.withError(response?.data['message'] ??
+            "Your Internet Connection is Slow ${response?.statusCode} ${response?.data}");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -412,7 +412,7 @@ class ApiProvider {
       referal,
       is_new) async {
     BaseOptions option =
-    BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer ${Storage.instance.token}'
@@ -427,8 +427,8 @@ class ApiProvider {
       'gender': gender == 'Male'
           ? 1
           : gender == 'Female'
-          ? 2
-          : 0,
+              ? 2
+              : 0,
       'address': address,
       'longitude': longitude,
       'latitude': latitude,
@@ -889,6 +889,50 @@ class ApiProvider {
     }
   }
 
+  Future<OpinionResponse> getOpinionRecomended(
+      categ_name, seo, per_page, page) async {
+    var data = {
+      'cat_slug': categ_name,
+      'per_page': per_page,
+      'page': page,
+      'news_seo': seo,
+    };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "${homeUrl}/opinion/recomended";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    debugPrint('Bearer ${Storage.instance.token}');
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.get(
+        url,
+        queryParameters: data,
+      );
+      debugPrint("opinion/recomended response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return OpinionResponse.fromJson(response?.data);
+      } else {
+        debugPrint("opinion/recomended error: ${response?.data}");
+        return OpinionResponse.withError("Your Internet Connection is Slow");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("opinion/recomended response: ${e.response}");
+      return OpinionResponse.withError(e.message);
+    }
+  }
+
   Future<ArticleDescResponse> getArticleDesc(categ_name, slur) async {
     // var data = {
     //   // 'mobile': mobile,
@@ -914,7 +958,8 @@ class ApiProvider {
         return ArticleDescResponse.fromJson(response?.data);
       } else {
         debugPrint("Article desc error: ${response?.data}");
-        return ArticleDescResponse.withError("Your Internet Connection is Slow");
+        return ArticleDescResponse.withError(
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1356,7 +1401,8 @@ class ApiProvider {
         return MembershipResponse2.fromJson(response?.data);
       } else {
         debugPrint("subscriptions error: ${response?.data}");
-        return MembershipResponse2.withError("Your Internet Connection is Slow");
+        return MembershipResponse2.withError(
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1515,7 +1561,8 @@ class ApiProvider {
         return DealDetailsResponse.fromJson(response?.data);
       } else {
         debugPrint("DealDetailsResponse error: ${response?.data}");
-        return DealDetailsResponse.withError("Your Internet Connection is Slow");
+        return DealDetailsResponse.withError(
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -1901,7 +1948,8 @@ class ApiProvider {
         return BlockedUserResponse.fromJson(response?.data);
       } else {
         debugPrint("BlockedUserResponse error: ${response?.data}");
-        return BlockedUserResponse.withError("Your Internet Connection is Slow");
+        return BlockedUserResponse.withError(
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2101,7 +2149,8 @@ class ApiProvider {
         return BlockedUserResponse.fromJson(response?.data);
       } else {
         debugPrint("blocked-user-list error: ${response?.data}");
-        return BlockedUserResponse.withError("Your Internet Connection is Slow");
+        return BlockedUserResponse.withError(
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2198,7 +2247,7 @@ class ApiProvider {
     }
   }
 
-  Future<GenericResponse> notificationRead(id) async {
+  Future<NotificationInDeviceResponse> notificationRead(id) async {
     var url = "${baseUrl}/app/notifications/read";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
@@ -2220,12 +2269,13 @@ class ApiProvider {
         data: data,
         // queryParameters: data,
       );
-      // debugPrint("notifications/read response: ${response?.data}");
+      debugPrint("notifications/read response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
-        return GenericResponse.fromJson(response?.data);
+        return NotificationInDeviceResponse.fromJson(response?.data);
       } else {
         debugPrint("notifications/read error: ${response?.data}");
-        return GenericResponse.withError("Your Internet Connection is Slow");
+        return NotificationInDeviceResponse.withError(
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -2234,7 +2284,7 @@ class ApiProvider {
         showError("Oops! Your session expired. Please Login Again");
       }
       debugPrint("notifications/read error: ${e.response}");
-      return GenericResponse.withError(
+      return NotificationInDeviceResponse.withError(
           e.response?.data['message'] ?? e.message);
     }
   }
@@ -3872,7 +3922,8 @@ class ApiProvider {
         return CreateOrderResponse.fromJson(response?.data);
       } else {
         debugPrint("CreateOrderResponse1 error: ${response?.data}");
-        return CreateOrderResponse.withError("Your Internet Connection is Slow");
+        return CreateOrderResponse.withError(
+            "Your Internet Connection is Slow");
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 420) {
@@ -4633,10 +4684,12 @@ class ApiProvider {
       await Future<void>.delayed(const Duration(seconds: 1), () async {
         const darwin_details = DarwinNotificationDetails(
           // badgeNumber: int.parse(channel.id),
-          subtitle: 'progress channel',
+          interruptionLevel: InterruptionLevel.passive,
+          subtitle: 'Saving E-paper',
         );
         final AndroidNotificationDetails androidPlatformChannelSpecifics =
-            AndroidNotificationDetails('progress channel', 'progress channel',
+            AndroidNotificationDetails(
+                'download progress channel', ' download progress channel',
                 channelShowBadge: false,
                 importance: Importance.max,
                 priority: Priority.high,
@@ -4664,19 +4717,24 @@ class ApiProvider {
     debugPrint("Completed");
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.cancelAll().then((value) async {
+      const darwinDetails = DarwinNotificationDetails(
+        // badgeNumber: int.parse(channel.id),
+        interruptionLevel: InterruptionLevel.critical,
+        subtitle: 'E-paper Downloaded',
+      );
       const AndroidNotificationDetails androidPlatformChannelSpecifics =
           AndroidNotificationDetails(
-        'progress channel',
-        'progress channel',
+        'e-paper downloaded',
+        'e-paper downloaded',
         channelShowBadge: false,
         importance: Importance.max,
         priority: Priority.high,
         onlyAlertOnce: true,
         showProgress: false,
       );
-      const NotificationDetails platformChannelSpecifics =
-          NotificationDetails(android: androidPlatformChannelSpecifics);
-      await flutterLocalNotificationsPlugin.show(1, 'Epaper Downloaded',
+      const NotificationDetails platformChannelSpecifics = NotificationDetails(
+          android: androidPlatformChannelSpecifics, iOS: darwinDetails);
+      await flutterLocalNotificationsPlugin.show(1, 'E-paper Downloaded',
           'Saved Successfully', platformChannelSpecifics,
           payload: fullPath);
     });

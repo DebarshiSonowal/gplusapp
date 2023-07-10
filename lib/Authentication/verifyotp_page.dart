@@ -287,8 +287,9 @@ class _VerifyOTPState extends State<VerifyOTP> {
       if (_authResult.additionalUserInfo?.isNewUser ?? false) {
         Storage.instance
             .setIsNew(_authResult.additionalUserInfo?.isNewUser ?? true);
-        Navigation.instance
-            .navigateAndReplace('/terms&conditions', args: widget.number);
+        // Navigation.instance
+        //     .navigateAndReplace('/terms&conditions', args: widget.number);
+        getProfile();
       } else {
         Storage.instance
             .setIsNew(_authResult.additionalUserInfo?.isNewUser ?? false);

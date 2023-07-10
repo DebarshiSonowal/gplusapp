@@ -826,65 +826,6 @@ class _StoryPageState extends State<StoryPage> {
                             SizedBox(
                               height: 1.h,
                             ),
-                            // data.ads.isNotEmpty
-                            //     ? Row(
-                            //         children: [
-                            //           Container(
-                            //             color: Constance.secondaryColor,
-                            //             padding: EdgeInsets.symmetric(
-                            //                 vertical: 0.2.h, horizontal: 1.w),
-                            //             margin: EdgeInsets.symmetric(
-                            //                 horizontal: 2.w),
-                            //             child: Text(
-                            //               'Ad',
-                            //               style: Theme.of(context)
-                            //                   .textTheme
-                            //                   .headline3
-                            //                   ?.copyWith(
-                            //                     fontSize: 9.sp,
-                            //                     color: Colors.white,
-                            //                     // fontWeight: FontWeight.bold,
-                            //                   ),
-                            //             ),
-                            //           ),
-                            //         ],
-                            //       )
-                            //     : Container(),
-                            // data.ads.isNotEmpty
-                            //     ? SizedBox(
-                            //         // height: 10.h,
-                            //         width: double.infinity,
-                            //         child: GestureDetector(
-                            //           onTap: () {
-                            //             _launchUrl(Uri.parse(
-                            //                 data.ads[random].link.toString()));
-                            //           },
-                            //           child: Padding(
-                            //             padding: EdgeInsets.symmetric(
-                            //               horizontal: 2.w,
-                            //             ),
-                            //             child: CachedNetworkImage(
-                            //               fit: BoxFit.fill,
-                            //               imageUrl: data.ads[random]
-                            //                       .image_file_name ??
-                            //                   '',
-                            //               placeholder: (cont, _) {
-                            //                 return Image.asset(
-                            //                   Constance.logoIcon,
-                            //                   // color: Colors.black,
-                            //                 );
-                            //               },
-                            //               errorWidget: (cont, _, e) {
-                            //                 return Image.network(
-                            //                   Constance.defaultImage,
-                            //                   fit: BoxFit.fitWidth,
-                            //                 );
-                            //               },
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       )
-                            //     : Container(),
                             SizedBox(
                               height: 0.5.h,
                             ),
@@ -1129,23 +1070,6 @@ class _StoryPageState extends State<StoryPage> {
                             SuggestionListView(
                               data: data,
                               dropdownvalue: dropdownvalue,
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     CustomButton(
-                            //         txt: 'Load More',
-                            //         onTap: () {
-                            //           skip = skip * 2;
-                            //           fetchMoreContent();
-                            //         }),
-                            //   ],
-                            // ),
-                            SizedBox(
-                              height: 4.h,
                             ),
                           ],
                         ),

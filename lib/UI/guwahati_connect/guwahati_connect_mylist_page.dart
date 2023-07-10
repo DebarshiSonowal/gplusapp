@@ -188,10 +188,13 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Icon(
-                              FontAwesomeIcons.radio,
+                            Image.asset(
+                              Constance.connectIcon,
+                              height: 6.h,
+                              width: 14.w,
+                              fit: BoxFit.fill,
                               color: Constance.secondaryColor,
-                              size: 6.h,
+                              // size: 6.h,
                             ),
                           ],
                         ),
@@ -352,10 +355,13 @@ class _GuwahatiConnectMylistPageState extends State<GuwahatiConnectMylistPage>
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  FontAwesomeIcons.radio,
+                Image.asset(
+                  Constance.connectIcon,
+                  height: 6.h,
+                  width: 14.w,
+                  fit: BoxFit.fill,
                   color: Constance.secondaryColor,
-                  size: 15.h,
+                  // size: 6.h,
                 ),
                 Text(
                   'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',

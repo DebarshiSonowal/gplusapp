@@ -16,7 +16,7 @@ class NotificationInDevice {
       category_id;
 
   NotificationInDevice.fromJson(json) {
-    id = json['data']['id'].toString();
+    id = json['id'].toString();
     notifiable_type = json['notifiable_type'] ?? "";
     created_at = json['created_at'] ?? "";
     read_at = json['read_at'] ?? "";

@@ -55,7 +55,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
-        padding: EdgeInsets.symmetric(vertical: 0.5.h),
+        padding: EdgeInsets.symmetric(vertical: 0.5.h,),
         child: Consumer<DataProvider>(builder: (context, data, _) {
           return Stack(
             alignment: Alignment.bottomCenter,
@@ -353,6 +353,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.w),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Icon(
                               Icons.notes,
@@ -364,25 +365,28 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                             SizedBox(
                               width: 2.w,
                             ),
-                            ReadMoreText(
-                              data.selectedClassified?.description ??
-                                  'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                                      ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                                      ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                                      ' remaining essentially unchanged',
-                              style:
-                                  Theme.of(context).textTheme.headline5?.copyWith(
-                                        color: Storage.instance.isDarkMode
-                                            ? Colors.white70
-                                            : Colors.black54,
-                                        // fontWeight: FontWeight.bold,
-                                        fontSize: 11.sp,
-                                      ),
-                              trimLines: 5,
-                              colorClickableText: Constance.secondaryColor,
-                              trimMode: TrimMode.Line,
-                              trimCollapsedText: 'Show more',
-                              trimExpandedText: 'Show less',
+                            SizedBox(
+                              width: 82.w,
+                              child: ReadMoreText(
+                                data.selectedClassified?.description ??
+                                    'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
+                                        ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+                                        ' It has survived not only five centuries, but also the leap into electronic typesetting,'
+                                        ' remaining essentially unchanged',
+                                style:
+                                    Theme.of(context).textTheme.headline5?.copyWith(
+                                          color: Storage.instance.isDarkMode
+                                              ? Colors.white70
+                                              : Colors.black54,
+                                          // fontWeight: FontWeight.bold,
+                                          fontSize: 11.sp,
+                                        ),
+                                trimLines: 5,
+                                colorClickableText: Constance.secondaryColor,
+                                trimMode: TrimMode.Line,
+                                trimCollapsedText: 'Show more',
+                                trimExpandedText: 'Show less',
+                              ),
                             ),
                           ],
                         ),

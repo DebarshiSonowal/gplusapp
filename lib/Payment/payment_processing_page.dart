@@ -195,7 +195,9 @@ You can parse it accordingly to handle response */
               SizedBox(
                 height: 5.h,
               ),
-              CustomButton(txt: 'Cancel Payment', onTap: () {}),
+              CustomButton(txt: 'Cancel Payment', onTap: () {
+                Navigation.instance.goBack();
+              }),
             ],
           ),
         ),

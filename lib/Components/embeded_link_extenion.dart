@@ -49,7 +49,7 @@ class EmbeddedLinkExtension extends HtmlExtension {
                 }
               },
               child: Text(
-                context.innerHtml,
+                context.innerHtml.replaceAll(";", "").replaceAll("&nbsp",""),
                 style:
                     Theme.of(Navigation.instance.navigatorKey.currentContext!)
                         .textTheme
