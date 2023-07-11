@@ -2,6 +2,7 @@ import 'attach_file.dart';
 
 class CitizenJournalist {
   int? id, user_id, status;
+  bool? is_post_by_me;
   String? title, story, created_at, remarks;
   List<CJAttachment>? attach_files;
 
@@ -10,7 +11,7 @@ class CitizenJournalist {
     user_id =
         json['user_id'] == null ? 0 : int.parse(json['user_id'].toString());
     status = json['status'] == null ? 0 : int.parse(json['status'].toString());
-
+    is_post_by_me = json['is_post_by_me'] ?? false;
     title = json['title'] ?? "";
     story = json['story'] ?? "";
     remarks = json['remarks'] ?? "";

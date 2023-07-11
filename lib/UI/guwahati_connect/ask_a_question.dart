@@ -391,11 +391,11 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
                             )),
                       ],
                     ),
-                    Container(
+                    Platform.isAndroid? Container(
                       margin: EdgeInsets.only(top: 1.5.h),
                       width: 50.w,
                       child: Constance.androidWarning,
-                    ),
+                    ):Container(),
                   ],
                 ));
           });
@@ -654,6 +654,10 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
   }
 
   void initializeAndroidInfo() async {
-    androidInfo = await DeviceInfoPlugin().androidInfo;
+    try {
+      androidInfo = await DeviceInfoPlugin().androidInfo;
+    } catch (e) {
+      print(e);
+    }
   }
 }

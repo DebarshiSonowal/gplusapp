@@ -395,7 +395,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                         height: 2.h,
                       ),
 
-                      Padding(
+                      (data.selectedClassified?.is_post_by_me??true)? Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.w),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -425,7 +425,7 @@ class _ClassifiedDetailsState extends State<ClassifiedDetails> {
                             ),
                           ],
                         ),
-                      ),
+                      ):Container(),
                       (data.selectedClassified?.is_post_by_me??true)?SizedBox(
                         height: 1.h,
                       ):Container(),

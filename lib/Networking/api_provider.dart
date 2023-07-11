@@ -374,7 +374,7 @@ class ApiProvider {
         return ProfileResponse.fromJson(response?.data);
       } else {
         debugPrint(
-            "create Profile error: ${response?.statusCode} ${response?.data}",
+            "create Profile error Specific: ${response?.statusCode} ${response?.data}",
             wrapWidth: 1024);
         return ProfileResponse.withError(response?.data['message'] ??
             "Your Internet Connection is Slow ${response?.statusCode} ${response?.data}");
@@ -3326,7 +3326,7 @@ class ApiProvider {
   }
 
   Future<CitizenJournalistResponse> getCitizenJournalistApproved() async {
-    var url = "${baseUrl}/app/citizen-journalist-list/submit";
+    var url = "$baseUrl/app/citizen-journalist-list/submit";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',

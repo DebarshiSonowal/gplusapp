@@ -283,7 +283,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
       //   if (e.code == 'provider-already-linked') {
       UserCredential _authResult =
           await _auth.signInWithCredential(authCredential);
-
+      Navigation.instance.navigate("/loadingDialog");
       if (_authResult.additionalUserInfo?.isNewUser ?? false) {
         Storage.instance
             .setIsNew(_authResult.additionalUserInfo?.isNewUser ?? true);
@@ -308,7 +308,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
     _verificationId = verification;
     // debugPrint(forceResendingToken);
     debugPrint(forceResendingToken.toString());
-    debugPrint("code sent ${_verificationId}");
+    debugPrint("code sent $_verificationId");
     Fluttertoast.showToast(msg: "OTP sent successfully");
     Navigation.instance.goBack();
     setTimer();
@@ -377,7 +377,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
           debugPrint(e.toString());
         }
         Storage.instance.setUser(reponse.access_token ?? "");
-        Navigation.instance.navigateAndReplace('/main');
+        Navigation.instance.navigateAndRemoveUntil('/main');
         // Navigation.instance.navigate('/terms&conditions', args: widget.number);
       }
     } else {

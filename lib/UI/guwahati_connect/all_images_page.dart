@@ -143,7 +143,7 @@ class _AllImagePageState extends State<AllImagePage> {
                         SizedBox(
                           height: 1.h,
                         ),
-                        Text(
+                        (data.specificGuwahatiConnect?.is_post_by_me??false)?Text(
                           statusText(data.specificGuwahatiConnect!.status!),
                           style:
                               Theme.of(context).textTheme.labelMedium?.copyWith(
@@ -152,11 +152,11 @@ class _AllImagePageState extends State<AllImagePage> {
                                         : Colors.black45,
                                     // fontWeight: FontWeight.bold,
                                   ),
-                        ),
+                        ):Container(),
                         SizedBox(
                           height: 1.h,
                         ),
-                        Text(
+                        (data.specificGuwahatiConnect?.is_post_by_me??false)?Text(
                           data.specificGuwahatiConnect!.remarks ?? "",
                           style:
                               Theme.of(context).textTheme.headline4?.copyWith(
@@ -165,7 +165,7 @@ class _AllImagePageState extends State<AllImagePage> {
                                         : Colors.black45,
                                     // fontWeight: FontWeight.bold,
                                   ),
-                        ),
+                        ):Container(),
                       ],
                     ),
                   ),

@@ -571,11 +571,11 @@ class _PostAListingState extends State<PostAListing>
                             )),
                       ],
                     ),
-                    Container(
+                    Platform.isAndroid? Container(
                       margin: EdgeInsets.only(top: 1.5.h),
                       width: 50.w,
                       child: Constance.androidWarning,
-                    ),
+                    ):Container(),
                   ],
                 ));
           });

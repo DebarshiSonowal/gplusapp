@@ -605,11 +605,11 @@ class _EditAListingPostState extends State<EditAListingPost>
                             )),
                       ],
                     ),
-                    Container(
+                    Platform.isAndroid? Container(
                       margin: EdgeInsets.only(top: 1.5.h),
                       width: 50.w,
                       child: Constance.androidWarning,
-                    ),
+                    ):Container(),
                   ],
                 ));
           });

@@ -210,37 +210,39 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
               SizedBox(
                 height: 4.h,
               ),
-              Text(
-                getStatusText(local?.status??0),
-                style: Theme.of(context).textTheme.headline6?.copyWith(
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black,
-                  // fontSize: 1.6.h,
-                ),
-              ),
-              SizedBox(
+              (local?.is_post_by_me ?? false)
+                  ? Text(
+                      getStatusText(local?.status ?? 0),
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Storage.instance.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                            // fontSize: 1.6.h,
+                          ),
+                    )
+                  : Container(),
+              (local?.is_post_by_me ?? false)
+                  ?SizedBox(
                 height: 2.h,
-              ),
-              Text(
-                local?.remarks??"",
+              ):Container(),
+              (local?.is_post_by_me ?? false)
+                  ?Text(
+                local?.remarks ?? "",
                 style: Theme.of(context).textTheme.headline6?.copyWith(
-                  fontStyle: FontStyle.italic,
-                  color: Storage.instance.isDarkMode
-                      ? Colors.white
-                      : Colors.black,
-                  // fontSize: 1.6.h,
-                ),
-              ),
+                      fontStyle: FontStyle.italic,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
+                      // fontSize: 1.6.h,
+                    ),
+              ):Container(),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(current,"citizen_journalist"),
+      bottomNavigationBar: CustomNavigationBar(current, "citizen_journalist"),
     );
   }
-
-
 
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
@@ -406,6 +408,7 @@ class _ViewStoryPageState extends State<ViewStoryPage> {
       // Navigation.instance.goBack();
     }
   }
+
   String getStatusText(int? status) {
     switch (status) {
       case 1:
