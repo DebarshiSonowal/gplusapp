@@ -844,17 +844,22 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
 
   void showError(String msg, Function? onTap, String? title) {
     AlertX.instance.showAlert(
-        title: title ?? "Error",
-        msg: msg,
-        positiveButtonText: "Done",
-        positiveButtonPressed: () {
-          if (onTap == null) {
-            Navigation.instance.goBack();
-          } else {
-            Navigation.instance.goBack();
-            onTap();
-          }
-        });
+      title: title ?? "Error",
+      msg: msg,
+      positiveButtonText: "Done",
+      positiveButtonPressed: () {
+        if (onTap == null) {
+          Navigation.instance.goBack();
+        } else {
+          Navigation.instance.goBack();
+          onTap();
+        }
+      },
+      negativeButtonPressed: () {
+        Navigation.instance.goBack();
+      },
+      negativeButtonText: "Cancel",
+    );
   }
 
   Future<void> getAddress(latitude, longitude) async {
@@ -1015,23 +1020,24 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
   void signUp() async {
     Navigation.instance.navigate("/loadingDialog");
     final reponse = await ApiProvider.instance.createProfile(
-        '0',
-        Storage.instance.signUpdata?.mobile,
-        Storage.instance.signUpdata?.f_name,
-        Storage.instance.signUpdata?.l_name,
-        Storage.instance.signUpdata?.email,
-        Storage.instance.signUpdata?.dob,
-        Storage.instance.signUpdata?.address,
-        Storage.instance.signUpdata?.longitude,
-        Storage.instance.signUpdata?.latitude,
-        "",
-        "",
-        0,
-        0,
-        0,
-        Storage.instance.signUpdata?.gender,
-        Storage.instance.signUpdata?.refer,
-        1,);
+      '0',
+      Storage.instance.signUpdata?.mobile,
+      Storage.instance.signUpdata?.f_name,
+      Storage.instance.signUpdata?.l_name,
+      Storage.instance.signUpdata?.email,
+      Storage.instance.signUpdata?.dob,
+      Storage.instance.signUpdata?.address,
+      Storage.instance.signUpdata?.longitude,
+      Storage.instance.signUpdata?.latitude,
+      "",
+      "",
+      0,
+      0,
+      0,
+      Storage.instance.signUpdata?.gender,
+      Storage.instance.signUpdata?.refer,
+      1,
+    );
     if (reponse.success ?? false) {
       // setPreferences();
       Navigation.instance.goBack();

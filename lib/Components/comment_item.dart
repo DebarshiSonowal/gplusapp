@@ -1,4 +1,6 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -9,6 +11,7 @@ import 'package:sizer/sizer.dart';
 import '../Helper/Constance.dart';
 import '../Helper/Storage.dart';
 import '../Model/comment.dart';
+import '../Model/profile.dart';
 import '../Navigation/Navigate.dart';
 import '../Networking/api_provider.dart';
 import 'alert.dart';
@@ -18,12 +21,12 @@ class CommentItem extends StatelessWidget {
   final BuildContext context;
   final bool liked;
   bool like = false;
-
+  final Function fetchGuwahatiConnect;
   CommentItem(
       {super.key,
       required this.current,
       required this.context,
-      required this.liked}) {
+      required this.liked, required this.fetchGuwahatiConnect}) {
     like = liked;
   }
 
@@ -118,7 +121,7 @@ class CommentItem extends StatelessWidget {
                 // Offset value to show menuItem from the selected item
                 bottomOffsetHeight: 80.0,
                 // Offset hei
-                onPressed: () {},
+
                 menuItems: <FocusedMenuItem>[
                   // Add Each FocusedMenuItem  for Menu Options
                   FocusedMenuItem(
@@ -137,6 +140,7 @@ class CommentItem extends StatelessWidget {
                           : Colors.black,
                     ),
                     onPressed: () {
+                      blockUser(current.user_id);
                       // Navigator.push(context, MaterialPageRoute(builder: (context)=>ScreenTwo()));
                     },
                   ),
@@ -159,6 +163,7 @@ class CommentItem extends StatelessWidget {
                     },
                   ),
                 ],
+                onPressed: (){} ,
                 child: body(context, _, data.profile?.id),
               );
       });
@@ -272,6 +277,157 @@ class CommentItem extends StatelessWidget {
           // ),
         ],
       ),
+    );
+  }
+  void blockUser(int? id) async {
+    final response =
+    await ApiProvider.instance.blockUser(id, 'guwahati-connect');
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      Fluttertoast.showToast(msg: response.message ?? "Something went wrong");
+      fetchGuwahatiConnect();
+    } else {
+      Navigation.instance.goBack();
+      Fluttertoast.showToast(msg: response.message ?? "Something went wrong");
+    }
+  }
+
+  void logTheBlockUserClick(
+      Profile profile,
+      String post,
+      ) async {
+    // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
+    // String id = await FirebaseInstallations.instance.getId();
+    await FirebaseAnalytics.instance.logEvent(
+      name: "block_user",
+      parameters: {
+        "login_status": Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id_event": id,
+        "user_id_event": profile.id,
+        "post": post.length > 100 ? post.substring(0, 100) : post,
+        // "cta_click": cta_click,
+        "screen_name": "guwahati",
+        "user_login_status":
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        "client_id": id,
+        "user_id_tvc": profile.id,
+      },
+    );
+  }
+
+  void showBlockConfirmation(int? user_id, name, context, post) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          contentPadding: EdgeInsets.zero,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
+          title: Text(
+            'Are you sure you want to block ${name} ?',
+            style: Theme.of(context).textTheme.headline5?.copyWith(
+              color: !Storage.instance.isDarkMode
+                  ? Colors.black
+                  : Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Container(
+            padding: EdgeInsets.symmetric(horizontal: 2.5.h, vertical: 1.h),
+            // height: 50.h,
+            width: 80.w,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 1.h),
+                Text(
+                  'You will not be able to see ${name}\'s:',
+                  style: Theme.of(context).textTheme.headline6?.copyWith(
+                    color: !Storage.instance.isDarkMode
+                        ? Colors.black
+                        : Colors.white,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 1.h),
+                Html(
+                  data: """ 
+                <ul> 
+                     <li>* Posts </li> <br/>
+                     <li>* Comments </li> <br/>
+                     <li>* Notifications </li>  <br/>
+                <ul>
+                """,
+                  shrinkWrap: true,
+                  style: {
+                    '#': Style(
+                      fontSize: FontSize(10.sp),
+
+                      // maxLines: 20,
+                      color: Storage.instance.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
+                      // textOverflow: TextOverflow.ellipsis,
+                    ),
+                  },
+                ),
+                SizedBox(height: 2.h),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: Theme.of(context).textTheme.headline4?.copyWith(
+                  color: !Storage.instance.isDarkMode
+                      ? Colors.black
+                      : Colors.white,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Confirm',
+                style: Theme.of(context).textTheme.headline4?.copyWith(
+                  color: !Storage.instance.isDarkMode
+                      ? Colors.black
+                      : Colors.white,
+                ),
+              ),
+              onPressed: () {
+                logTheBlockUserClick(
+                    Provider.of<DataProvider>(
+                        Navigation.instance.navigatorKey.currentContext ??
+                            context,
+                        listen: false)
+                        .profile!,
+                    post);
+                blockUser(user_id);
+              },
+            ),
+            // TextButton(
+            //   child: const Text('Yes'),
+            //   onPressed: () {
+            //     Navigator.of(context).pop();
+            //   },
+            // ),
+          ],
+        );
+      },
     );
   }
 
@@ -449,42 +605,46 @@ class CommentItem extends StatelessWidget {
                       ),
                 ),
                 SizedBox(
-                  height: 9.h,
+                  height: 4.h,
                 ),
-                ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: Provider.of<DataProvider>(context, listen: false)
-                      .reportCategories
-                      .length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var item = Provider.of<DataProvider>(context, listen: false)
-                        .reportCategories[index];
-                    return GestureDetector(
-                      onTap: () {
-                        reportPost_Comment(
-                            context, id, item.id, "guwahati-connect");
-                      },
-                      child: Text(
-                        item.name ?? "",
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: !Storage.instance.isDarkMode
-                                  ? Colors.black
-                                  : Colors.white,
-                            ),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 0.4.h),
-                      child: Divider(
-                        color: !Storage.instance.isDarkMode
-                            ? Colors.black
-                            : Colors.white,
-                        thickness: 0.01.h,
-                      ),
-                    );
-                  },
+                SizedBox(
+                  height: 15.h,
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(top: 0),
+                    itemCount: Provider.of<DataProvider>(context, listen: false)
+                        .reportCategories
+                        .length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var item = Provider.of<DataProvider>(context, listen: false)
+                          .reportCategories[index];
+                      return GestureDetector(
+                        onTap: () {
+                          reportPost_Comment(
+                              context, id, item.id, "guwahati-connect");
+                        },
+                        child: Text(
+                          item.name ?? "",
+                          style: Theme.of(context).textTheme.headline6?.copyWith(
+                                color: !Storage.instance.isDarkMode
+                                    ? Colors.black
+                                    : Colors.white,
+                              ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 0.4.h),
+                        child: Divider(
+                          color: !Storage.instance.isDarkMode
+                              ? Colors.black
+                              : Colors.white,
+                          thickness: 0.01.h,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

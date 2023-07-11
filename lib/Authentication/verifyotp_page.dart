@@ -12,8 +12,6 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-// import 'package:sms_autofill/sms_autofill.dart';
-
 import '../Components/alert.dart';
 import '../Components/custom_button.dart';
 import '../Navigation/Navigate.dart';
@@ -38,7 +36,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
   // final SmsAutoFill _autoFill = SmsAutoFill();
   String currentText = '';
   String time = '30';
-  bool resend = false;
+  bool resend = false, isButtonEnabled = true;
 
   @override
   void dispose() {
@@ -141,6 +139,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                   inactiveColor: Colors.grey.shade700,
                   inactiveFillColor: Colors.white,
                 ),
+
                 textStyle: Theme.of(context)
                     .textTheme
                     .headline5
@@ -162,10 +161,18 @@ class _VerifyOTPState extends State<VerifyOTP> {
                   debugPrint(value);
                   setState(() {
                     currentText = value;
+                    if(value.length==6){
+                      isButtonEnabled = false;
+                    }else{
+                      isButtonEnabled = true;
+                    }
                   });
                 },
                 beforeTextPaste: (text) {
                   debugPrint("Allowing to paste $text");
+                  setState(() {
+
+                  });
                   //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
                   //but you can show anything you want here, like your pop up saying wrong paste format or etc
                   return true;
@@ -181,36 +188,42 @@ class _VerifyOTPState extends State<VerifyOTP> {
               width: 66.w,
               padding: EdgeInsets.symmetric(horizontal: 6.w),
               child: CustomButton(
-                  txt: 'Submit',
-                  onTap: () async {
-                    // GetProfile();
-                    Navigation.instance.navigate("/loadingDialog");
-                    try {
-                      PhoneAuthCredential credential =
-                          PhoneAuthProvider.credential(
-                              verificationId: _verificationId!,
-                              smsCode: textEditingController.text);
-                      await _auth
-                          .signInWithCredential(credential)
-                          .then((value) {
-                        getProfile();
-                      });
-                      //     .catchError((e) {
-                      //   debugPrint(_verificationId);
-                      //   debugPrint("s ${e}");
-                      //   debugPrint(textEditingController.text);
-                      //   showError("$e");
-                      // });
-                    } on FirebaseAuthException catch (_, e) {
-                      debugPrint(_.code);
-                      // if(dev)
-                      Navigation.instance.goBack();
-                      showError("${_.message}");
-                      // else
-                      //    simple
-                    }
-                    // phoneSignIn(phoneNumber: widget.number.toString());
-                  }),
+                txt: 'Submit',
+                onTap: isButtonEnabled
+                    ? () async {
+                        // GetProfile();
+                        Navigation.instance.navigate("/loadingDialog");
+                        try {
+                          PhoneAuthCredential credential =
+                              PhoneAuthProvider.credential(
+                                  verificationId: _verificationId!,
+                                  smsCode: textEditingController.text);
+                          await _auth
+                              .signInWithCredential(credential)
+                              .then((value) {
+                            getProfile();
+                          });
+                          //     .catchError((e) {
+                          //   debugPrint(_verificationId);
+                          //   debugPrint("s ${e}");
+                          //   debugPrint(textEditingController.text);
+                          //   showError("$e");
+                          // });
+                        } on FirebaseAuthException catch (_, e) {
+                          debugPrint(_.code);
+                          // if(dev)
+                          Navigation.instance.goBack();
+                          showError("${_.message}");
+                          setState(() {
+                            isButtonEnabled = true;
+                          });
+                          // else
+                          //    simple
+                        }
+                        // phoneSignIn(phoneNumber: widget.number.toString());
+                      }
+                    : () {},
+              ),
             ),
             SizedBox(
               height: 3.h,
@@ -368,7 +381,8 @@ class _VerifyOTPState extends State<VerifyOTP> {
           reponse.profile?.l_name == "" ||
           reponse.profile?.is_new == 1) {
         Storage.instance.setToken(reponse.access_token ?? "");
-        Navigation.instance.navigateAndReplace('/terms&conditions', args: widget.number);
+        Navigation.instance
+            .navigateAndReplace('/terms&conditions', args: widget.number);
       } else {
         fetchToken();
         try {

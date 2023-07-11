@@ -99,7 +99,7 @@ class CommentUI extends StatelessWidget {
                         return CommentItem(
                             current: current,
                             context: context,
-                            liked: current.is_liked);
+                            liked: current.is_liked, fetchGuwahatiConnect: ()=>fetchGuwahatiConnect(),);
                       }),
                 ),
                 Container(
