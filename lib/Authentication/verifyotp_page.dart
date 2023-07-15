@@ -64,7 +64,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: Constance.buildAppBar("verify", false, _scaffoldKey),
+      appBar: Constance.buildAppBar2("verify"),
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -155,7 +155,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                 // errorAnimationController: errorController,
                 controller: textEditingController,
                 onCompleted: (v) {
-                  debugPrint("Completed");
+                  debugPrint("Completed ");
                 },
                 onChanged: (value) {
                   debugPrint(value);
@@ -189,14 +189,13 @@ class _VerifyOTPState extends State<VerifyOTP> {
               padding: EdgeInsets.symmetric(horizontal: 6.w),
               child: CustomButton(
                 txt: 'Submit',
-                onTap: isButtonEnabled
-                    ? () async {
+                onTap:  () async {
                         // GetProfile();
                         Navigation.instance.navigate("/loadingDialog");
                         try {
                           PhoneAuthCredential credential =
                               PhoneAuthProvider.credential(
-                                  verificationId: _verificationId!,
+                                  verificationId: _verificationId??"",
                                   smsCode: textEditingController.text);
                           await _auth
                               .signInWithCredential(credential)
@@ -221,8 +220,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                           //    simple
                         }
                         // phoneSignIn(phoneNumber: widget.number.toString());
-                      }
-                    : () {},
+                      },
               ),
             ),
             SizedBox(
@@ -240,7 +238,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
               onPressed: () {
                 if (time == '0') {
                   phoneSignIn(phoneNumber: widget.number.toString());
-                } else {}
+                }
               },
               child: Text(
                 'Send Again',
@@ -252,7 +250,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
               ),
             ),
             Text(
-              'In ${time} seconds',
+              'In $time seconds',
               style: Theme.of(context).textTheme.headline6?.copyWith(
                     color: Colors.black,
                     fontSize: 15.sp,
@@ -287,34 +285,37 @@ class _VerifyOTPState extends State<VerifyOTP> {
     setState(() {
       textEditingController.text = authCredential.smsCode!;
     });
-    if (authCredential.smsCode != null) {
-      // try {
-      //   UserCredential credential =
-      //       await user!.linkWithCredential(authCredential);
-
-      // } on FirebaseAuthException catch (e) {
-      //   if (e.code == 'provider-already-linked') {
-      UserCredential _authResult =
-          await _auth.signInWithCredential(authCredential);
-      Navigation.instance.navigate("/loadingDialog");
-      if (_authResult.additionalUserInfo?.isNewUser ?? false) {
-        Storage.instance
-            .setIsNew(_authResult.additionalUserInfo?.isNewUser ?? true);
-        // Navigation.instance
-        //     .navigateAndReplace('/terms&conditions', args: widget.number);
-        getProfile();
-      } else {
-        Storage.instance
-            .setIsNew(_authResult.additionalUserInfo?.isNewUser ?? false);
-        getProfile();
-      }
-    }
+    // if (authCredential.smsCode != null) {
+    //   // try {
+    //   //   UserCredential credential =
+    //   //       await user!.linkWithCredential(authCredential);
+    //
+    //   // } on FirebaseAuthException catch (e) {
+    //   //   if (e.code == 'provider-already-linked') {
+    //   UserCredential _authResult =
+    //       await _auth.signInWithCredential(authCredential);
+    //   Navigation.instance.navigate("/loadingDialog");
+    //   if (_authResult.additionalUserInfo?.isNewUser ?? false) {
+    //     Storage.instance
+    //         .setIsNew(_authResult.additionalUserInfo?.isNewUser ?? true);
+    //     // Navigation.instance
+    //     //     .navigateAndReplace('/terms&conditions', args: widget.number);
+    //     getProfile();
+    //   } else {
+    //     Storage.instance
+    //         .setIsNew(_authResult.additionalUserInfo?.isNewUser ?? false);
+    //     getProfile();
+    //   }
+    // }
   }
 
   _onVerificationFailed(FirebaseAuthException exception) {
     if (exception.code == 'invalid-phone-number') {
       showMessage("The phone number entered is invalid!");
     }
+    setState(() {
+      isButtonEnabled = true;
+    });
   }
 
   _onCodeSent(String verification, int? forceResendingToken) {
@@ -328,6 +329,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
   }
 
   _onCodeTimeout(String timeout) {
+
     return null;
   }
 

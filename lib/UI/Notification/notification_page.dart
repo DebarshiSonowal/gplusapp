@@ -207,9 +207,11 @@ class _NotificationPageState extends State<NotificationPage> {
               listen: false)
           .setNotificationInDevice(response.notification);
 
-      setState(() {
+      if (mounted) {
+        setState(() {
 
-      });
+              });
+      }
     } else {
       setState(() {
         isEmpty = true;
