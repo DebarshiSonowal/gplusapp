@@ -284,7 +284,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                         height: 1.h,
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 0.5.h),
                         child: Text(
                           Constance.copyright,
                           style:

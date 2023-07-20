@@ -39,7 +39,7 @@ public class MainActivity extends FlutterActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().addFlags(LayoutParams.FLAG_SECURE);
+//        getWindow().addFlags(LayoutParams.FLAG_SECURE);
         GeneratedPluginRegister.registerGeneratedPlugins(getFlutterEngine());
         start_payment = true;
 
