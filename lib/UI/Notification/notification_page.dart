@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:lottie/lottie.dart';
@@ -103,8 +101,8 @@ class _NotificationPageState extends State<NotificationPage> {
     final response = await ApiProvider.instance.notificationRead(id);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext!,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
           .setNotificationInDevice(response.notification);
       sendToDestination(
           seo_name, category_name, type, id, vendor_id, categoryId);
@@ -114,20 +112,31 @@ class _NotificationPageState extends State<NotificationPage> {
       showError(response.message ?? "Something went wrong");
     }
   }
+
   // void setNewsRead
 
   void sendToDestination(
       seoName, categoryName, type, id, vendorId, categoryId) async {
     switch (type) {
       case "news":
-        debugPrint("News clicked ${categoryName},${seoName} ");
-        final response = await Navigation.instance.navigate('/story',
-            args: '${categoryName},${seoName},notification_page');
+        debugPrint("News clicked $categoryName,$seoName ");
+        if ((Provider.of<DataProvider>(context, listen: false)
+            .profile
+            ?.is_plan_active ??
+            false)) {
+          final response = await Navigation.instance.navigate('/story',
+                      args: '$categoryName,${seoName},notification_page');
+        }
         break;
       case "opinion":
         Navigation.instance.navigate('/opinionPage');
-        final response = await Navigation.instance
-            .navigate('/opinionDetails', args: '${seoName},${categoryId}');
+        if ((Provider.of<DataProvider>(context, listen: false)
+                .profile
+                ?.is_plan_active ??
+            false)) {
+          final response = await Navigation.instance
+              .navigate('/opinionDetails', args: '${seoName},${categoryId}');
+        }
 
         break;
       case "ghy_connect":
@@ -155,7 +164,8 @@ class _NotificationPageState extends State<NotificationPage> {
                 Navigation.instance.navigatorKey.currentContext!,
                 listen: false)
             .setCurrent(3);
-        final response = await Navigation.instance.navigate('/citizenJournalist');
+        final response =
+            await Navigation.instance.navigate('/citizenJournalist');
 
         break;
       case "ctz_journalist_status":
@@ -185,7 +195,8 @@ class _NotificationPageState extends State<NotificationPage> {
                 listen: false)
             .setCurrent(4);
         Navigation.instance.navigate('/classified');
-        final response = await  Navigation.instance.navigate('/classifiedDetails', args: int.parse(id));
+        final response = await Navigation.instance
+            .navigate('/classifiedDetails', args: int.parse(id));
 
         break;
       case "locality":
@@ -208,9 +219,7 @@ class _NotificationPageState extends State<NotificationPage> {
           .setNotificationInDevice(response.notification);
 
       if (mounted) {
-        setState(() {
-
-              });
+        setState(() {});
       }
     } else {
       setState(() {

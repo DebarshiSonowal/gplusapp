@@ -161,18 +161,16 @@ class _VerifyOTPState extends State<VerifyOTP> {
                   debugPrint(value);
                   setState(() {
                     currentText = value;
-                    if(value.length==6){
+                    if (value.length == 6) {
                       isButtonEnabled = false;
-                    }else{
+                    } else {
                       isButtonEnabled = true;
                     }
                   });
                 },
                 beforeTextPaste: (text) {
                   debugPrint("Allowing to paste $text");
-                  setState(() {
-
-                  });
+                  setState(() {});
                   //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
                   //but you can show anything you want here, like your pop up saying wrong paste format or etc
                   return true;
@@ -189,38 +187,38 @@ class _VerifyOTPState extends State<VerifyOTP> {
               padding: EdgeInsets.symmetric(horizontal: 6.w),
               child: CustomButton(
                 txt: 'Submit',
-                onTap:  () async {
-                        // GetProfile();
-                        Navigation.instance.navigate("/loadingDialog");
-                        try {
-                          PhoneAuthCredential credential =
-                              PhoneAuthProvider.credential(
-                                  verificationId: _verificationId??"",
-                                  smsCode: textEditingController.text);
-                          await _auth
-                              .signInWithCredential(credential)
-                              .then((value) {
-                            getProfile();
-                          });
-                          //     .catchError((e) {
-                          //   debugPrint(_verificationId);
-                          //   debugPrint("s ${e}");
-                          //   debugPrint(textEditingController.text);
-                          //   showError("$e");
-                          // });
-                        } on FirebaseAuthException catch (_, e) {
-                          debugPrint(_.code);
-                          // if(dev)
-                          Navigation.instance.goBack();
-                          showError("${_.message}");
-                          setState(() {
-                            isButtonEnabled = true;
-                          });
-                          // else
-                          //    simple
-                        }
-                        // phoneSignIn(phoneNumber: widget.number.toString());
-                      },
+                onTap: () async {
+                  // GetProfile();
+                  Navigation.instance.navigate("/loadingDialog");
+                  try {
+                    PhoneAuthCredential credential =
+                        PhoneAuthProvider.credential(
+                            verificationId: _verificationId ?? "",
+                            smsCode: textEditingController.text);
+                    await _auth
+                        .signInWithCredential(credential)
+                        .then((UserCredential value) {
+                      getProfile();
+                    });
+                    //     .catchError((e) {
+                    //   debugPrint(_verificationId);
+                    //   debugPrint("s ${e}");
+                    //   debugPrint(textEditingController.text);
+                    //   showError("$e");
+                    // });
+                  } on FirebaseAuthException catch (_, e) {
+                    debugPrint(_.code);
+                    // if(dev)
+                    Navigation.instance.goBack();
+                    showError("${_.message}");
+                    setState(() {
+                      isButtonEnabled = true;
+                    });
+                    // else
+                    //    simple
+                  }
+                  // phoneSignIn(phoneNumber: widget.number.toString());
+                },
               ),
             ),
             SizedBox(
@@ -275,38 +273,21 @@ class _VerifyOTPState extends State<VerifyOTP> {
             codeAutoRetrievalTimeout: _onCodeTimeout)
         .onError((error, stackTrace) {
       debugPrint('error ${error} ${stackTrace}');
-    }).then((value) => {debugPrint('sent')});
+    }).then((value) {
+      setState(() {
+        time = '30';
+        // setTimer();
+      });
+    });
   }
 
   _onVerificationCompleted(PhoneAuthCredential authCredential) async {
     // print("verification completed ${authCredential.smsCode}");
     // User? user = FirebaseAuth.instance.currentUser;
-    debugPrint('Verification completed ${authCredential.smsCode}');
+    debugPrint('Verification completed ${authCredential..smsCode}');
     setState(() {
       textEditingController.text = authCredential.smsCode!;
     });
-    // if (authCredential.smsCode != null) {
-    //   // try {
-    //   //   UserCredential credential =
-    //   //       await user!.linkWithCredential(authCredential);
-    //
-    //   // } on FirebaseAuthException catch (e) {
-    //   //   if (e.code == 'provider-already-linked') {
-    //   UserCredential _authResult =
-    //       await _auth.signInWithCredential(authCredential);
-    //   Navigation.instance.navigate("/loadingDialog");
-    //   if (_authResult.additionalUserInfo?.isNewUser ?? false) {
-    //     Storage.instance
-    //         .setIsNew(_authResult.additionalUserInfo?.isNewUser ?? true);
-    //     // Navigation.instance
-    //     //     .navigateAndReplace('/terms&conditions', args: widget.number);
-    //     getProfile();
-    //   } else {
-    //     Storage.instance
-    //         .setIsNew(_authResult.additionalUserInfo?.isNewUser ?? false);
-    //     getProfile();
-    //   }
-    // }
   }
 
   _onVerificationFailed(FirebaseAuthException exception) {
@@ -329,7 +310,6 @@ class _VerifyOTPState extends State<VerifyOTP> {
   }
 
   _onCodeTimeout(String timeout) {
-
     return null;
   }
 
