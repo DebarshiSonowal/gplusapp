@@ -1,5 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:gplusapp/UI/main/sections/shimmering_card.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
@@ -28,7 +29,7 @@ class GPlusExclusiveSection extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          data.home_exclusive.isNotEmpty? Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.w),
             child: Text(
               'G Plus Exclusive',
@@ -40,7 +41,7 @@ class GPlusExclusiveSection extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-          ):Container(),
+          ),
           SizedBox(
             height: 0.3.h,
           ),
@@ -120,7 +121,7 @@ class GPlusExclusiveSection extends StatelessWidget {
                     ),
                   ),
                 )
-              : Container(),
+              :  const ShimmeringCard(),
         ],
       ),
     );

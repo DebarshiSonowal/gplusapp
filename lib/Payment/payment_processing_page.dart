@@ -759,7 +759,7 @@ You can parse it accordingly to handle response */
       offerings = await Purchases.getOfferings();
       debugPrint("Packages1 ${offerings.current!.availablePackages}");
       final response = await Purchases.appUserID;
-      debugPrint("1st ${response}");
+      debugPrint("1st $response");
       debugPrint("2nd ${offerings.getOffering("subscriptions")}");
       debugPrint("3rd ${widget.input.split(',')[2]}");
       CustomerInfo customerInfo =

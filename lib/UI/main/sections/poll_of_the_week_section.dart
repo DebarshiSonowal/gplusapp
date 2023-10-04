@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../Helper/Constance.dart';
@@ -85,7 +86,7 @@ class PollOfTheWeekSection extends StatelessWidget {
           SizedBox(
             height: 1.h,
           ),
-          Container(
+          data.pollOfTheWeek!=null?Container(
             padding: EdgeInsets.symmetric(horizontal: 0.5.w),
             child: ListView.separated(
                 shrinkWrap: true,
@@ -194,27 +195,142 @@ class PollOfTheWeekSection extends StatelessWidget {
                   );
                 },
                 itemCount: 3),
+          ):Container(
+            padding: EdgeInsets.symmetric(horizontal: 5.w),
+            width: double.infinity,
+            height: 20.h,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 2.w, vertical: 1.h),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  width: double.infinity,
+                  height: 5.h,
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.white,
+                    highlightColor: Colors.grey.shade300,
+                    enabled: true,
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 2.h,
+                          width: 2.h,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                            )
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Container(
+                          color: Colors.grey.shade200,
+                          height: 1.5.h,
+                          width: 40.w,
+                        ),
+                        const Spacer(),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.grey.shade300,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 2.w, vertical: 1.h),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  width: double.infinity,
+                  height: 5.h,
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.white,
+                    highlightColor: Colors.grey.shade300,
+                    enabled: true,
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 2.h,
+                          width: 2.h,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                              )
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Container(
+                          color: Colors.grey.shade200,
+                          height: 1.5.h,
+                          width: 40.w,
+                        ),
+                        const Spacer(),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.grey.shade300,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 2.w, vertical: 1.h),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  width: double.infinity,
+                  height: 5.h,
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.white,
+                    highlightColor: Colors.grey.shade300,
+                    enabled: true,
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 2.h,
+                          width: 2.h,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                              )
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Container(
+                          color: Colors.grey.shade200,
+                          height: 1.5.h,
+                          width: 40.w,
+                        ),
+                        const Spacer(),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.grey.shade300,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          // SizedBox(
-          //   height: 1.h,
-          // ),
-          // GestureDetector(
-          //   onTap: () {
-          //     Navigation.instance.navigate('/pollPage');
-          //   },
-          //   child: Padding(
-          //     padding: EdgeInsets.symmetric(horizontal: 5.w),
-          //     child: Text(
-          //       'View All',
-          //       style: Theme.of(context).textTheme.headline5?.copyWith(
-          //             color: Storage.instance.isDarkMode
-          //                 ? Colors.white
-          //                 : Constance.primaryColor,
-          //             fontWeight: FontWeight.bold,
-          //           ),
-          //     ),
-          //   ),
-          // ),
           SizedBox(
             height: 1.h,
           ),

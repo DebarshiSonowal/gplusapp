@@ -57,7 +57,8 @@ class NotificationHelper {
         OpenFile.open(details?.notificationResponse?.payload);
       }
     }
-    debugPrint("Notification Payload ${notificationResponse.payload} ${notificationResponse.input}");
+    debugPrint(
+        "Notification Payload ${notificationResponse.payload} ${notificationResponse.input}");
     var jsData = notificationResponse.payload ?? "";
     var jsData1 = notificationResponse.payload ?? "";
     jsData = jsData.replaceAll('{', '{"');
@@ -72,15 +73,17 @@ class NotificationHelper {
 
       var json = <String, String?>{};
 
-      propertyPattern.allMatches("${notificationResponse.payload}").forEach((match) {
+      propertyPattern
+          .allMatches("${notificationResponse.payload}")
+          .forEach((match) {
         var propertyName = match.group(1);
         var propertyValue = match.group(2);
 
         json[propertyName!] = propertyValue!.trim();
       });
       NotificationReceived notification =
-      // NotificationReceived.fromJson(jsonDecode(jsData1));
-      NotificationReceived.fromJson(json);
+          // NotificationReceived.fromJson(jsonDecode(jsData1));
+          NotificationReceived.fromJson(json);
       setRead(
           notification.notification_id,
           notification.seo_name,
@@ -89,7 +92,7 @@ class NotificationHelper {
           notification.post_id,
           notification.vendor_id,
           notification.category_id);
-    }else{
+    } else {
       try {
         OpenFile.open(notificationResponse.payload!);
       } catch (e) {
@@ -141,8 +144,6 @@ class NotificationHelper {
     //       notification.category_id);
     // }
     // Navigation.instance.navigate('');
-
-
   }
 
   static void setRead(String? id, seoName, categoryName, type, postId, vendorId,
@@ -176,14 +177,28 @@ class NotificationHelper {
       case "news":
         debugPrint("News clicked ${categoryName},${seoName} ");
         // Navigation.instance.navigate("/main");
-        Navigation.instance
-            .navigate('/story', args: '${categoryName},${seoName},home_page');
+        if ((Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext!,
+                    listen: false)
+                .profile
+                ?.is_plan_active ??
+            false)) {
+          Navigation.instance
+              .navigate('/story', args: '${categoryName},${seoName},home_page');
+        }
         break;
       case "opinion":
         // Navigation.instance.navigate("/main");
-        Navigation.instance.navigate('/opinionPage');
-        Navigation.instance
-            .navigate('/opinionDetails', args: '${seoName},${categoryId}');
+        if ((Provider.of<DataProvider>(
+            Navigation.instance.navigatorKey.currentContext!,
+            listen: false)
+            .profile
+            ?.is_plan_active ??
+            false)) {
+          Navigation.instance.navigate('/opinionPage');
+          Navigation.instance
+              .navigate('/opinionDetails', args: '${seoName},${categoryId}');
+        }
         break;
       case "ghy_connect":
         // Navigation.instance.navigate("/main");

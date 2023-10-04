@@ -1,6 +1,8 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:gplusapp/UI/main/sections/shimmering_card.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../Components/toppicks_card.dart';
@@ -19,9 +21,7 @@ class SuggestedForYou extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return data.home_toppicks.isEmpty
-        ? Container()
-        : Container(
+    return Container(
             height: 26.h,
             width: double.infinity,
             color: Constance.secondaryColor,
@@ -44,81 +44,83 @@ class SuggestedForYou extends StatelessWidget {
                 SizedBox(
                   height: 1.h,
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 4.w),
-                  width: 95.w,
-                  height: 18.h,
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: data.home_toppicks.length > 4
-                        ? 4
-                        : data.home_toppicks.length + 1,
-                    itemBuilder: (cont, count) {
-                      var item = data.home_toppicks[count];
-                      if ((data.home_toppicks.length > 4
-                              ? 3
-                              : data.home_toppicks.length - 1) ==
-                          count) {
-                        return Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 1.w, vertical: 1.5.h),
-                          // height: 5.h,
-                          // width: 20.w,
-                          child: TextButton(
-                            onPressed: () {
-                              if (item.has_permission ?? false) {
-                                logTheViewAllClick(
-                                    data.profile!, "top_picks_for_you");
-                                Navigation.instance.navigate('/toppicks');
-                                // Navigation.instance.navigate('/fullScreenAd');
-                              }else{
-                                showNotaMember();
-                              }
-                            },
-                            child: Text(
-                              'View All',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline3
-                                  ?.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10.sp,
+                data.home_toppicks.isNotEmpty
+                    ? Container(
+                        margin: EdgeInsets.only(left: 4.w),
+                        width: 95.w,
+                        height: 18.h,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: data.home_toppicks.length > 4
+                              ? 4
+                              : data.home_toppicks.length + 1,
+                          itemBuilder: (cont, count) {
+                            var item = data.home_toppicks[count];
+                            if ((data.home_toppicks.length > 4
+                                    ? 3
+                                    : data.home_toppicks.length - 1) ==
+                                count) {
+                              return Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 1.w, vertical: 1.5.h),
+                                // height: 5.h,
+                                // width: 20.w,
+                                child: TextButton(
+                                  onPressed: () {
+                                    if (item.has_permission ?? false) {
+                                      logTheViewAllClick(
+                                          data.profile!, "top_picks_for_you");
+                                      Navigation.instance.navigate('/toppicks');
+                                      // Navigation.instance.navigate('/fullScreenAd');
+                                    } else {
+                                      showNotaMember();
+                                    }
+                                  },
+                                  child: Text(
+                                    'View All',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline3
+                                        ?.copyWith(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 10.sp,
+                                        ),
                                   ),
-                            ),
-                          ),
-                        );
-                      } else {
-                        return GestureDetector(
-                          onTap: () {
-                            if (item.has_permission ?? false) {
-                              logTheTopPicksClick(
-                                data.profile!,
-                                item.title!,
-                                "top_picks_for_you",
-                                item.id!,
-                                DateFormat("dd MMM, yyyy")
-                                    .format(DateTime.parse(item.date!)),
+                                ),
                               );
-                              Navigation.instance.navigate('/story',
-                                  args:
-                                      '${item.categories?.first.seo_name},${item.seo_name},top_picks_for_you');
                             } else {
-                              showNotaMember();
+                              return GestureDetector(
+                                onTap: () {
+                                  if (item.has_permission ?? false) {
+                                    logTheTopPicksClick(
+                                      data.profile!,
+                                      item.title!,
+                                      "top_picks_for_you",
+                                      item.id!,
+                                      DateFormat("dd MMM, yyyy")
+                                          .format(DateTime.parse(item.date!)),
+                                    );
+                                    Navigation.instance.navigate('/story',
+                                        args:
+                                            '${item.categories?.first.seo_name},${item.seo_name},top_picks_for_you');
+                                  } else {
+                                    showNotaMember();
+                                  }
+                                },
+                                child: SuggestedForYouCard(item: item),
+                              );
                             }
                           },
-                          child: SuggestedForYouCard(item: item),
-                        );
-                      }
-                    },
-                    separatorBuilder: (cont, inde) {
-                      return SizedBox(
-                        width: 1.w,
-                      );
-                    },
-                  ),
-                ),
+                          separatorBuilder: (cont, inde) {
+                            return SizedBox(
+                              width: 1.w,
+                            );
+                          },
+                        ),
+                      )
+                    : const ShimmeringCard(),
               ],
             ),
           );
@@ -168,3 +170,5 @@ class SuggestedForYou extends StatelessWidget {
     );
   }
 }
+
+

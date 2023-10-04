@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:gplusapp/UI/main/sections/shimmering_card.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
@@ -29,7 +30,7 @@ class VideoReportSection extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          data.home_weekly.isNotEmpty?Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.w),
             child: Text(
               'Videos Of The Week',
@@ -41,7 +42,7 @@ class VideoReportSection extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-          ):Container(),
+          ),
           SizedBox(
             height: 0.3.h,
           ),
@@ -118,7 +119,7 @@ class VideoReportSection extends StatelessWidget {
                         : data.home_weekly.length + 1,
                   ),
                 )
-              : Container(),
+              :  const ShimmeringCard(),
 
           // SizedBox(
           //   height: 1.h,

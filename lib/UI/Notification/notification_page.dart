@@ -175,7 +175,7 @@ class _NotificationPageState extends State<NotificationPage> {
             .setCurrent(3);
         Navigation.instance.navigate('/citizenJournalist');
         Navigation.instance.navigate('/submitedStory');
-        final response = await Navigation.instance
+        Navigation.instance
             .navigate('/viewStoryPage', args: int.parse(id.toString()));
 
         break;
@@ -185,7 +185,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 listen: false)
             .setCurrent(1);
         Navigation.instance.navigate('/bigdealpage');
-        final response = await Navigation.instance
+        Navigation.instance
             .navigate('/categorySelect', args: int.parse(vendorId));
 
         break;
