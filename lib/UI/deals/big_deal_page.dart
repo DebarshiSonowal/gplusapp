@@ -11,6 +11,7 @@ import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Components/NavigationBar.dart';
@@ -149,9 +150,9 @@ class _BigDealPageState extends State<BigDealPage> {
             } else if (mode == LoadStatus.canLoading) {
               body = const Text("release to load more");
             } else {
-              body = Text("No more Data");
+              body = const Text("No more Data");
             }
-            return Container(
+            return SizedBox(
               height: 55.0,
               child: Center(child: body),
             );
@@ -170,57 +171,96 @@ class _BigDealPageState extends State<BigDealPage> {
             color: Storage.instance.isDarkMode ? Colors.black : Colors.white,
             padding: EdgeInsets.symmetric(vertical: 2.h),
             child: Consumer<DataProvider>(builder: (context, current, _) {
-              return current.deals.isNotEmpty || current.category.isNotEmpty
-                  ? SingleChildScrollView(
-                      controller: controller,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          current.deals.isEmpty
-                              ? Container()
-                              : Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 5.w),
-                                  child: Text(
-                                    'Promoted Deals',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline2
-                                        ?.copyWith(
-                                          color: Storage.instance.isDarkMode
-                                              ? Colors.white
-                                              : Constance.primaryColor,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                ),
-                          PromotedDeal(
+              return
+                  // current.deals.isNotEmpty || current.category.isNotEmpty
+                  //   ?
+                isEmpty
+                    ? Image.asset(
+                  "assets/images/no_data.png",
+                  scale: 4,
+                )
+                    :SingleChildScrollView(
+                controller: controller,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // current.deals.isEmpty
+                    //     ? Container()
+                    //     :
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5.w),
+                      child: Text(
+                        'Promoted Deals',
+                        style: Theme.of(context).textTheme.headline2?.copyWith(
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Constance.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ),
+                    current.deals.isNotEmpty
+                        ? PromotedDeal(
                             current: current,
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5.w),
-                            child: Text(
-                              'Categories',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline3
-                                  ?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Constance.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          )
+                        : Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 2.w,
+                              vertical: 1.h,
+                            ),
+                            width: double.infinity,
+                            height: 25.h,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              height: 24.h,
+                              width: double.infinity,
+                              child: Shimmer.fromColors(
+                                baseColor: Colors.white,
+                                highlightColor: Colors.grey.shade300,
+                                enabled: true,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      width: 80.w,
+                                      height: 18.h,
+                                      color: Colors.grey.shade100,
+                                    ),
+                                    Container(
+                                      width: 80.w,
+                                      height: 3.h,
+                                      color: Colors.grey.shade100,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 3.w),
-                            child: Wrap(
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5.w),
+                      child: Text(
+                        'Categories',
+                        style: Theme.of(context).textTheme.headline3?.copyWith(
+                              color: Storage.instance.isDarkMode
+                                  ? Colors.white
+                                  : Constance.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 3.w),
+                      child: current.category.isNotEmpty
+                          ? Wrap(
                               alignment: WrapAlignment.start,
                               children: expandCateg
                                   ? current.category.map((e) {
@@ -236,105 +276,99 @@ class _BigDealPageState extends State<BigDealPage> {
                                         e: e,
                                       );
                                     }).toList(),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 2.5.h,
-                          ),
-                          current.category.length <= 8
-                              ? Container()
-                              : SizedBox(
-                                  width: double.infinity,
-                                  child: Center(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        if (!expandCateg) {
-                                          logTheViewMoreClick(
-                                              Provider.of<DataProvider>(
-                                                      Navigation
-                                                              .instance
-                                                              .navigatorKey
-                                                              .currentContext ??
-                                                          context,
-                                                      listen: false)
-                                                  .profile!);
-                                        } else {
-                                          logTheShowLessClick(
-                                              Provider.of<DataProvider>(
-                                                      Navigation
-                                                              .instance
-                                                              .navigatorKey
-                                                              .currentContext ??
-                                                          context,
-                                                      listen: false)
-                                                  .profile!);
-                                        }
-                                        setState(() {
-                                          expandCateg = !expandCateg;
-                                        });
-                                      },
-                                      child: Container(
-                                        width: 90.w,
-                                        // height: 4.h,
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 1.h, horizontal: 4.w),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Storage.instance.isDarkMode
-                                                  ? Colors.white
-                                                  : Colors.black54,
-                                            ),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(5))),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              expandCateg
-                                                  ? 'Show less'
-                                                  : 'View More',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5
-                                                  ?.copyWith(
-                                                    color: Storage
-                                                            .instance.isDarkMode
-                                                        ? Colors.white
-                                                        : Colors.black54,
-                                                  ),
-                                            ),
-                                            Icon(
-                                              expandCateg
-                                                  ? Icons.arrow_drop_up
-                                                  : Icons.arrow_drop_down,
-                                              color: Storage.instance.isDarkMode
-                                                  ? Colors.white
-                                                  : Colors.black54,
-                                            ),
-                                          ],
-                                        ),
+                            )
+                          : const ShimmerCategories(),
+                    ),
+                    SizedBox(
+                      height: 2.5.h,
+                    ),
+                    current.category.length <= 8
+                        ? Container()
+                        : SizedBox(
+                            width: double.infinity,
+                            child: Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (!expandCateg) {
+                                    logTheViewMoreClick(
+                                        Provider.of<DataProvider>(
+                                                Navigation.instance.navigatorKey
+                                                        .currentContext ??
+                                                    context,
+                                                listen: false)
+                                            .profile!);
+                                  } else {
+                                    logTheShowLessClick(
+                                        Provider.of<DataProvider>(
+                                                Navigation.instance.navigatorKey
+                                                        .currentContext ??
+                                                    context,
+                                                listen: false)
+                                            .profile!);
+                                  }
+                                  setState(() {
+                                    expandCateg = !expandCateg;
+                                  });
+                                },
+                                child: Container(
+                                  width: 90.w,
+                                  // height: 4.h,
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 1.h, horizontal: 4.w),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black54,
                                       ),
-                                    ),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(5))),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        expandCateg ? 'Show less' : 'View More',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5
+                                            ?.copyWith(
+                                              color: Storage.instance.isDarkMode
+                                                  ? Colors.white
+                                                  : Colors.black54,
+                                            ),
+                                      ),
+                                      Icon(
+                                        expandCateg
+                                            ? Icons.arrow_drop_up
+                                            : Icons.arrow_drop_down,
+                                        color: Storage.instance.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black54,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                          SizedBox(
-                            height: 1.h,
+                              ),
+                            ),
                           ),
-                          const HistorySection(),
-                          getSpace(),
-                        ],
-                      ),
-                    )
-                  : (isEmpty
-                      ? Image.asset(
-                          "assets/images/no_data.png",
-                          scale: 4,
-                        )
-                      : Lottie.asset(
-                          Constance.searchingIcon,
-                        ));
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    const HistorySection(),
+                    getSpace(),
+                  ],
+                ),
+              )
+                  // : (isEmpty
+                  //     ? Image.asset(
+                  //         "assets/images/no_data.png",
+                  //         scale: 4,
+                  //       )
+                  //     : Lottie.asset(
+                  //         Constance.searchingIcon,
+                  //       ))
+                  ;
             }),
           ),
         ),
@@ -717,6 +751,79 @@ class _BigDealPageState extends State<BigDealPage> {
         "client_id": id,
         "user_id_tvc": profile.id,
       },
+    );
+  }
+}
+
+class ShimmerCategories extends StatelessWidget {
+  const ShimmerCategories({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 3.w),
+      width: double.infinity,
+      height: 20.h,
+      child: const Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ShimmerDealCard(),
+              ShimmerDealCard(),
+              ShimmerDealCard(),
+              ShimmerDealCard(),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ShimmerDealCard(),
+              ShimmerDealCard(),
+              ShimmerDealCard(),
+              ShimmerDealCard(),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class ShimmerDealCard extends StatelessWidget {
+  const ShimmerDealCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.white,
+      highlightColor: Colors.grey.shade300,
+      enabled: true,
+      child: Column(
+        children: [
+          Container(
+            height: 7.h,
+            width: 7.h,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.grey.shade200,
+            ),
+          ),
+          SizedBox(
+            height: 1.h,
+          ),
+          Container(
+            width: 15.w,
+            height: 1.5.h,
+            color: Colors.grey.shade100,
+          ),
+        ],
+      ),
     );
   }
 }

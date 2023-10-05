@@ -8,6 +8,7 @@ import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Components/NavigationBar.dart';
@@ -122,14 +123,14 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
       setState(() {
         isEmpty = (response.posts.isEmpty ?? false) ? true : false;
         has_permission = (response.has_permission ?? false);
-        is_enabled=true;
+        is_enabled = true;
       });
       _refreshController.refreshCompleted();
     } else {
       // Navigation.instance.goBack();
       setState(() {
         isEmpty = true;
-        is_enabled=true;
+        is_enabled = true;
       });
       // Provider.of<DataProvider>(
       //         Navigation.instance.navigatorKey.currentContext ?? context,
@@ -146,20 +147,6 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
       appBar: Constance.buildAppBar("guwahati", true, scaffoldKey),
       key: scaffoldKey,
       drawer: const BergerMenuMemPage(screen: "guwahati"),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: () {
-      //     checkIt();
-      //     // showDialogBox();
-      //   },
-      //   icon: Icon(Icons.add),
-      //   label: Text(
-      //     "Ask a question",
-      //     style: Theme.of(context).textTheme.headline5?.copyWith(
-      //           color: Colors.black,
-      //           // fontWeight: FontWeight.bold,
-      //         ),
-      //   ),
-      // ),
       floatingActionButton: !showing
           ? Builder(builder: (context) {
               return FloatingActionBubble(
@@ -178,10 +165,11 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                     onPress: () {
                       if (is_enabled) {
                         logTheAskAQuestionClick(Provider.of<DataProvider>(
-                                                      Navigation.instance.navigatorKey.currentContext ??
-                                                          context,
-                                                      listen: false)
-                                                  .profile!);
+                                Navigation
+                                        .instance.navigatorKey.currentContext ??
+                                    context,
+                                listen: false)
+                            .profile!);
                         _animationController?.reverse();
                         if (has_permission ?? false) {
                           Navigation.instance.navigate('/askAQuestion');
@@ -255,7 +243,7 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
       body: SmartRefresher(
         enablePullDown: true,
         enablePullUp: false,
-        header: WaterDropHeader(),
+        header: const WaterDropHeader(),
         footer: CustomFooter(
           builder: (BuildContext context, LoadStatus? mode) {
             Widget body;
@@ -346,20 +334,23 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                   height: 1.h,
                 ),
                 Consumer<DataProvider>(builder: (context, current, _) {
-                  return current.guwahatiConnect.isEmpty
-                      ? Center(
-                          child: (isEmpty
-                              ? Image.asset(
-                                  "assets/images/no_data.png",
-                                  scale: 4,
-                                )
-                              : Lottie.asset(
-                                  Constance.searchingIcon,
-                                )),
-                        )
-                      : Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 2.w),
-                          child: ListView.separated(
+                  return
+                      // current.guwahatiConnect.isEmpty
+                      //   ? Center(
+                      //       child: (isEmpty
+                      //           ? Image.asset(
+                      //               "assets/images/no_data.png",
+                      //               scale: 4,
+                      //             )
+                      //           : Lottie.asset(
+                      //               Constance.searchingIcon,
+                      //             )),
+                      //     )
+                      //   :
+                      Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 2.w),
+                    child: current.guwahatiConnect.isNotEmpty
+                        ? ListView.separated(
                             padding: EdgeInsets.only(bottom: 5.h),
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -430,8 +421,14 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
                                 ),
                               );
                             },
+                          )
+                        : Container(
+                            padding: EdgeInsets.symmetric(horizontal: 2.w),
+                            width: double.infinity,
+                            height: 80.h,
+                            child: const GuwahatiConnectShimmerCard(),
                           ),
-                        );
+                  );
                 }),
                 SizedBox(
                   height: 17.h,
@@ -686,5 +683,105 @@ class _GuwahatiConnectPageState extends State<GuwahatiConnectPage>
         txt = response.desc ?? "";
       });
     } else {}
+  }
+}
+
+class GuwahatiConnectShimmerCard extends StatelessWidget {
+  const GuwahatiConnectShimmerCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 80.w,
+      height: 40.w,
+      child: Shimmer.fromColors(
+        baseColor: Colors.white,
+        highlightColor: Colors.grey.shade300,
+        enabled: true,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 40.w,
+                  height: 3.h,
+                  color: Colors.grey.shade100,
+                ),
+                Icon(Icons.menu_sharp,color: Colors.grey.shade100,),
+              ],
+            ),
+            SizedBox(
+              height: 4.h,
+            ),
+            Container(
+              width: 70.w,
+              height: 2.h,
+              color: Colors.grey.shade100,
+            ),
+            SizedBox(
+              height: 1.h,
+            ),
+            Container(
+              width: 60.w,
+              height: 2.h,
+              color: Colors.grey.shade100,
+            ),
+            SizedBox(
+              height: 1.h,
+            ),
+            Container(
+              width: 50.w,
+              height: 2.h,
+              color: Colors.grey.shade100,
+            ),
+            SizedBox(
+              height: 2.h,
+            ),
+            Container(
+              width: 30.w,
+              height: 2.h,
+              color: Colors.grey.shade100,
+            ),
+            SizedBox(
+              height: 2.h,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 20.w,
+                  height: 2.h,
+                  color: Colors.grey.shade100,
+                ),
+                Container(
+                  width: 20.w,
+                  height: 2.h,
+                  color: Colors.grey.shade100,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 2.h,
+            ),
+            Row(
+              children: [
+                Icon(Icons.thumb_up,color: Colors.grey.shade100,),
+                SizedBox(
+                  width: 4.w,
+                ),
+                Icon(Icons.thumb_down,color: Colors.grey.shade100,),
+                const Spacer(),
+                Icon(Icons.comment,color: Colors.grey.shade100,),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

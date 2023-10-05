@@ -12,6 +12,7 @@ import 'package:lottie/lottie.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Components/NavigationBar.dart';
@@ -40,7 +41,10 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
   String result = '';
   final controller = TextEditingController();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  bool showing = false, isEmpty = false, has_permission = false,enabled = false;
+  bool showing = false,
+      isEmpty = false,
+      has_permission = false,
+      enabled = false;
 
   @override
   void initState() {
@@ -356,20 +360,24 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                           : Colors.black,
                     ),
                   ),
-                  data.classified.isEmpty
-                      ? Center(
-                          child: (isEmpty
-                              ? Image.asset(
-                                  "assets/images/no_data.png",
-                                  scale: 4,
-                                )
-                              : Lottie.asset(
-                                  Constance.searchingIcon,
-                                )),
-                        )
-                      : Padding(
+                  // data.classified.isEmpty
+                  //     ? Center(
+                  //         child: (
+                  //         isEmpty
+                  //             ? Image.asset(
+                  //                 "assets/images/no_data.png",
+                  //                 scale: 4,
+                  //               )
+                  //             : Lottie.asset(
+                  //                 Constance.searchingIcon,
+                  //               )),
+                  //       )
+                  //     :
+                  data.classified.isNotEmpty
+                      ? Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 5.w,),
+                            horizontal: 5.w,
+                          ),
                           child: ListView.separated(
                             padding: EdgeInsets.only(bottom: 4.h),
                             physics: const NeverScrollableScrollPhysics(),
@@ -408,8 +416,28 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                               );
                             },
                           ),
+                        )
+                      : Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 5.w,
+                          ),
+                          width: double.infinity,
+                          height: 80.h,
+                          child: isEmpty
+                              ? Image.asset(
+                                  "assets/images/no_data.png",
+                                  scale: 4,
+                                )
+                              : Column(
+                                  children: [
+                                    const ShimmeringClassifiedCard(),
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
+                                    const ShimmeringClassifiedCard(),
+                                  ],
+                                ),
                         ),
-
                 ],
               ),
             ),
@@ -797,5 +825,119 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
       }
     }
     return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
+  }
+}
+
+class ShimmeringClassifiedCard extends StatelessWidget {
+  const ShimmeringClassifiedCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: Colors.grey.shade900,
+          width: 0.2,
+        ),
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 4.w,
+          vertical: 1.5.h,
+        ),
+        width: double.infinity,
+        height: 23.h,
+        child: Shimmer.fromColors(
+          baseColor: Colors.white,
+          highlightColor: Colors.grey.shade300,
+          enabled: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 60.w,
+                    height: 1.5.h,
+                    color: Colors.grey.shade100,
+                  ),
+                  Icon(
+                    Icons.heart_broken,
+                    color: Colors.grey.shade100,
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
+              Container(
+                width: 75.w,
+                height: 1.5.h,
+                color: Colors.grey.shade100,
+              ),
+              SizedBox(
+                height: 1.h,
+              ),
+              Container(
+                width: 65.w,
+                height: 1.5.h,
+                color: Colors.grey.shade100,
+              ),
+              SizedBox(
+                height: 1.h,
+              ),
+              Container(
+                width: 55.w,
+                height: 1.5.h,
+                color: Colors.grey.shade100,
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.remove_red_eye,
+                    color: Colors.grey.shade100,
+                  ),
+                  SizedBox(
+                    width: 2.w,
+                  ),
+                  Container(
+                    width: 10.w,
+                    height: 1.5.h,
+                    color: Colors.grey.shade100,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 1.h,
+              ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.location_on,
+                    color: Colors.grey.shade100,
+                  ),
+                  SizedBox(
+                    width: 2.w,
+                  ),
+                  Container(
+                    width: 10.w,
+                    height: 1.5.h,
+                    color: Colors.grey.shade100,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -138,8 +138,9 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      data.home_albums.isNotEmpty
-                          ? HomeBannerPage(
+                      // data.home_albums.isNotEmpty
+                      //     ?
+                      HomeBannerPage(
                               showNotaMember: () {
                                 setState(() {
                                   showing = true;
@@ -150,8 +151,8 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                                   });
                                 });
                               },
-                            )
-                          : Container(),
+                            ),
+                          // : Container(),
                       data.profile?.is_plan_active ?? false
                           ? Container()
                           : const BigDealsAdSection(),

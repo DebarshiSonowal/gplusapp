@@ -20,6 +20,7 @@ import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 import '../Menu/berger_menu_member_page.dart';
+import 'classified_page.dart';
 
 class ClassifiedMyList extends StatefulWidget {
   const ClassifiedMyList({Key? key}) : super(key: key);
@@ -72,7 +73,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
       _refreshController.refreshCompleted();
     } else {
       setState(() {
-        isEmpty=true;
+        isEmpty = true;
       });
       _refreshController.refreshFailed();
     }
@@ -330,20 +331,23 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                       color: Colors.black,
                     ),
                   ),
-                  data.classified.isEmpty
-                      ? Center(
-                          child: (isEmpty
-                              ? Image.asset(
-                            "assets/images/no_data.png",
-                            scale: 4,
-                          )
-                              : Lottie.asset(
-                            Constance.searchingIcon,
-                          )),
-                        )
-                      : Padding(
+                  // data.classified.isEmpty
+                  //     ? Center(
+                  //         child: (isEmpty
+                  //             ? Image.asset(
+                  //           "assets/images/no_data.png",
+                  //           scale: 4,
+                  //         )
+                  //             : Lottie.asset(
+                  //           Constance.searchingIcon,
+                  //         )),
+                  //       )
+                  //     :
+                  data.classified.isNotEmpty
+                      ? Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 5.w, ),
+                            horizontal: 5.w,
+                          ),
                           child: ListView.separated(
                             padding: EdgeInsets.only(
                               bottom: 4.h,
@@ -371,7 +375,30 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                               );
                             },
                           ),
-                        ),
+                        )
+                      : isEmpty
+                          ? Center(
+                              child: Image.asset(
+                                "assets/images/no_data.png",
+                                scale: 4,
+                              ),
+                            )
+                          : Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 5.w,
+                              ),
+                              width: double.infinity,
+                              height: 80.h,
+                              child: Column(
+                                children: [
+                                  const ShimmeringClassifiedCard(),
+                                  SizedBox(
+                                    height: 2.h,
+                                  ),
+                                  const ShimmeringClassifiedCard(),
+                                ],
+                              ),
+                            ),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -381,7 +408,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
           );
         }),
       ),
-      bottomNavigationBar: CustomNavigationBar(current,"classified"),
+      bottomNavigationBar: CustomNavigationBar(current, "classified"),
     );
   }
 
@@ -525,7 +552,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
       Navigation.instance.goBack();
     } else {
       setState(() {
-        isEmpty=true;
+        isEmpty = true;
       });
       Navigation.instance.goBack();
     }
@@ -661,10 +688,13 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                           child: CustomButton(
                             txt: 'Yes, take me there',
                             onTap: () {
-                              logTheSubscriptionInitiationClick(Provider.of<DataProvider>(
-                                  Navigation.instance.navigatorKey.currentContext ?? context,
-                                  listen: false)
-                                  .profile!);
+                              logTheSubscriptionInitiationClick(
+                                  Provider.of<DataProvider>(
+                                          Navigation.instance.navigatorKey
+                                                  .currentContext ??
+                                              context,
+                                          listen: false)
+                                      .profile!);
                               Navigation.instance.navigate('/beamember');
                             },
                             size: 12.sp,
@@ -677,10 +707,13 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                           child: CustomButton(
                             txt: '''No, I don't want it''',
                             onTap: () {
-                              logTheSubscriptionInitiationCancelClick(Provider.of<DataProvider>(
-                                  Navigation.instance.navigatorKey.currentContext ?? context,
-                                  listen: false)
-                                  .profile!);
+                              logTheSubscriptionInitiationCancelClick(
+                                  Provider.of<DataProvider>(
+                                          Navigation.instance.navigatorKey
+                                                  .currentContext ??
+                                              context,
+                                          listen: false)
+                                      .profile!);
                               Navigation.instance.goBack();
                             },
                             color: Colors.black,
@@ -724,7 +757,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
         "user_id_event": profile.id,
         "screen_name": "subscription",
         "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },
@@ -743,7 +776,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
         "user_id_event": profile.id,
         "screen_name": "subscription",
         "user_login_status":
-        Storage.instance.isLoggedIn ? "logged_in" : "guest",
+            Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },
@@ -789,5 +822,4 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
         return Constance.primaryColor;
     }
   }
-
 }
