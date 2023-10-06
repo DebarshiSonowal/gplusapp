@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:navigation_history_observer/navigation_history_observer.dart';
 
 // import 'package:new_version/new_version.dart';
 import 'package:open_file_safe/open_file_safe.dart';
@@ -229,6 +230,7 @@ class _MyAppState extends State<MyApp> {
           navigatorKey: Navigation.instance.navigatorKey,
           onGenerateRoute: generateRoute,
           navigatorObservers: [
+            NavigationHistoryObserver(),
             FirebaseAnalyticsObserver(analytics: analytics), // <-- here
           ],
         );

@@ -25,6 +25,7 @@ import '../../Helper/DataProvider.dart';
 import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
 import '../Menu/berger_menu_member_page.dart';
+import 'options_bar.dart';
 
 class ClassifiedPage extends StatefulWidget {
   const ClassifiedPage({Key? key}) : super(key: key);
@@ -162,140 +163,20 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    // color: Constance.forthColor,
-                    height: 5.h,
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            // showSortByOption();
-                            setState(() {
-                              selected = 1;
-                            });
-                            getFilter();
-                          },
-                          child: Container(
-                            width: 48.w,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 1.h,
-                              horizontal: 5.w,
-                            ),
-                            color: selected == 1
-                                ? Constance.secondaryColor
-                                : Constance.forthColor,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.list,
-                                  color: selected == 1
-                                      ? Colors.black
-                                      : Storage.instance.isDarkMode
-                                          ? Constance.secondaryColor
-                                          : Colors.white,
-                                ),
-                                SizedBox(
-                                  width: 1.w,
-                                ),
-                                Text(
-                                  'Filter by',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      ?.copyWith(
-                                        color: selected == 1
-                                            ? Colors.black
-                                            : Storage.instance.isDarkMode
-                                                ? Colors.black
-                                                : Colors.white,
-                                        fontSize: 2.h,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 2.w,
-                          child: Center(
-                            child: Container(
-                              height: double.infinity,
-                              width: 0.5.w,
-                              color: Storage.instance.isDarkMode
-                                  ? Colors.black
-                                  : Colors.white,
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            // setState(() {
-                            //   selected = 3;
-                            // });
-                            // fetchClassified(result);
-                            logTheMyListClick(Provider.of<DataProvider>(
-                                    Navigation.instance.navigatorKey
-                                            .currentContext ??
-                                        context,
-                                    listen: false)
-                                .profile!);
-                            var result = await Navigation.instance.navigate(
-                              '/classifiedMyListDetails',
-                            );
-                            if (result == null) {
-                              fetchClassified(result);
-                            }
-                          },
-                          child: Container(
-                            width: 48.w,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 1.h,
-                              horizontal: 5.w,
-                            ),
-                            color: selected == 3
-                                ? Constance.secondaryColor
-                                : Storage.instance.isDarkMode
-                                    ? Colors.white
-                                    : Constance.forthColor,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.person,
-                                  color: selected == 3
-                                      ? Colors.black
-                                      : Storage.instance.isDarkMode
-                                          ? Constance.secondaryColor
-                                          : Colors.white,
-                                ),
-                                SizedBox(
-                                  width: 1.w,
-                                ),
-                                Text(
-                                  'My List',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      ?.copyWith(
-                                        color: selected == 3
-                                            ? Colors.black
-                                            : Storage.instance.isDarkMode
-                                                ? Colors.black
-                                                : Colors.white,
-                                        fontSize: 2.h,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  OptionsBar(
+                    selected: selected,
+                    updateSelected: (int val) {
+                      setState(() {
+                        selected = val;
+                      });
+                      getFilter();
+                    },
+                    fetchClassified: (result) {
+                      fetchClassified(result);
+                    },
+                    logTheMyListClick: (Profile? profile) {
+                      logTheMyListClick(profile!);
+                    },
                   ),
                   SizedBox(
                     height: 1.h,
@@ -379,7 +260,7 @@ class _ClassifiedPageState extends State<ClassifiedPage> {
                             horizontal: 5.w,
                           ),
                           child: ListView.separated(
-                            padding: EdgeInsets.only(bottom: 4.h),
+                            padding: EdgeInsets.only(bottom: 20.h),
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: data.classified.length,

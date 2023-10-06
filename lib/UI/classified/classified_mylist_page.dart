@@ -350,7 +350,7 @@ class _ClassifiedMyListState extends State<ClassifiedMyList> {
                           ),
                           child: ListView.separated(
                             padding: EdgeInsets.only(
-                              bottom: 4.h,
+                              bottom: 20.h,
                             ),
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,

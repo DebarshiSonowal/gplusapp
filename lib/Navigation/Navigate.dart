@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:navigation_history_observer/navigation_history_observer.dart';
 
 class Navigation {
   final String initialRoute = "/";
-
+  // final navigationHistoryObserver = NavigationHistoryObserver();
   Navigation._privateConstructor();
   static final Navigation instance = Navigation._privateConstructor();
 
@@ -27,7 +28,7 @@ class Navigation {
     try {
       return navigatorKey.currentState?.pop();
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 }

@@ -14,6 +14,8 @@ import 'package:sizer/sizer.dart';
 import '../../Components/opinion_page_item.dart';
 import '../../Helper/Constance.dart';
 import '../../Navigation/Navigate.dart';
+import '../view/shimmering_head_card.dart';
+import '../view/simmering_item.dart';
 
 class OpinionPage extends StatefulWidget {
   const OpinionPage({Key? key}) : super(key: key);
@@ -140,9 +142,9 @@ class _OpinionPageState extends State<OpinionPage> {
                                     .textTheme
                                     .headline3
                                     ?.copyWith(
-                                  color: Storage.instance.isDarkMode
-                                      ? Colors.black
-                                      : Constance.primaryColor,
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.black
+                                          : Constance.primaryColor,
                                       // fontSize: 2.2.h,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -282,7 +284,7 @@ class _OpinionPageState extends State<OpinionPage> {
                                         ),
                                         TextSpan(
                                           text:
-                                              ' , ${Jiffy.parse(data.opinions[0].publish_date?.split(" ")[0]??"", pattern: "yyyy-MM-dd").format(pattern: "dd MMM, yyyy")}',
+                                              ' , ${Jiffy.parse(data.opinions[0].publish_date?.split(" ")[0] ?? "", pattern: "yyyy-MM-dd").format(pattern: "dd MMM, yyyy")}',
                                           style: Theme.of(Navigation.instance
                                                   .navigatorKey.currentContext!)
                                               .textTheme
@@ -382,14 +384,32 @@ class _OpinionPageState extends State<OpinionPage> {
                       ],
                     ),
                   )
-                : (isEmpty
+                : isEmpty
                     ? Image.asset(
                         "assets/images/no_data.png",
                         scale: 4,
                       )
-                    : Lottie.asset(
-                        Constance.searchingIcon,
-                      )),
+                    : Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 2.w,
+                          vertical: 1.h,
+                        ),
+                        width: double.infinity,
+                        height: 90.h,
+                        child: Column(
+                          children: [
+                            const ShimmeringHeadCard(),
+                            Divider(
+                              color: Colors.grey.shade300,
+                            ),
+                            const ShimmeringItem(),
+                            Divider(
+                              color: Colors.grey.shade300,
+                            ),
+                            const ShimmeringItem(),
+                          ],
+                        ),
+                      ),
           );
         }),
       ),

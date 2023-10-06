@@ -14,6 +14,8 @@ import '../../Helper/DataProvider.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 import '../Menu/berger_menu_member_page.dart';
+import '../view/shimmering_head_card.dart';
+import '../view/simmering_item.dart';
 
 class ExclusivePage extends StatefulWidget {
   const ExclusivePage({Key? key}) : super(key: key);
@@ -27,6 +29,7 @@ class _ExclusivePageState extends State<ExclusivePage> {
       RefreshController(initialRefresh: false);
   final ScrollController controller = ScrollController();
   int skip = 10;
+  bool isEmpty = false;
 
   @override
   void initState() {
@@ -57,8 +60,10 @@ class _ExclusivePageState extends State<ExclusivePage> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setHomeExecl(response.articles ?? []);
+      isEmpty = (response.articles ?? []).isEmpty ? true : false;
       _refreshController.refreshCompleted();
     } else {
+      isEmpty = false;
       _refreshController.refreshFailed();
     }
     // if failed,use refreshFailed()
@@ -284,12 +289,32 @@ class _ExclusivePageState extends State<ExclusivePage> {
                       ],
                     ),
                   )
-                : Center(
-                    child: SizedBox(
-                        height: 2.h,
-                        width: 2.h,
-                        child: const CircularProgressIndicator()),
-                  ),
+                : isEmpty
+                    ? Image.asset(
+                        "assets/images/no_data.png",
+                        scale: 4,
+                      )
+                    : Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 2.w,
+                          vertical: 1.h,
+                        ),
+                        width: double.infinity,
+                        height: 90.h,
+                        child: Column(
+                          children: [
+                            const ShimmeringHeadCard(),
+                            Divider(
+                              color: Colors.grey.shade300,
+                            ),
+                            const ShimmeringItem(),
+                            Divider(
+                              color: Colors.grey.shade300,
+                            ),
+                            const ShimmeringItem(),
+                          ],
+                        ),
+                      ),
           );
         }),
       ),

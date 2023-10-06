@@ -5,6 +5,7 @@ import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Components/alert.dart';
@@ -14,6 +15,8 @@ import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 import '../Menu/berger_menu_member_page.dart';
+import '../view/shimmering_video_widget.dart';
+import '../view/simmering_item.dart';
 
 class VideoReport extends StatefulWidget {
   final String category;
@@ -30,6 +33,7 @@ class _VideoReportState extends State<VideoReport> {
   int page = 1;
   final ScrollController controller = ScrollController();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool isEmpty = false;
 
   @override
   void initState() {
@@ -64,8 +68,10 @@ class _VideoReportState extends State<VideoReport> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setVideoNews(response.videos ?? []);
+      isEmpty = (response.videos ?? []).isEmpty ? true : false;
       _refreshController.refreshCompleted();
     } else {
+      isEmpty = false;
       _refreshController.refreshFailed();
     }
     // if failed,use refreshFailed()
@@ -188,10 +194,10 @@ class _VideoReportState extends State<VideoReport> {
                                               // if (data.profile
                                               //         ?.is_plan_active ??
                                               //     false) {
-                                                Navigation.instance.navigate(
-                                                    '/videoPlayer',
-                                                    args:
-                                                        '${data.video_news[0].youtube_id},${'2'}');
+                                              Navigation.instance.navigate(
+                                                  '/videoPlayer',
+                                                  args:
+                                                      '${data.video_news[0].youtube_id},${'2'}');
                                               // } else {
                                               //   Constance.showMembershipPrompt(
                                               //       context, () {
@@ -237,7 +243,12 @@ class _VideoReportState extends State<VideoReport> {
                                       height: 2.h,
                                     ),
                                     Text(
-                                      Jiffy.parse(data.video_news[0].publish_date!.split(" ")[0]??"", pattern: "yyyy-MM-dd").fromNow(),
+                                      Jiffy.parse(
+                                              data.video_news[0].publish_date!
+                                                      .split(" ")[0] ??
+                                                  "",
+                                              pattern: "yyyy-MM-dd")
+                                          .fromNow(),
                                       style: Theme.of(Navigation.instance
                                               .navigatorKey.currentContext!)
                                           .textTheme
@@ -271,9 +282,8 @@ class _VideoReportState extends State<VideoReport> {
                                 return GestureDetector(
                                   onTap: () {
                                     // if (data.profile?.is_plan_active ?? false) {
-                                      Navigation.instance.navigate(
-                                          '/videoPlayer',
-                                          args: '${item.youtube_id},${2}');
+                                    Navigation.instance.navigate('/videoPlayer',
+                                        args: '${item.youtube_id},${2}');
                                     // } else {
                                     //   Constance.showMembershipPrompt(
                                     //       context, () {});
@@ -317,12 +327,12 @@ class _VideoReportState extends State<VideoReport> {
                         ],
                       ),
                     )
-                  : Center(
-                      child: SizedBox(
-                          height: 2.h,
-                          width: 2.h,
-                          child: const CircularProgressIndicator()),
-                    ),
+                  : isEmpty
+                      ? Image.asset(
+                          "assets/images/no_data.png",
+                          scale: 4,
+                        )
+                      : const ShimmeringVideoWidget(),
             );
           }),
         ),
@@ -370,3 +380,5 @@ class _VideoReportState extends State<VideoReport> {
     }
   }
 }
+
+

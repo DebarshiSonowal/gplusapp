@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
+import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -109,8 +110,9 @@ class _NavigationBarState extends State<CustomNavigationBar> {
                       .setCurrent(val);
                   Navigation.instance.navigate('/classified');
                 }
-
+                debugPrint("route ${NavigationHistoryObserver().history}");
                 break;
+
               default:
                 if (Provider.of<DataProvider>(
                             Navigation.instance.navigatorKey.currentContext ??

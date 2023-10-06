@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Components/news_from_suggestions.dart';
@@ -13,6 +14,8 @@ import '../../Helper/Storage.dart';
 import '../../Navigation/Navigate.dart';
 import '../../Networking/api_provider.dart';
 import '../Menu/berger_menu_member_page.dart';
+import '../view/shimmering_head_card.dart';
+import '../view/simmering_item.dart';
 
 class NewsFrom extends StatefulWidget {
   final String categ;
@@ -28,6 +31,7 @@ class _NewsFromState extends State<NewsFrom> {
       RefreshController(initialRefresh: false);
   final ScrollController controller = ScrollController();
   int skip = 5;
+  bool isEmpty = false;
 
   @override
   void initState() {
@@ -75,9 +79,10 @@ class _NewsFromState extends State<NewsFrom> {
     //   });
     skip = skip * 2;
     fetchMoreContent();
-
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +90,8 @@ class _NewsFromState extends State<NewsFrom> {
       // appBar: Constance.buildAppBar("news_from",true,_scaffoldKey),
       appBar: Constance.buildAppBar2("news_from"),
       // drawer: const BergerMenuMemPage(screen: "news_from",),
-      backgroundColor: Storage.instance.isDarkMode?Colors.black:Colors.white,
+      backgroundColor:
+          Storage.instance.isDarkMode ? Colors.black : Colors.white,
       // drawer: BergerMenuMemPage(),
       body: SmartRefresher(
         enablePullDown: true,
@@ -164,12 +170,12 @@ class _NewsFromState extends State<NewsFrom> {
                           height: 1.h,
                         ),
                         GestureDetector(
-                          onTap: (){
-                            if(data.news_from[0].has_permission??false){
+                          onTap: () {
+                            if (data.news_from[0].has_permission ?? false) {
                               Navigation.instance.navigate('/story',
                                   args:
-                                  '${widget.categ},${data.news_from[0].seo_name},news_from');
-                            }else{
+                                      '${widget.categ},${data.news_from[0].seo_name},news_from');
+                            } else {
                               Constance.showMembershipPrompt(context, () {});
                             }
                           },
@@ -195,7 +201,7 @@ class _NewsFromState extends State<NewsFrom> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            if(data.news_from[0].has_permission??false){
+                            if (data.news_from[0].has_permission ?? false) {
                               Navigation.instance.navigate('/story',
                                   args:
                                       '${widget.categ},${data.news_from[0].seo_name},news_from');
@@ -234,12 +240,12 @@ class _NewsFromState extends State<NewsFrom> {
                             ),
                             GestureDetector(
                               onTap: () {
-
-                                if(data.news_from[0].has_permission??false){
+                                if (data.news_from[0].has_permission ?? false) {
                                   Navigation.instance.navigate('/authorPage',
                                       args: data.news_from[0].author);
-                                }else{
-                                  Constance.showMembershipPrompt(context, () {});
+                                } else {
+                                  Constance.showMembershipPrompt(
+                                      context, () {});
                                 }
                               },
                               child: RichText(
@@ -263,7 +269,7 @@ class _NewsFromState extends State<NewsFrom> {
                                     ),
                                     TextSpan(
                                       text:
-                                          ' , ${Jiffy.parse(data.news_from[0].publish_date?.split(" ")[0]??"", pattern: "yyyy-MM-dd").format(pattern: "dd MMM, yyyy")}',
+                                          ' , ${Jiffy.parse(data.news_from[0].publish_date?.split(" ")[0] ?? "", pattern: "yyyy-MM-dd").format(pattern: "dd MMM, yyyy")}',
                                       style: Theme.of(Navigation.instance
                                               .navigatorKey.currentContext!)
                                           .textTheme
@@ -288,26 +294,47 @@ class _NewsFromState extends State<NewsFrom> {
                               : Colors.black,
                           thickness: 0.5.sp,
                         ),
-                        newsfrom_suggestion(widget: widget, data: data,),
+                        newsfrom_suggestion(
+                          widget: widget,
+                          data: data,
+                        ),
                         SizedBox(
                           height: 2.h,
                         ),
                       ],
                     ),
                   )
-                : Center(
-                    child: SizedBox(
-                        height: 2.h,
-                        width: 2.h,
-                        child: const CircularProgressIndicator()),
-                  ),
+                : isEmpty
+                    ? Image.asset(
+                        "assets/images/no_data.png",
+                        scale: 4,
+                      )
+                    : Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 2.w,
+                          vertical: 1.h,
+                        ),
+                        width: double.infinity,
+                        height: 90.h,
+                        child: Column(
+                          children: [
+                            const ShimmeringHeadCard(),
+                            Divider(
+                              color: Colors.grey.shade300,
+                            ),
+                            const ShimmeringItem(),
+                            Divider(
+                              color: Colors.grey.shade300,
+                            ),
+                            const ShimmeringItem(),
+                          ],
+                        ),
+                      ),
           );
         }),
       ),
     );
   }
-
-
 
   String capitalize(String str) {
     return "${str[0].toUpperCase()}${str.substring(1).toLowerCase()}";
@@ -324,9 +351,11 @@ class _NewsFromState extends State<NewsFrom> {
               listen: false)
           .addNewsFrom(response.articles ?? []);
       // _refreshController.refreshCompleted();
+      isEmpty = (response.articles ?? []).isEmpty ? true : false;
       _refreshController.loadComplete();
     } else {
       Navigation.instance.goBack();
+      isEmpty = false;
       // _refreshController.refreshFailed();
       _refreshController.loadFailed();
     }
@@ -345,5 +374,7 @@ class _NewsFromState extends State<NewsFrom> {
     }
   }
 }
+
+
 
 
