@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 #version: 3.5.22+30522
-version: 3.6.16+30616
+version: 3.6.18+30618
 
 environment:
   sdk: ">=3.0.5 <4.0.0"
@@ -90,6 +90,7 @@ dependencies:
   firebase_messaging: ^14.1.3
   floating_action_bubble: ^1.1.4
 #  flutter_inappwebview: ^5.7.2+2
+  flutter_inappwebview: ^5.8.0
   badges: ^3.1.1
   focused_menu: ^1.0.5
   flutter_config: ^2.0.2
@@ -117,6 +118,7 @@ dependencies:
   dio_smart_retry: ^1.4.0
   shimmer: ^3.0.0
   navigation_history_observer: ^1.1.0
+  flutter_layout_grid: ^2.0.5
 
 dependency_overrides:
   package_info_plus: any

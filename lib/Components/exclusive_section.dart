@@ -111,63 +111,209 @@ class ExclusiveSection extends StatelessWidget {
           SizedBox(
             height: 1.2.h,
           ),
-          InkWell(
-            splashColor: Constance.secondaryColor,
-            radius: 15.h,
-            onTap: () {
-              logTheHambergerOptionClick(
-                Provider.of<DataProvider>(
-                    Navigation.instance.navigatorKey.currentContext ??
-                        context,
-                    listen: false)
-                    .profile!,
-                screen,
-                "opinion",
-                "NA",
-              );
-              Navigation.instance.navigate('/opinionPage');
-            },
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.message,
-                  color: Constance.secondaryColor,
-                ),
-                SizedBox(
-                  width: 2.w,
-                ),
-                Text(
-                  'Opinion',
-                  style: Theme.of(context).textTheme.headline4?.copyWith(
+          SizedBox(
+            // height: 8.h,
+            child: ListTileTheme(
+              contentPadding: const EdgeInsets.all(0),
+              child: ExpansionTile(
+                title: Row(
+                  children: [
+                    const Icon(
+                      Icons.message,
+                      color: Constance.secondaryColor,
+                    ),
+                    SizedBox(
+                      width: 2.w,
+                    ),
+                    Text(
+                      'Opinion',
+                      style: Theme.of(context).textTheme.headline4?.copyWith(
                         color: Colors.white,
                         // fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                       ),
+                    ),
+                    SizedBox(
+                      width: 2.w,
+                    ),
+                    Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.white,
+                      size: 3.h,
+                    ),
+                  ],
                 ),
-                Expanded(child: Container()),
-                !filterToCheckPerType(
+                trailing:
+                  !filterToCheckPerType(
+                      Provider.of<DataProvider>(
+                          Navigation
+                              .instance.navigatorKey.currentContext ??
+                              context,
+                          listen: false)
+                          .notifications,
+                      'opinion')
+                      ? const SizedBox(
+                    height: 6,
+                    width: 6,
+                  )
+                      : Container(
+                    height: 6,
+                    width: 6,
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                children: [
+                  InkWell(
+                    splashColor: Constance.secondaryColor,
+                    radius: 15.h,
+                    onTap: () {
+                      logTheHambergerOptionClick(
                         Provider.of<DataProvider>(
-                                Navigation
-                                        .instance.navigatorKey.currentContext ??
-                                    context,
-                                listen: false)
-                            .notifications,
-                        'opinion')
-                    ? const SizedBox(
-                        height: 6,
-                        width: 6,
-                      )
-                    : Container(
-                        height: 6,
-                        width: 6,
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
+                            Navigation.instance.navigatorKey.currentContext ??
+                                context,
+                            listen: false)
+                            .profile!,
+                        screen,
+                        "opinion",
+                        "NA",
+                      );
+                      Navigation.instance.navigate('/opinionPage',args: "opinion");
+                    },
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 8.w,
                         ),
-                      ),
-              ],
+                        Text(
+                          'Opinion',
+                          style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Colors.white,
+                            fontSize: 11.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Expanded(child: Container()),
+                        Container(
+                          height: 6,
+                          width: 6,
+                          decoration: const BoxDecoration(
+                            // color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  InkWell(
+                    splashColor: Constance.secondaryColor,
+                    radius: 15.h,
+                    onTap: () {
+                      logTheHambergerOptionClick(
+                        Provider.of<DataProvider>(
+                            Navigation.instance.navigatorKey.currentContext ??
+                                context,
+                            listen: false)
+                            .profile!,
+                        screen,
+                        "editorials",
+                        "NA",
+                      );
+                      Navigation.instance.navigate('/opinionPage',args: "editorials");
+                    },
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 8.w,
+                        ),
+                        Text(
+                          'Editorials',
+                          style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Colors.white,
+                            fontSize: 11.sp,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Expanded(child: Container()),
+                        Container(
+                          height: 6,
+                          width: 6,
+                          decoration: const BoxDecoration(
+                            // color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                ],
+              ),
             ),
           ),
+          // InkWell(
+          //   splashColor: Constance.secondaryColor,
+          //   radius: 15.h,
+          //   onTap: () {
+          //     logTheHambergerOptionClick(
+          //       Provider.of<DataProvider>(
+          //           Navigation.instance.navigatorKey.currentContext ??
+          //               context,
+          //           listen: false)
+          //           .profile!,
+          //       screen,
+          //       "opinion",
+          //       "NA",
+          //     );
+          //     Navigation.instance.navigate('/opinionPage');
+          //   },
+          //   child: Row(
+          //     children: [
+          //       const Icon(
+          //         Icons.message,
+          //         color: Constance.secondaryColor,
+          //       ),
+          //       SizedBox(
+          //         width: 2.w,
+          //       ),
+          //       Text(
+          //         'Opinion',
+          //         style: Theme.of(context).textTheme.headline4?.copyWith(
+          //               color: Colors.white,
+          //               // fontSize: 14.sp,
+          //               fontWeight: FontWeight.bold,
+          //             ),
+          //       ),
+          //       Expanded(child: Container()),
+          //       !filterToCheckPerType(
+          //               Provider.of<DataProvider>(
+          //                       Navigation
+          //                               .instance.navigatorKey.currentContext ??
+          //                           context,
+          //                       listen: false)
+          //                   .notifications,
+          //               'opinion')
+          //           ? const SizedBox(
+          //               height: 6,
+          //               width: 6,
+          //             )
+          //           : Container(
+          //               height: 6,
+          //               width: 6,
+          //               decoration: const BoxDecoration(
+          //                 color: Colors.red,
+          //                 shape: BoxShape.circle,
+          //               ),
+          //             ),
+          //     ],
+          //   ),
+          // ),
           SizedBox(
             height: 1.2.h,
           ),

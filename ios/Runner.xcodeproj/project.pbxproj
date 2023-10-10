@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		7008DCCE2ACFFFA2009DA4A8 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777F13D17513EBF9FB7B85D6 /* Pods_Runner.framework */; };
 		703477AB2960314A005B2BD9 /* Easebuzz.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 703477A929603146005B2BD9 /* Easebuzz.xcframework */; };
 		703477AC2960314A005B2BD9 /* Easebuzz.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 703477A929603146005B2BD9 /* Easebuzz.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		70989C36297A661D00B7B30B /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 70989C35297A661D00B7B30B /* Configuration.storekit */; };
@@ -18,7 +19,6 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		C6564063914C5C49499A8C7D /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777F13D17513EBF9FB7B85D6 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -69,8 +69,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7008DCCE2ACFFFA2009DA4A8 /* Pods_Runner.framework in Frameworks */,
 				703477AB2960314A005B2BD9 /* Easebuzz.xcframework in Frameworks */,
-				C6564063914C5C49499A8C7D /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,13 +157,13 @@
 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
 			buildPhases = (
 				6397E72107DF0906FF00A5D5 /* [CP] Check Pods Manifest.lock */,
+				703477AD2960314A005B2BD9 /* Embed Frameworks */,
+				71EB4912C51D3AECB2A16EE2 /* [CP] Embed Pods Frameworks */,
 				9740EEB61CF901F6004384FC /* Run Script */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
-				703477AD2960314A005B2BD9 /* Embed Frameworks */,
-				71EB4912C51D3AECB2A16EE2 /* [CP] Embed Pods Frameworks */,
 				8171DD4E56A3CBA06E83A2BE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (

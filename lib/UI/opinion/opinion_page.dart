@@ -18,8 +18,8 @@ import '../view/shimmering_head_card.dart';
 import '../view/simmering_item.dart';
 
 class OpinionPage extends StatefulWidget {
-  const OpinionPage({Key? key}) : super(key: key);
-
+  const OpinionPage({Key? key, required this.type}) : super(key: key);
+  final String type;
   @override
   State<OpinionPage> createState() => _OpinionPageState();
 }
@@ -37,7 +37,7 @@ class _OpinionPageState extends State<OpinionPage> {
     setState(() {
       page_no = 1;
     });
-    final response = await ApiProvider.instance.getOpinion(11, page_no);
+    final response = await ApiProvider.instance.getOpinion(11, page_no,widget.type);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
@@ -61,7 +61,7 @@ class _OpinionPageState extends State<OpinionPage> {
       page_no++;
     });
     // monitor network fetch
-    final response = await ApiProvider.instance.getOpinion(11, page_no);
+    final response = await ApiProvider.instance.getOpinion(11, page_no,"opinion");
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
@@ -484,7 +484,7 @@ class _OpinionPageState extends State<OpinionPage> {
   }
 
   void fetchOpinions() async {
-    final response = await ApiProvider.instance.getOpinion(11, page_no);
+    final response = await ApiProvider.instance.getOpinion(11, page_no,"opinion");
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,
@@ -497,7 +497,7 @@ class _OpinionPageState extends State<OpinionPage> {
   }
 
   void fetchMoreOpinions() async {
-    final response = await ApiProvider.instance.getOpinion(11, page_no);
+    final response = await ApiProvider.instance.getOpinion(11, page_no,"opinion");
     if (response.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext!,

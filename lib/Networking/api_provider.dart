@@ -847,9 +847,10 @@ class ApiProvider {
     }
   }
 
-  Future<OpinionResponse> getOpinion(per_page, page) async {
+  Future<OpinionResponse> getOpinion(per_page, page, type) async {
     var data = {
-      'category': 'opinion',
+      // 'category': 'editorials',
+      'category': type,
       'per_page': per_page,
       'page': page,
     };
@@ -1139,7 +1140,7 @@ class ApiProvider {
       'Authorization': 'Bearer ${Storage.instance.token}'
       // 'APP-KEY': ConstanceData.app_key
     });
-    var url = "${homeUrl}/app/latest-opinions";
+    var url = "$homeUrl/app/latest-opinions";
     dio = Dio(option);
     debugPrint(url.toString());
     // debugPrint(jsonEncode(data));

@@ -220,7 +220,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case '/opinionPage':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'opinion');
-      return FadeTransitionPageRouteBuilder(page: const OpinionPage());
+      return FadeTransitionPageRouteBuilder(page: OpinionPage(type:settings.arguments as String));
     case '/opinionDetails':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'opinion_detail');
       return FadeTransitionPageRouteBuilder(
