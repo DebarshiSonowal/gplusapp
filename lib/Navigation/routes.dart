@@ -248,6 +248,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/authorPage':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'author');
       return FadeTransitionPageRouteBuilder(
+          // page: AuthorPage(int.parse((settings.arguments as String).split(",")[0]),(settings.arguments as String).split(",")[1]));
           page: AuthorPage(settings.arguments as int));
     case '/storyviewPage':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'story_view');

@@ -19,7 +19,10 @@ import '../Menu/berger_menu_member_page.dart';
 class AuthorPage extends StatefulWidget {
   final int id;
 
-  AuthorPage(this.id);
+  // final String title;
+  const AuthorPage(this.id,
+      // this.title,
+      {super.key});
 
   @override
   State<AuthorPage> createState() => _AuthorPageState();
@@ -165,7 +168,7 @@ class _AuthorPageState extends State<AuthorPage> {
                                 ),
                               ),
                               SizedBox(
-                                width:3.w,
+                                width: 3.w,
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -182,7 +185,7 @@ class _AuthorPageState extends State<AuthorPage> {
                                 ),
                               ),
                               SizedBox(
-                                width:3.w,
+                                width: 3.w,
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -224,6 +227,7 @@ class _AuthorPageState extends State<AuthorPage> {
                 AuthorRelatedOpinions(
                   opinions: data.author?.opinions ?? [],
                   data: data,
+                  // title: widget.title,
                   updateState: () {
                     setState(() {});
                   },

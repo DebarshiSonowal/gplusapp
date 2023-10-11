@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Networking/api_provider.dart';
+import 'package:gplusapp/UI/category/category_details.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -136,7 +137,7 @@ class _OpinionPageState extends State<OpinionPage> {
                                 size: 4.h,
                               ),
                               Text(
-                                ' Opinions',
+                                ' ${widget.type.capitalize()}',
                                 style: Theme.of(Navigation
                                         .instance.navigatorKey.currentContext!)
                                     .textTheme

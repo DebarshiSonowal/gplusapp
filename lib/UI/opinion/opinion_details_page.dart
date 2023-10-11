@@ -33,6 +33,7 @@ import '../view/blockquote_extention.dart';
 
 class OpinionDetailsPage extends StatefulWidget {
   final String? slug;
+  // final String? opinionType;
 
   OpinionDetailsPage(this.slug);
 
@@ -244,8 +245,11 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Navigation.instance.navigate('/authorPage',
-                                    args: data.opinion?.user_id);
+                                Navigation.instance.navigate(
+                                  '/authorPage',
+                                  args: data.opinion?.user_id,
+                                );
+                                // args: "${data.opinion?.user_id},${data.opinion?.}");
                               },
                               child: Row(
                                 children: [
