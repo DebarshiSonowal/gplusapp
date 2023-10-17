@@ -204,16 +204,16 @@ class CommentItem extends StatelessWidget {
           SizedBox(
             height: 1.h,
           ),
-          Row(
-            children: [
-              Text(
-                current.comment ?? "",
-                style: Theme.of(context).textTheme.headline6?.copyWith(
-                      color: Colors.black,
-                      // fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ],
+          SizedBox(
+            width: 90.w,
+            child: Text(
+              current.comment ?? "",
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.headline6?.copyWith(
+                    color: Colors.black,
+                    // fontWeight: FontWeight.bold,
+                  ),
+            ),
           ),
           SizedBox(
             height: 1.h,
