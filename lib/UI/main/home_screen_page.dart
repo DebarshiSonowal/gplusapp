@@ -45,7 +45,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   int current = 0, currentPage = 0;
   int random = 0;
   final ScrollController controller = ScrollController();
@@ -84,13 +84,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
     // _listController.dispose();
   }
-
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    debugPrint("didChangeAppLifecycleState $state");
+    if (state == AppLifecycleState.resumed) {
+      getDynamicLink();
+    }
+  }
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     setUserProperty(Provider.of<DataProvider>(
             Navigation.instance.navigatorKey.currentContext ?? context,
             listen: false)
@@ -587,6 +596,8 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
       });
+    }else{
+      debugPrint("Show Empty Link");
     }
   }
 

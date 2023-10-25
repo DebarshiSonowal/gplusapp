@@ -242,7 +242,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initValues();
-    initDeepLink();
+    // initDeepLink();
     // checkForUpdate();
 
     FirebaseMessaging.onMessage.listen(showFlutterNotification);

@@ -101,7 +101,7 @@ dependencies:
   firebase_analytics: ^10.1.4
   package_info_plus: ^1.4.2
   purchases_flutter: ^5.2.3
-  firebase_dynamic_links: ^5.0.11
+  firebase_dynamic_links: ^5.4.0
   in_app_review: ^2.0.6
   #  flutter_launcher_icons: ^0.13.1
   flutter_stories: ^0.3.1
