@@ -35,12 +35,17 @@ public class MainActivity extends FlutterActivity
     private static final String CHANNEL = "easebuzz";
     MethodChannel.Result channel_result;
     private boolean start_payment = true;
+    @Override
+    public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
+        super.configureFlutterEngine(flutterEngine);
+//        GeneratedPluginRegistrant.registerWith(flutterEngine);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(LayoutParams.FLAG_SECURE);
-        GeneratedPluginRegister.registerGeneratedPlugins(getFlutterEngine());
+//        GeneratedPluginRegister.registerGeneratedPlugins(getFlutterEngine());
         start_payment = true;
 
         new MethodChannel(getFlutterEngine().getDartExecutor().getBinaryMessenger(), CHANNEL).setMethodCallHandler(

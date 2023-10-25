@@ -61,17 +61,23 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   StreamSubscription? _sub;
 
   void sendToRoute(String route, data, String? category) async {
-    // print("our route ${route}");
+    debugPrint("our route $route $data $category");
     switch (route) {
       case "story":
         // Navigation.instance.navigate('/main');
         // print("this route");
         Navigation.instance
-            .navigate('/story', args: '${category},${data},home_page');
+            .navigate('/story', args: '$category,$data,home_page');
         break;
       case "opinion":
         Navigation.instance
             .navigate('/opinionDetails', args: '${data},${category}');
+        break;
+      case "exclusive-news":
+      // Navigation.instance.navigate('/main');
+      // print("this route");
+        Navigation.instance
+            .navigate('/story', args: '${category},${data},home_page');
         break;
       default:
         debugPrint("deeplink failed 1 ${route}");
@@ -79,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         //     '/link_failed',args: ""
         // );
         break;
+
     }
   }
 
@@ -93,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     debugPrint("didChangeAppLifecycleState $state");
     if (state == AppLifecycleState.resumed) {
-      getDynamicLink();
+      // getDynamicLink();
     }
   }
   @override
@@ -577,28 +584,52 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Future<void> getDynamicLink() async {
-    final PendingDynamicLinkData? dynamicLinkData =
-        await FirebaseDynamicLinks.instance.getInitialLink();
-    if (dynamicLinkData != null) {
-      final Uri deepLink = dynamicLinkData.link;
-      debugPrint("URL link2 ${deepLink}");
-      Future.delayed(const Duration(seconds: 0), () {
-        if (Storage.instance.isLoggedIn) {
-          bool isOpinion = dynamicLinkData.link.path.split("/").length == 4;
-          sendToRoute(
-            dynamicLinkData.link.path.split("/")[1].trim(),
-            isOpinion
-                ? dynamicLinkData.link.path.split("/")[3].trim()
-                : dynamicLinkData.link.path.split("/")[2].trim(),
-            (isOpinion
-                ? dynamicLinkData.link.path.split("/")[2].trim()
-                : dynamicLinkData.link.path.split("/")[1].trim()),
-          );
-        }
-      });
-    }else{
-      debugPrint("Show Empty Link");
-    }
+
+    FirebaseDynamicLinks.instance.onLink.listen((PendingDynamicLinkData? dynamicLinkData) {
+      if (dynamicLinkData != null) {
+        final Uri deepLink = dynamicLinkData.link;
+        debugPrint("URL link2 ${deepLink.path.split("/")}");
+        Future.delayed(const Duration(seconds: 0), () {
+          if (Storage.instance.isLoggedIn) {
+            bool isOpinion = deepLink.path.split("/")[2] == "opinion";
+            sendToRoute(
+              dynamicLinkData.link.path.split("/")[2].trim(),
+              isOpinion
+                  ? dynamicLinkData.link.path.split("/")[4].trim()
+                  : dynamicLinkData.link.path.split("/")[3].trim(),
+              (isOpinion
+                  ? dynamicLinkData.link.path.split("/")[3].trim()
+                  : dynamicLinkData.link.path.split("/")[4].trim()),
+            );
+          }
+        });
+      }else{
+        debugPrint("Show Empty Link");
+      }
+    });
+
+    // final PendingDynamicLinkData? dynamicLinkData =
+    //     await FirebaseDynamicLinks.instance.getInitialLink();
+    // if (dynamicLinkData != null) {
+    //   final Uri deepLink = dynamicLinkData.link;
+    //   debugPrint("URL link2 $deepLink");
+    //   Future.delayed(const Duration(seconds: 0), () {
+    //     if (Storage.instance.isLoggedIn) {
+    //       bool isOpinion = dynamicLinkData.link.path.split("/").length == 4;
+    //       sendToRoute(
+    //         dynamicLinkData.link.path.split("/")[1].trim(),
+    //         isOpinion
+    //             ? dynamicLinkData.link.path.split("/")[3].trim()
+    //             : dynamicLinkData.link.path.split("/")[2].trim(),
+    //         (isOpinion
+    //             ? dynamicLinkData.link.path.split("/")[2].trim()
+    //             : dynamicLinkData.link.path.split("/")[1].trim()),
+    //       );
+    //     }
+    //   });
+    // }else{
+    //   debugPrint("Show Empty Link");
+    // }
   }
 
   void fetchDetails(BuildContext context) async {
@@ -611,7 +642,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     // If permission is granted, show a notification.
     if (status == PermissionStatus.granted) {
-      FirebaseMessaging.instance.getInitialMessage().then(
+      final response = FirebaseMessaging.instance.getInitialMessage().then(
             (RemoteMessage? value) => setState(
               () {
                 debugPrint("Initial!@8 1$value");

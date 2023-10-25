@@ -132,7 +132,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void fetchToken() async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
     sendToken(fcmToken!);
-    FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
+    final response = FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
       // TODO: If necessary send token to application server.
       sendToken(fcmToken);
       // Note: This callback is fired at each app startup and whenever a new

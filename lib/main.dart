@@ -55,25 +55,26 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Storage.instance.initializeStorage();
+  await FlutterConfig.loadEnvVariables();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // Set the background messaging handler early on, as a named top-level function
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
-  _networkConnectivity.initialise();
-  _networkConnectivity.myStream.listen((event) {
-    debugPrint("Connect ${event} ${event['status']}");
-    if (event['status'].toString() == "false") {
-      debugPrint("MIN");
-      Future.delayed(const Duration(seconds: 3), () {
-        Navigation.instance.navigate("/no_internet");
-      });
-    }
-  });
+  // initDeepLink();
+  // _networkConnectivity.initialise();
+  // _networkConnectivity.myStream.listen((event) {
+  //   debugPrint("Connect ${event} ${event['status']}");
+  //   if (event['status'].toString() == "false") {
+  //     debugPrint("MIN");
+  //     Future.delayed(const Duration(seconds: 3), () {
+  //       Navigation.instance.navigate("/no_internet");
+  //     });
+  //   }
+  // });
 
   await setupFlutterNotifications();
 
-  Storage.instance.initializeStorage();
-  await FlutterConfig.loadEnvVariables();
+
   StoreConfig(
     store: Store.appleStore,
     apiKey: FlutterConfig.get('revenueCatIOSKey') ?? "",
@@ -81,23 +82,71 @@ Future<void> main() async {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
+
     runApp(const MyApp());
   });
+}
+
+void initDeepLink() async {
+  FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+    debugPrint("URL link ${dynamicLinkData.link.path.split("/")}");
+    if (Storage.instance.isLoggedIn) {
+      bool isOpinion = dynamicLinkData.link.path.split("/").length == 4;
+      sendToRoute(
+        dynamicLinkData.link.path.split("/")[1].trim(),
+        isOpinion
+            ? dynamicLinkData.link.path.split("/")[3].trim()
+            : dynamicLinkData.link.path.split("/")[2].trim(),
+        (isOpinion
+            ? dynamicLinkData.link.path.split("/")[2].trim()
+            : dynamicLinkData.link.path.split("/")[1].trim()),
+        Navigation.instance.navigatorKey.currentContext!,
+      );
+    }
+  }).onError((error) {
+    debugPrint("URL link $error");
+  });
+}
+
+void sendToRoute(String route, data, String? category,BuildContext context) async {
+  switch (route) {
+    case "opinion":
+      // Navigation.instance.navigate('/main');
+      //   debugPrint("this route2 ${category},${data}");
+      if ((Provider.of<DataProvider>(context, listen: false)
+              .profile
+              ?.is_plan_active ??
+          false)) {
+        Navigation.instance
+            .navigate('/opinionDetails', args: '$data,$category');
+      }
+      break;
+    default:
+      // Navigation.instance.navigate('/main');
+      if ((Provider.of<DataProvider>(context, listen: false)
+              .profile
+              ?.is_plan_active ??
+          false)) {
+        Navigation.instance
+            .navigate('/story', args: '$category,$data,home_page');
+      }
+      break;
+  }
 }
 
 void checkVersion(String version, String buildNumber) async {
   if (Platform.isIOS) {
     final response =
-    await ApiProvider.instance.versionCheck(version, buildNumber);
+        await ApiProvider.instance.versionCheck(version, buildNumber);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext!,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
           .setHide(true);
     } else {
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext!,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext!,
+              listen: false)
           .setHide(false);
     }
   }
@@ -111,7 +160,7 @@ Future<void> setupFlutterNotifications() async {
     'high_importance_channel', // id
     'High Importance Notifications', // title
     description:
-    'This channel is used for important notifications.', // description
+        'This channel is used for important notifications.', // description
     importance: Importance.high,
   );
 
@@ -123,20 +172,20 @@ Future<void> setupFlutterNotifications() async {
   /// default FCM channel to enable heads up notifications.
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
   await flutterLocalNotificationsPlugin.initialize(
     NotificationHelper.initializationSettings,
     onDidReceiveNotificationResponse:
         (NotificationResponse notificationResponse) =>
-        NotificationHelper.onDidReceiveNotificationResponse(
-            notificationResponse),
+            NotificationHelper.onDidReceiveNotificationResponse(
+                notificationResponse),
   );
 
   /// Update the iOS foreground notification presentation options to allow
   /// heads up notifications.
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+  final _firebaseMessaging = await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
     sound: true,
@@ -146,10 +195,9 @@ Future<void> setupFlutterNotifications() async {
 
 void notificationHandler(RemoteMessage? message, String msg) async {
   var details =
-  await FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails();
+      await FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails();
   debugPrint(
-      "onDidReceiveNotificationResponse ${details?.notificationResponse
-          ?.payload}");
+      "onDidReceiveNotificationResponse ${details?.notificationResponse?.payload}");
   if (details?.didNotificationLaunchApp ?? false) {
     if (details?.notificationResponse?.payload != 'downloading') {
       OpenFile.open(details?.notificationResponse?.payload);
@@ -177,8 +225,8 @@ void notificationHandler(RemoteMessage? message, String msg) async {
     json[propertyName!] = propertyValue!.trim();
   });
   NotificationReceived notification =
-  // NotificationReceived.fromJson(jsonDecode(jsData1));
-  NotificationReceived.fromJson(json);
+      // NotificationReceived.fromJson(jsonDecode(jsData1));
+      NotificationReceived.fromJson(json);
   // Navigation.instance.navigate('');
 
   NotificationHelper.setRead(
@@ -193,8 +241,7 @@ void notificationHandler(RemoteMessage? message, String msg) async {
 
 void showFlutterNotification(RemoteMessage message) {
   debugPrint(
-      "Showing notification ${message.data} ${message.notification
-          ?.title} ${message.notification?.body}");
+      "Showing notification ${message.data} ${message.notification?.title} ${message.notification?.body}");
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
   flutterLocalNotificationsPlugin.show(
@@ -245,41 +292,22 @@ class _MyAppState extends State<MyApp> {
     // initDeepLink();
     // checkForUpdate();
 
-    FirebaseMessaging.onMessage.listen(showFlutterNotification);
+    try {
+      final response = FirebaseMessaging.onMessage.listen(showFlutterNotification);
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) =>
-        notificationHandler(message, "Opened Firebase Notification"));
+      final respo = FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) =>
+              notificationHandler(message, "Opened Firebase Notification"));
+    } catch (e) {
+      print(e);
+    }
   }
 
   void initValues() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     debugPrint(
-        "version:${packageInfo.version} buildNumber:${packageInfo
-            .buildNumber}");
+        "version:${packageInfo.version} buildNumber:${packageInfo.buildNumber}");
     //notification
     checkVersion(packageInfo.version, packageInfo.buildNumber);
-  }
-
-  void initDeepLink() async {
-    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
-      debugPrint("URL link ${dynamicLinkData.link.path.split("/")}");
-      if (Storage.instance.isLoggedIn) {
-        bool isOpinion = dynamicLinkData.link.path
-            .split("/")
-            .length == 4;
-        sendToRoute(
-          dynamicLinkData.link.path.split("/")[1].trim(),
-          isOpinion
-              ? dynamicLinkData.link.path.split("/")[3].trim()
-              : dynamicLinkData.link.path.split("/")[2].trim(),
-          (isOpinion
-              ? dynamicLinkData.link.path.split("/")[2].trim()
-              : dynamicLinkData.link.path.split("/")[1].trim()),
-        );
-      }
-    }).onError((error) {
-      debugPrint("URL link $error");
-    });
   }
 
 //   void checkForUpdate() async {
@@ -312,32 +340,5 @@ class _MyAppState extends State<MyApp> {
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
-  }
-
-  void sendToRoute(String route, data, String? category) async {
-    switch (route) {
-      case "opinion":
-      // Navigation.instance.navigate('/main');
-      //   debugPrint("this route2 ${category},${data}");
-        if ((Provider
-            .of<DataProvider>(context, listen: false)
-            .profile
-            ?.is_plan_active ??
-            false)) {
-          Navigation.instance
-              .navigate('/opinionDetails', args: '$data,$category');
-        }
-        break;
-      default:
-      // Navigation.instance.navigate('/main');
-        if ((Provider.of<DataProvider>(context, listen: false)
-            .profile
-            ?.is_plan_active ??
-            false)) {
-          Navigation.instance
-              .navigate('/story', args: '$category,$data,home_page');
-        }
-        break;
-    }
   }
 }

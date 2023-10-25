@@ -58,7 +58,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       fetchDetails();
-      fetchContent();
+      fetchMoreContent();
     });
     fetchAds();
     controller.addListener(() {
@@ -1065,7 +1065,7 @@ void generateURL(
     first_cat_name, String? seo_name, description, image_url) async {
   final dynamicLinkParams = DynamicLinkParameters(
     link: Uri.parse(
-        "${FlutterConfig.get('domain')}/opinion/${first_cat_name}/${seo_name}"),
+        "${FlutterConfig.get('domain')}/link/opinion/${first_cat_name}/${seo_name}"),
     uriPrefix: FlutterConfig.get('customHostDeepLink'),
     androidParameters: AndroidParameters(
       packageName: FlutterConfig.get("androidPackage"),

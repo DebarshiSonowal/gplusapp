@@ -1345,6 +1345,7 @@ class _StoryPageState extends State<StoryPage> {
 
   void generateURL(
       first_cat_name, String? seo_name, description, image_url) async {
+    debugPrint("generating URL $first_cat_name $seo_name $description $image_url");
     // final dynamicLinkParams = DynamicLinkParameters(
     //   link: Uri.parse(
     //       "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}"),
@@ -1357,8 +1358,8 @@ class _StoryPageState extends State<StoryPage> {
     //     await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
     final dynamicLinkParams = DynamicLinkParameters(
         link: Uri.parse(
-            // "${FlutterConfig.get('domain')}/link/story/${seo_name}/${first_cat_name}"),
-            "${FlutterConfig.get('domain')}/${first_cat_name}/${seo_name}"),
+            "${FlutterConfig.get('domain')}/link/story/$seo_name/$first_cat_name"),
+            // "${FlutterConfig.get('domain')}/$first_cat_name/$seo_name"),
         uriPrefix: FlutterConfig.get('customHostDeepLink'),
         androidParameters: AndroidParameters(
           packageName: FlutterConfig.get("androidPackage"),
@@ -1381,7 +1382,7 @@ class _StoryPageState extends State<StoryPage> {
       dynamicLinkParams,
       shortLinkType: ShortDynamicLinkType.unguessable,
     );
-
+    debugPrint("generating URL ${dynamicLink.shortUrl}");
     Share.share(dynamicLink.shortUrl.toString());
     // return "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}";
   }

@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/OnBoarding/SplashScreen.dart';
 import 'package:gplusapp/UI/classified/classified_mylist_page.dart';
+import 'package:gplusapp/UI/main/sections/loading_router.dart';
 import 'package:gplusapp/UI/view/no_internet_connection_page.dart';
 
 import '../Authentication/Signin/login_page.dart';
@@ -17,6 +18,7 @@ import '../Components/story_view.dart';
 import '../Components/video_player_screen.dart';
 
 // import '../OnBoarding/on_boarding_page.dart';
+import '../Helper/Storage.dart';
 import '../Payment/payment_processing_page.dart';
 import '../UI/Member/be_a_membe_page.dart';
 import '../UI/Notification/notification_page.dart';
@@ -81,6 +83,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   //   return FadeTransitionPageRouteBuilder(page: HomeScreen());
   // }
   switch (settings.name) {
+    // case null:
+    //   debugPrint("It's here");
+    //   FirebaseAnalytics.instance.setCurrentScreen(screenName: 'home');
+    //   return FadeTransitionPageRouteBuilder(page: const HomeScreen());
     case '/':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'splash_screen');
       return FadeTransitionPageRouteBuilder(page: const SplashScreen());
@@ -220,7 +226,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case '/opinionPage':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'opinion');
-      return FadeTransitionPageRouteBuilder(page: OpinionPage(type:settings.arguments as String));
+      return FadeTransitionPageRouteBuilder(
+          page: OpinionPage(type: settings.arguments as String));
     case '/opinionDetails':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'opinion_detail');
       return FadeTransitionPageRouteBuilder(
@@ -394,13 +401,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
 
     default:
-      debugPrint("DefaultPath");
-      Future.delayed(Duration.zero, () {
-        Navigation.instance.goBack();
-      });
       return FadeTransitionPageRouteBuilder(
-          page: LinkFailedPage(
-        path: (settings.arguments ?? "") as String,
-      ));
+          page: LoadingRouter(deepLink: settings.name ?? ""));
   }
 }
