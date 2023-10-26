@@ -29,6 +29,8 @@ class BlockquoteExtension extends HtmlExtension {
 
   @override
   InlineSpan build(ExtensionContext context) {
+    debugPrint(
+        "LUIN ${context.innerHtml} \n ${extractTwitterId(context.innerHtml)}");
     return WidgetSpan(
       child: Container(
         color: Colors.black,
@@ -41,14 +43,13 @@ class BlockquoteExtension extends HtmlExtension {
           child: WebViewWidget(
             gestureRecognizers: {
               Factory<VerticalDragGestureRecognizer>(
-                      () => VerticalDragGestureRecognizer()
-              )
+                  () => VerticalDragGestureRecognizer())
             },
             controller: WebViewController()
               ..setJavaScriptMode(JavaScriptMode.unrestricted)
               ..enableZoom(true)
               ..loadHtmlString(
-                getHtmlString("1668455627319033857"),
+                getHtmlString(extractTwitterId(context.innerHtml)),
               ),
           ),
         ),
@@ -60,15 +61,15 @@ class BlockquoteExtension extends HtmlExtension {
     return innerHtml.contains("ad_managers");
   }
 
-  String extractTwitterId(String htmlString) {
-    RegExp regExp = RegExp(r'@(\w+)');
-    Iterable<RegExpMatch> matches = regExp.allMatches(htmlString);
-    String twitterId = '';
-    for (RegExpMatch match in matches) {
-      twitterId = match.group(1)!;
-      break; // Use the first match found
+  String extractTwitterId(String html) {
+    final twitterIdPattern = RegExp(r'/status/(\d+)');
+    final match = twitterIdPattern.firstMatch(html);
+
+    if (match != null) {
+      final twitterId = match.group(1);
+      return twitterId ?? "";
     }
-    return twitterId;
+    return "";
   }
 
   Future<void> _launchUrl(_url) async {
