@@ -198,6 +198,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         //   onPressed: () {
         //     _launchUrl(
         //         Uri.parse('whatsapp://send?phone=919365974702&text=Hi+G+Plus!'));
+        //   Navigation.instance.navigate("/competitions");
         //   },
         //   child: Icon(
         //     FontAwesomeIcons.whatsapp,

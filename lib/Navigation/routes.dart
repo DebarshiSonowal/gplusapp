@@ -73,6 +73,7 @@ import '../UI/refer_earn/redeem_points.dart';
 import '../UI/refer_earn/refer&earn.dart';
 import '../UI/story/story_page.dart';
 import '../UI/toppicks/top_picks_page.dart';
+import '../UI/view/competition_dynamic_page.dart';
 import '../UI/view/full_screen_advertisement.dart';
 import '../UI/view/view_image_page.dart';
 import '../UI/view/webview_payment.dart';
@@ -361,6 +362,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       FirebaseAnalytics.instance
           .setCurrentScreen(screenName: 'blocked_userlist');
       return FadeTransitionPageRouteBuilder(page: const BlockedUserListPage());
+    case '/competitions':
+      return FadeTransitionPageRouteBuilder(page: CompetitionDynamicPage(url: settings.arguments as String, ));
 
     //Main
     case '/main':
