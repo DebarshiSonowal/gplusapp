@@ -35,15 +35,15 @@ class _LoadingRouterState extends State<LoadingRouter> {
       Navigation.instance.navigateAndReplace("/main");
       debugPrint("OWE ${widget.deepLink.split("/")}");
       if (Storage.instance.isLoggedIn) {
-        bool isOpinion = widget.deepLink.split("/")[4] == "opinion";
+        bool isOpinion = widget.deepLink.split("/")[3] == "opinion";
         sendToRoute(
-          widget.deepLink.split("/")[4].trim(),
+          widget.deepLink.split("/")[3].trim(),
           isOpinion
-              ? widget.deepLink.split("/")[6].trim()
-              : widget.deepLink.split("/")[5].trim(),
+              ? widget.deepLink.split("/")[4].trim()
+              : widget.deepLink.split("/")[4].trim(),
           (isOpinion
               ? widget.deepLink.split("/")[5].trim()
-              : widget.deepLink.split("/")[6].trim()),
+              : widget.deepLink.split("/")[3].trim()),
         );
       }
     });
@@ -51,12 +51,12 @@ class _LoadingRouterState extends State<LoadingRouter> {
   void sendToRoute(String route, data, String? category) async {
     debugPrint("our route $route $data $category");
     switch (route) {
-      case "story":
-      // Navigation.instance.navigate('/main');
-      // print("this route");
-        Navigation.instance
-            .navigate('/story', args: '$category,$data,home_page');
-        break;
+      // case "story":
+      // // Navigation.instance.navigate('/main');
+      // // print("this route");
+      //   Navigation.instance
+      //       .navigate('/story', args: '$category,$data,home_page');
+      //   break;
       case "opinion":
         Navigation.instance
             .navigate('/opinionDetails', args: '$data,$category');
@@ -67,11 +67,14 @@ class _LoadingRouterState extends State<LoadingRouter> {
             .navigate('/story', args: '$category,$data,home_page');
         break;
       default:
-        debugPrint("deeplink failed 1 ${route}");
-        // Navigation.instance.navigate(
-        //     '/link_failed',args: ""
-        // );
+        Navigation.instance
+            .navigate('/story', args: '$category,$data,home_page');
         break;
+        // debugPrint("deeplink failed 1 ${route}");
+        // // Navigation.instance.navigate(
+        // //     '/link_failed',args: ""
+        // // );
+        // break;
 
     }
   }

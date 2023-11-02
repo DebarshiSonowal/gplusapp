@@ -1184,7 +1184,8 @@ class ApiProvider {
       // 'APP-KEY': ConstanceData.app_key
     });
     var url =
-        "${homeUrl}/opinion/${slug.toString().split(",")[1] == '4' ? 'editorials' : 'opinion'}/${slug.toString().split(",")[0]}";
+        // "${homeUrl}/opinion/${slug.toString().split(",")[1] == '4' ? 'editorials' : 'opinion'}/${slug.toString().split(",")[0]}";
+        "${homeUrl}/opinion/${(slug.toString().split(",")[1]== '4' ? 'editorials':slug.toString().split(",")[1]== '5' ?'opinion': slug.toString().split(",")[1])}/${slug.toString().split(",")[0]}";
     dio = Dio(option);
     debugPrint(url.toString());
     // debugPrint(jsonEncode(data));

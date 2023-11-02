@@ -85,11 +85,11 @@
 
                 <data
                     android:host="guwahatiplus.com"
-                    android:pathPrefix="/link/"
+
                     android:scheme="http" />
                 <data
                     android:host="guwahatiplus.com"
-                    android:pathPrefix="/link/"
+
                     android:scheme="https" />
             </intent-filter>
 

@@ -63,27 +63,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void sendToRoute(String route, data, String? category) async {
     debugPrint("our route $route $data $category");
     switch (route) {
-      case "story":
-        // Navigation.instance.navigate('/main');
-        // print("this route");
-        Navigation.instance
-            .navigate('/story', args: '$category,$data,home_page');
-        break;
+      // case "story":
+      //   // Navigation.instance.navigate('/main');
+      //   // print("this route");
+      //   Navigation.instance
+      //       .navigate('/story', args: '$category,$data,home_page');
+      //   break;
       case "opinion":
         Navigation.instance
-            .navigate('/opinionDetails', args: '${data},${category}');
-        break;
-      case "exclusive-news":
-      // Navigation.instance.navigate('/main');
-      // print("this route");
-        Navigation.instance
-            .navigate('/story', args: '${category},${data},home_page');
+            .navigate('/opinionDetails', args: '$data,$category');
         break;
       default:
-        debugPrint("deeplink failed 1 ${route}");
-        // Navigation.instance.navigate(
-        //     '/link_failed',args: ""
-        // );
+        Navigation.instance
+            .navigate('/story', args: '$category,$data,home_page');
         break;
 
     }
@@ -592,15 +584,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         debugPrint("URL link2 ${deepLink.path.split("/")}");
         Future.delayed(const Duration(seconds: 0), () {
           if (Storage.instance.isLoggedIn) {
-            bool isOpinion = deepLink.path.split("/")[2] == "opinion";
+            bool isOpinion = deepLink.path.split("/")[1] == "opinion";
             sendToRoute(
-              dynamicLinkData.link.path.split("/")[2].trim(),
               isOpinion
-                  ? dynamicLinkData.link.path.split("/")[4].trim()
-                  : dynamicLinkData.link.path.split("/")[3].trim(),
-              (isOpinion
+                  ?dynamicLinkData.link.path.split("/")[1].trim():dynamicLinkData.link.path.split("/")[2].trim(),
+              isOpinion
                   ? dynamicLinkData.link.path.split("/")[3].trim()
-                  : dynamicLinkData.link.path.split("/")[4].trim()),
+                  : dynamicLinkData.link.path.split("/")[2].trim(),
+              (isOpinion
+                  ? dynamicLinkData.link.path.split("/")[2].trim()
+                  : dynamicLinkData.link.path.split("/")[1].trim()),
             );
           }
         });
