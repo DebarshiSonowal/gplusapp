@@ -185,7 +185,7 @@ Future<void> setupFlutterNotifications() async {
 
   /// Update the iOS foreground notification presentation options to allow
   /// heads up notifications.
-  final _firebaseMessaging = await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
     sound: true,
@@ -293,9 +293,9 @@ class _MyAppState extends State<MyApp> {
     // checkForUpdate();
 
     try {
-      final response = FirebaseMessaging.onMessage.listen(showFlutterNotification);
+      FirebaseMessaging.onMessage.listen(showFlutterNotification);
 
-      final respo = FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) =>
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) =>
               notificationHandler(message, "Opened Firebase Notification"));
     } catch (e) {
       print(e);

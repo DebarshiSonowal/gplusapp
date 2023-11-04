@@ -87,6 +87,10 @@ class _SplashScreenState extends State<SplashScreen> {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
+          .setFloatingButton(response.floating_button!);
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setMyTopicks(response.topicks);
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,

@@ -3,6 +3,7 @@ import 'package:gplusapp/Model/topick.dart';
 
 import 'address.dart';
 import 'article.dart';
+import 'floating_button.dart';
 import 'opinion.dart';
 
 class Profile {
@@ -89,6 +90,7 @@ class Profile {
     //             ? true
     //             : false;
     is_plan_active = json['is_plan_active']??false;
+
   }
 
   bool check(start_date, end_date) {
@@ -242,7 +244,7 @@ class ProfileResponse {
   Profile? profile;
   List<Topick> topicks = [];
   List<GeoTopick> geoTopicks = [];
-
+  FloatingButton? floating_button;
   ProfileResponse.fromJson(json) {
     success = true;
     msg = json['message'] ?? "";
@@ -257,6 +259,7 @@ class ProfileResponse {
         : (json['result']['data']['geo'] as List)
             .map((e) => GeoTopick.fromJson(e))
             .toList();
+    floating_button = FloatingButton.fromJson(json['result']['float_btn']);
   }
 
   ProfileResponse.withError(msg) {
@@ -270,7 +273,7 @@ class ProfileResponse2 {
   Profile? profile;
   List<Topick> topicks = [];
   List<GeoTopick> geoTopicks = [];
-
+  FloatingButton? floating_button;
   ProfileResponse2.fromJson(json) {
     success = true;
     msg = json['message'] ?? "";
@@ -285,6 +288,7 @@ class ProfileResponse2 {
         : (json['result']['data']['geo'] as List)
             .map((e) => GeoTopick.fromJson(e))
             .toList();
+    floating_button = FloatingButton.fromJson(json['result']['float_btn']);
   }
 
   ProfileResponse2.withError(msg) {

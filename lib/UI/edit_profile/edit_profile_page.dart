@@ -597,6 +597,10 @@ class _EditProfileState extends State<EditProfile> {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setProfile(response.profile!);
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setFloatingButton(response.floating_button!);
       // Provider.of<DataProvider>(
       //         Navigation.instance.navigatorKey.currentContext ?? context,
       //         listen: false)

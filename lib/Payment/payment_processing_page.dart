@@ -230,6 +230,10 @@ You can parse it accordingly to handle response */
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setMyGeoTopicks(response.geoTopicks);
+      Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
+          .setFloatingButton(response.floating_button!);
       // Navigation.instance.goBack();
     } else {
       // Navigation.instance.goBack();

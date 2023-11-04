@@ -24,6 +24,7 @@ import 'package:gplusapp/Model/video_news.dart';
 
 import '../Model/blocked_user.dart';
 import '../Model/contact_us.dart';
+import '../Model/floating_button.dart';
 import '../Model/full_screen_ad.dart';
 import '../Model/guwahati_connect.dart';
 import '../Model/membership.dart';
@@ -43,6 +44,7 @@ class DataProvider extends ChangeNotifier {
   List<BlockedUser> blockedUsers = [
     // BlockedUser(),
   ];
+  FloatingButton? floating_button;
   List<ReportModel> reportCategories = [];
   List<NotificationInDevice> notifications = [];
   List<Opinion> opinions = [];
@@ -139,6 +141,11 @@ class DataProvider extends ChangeNotifier {
 
   setRedeemText(String txt) {
     redeem = txt;
+    notifyListeners();
+  }
+
+  setFloatingButton(FloatingButton?  txt) {
+    floating_button = txt;
     notifyListeners();
   }
 

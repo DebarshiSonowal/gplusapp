@@ -3,11 +3,20 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 import 'dart:math';
 
+// import 'package:encrypt/encrypt.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:encrypt/encrypt.dart' as Enc;
+
+// import 'package:encrypt/encrypt.dart';
+import 'package:aespack/aespack.dart';
+
+// import 'package:encryptions/encryptions.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
@@ -77,7 +86,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         Navigation.instance
             .navigate('/story', args: '$category,$data,home_page');
         break;
-
     }
   }
 
@@ -87,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.dispose();
     // _listController.dispose();
   }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
@@ -95,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       // getDynamicLink();
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -198,6 +208,53 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         //     size: 22.sp,
         //   ),
         // ),
+        floatingActionButton:
+            Consumer<DataProvider>(builder: (context, data, _) {
+          return (data.floating_button?.status ?? false)
+              ? FloatingActionButton(
+                  backgroundColor: (data.floating_button?.color == null|| data.floating_button?.image_url != "")
+                      ? Colors.transparent
+                      : hexToColor(
+                          data.floating_button?.color.toString() ?? "#7CFC00"),
+                  onPressed: () {
+                    final plainText =
+                        "${data.profile?.id}_${DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now())}";
+                    final key = Enc.Key.fromBase64(
+                        FlutterConfig.get('AES_ENCRYPTION_KEY'));
+                    final iv = Enc.IV.fromBase64(FlutterConfig.get('IV'));
+                    final encrypter =
+                        Enc.Encrypter(Enc.AES(key, mode: Enc.AESMode.cbc));
+                    final encrypted = encrypter.encrypt(plainText, iv: iv);
+                    debugPrint(
+                        "${plainText} ${data.floating_button?.url}?key=${encrypted.base64}");
+                    Navigation.instance.navigate("/competitions",
+                        args:
+                            "${data.floating_button?.url}?key=${encrypted.base64}");
+                    final decrypted = encrypter.decrypt(encrypted, iv: iv);
+                    print("${encrypted} ${decrypted}");
+                  },
+                  // child: Text(
+                  //   "${data.floating_button?.text}",
+                  //   style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  //         color: Colors.black,
+                  //       ),
+                  // ),
+                  child: data.floating_button?.image_url == ""
+                      ? Text(
+                          "${data.floating_button?.text}",
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Colors.black,
+                                  ),
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: data.floating_button!.image_url!,
+                    height: 35.sp,
+                    width: 35.sp,
+                        ),
+                )
+              : Container();
+        }),
         drawer: const BergerMenuMemPage(
           screen: "home",
         ),
@@ -384,6 +441,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
           .setMyGeoTopicks(response.geoTopicks);
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setFloatingButton(response.floating_button!);
       // initUniLinks();
       // initUniLinksResume();
     } else {
@@ -577,8 +638,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Future<void> getDynamicLink() async {
-
-    FirebaseDynamicLinks.instance.onLink.listen((PendingDynamicLinkData? dynamicLinkData) {
+    FirebaseDynamicLinks.instance.onLink
+        .listen((PendingDynamicLinkData? dynamicLinkData) {
       if (dynamicLinkData != null) {
         final Uri deepLink = dynamicLinkData.link;
         debugPrint("URL link2 ${deepLink.path.split("/")}");
@@ -587,7 +648,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             bool isOpinion = deepLink.path.split("/")[1] == "opinion";
             sendToRoute(
               isOpinion
-                  ?dynamicLinkData.link.path.split("/")[1].trim():dynamicLinkData.link.path.split("/")[2].trim(),
+                  ? dynamicLinkData.link.path.split("/")[1].trim()
+                  : dynamicLinkData.link.path.split("/")[2].trim(),
               isOpinion
                   ? dynamicLinkData.link.path.split("/")[3].trim()
                   : dynamicLinkData.link.path.split("/")[2].trim(),
@@ -597,7 +659,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             );
           }
         });
-      }else{
+      } else {
         debugPrint("Show Empty Link");
       }
     });
@@ -636,7 +698,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     // If permission is granted, show a notification.
     if (status == PermissionStatus.granted) {
-      final response = FirebaseMessaging.instance.getInitialMessage().then(
+      FirebaseMessaging.instance.getInitialMessage().then(
             (RemoteMessage? value) => setState(
               () {
                 debugPrint("Initial!@8 1$value");
@@ -687,5 +749,28 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     getDynamicLink();
     showPopUp();
+  }
+
+  Color hexToColor(String code) {
+    return Color(int.parse(code.replaceAll('#', '0xFF')));
+  }
+
+  void encrypt(DataProvider data, String txt, key, iv) async {
+    var text = txt;
+    debugPrint(stringToBinary(key.toString()));
+    var result = await Aespack.encrypt(text,
+        "1A3D271CE36D07B79DD9E699D5A6F469731F80B6E4F2F9F1CC52F33BB7EF69B1", iv);
+    debugPrint(result);
+    Navigation.instance.navigate("/competitions",
+        args: "${data.floating_button?.url}/$result");
+  }
+
+  String stringToBinary(String text) {
+    List<int> bytes = text.codeUnits;
+    String binaryString = '';
+    for (int byte in bytes) {
+      binaryString += byte.toRadixString(2).padLeft(8, '0');
+    }
+    return binaryString;
   }
 }

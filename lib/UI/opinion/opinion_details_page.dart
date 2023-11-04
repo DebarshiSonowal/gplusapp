@@ -1066,7 +1066,7 @@ seo_name, String? first_cat_name, description, image_url) async {
   final dynamicLinkParams = DynamicLinkParameters(
     link: Uri.parse(
         // "${FlutterConfig.get('domain')}/link/opinion/${first_cat_name}/${seo_name}"),
-        "${FlutterConfig.get('domain')}/opinion/${first_cat_name}/${seo_name}"),
+        "${FlutterConfig.get('domain')}/opinion/$seo_name/$first_cat_name"),
     uriPrefix: FlutterConfig.get('customHostDeepLink'),
     androidParameters: AndroidParameters(
       packageName: FlutterConfig.get("androidPackage"),
@@ -1085,7 +1085,9 @@ seo_name, String? first_cat_name, description, image_url) async {
       shortLinkType: ShortDynamicLinkType.unguessable);
 
   debugPrint(
-      "${FlutterConfig.get('domain')}/link/opinion/${seo_name}/${first_cat_name}");
+      "${FlutterConfig.get('domain')}/opinion/${seo_name}/${first_cat_name}");
+  debugPrint(
+      "${FlutterConfig.get('domain')}/opinion/${first_cat_name}/${seo_name}");
   Share.share(dynamicLink.shortUrl.toString());
   // return "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}";
 }
