@@ -217,21 +217,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       : hexToColor(
                           data.floating_button?.color.toString() ?? "#7CFC00"),
                   onPressed: () {
-                    final plainText =
-                        "${data.profile?.id}_${DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now())}";
-                    final key = Enc.Key.fromBase64(
-                        FlutterConfig.get('AES_ENCRYPTION_KEY'));
-                    final iv = Enc.IV.fromBase64(FlutterConfig.get('IV'));
-                    final encrypter =
-                        Enc.Encrypter(Enc.AES(key, mode: Enc.AESMode.cbc));
-                    final encrypted = encrypter.encrypt(plainText, iv: iv);
-                    debugPrint(
-                        "${plainText} ${data.floating_button?.url}?key=${encrypted.base64}");
+                    var encrypted = getEncrypted(data);
+                    // while(encrypted.base64.toString().contains("+")){
+                    //   encrypted = getEncrypted(data);
+                    // }
                     Navigation.instance.navigate("/competitions",
                         args:
                             "${data.floating_button?.url}?key=${encrypted.base64}");
-                    final decrypted = encrypter.decrypt(encrypted, iv: iv);
-                    print("${encrypted} ${decrypted}");
                   },
                   // child: Text(
                   //   "${data.floating_button?.text}",
@@ -772,5 +764,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       binaryString += byte.toRadixString(2).padLeft(8, '0');
     }
     return binaryString;
+  }
+
+  getEncrypted(DataProvider data) {
+    final plainText =
+        "${data.profile?.id}_${DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now())}";
+    final key = Enc.Key.fromBase64(
+        FlutterConfig.get('AES_ENCRYPTION_KEY'));
+    final iv = Enc.IV.fromBase64(FlutterConfig.get('IV'));
+    final encrypter =
+    Enc.Encrypter(Enc.AES(key, mode: Enc.AESMode.cbc));
+    final encrypted = encrypter.encrypt(plainText, iv: iv);
+    debugPrint(
+        "$plainText ${data.floating_button?.url}?key=${encrypted.base64}");
+    return encrypted;
   }
 }

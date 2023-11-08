@@ -179,7 +179,7 @@ class OpinionSection extends StatelessWidget {
                 onTap: () {
                   if (data.latestOpinions[0].has_permission ?? false) {
                     logTheReadMoreClick(data.profile!);
-                    Navigation.instance.navigate('/opinionPage');
+                    Navigation.instance.navigate('/opinionPage',args: "opinion");
                   } else {
                     showNotaMember();
                   }

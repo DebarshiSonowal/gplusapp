@@ -39,10 +39,10 @@ class _LoadingRouterState extends State<LoadingRouter> {
         sendToRoute(
           widget.deepLink.split("/")[3].trim(),
           isOpinion
-              ? widget.deepLink.split("/")[4].trim()
+              ? widget.deepLink.split("/")[5].trim()
               : widget.deepLink.split("/")[4].trim(),
           (isOpinion
-              ? widget.deepLink.split("/")[5].trim()
+              ? widget.deepLink.split("/")[4].trim()
               : widget.deepLink.split("/")[3].trim()),
         );
       }

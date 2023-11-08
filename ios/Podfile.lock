@@ -1,4 +1,6 @@
 PODS:
+  - aespack (0.0.1):
+    - Flutter
   - connectivity_plus (0.0.1):
     - Flutter
     - ReachabilitySwift
@@ -224,6 +226,7 @@ PODS:
   - ZLPhotoBrowser/Core (4.2.5)
 
 DEPENDENCIES:
+  - aespack (from `.symlinks/plugins/aespack/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -287,6 +290,8 @@ SPEC REPOS:
     - ZLPhotoBrowser
 
 EXTERNAL SOURCES:
+  aespack:
+    :path: ".symlinks/plugins/aespack/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/ios"
   device_info_plus:
@@ -357,6 +362,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
+  aespack: d17013131ac17772a01c0d264ec867664e748912
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Firebase: 25899099b77d255a636e3579c3d9dce10ec150d5
