@@ -44,6 +44,18 @@ extension StringExtension on String {
   }
 }
 
+extension StringsExtension on String {
+  String capitalizeWords() {
+    List<String> words = split(' ');
+    List<String> capitalizedWords = words.map((word) {
+      return word.isEmpty
+          ? word
+          : "${word[0].toUpperCase()}${word.substring(1).toLowerCase()}";
+    }).toList();
+    return capitalizedWords.join(' ');
+  }
+}
+
 class StoryPage extends StatefulWidget {
   final String? slug;
 
@@ -480,16 +492,21 @@ class _StoryPageState extends State<StoryPage> {
                                               .selectedArticle!.publish_date!)),
                                     );
                                     generateURL(
-                                        data.selectedArticle?.first_cat_name
-                                            ?.seo_name,
-                                        data.selectedArticle?.seo_name,
-                                        data.selectedArticle?.description
-                                            ?.trim()
-                                            .split(".")
-                                            .sublist(0, 4)
-                                            .join(""),
-                                        data.selectedArticle?.image_file_name
-                                            ?.toString());
+                                      data.selectedArticle?.first_cat_name
+                                          ?.seo_name,
+                                      data.selectedArticle?.seo_name,
+                                      // data.selectedArticle?.description
+                                      //     ?.trim()
+                                      //     .split(".")
+                                      //     .sublist(0, 4)
+                                      //     .join(""),
+                                      extractLinesWithoutHtml(
+                                        data.selectedArticle?.description ?? "",
+                                      ),
+                                      data.selectedArticle?.image_file_name
+                                          ?.toString(),
+                                      data.selectedArticle?.title,
+                                    );
                                   },
                                   splashRadius: 20.0,
                                   splashColor: Storage.instance.isDarkMode
@@ -682,16 +699,21 @@ class _StoryPageState extends State<StoryPage> {
                                               .selectedArticle!.publish_date!)),
                                     );
                                     generateURL(
-                                        data.selectedArticle?.first_cat_name
-                                            ?.seo_name,
-                                        data.selectedArticle?.seo_name,
-                                        data.selectedArticle?.description
-                                            ?.trim()
-                                            .split(".")
-                                            .sublist(0, 4)
-                                            .join(""),
-                                        data.selectedArticle?.image_file_name
-                                            .toString());
+                                      data.selectedArticle?.first_cat_name
+                                          ?.seo_name,
+                                      data.selectedArticle?.seo_name,
+                                      // data.selectedArticle?.description
+                                      //     ?.trim()
+                                      //     .split(".")
+                                      //     .sublist(0, 4)
+                                      //     .join(""),
+                                      extractLinesWithoutHtml(
+                                          data.selectedArticle?.description ??
+                                              ""),
+                                      data.selectedArticle?.image_file_name
+                                          .toString(),
+                                      data.selectedArticle?.title,
+                                    );
                                   },
                                   splashRadius: 10.0,
                                   splashColor: Constance.secondaryColor,
@@ -1093,9 +1115,10 @@ class _StoryPageState extends State<StoryPage> {
     return 'https://img.youtube.com/vi/${id}/0.jpg';
   }
 
-  void generateURL(
-      first_cat_name, String? seo_name, description, image_url) async {
-    debugPrint("generating URL $first_cat_name $seo_name $description $image_url");
+  void generateURL(String? first_cat_name, String? seo_name,
+      String? description, String? image_url, String? title) async {
+    debugPrint(
+        "generating URL \n$first_cat_name \n ${seo_name?.replaceAll("-", " ").capitalizeWords()} \n $description \n $image_url");
     // final dynamicLinkParams = DynamicLinkParameters(
     //   link: Uri.parse(
     //       "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}"),
@@ -1112,6 +1135,11 @@ class _StoryPageState extends State<StoryPage> {
             // "${FlutterConfig.get('domain')}/link/story/$seo_name/$first_cat_name"),
             "${FlutterConfig.get('domain')}/$first_cat_name/$seo_name"),
         uriPrefix: FlutterConfig.get('customHostDeepLink'),
+        socialMetaTagParameters: SocialMetaTagParameters(
+          title: title,
+          description: description,
+          imageUrl: Uri.tryParse(image_url ?? ""),
+        ),
         androidParameters: AndroidParameters(
           packageName: FlutterConfig.get("androidPackage"),
           // fallbackUrl: Uri.parse("https://guwahatiplus.com/${first_cat_name}/${seo_name}"),
@@ -1133,7 +1161,8 @@ class _StoryPageState extends State<StoryPage> {
       dynamicLinkParams,
       shortLinkType: ShortDynamicLinkType.unguessable,
     );
-    debugPrint("generating URL ${"${FlutterConfig.get('domain')}/link/story/$first_cat_name/$seo_name"})}");
+    debugPrint(
+        "generating URL ${"${FlutterConfig.get('domain')}/link/story/$first_cat_name/$seo_name"})}");
     debugPrint("generating URL ${dynamicLink.shortUrl}");
     Share.share(dynamicLink.shortUrl.toString());
     // return "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}";
@@ -1215,5 +1244,34 @@ class _StoryPageState extends State<StoryPage> {
         "user_id_tvc": profile.id,
       },
     );
+  }
+
+  String extractLinesWithoutHtml(String inputText) {
+    // Remove HTML tags
+    String textWithoutHtml = removeAllHtmlTags(inputText);
+
+    // Split the text into lines
+    List<String> lines = textWithoutHtml.split('\n');
+
+    // Filter out empty lines and trim leading spaces from the first letter
+    List<String> filteredLines = lines
+        .where((line) => line.trim().isNotEmpty)
+        .map((line) => line.replaceFirst(RegExp(r'^\s*'), ''))
+        .toList();
+
+    // Join the lines back into a single string
+    String result = filteredLines.join('\n');
+
+    return result;
+  }
+
+  String removeAllHtmlTags(String htmlText) {
+    RegExp exp = RegExp(
+      r"<[^>]*>",
+      multiLine: true,
+      caseSensitive: true,
+    );
+
+    return htmlText.replaceAll(exp, '');
   }
 }

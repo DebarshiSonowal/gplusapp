@@ -33,6 +33,7 @@ import '../view/blockquote_extention.dart';
 
 class OpinionDetailsPage extends StatefulWidget {
   final String? slug;
+
   // final String? opinionType;
 
   OpinionDetailsPage(this.slug);
@@ -381,12 +382,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                           data.opinion?.category_gallery!
                                               .seo_name!,
                                           data.opinion?.seo_name,
-                                          data.opinion?.description
-                                              ?.trim()
-                                              .split(".")
-                                              .sublist(0, 4)
-                                              .join(""),
-                                          data.opinion?.image_file_name);
+                                          extractLinesWithoutHtml(data.opinion?.description??""),
+                                          data.opinion?.image_file_name,
+                                          data.opinion?.title);
                                     },
                                     splashRadius: 10.0,
                                     splashColor: Constance.secondaryColor,
@@ -762,14 +760,13 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     //     ? 'check out our website https://guwahatiplus.com/'
                                     //     : '${data.opinion?.web_url}');
                                     generateURL(
-                                        data.opinion?.category_id,
-                                        data.opinion?.seo_name,
-                                        data.opinion?.description
-                                            ?.trim()
-                                            .split(".")
-                                            .sublist(0, 4)
-                                            .join(""),
-                                        data.opinion?.image_file_name);
+                                      data.opinion?.category_gallery!
+                                          .seo_name!,
+                                      data.opinion?.seo_name,
+                                      extractLinesWithoutHtml(data.opinion?.description??""),
+                                      data.opinion?.image_file_name,
+                                      data.opinion?.title,
+                                    );
                                   },
                                   splashRadius: 10.0,
                                   splashColor: Constance.secondaryColor,
@@ -1061,13 +1058,20 @@ String getYoutubeThumbnail(var id) {
   return 'https://img.youtube.com/vi/${id}/0.jpg';
 }
 
-void generateURL(
-seo_name, String? first_cat_name, description, image_url) async {
+void generateURL(String? seo_name, String? first_cat_name, String? description,
+    String? image_url, String? title) async {
+  debugPrint(
+      "generating URL \n$first_cat_name \n ${title} \n $description \n $image_url");
   final dynamicLinkParams = DynamicLinkParameters(
     link: Uri.parse(
         // "${FlutterConfig.get('domain')}/link/opinion/${first_cat_name}/${seo_name}"),
         "${FlutterConfig.get('domain')}/opinion/$seo_name/$first_cat_name"),
     uriPrefix: FlutterConfig.get('customHostDeepLink'),
+    socialMetaTagParameters: SocialMetaTagParameters(
+      title: title,
+      description: description,
+      imageUrl: Uri.tryParse(image_url ?? ""),
+    ),
     androidParameters: AndroidParameters(
       packageName: FlutterConfig.get("androidPackage"),
     ),
@@ -1090,4 +1094,33 @@ seo_name, String? first_cat_name, description, image_url) async {
       "${FlutterConfig.get('domain')}/opinion/${first_cat_name}/${seo_name}");
   Share.share(dynamicLink.shortUrl.toString());
   // return "https://guwahatiplus.com/link/story/${seo_name}/${first_cat_name}";
+}
+
+String extractLinesWithoutHtml(String inputText) {
+  // Remove HTML tags
+  String textWithoutHtml = removeAllHtmlTags(inputText);
+
+  // Split the text into lines
+  List<String> lines = textWithoutHtml.split('\n');
+
+  // Filter out empty lines and trim leading spaces from the first letter
+  List<String> filteredLines = lines
+      .where((line) => line.trim().isNotEmpty)
+      .map((line) => line.replaceFirst(RegExp(r'^\s*'), ''))
+      .toList();
+
+  // Join the lines back into a single string
+  String result = filteredLines.join('\n');
+
+  return result;
+}
+
+String removeAllHtmlTags(String htmlText) {
+  RegExp exp = RegExp(
+    r"<[^>]*>",
+    multiLine: true,
+    caseSensitive: true,
+  );
+
+  return htmlText.replaceAll(exp, '');
 }
