@@ -1,6 +1,7 @@
 import 'package:gplusapp/Model/profile.dart';
 
 import 'category_name.dart';
+import 'news_catergory.dart';
 
 class Article {
   int? id, is_app, status, view_count, share_count, author, is_liked;
@@ -19,6 +20,7 @@ class Article {
       tags,image_caption;
   bool is_bookmark = false,has_permission=false;
   CategoryName? first_cat_name;
+  List<NewsCategories> categories=[];
   // AuthorProfile? author_profile;
 
   Article.fromJson(json) {
@@ -63,6 +65,7 @@ class Article {
     as_description = json['as_description'] ?? "";
     as_short_description = json['as_short_description'] ?? "";
     web_url = json['web_url'] ?? "";
+    categories = json['category_list']==null?[]:(json['category_list'] as List).map((e) => NewsCategories.fromJson(e)).toList();
     // author = json['author'] ?? "";
     // author_profile = AuthorProfile.fromJson(json['author_detail']);
   }

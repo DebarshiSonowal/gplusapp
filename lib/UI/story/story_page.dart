@@ -285,78 +285,193 @@ class _StoryPageState extends State<StoryPage> {
                             SizedBox(
                               height: 1.h,
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                logTheClassifiedMyListPostClick(
-                                  data.profile!,
-                                  '${data.selectedArticle?.author_name == "" ? "G Plus News" : data.selectedArticle?.author_name}',
-                                  data.selectedArticle!.title!,
-                                  widget.slug.toString().split(",")[2],
-                                  data.selectedArticle!.id!,
-                                  data.selectedArticle!.author_name!,
-                                  DateFormat("dd MMM, yyyy").format(
-                                      DateTime.parse(
-                                          data.selectedArticle!.publish_date!)),
-                                );
-                                Navigation.instance.navigate('/authorPage',
-                                    args: data.selectedArticle?.author);
-                              },
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    Constance.authorIcon,
-                                    scale: 30,
-                                    color: Constance.secondaryColor,
-                                  ),
-                                  SizedBox(
-                                    width: 0.5.w,
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              '${data.selectedArticle?.author_name == "" ? "G Plus News" : data.selectedArticle?.author_name}',
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline5
-                                              ?.copyWith(
-                                                color: Storage
-                                                        .instance.isDarkMode
-                                                    ? Constance.secondaryColor
-                                                    : Constance.primaryColor,
-                                                fontWeight: FontWeight.bold,
-                                                decoration:
-                                                    TextDecoration.underline,
-                                              ),
+                            // Row(
+                            //   children: [
+                            //     // Image.asset(
+                            //     //   Constance.newsIcon,
+                            //     //   height: 5.h,
+                            //     //   width: 4.5.w,
+                            //     //   color: Constance.secondaryColor,
+                            //     // ),
+                            //     // for (var i
+                            //     // in data.selectedArticle!.categories)
+                            //     GestureDetector(
+                            //       onTap: () {
+                            //         Navigation.instance.navigate('/search',
+                            //             args:
+                            //                 "${data.selectedArticle?.first_cat_name?.seo_name}");
+                            //       },
+                            //       child: Container(
+                            //         margin:
+                            //             EdgeInsets.symmetric(horizontal: 0.5.w),
+                            //         // padding: EdgeInsets.symmetric(
+                            //         //     horizontal: 2.w, vertical: 1.h),
+                            //         // color: Constance.primaryColor,
+                            //         child: Text(
+                            //           (data.selectedArticle?.first_cat_name
+                            //                   ?.seo_name ??
+                            //               "").capitalize(),
+                            //           style: Theme.of(context)
+                            //               .textTheme
+                            //               .headline5
+                            //               ?.copyWith(
+                            //                 color: Storage.instance.isDarkMode
+                            //                     ? Constance.secondaryColor
+                            //                     : Constance.primaryColor,
+                            //                 fontWeight: FontWeight.bold,
+                            //               ),
+                            //         ),
+                            //       ),
+                            //     )
+                            //   ],
+                            // ),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 0.5.w),
+                              // padding: EdgeInsets.symmetric(
+                              //     horizontal: 2.w, vertical: 1.h),
+                              // color: Constance.primaryColor,
+                              child: Text(
+                                Jiffy.parse(
+                                        data.selectedArticle?.publish_date
+                                                ?.split(" ")[0] ??
+                                            "",
+                                        pattern: "yyyy-MM-dd")
+                                    .format(pattern: "dd MMM, yyyy"),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    ?.copyWith(color: Colors.black
+                                        // fontWeight: FontWeight.bold,
                                         ),
-                                        TextSpan(
-                                          text:
-                                              ' , ${Jiffy.parse(data.selectedArticle?.publish_date?.split(" ")[0] ?? "", pattern: "yyyy-MM-dd").format(pattern: "dd MMM, yyyy")}',
-                                          style: Theme.of(Navigation.instance
-                                                  .navigatorKey.currentContext!)
-                                              .textTheme
-                                              .headline5
-                                              ?.copyWith(
-                                                color:
-                                                    Storage.instance.isDarkMode
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                // fontSize: 2.2.h,
-                                                // fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
                               ),
                             ),
-
                             SizedBox(
                               height: 1.h,
                             ),
+                            Row(
+                              children: [
+                                Image.asset(
+                                  Constance.authorIcon,
+                                  scale: 30,
+                                  color: Constance.secondaryColor,
+                                ),
+                                // SizedBox(
+                                //   width: 0.5.w,
+                                // ),
+                                SizedBox(
+                                  width: 1.w,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    logTheClassifiedMyListPostClick(
+                                      data.profile!,
+                                      '${data.selectedArticle?.author_name == "" ? "G Plus News" : data.selectedArticle?.author_name}',
+                                      data.selectedArticle!.title!,
+                                      widget.slug.toString().split(",")[2],
+                                      data.selectedArticle!.id!,
+                                      data.selectedArticle!.author_name!,
+                                      DateFormat("dd MMM, yyyy").format(
+                                          DateTime.parse(data
+                                              .selectedArticle!.publish_date!)),
+                                    );
+                                    Navigation.instance.navigate('/authorPage',
+                                        args: data.selectedArticle?.author);
+                                  },
+                                  child: SizedBox(
+                                    width: 32.w,
+                                    child: Text(
+                                      '${data.selectedArticle?.author_name == "" ? "G Plus News" : data.selectedArticle?.author_name}',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Storage.instance.isDarkMode
+                                                ? Constance.secondaryColor
+                                                : Constance.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            decoration: TextDecoration.underline,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 1.w,
+                                ),
+                                Image.asset(
+                                  Constance.classifiedIcon,
+                                  scale: 8,
+                                  color: Constance.secondaryColor,
+                                ),
+                                SizedBox(
+                                  width: 1.w,
+                                ),
+                                GestureDetector(
+                                  onTap: (){
+                                            Navigation.instance.navigate('/search',
+                                                args:
+                                                    "${data.selectedArticle?.first_cat_name?.seo_name}");
+                                  },
+                                  child: SizedBox(
+                                    width: 34.w,
+                                    child: Text(
+                                      (data.selectedArticle?.first_cat_name
+                                                  ?.seo_name ??
+                                              "")
+                                          .capitalize(),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(Navigation.instance
+                                              .navigatorKey.currentContext!)
+                                          .textTheme
+                                          .headline5
+                                          ?.copyWith(
+                                            color: Storage.instance.isDarkMode
+                                                ? Constance.secondaryColor
+                                                : Constance.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                            // fontSize: 2.2.h,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 1.h,
+                            ),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     Navigation.instance.navigate('/search',
+                            //         args:
+                            //             "${data.selectedArticle?.first_cat_name?.seo_name}");
+                            //   },
+                            //   child: Container(
+                            //     margin: EdgeInsets.symmetric(horizontal: 0.5.w),
+                            //     // padding: EdgeInsets.symmetric(
+                            //     //     horizontal: 2.w, vertical: 1.h),
+                            //     // color: Constance.primaryColor,
+                            //     child: Text(
+                            //       (data.selectedArticle?.first_cat_name
+                            //                   ?.seo_name ??
+                            //               "")
+                            //           .capitalize(),
+                            //       style: Theme.of(context)
+                            //           .textTheme
+                            //           .headline5
+                            //           ?.copyWith(
+                            //             color: Storage.instance.isDarkMode
+                            //                 ? Constance.secondaryColor
+                            //                 : Constance.primaryColor,
+                            //             fontWeight: FontWeight.bold,
+                            //           ),
+                            //     ),
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 1.h,
+                            // ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
