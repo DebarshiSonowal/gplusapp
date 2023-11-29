@@ -478,15 +478,18 @@ class _VerifyOTPState extends State<VerifyOTP> {
     Navigation.instance.navigate("/loadingDialog");
     final response = await ApiProvider.instance.verifyOTP(mobile, otp);
     if (response.success ?? false) {
-      final result = await Storage.instance.setToken(response.access_token ?? "");
+      final result =
+          await Storage.instance.setToken(response.access_token ?? "");
       Navigation.instance.goBack();
-     Future.delayed(const Duration(seconds: 2),(){
-       getProfile();
-     });
-
+      if (response.is_new == 0) {
+        getProfile();
+      } else {
+        Navigation.instance
+            .navigateAndReplace('/terms&conditions', args: widget.number);
+      }
     } else {
       Navigation.instance.goBack();
-      Fluttertoast.showToast(msg: response.message??"Something went wrong");
+      Fluttertoast.showToast(msg: response.message ?? "Something went wrong");
     }
   }
 }

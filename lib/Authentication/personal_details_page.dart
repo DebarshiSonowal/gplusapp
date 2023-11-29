@@ -421,7 +421,7 @@ class _PersonalDetailsPageState extends State<PersonalDetailsPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: SizedBox(
-                  width: 25.w,
+                  width:30.w,
                   // height: 10.h,
                   child: DropdownButtonFormField2(
                     decoration: const InputDecoration.collapsed(hintText: ''),
