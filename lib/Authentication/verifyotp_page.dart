@@ -189,34 +189,34 @@ class _VerifyOTPState extends State<VerifyOTP> {
                 txt: 'Submit',
                 onTap: () async {
                   // GetProfile();
-                  Navigation.instance.navigate("/loadingDialog");
-                  try {
-                    PhoneAuthCredential credential =
-                        PhoneAuthProvider.credential(
-                            verificationId: _verificationId ?? "",
-                            smsCode: textEditingController.text);
-                    await _auth
-                        .signInWithCredential(credential)
-                        .then((UserCredential value) {
-                      getProfile();
-                    });
-                    //     .catchError((e) {
-                    //   debugPrint(_verificationId);
-                    //   debugPrint("s ${e}");
-                    //   debugPrint(textEditingController.text);
-                    //   showError("$e");
-                    // });
-                  } on FirebaseAuthException catch (_, e) {
-                    debugPrint(_.code);
-                    // if(dev)
-                    Navigation.instance.goBack();
-                    showError("${_.message}");
-                    setState(() {
-                      isButtonEnabled = true;
-                    });
-                    // else
-                    //    simple
-                  }
+                  verifyOtp(widget.number, textEditingController.text);
+                  // try {
+                  //   PhoneAuthCredential credential =
+                  //       PhoneAuthProvider.credential(
+                  //           verificationId: _verificationId ?? "",
+                  //           smsCode: textEditingController.text);
+                  //   await _auth
+                  //       .signInWithCredential(credential)
+                  //       .then((UserCredential value) {
+                  //     getProfile();
+                  //   });
+                  //   //     .catchError((e) {
+                  //   //   debugPrint(_verificationId);
+                  //   //   debugPrint("s ${e}");
+                  //   //   debugPrint(textEditingController.text);
+                  //   //   showError("$e");
+                  //   // });
+                  // } on FirebaseAuthException catch (_, e) {
+                  //   debugPrint(_.code);
+                  //   // if(dev)
+                  //   Navigation.instance.goBack();
+                  //   showError("${_.message}");
+                  //   setState(() {
+                  //     isButtonEnabled = true;
+                  //   });
+                  // else
+                  //    simple
+                  // }
                   // phoneSignIn(phoneNumber: widget.number.toString());
                 },
               ),
@@ -264,21 +264,29 @@ class _VerifyOTPState extends State<VerifyOTP> {
   Future<void> phoneSignIn({required String phoneNumber}) async {
     debugPrint('+91$phoneNumber');
     showLoaderDialog(context);
-    await _auth
-        .verifyPhoneNumber(
-            phoneNumber: '+91$phoneNumber',
-            verificationCompleted: _onVerificationCompleted,
-            verificationFailed: _onVerificationFailed,
-            codeSent: _onCodeSent,
-            codeAutoRetrievalTimeout: _onCodeTimeout)
-        .onError((error, stackTrace) {
-      debugPrint('error ${error} ${stackTrace}');
-    }).then((value) {
-      setState(() {
-        time = '30';
-        // setTimer();
-      });
-    });
+    // await _auth
+    //     .verifyPhoneNumber(
+    //         phoneNumber: '+91$phoneNumber',
+    //         verificationCompleted: _onVerificationCompleted,
+    //         verificationFailed: _onVerificationFailed,
+    //         codeSent: _onCodeSent,
+    //         codeAutoRetrievalTimeout: _onCodeTimeout)
+    //     .onError((error, stackTrace) {
+    //   debugPrint('error ${error} ${stackTrace}');
+    // }).then((value) {
+    //   setState(() {
+    //     time = '30';
+    //     // setTimer();
+    //   });
+    // });
+    final response = await ApiProvider.instance.sendOTP(phoneNumber);
+    if (response.success ?? false) {
+      Navigation.instance.goBack();
+      Fluttertoast.showToast(msg: "OTP sent successfully");
+    } else {
+      Navigation.instance.goBack();
+      Navigation.instance.goBack();
+    }
   }
 
   _onVerificationCompleted(PhoneAuthCredential authCredential) async {
@@ -350,8 +358,9 @@ class _VerifyOTPState extends State<VerifyOTP> {
   }
 
   void getProfile() async {
-    final reponse = await ApiProvider.instance.login(widget.number.toString());
-    if (reponse.status ?? false) {
+    Navigation.instance.navigate("/loadingDialog");
+    final reponse = await ApiProvider.instance.getprofile();
+    if (reponse.success ?? false) {
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
@@ -362,7 +371,8 @@ class _VerifyOTPState extends State<VerifyOTP> {
           reponse.profile?.email == "" ||
           reponse.profile?.l_name == "" ||
           reponse.profile?.is_new == 1) {
-        Storage.instance.setToken(reponse.access_token ?? "");
+        // Storage.instance.setToken(reponse.access_token ?? "");
+        Navigation.instance.goBack();
         Navigation.instance
             .navigateAndReplace('/terms&conditions', args: widget.number);
       } else {
@@ -372,7 +382,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
         } catch (e) {
           debugPrint(e.toString());
         }
-        Storage.instance.setUser(reponse.access_token ?? "");
+        // Storage.instance.setUser(reponse.access_token ?? "");
         Navigation.instance.navigateAndRemoveUntil('/main');
         // Navigation.instance.navigate('/terms&conditions', args: widget.number);
       }
@@ -462,5 +472,21 @@ class _VerifyOTPState extends State<VerifyOTP> {
     final response = await ApiProvider.instance.updateDeviceToken(fcmToken);
     if (response.success ?? false) {
     } else {}
+  }
+
+  void verifyOtp(int mobile, String otp) async {
+    Navigation.instance.navigate("/loadingDialog");
+    final response = await ApiProvider.instance.verifyOTP(mobile, otp);
+    if (response.success ?? false) {
+      final result = await Storage.instance.setToken(response.access_token ?? "");
+      Navigation.instance.goBack();
+     Future.delayed(const Duration(seconds: 2),(){
+       getProfile();
+     });
+
+    } else {
+      Navigation.instance.goBack();
+      Fluttertoast.showToast(msg: response.message??"Something went wrong");
+    }
   }
 }

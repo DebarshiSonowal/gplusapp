@@ -9,6 +9,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gplusapp/Helper/Storage.dart';
 import 'package:gplusapp/Model/bookmark_item.dart';
 import 'package:gplusapp/Model/profile.dart';
+import 'package:gplusapp/Model/verify_response.dart';
 import 'package:gplusapp/Navigation/Navigate.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
@@ -100,6 +101,67 @@ class ApiProvider {
     } on DioError catch (e) {
       debugPrint("login  response: ${e.response}");
       return LoginResponse.withError();
+    }
+  }
+  Future<GenericResponse> sendOTP(mobile) async {
+    var data = {
+      'mobile': mobile,
+    };
+    BaseOptions option =
+    BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // 'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "$baseUrl/generate-login-otp";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(url, data: jsonEncode(data));
+      debugPrint("sendOTP response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("sendOTP  error: ${response?.data}");
+        return GenericResponse.withError("${response?.data}");
+      }
+    } on DioError catch (e) {
+      debugPrint("sendOTP  response: ${e.response}");
+      return GenericResponse.withError(e.error);
+    }
+  }
+  Future<VerifyResponse> verifyOTP(mobile,otp) async {
+    var data = {
+      'mobile': mobile,
+      'otp': otp,
+    };
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // 'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "$baseUrl/verify-otp";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(url, data: jsonEncode(data));
+      debugPrint("VerifyResponse response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return VerifyResponse.fromJson(response?.data);
+      } else {
+        debugPrint("VerifyResponse  error: ${response?.data}");
+        return VerifyResponse.withError("${response?.data}");
+      }
+    } on DioError catch (e) {
+      debugPrint("VerifyResponse  response: ${e.response}");
+      return VerifyResponse.withError(e.error);
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/temp.dart';
@@ -26,6 +27,7 @@ class Storage {
   }
 
   Future<void> setToken(String token) async {
+    debugPrint('set token ${token}');
     await sharedpreferences.setString("token", token);
   }
 

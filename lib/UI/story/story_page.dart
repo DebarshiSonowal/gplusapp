@@ -418,8 +418,8 @@ class _StoryPageState extends State<StoryPage> {
                                     child: Text(
                                       (data.selectedArticle?.first_cat_name
                                                   ?.seo_name ??
-                                              "")
-                                          .capitalize(),
+                                              "").replaceAll("-", " ")
+                                          .capitalizeWords(),
                                       overflow: TextOverflow.ellipsis,
                                       style: Theme.of(Navigation.instance
                                               .navigatorKey.currentContext!)

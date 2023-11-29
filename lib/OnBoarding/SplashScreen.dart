@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
       setState(() {
         Storage.instance.setDarkMode(response.status?.dark ?? false);
       });
-      fetchProfile();
+       fetchProfile();
     } else {}
   }
 
