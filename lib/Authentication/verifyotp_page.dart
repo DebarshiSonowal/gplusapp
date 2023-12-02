@@ -263,6 +263,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
 
   Future<void> phoneSignIn({required String phoneNumber}) async {
     debugPrint('+91$phoneNumber');
+
     showLoaderDialog(context);
     // await _auth
     //     .verifyPhoneNumber(
@@ -282,6 +283,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
     final response = await ApiProvider.instance.sendOTP(phoneNumber);
     if (response.success ?? false) {
       Navigation.instance.goBack();
+      setTimer();
       Fluttertoast.showToast(msg: "OTP sent successfully");
     } else {
       Navigation.instance.goBack();

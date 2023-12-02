@@ -265,7 +265,7 @@ class _EnterPreferencesPageState extends State<EnterPreferencesPage> {
       debugPrint("Profile Created ${reponse.profile!.id}");
       logTheSignUpSuccessClick(getComaSeparatedName(selGeo),
           getComaSeparatedName(selTop), reponse.profile!);
-      Navigation.instance.navigateAndReplace('/main');
+      Navigation.instance.navigateAndRemoveUntil('/main');
     } else {
       // showError(reponse.msg ?? "Something went wrong");
       Navigation.instance.goBack();

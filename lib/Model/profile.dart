@@ -259,7 +259,7 @@ class ProfileResponse {
         : (json['result']['data']['geo'] as List)
             .map((e) => GeoTopick.fromJson(e))
             .toList();
-    floating_button = FloatingButton.fromJson(json['result']['float_btn']);
+    floating_button =json['result']['float_btn']==null? null:FloatingButton.fromJson(json['result']['float_btn']);
   }
 
   ProfileResponse.withError(msg) {
