@@ -382,7 +382,9 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                           data.opinion?.category_gallery!
                                               .seo_name!,
                                           data.opinion?.seo_name,
-                                          extractLinesWithoutHtml(data.opinion?.description??""),
+                                          extractLinesWithoutHtml(
+                                              (data.opinion?.description??"").substring(0,200)
+                                          ),
                                           data.opinion?.image_file_name,
                                           data.opinion?.title);
                                     },
@@ -763,7 +765,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                       data.opinion?.category_gallery!
                                           .seo_name!,
                                       data.opinion?.seo_name,
-                                      extractLinesWithoutHtml(data.opinion?.description??""),
+                                      extractLinesWithoutHtml( (data.opinion?.description??"").substring(0,200) ),
                                       data.opinion?.image_file_name,
                                       data.opinion?.title,
                                     );

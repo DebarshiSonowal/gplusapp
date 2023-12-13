@@ -391,7 +391,8 @@ class _StoryPageState extends State<StoryPage> {
                                                 ? Constance.secondaryColor
                                                 : Constance.primaryColor,
                                             fontWeight: FontWeight.bold,
-                                            decoration: TextDecoration.underline,
+                                            decoration:
+                                                TextDecoration.underline,
                                           ),
                                     ),
                                   ),
@@ -408,17 +409,18 @@ class _StoryPageState extends State<StoryPage> {
                                   width: 1.w,
                                 ),
                                 GestureDetector(
-                                  onTap: (){
-                                            Navigation.instance.navigate('/search',
-                                                args:
-                                                    "${data.selectedArticle?.first_cat_name?.seo_name}");
+                                  onTap: () {
+                                    Navigation.instance.navigate('/search',
+                                        args:
+                                            "${data.selectedArticle?.first_cat_name?.seo_name}");
                                   },
                                   child: SizedBox(
                                     width: 34.w,
                                     child: Text(
                                       (data.selectedArticle?.first_cat_name
                                                   ?.seo_name ??
-                                              "").replaceAll("-", " ")
+                                              "")
+                                          .replaceAll("-", " ")
                                           .capitalizeWords(),
                                       overflow: TextOverflow.ellipsis,
                                       style: Theme.of(Navigation.instance
@@ -616,7 +618,9 @@ class _StoryPageState extends State<StoryPage> {
                                       //     .sublist(0, 4)
                                       //     .join(""),
                                       extractLinesWithoutHtml(
-                                        data.selectedArticle?.description ?? "",
+                                        (data.selectedArticle?.description ??
+                                                "")
+                                            .substring(0, 200),
                                       ),
                                       data.selectedArticle?.image_file_name
                                           ?.toString(),
@@ -823,8 +827,10 @@ class _StoryPageState extends State<StoryPage> {
                                       //     .sublist(0, 4)
                                       //     .join(""),
                                       extractLinesWithoutHtml(
-                                          data.selectedArticle?.description ??
-                                              ""),
+                                        (data.selectedArticle?.description ??
+                                                "")
+                                            .substring(0, 200),
+                                      ),
                                       data.selectedArticle?.image_file_name
                                           .toString(),
                                       data.selectedArticle?.title,
