@@ -130,7 +130,7 @@ class ApiProvider {
       }
     } on DioError catch (e) {
       debugPrint("sendOTP  response: ${e.response}");
-      return GenericResponse.withError(e.error);
+      return GenericResponse.withError(e.response?.data['message']);
     }
   }
   Future<VerifyResponse> verifyOTP(mobile,otp) async {
