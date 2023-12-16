@@ -649,6 +649,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   ? dynamicLinkData.link.path.split("/")[2].trim()
                   : dynamicLinkData.link.path.split("/")[1].trim()),
             );
+          }else{
+            debugPrint("Storage ${Storage.instance.isLoggedIn}");
           }
         });
       } else {

@@ -481,7 +481,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
     final response = await ApiProvider.instance.verifyOTP(mobile, otp);
     if (response.success ?? false) {
       final result =
-          await Storage.instance.setToken(response.access_token ?? "");
+          await Storage.instance.setUser(response.access_token ?? "");
       Navigation.instance.goBack();
       if (response.is_new == 0) {
         getProfile();
