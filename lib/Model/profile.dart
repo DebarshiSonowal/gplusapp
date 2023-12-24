@@ -31,7 +31,7 @@ class Profile {
       id,
       plan_id,
       referral_point_balance,
-      is_new;
+      is_new,completed_percent;
   bool? has_deal_notify_perm,
       has_ghy_connect_notify_perm,
       has_classified_notify_perm;
@@ -90,6 +90,7 @@ class Profile {
     //             ? true
     //             : false;
     is_plan_active = json['is_plan_active']??false;
+    completed_percent = json['completed_percent']==null?0:int.tryParse(json['completed_percent'].toString());
 
   }
 

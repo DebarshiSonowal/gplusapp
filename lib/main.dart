@@ -298,7 +298,7 @@ class _MyAppState extends State<MyApp> {
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) =>
               notificationHandler(message, "Opened Firebase Notification"));
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 

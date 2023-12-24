@@ -103,12 +103,13 @@ class ApiProvider {
       return LoginResponse.withError();
     }
   }
+
   Future<GenericResponse> sendOTP(mobile) async {
     var data = {
       'mobile': mobile,
     };
     BaseOptions option =
-    BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       // 'Authorization': 'Bearer ${Storage.instance.token}'
@@ -133,7 +134,8 @@ class ApiProvider {
       return GenericResponse.withError(e.response?.data['message']);
     }
   }
-  Future<VerifyResponse> verifyOTP(mobile,otp) async {
+
+  Future<VerifyResponse> verifyOTP(mobile, otp) async {
     var data = {
       'mobile': mobile,
       'otp': otp,
@@ -480,30 +482,102 @@ class ApiProvider {
       'Authorization': 'Bearer ${Storage.instance.token}'
       // 'APP-KEY': ConstanceData.app_key
     });
-    var data = {
-      'mobile': mobile,
-      'f_name': f_name,
-      'l_name': l_name,
-      'email': email,
-      'dob': dob,
-      'gender': gender == 'Male'
-          ? 1
-          : gender == 'Female'
-              ? 2
-              : 0,
-      'address': address,
-      'longitude': longitude,
-      'latitude': latitude,
-      'address_id': address_id,
-      'topic_ids': topic_ids,
-      'geo_ids': geo_ids,
-      'has_deal_notify_perm': has_deal_notify_perm,
-      'has_ghy_connect_notify_perm': has_ghy_connect_notify_perm,
-      'has_classified_notify_perm': has_classified_notify_perm,
-      'referred_by_code': referal,
-      'is_new': is_new
-    };
-    var url = "${baseUrl}/profile-update";
+    var data = {};
+    if (mobile != null) {
+      data.addAll({
+        'mobile': mobile,
+      });
+    }
+    if (f_name != null) {
+      data.addAll({
+        'f_name': f_name,
+      });
+    }
+    if (l_name != null) {
+      data.addAll({
+        'l_name': l_name,
+      });
+    }
+    if (email != null) {
+      data.addAll({
+        'email': email,
+      });
+    }
+    if (dob != null) {
+      data.addAll({
+        'dob': dob,
+      });
+    }
+    if (gender != null) {
+      data.addAll({
+        'gender': gender == 'Male'
+            ? 1
+            : gender == 'Female'
+                ? 2
+                : 0,
+      });
+    }
+    if (address != null) {
+      data.addAll({
+        'address': address,
+      });
+    }
+    if (longitude != null) {
+      data.addAll({
+        'longitude': longitude,
+      });
+    }
+    if(latitude!=null) {
+      data.addAll({
+        'latitude': latitude,
+      });
+    }
+    if(address_id!=null){
+      data.addAll({
+        'address_id': address_id,
+
+      });
+    }
+    if(topic_ids!=null){
+      data.addAll({
+        'topic_ids': topic_ids,
+      });
+    }
+    if(geo_ids!=null){
+      data.addAll({
+        'geo_ids': geo_ids,
+      });
+    }
+    if(has_deal_notify_perm!=null){
+      data.addAll({
+        'has_deal_notify_perm': has_deal_notify_perm,
+
+      });
+    }
+    if(has_ghy_connect_notify_perm!=null){
+      data.addAll({
+        'has_ghy_connect_notify_perm': has_ghy_connect_notify_perm,
+
+      });
+    }
+    if(has_classified_notify_perm!=null){
+      data.addAll({
+        'has_classified_notify_perm': has_classified_notify_perm,
+
+      });
+    }
+    if(referal!=null){
+      data.addAll({
+        'referred_by_code': referal,
+
+      });
+    }
+    if(is_new!=null){
+      data.addAll({
+        'is_new': is_new
+      });
+    }
+    var url = "$baseUrl/profile-update";
     // var url = "${baseUrl}/profile";
     dio = Dio(option);
     debugPrint(url.toString());
@@ -1247,7 +1321,7 @@ class ApiProvider {
     });
     var url =
         // "${homeUrl}/opinion/${slug.toString().split(",")[1] == '4' ? 'editorials' : 'opinion'}/${slug.toString().split(",")[0]}";
-        "${homeUrl}/opinion/${(slug.toString().split(",")[1]== '4' ? 'editorials':slug.toString().split(",")[1]== '5' ?'opinion': slug.toString().split(",")[1])}/${slug.toString().split(",")[0]}";
+        "${homeUrl}/opinion/${(slug.toString().split(",")[1] == '4' ? 'editorials' : slug.toString().split(",")[1] == '5' ? 'opinion' : slug.toString().split(",")[1])}/${slug.toString().split(",")[0]}";
     dio = Dio(option);
     debugPrint(url.toString());
     // debugPrint(jsonEncode(data));

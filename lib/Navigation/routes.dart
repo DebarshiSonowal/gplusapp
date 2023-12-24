@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gplusapp/OnBoarding/SplashScreen.dart';
 import 'package:gplusapp/UI/classified/classified_mylist_page.dart';
 import 'package:gplusapp/UI/main/sections/loading_router.dart';
+import 'package:gplusapp/UI/update_profile_details/update_profile_details.dart';
 import 'package:gplusapp/UI/view/no_internet_connection_page.dart';
 
 import '../Authentication/Signin/login_page.dart';
@@ -125,6 +126,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         which: settings.arguments as int,
       ));
 
+
+    case '/updateProfile':
+      FirebaseAnalytics.instance.setCurrentScreen(screenName: 'signup_profile');
+      return FadeTransitionPageRouteBuilder(page: const UpdateProfileDetails());
     case '/profile':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'subscription');
       return FadeTransitionPageRouteBuilder(page: const ProfilePage());

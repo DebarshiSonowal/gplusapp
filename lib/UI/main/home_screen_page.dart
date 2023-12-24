@@ -19,6 +19,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/FirebaseHelper.dart';
 import 'package:gplusapp/Helper/Storage.dart';
@@ -212,7 +213,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             Consumer<DataProvider>(builder: (context, data, _) {
           return (data.floating_button?.status ?? false)
               ? FloatingActionButton(
-                  backgroundColor: (data.floating_button?.color == null|| data.floating_button?.image_url != "")
+                  backgroundColor: (data.floating_button?.color == null ||
+                          data.floating_button?.image_url != "")
                       ? Colors.transparent
                       : hexToColor(
                           data.floating_button?.color.toString() ?? "#7CFC00"),
@@ -241,8 +243,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         )
                       : CachedNetworkImage(
                           imageUrl: data.floating_button!.image_url!,
-                    height: 35.sp,
-                    width: 35.sp,
+                          height: 35.sp,
+                          width: 35.sp,
                         ),
                 )
               : Container();
@@ -649,7 +651,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   ? dynamicLinkData.link.path.split("/")[2].trim()
                   : dynamicLinkData.link.path.split("/")[1].trim()),
             );
-          }else{
+          } else {
             debugPrint("Storage ${Storage.instance.isLoggedIn}");
           }
         });
@@ -733,7 +735,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             listen: false)
         .setCurrent(0);
     await fetchProfile();
-
+    if ((Provider.of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ?? context,
+                    listen: false)
+                .profile
+                ?.is_new ??
+            0) ==
+        1) {
+      askFirstName(context);
+    } else {
+      // askFirstName(context);
+    }
     await fetchStories();
     await fetchHome();
     await fetchOpinion();
@@ -771,14 +783,90 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   getEncrypted(DataProvider data) {
     final plainText =
         "${data.profile?.id}_${DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now())}";
-    final key = Enc.Key.fromBase64(
-        FlutterConfig.get('AES_ENCRYPTION_KEY'));
+    final key = Enc.Key.fromBase64(FlutterConfig.get('AES_ENCRYPTION_KEY'));
     final iv = Enc.IV.fromBase64(FlutterConfig.get('IV'));
-    final encrypter =
-    Enc.Encrypter(Enc.AES(key, mode: Enc.AESMode.cbc));
+    final encrypter = Enc.Encrypter(Enc.AES(key, mode: Enc.AESMode.cbc));
     final encrypted = encrypter.encrypt(plainText, iv: iv);
     debugPrint(
         "$plainText ${data.floating_button?.url}?key=${encrypted.base64}");
     return encrypted;
+  }
+
+  Future<void> askFirstName(BuildContext context) async {
+    final firstNameController = TextEditingController();
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            title: Text(
+              'What should we call you?',
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                    color: Constance.primaryColor,
+                    fontSize: 12.sp,
+                  ),
+            ),
+            content: TextFormField(
+              onChanged: (value) {},
+              controller: firstNameController,
+              decoration: InputDecoration(
+                hintText: "Enter Your First Name",
+                hintStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  color: Constance.primaryColor,
+                  fontSize: 8.sp,
+                ),
+              ),
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                    color: Constance.primaryColor,
+                    fontSize: 10.sp,
+                  ),
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  if (firstNameController.text.isNotEmpty) {
+                    updateProfile(firstNameController.text);
+                  }
+                },
+                child: Text(
+                  "Submit",
+                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                        color: Colors.white,
+                        fontSize: 10.sp,
+                      ),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  void updateProfile(String text) async {
+    final response = await ApiProvider.instance.updateProfile(
+      null,
+      null,
+      text,
+      'l-nam',
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
+    if (response.success ?? false) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "You're all set");
+    } else {
+      // Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Please Try Again");
+    }
   }
 }

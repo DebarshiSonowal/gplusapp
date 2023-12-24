@@ -11,6 +11,7 @@ import 'package:open_settings/open_settings.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Components/about_section.dart';
@@ -34,14 +35,31 @@ class BergerMenuMemPage extends StatefulWidget {
 }
 
 class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
-
-  String? versionCode="";
-
+  late ValueNotifier<double> valueNotifier;
+  String? versionCode = "";
 
   @override
   void initState() {
     super.initState();
     fetchVersion();
+    Future.delayed(Duration.zero, () {
+      valueNotifier = ValueNotifier(double.parse((Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext ??
+                          context,
+                      listen: false)
+                  .profile
+                  ?.completed_percent ??
+              70)
+          .toString()));
+      debugPrint("valueNotifier ${double.parse((Provider.of<DataProvider>(
+          Navigation.instance.navigatorKey.currentContext ??
+              context,
+          listen: false)
+          .profile
+          ?.completed_percent ??
+          70)
+          .toString())}");
+    });
   }
 
   @override
@@ -60,73 +78,162 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   child: SizedBox(
                     height: 12.5.h,
                     width: double.infinity,
-                    child: Column(
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          data.profile?.f_name ?? 'Jonathan Doe',
-                          style: Theme.of(Navigation
-                                  .instance.navigatorKey.currentContext!)
-                              .textTheme
-                              .subtitle2
-                              ?.copyWith(
-                                color: Colors.white,
-                                // fontSize: 19.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Row(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '+91 ${data.profile?.mobile ?? 'XXXXXXXXXX'}',
+                              data.profile?.f_name ?? 'Jonathan Doe',
                               style: Theme.of(Navigation
                                       .instance.navigatorKey.currentContext!)
                                   .textTheme
-                                  .headline6
+                                  .subtitle2
                                   ?.copyWith(
                                     color: Colors.white,
-                                    // fontSize: 15.sp,
+                                    // fontSize: 19.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
                             ),
                             SizedBox(
-                              width: 1.5.w,
+                              height: 2.h,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  '+91 ${data.profile?.mobile ?? 'XXXXXXXXXX'}',
+                                  style: Theme.of(Navigation.instance
+                                          .navigatorKey.currentContext!)
+                                      .textTheme
+                                      .headline6
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                        // fontSize: 15.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                SizedBox(
+                                  width: 1.5.w,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 2.h,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                if ((Provider.of<DataProvider>(
+                                                Navigation.instance.navigatorKey
+                                                        .currentContext ??
+                                                    context,
+                                                listen: false)
+                                            .profile
+                                            ?.is_new ??
+                                        0) ==
+                                    0) {
+                                  logTheHambergerOptionClick(
+                                    Provider.of<DataProvider>(
+                                            Navigation.instance.navigatorKey
+                                                    .currentContext ??
+                                                context,
+                                            listen: false)
+                                        .profile!,
+                                    widget.screen,
+                                    "view_profile",
+                                    "NA",
+                                  );
+                                  Navigation.instance.navigate('/editProfile');
+                                } else {
+                                  Navigation.instance
+                                      .navigate('/updateProfile');
+                                }
+                              },
+                              child: Text(
+                                'View Profile',
+                                style: Theme.of(Navigation
+                                        .instance.navigatorKey.currentContext!)
+                                    .textTheme
+                                    .headline6
+                                    ?.copyWith(
+                                      color: Constance.secondaryColor,
+                                      fontSize: 11.sp,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                              ),
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
                         GestureDetector(
-                          onTap: () {
-                            logTheHambergerOptionClick(
-                              Provider.of<DataProvider>(
-                                      Navigation.instance.navigatorKey
-                                              .currentContext ??
-                                          context,
-                                      listen: false)
-                                  .profile!,
-                              widget.screen,
-                              "view_profile",
-                              "NA",
-                            );
-                            Navigation.instance.navigate('/editProfile');
+                          onTap: (){
+                            if ((Provider.of<DataProvider>(
+                                Navigation.instance.navigatorKey
+                                    .currentContext ??
+                                    context,
+                                listen: false)
+                                .profile
+                                ?.is_new ??
+                                0) ==
+                                0) {
+                              logTheHambergerOptionClick(
+                                Provider.of<DataProvider>(
+                                    Navigation.instance.navigatorKey
+                                        .currentContext ??
+                                        context,
+                                    listen: false)
+                                    .profile!,
+                                widget.screen,
+                                "view_profile",
+                                "NA",
+                              );
+                              Navigation.instance.navigate('/editProfile');
+                            } else {
+                              Navigation.instance
+                                  .navigate('/updateProfile');
+                            }
                           },
-                          child: Text(
-                            'View Profile',
-                            style: Theme.of(Navigation
-                                    .instance.navigatorKey.currentContext!)
-                                .textTheme
-                                .headline6
-                                ?.copyWith(
-                                  color: Constance.secondaryColor,
-                                  fontSize: 11.sp,
-                                  // fontWeight: FontWeight.bold,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 15.w,
+                                height: 15.w,
+                                child: SimpleCircularProgressBar(
+                                  valueNotifier: valueNotifier,
+                                  progressStrokeWidth: 1.5.w,
+                                  backStrokeWidth: 1.5.w,
+                                  onGetText: (double value) {
+                                    return Text(
+                                      '${value.toInt()}',
+                                      style: TextStyle(
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Constance.secondaryColor,
+                                      ),
+                                    );
+                                  },
+                                  // size: 100,
+                                  progressColors: const [
+                                    Constance.secondaryColor
+                                  ],
                                 ),
+                              ),
+                              SizedBox(
+                                height: 1.5.h,
+                              ),
+                              Text(
+                                "Complete Your Profile",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                      fontSize: 7.sp,
+                                      color: Colors.white,
+                                    ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -416,12 +523,11 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                     children: [
                       Text(
                         'Version Code: ${versionCode}',
-                        style:
-                        Theme.of(context).textTheme.headline4?.copyWith(
-                          color: Colors.white,
-                          // fontSize: 19.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.headline4?.copyWith(
+                              color: Colors.white,
+                              // fontSize: 19.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -492,9 +598,6 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     }
   }
 
-
-
-
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       backgroundColor: Colors.white,
@@ -555,14 +658,10 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     required String url,
   }) async {}
 
-  void fetchVersion() async{
+  void fetchVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     setState(() {
       versionCode = "${packageInfo.version}";
     });
   }
-
-
-
-
 }
