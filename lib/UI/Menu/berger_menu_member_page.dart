@@ -51,14 +51,8 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                   ?.completed_percent ??
               70)
           .toString()));
-      debugPrint("valueNotifier ${double.parse((Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ??
-              context,
-          listen: false)
-          .profile
-          ?.completed_percent ??
-          70)
-          .toString())}");
+      debugPrint(
+          "valueNotifier ${double.parse((Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.completed_percent ?? 70).toString())}");
     });
   }
 
@@ -125,15 +119,39 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                if ((Provider.of<DataProvider>(
-                                                Navigation.instance.navigatorKey
-                                                        .currentContext ??
-                                                    context,
-                                                listen: false)
-                                            .profile
-                                            ?.is_new ??
-                                        0) ==
-                                    0) {
+                                if (((Provider.of<DataProvider>(
+                                                    Navigation
+                                                            .instance
+                                                            .navigatorKey
+                                                            .currentContext ??
+                                                        context,
+                                                    listen: false)
+                                                .profile
+                                                ?.f_name ??
+                                            "") !=
+                                        "") &&
+                                    ((Provider.of<DataProvider>(
+                                                    Navigation
+                                                            .instance
+                                                            .navigatorKey
+                                                            .currentContext ??
+                                                        context,
+                                                    listen: false)
+                                                .profile
+                                                ?.l_name ??
+                                            "") !=
+                                        "") &&
+                                    ((Provider.of<DataProvider>(
+                                                    Navigation
+                                                            .instance
+                                                            .navigatorKey
+                                                            .currentContext ??
+                                                        context,
+                                                    listen: false)
+                                                .profile
+                                                ?.email ??
+                                            "") !=
+                                        "")) {
                                   logTheHambergerOptionClick(
                                     Provider.of<DataProvider>(
                                             Navigation.instance.navigatorKey
@@ -167,22 +185,22 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                           ],
                         ),
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             if ((Provider.of<DataProvider>(
-                                Navigation.instance.navigatorKey
-                                    .currentContext ??
-                                    context,
-                                listen: false)
-                                .profile
-                                ?.is_new ??
-                                0) ==
+                                            Navigation.instance.navigatorKey
+                                                    .currentContext ??
+                                                context,
+                                            listen: false)
+                                        .profile
+                                        ?.is_new ??
+                                    0) ==
                                 0) {
                               logTheHambergerOptionClick(
                                 Provider.of<DataProvider>(
-                                    Navigation.instance.navigatorKey
-                                        .currentContext ??
-                                        context,
-                                    listen: false)
+                                        Navigation.instance.navigatorKey
+                                                .currentContext ??
+                                            context,
+                                        listen: false)
                                     .profile!,
                                 widget.screen,
                                 "view_profile",
@@ -190,8 +208,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                               );
                               Navigation.instance.navigate('/editProfile');
                             } else {
-                              Navigation.instance
-                                  .navigate('/updateProfile');
+                              Navigation.instance.navigate('/updateProfile');
                             }
                           },
                           child: Column(

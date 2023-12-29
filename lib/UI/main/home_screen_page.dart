@@ -739,9 +739,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     Navigation.instance.navigatorKey.currentContext ?? context,
                     listen: false)
                 .profile
-                ?.is_new ??
-            0) ==
-        1) {
+                ?.f_name ??
+            "") ==
+        "") {
       askFirstName(context);
     } else {
       // askFirstName(context);
@@ -795,6 +795,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Future<void> askFirstName(BuildContext context) async {
     final firstNameController = TextEditingController();
     return showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -812,9 +813,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               decoration: InputDecoration(
                 hintText: "Enter Your First Name",
                 hintStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
-                  color: Constance.primaryColor,
-                  fontSize: 8.sp,
-                ),
+                      color: Constance.primaryColor,
+                      fontSize: 8.sp,
+                    ),
               ),
               style: Theme.of(context).textTheme.displaySmall?.copyWith(
                     color: Constance.primaryColor,
@@ -825,7 +826,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               ElevatedButton(
                 onPressed: () {
                   if (firstNameController.text.isNotEmpty) {
-                    updateProfile(firstNameController.text);
+                    updateProfile(firstNameController.text,context);
                   }
                 },
                 child: Text(
@@ -841,7 +842,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         });
   }
 
-  void updateProfile(String text) async {
+  void updateProfile(String text,BuildContext context) async {
     final response = await ApiProvider.instance.updateProfile(
       null,
       null,
@@ -864,6 +865,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (response.success ?? false) {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "You're all set");
+      fetchProfile();
     } else {
       // Navigator.pop(context);
       Fluttertoast.showToast(msg: "Please Try Again");

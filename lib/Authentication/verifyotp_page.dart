@@ -361,8 +361,10 @@ class _VerifyOTPState extends State<VerifyOTP> {
 
   void getProfile() async {
     Navigation.instance.navigate("/loadingDialog");
-    final reponse = await ApiProvider.instance.getprofile();
-    if (reponse.success ?? false) {
+    final reponse = await ApiProvider.instance
+        .login(widget.number);
+    if (reponse.status ?? false) {
+      Storage.instance.setUser(reponse.access_token ?? "");
       Provider.of<DataProvider>(
               Navigation.instance.navigatorKey.currentContext ?? context,
               listen: false)
@@ -374,9 +376,17 @@ class _VerifyOTPState extends State<VerifyOTP> {
           reponse.profile?.l_name == "" ||
           reponse.profile?.is_new == 1) {
         // Storage.instance.setToken(reponse.access_token ?? "");
-        Navigation.instance.goBack();
-        Navigation.instance
-            .navigateAndReplace('/terms&conditions', args: widget.number);
+        // Navigation.instance.goBack();
+        // Navigation.instance
+        //     .navigateAndReplace('/terms&conditions', args: widget.number);
+        fetchToken();
+        try {
+          timer?.cancel();
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+        // Storage.instance.setUser(reponse.access_token ?? "");
+        Navigation.instance.navigateAndRemoveUntil('/main');
       } else {
         fetchToken();
         try {
@@ -486,8 +496,9 @@ class _VerifyOTPState extends State<VerifyOTP> {
       if (response.is_new == 0) {
         getProfile();
       } else {
-        Navigation.instance
-            .navigateAndReplace('/terms&conditions', args: widget.number);
+        getProfile();
+        // Navigation.instance
+        //     .navigateAndReplace('/terms&conditions', args: widget.number);
       }
     } else {
       Navigation.instance.goBack();

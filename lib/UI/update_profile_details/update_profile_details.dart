@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
@@ -31,7 +32,7 @@ class _UpdateProfileDetailsState extends State<UpdateProfileDetails> {
   var lastName = TextEditingController();
   var email = TextEditingController();
   var referralCode = TextEditingController();
-  var date = 'DOB', address = "", address_id = "0",id = '0';
+  var date = 'DOB', address = "", address_id = "0", id = '0';
   bool agreed = false;
   double longitude = 0, latitude = 0;
   List<GeoTopick> selGeo = [];
@@ -54,6 +55,7 @@ class _UpdateProfileDetailsState extends State<UpdateProfileDetails> {
       });
       fetchTopicks();
       fetchAddress();
+      fetchData();
     });
   }
 
@@ -370,7 +372,7 @@ class _UpdateProfileDetailsState extends State<UpdateProfileDetails> {
                               ? Colors.white
                               : Constance.primaryColor,
                           // fontSize: 2.h,
-                      fontSize: 13.sp,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -401,7 +403,7 @@ class _UpdateProfileDetailsState extends State<UpdateProfileDetails> {
                 return SizedBox(
                   // height: 15.h,
                   width: double.infinity,
-                   child: Wrap(
+                  child: Wrap(
                     children: [
                       for (int i = 0; i < data.geoTopicks.length; i++)
                         GestureDetector(
@@ -471,7 +473,41 @@ class _UpdateProfileDetailsState extends State<UpdateProfileDetails> {
                         horizontal: 8.w,
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      if (agreed) {
+                        if (firstName.text.isNotEmpty ||
+                            lastName.text.isNotEmpty ||
+                            email.text.isNotEmpty ||
+                            date != "" ||
+                            referralCode.text.isNotEmpty) {
+                          if (address != "") {
+                            signUp(
+                                context,
+                                firstName.text,
+                                lastName.text,
+                                email.text,
+                                date,
+                                referralCode.text,
+                                address_id,
+                                Provider.of<DataProvider>(context,
+                                            listen: false)
+                                        .profile
+                                        ?.mobile ??
+                                    "");
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: "Enter the address details");
+                          }
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "Enter the details properly");
+                        }
+                      } else {
+                        Fluttertoast.showToast(
+                            msg:
+                                "You have to agree to our terms and conditions");
+                      }
+                    },
                     child: Text(
                       'SIGN UP',
                       style: Theme.of(context).textTheme.subtitle2?.copyWith(
@@ -523,8 +559,8 @@ class _UpdateProfileDetailsState extends State<UpdateProfileDetails> {
     if (response.success ?? false) {
       Navigation.instance.goBack();
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setAddressess(response.addresses);
       if (mounted) {
         setState(() {
@@ -903,39 +939,102 @@ class _UpdateProfileDetailsState extends State<UpdateProfileDetails> {
     if (response.success ?? false) {
       // Navigation.instance.goBack();
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setTopicks(response.topicks);
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setGeoTopicks(response.geoTopicks);
+    }
+  }
 
-      // for (var i in response.geoTopicks) {
-      //   print(i.id);
-      //   for (var j in Provider.of<DataProvider>(
-      //           Navigation.instance.navigatorKey.currentContext ?? context,
-      //           listen: false)
-      //       .mygeoTopicks) {
-      //     if (i.id == j.id) {
-      //       selGeo.add(j);
-      //     }
-      //   }
-      // }
-      // for (var i in Provider.of<DataProvider>(
-      //         Navigation.instance.navigatorKey.currentContext ?? context,
-      //         listen: false)
-      //     .mytopicks) {
-      //   for (var j in response.topicks) {
-      //     if (i.id == j.id) {
-      //       selTop.add(j);
-      //     }
-      //   }
-      // }
+  void fetchData() {
+    final data = Provider.of<DataProvider>(context, listen: false).profile;
+    if ((data?.f_name?.isNotEmpty ?? false) && (data?.f_name != "")) {
+      firstName.text = data?.f_name ?? "";
+    }
+    if ((data?.l_name?.isNotEmpty ?? false) && (data?.l_name != "")) {
+      lastName.text = data?.l_name ?? "";
+    }
+    if ((data?.email?.isNotEmpty ?? false) && (data?.email != "")) {
+      email.text = data?.email ?? "";
+    }
+    setState(() {});
+  }
+
+  void signUp(BuildContext context, String fname, String lname, String email,
+      String date, String referal, String address_id, String mobile) async {
+    Navigation.instance.navigate("/loadingDialog");
+    final response = await ApiProvider.instance.updateProfile(
+      address_id,
+      mobile,
+      fname,
+      lname,
+      email,
+      date,
+      address,
+      longitude,
+      latitude,
+      null,
+      getComaSeparated(selGeo),
+      true,
+      true,
+      true,
+      null,
+      referal,
+      null,
+    );
+    if (response.success ?? false) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "You're all set");
+      fetchProfile();
+    } else {
+      // Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Please Try Again");
+    }
+  }
+
+  Future<void> fetchProfile() async {
+    debugPrint('object profile');
+    // Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.getprofile();
+    if (response.success ?? false) {
+
+      debugPrint('object profile');
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setProfile(response.profile!);
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setMyTopicks(response.topicks);
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setMyGeoTopicks(response.geoTopicks);
+      Provider.of<DataProvider>(
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
+          .setFloatingButton(response.floating_button!);
+      Navigation.instance.goBack();
+      // initUniLinks();
+      // initUniLinksResume();
     } else {
       // Navigation.instance.goBack();
-      // showError("Something went wrong");
     }
+  }
+  String getComaSeparated(List<dynamic> list) {
+    String temp = "";
+    for (int i = 0; i < list.length; i++) {
+      if (i == 0) {
+        temp = '${list[i].id.toString()},';
+      } else {
+        temp += '${list[i].id.toString()},';
+      }
+    }
+    return temp.endsWith(",") ? temp.substring(0, temp.length - 1) : temp;
   }
 
 }
