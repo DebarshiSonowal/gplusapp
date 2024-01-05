@@ -34,6 +34,7 @@ import 'Navigation/routes.dart';
 import 'Networking/api_provider.dart';
 import 'Networking/connection_checker.dart';
 import 'firebase_options.dart';
+import 'package:http/http.dart' as http;
 
 late AndroidNotificationChannel channel;
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -74,7 +75,6 @@ Future<void> main() async {
 
   await setupFlutterNotifications();
 
-
   StoreConfig(
     store: Store.appleStore,
     apiKey: FlutterConfig.get('revenueCatIOSKey') ?? "",
@@ -82,7 +82,6 @@ Future<void> main() async {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-
     runApp(const MyApp());
   });
 }
@@ -108,7 +107,8 @@ void initDeepLink() async {
   });
 }
 
-void sendToRoute(String route, data, String? category,BuildContext context) async {
+void sendToRoute(
+    String route, data, String? category, BuildContext context) async {
   switch (route) {
     case "opinion":
       // Navigation.instance.navigate('/main');
@@ -236,22 +236,46 @@ void notificationHandler(RemoteMessage? message, String msg) async {
       notification.type,
       notification.post_id,
       notification.vendor_id,
-      notification.category_id);
+      notification.category_id,
+      notification.seo_name_category,
+      notification.title
+      // notification.image
+      );
 }
 
-void showFlutterNotification(RemoteMessage message) {
+void showFlutterNotification(RemoteMessage message) async {
   debugPrint(
       "Showing notification ${message.data} ${message.notification?.title} ${message.notification?.body}");
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
+
   flutterLocalNotificationsPlugin.show(
       notification.hashCode,
       // notification.title,
       message.data['title'],
       // notification.body,
       message.data['body'],
-      NotificationHelper.notificationDetails,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          NotificationHelper.channel.id,
+          NotificationHelper.channel.name,
+          channelDescription: NotificationHelper.channel.description,
+          icon: "@drawable/ic_notification",
+          styleInformation: message.data['image_file_name'] == null
+              ? null
+              : await getStyleInformation(message.data['image_file_name']),
+        ),
+      ),
       payload: "${message.data}");
+}
+
+Future<StyleInformation?> getStyleInformation(imageUrl) async {
+  http.Response response = await http.get(Uri.parse(imageUrl));
+  // var buffer = bytes.buffer;
+  final bigPictureStyleInformation = BigPictureStyleInformation(
+      ByteArrayAndroidBitmap.fromBase64String(
+          base64Encode(response.bodyBytes)));
+  return bigPictureStyleInformation;
 }
 
 class MyApp extends StatefulWidget {
@@ -296,7 +320,7 @@ class _MyAppState extends State<MyApp> {
       FirebaseMessaging.onMessage.listen(showFlutterNotification);
 
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) =>
-              notificationHandler(message, "Opened Firebase Notification"));
+          notificationHandler(message, "Opened Firebase Notification"));
     } catch (e) {
       debugPrint(e.toString());
     }

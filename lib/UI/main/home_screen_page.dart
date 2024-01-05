@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   StreamSubscription? _sub;
 
   void sendToRoute(String route, data, String? category) async {
-    debugPrint("our route $route $data $category");
+    debugPrint("our route1 $route\n$data\n$category");
     switch (route) {
       // case "story":
       //   // Navigation.instance.navigate('/main');
@@ -79,13 +79,25 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       //   Navigation.instance
       //       .navigate('/story', args: '$category,$data,home_page');
       //   break;
+      case "poll_of_the_week":
+        Navigation.instance.navigate(
+          '/pollPage',
+        );
+        break;
       case "opinion":
         Navigation.instance
             .navigate('/opinionDetails', args: '$data,$category');
         break;
       default:
-        Navigation.instance
-            .navigate('/story', args: '$category,$data,home_page');
+        if (category == 'poll_of_the_week') {
+          Navigation.instance.navigate(
+            '/pollPage',
+          );
+        } else {
+          Navigation.instance
+              .navigate('/story', args: '$category,$data,home_page');
+        }
+
         break;
     }
   }
@@ -133,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     fetchPoll();
     fetchOpinion();
     fetchGPlusExcl();
-    fetchToppicks();
+    fetchTopPicks();
     fetchAds();
     final result = await ApiProvider.instance.getHomeAlbum();
     if (result.success ?? false) {
@@ -292,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
-  void fetchToppicks() async {
+  void fetchTopPicks() async {
     final response = await ApiProvider.instance.getTopPicks(1);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
@@ -331,9 +343,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           });
         }
       }
-      fetchToppicks();
+      fetchTopPicks();
     } else {
-      fetchToppicks();
+      fetchTopPicks();
     }
   }
 
@@ -631,6 +643,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         value: Storage.instance.isLoggedIn ? "logged_in" : "guest");
   }
 
+//https://guwahatiplus.page.link/cku8b9oM42AoqLNAA
   Future<void> getDynamicLink() async {
     FirebaseDynamicLinks.instance.onLink
         .listen((PendingDynamicLinkData? dynamicLinkData) {
@@ -639,11 +652,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         debugPrint("URL link2 ${deepLink.path.split("/")}");
         Future.delayed(const Duration(seconds: 0), () {
           if (Storage.instance.isLoggedIn) {
-            bool isOpinion = deepLink.path.split("/")[1] == "opinion";
+            bool isOpinion = (deepLink.path.split("/")[1] == "opinion");
+            bool isPollOfTheWeek =
+                deepLink.path.split("/")[1] == "poll_of_the_week";
             sendToRoute(
-              isOpinion
-                  ? dynamicLinkData.link.path.split("/")[1].trim()
-                  : dynamicLinkData.link.path.split("/")[2].trim(),
+              isPollOfTheWeek
+                  ? deepLink.path.split("/")[1].trim()
+                  : (isOpinion
+                      ? dynamicLinkData.link.path.split("/")[1].trim()
+                      : dynamicLinkData.link.path.split("/")[2].trim()),
               isOpinion
                   ? dynamicLinkData.link.path.split("/")[3].trim()
                   : dynamicLinkData.link.path.split("/")[2].trim(),
@@ -724,7 +741,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       notification.type,
                       notification.post_id,
                       notification.vendor_id,
-                      notification.category_id);
+                      notification.category_id,
+                      notification.seo_name_category,
+                      notification.title
+                      // notification.image
+                      );
                 }
               },
             ),
@@ -826,7 +847,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               ElevatedButton(
                 onPressed: () {
                   if (firstNameController.text.isNotEmpty) {
-                    updateProfile(firstNameController.text,context);
+                    updateProfile(firstNameController.text, context);
                   }
                 },
                 child: Text(
@@ -842,7 +863,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         });
   }
 
-  void updateProfile(String text,BuildContext context) async {
+  void updateProfile(String text, BuildContext context) async {
     final response = await ApiProvider.instance.updateProfile(
       null,
       null,

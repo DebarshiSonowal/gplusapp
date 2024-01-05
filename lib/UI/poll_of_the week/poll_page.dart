@@ -63,7 +63,7 @@ class _PollPageState extends State<PollPage> {
                   ],
                 ),
               ),
-              ListView.separated(
+              data.pollOfTheWeek!=null?ListView.separated(
                   shrinkWrap: true,
                   itemBuilder: (context, count) {
                     int current = 0;
@@ -217,7 +217,7 @@ class _PollPageState extends State<PollPage> {
                       height: 2.h,
                     );
                   },
-                  itemCount: 1),
+                  itemCount: 1):Container(),
             ],
           );
         }),

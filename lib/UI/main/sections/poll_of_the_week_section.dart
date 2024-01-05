@@ -1,7 +1,10 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 
@@ -49,21 +52,17 @@ class PollOfTheWeekSection extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                // IconButton(
-                //   onPressed: () {
-                //     // Share.share(data
-                //     //     .selectedArticle?.web_url ==
-                //     //     ""
-                //     //     ? 'check out our website https://guwahatiplus.com/'
-                //     //     : '${data.selectedArticle?.web_url}');
-                //   },
-                //   icon: Icon(
-                //     Icons.share,
-                //     color: Storage.instance.isDarkMode
-                //         ? Colors.white
-                //         : Constance.primaryColor,
-                //   ),
-                // ),
+                IconButton(
+                  onPressed: () {
+                    sharePollOfTheWeek("poll_of_the_week",data.pollOfTheWeek?.title?.replaceAll(" ", "_").toLowerCase(),data.pollOfTheWeek?.id);
+                  },
+                  icon: Icon(
+                    Icons.share,
+                    color: Storage.instance.isDarkMode
+                        ? Colors.white
+                        : Constance.primaryColor,
+                  ),
+                ),
               ],
             ),
           ),
@@ -86,251 +85,263 @@ class PollOfTheWeekSection extends StatelessWidget {
           SizedBox(
             height: 1.h,
           ),
-          data.pollOfTheWeek!=null?Container(
-            padding: EdgeInsets.symmetric(horizontal: 0.5.w),
-            child: ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemBuilder: (cont, count) {
-                  var item = data.pollOfTheWeek;
-                  // var value =
-                  //     Constance.pollValue[count];
-                  return Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 2.w, vertical: 1.h),
-                        child: LinearPercentIndicator(
-                          barRadius: const Radius.circular(5),
-                          width: 95.w,
-                          lineHeight: 5.h,
-                          percent: data.pollOfTheWeek?.is_polled == 'false'
-                              ? 0
-                              : (getOption(count, data) / 100),
-                          center: const Text(
-                            "",
-                            style: TextStyle(fontSize: 12.0),
-                          ),
-                          // trailing: Icon(Icons.mood),
-                          linearStrokeCap: LinearStrokeCap.roundAll,
-                          backgroundColor: Colors.white,
-                          progressColor: Constance.secondaryColor,
-                        ),
-                      ),
-                      Theme(
-                        data: ThemeData(
-                          unselectedWidgetColor: Colors.grey.shade900,
-                          backgroundColor: Colors.grey.shade200,
-                        ),
-                        child: RadioListTile(
-                          controlAffinity: ListTileControlAffinity.leading,
-                          selected:
-                              poll == getOptionName(count, data) ? true : false,
-                          tileColor: Colors.grey.shade300,
-                          selectedTileColor: Colors.black,
-                          value: getOptionName(count, data),
-                          activeColor: Colors.black,
-                          groupValue: poll,
-                          onChanged: (val) {
-                            if (data.pollOfTheWeek!.has_permission ?? false) {
-                              if ((poll == ""||poll!=getOptionName(count, data))&&(checkIfExists(data,poll))) {
-                                poll = getOptionName(count, data);
-                                debugPrint(
-                                    "Title ${poll.toLowerCase().replaceAll(" ", "_")}");
-                                // update();
+          data.pollOfTheWeek != null
+              ? Container(
+                  padding: EdgeInsets.symmetric(horizontal: 0.5.w),
+                  child: ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (cont, count) {
+                        var item = data.pollOfTheWeek;
+                        // var value =
+                        //     Constance.pollValue[count];
+                        return Stack(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 2.w, vertical: 1.h),
+                              child: LinearPercentIndicator(
+                                barRadius: const Radius.circular(5),
+                                width: 95.w,
+                                lineHeight: 5.h,
+                                percent:
+                                    data.pollOfTheWeek?.is_polled == 'false'
+                                        ? 0
+                                        : (getOption(count, data) / 100),
+                                center: const Text(
+                                  "",
+                                  style: TextStyle(fontSize: 12.0),
+                                ),
+                                // trailing: Icon(Icons.mood),
+                                linearStrokeCap: LinearStrokeCap.roundAll,
+                                backgroundColor: Colors.white,
+                                progressColor: Constance.secondaryColor,
+                              ),
+                            ),
+                            Theme(
+                              data: ThemeData(
+                                unselectedWidgetColor: Colors.grey.shade900,
+                                backgroundColor: Colors.grey.shade200,
+                              ),
+                              child: RadioListTile(
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
+                                selected: poll == getOptionName(count, data)
+                                    ? true
+                                    : false,
+                                tileColor: Colors.grey.shade300,
+                                selectedTileColor: Colors.black,
+                                value: getOptionName(count, data),
+                                activeColor: Colors.black,
+                                groupValue: poll,
+                                onChanged: (val) {
+                                  if (data.pollOfTheWeek!.has_permission ??
+                                      false) {
+                                    if ((poll == "" ||
+                                            poll !=
+                                                getOptionName(count, data)) &&
+                                        (checkIfExists(data, poll))) {
+                                      poll = getOptionName(count, data);
+                                      debugPrint(
+                                          "Title ${poll.toLowerCase().replaceAll(" ", "_")}");
+                                      // update();
 
-                                postPollOfTheWeek(data.pollOfTheWeek?.id, poll);
-                              } else {
-                                debugPrint("Who $poll");
-                                Fluttertoast.showToast(msg: "Poll already answered");
-                              }
-                            } else {
-                              showNotaMember();
-                            }
-                          },
-                          title: Text(
-                            getOptionName(count, data),
-                            style:
-                                Theme.of(context).textTheme.headline6?.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                          secondary: SizedBox(
-                            height: 7.h,
-                            width: 25.w,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  item?.is_polled == 'false'
-                                      ? ''
-                                      : '${getOption(count, data)}%',
+                                      postPollOfTheWeek(
+                                          data.pollOfTheWeek?.id, poll);
+                                    } else {
+                                      debugPrint("Who $poll");
+                                      Fluttertoast.showToast(
+                                          msg: "Poll already answered");
+                                    }
+                                  } else {
+                                    showNotaMember();
+                                  }
+                                },
+                                title: Text(
+                                  getOptionName(count, data),
                                   style: Theme.of(context)
                                       .textTheme
-                                      .headline5
+                                      .headline6
                                       ?.copyWith(
-                                          color: Colors.black, fontSize: 1.7.h
-                                          // fontWeight: FontWeight.bold,
-                                          ),
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
-                                const Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.black,
-                                )
-                              ],
+                                secondary: SizedBox(
+                                  height: 7.h,
+                                  width: 25.w,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        item?.is_polled == 'false'
+                                            ? ''
+                                            : '${getOption(count, data)}%',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5
+                                            ?.copyWith(
+                                                color: Colors.black,
+                                                fontSize: 1.7.h
+                                                // fontWeight: FontWeight.bold,
+                                                ),
+                                      ),
+                                      const Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: Colors.black,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
+                          ],
+                        );
+                      },
+                      separatorBuilder: (cont, inde) {
+                        return SizedBox(
+                          width: 10.w,
+                        );
+                      },
+                      itemCount: 3),
+                )
+              : Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  width: double.infinity,
+                  height: 20.h,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 2.w, vertical: 1.h),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        width: double.infinity,
+                        height: 5.h,
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.white,
+                          highlightColor: Colors.grey.shade300,
+                          enabled: true,
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 2.h,
+                                width: 2.h,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                    )),
+                              ),
+                              SizedBox(
+                                width: 5.w,
+                              ),
+                              Container(
+                                color: Colors.grey.shade200,
+                                height: 1.5.h,
+                                width: 40.w,
+                              ),
+                              const Spacer(),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.grey.shade300,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 2.w, vertical: 1.h),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        width: double.infinity,
+                        height: 5.h,
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.white,
+                          highlightColor: Colors.grey.shade300,
+                          enabled: true,
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 2.h,
+                                width: 2.h,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                    )),
+                              ),
+                              SizedBox(
+                                width: 5.w,
+                              ),
+                              Container(
+                                color: Colors.grey.shade200,
+                                height: 1.5.h,
+                                width: 40.w,
+                              ),
+                              const Spacer(),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.grey.shade300,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 2.w, vertical: 1.h),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        width: double.infinity,
+                        height: 5.h,
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.white,
+                          highlightColor: Colors.grey.shade300,
+                          enabled: true,
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 2.h,
+                                width: 2.h,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                    )),
+                              ),
+                              SizedBox(
+                                width: 5.w,
+                              ),
+                              Container(
+                                color: Colors.grey.shade200,
+                                height: 1.5.h,
+                                width: 40.w,
+                              ),
+                              const Spacer(),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.grey.shade300,
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ],
-                  );
-                },
-                separatorBuilder: (cont, inde) {
-                  return SizedBox(
-                    width: 10.w,
-                  );
-                },
-                itemCount: 3),
-          ):Container(
-            padding: EdgeInsets.symmetric(horizontal: 5.w),
-            width: double.infinity,
-            height: 20.h,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 2.w, vertical: 1.h),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  width: double.infinity,
-                  height: 5.h,
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.white,
-                    highlightColor: Colors.grey.shade300,
-                    enabled: true,
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 2.h,
-                          width: 2.h,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                            )
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5.w,
-                        ),
-                        Container(
-                          color: Colors.grey.shade200,
-                          height: 1.5.h,
-                          width: 40.w,
-                        ),
-                        const Spacer(),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.grey.shade300,
-                        ),
-                      ],
-                    ),
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 2.w, vertical: 1.h),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  width: double.infinity,
-                  height: 5.h,
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.white,
-                    highlightColor: Colors.grey.shade300,
-                    enabled: true,
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 2.h,
-                          width: 2.h,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                              )
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5.w,
-                        ),
-                        Container(
-                          color: Colors.grey.shade200,
-                          height: 1.5.h,
-                          width: 40.w,
-                        ),
-                        const Spacer(),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.grey.shade300,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 2.w, vertical: 1.h),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  width: double.infinity,
-                  height: 5.h,
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.white,
-                    highlightColor: Colors.grey.shade300,
-                    enabled: true,
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 2.h,
-                          width: 2.h,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                              )
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5.w,
-                        ),
-                        Container(
-                          color: Colors.grey.shade200,
-                          height: 1.5.h,
-                          width: 40.w,
-                        ),
-                        const Spacer(),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.grey.shade300,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
           SizedBox(
             height: 1.h,
           ),
@@ -364,8 +375,11 @@ class PollOfTheWeekSection extends StatelessWidget {
         return data.pollOfTheWeek?.option1 ?? "";
     }
   }
-  bool checkIfExists(data,poll){
-    if(poll==(data.pollOfTheWeek?.option1 ?? "")||poll==(data.pollOfTheWeek?.option2 ?? "")||poll==(data.pollOfTheWeek?.option3 ?? "")){
+
+  bool checkIfExists(data, poll) {
+    if (poll == (data.pollOfTheWeek?.option1 ?? "") ||
+        poll == (data.pollOfTheWeek?.option2 ?? "") ||
+        poll == (data.pollOfTheWeek?.option3 ?? "")) {
       return false;
     }
     return true;
@@ -416,5 +430,33 @@ class PollOfTheWeekSection extends StatelessWidget {
 
   getAnswer(String answer) {
     return answer;
+  }
+
+  Future<void> sharePollOfTheWeek(title, description,id) async {
+    debugPrint("Share $title\n$description");
+    final dynamicLinkParams = DynamicLinkParameters(
+      link:
+          Uri.parse("${FlutterConfig.get('domain')}/PollOfTheWeek/$description/$title/$id"),
+      uriPrefix: FlutterConfig.get('customHostDeepLink'),
+      socialMetaTagParameters: SocialMetaTagParameters(
+        title: title,
+        description: description,
+      ),
+      androidParameters: AndroidParameters(
+        packageName: FlutterConfig.get("androidPackage"),
+      ),
+      iosParameters: IOSParameters(
+        bundleId: FlutterConfig.get('iosBundleId'),
+      ),
+      navigationInfoParameters: const NavigationInfoParameters(
+        forcedRedirectEnabled: true,
+      ),
+    );
+    final dynamicLink = await FirebaseDynamicLinks.instance.buildShortLink(
+      dynamicLinkParams,
+      shortLinkType: ShortDynamicLinkType.unguessable,
+    );
+    debugPrint("${dynamicLink.shortUrl}");
+    Share.share(dynamicLink.shortUrl.toString());
   }
 }

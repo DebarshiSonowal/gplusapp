@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gplusapp/OnBoarding/SplashScreen.dart';
+import 'package:gplusapp/UI/EmergencyPage/emergency_page.dart';
 import 'package:gplusapp/UI/classified/classified_mylist_page.dart';
 import 'package:gplusapp/UI/main/sections/loading_router.dart';
 import 'package:gplusapp/UI/update_profile_details/update_profile_details.dart';
@@ -369,6 +370,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return FadeTransitionPageRouteBuilder(page: const BlockedUserListPage());
     case '/competitions':
       return FadeTransitionPageRouteBuilder(page: CompetitionDynamicPage(url: settings.arguments as String, ));
+    case '/emergency':
+      return FadeTransitionPageRouteBuilder(
+          page: EmergencyPage(title: settings.arguments as String,
+      ));
 
     //Main
     case '/main':

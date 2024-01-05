@@ -3502,7 +3502,7 @@ class ApiProvider {
   }
 
   Future<PollOfTheWeekResponse> getPollOfTheWeek() async {
-    var url = "${baseUrl}/app/poll-question";
+    var url = "$baseUrl/app/poll-question";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',

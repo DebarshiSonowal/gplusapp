@@ -38,6 +38,7 @@ class NotificationHelper {
       NotificationHelper.channel.name,
       channelDescription: NotificationHelper.channel.description,
       icon: "@drawable/ic_notification",
+
       // other properties...
     ),
     iOS: DarwinNotificationDetails(
@@ -91,7 +92,7 @@ class NotificationHelper {
           notification.type,
           notification.post_id,
           notification.vendor_id,
-          notification.category_id);
+          notification.category_id,notification.seo_name_category,notification.title);
     } else {
       try {
         OpenFile.open(notificationResponse.payload!);
@@ -147,12 +148,12 @@ class NotificationHelper {
   }
 
   static void setRead(String? id, seoName, categoryName, type, postId, vendorId,
-      categoryId) async {
+      categoryId,seo_name_category,title) async {
     final response = await ApiProvider.instance.notificationRead(id);
     if (response.success ?? false) {
       fetchNotification();
       sendToDestination(
-          seoName, categoryName, type, postId, vendorId, categoryId);
+          seoName, categoryName, type, postId, vendorId, categoryId,seo_name_category,title);
     } else {
       showError(response.message ?? "Something went wrong");
     }
@@ -172,7 +173,7 @@ class NotificationHelper {
   }
 
   static void sendToDestination(
-      seoName, categoryName, type, id, vendorId, categoryId) async {
+      seoName, categoryName, type, id, vendorId, categoryId,seo_name_category,title) async {
     switch (type) {
       case "news":
         debugPrint("News clicked ${categoryName},${seoName} ");
@@ -184,7 +185,7 @@ class NotificationHelper {
                 ?.is_plan_active ??
             false)) {
           Navigation.instance
-              .navigate('/story', args: '${categoryName},${seoName},home_page');
+              .navigate('/story', args: '$categoryName,$seoName,home_page');
         }
         break;
       case "opinion":
@@ -195,9 +196,9 @@ class NotificationHelper {
             .profile
             ?.is_plan_active ??
             false)) {
-          Navigation.instance.navigate('/opinionPage');
+          Navigation.instance.navigate('/opinionPage',args: "${seo_name_category}");
           Navigation.instance
-              .navigate('/opinionDetails', args: '${seoName},${categoryId}');
+              .navigate('/opinionDetails', args: '$seoName,$categoryId');
         }
         break;
       case "ghy_connect":
@@ -263,8 +264,8 @@ class NotificationHelper {
         Navigation.instance
             .navigate('/story', args: '${categoryName},${seoName},home_page');
         break;
-
       default:
+        Navigation.instance.navigate("/emergency",args: title);
         break;
     }
   }

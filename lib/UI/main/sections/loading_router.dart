@@ -32,7 +32,7 @@ class _LoadingRouterState extends State<LoadingRouter> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero,(){
-      Navigation.instance.navigateAndReplace("/main");
+      Navigation.instance.navigateAndRemoveUntil("/main");
       debugPrint("OWE ${widget.deepLink.split("/")}");
       if (Storage.instance.isLoggedIn) {
         bool isOpinion = widget.deepLink.split("/")[3] == "opinion";
@@ -57,6 +57,10 @@ class _LoadingRouterState extends State<LoadingRouter> {
       //   Navigation.instance
       //       .navigate('/story', args: '$category,$data,home_page');
       //   break;
+      case "poll_of_the_week":
+        Navigation.instance
+            .navigate('/pollPage',);
+        break;
       case "opinion":
         Navigation.instance
             .navigate('/opinionDetails', args: '$data,$category');
