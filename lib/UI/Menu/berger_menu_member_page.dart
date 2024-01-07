@@ -35,7 +35,7 @@ class BergerMenuMemPage extends StatefulWidget {
 }
 
 class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
-  late ValueNotifier<double> valueNotifier;
+  ValueNotifier<double>? valueNotifier;
   String? versionCode = "";
 
   @override
@@ -119,54 +119,30 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                if (((Provider.of<DataProvider>(
-                                                    Navigation
-                                                            .instance
-                                                            .navigatorKey
-                                                            .currentContext ??
-                                                        context,
-                                                    listen: false)
-                                                .profile
-                                                ?.f_name ??
-                                            "") !=
-                                        "") &&
-                                    ((Provider.of<DataProvider>(
-                                                    Navigation
-                                                            .instance
-                                                            .navigatorKey
-                                                            .currentContext ??
-                                                        context,
-                                                    listen: false)
-                                                .profile
-                                                ?.l_name ??
-                                            "") !=
-                                        "") &&
-                                    ((Provider.of<DataProvider>(
-                                                    Navigation
-                                                            .instance
-                                                            .navigatorKey
-                                                            .currentContext ??
-                                                        context,
-                                                    listen: false)
-                                                .profile
-                                                ?.email ??
-                                            "") !=
-                                        "")) {
-                                  logTheHambergerOptionClick(
+                                if (checkIfProfileNeedCreation(
                                     Provider.of<DataProvider>(
                                             Navigation.instance.navigatorKey
                                                     .currentContext ??
                                                 context,
                                             listen: false)
+                                        .profile)) {
+                                  Navigation.instance
+                                      .navigate('/updateProfile');
+
+                                } else {
+                                  logTheHambergerOptionClick(
+                                    Provider.of<DataProvider>(
+                                        Navigation.instance.navigatorKey
+                                            .currentContext ??
+                                            context,
+                                        listen: false)
                                         .profile!,
                                     widget.screen,
                                     "view_profile",
                                     "NA",
                                   );
                                   Navigation.instance.navigate('/editProfile');
-                                } else {
-                                  Navigation.instance
-                                      .navigate('/updateProfile');
+
                                 }
                               },
                               child: Text(
@@ -217,25 +193,27 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                               SizedBox(
                                 width: 15.w,
                                 height: 15.w,
-                                child: SimpleCircularProgressBar(
-                                  valueNotifier: valueNotifier,
-                                  progressStrokeWidth: 1.5.w,
-                                  backStrokeWidth: 1.5.w,
-                                  onGetText: (double value) {
-                                    return Text(
-                                      '${value.toInt()}',
-                                      style: TextStyle(
-                                        fontSize: 15.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: Constance.secondaryColor,
+                                child: valueNotifier == null
+                                    ? Container()
+                                    : SimpleCircularProgressBar(
+                                        valueNotifier: valueNotifier,
+                                        progressStrokeWidth: 1.5.w,
+                                        backStrokeWidth: 1.5.w,
+                                        onGetText: (double value) {
+                                          return Text(
+                                            '${value.toInt()}',
+                                            style: TextStyle(
+                                              fontSize: 15.sp,
+                                              fontWeight: FontWeight.bold,
+                                              color: Constance.secondaryColor,
+                                            ),
+                                          );
+                                        },
+                                        // size: 100,
+                                        progressColors: const [
+                                          Constance.secondaryColor
+                                        ],
                                       ),
-                                    );
-                                  },
-                                  // size: 100,
-                                  progressColors: const [
-                                    Constance.secondaryColor
-                                  ],
-                                ),
                               ),
                               SizedBox(
                                 height: 1.5.h,
@@ -680,5 +658,14 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
     setState(() {
       versionCode = "${packageInfo.version}";
     });
+  }
+
+  bool checkIfProfileNeedCreation(Profile? profile) {
+    if (profile == null) return true;
+    if (profile.f_name=="") return true;
+    if (profile.l_name=="") return true;
+    if (profile.email=="") return true;
+    if (profile.addresses==[]) return true;
+    return false;
   }
 }

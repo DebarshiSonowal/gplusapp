@@ -9,6 +9,7 @@ import '../Components/alert.dart';
 import '../Model/notification_received.dart';
 import '../Navigation/Navigate.dart';
 import '../Networking/api_provider.dart';
+import 'Constance.dart';
 import 'DataProvider.dart';
 
 class NotificationHelper {
@@ -178,7 +179,7 @@ class NotificationHelper {
       case "news":
         debugPrint("News clicked ${categoryName},${seoName} ");
         // Navigation.instance.navigate("/main");
-        if ((Provider.of<DataProvider>(
+        if (!(Provider.of<DataProvider>(
                     Navigation.instance.navigatorKey.currentContext!,
                     listen: false)
                 .profile
@@ -186,6 +187,8 @@ class NotificationHelper {
             false)) {
           Navigation.instance
               .navigate('/story', args: '$categoryName,$seoName,home_page');
+        }else{
+          Navigation.instance.navigate('/beamember');
         }
         break;
       case "opinion":
@@ -199,6 +202,8 @@ class NotificationHelper {
           Navigation.instance.navigate('/opinionPage',args: "${seo_name_category}");
           Navigation.instance
               .navigate('/opinionDetails', args: '$seoName,$categoryId');
+        }else{
+          Navigation.instance.navigate('/beamember');
         }
         break;
       case "ghy_connect":

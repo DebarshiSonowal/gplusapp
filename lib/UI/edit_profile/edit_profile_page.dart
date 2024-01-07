@@ -375,193 +375,6 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(
                   height: 1.5.h,
                 ),
-
-                // Text(
-                //   'Topical',
-                //   style: Theme.of(context).textTheme.headline4?.copyWith(
-                //         color: Storage.instance.isDarkMode
-                //             ? Colors.white
-                //             : Constance.primaryColor,
-                //         // fontSize: 2.h,
-                //         fontWeight: FontWeight.bold,
-                //       ),
-                // ),
-                // SizedBox(
-                //   height: 1.h,
-                // ),
-                // SizedBox(
-                //   // height: 15.h,
-                //   width: double.infinity,
-                //   child: Wrap(
-                //     children: [
-                //       for (int i = 0; i < data.topicks.length; i++)
-                //         GestureDetector(
-                //           onTap: () {
-                //             setState(() {
-                //               if (!check(selTop, data.topicks[i])) {
-                //                 print('add ${data.topicks[i].title}');
-                //                 selTop.add(data.topicks[i]);
-                //               } else {
-                //                 // print(
-                //                 //     'rmv ${}');
-                //                 // selTop.remove(data.topicks[i]);
-                //                 selTop.removeWhere((element) =>
-                //                     element.id == data.topicks[i].id);
-                //               }
-                //             });
-                //           },
-                //           child: Container(
-                //             margin: const EdgeInsets.symmetric(
-                //                 horizontal: 6, vertical: 6),
-                //             padding: const EdgeInsets.symmetric(
-                //                 horizontal: 6, vertical: 4),
-                //             decoration: BoxDecoration(
-                //               color: selTop == null
-                //                   ? Colors.white
-                //                   : !check(selTop, data.topicks[i])
-                //                       ? Colors.white
-                //                       : Constance.secondaryColor,
-                //               borderRadius: BorderRadius.circular(5),
-                //               border: Border.all(
-                //                 color: selTop == null
-                //                     ? Constance.primaryColor
-                //                     : !check(selTop, data.topicks[i])
-                //                         ? Constance.primaryColor
-                //                         : Constance.secondaryColor,
-                //                 width: 0.5.w,
-                //                 // left: BorderSide(
-                //                 //   color: Colors.green,
-                //                 //   width: 1,
-                //                 // ),
-                //               ),
-                //             ),
-                //             child: Text(
-                //               data.topicks[i].title!,
-                //               style: Theme.of(context)
-                //                   .textTheme
-                //                   .headline5
-                //                   ?.copyWith(
-                //                     color: Constance.primaryColor,
-                //                     // fontSize: 2.h,
-                //                     // fontWeight: FontWeight.bold,
-                //                   ),
-                //             ),
-                //           ),
-                //         ),
-                //     ],
-                //   ),
-                // ),
-                // SizedBox(
-                //   height: 1.5.h,
-                // ),
-                // Text(
-                //   'Notification Permission',
-                //   style: Theme.of(context).textTheme.headline4?.copyWith(
-                //         color: Constance.primaryColor,
-                //         // fontSize: 2.h,
-                //         fontWeight: FontWeight.bold,
-                //       ),
-                // ),
-                // SizedBox(
-                //   height: 0.5.h,
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     Text(
-                //       'Big Deal',
-                //       style: Theme.of(context).textTheme.headline5?.copyWith(
-                //             color: Colors.black,
-                //             // fontSize: 2.h,
-                //             // fontWeight: FontWeight.bold,
-                //           ),
-                //     ),
-                //     Switch(
-                //       activeColor: Constance.secondaryColor,
-                //       onChanged: (bool value) {
-                //         setState(() {
-                //           big_deal = value;
-                //         });
-                //       },
-                //       value: big_deal,
-                //     ),
-                //   ],
-                // ),
-                // SizedBox(
-                //   height: 0.2.h,
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     Text(
-                //       'Guwahati Connect',
-                //       style: Theme.of(context).textTheme.headline5?.copyWith(
-                //             color: Colors.black,
-                //             // fontSize: 2.h,
-                //             // fontWeight: FontWeight.bold,
-                //           ),
-                //     ),
-                //     Switch(
-                //       activeColor: Constance.secondaryColor,
-                //       onChanged: (bool value) {
-                //         setState(() {
-                //           guwahati_connect = value;
-                //         });
-                //       },
-                //       value: guwahati_connect,
-                //     ),
-                //   ],
-                // ),
-                // SizedBox(
-                //   height: 0.2.h,
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     Text(
-                //       'Classified',
-                //       style: Theme.of(context).textTheme.headline5?.copyWith(
-                //             color: Colors.black,
-                //             // fontSize: 2.h,
-                //             // fontWeight: FontWeight.bold,
-                //           ),
-                //     ),
-                //     Switch(
-                //       activeColor: Constance.secondaryColor,
-                //       onChanged: (bool value) {
-                //         setState(() {
-                //           classified = value;
-                //         });
-                //       },
-                //       value: classified,
-                //     ),
-                //   ],
-                // ),
-                // SizedBox(
-                //   height: 0.2.h,
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     Text(
-                //       'Dark Mode',
-                //       style: Theme.of(context).textTheme.headline4?.copyWith(
-                //             color: Constance.primaryColor,
-                //             // fontSize: 2.h,
-                //             fontWeight: FontWeight.bold,
-                //           ),
-                //     ),
-                //     Switch(
-                //       activeColor: Constance.secondaryColor,
-                //       onChanged: (bool value) {
-                //         setState(() {
-                //           dark_mode = value;
-                //         });
-                //       },
-                //       value: dark_mode,
-                //     ),
-                //   ],
-                // ),
                 SizedBox(
                   height: 1.h,
                 ),
@@ -571,7 +384,19 @@ class _EditProfileState extends State<EditProfile> {
                   child: CustomButton(
                     txt: 'Save & Continue',
                     onTap: () {
-                      saveDetails();
+                      if (address!="") {
+                        if (selGeo.isNotEmpty) {
+                          if (first_name.text.isNotEmpty&&last_name.text.isNotEmpty&&email.text.isNotEmpty) {
+                            saveDetails();
+                          } else {
+                            Fluttertoast.showToast(msg: "Please Enter All Of Your Details");
+                          }
+                        } else {
+                          Fluttertoast.showToast(msg: "Please Select at least one of the geographical");
+                        }
+                      }else{
+                        Fluttertoast.showToast(msg: "Please Select a address");
+                      }
                       // debugPrint(getComaSeparatedName(selGeo));
                       // debugPrint(getComaSeparatedName(selTop));
                       // Navigation.instance.navigateAndReplace('/enterPreferences');

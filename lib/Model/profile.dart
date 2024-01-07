@@ -90,7 +90,7 @@ class Profile {
     //             ? true
     //             : false;
     is_plan_active = json['is_plan_active']??false;
-    completed_percent = json['completed_percent']==null?0:int.tryParse(json['completed_percent'].toString());
+    completed_percent = json['completed_percent']==null?10:int.tryParse(json['completed_percent'].toString());
 
   }
 
