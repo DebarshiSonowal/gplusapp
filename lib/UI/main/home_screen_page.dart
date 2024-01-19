@@ -221,46 +221,47 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         //     size: 22.sp,
         //   ),
         // ),
-        floatingActionButton:
-            Consumer<DataProvider>(builder: (context, data, _) {
-          return (data.floating_button?.status ?? false)
-              ? FloatingActionButton(
-                  backgroundColor: (data.floating_button?.color == null ||
-                          data.floating_button?.image_url != "")
-                      ? Colors.transparent
-                      : hexToColor(
-                          data.floating_button?.color.toString() ?? "#7CFC00"),
-                  onPressed: () {
-                    var encrypted = getEncrypted(data);
-                    // while(encrypted.base64.toString().contains("+")){
-                    //   encrypted = getEncrypted(data);
-                    // }
-                    Navigation.instance.navigate("/competitions",
-                        args:
-                            "${data.floating_button?.url}?key=${encrypted.base64}");
-                  },
-                  // child: Text(
-                  //   "${data.floating_button?.text}",
-                  //   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  //         color: Colors.black,
-                  //       ),
-                  // ),
-                  child: data.floating_button?.image_url == ""
-                      ? Text(
-                          "${data.floating_button?.text}",
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Colors.black,
-                                  ),
-                        )
-                      : CachedNetworkImage(
-                          imageUrl: data.floating_button!.image_url!,
-                          height: 35.sp,
-                          width: 35.sp,
-                        ),
-                )
-              : Container();
-        }),
+        floatingActionButton: Consumer<DataProvider>(
+          builder: (context, data, _) {
+            return (data.floating_button?.status ?? false)
+                ? FloatingActionButton(
+                    backgroundColor: (data.floating_button?.color == null ||
+                            data.floating_button?.image_url != "")
+                        ? Colors.transparent
+                        : hexToColor(data.floating_button?.color.toString() ??
+                            "#7CFC00"),
+                    onPressed: () {
+                      var encrypted = getEncrypted(data);
+                      // while(encrypted.base64.toString().contains("+")){
+                      //   encrypted = getEncrypted(data);
+                      // }
+                      Navigation.instance.navigate("/competitions",
+                          args:
+                              "${data.floating_button?.url}?key=${encrypted.base64}");
+                    },
+                    // child: Text(
+                    //   "${data.floating_button?.text}",
+                    //   style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    //         color: Colors.black,
+                    //       ),
+                    // ),
+                    child: data.floating_button?.image_url == ""
+                        ? Text(
+                            "${data.floating_button?.text}",
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Colors.black,
+                                    ),
+                          )
+                        : CachedNetworkImage(
+                            imageUrl: data.floating_button!.image_url!,
+                            height: 35.sp,
+                            width: 35.sp,
+                          ),
+                  )
+                : Container();
+          },
+        ),
         drawer: const BergerMenuMemPage(
           screen: "home",
         ),

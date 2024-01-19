@@ -475,11 +475,10 @@ class _UpdateProfileDetailsState extends State<UpdateProfileDetails> {
                     ),
                     onPressed: () {
                       if (agreed) {
-                        if (firstName.text.isNotEmpty ||
-                            lastName.text.isNotEmpty ||
-                            email.text.isNotEmpty ||
-                            date != "" ||
-                            referralCode.text.isNotEmpty) {
+                        if (firstName.text.isNotEmpty &&
+                            lastName.text.isNotEmpty &&
+                            email.text.isNotEmpty &&
+                            date != "") {
                           if (address != "") {
                             signUp(
                                 context,

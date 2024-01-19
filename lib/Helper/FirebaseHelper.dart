@@ -179,7 +179,7 @@ class NotificationHelper {
       case "news":
         debugPrint("News clicked ${categoryName},${seoName} ");
         // Navigation.instance.navigate("/main");
-        if (!(Provider.of<DataProvider>(
+        if ((Provider.of<DataProvider>(
                     Navigation.instance.navigatorKey.currentContext!,
                     listen: false)
                 .profile

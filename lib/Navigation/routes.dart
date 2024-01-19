@@ -73,6 +73,7 @@ import '../UI/poll_of_the week/poll_page.dart';
 import '../UI/profile/profile_page.dart';
 import '../UI/refer_earn/redeem_points.dart';
 import '../UI/refer_earn/refer&earn.dart';
+import '../UI/story/show_membership_page.dart';
 import '../UI/story/story_page.dart';
 import '../UI/toppicks/top_picks_page.dart';
 import '../UI/view/competition_dynamic_page.dart';
@@ -373,6 +374,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/emergency':
       return FadeTransitionPageRouteBuilder(
           page: EmergencyPage(title: settings.arguments as String,
+      ));
+    case '/showMembership':
+      return FadeTransitionPageRouteBuilder(
+          page: ShowMembershipPage(
+        name: settings.arguments as String,
       ));
 
     //Main

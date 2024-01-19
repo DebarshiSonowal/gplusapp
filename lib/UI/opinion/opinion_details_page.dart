@@ -941,6 +941,12 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
         isEmpty = (response.opinion == null) ? true : false;
       });
       // Navigation.instance.goBack();
+      if ((response.opinion?.has_permission ?? false)) {
+      } else {
+        Navigation.instance.navigate("/showMembership",
+            args:
+            "${Provider.of<DataProvider>(context, listen: false).profile?.name}");
+      }
     } else {
       setState(() {
         isEmpty = true;

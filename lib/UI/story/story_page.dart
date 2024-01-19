@@ -1091,6 +1091,13 @@ class _StoryPageState extends State<StoryPage> {
       setState(() {
         isEmpty = false;
       });
+      debugPrint("PermSS ${response.article?.has_permission}");
+      if ((response.article?.has_permission ?? false)) {
+      } else {
+        Navigation.instance.navigate("/showMembership",
+            args:
+                "${Provider.of<DataProvider>(context, listen: false).profile?.name}");
+      }
     } else {
       setState(() {
         isEmpty = true;
