@@ -123,6 +123,7 @@ dependencies:
 #  encryptions: ^1.1.0+1
   aespack: ^0.0.3
   simple_circular_progress_bar: ^1.0.2
+#  flutter_bloc: ^8.1.3
 
 dependency_overrides:
   package_info_plus: any

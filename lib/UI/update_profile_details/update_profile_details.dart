@@ -779,6 +779,7 @@ class _UpdateProfileDetailsState extends State<UpdateProfileDetails> {
     setState(() {
       address = address1;
     });
+    
     Navigation.instance.goBack();
   }
 

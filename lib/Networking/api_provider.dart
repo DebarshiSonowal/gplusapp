@@ -966,6 +966,7 @@ class ApiProvider {
       );
       debugPrint("topic/${categ_name}/${slug} Details response: ");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
+        debugPrint("Has Permission ${response?.data['has_permission']}");
         return ArticleDetailsResponse.fromJson(response?.data);
       } else {
         debugPrint("topic/${categ_name}/${slug} error: ${response?.data}");

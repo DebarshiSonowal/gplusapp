@@ -22,7 +22,7 @@ class ShowMembershipPage extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.black.withOpacity(0.95),
         body: SizedBox(
           width: double.infinity,
           height: double.infinity,
@@ -78,7 +78,7 @@ class ShowMembershipPage extends StatelessWidget {
                       height: 3.h,
                     ),
                     Text(
-                      Constance.about,
+                      "Become a subscriber and unlock this premium article. Offering 100+ premium reads every month with GPlus App Subscription.",
                       style: Theme.of(context).textTheme.headline5?.copyWith(
                             color: Colors.black,
                             // fontWeight: FontWeight.bold,
@@ -129,6 +129,7 @@ class ShowMembershipPage extends StatelessWidget {
                                               context,
                                           listen: false)
                                       .profile!);
+                              Navigation.instance.goBack();
                               Navigation.instance.goBack();
                             },
                             color: Colors.black,

@@ -41,24 +41,24 @@ class _NavigationBarState extends State<CustomNavigationBar> {
           onTap: (val) {
             switch (val) {
               case 1:
-                Navigation.instance.navigate("/emergency",
-                    args:
-                        "Some one in your area has tested postive for COVID-19. Read news for more updates");
-                // if (Provider.of<DataProvider>(
-                //             Navigation.instance.navigatorKey.currentContext ??
-                //                 context,
-                //             listen: false)
-                //         .currentIndex !=
-                //     val) {
-                //   logTheBottomNavigationClick(
-                //       data.profile!, "big_deal", widget.screen);
-                //   Provider.of<DataProvider>(
-                //           Navigation.instance.navigatorKey.currentContext ??
-                //               context,
-                //           listen: false)
-                //       .setCurrent(val);
-                //   Navigation.instance.navigate('/bigdealpage');
-                // }
+                // Navigation.instance.navigate("/emergency",
+                //     args:
+                //         "Some one in your area has tested postive for COVID-19. Read news for more updates");
+                if (Provider.of<DataProvider>(
+                            Navigation.instance.navigatorKey.currentContext ??
+                                context,
+                            listen: false)
+                        .currentIndex !=
+                    val) {
+                  logTheBottomNavigationClick(
+                      data.profile!, "big_deal", widget.screen);
+                  Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey.currentContext ??
+                              context,
+                          listen: false)
+                      .setCurrent(val);
+                  Navigation.instance.navigate('/bigdealpage');
+                }
 
                 break;
               case 2:

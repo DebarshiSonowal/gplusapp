@@ -55,7 +55,7 @@ class OpinionSection extends StatelessWidget {
                       var item = data.latestOpinions[count];
                       return GestureDetector(
                           onTap: () {
-                            if (item.has_permission ?? false) {
+                            // if (item.has_permission ?? false) {
                               logTheOpinionArticleClick(
                                 data.profile!,
                                 item.title!,
@@ -68,9 +68,9 @@ class OpinionSection extends StatelessWidget {
                               Navigation.instance.navigate('/opinionDetails',
                                   args:
                                       '${item.seo_name?.trim()},${item.category_gallery?.id}');
-                            } else {
-                              showNotaMember();
-                            }
+                            // } else {
+                            //   showNotaMember();
+                            // }
                           },
                           child: OpinionCard(item: item));
                     },

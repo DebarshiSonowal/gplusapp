@@ -585,6 +585,7 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
               listen: false)
           .setAddressess(response.addresses);
       Navigation.instance.goBack();
+      fetchProfile();
       if (widget.which == 0) {
         Navigator.of(context).pop(response.addresses.last.id);
       }
@@ -647,5 +648,9 @@ class _EditSavedAddressesState extends State<EditSavedAddresses> {
       Navigation.instance.goBack();
       showError(response.message ?? "Something went wrong");
     }
+  }
+
+  void fetchProfile() {
+
   }
 }
