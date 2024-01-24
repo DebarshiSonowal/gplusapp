@@ -177,12 +177,14 @@ class OpinionSection extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  if (data.latestOpinions[0].has_permission ?? false) {
-                    logTheReadMoreClick(data.profile!);
-                    Navigation.instance.navigate('/opinionPage',args: "opinion");
-                  } else {
-                    showNotaMember();
-                  }
+                  // if (data.latestOpinions[0].has_permission ?? false) {
+                  //   logTheReadMoreClick(data.profile!);
+                  //   Navigation.instance.navigate('/opinionPage',args: "opinion");
+                  // } else {
+                  //   showNotaMember();
+                  // }
+                  logTheReadMoreClick(data.profile!);
+                  Navigation.instance.navigate('/opinionPage',args: "opinion");
 
                   // Navigation.instance
                   //     .navigate('/authorPage', args: 1);

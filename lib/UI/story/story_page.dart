@@ -142,7 +142,7 @@ class _StoryPageState extends State<StoryPage> {
     Provider.of<DataProvider>(
             Navigation.instance.navigatorKey.currentContext ?? context,
             listen: false)
-        .selectedArticle = null;
+        .clearSelectedArticle();
     controller.dispose();
     super.dispose();
   }
@@ -1075,7 +1075,20 @@ class _StoryPageState extends State<StoryPage> {
               listen: false)
           .setArticleDetails(response.article!);
       debugPrint(response.article?.is_liked.toString());
-      setState(() {
+      if (mounted) {
+        setState(() {
+          like = is_liked(response.article?.is_liked ?? -1);
+          dislike = is_disliked(response.article?.is_liked ?? -1);
+          is_bookmark = response.article?.is_bookmark ?? false;
+          if (categories.contains(response.article?.first_cat_name!.seo_name)) {
+            dropdownvalue =
+                response.article?.first_cat_name?.seo_name ?? "international";
+            fetchContent();
+          } else {
+            fetchContent();
+          }
+              });
+      } else {
         like = is_liked(response.article?.is_liked ?? -1);
         dislike = is_disliked(response.article?.is_liked ?? -1);
         is_bookmark = response.article?.is_bookmark ?? false;
@@ -1086,7 +1099,7 @@ class _StoryPageState extends State<StoryPage> {
         } else {
           fetchContent();
         }
-      });
+      }
       // Navigation.instance.goBack();
       setState(() {
         isEmpty = false;

@@ -459,4 +459,14 @@ class DataProvider extends ChangeNotifier {
     full_screen_ad = FullScreenAd(t, s);
     notifyListeners();
   }
+
+  void clearOpinionDetails() {
+    opinion=null;
+    notifyListeners();
+  }
+
+  void clearSelectedArticle() {
+    selectedArticle = null;
+    notifyListeners();
+  }
 }

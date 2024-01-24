@@ -55,6 +55,15 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   bool isEmpty = false;
 
   @override
+  void dispose() {
+    Provider.of<DataProvider>(
+        Navigation.instance.navigatorKey.currentContext ?? context,
+        listen: false)
+        .clearOpinionDetails();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
@@ -268,7 +277,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                         children: [
                                           TextSpan(
                                             text:
-                                                '${data.opinion?.user?.name ?? "G Plus"}',
+                                                data.opinion?.user?.name ?? "G Plus",
                                             style: Theme.of(Navigation
                                                     .instance
                                                     .navigatorKey
@@ -1132,3 +1141,4 @@ String removeAllHtmlTags(String htmlText) {
 
   return htmlText.replaceAll(exp, '');
 }
+

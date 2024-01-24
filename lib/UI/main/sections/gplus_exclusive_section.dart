@@ -90,7 +90,7 @@ class GPlusExclusiveSection extends StatelessWidget {
                         } else {
                           return GestureDetector(
                             onTap: () {
-                              if (item.has_permission ?? false) {
+                              // if (item.has_permission ?? false) {
                                 logTheExclusiveClick(
                                     data.profile!,
                                     item.title!,
@@ -102,9 +102,9 @@ class GPlusExclusiveSection extends StatelessWidget {
                                 Navigation.instance.navigate('/story',
                                     args:
                                         '${'exclusive-news'},${item.seo_name},g_plus_exclusive');
-                              } else {
-                                showNotaMember();
-                              }
+                              // } else {
+                              //   showNotaMember();
+                              // }
                             },
                             child: GPlusExecCard(item: item),
                           );
