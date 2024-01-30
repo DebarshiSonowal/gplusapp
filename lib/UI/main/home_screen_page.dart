@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       //       .navigate('/story', args: '$category,$data,home_page');
       //   break;
       case "poll_of_the_week":
-        Navigation.instance.navigate(
+        Navigation.instance.pushNamedIfNotCurrent(
           '/pollPage',
         );
         break;
@@ -89,8 +89,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             .navigate('/opinionDetails', args: '$data,$category');
         break;
       default:
-        if (category == 'poll_of_the_week') {
-          Navigation.instance.navigate(
+        if (category == 'poll_of_the_week'||category == "PollOfTheWeek") {
+          Navigation.instance.pushNamedIfNotCurrent(
             '/pollPage',
           );
         } else {
@@ -712,45 +712,49 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     // If permission is granted, show a notification.
     if (status == PermissionStatus.granted) {
-      FirebaseMessaging.instance.getInitialMessage().then(
-            (RemoteMessage? value) => setState(
-              () {
-                debugPrint("Initial!@8 1$value");
-                String initialMessage = "${value?.data}";
-                debugPrint("Initial!@8 2$initialMessage");
-                if (value!.data.isNotEmpty) {
-                  debugPrint("Notification Payload ${value.data}");
-                  var propertyPattern = RegExp(r'(\w+): ([^,]+)');
+      try {
+        FirebaseMessaging.instance.getInitialMessage().then(
+                    (RemoteMessage? value) => setState(
+                      () {
+                        debugPrint("Initial!@8 1$value");
+                        String initialMessage = "${value?.data}";
+                        debugPrint("Initial!@8 2$initialMessage");
+                        if (value!.data.isNotEmpty) {
+                          debugPrint("Notification Payload ${value.data}");
+                          var propertyPattern = RegExp(r'(\w+): ([^,]+)');
 
-                  var json = <String, String?>{};
+                          var json = <String, String?>{};
 
-                  propertyPattern.allMatches("${value.data}").forEach((match) {
-                    var propertyName = match.group(1);
-                    var propertyValue = match.group(2);
+                          propertyPattern.allMatches("${value.data}").forEach((match) {
+                            var propertyName = match.group(1);
+                            var propertyValue = match.group(2);
 
-                    json[propertyName!] = propertyValue!.trim();
-                  });
-                  NotificationReceived notification =
-                      // NotificationReceived.fromJson(jsonDecode(jsData1));
-                      NotificationReceived.fromJson(json);
-                  // Navigation.instance.navigate('');
+                            json[propertyName!] = propertyValue!.trim();
+                          });
+                          NotificationReceived notification =
+                              // NotificationReceived.fromJson(jsonDecode(jsData1));
+                              NotificationReceived.fromJson(json);
+                          // Navigation.instance.navigate('');
 
-                  NotificationHelper.setRead(
-                      notification.notification_id,
-                      notification.seo_name,
-                      notification.seo_name_category,
-                      notification.type,
-                      notification.post_id,
-                      notification.vendor_id,
-                      notification.category_id,
-                      notification.seo_name_category,
-                      notification.title
-                      // notification.image
-                      );
-                }
-              },
-            ),
-          );
+                          NotificationHelper.setRead(
+                              notification.notification_id,
+                              notification.seo_name,
+                              notification.seo_name_category,
+                              notification.type,
+                              notification.post_id,
+                              notification.vendor_id,
+                              notification.category_id,
+                              notification.seo_name_category,
+                              notification.title
+                              // notification.image
+                              );
+                        }
+                      },
+                    ),
+                  );
+      } catch (e) {
+        print(e);
+      }
     }
     Provider.of<DataProvider>(
             Navigation.instance.navigatorKey.currentContext ?? context,

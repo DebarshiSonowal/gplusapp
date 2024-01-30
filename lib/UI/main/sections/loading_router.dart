@@ -58,8 +58,9 @@ class _LoadingRouterState extends State<LoadingRouter> {
       //       .navigate('/story', args: '$category,$data,home_page');
       //   break;
       case "poll_of_the_week":
+        debugPrint("poll of the week ${Navigation.instance.navigatorKey.currentContext?.owner} \n ${ModalRoute.of(Navigation.instance.navigatorKey.currentContext!)?.settings.name} \n");
         Navigation.instance
-            .navigate('/pollPage',);
+            .pushNamedIfNotCurrent('/pollPage',);
         break;
       case "opinion":
         Navigation.instance

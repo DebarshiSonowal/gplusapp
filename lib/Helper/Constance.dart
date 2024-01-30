@@ -242,7 +242,7 @@ class Constance {
             );
             Navigation.instance.navigate('/search', args: "");
           },
-          icon: Icon(Icons.search),
+          icon: const Icon(Icons.search),
         ),
       ],
     );

@@ -125,25 +125,16 @@ class SuggestedForYouCard extends StatelessWidget {
                   SizedBox(
                     height: 0.5.h,
                   ),
-                  Row(
-                    children: [
-                      // Image.asset(
-                      //   Constance.authorIcon,
-                      //   color: Constance.secondaryColor,
-                      //   // size: 8.sp,
-                      //   scale: 37,
-                      // ),
-                      // SizedBox(
-                      //   width: 1.w,
-                      // ),
-                      Text(
-                        item.author_name ?? "",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            ?.copyWith(color: Colors.black54),
-                      ),
-                    ],
+                  SizedBox(
+                    width: 34.w,
+                    child: Text(
+                      item.author_name ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          ?.copyWith(color: Colors.black54),
+                    ),
                   ),
                 ],
               ),
