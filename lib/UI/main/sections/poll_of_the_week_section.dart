@@ -52,17 +52,7 @@ class PollOfTheWeekSection extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    sharePollOfTheWeek("poll_of_the_week",data.pollOfTheWeek?.title?.replaceAll(" ", "_").toLowerCase(),data.pollOfTheWeek?.id);
-                  },
-                  icon: Icon(
-                    Icons.share,
-                    color: Storage.instance.isDarkMode
-                        ? Colors.white
-                        : Constance.primaryColor,
-                  ),
-                ),
+
               ],
             ),
           ),
@@ -342,8 +332,25 @@ class PollOfTheWeekSection extends StatelessWidget {
                     ],
                   ),
                 ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                onPressed: () {
+                  sharePollOfTheWeek("poll_of_the_week",data.pollOfTheWeek?.title?.replaceAll(" ", "_").toLowerCase(),data.pollOfTheWeek?.id);
+                },
+                icon: Icon(
+                  Icons.share,
+                  color: Storage.instance.isDarkMode
+                      ? Colors.white
+                      : Constance.primaryColor,
+                  size: 12.sp,
+                ),
+              ),
+            ],
+          ),
           SizedBox(
-            height: 1.h,
+            height: 0.5.h,
           ),
         ],
       ),
