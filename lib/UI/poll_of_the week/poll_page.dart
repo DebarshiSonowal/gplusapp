@@ -4,6 +4,7 @@ import 'package:flutter_config/flutter_config.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gplusapp/Helper/DataProvider.dart';
 import 'package:gplusapp/Helper/Storage.dart';
+import 'package:gplusapp/Helper/string_extension.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -328,8 +329,8 @@ class _PollPageState extends State<PollPage> {
           "${FlutterConfig.get('domain')}/PollOfTheWeek/$description/$title/$id"),
       uriPrefix: FlutterConfig.get('customHostDeepLink'),
       socialMetaTagParameters: SocialMetaTagParameters(
-        title: title,
-        description: description,
+        title: "G Plus Poll of The Week",
+        description: description.toString().replaceAll("_", " ").capitalize(),
       ),
       androidParameters: AndroidParameters(
         packageName: FlutterConfig.get("androidPackage"),

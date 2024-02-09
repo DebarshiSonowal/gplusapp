@@ -21,27 +21,23 @@ class Storage {
   }
 
   Future<void> setUser(String token) async {
-    print('set token ${token}');
+    debugPrint('set token $token');
     await sharedpreferences.setString("token", token);
     await sharedpreferences.setBool("isLoggedIn", true);
   }
 
   Future<void> setToken(String token) async {
-    debugPrint('set token ${token}');
+    debugPrint('set token $token');
     await sharedpreferences.setString("token", token);
   }
 
-  // Future<void> setLogInStatus(int val) async {
-  //   await sharedpreferences.setInt("logInStatus", val);
-  // }
-
   Future<void> setFilter(String filters) async {
-    print('set filters ${filters.toString()}');
+    debugPrint('set filters ${filters.toString()}');
     await sharedpreferences.setString("filter", filters);
   }
 
   Future<void> setFullScreenAd(bool val) async {
-    // print('set filters ${filters.toString()}');
+
     await sharedpreferences.setBool("fullscreen", val);
   }
 
@@ -63,7 +59,7 @@ class Storage {
 
   Future<void> setDarkMode(bool selected) async {
     await sharedpreferences.setBool("dark", selected);
-    print('setDarkMode');
+    debugPrint('setDarkMode');
   }
 
   Future<void> setLastDisplayed(String val) async {
@@ -95,8 +91,6 @@ class Storage {
   get isFullScreenAd => sharedpreferences.getBool("fullscreen") ?? false;
 
   get isNew => sharedpreferences.getBool("isNew") ?? false;
-
-  // get logInStatus => sharedpreferences.getInt("logInStatus") ?? 0;
 
   get isOnBoarding => sharedpreferences.getBool("isOnBoarding") ?? false;
 

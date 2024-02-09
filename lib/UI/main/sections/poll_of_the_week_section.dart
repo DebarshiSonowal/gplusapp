@@ -3,6 +3,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gplusapp/UI/category/category_details.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
@@ -446,8 +447,8 @@ class PollOfTheWeekSection extends StatelessWidget {
           Uri.parse("${FlutterConfig.get('domain')}/PollOfTheWeek/$description/$title/$id"),
       uriPrefix: FlutterConfig.get('customHostDeepLink'),
       socialMetaTagParameters: SocialMetaTagParameters(
-        title: title,
-        description: description,
+        title: "G Plus Poll of The Week",
+        description: description.toString().replaceAll("_", " ").capitalize(),
       ),
       androidParameters: AndroidParameters(
         packageName: FlutterConfig.get("androidPackage"),

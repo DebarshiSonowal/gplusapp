@@ -57,8 +57,8 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
   @override
   void dispose() {
     Provider.of<DataProvider>(
-        Navigation.instance.navigatorKey.currentContext ?? context,
-        listen: false)
+            Navigation.instance.navigatorKey.currentContext ?? context,
+            listen: false)
         .clearOpinionDetails();
     super.dispose();
   }
@@ -276,8 +276,8 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text:
-                                                data.opinion?.user?.name ?? "G Plus",
+                                            text: data.opinion?.user?.name ??
+                                                "G Plus",
                                             style: Theme.of(Navigation
                                                     .instance
                                                     .navigatorKey
@@ -392,8 +392,8 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                               .seo_name!,
                                           data.opinion?.seo_name,
                                           extractLinesWithoutHtml(
-                                              (data.opinion?.description??"").substring(0,200)
-                                          ),
+                                              (data.opinion?.description ?? "")
+                                                  .substring(0, 200)),
                                           data.opinion?.image_file_name,
                                           data.opinion?.title);
                                     },
@@ -771,10 +771,11 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
                                     //     ? 'check out our website https://guwahatiplus.com/'
                                     //     : '${data.opinion?.web_url}');
                                     generateURL(
-                                      data.opinion?.category_gallery!
-                                          .seo_name!,
+                                      data.opinion?.category_gallery!.seo_name!,
                                       data.opinion?.seo_name,
-                                      extractLinesWithoutHtml( (data.opinion?.description??"").substring(0,200) ),
+                                      extractLinesWithoutHtml(
+                                          (data.opinion?.description ?? "")
+                                              .substring(0, 200)),
                                       data.opinion?.image_file_name,
                                       data.opinion?.title,
                                     );
@@ -954,7 +955,7 @@ class _OpinionDetailsPageState extends State<OpinionDetailsPage> {
       } else {
         Navigation.instance.navigate("/showMembership",
             args:
-            "${Provider.of<DataProvider>(context, listen: false).profile?.name}");
+                "${Provider.of<DataProvider>(context, listen: false).profile?.name}");
       }
     } else {
       setState(() {
@@ -1081,11 +1082,12 @@ void generateURL(String? seo_name, String? first_cat_name, String? description,
       "generating URL \n$first_cat_name \n ${title} \n $description \n $image_url");
   final dynamicLinkParams = DynamicLinkParameters(
     link: Uri.parse(
-        // "${FlutterConfig.get('domain')}/link/opinion/${first_cat_name}/${seo_name}"),
-        "${FlutterConfig.get('domain')}/opinion/$seo_name/$first_cat_name"),
+      // "${FlutterConfig.get('domain')}/link/opinion/${first_cat_name}/${seo_name}"),
+      "${FlutterConfig.get('domain')}/opinion/$seo_name/$first_cat_name",
+    ),
     uriPrefix: FlutterConfig.get('customHostDeepLink'),
     socialMetaTagParameters: SocialMetaTagParameters(
-      title: title,
+      title: title?.replaceAll("", ""),
       description: description,
       imageUrl: Uri.tryParse(image_url ?? ""),
     ),
@@ -1095,6 +1097,7 @@ void generateURL(String? seo_name, String? first_cat_name, String? description,
     iosParameters: IOSParameters(
       bundleId: FlutterConfig.get('iosBundleId'),
     ),
+
     // socialMetaTagParameters: SocialMetaTagParameters(
     //   description: description,
     //   title: seo_name?.replaceAll("-", " "),
@@ -1141,4 +1144,3 @@ String removeAllHtmlTags(String htmlText) {
 
   return htmlText.replaceAll(exp, '');
 }
-
