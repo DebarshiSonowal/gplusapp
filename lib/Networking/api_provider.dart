@@ -3313,7 +3313,7 @@ class ApiProvider {
   }
 
   Future<GuwahatiConnectResponse> getGuwahatiConnect() async {
-    var url = "${baseUrl}/app/guwahati-connect";
+    var url = "$baseUrl/app/guwahati-connect";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',
@@ -3351,7 +3351,7 @@ class ApiProvider {
   }
 
   Future<GuwahatiConnectSpecificResponse> getGuwahatiConnectSpecific(id) async {
-    var url = "${baseUrl}/app/guwahati-connect-test/${id}";
+    var url = "$baseUrl/app/guwahati-connect-test/$id";
     BaseOptions option =
         BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',

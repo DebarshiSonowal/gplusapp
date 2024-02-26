@@ -464,11 +464,13 @@ class _SubmitStoryPageState extends State<SubmitStoryPage>
                             )),
                       ],
                     ),
-                    Platform.isAndroid? Container(
-                      margin: EdgeInsets.only(top: 1.5.h),
-                      width: 50.w,
-                      child: Constance.androidWarning,
-                    ):Container(),
+                    Platform.isAndroid
+                        ? Container(
+                            margin: EdgeInsets.only(top: 1.5.h),
+                            width: 50.w,
+                            child: Constance.androidWarning,
+                          )
+                        : Container(),
                   ],
                 ));
           });
@@ -478,33 +480,42 @@ class _SubmitStoryPageState extends State<SubmitStoryPage>
   Future<void> getProfileImage(int index) async {
     if (index == 0) {
       if (await Permission.camera.request().isGranted) {
-        // final pickedFile = await _picker
-        //     .pickImage(
-        //   source: ImageSource.camera,
-        //   imageQuality: 70,
-        // )
-        //     .catchError((er) {
-        //   debugPrint("error $er}");
-        // });
-        List<Media>? res = await ImagesPicker.openCamera(
-          pickType: PickType.image,
-        );
-        if (res != null) {
+        if (getIsNotAndroid13()) {
+          final pickedFile = await _picker
+              .pickImage(
+            source: ImageSource.camera,
+            imageQuality: 70,
+          )
+              .catchError((er) {
+            debugPrint("error $er}");
+          });
           setState(() {
             attachements.add(
-              File(res[0].path),
+              File(pickedFile!.path),
             );
           });
-          // }
+        } else {
+          List<Media>? res = await ImagesPicker.openCamera(
+            pickType: PickType.image,
+          );
+          if (res != null) {
+            setState(() {
+              attachements.add(
+                File(res[0].path),
+              );
+            });
+          }
         }
       } else {
-        showErrorStorage('Permission Denied');
+        showErrorStorage('Permission Denied1');
       }
     } else {
-      if (getIsNotAndroid13()
+      debugPrint(
+          "${getIsNotAndroid13()}\nStorage ${await Permission.storage.request().isGranted}\n photos ${await Permission.photos.request().isGranted}");
+      if (!getIsNotAndroid13()
           ? (await Permission.storage.request().isGranted)
           : (await Permission.photos.request().isGranted)) {
-        if (getIsNotAndroid13()) {
+        if (!getIsNotAndroid13()) {
           List<Media>? res = await ImagesPicker.pick(
             count: 3,
             pickType: PickType.image,
