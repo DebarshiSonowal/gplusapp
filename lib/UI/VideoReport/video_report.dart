@@ -173,10 +173,11 @@ class _VideoReportState extends State<VideoReport> {
                                   children: [
                                     Container(
                                       decoration: const BoxDecoration(
-                                          color: Constance.secondaryColor,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(5.0),
-                                          )),
+                                        color: Constance.secondaryColor,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(5.0),
+                                        ),
+                                      ),
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 2.w, vertical: 1.h),
                                       child: Row(
@@ -380,5 +381,3 @@ class _VideoReportState extends State<VideoReport> {
     }
   }
 }
-
-
