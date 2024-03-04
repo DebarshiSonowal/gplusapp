@@ -77,16 +77,19 @@ class GuwahatiConnectPostCard extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          data.title ?? "",
-                          style:
-                              Theme.of(context).textTheme.headline3?.copyWith(
-                                    color: Storage.instance.isDarkMode
-                                        ? Colors.white
-                                        : Constance.primaryColor,
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                        SizedBox(
+                          width:80.w,
+                          child: Text(
+                            data.title ?? "",
+                            style:
+                                Theme.of(context).textTheme.headline3?.copyWith(
+                                      color: Storage.instance.isDarkMode
+                                          ? Colors.white
+                                          : Constance.primaryColor,
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
                         ),
                         (data.is_post_by_me ?? false)
                             ? PopupMenuButton<int>(

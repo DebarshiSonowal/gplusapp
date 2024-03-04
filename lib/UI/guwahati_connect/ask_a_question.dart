@@ -474,32 +474,32 @@ class _AskAQuestionPageState extends State<AskAQuestionPage>
     }
   }
 
-  Future<void> getLostData() async {
-    androidInfo = await DeviceInfoPlugin().androidInfo;
-    // Navigation.instance.navigate("/loadingDialog");
-    if (await Permission.storage.request().isGranted) {
-      // Navigation.instance.goBack();
-      final LostDataResponse response = await _picker.retrieveLostData();
-      if (response.isEmpty) {
-        debugPrint("didChangeAppLifecycleState isEmpty");
-        return;
-      }
-      if (response.files != null) {
-        debugPrint("didChangeAppLifecycleState isNotEmpty");
-        for (final XFile file in response.files!) {
-          setState(() {
-            attachements.add(
-              File(file.path),
-            );
-          });
-        }
-      } else {
-        debugPrint("${response.exception!}");
-      }
-    } else {
-      // Navigation.instance.goBack();
-    }
-  }
+  // Future<void> getLostData() async {
+  //   androidInfo = await DeviceInfoPlugin().androidInfo;
+  //   // Navigation.instance.navigate("/loadingDialog");
+  //   if (await Permission.storage.request().isGranted) {
+  //     // Navigation.instance.goBack();
+  //     final LostDataResponse response = await _picker.retrieveLostData();
+  //     if (response.isEmpty) {
+  //       debugPrint("didChangeAppLifecycleState isEmpty");
+  //       return;
+  //     }
+  //     if (response.files != null) {
+  //       debugPrint("didChangeAppLifecycleState isNotEmpty");
+  //       for (final XFile file in response.files!) {
+  //         setState(() {
+  //           attachements.add(
+  //             File(file.path),
+  //           );
+  //         });
+  //       }
+  //     } else {
+  //       debugPrint("${response.exception!}");
+  //     }
+  //   } else {
+  //     // Navigation.instance.goBack();
+  //   }
+  // }
 
   // Future<void> getProfileImage(int index) async {
   //   if (index == 0) {

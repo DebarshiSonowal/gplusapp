@@ -6,9 +6,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gplusapp/Components/custom_button.dart';
-import 'package:gplusapp/Networking/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:images_picker/images_picker.dart';
 import 'package:open_settings/open_settings.dart';
@@ -18,14 +15,16 @@ import 'package:sizer/sizer.dart';
 
 import '../../Components/NavigationBar.dart';
 import '../../Components/alert.dart';
+import '../../Components/custom_button.dart';
 import '../../Helper/Constance.dart';
 import '../../Helper/DataProvider.dart';
 import '../../Helper/Storage.dart';
 import '../../Model/profile.dart';
 import '../../Navigation/Navigate.dart';
+import '../../Networking/api_provider.dart';
 
 class SubmitStoryPage extends StatefulWidget {
-  const SubmitStoryPage({Key? key}) : super(key: key);
+  const SubmitStoryPage({super.key});
 
   @override
   State<SubmitStoryPage> createState() => _SubmitStoryPageState();
@@ -34,63 +33,18 @@ class SubmitStoryPage extends StatefulWidget {
 class _SubmitStoryPageState extends State<SubmitStoryPage>
     with WidgetsBindingObserver {
   var title = TextEditingController();
-  bool _isImagePickerActive = false;
   var desc = TextEditingController();
   AndroidDeviceInfo? androidInfo;
   var current = 3;
-  ImagePicker _picker = ImagePicker();
   List<File> attachements = [];
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    getIsNotAndroid13() ? getLostData() : () {};
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    title.dispose();
-    desc.dispose();
-    super.dispose();
-  }
-
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   debugPrint("didChangeAppLifecycleState $state");
-  //   if (state == AppLifecycleState.resumed) {
-  //     debugPrint("didChangeAppLifecycleState inside $state");
-  //     try {
-  //       getLostData();
-  //     } catch (e) {
-  //       debugPrint("what error $e");
-  //     }
-  //   }
-  // }
-
-  Future<void> getLostData() async {
-    if (await Permission.storage.request().isGranted) {
-      final LostDataResponse response = await _picker.retrieveLostData();
-      if (response.isEmpty) {
-        debugPrint("didChangeAppLifecycleState isEmpty");
-        return;
-      }
-      if (response.files != null) {
-        debugPrint("didChangeAppLifecycleState isNotEmpty");
-        for (final XFile file in response.files!) {
-          setState(() {
-            attachements.add(
-              File(file.path),
-            );
-          });
-        }
-      } else {
-        debugPrint("${response.exception!}");
-      }
-    }
+    // getIsNotAndroid13() ? getLostData() : () {};
   }
 
   @override
@@ -203,76 +157,64 @@ class _SubmitStoryPageState extends State<SubmitStoryPage>
               SizedBox(
                 height: 2.h,
               ),
-              FutureBuilder(
-                  future: getLostData(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<void> snapshot) {
-                    return Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: List.generate(
-                        (attachements.length ?? 0) + 1,
-                        (pos) => (pos == attachements.length)
-                            ? GestureDetector(
-                                onTap: () {
-                                  // setState(() {
-                                  //   showPhotoBottomSheet(getProfileImage);
-                                  // });
-                                  request();
-                                },
-                                child: Container(
-                                  height: 8.h,
-                                  width: 20.w,
-                                  color: Colors.grey.shade200,
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.add,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  Container(
-                                    height: 8.h,
-                                    width: 20.w,
-                                    color: Colors.grey.shade200,
-                                    child: Center(
-                                      child: Image.file(
-                                        attachements[pos],
-                                        fit: BoxFit.fill,
-                                        errorBuilder: (err, cont, st) {
-                                          return Image.asset(
-                                              Constance.logoIcon);
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        attachements.removeAt(pos);
-                                      });
-                                    },
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      color: Colors.white,
-                                      child: const Icon(
-                                        Icons.remove,
-                                        color: Constance.thirdColor,
-                                      ),
-                                    ),
-                                  )
-                                ],
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: List.generate(
+                  (attachements.length ?? 0) + 1,
+                  (pos) => (pos == attachements.length)
+                      ? GestureDetector(
+                          onTap: () {
+                            request();
+                            debugPrint("Image added successfully pre 2");
+                          },
+                          child: Container(
+                            height: 8.h,
+                            width: 20.w,
+                            color: Colors.grey.shade200,
+                            child: const Center(
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.black,
                               ),
-                      ),
-                    );
-                  }),
+                            ),
+                          ),
+                        )
+                      : Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            Container(
+                              height: 8.h,
+                              width: 20.w,
+                              color: Colors.grey.shade200,
+                              child: Center(
+                                child: Image.file(
+                                  attachements[pos],
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  attachements.removeAt(pos);
+                                });
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                color: Colors.white,
+                                child: const Icon(
+                                  Icons.remove,
+                                  color: Constance.thirdColor,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                ),
+              ),
               SizedBox(
                 height: 2.h,
               ),
@@ -380,174 +322,30 @@ class _SubmitStoryPageState extends State<SubmitStoryPage>
     );
   }
 
-  void showPhotoBottomSheet(Function(int) getImage) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-    ));
-    BuildContext? context = Navigation.instance.navigatorKey.currentContext;
-    if (context != null) {
-      showDialog(
-          barrierDismissible: true,
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-                title: const Center(
-                    child: Text(
-                  "Add Photo",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                )),
-                contentPadding: const EdgeInsets.only(top: 24, bottom: 30),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        getIsNotAndroid13()
-                            ? InkWell(
-                                onTap: () {
-                                  Navigation.instance.goBack();
-                                  getImage(0);
-                                },
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(12),
-                                      margin: const EdgeInsets.only(bottom: 4),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          color: Colors.pink.shade300),
-                                      child: const Icon(
-                                        Icons.camera_alt_rounded,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const Text(
-                                      "Camera",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(),
-                        SizedBox(
-                          width: getIsNotAndroid13() ? 42 : 0,
-                        ),
-                        InkWell(
-                            onTap: () {
-                              Navigation.instance.goBack();
-                              getImage(1);
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(12),
-                                  margin: EdgeInsets.only(bottom: 4),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.purple.shade300),
-                                  child: const Icon(
-                                    Icons.image,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const Text(
-                                  "Gallery",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            )),
-                      ],
-                    ),
-                    Platform.isAndroid
-                        ? Container(
-                            margin: EdgeInsets.only(top: 1.5.h),
-                            width: 50.w,
-                            child: Constance.androidWarning,
-                          )
-                        : Container(),
-                  ],
-                ));
-          });
-    }
-  }
-
-  Future<void> getProfileImage(int index) async {
-    if (index == 0) {
-      if (await Permission.camera.request().isGranted) {
-        if (getIsNotAndroid13()) {
-          final pickedFile = await _picker
-              .pickImage(
-            source: ImageSource.camera,
-            imageQuality: 70,
-          )
-              .catchError((er) {
-            debugPrint("error $er}");
-          });
-          setState(() {
-            attachements.add(
-              File(pickedFile!.path),
-            );
-          });
-        } else {
-          List<Media>? res = await ImagesPicker.openCamera(
-            pickType: PickType.image,
-          );
-          if (res != null) {
-            setState(() {
-              attachements.add(
-                File(res[0].path),
-              );
-            });
-          }
-        }
-      } else {
-        showErrorStorage('Permission Denied1');
+  void request() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      getIsNotAndroid13() ? Permission.storage : Permission.photos,
+      Permission.camera,
+    ].request();
+    statuses.forEach((permission, status) {
+      debugPrint("Image added successfully pre 1");
+      if (status.isGranted) {
+        // Permission granted
+        debugPrint('${permission.toString()} granted.');
+      } else if (status.isDenied) {
+        // Permission denied
+        // showErrorStorage('${permission.toString()} denied.');
+        debugPrint('${permission.toString()} denied.');
+        // showErrorStorage('${permission.toString()} denied.');
+      } else if (status.isPermanentlyDenied) {
+        // Permission permanently denied
+        showErrorStorage('${permission.toString()} denied.');
+        // debugPrint('${permission.toString()} permanently denied.');
       }
-    } else {
-      debugPrint(
-          "${getIsNotAndroid13()}\nStorage ${await Permission.storage.request().isGranted}\n photos ${await Permission.photos.request().isGranted}");
-      if (!getIsNotAndroid13()
-          ? (await Permission.storage.request().isGranted)
-          : (await Permission.photos.request().isGranted)) {
-        if (!getIsNotAndroid13()) {
-          List<Media>? res = await ImagesPicker.pick(
-            count: 3,
-            pickType: PickType.image,
-          );
-          if (res != null) {
-            setState(() {
-              for (var i in res) {
-                attachements.add(
-                  File(i.path),
-                );
-              }
-            });
-          }
-        } else {
-          _picker = ImagePicker();
-          final pickedFile = await _picker.pickMultiImage(
-            imageQuality: 70,
-          );
-          if (pickedFile != null) {
-            setState(() {
-              for (var i in pickedFile) {
-                attachements.add(
-                  File(i.path),
-                );
-              }
-            });
-          }
-        }
-      } else {
-        showErrorStorage('Permission Denied');
-      }
-    }
+      setState(() {
+        showPhotoBottomSheet(getProfileImage);
+      });
+    });
   }
 
   getIsNotAndroid13() {
@@ -579,32 +377,6 @@ class _SubmitStoryPageState extends State<SubmitStoryPage>
     );
   }
 
-  void request() async {
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.storage,
-      Permission.camera,
-      Permission.photos,
-    ].request();
-    statuses.forEach((permission, status) {
-      if (status.isGranted) {
-        // Permission granted
-
-        debugPrint('${permission.toString()} granted.');
-      } else if (status.isDenied) {
-        // Permission denied
-        // showErrorStorage('${permission.toString()} denied.');
-        debugPrint('${permission.toString()} denied.');
-      } else if (status.isPermanentlyDenied) {
-        // Permission permanently denied
-
-        debugPrint('${permission.toString()} permanently denied.');
-      }
-    });
-    setState(() {
-      showPhotoBottomSheet(getProfileImage);
-    });
-  }
-
   void showErrorStorage(String msg) {
     AlertX.instance.showAlert(
       title: msg,
@@ -621,98 +393,6 @@ class _SubmitStoryPageState extends State<SubmitStoryPage>
     );
   }
 
-  void showDialogBox() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          insetPadding: EdgeInsets.zero,
-          contentPadding: EdgeInsets.zero,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10.0),
-            ),
-          ),
-          backgroundColor: Colors.white,
-          title: Text(
-            'Be a journalist!',
-            style: Theme.of(context).textTheme.headline1?.copyWith(
-                  color: Constance.secondaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          content: Container(
-            padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
-            // height: 50.h,
-            width: 80.w,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  FontAwesomeIcons.podcast,
-                  color: Constance.secondaryColor,
-                  size: 15.h,
-                ),
-                Text(
-                  'Hello ${Provider.of<DataProvider>(Navigation.instance.navigatorKey.currentContext ?? context, listen: false).profile?.name}',
-                  style: Theme.of(context).textTheme.headline3?.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(height: 1.h),
-                Text(
-                  'is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,'
-                  ' when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
-                  ' It has survived not only five centuries, but also the leap into electronic typesetting,'
-                  ' remaining essentially unchanged',
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(height: 1.h),
-                Text(
-                  'is simply dummy text of the printing and typesetting industry',
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(height: 1.h),
-                SizedBox(
-                  width: double.infinity,
-                  child: CustomButton(
-                      txt: 'Go Ahead',
-                      onTap: () {
-                        Navigation.instance.goBack();
-                      }),
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void postStory(is_story_submit) async {
-    Navigation.instance.navigate('/loadingDialog');
-    final response = await ApiProvider.instance.postCitizenJournalist(
-        title.text, desc.text, attachements, is_story_submit);
-    if (response.success ?? false) {
-      Fluttertoast.showToast(msg: "Posted successfully");
-      Navigation.instance.goBack();
-      Navigation.instance.goBack();
-    } else {
-      Navigation.instance.goBack();
-      showError(response.message ?? "Something went wrong");
-    }
-  }
-
   void showError(String msg) {
     AlertX.instance.showAlert(
         title: "Error",
@@ -721,6 +401,190 @@ class _SubmitStoryPageState extends State<SubmitStoryPage>
         positiveButtonPressed: () {
           Navigation.instance.goBack();
         });
+  }
+
+  void showPhotoBottomSheet(Function(int) getImage) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+    ));
+    BuildContext? context = Navigation.instance.navigatorKey.currentContext;
+    if (context != null) {
+      showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text(
+                "Add Photo",
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+              ),
+            ),
+            contentPadding: const EdgeInsets.only(top: 24, bottom: 30),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    getIsNotAndroid13()
+                        ? InkWell(
+                            onTap: () {
+                              Navigation.instance.goBack();
+                              getImage(0);
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(12),
+                                  margin: const EdgeInsets.only(bottom: 4),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Colors.pink.shade300),
+                                  child: const Icon(
+                                    Icons.camera_alt_rounded,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const Text(
+                                  "Camera",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(),
+                    SizedBox(
+                      width: getIsNotAndroid13() ? 42 : 0,
+                    ),
+                    InkWell(
+                        onTap: () {
+                          Navigation.instance.goBack();
+                          getImage(1);
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(12),
+                              margin: EdgeInsets.only(bottom: 4),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: Colors.purple.shade300),
+                              child: const Icon(
+                                Icons.image,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const Text(
+                              "Gallery",
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        )),
+                  ],
+                ),
+                Platform.isAndroid
+                    ? Container(
+                        margin: EdgeInsets.only(top: 1.5.h),
+                        width: 50.w,
+                        child: Constance.androidWarning,
+                      )
+                    : Container(),
+              ],
+            ),
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> getProfileImage(int index) async {
+    debugPrint("Image added pre ");
+    if (index == 0) {
+      if (await Permission.camera.request().isGranted) {
+        // List<Media>? res = await ImagesPicker.openCamera(
+        //   pickType: PickType.image,
+        // );
+        // if (res != null) {
+        //   setState(() {
+        //     attachements.add(
+        //       File(res[0].path),
+        //     );
+        //   });
+        //   // }
+        // }
+        final pickedFile = await _picker
+            .pickImage(
+          source: ImageSource.camera,
+          imageQuality: 70,
+        ).catchError((er) {
+          debugPrint("error $er}");
+        });
+        if (pickedFile != null) {
+          setState(() {
+            attachements.add(
+              File(pickedFile.path),
+            );
+          });
+        } else {
+          showErrorStorage('Permission Denied');
+        }
+      }
+    } else {
+      debugPrint("Image added successfully pre ");
+      if (!getIsNotAndroid13()
+          ? (await Permission.storage.request().isGranted)
+          : (await Permission.photos.request().isGranted)) {
+        if (!getIsNotAndroid13()) {
+          debugPrint("Image added successfully1 pre ");
+          List<Media>? res = await ImagesPicker.pick(
+            count: 3,
+            pickType: PickType.image,
+          );
+          if (res != null) {
+            debugPrint("Image added successfully1 ");
+            setState(() {
+              for (var i in res) {
+                attachements.add(
+                  File(i.path),
+                );
+              }
+            });
+          }
+        } else {
+          _picker = ImagePicker();
+          debugPrint("Image added successfully2 pre ");
+          final pickedFile = await _picker.pickMultiImage(
+            imageQuality: 70,
+          );
+          if (pickedFile != null) {
+            debugPrint("Image added successfully2");
+            setState(() {
+              for (var i in pickedFile) {
+                attachements.add(
+                  File(i.path),
+                );
+              }
+            });
+          }
+        }
+      } else {
+        showErrorStorage('Permission Denied');
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    title.dispose();
+    desc.dispose();
+    super.dispose();
+    // title.dispose();
   }
 
   void logTheCjDraftSubmitClick(
@@ -747,5 +611,19 @@ class _SubmitStoryPageState extends State<SubmitStoryPage>
         "user_id_tvc": profile.id,
       },
     );
+  }
+
+  void postStory(is_story_submit) async {
+    Navigation.instance.navigate('/loadingDialog');
+    final response = await ApiProvider.instance.postCitizenJournalist(
+        title.text, desc.text, attachements, is_story_submit);
+    if (response.success ?? false) {
+      Fluttertoast.showToast(msg: "Posted successfully");
+      Navigation.instance.goBack();
+      Navigation.instance.goBack();
+    } else {
+      Navigation.instance.goBack();
+      showError(response.message ?? "Something went wrong");
+    }
   }
 }

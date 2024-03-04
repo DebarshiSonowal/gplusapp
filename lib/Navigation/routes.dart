@@ -35,6 +35,7 @@ import '../UI/citizen_journalist/draft_story.dart';
 import '../UI/citizen_journalist/edit_story.dart';
 import '../UI/citizen_journalist/stories_submitted.dart';
 import '../UI/citizen_journalist/submit_story.dart';
+import '../UI/citizen_journalist/temp_screen.dart';
 import '../UI/citizen_journalist/view_story_page.dart';
 import '../UI/classified/classified_details.dart';
 import '../UI/classified/classified_page.dart';
@@ -78,6 +79,7 @@ import '../UI/story/story_page.dart';
 import '../UI/toppicks/top_picks_page.dart';
 import '../UI/view/competition_dynamic_page.dart';
 import '../UI/view/full_screen_advertisement.dart';
+import '../UI/view/video_scroll_player.dart';
 import '../UI/view/view_image_page.dart';
 import '../UI/view/webview_payment.dart';
 import 'Navigate.dart';
@@ -154,7 +156,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/videoPlayer':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'video_player');
       return FadeTransitionPageRouteBuilder(
-          page: VideoPlayerScreen(settings.arguments as String));
+          // page: VideoPlayerScreen(settings.arguments as String));
+          page: const VideoScrollPlayer());
     case '/viewImage':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'view_image');
       return FadeTransitionPageRouteBuilder(
