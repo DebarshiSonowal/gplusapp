@@ -153,20 +153,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                         SizedBox(
                                           height: 2.h,
                                         ),
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: CustomButton(
-                                            txt: 'Renew Subscription',
-                                            onTap: () async {
-                                              final result = await Navigation
-                                                  .instance
-                                                  .navigate('/beamember');
-                                              if (result == null) {
-                                                fetch();
-                                              }
-                                            },
-                                          ),
-                                        ),
+                                        // SizedBox(
+                                        //   width: double.infinity,
+                                        //   child: CustomButton(
+                                        //     txt: 'Renew Subscription',
+                                        //     onTap: () async {
+                                        //       final result = await Navigation
+                                        //           .instance
+                                        //           .navigate('/beamember');
+                                        //       if (result == null) {
+                                        //         fetch();
+                                        //       }
+                                        //     },
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
                                   ),

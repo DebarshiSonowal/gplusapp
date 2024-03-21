@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:gplusapp/Components/custom_button.dart';
+import 'package:gplusapp/Payment/widgets/dialog_box_contents.dart';
+import 'package:gplusapp/Payment/widgets/getUserInformationBody.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -195,9 +197,11 @@ You can parse it accordingly to handle response */
               SizedBox(
                 height: 5.h,
               ),
-              CustomButton(txt: 'Cancel Payment', onTap: () {
-                Navigation.instance.goBack();
-              }),
+              CustomButton(
+                  txt: 'Cancel Payment',
+                  onTap: () {
+                    Navigation.instance.goBack();
+                  }),
             ],
           ),
         ),
@@ -231,8 +235,8 @@ You can parse it accordingly to handle response */
               listen: false)
           .setMyGeoTopicks(response.geoTopicks);
       Provider.of<DataProvider>(
-          Navigation.instance.navigatorKey.currentContext ?? context,
-          listen: false)
+              Navigation.instance.navigatorKey.currentContext ?? context,
+              listen: false)
           .setFloatingButton(response.floating_button!);
       // Navigation.instance.goBack();
     } else {
@@ -265,34 +269,7 @@ You can parse it accordingly to handle response */
                   fontWeight: FontWeight.bold,
                 ),
           ),
-          content: Container(
-            padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
-            // height: 50.h,
-            width: 80.w,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'You are now a member of G Plus community',
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.black,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(height: 1.h),
-                SizedBox(
-                  width: double.infinity,
-                  child: CustomButton(
-                      txt: 'Close',
-                      onTap: () {
-                        Navigation.instance.navigate('/');
-                      }),
-                ),
-              ],
-            ),
-          ),
+          content: const ShowDialogBoxContent(),
         );
       },
     );
@@ -364,210 +341,21 @@ You can parse it accordingly to handle response */
       backgroundColor:
           Storage.instance.isDarkMode ? Colors.black : Colors.white,
       builder: (BuildContext context) {
-        return Padding(
-          padding: MediaQuery.of(context).viewInsets,
-          child: Container(
-            height: 42.h,
-            width: 40.w,
-            padding: EdgeInsets.only(
-              top: 2.h,
-              right: 2.w,
-              left: 2.w,
-              // bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Fill out your details',
-                  style: Theme.of(context).textTheme.headline3?.copyWith(
-                        color: !Storage.instance.isDarkMode
-                            ? Colors.black
-                            : Colors.white,
-                      ),
-                ),
-                SizedBox(height: 3.h),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 26.0),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 0.1.h, horizontal: 0.1.w),
-                    decoration: BoxDecoration(
-                      color: !Storage.instance.isDarkMode
-                          ? Colors.black
-                          : Colors.white,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                    ),
-                    child: TextFormField(
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Colors.black,
-                            fontSize: 14.sp,
-                          ),
-                      controller: name,
-                      textAlignVertical: TextAlignVertical.center,
-                      keyboardType: TextInputType.name,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: 'Enter your name',
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        labelStyle:
-                            Theme.of(context).textTheme.headline6?.copyWith(
-                                  color: Colors.grey.shade700,
-                                  fontSize: 12.sp,
-                                ),
-                        border: OutlineInputBorder(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                          borderSide: BorderSide(
-                            color: !Storage.instance.isDarkMode
-                                ? Colors.black
-                                : Colors.white,
-                          ),
-                        ),
-                        focusedBorder: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 1.h),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 26.0),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 0.1.h, horizontal: 0.1.w),
-                    decoration: BoxDecoration(
-                      color: !Storage.instance.isDarkMode
-                          ? Colors.black
-                          : Colors.white,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                    ),
-                    child: TextFormField(
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Colors.black,
-                            fontSize: 14.sp,
-                          ),
-                      controller: email,
-                      textAlignVertical: TextAlignVertical.center,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: 'Enter your email',
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        labelStyle:
-                            Theme.of(context).textTheme.headline6?.copyWith(
-                                  color: Colors.grey.shade700,
-                                  fontSize: 12.sp,
-                                ),
-                        border: OutlineInputBorder(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                          borderSide: BorderSide(
-                            color: !Storage.instance.isDarkMode
-                                ? Colors.black
-                                : Colors.white,
-                          ),
-                        ),
-                        focusedBorder: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 1.h),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 26.0),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 0.1.h, horizontal: 0.1.w),
-                    decoration: BoxDecoration(
-                      color: !Storage.instance.isDarkMode
-                          ? Colors.black
-                          : Colors.white,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                    ),
-                    child: TextFormField(
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Colors.black,
-                            fontSize: 14.sp,
-                          ),
-                      controller: phone,
-                      textAlignVertical: TextAlignVertical.center,
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: 'Enter your phone number',
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        labelStyle:
-                            Theme.of(context).textTheme.headline6?.copyWith(
-                                  color: Colors.grey.shade700,
-                                  fontSize: 12.sp,
-                                ),
-                        border: OutlineInputBorder(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                          borderSide: BorderSide(
-                            color: !Storage.instance.isDarkMode
-                                ? Colors.black
-                                : Colors.white,
-                          ),
-                        ),
-                        focusedBorder: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        'Cancel',
-                        style: Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Constance.thirdColor,
-                            ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        if (name.text.isNotEmpty &&
-                            email.text.isNotEmpty &&
-                            phone.text.isNotEmpty) {
-                          fetchKeys(widget.input.split(',')[0], name.text,
-                              email.text, phone.text);
-                          Navigator.of(context).pop();
-                        } else {
-                          showError("All the details are mandatory");
-                        }
-                      },
-                      child: Text(
-                        'Continue',
-                        style: Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Colors.green,
-                            ),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-        );
+        return GetUserInformationBody(
+            name: name,
+            email: email,
+            phone: phone,
+            onTap: () {
+              if (name.text.isNotEmpty &&
+                  email.text.isNotEmpty &&
+                  phone.text.isNotEmpty) {
+                fetchKeys(widget.input.split(',')[0], name.text, email.text,
+                    phone.text);
+                Navigator.of(context).pop();
+              } else {
+                showError("All the details are mandatory");
+              }
+            });
       },
     );
   }

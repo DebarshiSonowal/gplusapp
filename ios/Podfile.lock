@@ -194,6 +194,10 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.1.1):
     - Flutter
+  - phonepe_payment_sdk (1.1.0):
+    - Flutter
+    - PhonePePayment (= 2.7.3)
+  - PhonePePayment (2.7.3)
   - PromisesObjC (2.3.1)
   - purchases_flutter (5.8.0):
     - Flutter
@@ -253,6 +257,7 @@ DEPENDENCIES:
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - phonepe_payment_sdk (from `.symlinks/plugins/phonepe_payment_sdk/ios`)
   - purchases_flutter (from `.symlinks/plugins/purchases_flutter/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -281,6 +286,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - nanopb
     - OrderedSet
+    - PhonePePayment
     - PromisesObjC
     - PurchasesHybridCommon
     - ReachabilitySwift
@@ -344,6 +350,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
+  phonepe_payment_sdk:
+    :path: ".symlinks/plugins/phonepe_payment_sdk/ios"
   purchases_flutter:
     :path: ".symlinks/plugins/purchases_flutter/ios"
   share_plus:
@@ -406,6 +414,8 @@ SPEC CHECKSUMS:
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
+  phonepe_payment_sdk: 62696b0fa1265e9c5111ff0af49eda3cb5d58012
+  PhonePePayment: 13abece65df5d9ca6f976b001e7a91112b5c2107
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   purchases_flutter: a23f77000427872e31f770101cd0cd6f4fc60cb3
   PurchasesHybridCommon: 5ee5e13fe009876850a03f52bb0349b6fa91d976
@@ -417,7 +427,7 @@ SPEC CHECKSUMS:
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: 68d46cc9766d0c41dbdc884310529557e3cd7a86
-  video_player_avfoundation: 8563f13d8fc8b2c29dc2d09e60b660e4e8128837
+  video_player_avfoundation: e9e6f9cae7d7a6d9b43519b0aab382bca60fcfd1
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
   ZLPhotoBrowser: 4bfab86b851042e18d7f413284472aa68759626a

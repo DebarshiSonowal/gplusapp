@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 #version: 3.5.22+30522
-version: 3.6.69+30669
+version: 3.6.70+30670
 
 environment:
   sdk: ">=3.0.5 <4.0.0"
@@ -73,7 +73,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   google_maps_flutter: ^2.2.0
   scrollable_positioned_list: ^0.3.4
-  webview_flutter: ^4.4.1
+  webview_flutter: ^4.5.0
   change_app_package_name: ^1.1.0
   google_place: ^0.4.7
   google_geocoding: ^0.2.0
@@ -121,6 +121,7 @@ dependencies:
   simple_circular_progress_bar: ^1.0.2
   tiktoklikescroller: ^0.2.6
   video_player: ^2.8.2
+  phonepe_payment_sdk: ^2.0.1
 #  cached_video_player: ^2.0.3
 
 dependency_overrides:

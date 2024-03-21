@@ -42,6 +42,7 @@ import '../Model/message_response.dart';
 import '../Model/notification_in_device.dart';
 import '../Model/opinion.dart';
 import '../Model/order.dart';
+import '../Model/phonepe_response.dart';
 import '../Model/poll_of_the_week.dart';
 import '../Model/promoted_deal.dart';
 import '../Model/razorpay_key.dart';
@@ -527,55 +528,48 @@ class ApiProvider {
         'longitude': longitude,
       });
     }
-    if(latitude!=null) {
+    if (latitude != null) {
       data.addAll({
         'latitude': latitude,
       });
     }
-    if(address_id!=null){
+    if (address_id != null) {
       data.addAll({
         'address_id': address_id,
-
       });
     }
-    if(topic_ids!=null){
+    if (topic_ids != null) {
       data.addAll({
         'topic_ids': topic_ids,
       });
     }
-    if(geo_ids!=null){
+    if (geo_ids != null) {
       data.addAll({
         'geo_ids': geo_ids,
       });
     }
-    if(has_deal_notify_perm!=null){
+    if (has_deal_notify_perm != null) {
       data.addAll({
         'has_deal_notify_perm': has_deal_notify_perm,
-
       });
     }
-    if(has_ghy_connect_notify_perm!=null){
+    if (has_ghy_connect_notify_perm != null) {
       data.addAll({
         'has_ghy_connect_notify_perm': has_ghy_connect_notify_perm,
-
       });
     }
-    if(has_classified_notify_perm!=null){
+    if (has_classified_notify_perm != null) {
       data.addAll({
         'has_classified_notify_perm': has_classified_notify_perm,
-
       });
     }
-    if(referal!=null){
+    if (referal != null) {
       data.addAll({
         'referred_by_code': referal,
-
       });
     }
-    if(is_new!=null){
-      data.addAll({
-        'is_new': is_new
-      });
+    if (is_new != null) {
+      data.addAll({'is_new': is_new});
     }
     var url = "$baseUrl/profile-update";
     // var url = "${baseUrl}/profile";
@@ -2577,6 +2571,92 @@ class ApiProvider {
       }
       debugPrint("Razorpay error: ${e.response}");
       return RazorpayResponse.withError(e.message);
+    }
+  }
+
+  Future<PhonepeResponse> phonepeApi(subscription_id,use_referral_point,) async {
+    var url = "$baseUrl/phonepe/subscription";
+    BaseOptions option =
+        BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint(url.toString());
+    var data = {
+      "subscription_id":subscription_id,
+      "use_referral_point":use_referral_point,
+      'device_type': Platform.isAndroid?'android':"ios",
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        queryParameters: data,
+      );
+      debugPrint("Phonepe response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return PhonepeResponse.fromJson(response?.data);
+      } else {
+        debugPrint("Phonepe error: ${response?.data}");
+        return PhonepeResponse.withError(
+            "Your Internet Connection is Slow");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("Phonepe error: ${e.response}");
+      return PhonepeResponse.withError(e.message);
+    }
+  }
+
+  Future<GenericResponse> PhonepePaymentVerify(order_code,merchant_user_id,merchant_subscription_id,) async {
+    var url = "$baseUrl/phonepe/verify-payment";
+    BaseOptions option =
+    BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    dio = Dio(option);
+    debugPrint("Bearer ${Storage.instance.token}");
+    debugPrint(url.toString());
+    //order_code, merchant_subscription_id,redirect_url,merchant_user_id
+    var data = {
+      'order_code': order_code,
+      'merchant_subscription_id': merchant_subscription_id,
+      'merchant_user_id': merchant_user_id,
+    };
+    debugPrint(jsonEncode(data));
+
+    try {
+      Response? response = await dio?.post(
+        url,
+        queryParameters: data,
+      );
+      debugPrint("Phonepe verify response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return GenericResponse.fromJson(response?.data);
+      } else {
+        debugPrint("Phonepe verify error: ${response?.data}");
+        return GenericResponse.withError(
+            "Your Internet Connection is Slow");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("Phonepe verify error: ${e.response}");
+      return GenericResponse.withError(e.message);
     }
   }
 

@@ -22,6 +22,7 @@ import '../Components/video_player_screen.dart';
 // import '../OnBoarding/on_boarding_page.dart';
 import '../Helper/Storage.dart';
 import '../Payment/payment_processing_page.dart';
+import '../Payment/payment_processing_page2.dart';
 import '../UI/Member/be_a_membe_page.dart';
 import '../UI/Notification/notification_page.dart';
 import '../UI/Search/search_page.dart';
@@ -194,14 +195,22 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'category');
       return FadeTransitionPageRouteBuilder(
           page: CategoryDetails(slug: settings.arguments as String));
+    // case '/paymentProcessing':
+    //   FirebaseAnalytics.instance
+    //       .setCurrentScreen(screenName: 'payment_processing');
+    //   return FadeTransitionPageRouteBuilder(
+    //       page: paymentProcessingPage(settings.arguments as String));
     case '/paymentProcessing':
       FirebaseAnalytics.instance
           .setCurrentScreen(screenName: 'payment_processing');
       return FadeTransitionPageRouteBuilder(
-          page: paymentProcessingPage(settings.arguments as String));
-    // case '/paymentProcessingIOS':
-    //   return FadeTransitionPageRouteBuilder(
-    //       page: Webview_payment(url: settings.arguments as String));
+          page: PaymentProcessingPage2(input:settings.arguments as String));
+
+    case '/recurring_payment':
+      // FirebaseAnalytics.instance.setCurrentScreen(screenName: 'exclusive');
+      return FadeTransitionPageRouteBuilder(page:  WebviewPayment(url:settings.arguments as String));
+
+
 
     case '/notification':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'notification');

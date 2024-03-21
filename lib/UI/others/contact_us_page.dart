@@ -119,7 +119,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                     width: 4.w,
                   ),
                   SizedBox(
-                    width: 80.w,
+                    width: 70.w,
                     child: Text(
                       ('${data.contactUs?.address1},${data.contactUs?.address2},${data.contactUs?.address3}') ??
                           'Hatigaon Bhetapara Road, Bhetapara, Guwahati, Assam, 781022',
