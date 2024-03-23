@@ -140,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           height: 2.h,
                                         ),
                                         Text(
-                                          '*Subscription is for one time purchase only.\nWe do not renew you subscription automatically.',
+                                          '*Subscription is for recurring purchases.\nWe renew your subscription automatically.',
                                           style: Theme.of(context)
                                               .textTheme
                                               .headline6
