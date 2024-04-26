@@ -6,9 +6,11 @@ import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoScreen extends StatefulWidget {
-  const VideoScreen({super.key, required this.controller});
+import '../../Model/short_video.dart';
 
+class VideoScreen extends StatefulWidget {
+  const VideoScreen({super.key, required this.controller, required this.item});
+  final ShortVideo item;
   final VideoPlayerController controller;
 
   @override
@@ -33,12 +35,6 @@ class _VideoScreenState extends State<VideoScreen> {
             child: VideoPlayer(widget.controller),
           ),
         ),
-        // Positioned(
-        //   child: GestureDetector(
-        //     onTap: () {},
-        //     child: Icon(Icons.arrow_back,size: ,),
-        //   ),
-        // ),
         Positioned(
           left: 0,
           bottom: 4.5.h,
@@ -61,7 +57,7 @@ class _VideoScreenState extends State<VideoScreen> {
                       width: 3.w,
                     ),
                     Text(
-                      "GPlus",
+                      widget.item.title??"GPlus",
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Colors.white,
                             fontSize: 18.sp,
@@ -79,7 +75,7 @@ class _VideoScreenState extends State<VideoScreen> {
                   ),
                   width: 85.w,
                   child: ReadMoreText(
-                    'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.',
+                    widget.item.description??'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.',
                     trimLines: 2,
                     colorClickableText: Colors.pink,
                     trimMode: TrimMode.Line,
@@ -127,7 +123,7 @@ class _VideoScreenState extends State<VideoScreen> {
                       size: 10.w,
                     );
                   },
-                  likeCount: 665,
+                  likeCount: widget.item.viewCount??665,
                   countBuilder: (int? count, bool isLiked, String text) {
                     var color = isLiked ? Colors.red : Colors.grey.shade100;
                     Widget result;

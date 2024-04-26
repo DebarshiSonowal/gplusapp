@@ -54,6 +54,7 @@ import '../Model/report_model.dart';
 import '../Model/search_result.dart';
 import '../Model/shop.dart';
 import '../Model/shop_category.dart';
+import '../Model/short_video.dart';
 import '../Model/story.dart';
 import '../Model/swtich_status.dart';
 import '../Model/top_picks.dart';
@@ -4796,6 +4797,45 @@ class ApiProvider {
       debugPrint("update guwahati-connect error: ${e.response}");
       return GenericResponse.withError(
           e.response?.data['message'] ?? e.message);
+    }
+  }
+
+  Future<ShortVideoResponse> shortVideo(page) async {
+    var data = {
+      'page': page,
+    };
+    BaseOptions option =
+    BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${Storage.instance.token}'
+      // 'APP-KEY': ConstanceData.app_key
+    });
+    var url = "$baseUrl/app/short/videos";
+    dio = Dio(option);
+    debugPrint(url.toString());
+    debugPrint(jsonEncode(data));
+    try {
+      Response? response = await dio?.get(
+        url,
+        queryParameters: data,
+      );
+      debugPrint("short/videos response: ${response?.data}");
+      if (response?.statusCode == 200 || response?.statusCode == 201) {
+        return ShortVideoResponse.fromJson(response?.data);
+      } else {
+        debugPrint("short/videos  error: ${response?.data}");
+        return ShortVideoResponse.withError(
+            "Your Internet Connection is Slow");
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 420) {
+        Storage.instance.logout();
+        Navigation.instance.navigateAndRemoveUntil('/login');
+        showError("Oops! Your session expired. Please Login Again");
+      }
+      debugPrint("short/videos response: ${e.response}");
+      return ShortVideoResponse.withError(e.message);
     }
   }
 

@@ -162,29 +162,30 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            if ((Provider.of<DataProvider>(
-                                            Navigation.instance.navigatorKey
-                                                    .currentContext ??
-                                                context,
-                                            listen: false)
-                                        .profile
-                                        ?.is_new ??
-                                    0) ==
-                                0) {
+                            if (checkIfProfileNeedCreation(
+                                Provider.of<DataProvider>(
+                                    Navigation.instance.navigatorKey
+                                        .currentContext ??
+                                        context,
+                                    listen: false)
+                                    .profile)) {
+                              Navigation.instance
+                                  .navigate('/updateProfile');
+
+                            } else {
                               logTheHambergerOptionClick(
                                 Provider.of<DataProvider>(
-                                        Navigation.instance.navigatorKey
-                                                .currentContext ??
-                                            context,
-                                        listen: false)
+                                    Navigation.instance.navigatorKey
+                                        .currentContext ??
+                                        context,
+                                    listen: false)
                                     .profile!,
                                 widget.screen,
                                 "view_profile",
                                 "NA",
                               );
                               Navigation.instance.navigate('/editProfile');
-                            } else {
-                              Navigation.instance.navigate('/updateProfile');
+
                             }
                           },
                           child: Column(
@@ -218,7 +219,7 @@ class _BergerMenuMemPageState extends State<BergerMenuMemPage> {
                               SizedBox(
                                 height: 1.5.h,
                               ),
-                              Text(
+                              valueNotifier?.value==100?Container():Text(
                                 "Complete Your Profile",
                                 style: Theme.of(context)
                                     .textTheme

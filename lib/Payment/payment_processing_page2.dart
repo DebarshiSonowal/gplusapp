@@ -6,6 +6,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_upi/get_upi.dart';
 import 'package:gplusapp/Payment/widgets/dialog_box_contents.dart';
 import 'package:gplusapp/Payment/widgets/getUserInformationBody.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -81,7 +83,6 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
             Navigation.instance.goBack();
             Navigation.instance.goBack();
           }
-
         }
         break;
       case AppLifecycleState.inactive:
@@ -705,32 +706,19 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
             phone: phone,
             onTap: () async {
               if (name.text.isNotEmpty &&
-                  email.text.isNotEmpty &&
                   phone.text.isNotEmpty) {
                 // fetchKeys(widget.input.split(',')[0], name.text, email.text,
                 //     phone.text);
-                debugPrint("Soemn");
+                debugPrint("Soemn ${redirect_url}");
                 // final resp = await Navigation.instance
                 //     .navigate("/recurring_payment", args: redirect_url);
                 setState(() {
                   merchant_subscription_id = m_subscription_id;
                   merchant_user_id = m_user_id;
                 });
-                final resp = await launchUrl(Uri.parse(redirect_url!),
-                    mode: LaunchMode.externalApplication);
-                if (resp != null) {
-                  debugPrint("Launched");
-                  // final resp = await checkForOrders(orderId,merchant_subscription_id,merchant_user_id,);
-                  // if(resp){
-                  //   fetchProfile();
-                  //   Navigation.instance.goBack();
-                  // }else{
-                  //   Navigation.instance.goBack();
-                  // }
-                  // Navigation.instance.goBack();
-                }
-                // startPaymentProcessing(widget.input.split(',')[0],name.text, email.text,phone.text);
-                // Navigator.of(context).pop();
+                GetUPI.openNativeIntent(
+                  url: redirect_url!,
+                );
               } else {
                 showError("All the details are mandatory");
               }
