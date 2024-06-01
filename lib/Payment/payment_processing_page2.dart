@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
+// import 'package:flutter_inapp_purchase/modules.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_upi/get_upi.dart';
 import 'package:gplusapp/Payment/widgets/dialog_box_contents.dart';
@@ -16,7 +16,6 @@ import 'package:provider/provider.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../Components/custom_button.dart';
 import '../Components/guwhati_connect_post_card.dart';
 import '../Helper/Constance.dart';
@@ -44,8 +43,6 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
   final phone = TextEditingController();
   final name = TextEditingController();
   String? orderId, merchant_subscription_id, merchant_user_id;
-
-  //
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   List<String> environmentList = <String>['SANDBOX', 'PRODUCTION'];
   bool enableLogs = true;
@@ -56,25 +53,22 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
   String checksum = "";
   String packageName = "com.phonepe.simulator";
 
-  // String? orderId;
-
-  //
-  Timer? timer;
-
   AppLifecycleState? _notification;
-
+  // List<IAPItem> _items = [];
+  // List<PurchasedItem> _purchases = [];
+  // StreamSubscription? _purchaseUpdatedSubscription;
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
         print("app in resumed");
-        if (orderId != "" &&
-            merchant_subscription_id != "" &&
-            merchant_user_id != "") {
+        if (orderId != null &&
+            merchant_subscription_id != null &&
+            merchant_user_id != null) {
           final resp = await checkForOrders(
-            orderId,
-            merchant_subscription_id,
-            merchant_user_id,
+            orderId!,
+            merchant_subscription_id!,
+            merchant_user_id!,
           );
           if (resp) {
             fetchProfile();
@@ -118,12 +112,6 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
         showPaymentOptions();
       }
     });
-    // timer = Timer.periodic(
-    //   const Duration(seconds: 10),
-    //   (timer) async {
-    //
-    //   },
-    // );
   }
 
   @override
@@ -211,11 +199,11 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
     );
   }
 
-//Methods
-
+  //Methods
   //IN APP
-  _verifyPurchase(PurchaseDetails purchaseDetails) async {
-    return await InAppPurchase.instance.restorePurchases();
+  Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) async {
+    // Replace this with your own verification logic
+    return true;
   }
 
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
@@ -232,7 +220,7 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
             Navigation.instance.goBack();
             showDialogBox();
           } else {
-            showError(purchaseDetails.error.toString());
+            showError("Purchase verification failed");
           }
         }
         if (purchaseDetails.pendingCompletePurchase) {
@@ -321,7 +309,6 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
   Future<void> initPlatformState() async {
     // Enable debug logs before calling `configure`.
     await Purchases.setDebugLogsEnabled(true);
-
     /*
     - appUserID is nil, so an anonymous ID will be generated automatically by the Purchases SDK. Read more about Identifying Users here: https://docs.revenuecat.com/docs/user-ids
     - observerMode is false, so Purchases will automatically handle finishing transactions. Read more about Observer Mode here: https://docs.revenuecat.com/docs/observer-mode
@@ -338,12 +325,9 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
         ..observerMode = false;
     }
     await Purchases.configure(configuration);
-
     appData.appUserID = await Purchases.appUserID;
-
     Purchases.addCustomerInfoUpdateListener((customerInfo) async {
       appData.appUserID = await Purchases.appUserID;
-
       CustomerInfo customerInfo = await Purchases.getCustomerInfo();
       (customerInfo.entitlements.all[FlutterConfig.get('entitlementId')] !=
                   null &&
@@ -352,43 +336,56 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
           ? appData.entitlementIsActive = true
           : appData.entitlementIsActive = false;
     });
-
     Offerings offerings;
+
+    debugPrint(
+        "Packages0 ${await Purchases.appUserID} ${await Purchases.getProducts(["gplus_subscription_one_year_non"])}");
     try {
       offerings = await Purchases.getOfferings();
-      debugPrint("Packages1 ${offerings.current!.availablePackages}");
+      debugPrint("Packages1 ${offerings.toJson()}");
       final response = await Purchases.appUserID;
       debugPrint("1st $response");
       debugPrint("2nd ${offerings.getOffering("subscriptions")}");
       debugPrint("3rd ${widget.input.split(',')[2]}");
-      CustomerInfo customerInfo =
-          await Purchases.purchaseProduct(widget.input.split(',')[2]);
-
-      // purchasePackage(offerings
-      //       .getOffering("subscriptions")!
-      //       .availablePackages
-      //       .firstWhere((element) =>
-      //           element.storeProduct.identifier == widget.input.split(',')[2]));
-
-      fetchKeysInapp(
-          widget.input.split(',')[0],
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .profile
-              ?.name,
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .profile
-              ?.email,
-          Provider.of<DataProvider>(
-                  Navigation.instance.navigatorKey.currentContext ?? context,
-                  listen: false)
-              .profile
-              ?.mobile,
-          customerInfo.nonSubscriptionTransactions[0].revenueCatIdentifier,
-          customerInfo.nonSubscriptionTransactions[0].purchaseDate);
+      // Make sure to fetch the offerings first, before attempting to purchase a package
+      try {
+        Package package = offerings
+            .getOffering("yearly")!
+            .availablePackages.first;
+            // .firstWhere((element) =>
+            //     element.storeProduct.identifier == widget.input.split(',')[2]);
+        CustomerInfo customerInfo = await Purchases.purchasePackage(package);
+        if (customerInfo.nonSubscriptionTransactions.isNotEmpty) {
+          fetchKeysInapp(
+              widget.input.split(',')[0],
+              Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey.currentContext ??
+                              context,
+                          listen: false)
+                      .profile
+                      ?.name ??
+                  '',
+              Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey.currentContext ??
+                              context,
+                          listen: false)
+                      .profile
+                      ?.email ??
+                  '',
+              Provider.of<DataProvider>(
+                          Navigation.instance.navigatorKey.currentContext ??
+                              context,
+                          listen: false)
+                      .profile
+                      ?.mobile ??
+                  '',
+              customerInfo.nonSubscriptionTransactions[0].revenueCatIdentifier,
+              customerInfo.nonSubscriptionTransactions[0].purchaseDate);
+        }
+      } catch (e) {
+        showError("No package found");
+        debugPrint("Payment ${e}");
+      }
     } on PlatformException catch (e) {
       debugPrint("Payment ${e.message} ${e.details}");
       showError("Something went wrong");
@@ -413,7 +410,7 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
     );
     if (response.success ?? false) {
       verifyPaymentInapp(
-          response.order?.voucher_no, transaction_id, purchase_date);
+          response.order?.voucher_no ?? '', transaction_id, purchase_date);
     } else {
       showError(response.message ?? "Something went wrong");
     }
@@ -528,18 +525,15 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
           .then((apps) => {
                 setState(() {
                   result = 'getUPIAppsInstalledForIOS - $apps';
-
                   // For Usage
                   List<String> stringList = apps
                           ?.whereType<
                               String>() // Filters out null and non-String elements
                           .toList() ??
                       [];
-
                   // Check if the string value 'Orange' exists in the filtered list
                   String searchString = 'PHONEPE';
                   bool isStringExist = stringList.contains(searchString);
-
                   if (isStringExist) {
                     print('$searchString app exist in the device.');
                   } else {
@@ -626,7 +620,6 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
   }
 
   //Common
-
   void fetchProfile() async {
     // Navigation.instance.navigate('/loadingDialog');
     final response = await ApiProvider.instance.getprofile();
@@ -705,8 +698,7 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
             email: email,
             phone: phone,
             onTap: () async {
-              if (name.text.isNotEmpty &&
-                  phone.text.isNotEmpty) {
+              if (name.text.isNotEmpty && phone.text.isNotEmpty) {
                 // fetchKeys(widget.input.split(',')[0], name.text, email.text,
                 //     phone.text);
                 debugPrint("Soemn ${redirect_url}");
@@ -762,9 +754,9 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
   }
 
   Future<bool> checkForOrders(
-    order_code,
-    merchant_subscription_id,
-    merchant_user_id,
+    String order_code,
+    String merchant_subscription_id,
+    String merchant_user_id,
   ) async {
     final response = await ApiProvider.instance.PhonepePaymentVerify(
         order_code, merchant_user_id, merchant_subscription_id);
@@ -774,5 +766,16 @@ class _PaymentProcessingPage2State extends State<PaymentProcessingPage2>
       showError(response.message ?? "Something went wrong");
       return response.success ?? false;
     }
+  }
+
+  void showError(String msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 }

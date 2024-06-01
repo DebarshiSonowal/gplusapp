@@ -26,16 +26,16 @@ import '../Model/profile.dart';
 import '../Navigation/Navigate.dart';
 import '../Networking/api_provider.dart';
 
-class paymentProcessingPage extends StatefulWidget {
+class PaymentProcessingPage extends StatefulWidget {
   String input;
 
-  paymentProcessingPage(this.input);
+  PaymentProcessingPage(this.input);
 
   @override
-  State<paymentProcessingPage> createState() => _paymentProcessingPageState();
+  State<PaymentProcessingPage> createState() => _PaymentProcessingPageState();
 }
 
-class _paymentProcessingPageState extends State<paymentProcessingPage> {
+class _PaymentProcessingPageState extends State<PaymentProcessingPage> {
   double tempTotal = 0;
   var temp_order_id = "";
   static const MethodChannel _channel = MethodChannel('easebuzz');

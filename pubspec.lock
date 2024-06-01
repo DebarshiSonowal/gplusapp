@@ -1044,18 +1044,18 @@ packages:
     dependency: "direct main"
     description:
       name: in_app_purchase
-      sha256: bdda02b5b11b56d5e29c7f0c57c433db3452b0c8ce1c37cbfcf1de52946efd9f
+      sha256: def70fbaa2a274f4d835677459f6f7afc5469de912438f86076e51cbd4cbd5b4
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.11"
+    version: "3.1.13"
   in_app_purchase_android:
     dependency: transitive
     description:
       name: in_app_purchase_android
-      sha256: "3eeff5e51306e1916dda31eb5647b52da8e71ba81ffd9e4d840ee89986d4bf22"
+      sha256: b9d4ecf70c51ab46222502c050b1535f6249caf9d768c4abd856ea16a18a882d
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0+14"
+    version: "0.3.3+1"
   in_app_purchase_platform_interface:
     dependency: transitive
     description:
@@ -1068,10 +1068,10 @@ packages:
     dependency: transitive
     description:
       name: in_app_purchase_storekit
-      sha256: "88afd256c7605d431f0ce29d0161f9554851f90ecb92ceb9e18196c4e7858d52"
+      sha256: c4b17a7f2ca8ddc7fd7996a8c32a3af6beddf91d651997c8675a5f23c103c9bc
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.6+7"
+    version: "0.3.8+1"
   in_app_review:
     dependency: "direct main"
     description:
@@ -1216,6 +1216,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  multi_video_player:
+    dependency: "direct main"
+    description:
+      name: multi_video_player
+      sha256: "27e239a8af73816ccca32f8e4ff09c5a9b152483bc749df5218dac7079a5a030"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   navigation_history_observer:
     dependency: "direct main"
     description:
@@ -1528,6 +1536,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.3"
+  preload_page_view:
+    dependency: transitive
+    description:
+      name: preload_page_view
+      sha256: "488a10c158c5c2e9ba9d77e5dbc09b1e49e37a20df2301e5ba02992eac802b7a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   process:
     dependency: transitive
     description:

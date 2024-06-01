@@ -4822,6 +4822,7 @@ class ApiProvider {
       );
       debugPrint("short/videos response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
+        debugPrint("URIL ${response?.data['result']['data']}");
         return ShortVideoResponse.fromJson(response?.data);
       } else {
         debugPrint("short/videos  error: ${response?.data}");

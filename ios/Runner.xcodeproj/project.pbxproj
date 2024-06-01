@@ -10,6 +10,7 @@
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		7008DCCE2ACFFFA2009DA4A8 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777F13D17513EBF9FB7B85D6 /* Pods_Runner.framework */; };
+		702603112BF9B39600102A33 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 700A7B72296BF117006D8DEB /* StoreKit.framework */; };
 		703477AB2960314A005B2BD9 /* Easebuzz.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 703477A929603146005B2BD9 /* Easebuzz.xcframework */; };
 		703477AC2960314A005B2BD9 /* Easebuzz.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 703477A929603146005B2BD9 /* Easebuzz.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		70989C36297A661D00B7B30B /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 70989C35297A661D00B7B30B /* Configuration.storekit */; };
@@ -69,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				702603112BF9B39600102A33 /* StoreKit.framework in Frameworks */,
 				7008DCCE2ACFFFA2009DA4A8 /* Pods_Runner.framework in Frameworks */,
 				703477AB2960314A005B2BD9 /* Easebuzz.xcframework in Frameworks */,
 			);
@@ -436,6 +438,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -590,6 +593,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -631,6 +635,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

@@ -157,8 +157,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/videoPlayer':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'video_player');
       return FadeTransitionPageRouteBuilder(
-          page: VideoPlayerScreen(settings.arguments as String));
-          // page: VideoScrollPlayer(id:settings.arguments as String));
+          // page: VideoPlayerScreen(settings.arguments as String));
+          page: VideoScrollPlayer(id:settings.arguments as String));
     case '/viewImage':
       FirebaseAnalytics.instance.setCurrentScreen(screenName: 'view_image');
       return FadeTransitionPageRouteBuilder(

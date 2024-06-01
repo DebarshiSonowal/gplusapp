@@ -104,52 +104,52 @@ class _VideoScreenState extends State<VideoScreen> {
             decoration: BoxDecoration(color: Colors.black.withOpacity(0.05)),
             child: Column(
               children: [
-                LikeButton(
-                  isLiked: isLiked,
-                  size: 10.w,
-                  countPostion: CountPostion.bottom,
-                  circleColor:
-                      const CircleColor(start: Colors.white, end: Colors.red),
-                  bubblesColor: const BubblesColor(
-                    dotPrimaryColor: Color(0xff33b5e5),
-                    dotSecondaryColor: Color(0xff0099cc),
-                  ),
-                  likeBuilder: (bool isLiked) {
-                    return Icon(
-                      isLiked
-                          ? FontAwesomeIcons.solidHeart
-                          : FontAwesomeIcons.heart,
-                      color: isLiked ? Colors.red : Colors.grey.shade100,
-                      size: 10.w,
-                    );
-                  },
-                  likeCount: widget.item.viewCount??665,
-                  countBuilder: (int? count, bool isLiked, String text) {
-                    var color = isLiked ? Colors.red : Colors.grey.shade100;
-                    Widget result;
-                    if (count == 0) {
-                      result = Container(
-                        margin: EdgeInsets.only(top: 1.h),
-                        child: Text(
-                          "love",
-                          style: TextStyle(color: color),
-                        ),
-                      );
-                    } else {
-                      result = Container(
-                        margin: EdgeInsets.only(top: 1.h),
-                        child: Text(
-                          text,
-                          style: TextStyle(
-                            color: color,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                      );
-                    }
-                    return result;
-                  },
-                ),
+                // LikeButton(
+                //   isLiked: isLiked,
+                //   size: 10.w,
+                //   countPostion: CountPostion.bottom,
+                //   circleColor:
+                //       const CircleColor(start: Colors.white, end: Colors.red),
+                //   bubblesColor: const BubblesColor(
+                //     dotPrimaryColor: Color(0xff33b5e5),
+                //     dotSecondaryColor: Color(0xff0099cc),
+                //   ),
+                //   likeBuilder: (bool isLiked) {
+                //     return Icon(
+                //       isLiked
+                //           ? FontAwesomeIcons.solidHeart
+                //           : FontAwesomeIcons.heart,
+                //       color: isLiked ? Colors.red : Colors.grey.shade100,
+                //       size: 10.w,
+                //     );
+                //   },
+                //   likeCount: widget.item.viewCount??665,
+                //   countBuilder: (int? count, bool isLiked, String text) {
+                //     var color = isLiked ? Colors.red : Colors.grey.shade100;
+                //     Widget result;
+                //     if (count == 0) {
+                //       result = Container(
+                //         margin: EdgeInsets.only(top: 1.h),
+                //         child: Text(
+                //           "love",
+                //           style: TextStyle(color: color),
+                //         ),
+                //       );
+                //     } else {
+                //       result = Container(
+                //         margin: EdgeInsets.only(top: 1.h),
+                //         child: Text(
+                //           text,
+                //           style: TextStyle(
+                //             color: color,
+                //             fontSize: 16.sp,
+                //           ),
+                //         ),
+                //       );
+                //     }
+                //     return result;
+                //   },
+                // ),
                 SizedBox(
                   height: 2.h,
                 ),
@@ -166,16 +166,16 @@ class _VideoScreenState extends State<VideoScreen> {
                             Icons.share,
                             size: 10.w,
                           ),
-                          SizedBox(
-                            height: 1.h,
-                          ),
-                          Text(
-                            "5,352",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.sp,
-                            ),
-                          ),
+                          // SizedBox(
+                          //   height: 1.h,
+                          // ),
+                          // Text(
+                          //   "0",
+                          //   style: TextStyle(
+                          //     color: Colors.white,
+                          //     fontSize: 16.sp,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
