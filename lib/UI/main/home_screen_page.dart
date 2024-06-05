@@ -56,11 +56,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  int current = 0, currentPage = 0;
+  int current = 0,
+      currentPage = 0;
   int random = 0;
   final ScrollController controller = ScrollController();
   final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController(initialRefresh: false);
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool showing = false;
 
@@ -73,12 +74,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void sendToRoute(String route, data, String? category) async {
     debugPrint("our route1 $route\n$data\n$category");
     switch (route) {
-      // case "story":
-      //   // Navigation.instance.navigate('/main');
-      //   // print("this route");
-      //   Navigation.instance
-      //       .navigate('/story', args: '$category,$data,home_page');
-      //   break;
+    // case "story":
+    //   // Navigation.instance.navigate('/main');
+    //   // print("this route");
+    //   Navigation.instance
+    //       .navigate('/story', args: '$category,$data,home_page');
+    //   break;
       case "poll_of_the_week":
         Navigation.instance.pushNamedIfNotCurrent(
           '/pollPage',
@@ -89,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             .navigate('/opinionDetails', args: '$data,$category');
         break;
       default:
-        if (category == 'poll_of_the_week'||category == "PollOfTheWeek") {
+        if (category == 'poll_of_the_week' || category == "PollOfTheWeek") {
           Navigation.instance.pushNamedIfNotCurrent(
             '/pollPage',
           );
@@ -122,9 +123,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    setUserProperty(Provider.of<DataProvider>(
-            Navigation.instance.navigatorKey.currentContext ?? context,
-            listen: false)
+    setUserProperty(Provider
+        .of<DataProvider>(
+        Navigation.instance.navigatorKey.currentContext ?? context,
+        listen: false)
         .profile);
     // secureScreen();
     Future.delayed(Duration.zero, () => fetchDetails(context));
@@ -150,15 +152,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final result = await ApiProvider.instance.getHomeAlbum();
     if (result.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setHomeAlbum(result.articles ?? []);
 
       final response = await ApiProvider.instance.getWeekly();
       if (response.success ?? false) {
         Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
+            Navigation.instance.navigatorKey.currentContext ?? context,
+            listen: false)
             .setVideoWeekly(response.videos ?? []);
         _refreshController.refreshCompleted();
       }
@@ -177,17 +179,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       upgrader: Upgrader(
         // debugDisplayAlways: true,
         // debugDisplayOnce: true,
-        willDisplayUpgrade: (
-            {String? appStoreVersion,
-            bool? display,
-            String? installedVersion,
-            String? minAppVersion}) async {
+        willDisplayUpgrade: ({String? appStoreVersion,
+          bool? display,
+          String? installedVersion,
+          String? minAppVersion}) async {
           // print(
           //     "#123 $appStoreVersion | $display | $installedVersion | $minAppVersion");
           if ((Storage.instance.lastDisplayed == "" ||
-                  (DateFormat("dd/MM/yyyy").format(
-                          DateTime.parse(Storage.instance.lastDisplayed)) ==
-                      DateFormat("dd/MM/yyyy").format(DateTime.now()))) &&
+              (DateFormat("dd/MM/yyyy").format(
+                  DateTime.parse(Storage.instance.lastDisplayed)) ==
+                  DateFormat("dd/MM/yyyy").format(DateTime.now()))) &&
               (display ?? false)) {
             Storage.instance.setLastDisplayed(
                 DateFormat("dd/MM/yyyy").format(DateTime.now()));
@@ -202,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor:
-            Storage.instance.isDarkMode ? Colors.black : Colors.grey.shade100,
+        Storage.instance.isDarkMode ? Colors.black : Colors.grey.shade100,
         appBar: Constance.buildAppBar("home", true, _scaffoldKey),
         // floatingActionButtonLocation: showing
         //     ? FloatingActionButtonLocation.miniStartFloat
@@ -225,40 +226,44 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           builder: (context, data, _) {
             return (data.floating_button?.status ?? false)
                 ? FloatingActionButton(
-                    backgroundColor: (data.floating_button?.color == null ||
-                            data.floating_button?.image_url != "")
-                        ? Colors.transparent
-                        : hexToColor(data.floating_button?.color.toString() ??
-                            "#7CFC00"),
-                    onPressed: () {
-                      var encrypted = getEncrypted(data);
-                      // while(encrypted.base64.toString().contains("+")){
-                      //   encrypted = getEncrypted(data);
-                      // }
-                      Navigation.instance.navigate("/competitions",
-                          args:
-                              "${data.floating_button?.url}?key=${encrypted.base64}");
-                    },
-                    // child: Text(
-                    //   "${data.floating_button?.text}",
-                    //   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    //         color: Colors.black,
-                    //       ),
-                    // ),
-                    child: data.floating_button?.image_url == ""
-                        ? Text(
-                            "${data.floating_button?.text}",
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Colors.black,
-                                    ),
-                          )
-                        : CachedNetworkImage(
-                            imageUrl: data.floating_button!.image_url!,
-                            height: 35.sp,
-                            width: 35.sp,
-                          ),
-                  )
+              backgroundColor: (data.floating_button?.color == null ||
+                  data.floating_button?.image_url != "")
+                  ? Colors.transparent
+                  : hexToColor(data.floating_button?.color.toString() ??
+                  "#7CFC00"),
+              onPressed: () {
+                var encrypted = getEncrypted(data);
+                // while(encrypted.base64.toString().contains("+")){
+                //   encrypted = getEncrypted(data);
+                // }
+                Navigation.instance.navigate("/competitions",
+                    args:
+                    "${data.floating_button?.url}?key=${encrypted.base64}");
+              },
+              // child: Text(
+              //   "${data.floating_button?.text}",
+              //   style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              //         color: Colors.black,
+              //       ),
+              // ),
+              child: data.floating_button?.image_url == ""
+                  ? Text(
+                "${data.floating_button?.text}",
+                style:
+                Theme
+                    .of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(
+                  color: Colors.black,
+                ),
+              )
+                  : CachedNetworkImage(
+                imageUrl: data.floating_button!.image_url!,
+                height: 35.sp,
+                width: 35.sp,
+              ),
+            )
                 : Container();
           },
         ),
@@ -266,24 +271,22 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           screen: "home",
         ),
         body: OfflineBuilder(
-          connectivityBuilder: (
-            BuildContext context,
-            ConnectivityResult connectivity,
-            Widget child,
-          ) {
+          connectivityBuilder: (BuildContext context,
+              ConnectivityResult connectivity,
+              Widget child,) {
             final bool connected = connectivity != ConnectivityResult.none;
             return connected
                 ? HomeScreenBody(
-                    refreshController: _refreshController,
-                    onRefresh: _onRefresh,
-                    onLoading: _onLoading,
-                    showExitDialog: showExitDialog,
-                    controller: controller,
-                    random: random,
-                    fetchPoll: fetchPoll,
-                    poll: _poll,
-                    getSpace: getSpace,
-                  )
+              refreshController: _refreshController,
+              onRefresh: _onRefresh,
+              onLoading: _onLoading,
+              showExitDialog: showExitDialog,
+              controller: controller,
+              random: random,
+              fetchPoll: fetchPoll,
+              poll: _poll,
+              getSpace: getSpace,
+            )
                 : const InternetIssueScreen();
           },
           child: Container(),
@@ -297,8 +300,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final response = await ApiProvider.instance.getLatestOpinion();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setLatestOpinions(response.opinion ?? []);
     } else {
       // fetchGPlusExcl();
@@ -309,8 +312,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final response = await ApiProvider.instance.getTopPicks(1);
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setHomeTopPicks(response.toppicks ?? []);
       // fetchAds();
     } else {
@@ -322,8 +325,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final response = await ApiProvider.instance.getArticle('exclusive-news');
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setHomeExecl(response.articles ?? []);
     } else {
       // fetchPoll();
@@ -334,8 +337,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final response = await ApiProvider.instance.getPollOfTheWeek();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setPollOfTheWeek(response.pollOfTheWeek!);
       if (response.pollOfTheWeek?.is_polled != 'false') {
         if (mounted) {
@@ -354,8 +357,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final response = await ApiProvider.instance.getAdvertise();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setAds(response.ads ?? []);
       random = Random().nextInt(response.ads?.length ?? 0);
       // fetchAds();
@@ -368,8 +371,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final response1 = await ApiProvider.instance.getAdImage();
     if (response1.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setAdImage(response1.link!, response1.data!);
       if (mounted) {
         // setState(() {});
@@ -378,8 +381,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final response2 = await ApiProvider.instance.getFullScreenAdvertise();
     if (response2.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setFullAd(response2.link!, response2.data!);
     }
   }
@@ -388,15 +391,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final result = await ApiProvider.instance.getHomeAlbum();
     if (result.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setHomeAlbum(result.articles ?? []);
 
       final response = await ApiProvider.instance.getWeekly();
       if (response.success ?? false) {
         Provider.of<DataProvider>(
-                Navigation.instance.navigatorKey.currentContext ?? context,
-                listen: false)
+            Navigation.instance.navigatorKey.currentContext ?? context,
+            listen: false)
             .setVideoWeekly(response.videos ?? []);
         // _refreshController.refreshCompleted();
       }
@@ -419,7 +422,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void askPermissions() async {
     var status = await Permission.location.status;
     if (status.isDenied) {
-      if (await Permission.location.request().isGranted) {
+      if (await Permission.location
+          .request()
+          .isGranted) {
         debugPrint("We got location permissions");
       } else {
         debugPrint("We require location permissions");
@@ -437,20 +442,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       // Navigation.instance.goBack();
       debugPrint('object profile');
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setProfile(response.profile!);
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setMyTopicks(response.topicks);
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setMyGeoTopicks(response.geoTopicks);
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setFloatingButton(response.floating_button!);
       // initUniLinks();
       // initUniLinksResume();
@@ -493,12 +498,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         title: "Exit",
         color: Colors.white,
         context: context,
-        titleStyle: Theme.of(context).textTheme.headline2!.copyWith(
-              color: Colors.black,
-            ),
-        msgStyle: Theme.of(context).textTheme.headline5!.copyWith(
-              color: Colors.black,
-            ),
+        titleStyle: Theme
+            .of(context)
+            .textTheme
+            .headline2!
+            .copyWith(
+          color: Colors.black,
+        ),
+        msgStyle: Theme
+            .of(context)
+            .textTheme
+            .headline5!
+            .copyWith(
+          color: Colors.black,
+        ),
         actions: [
           IconsOutlineButton(
             onPressed: () {
@@ -512,10 +525,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           IconsButton(
             onPressed: () {
               logTheExitAppClick(
-                Provider.of<DataProvider>(
-                        Navigation.instance.navigatorKey.currentContext ??
-                            context,
-                        listen: false)
+                Provider
+                    .of<DataProvider>(
+                    Navigation.instance.navigatorKey.currentContext ??
+                        context,
+                    listen: false)
                     .profile!,
                 // String sort_applied,
               );
@@ -530,10 +544,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ]);
   }
 
-  void logTheExitAppClick(
-    Profile profile,
-    // String sort_applied,
-  ) async {
+  void logTheExitAppClick(Profile profile,
+      // String sort_applied,
+      ) async {
     // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     String id = await FirebaseAnalytics.instance.appInstanceId ?? "";
     // String id = await FirebaseInstallations.instance.getId();
@@ -546,7 +559,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         // "sort_applied": sort_applied,
         "screen_name": "app_exit",
         "user_login_status":
-            Storage.instance.isLoggedIn ? "logged_in" : "guest",
+        Storage.instance.isLoggedIn ? "logged_in" : "guest",
         "client_id": id,
         "user_id_tvc": profile.id,
       },
@@ -561,8 +574,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final response = await ApiProvider.instance.getStories();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setStories(response.stories);
     } else {}
   }
@@ -583,8 +596,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final response = await ApiProvider.instance.getReportMsg();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setReportModel(response.reports);
       fetchRedeemMsg();
     } else {
@@ -596,26 +609,26 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final response = await ApiProvider.instance.getReferEarnText();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setReferEarnText(response.desc ?? "");
     } else {}
     final response1 = await ApiProvider.instance.getRedeemText();
     if (response1.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setRedeemText(response1.desc ?? "");
     } else {}
     final response2 = await ApiProvider.instance.getCitizenText();
     if (response2.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setCitizenJournalistText(response2.desc!);
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext ?? context,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext ?? context,
+          listen: false)
           .setCitizenJournalistPermission(response2.has_permission ?? false);
     }
   }
@@ -624,8 +637,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final response = await ApiProvider.instance.getNotifications();
     if (response.success ?? false) {
       Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
+          Navigation.instance.navigatorKey.currentContext!,
+          listen: false)
           .setNotificationInDevice(response.notification);
       fetchReportMsg();
     } else {
@@ -646,37 +659,43 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
 //https://guwahatiplus.page.link/cku8b9oM42AoqLNAA
   Future<void> getDynamicLink() async {
-    FirebaseDynamicLinks.instance.onLink
-        .listen((PendingDynamicLinkData? dynamicLinkData) {
-      if (dynamicLinkData != null) {
-        final Uri deepLink = dynamicLinkData.link;
-        debugPrint("URL link2 ${deepLink.path.split("/")}");
-        Future.delayed(const Duration(seconds: 0), () {
-          if (Storage.instance.isLoggedIn) {
-            bool isOpinion = (deepLink.path.split("/")[1] == "opinion");
-            bool isPollOfTheWeek =
-                deepLink.path.split("/")[1] == "poll_of_the_week";
-            sendToRoute(
-              isPollOfTheWeek
-                  ? deepLink.path.split("/")[1].trim()
-                  : (isOpinion
-                      ? dynamicLinkData.link.path.split("/")[1].trim()
-                      : dynamicLinkData.link.path.split("/")[2].trim()),
-              isOpinion
-                  ? dynamicLinkData.link.path.split("/")[3].trim()
-                  : dynamicLinkData.link.path.split("/")[2].trim(),
-              (isOpinion
-                  ? dynamicLinkData.link.path.split("/")[2].trim()
-                  : dynamicLinkData.link.path.split("/")[1].trim()),
-            );
-          } else {
-            debugPrint("Storage ${Storage.instance.isLoggedIn}");
-          }
-        });
-      } else {
-        debugPrint("Show Empty Link");
-      }
-    });
+    // FirebaseDynamicLinks.instance.onLink
+    //     .listen((PendingDynamicLinkData? dynamicLinkData) {
+    //   if (dynamicLinkData != null) {
+    //     final Uri deepLink = dynamicLinkData.link;
+    //     debugPrint("URL link2 ${deepLink.path.split("/")}");
+    //     Future.delayed(const Duration(seconds: 0), () {
+    //       if (Storage.instance.isLoggedIn) {
+    //         if (deepLink.path.split("/")[1]!="video") {
+    //           bool isOpinion = (deepLink.path.split("/")[1] == "opinion");
+    //           bool isPollOfTheWeek =
+    //               deepLink.path.split("/")[1] == "poll_of_the_week";
+    //           sendToRoute(
+    //             isPollOfTheWeek
+    //                 ? deepLink.path.split("/")[1].trim()
+    //                 : (isOpinion
+    //                 ? dynamicLinkData.link.path.split("/")[1].trim()
+    //                 : dynamicLinkData.link.path.split("/")[2].trim()),
+    //             isOpinion
+    //                 ? dynamicLinkData.link.path.split("/")[3].trim()
+    //                 : dynamicLinkData.link.path.split("/")[2].trim(),
+    //             (isOpinion
+    //                 ? dynamicLinkData.link.path.split("/")[2].trim()
+    //                 : dynamicLinkData.link.path.split("/")[1].trim()),
+    //           );
+    //         } else {
+    //           Navigation.instance.navigate('/videoPlayer',
+    //             args: '${deepLink.path.split("/")[2]}'
+    //           );
+    //         }
+    //       } else {
+    //         debugPrint("Storage ${Storage.instance.isLoggedIn}");
+    //       }
+    //     });
+    //   } else {
+    //     debugPrint("Show Empty Link");
+    //   }
+    // });
 
     // final PendingDynamicLinkData? dynamicLinkData =
     //     await FirebaseDynamicLinks.instance.getInitialLink();
@@ -714,59 +733,62 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (status == PermissionStatus.granted) {
       try {
         FirebaseMessaging.instance.getInitialMessage().then(
-                    (RemoteMessage? value) => setState(
-                      () {
-                        debugPrint("Initial!@8 1$value");
-                        String initialMessage = "${value?.data}";
-                        debugPrint("Initial!@8 2$initialMessage");
-                        if (value!.data.isNotEmpty) {
-                          debugPrint("Notification Payload ${value.data}");
-                          var propertyPattern = RegExp(r'(\w+): ([^,]+)');
+              (RemoteMessage? value) =>
+              setState(
+                    () {
+                  debugPrint("Initial!@8 1$value");
+                  String initialMessage = "${value?.data}";
+                  debugPrint("Initial!@8 2$initialMessage");
+                  if (value!.data.isNotEmpty) {
+                    debugPrint("Notification Payload ${value.data}");
+                    var propertyPattern = RegExp(r'(\w+): ([^,]+)');
 
-                          var json = <String, String?>{};
+                    var json = <String, String?>{};
 
-                          propertyPattern.allMatches("${value.data}").forEach((match) {
-                            var propertyName = match.group(1);
-                            var propertyValue = match.group(2);
+                    propertyPattern.allMatches("${value.data}").forEach((
+                        match) {
+                      var propertyName = match.group(1);
+                      var propertyValue = match.group(2);
 
-                            json[propertyName!] = propertyValue!.trim();
-                          });
-                          NotificationReceived notification =
-                              // NotificationReceived.fromJson(jsonDecode(jsData1));
-                              NotificationReceived.fromJson(json);
-                          // Navigation.instance.navigate('');
+                      json[propertyName!] = propertyValue!.trim();
+                    });
+                    NotificationReceived notification =
+                    // NotificationReceived.fromJson(jsonDecode(jsData1));
+                    NotificationReceived.fromJson(json);
+                    // Navigation.instance.navigate('');
 
-                          NotificationHelper.setRead(
-                              notification.notification_id,
-                              notification.seo_name,
-                              notification.seo_name_category,
-                              notification.type,
-                              notification.post_id,
-                              notification.vendor_id,
-                              notification.category_id,
-                              notification.seo_name_category,
-                              notification.title
-                              // notification.image
-                              );
-                        }
-                      },
-                    ),
-                  );
+                    NotificationHelper.setRead(
+                        notification.notification_id,
+                        notification.seo_name,
+                        notification.seo_name_category,
+                        notification.type,
+                        notification.post_id,
+                        notification.vendor_id,
+                        notification.category_id,
+                        notification.seo_name_category,
+                        notification.title
+                      // notification.image
+                    );
+                  }
+                },
+              ),
+        );
       } catch (e) {
         print(e);
       }
     }
     Provider.of<DataProvider>(
-            Navigation.instance.navigatorKey.currentContext ?? context,
-            listen: false)
+        Navigation.instance.navigatorKey.currentContext ?? context,
+        listen: false)
         .setCurrent(0);
     await fetchProfile();
-    if ((Provider.of<DataProvider>(
-                    Navigation.instance.navigatorKey.currentContext ?? context,
-                    listen: false)
-                .profile
-                ?.f_name ??
-            "") ==
+    if ((Provider
+        .of<DataProvider>(
+        Navigation.instance.navigatorKey.currentContext ?? context,
+        listen: false)
+        .profile
+        ?.f_name ??
+        "") ==
         "") {
       askFirstName(context);
     } else {
@@ -808,7 +830,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   getEncrypted(DataProvider data) {
     final plainText =
-        "${data.profile?.id}_${DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now())}";
+        "${data.profile?.id}_${DateFormat("yyyy-MM-dd HH:mm:ss").format(
+        DateTime.now())}";
     final key = Enc.Key.fromBase64(FlutterConfig.get('AES_ENCRYPTION_KEY'));
     final iv = Enc.IV.fromBase64(FlutterConfig.get('IV'));
     final encrypter = Enc.Encrypter(Enc.AES(key, mode: Enc.AESMode.cbc));
@@ -828,25 +851,37 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             backgroundColor: Colors.white,
             title: Text(
               'What should we call you?',
-              style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                    color: Constance.primaryColor,
-                    fontSize: 12.sp,
-                  ),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .displaySmall
+                  ?.copyWith(
+                color: Constance.primaryColor,
+                fontSize: 12.sp,
+              ),
             ),
             content: TextFormField(
               onChanged: (value) {},
               controller: firstNameController,
               decoration: InputDecoration(
                 hintText: "Enter Your First Name",
-                hintStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      color: Constance.primaryColor,
-                      fontSize: 8.sp,
-                    ),
+                hintStyle: Theme
+                    .of(context)
+                    .textTheme
+                    .displaySmall
+                    ?.copyWith(
+                  color: Constance.primaryColor,
+                  fontSize: 8.sp,
+                ),
               ),
-              style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                    color: Constance.primaryColor,
-                    fontSize: 10.sp,
-                  ),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .displaySmall
+                  ?.copyWith(
+                color: Constance.primaryColor,
+                fontSize: 10.sp,
+              ),
             ),
             actions: [
               ElevatedButton(
@@ -857,10 +892,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 },
                 child: Text(
                   "Submit",
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                        color: Colors.white,
-                        fontSize: 10.sp,
-                      ),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .displaySmall
+                      ?.copyWith(
+                    color: Colors.white,
+                    fontSize: 10.sp,
+                  ),
                 ),
               ),
             ],

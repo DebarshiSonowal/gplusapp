@@ -94,13 +94,17 @@ class _StoryPageState extends State<StoryPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       fetchDetails();
-      setRead(Provider.of<DataProvider>(
-              Navigation.instance.navigatorKey.currentContext!,
-              listen: false)
-          .notifications
-          .firstWhere((element) =>
-              element.seo_name == widget.slug.toString().split(',')[1])
-          .id);
+      try {
+        setRead(Provider.of<DataProvider>(
+                      Navigation.instance.navigatorKey.currentContext!,
+                      listen: false)
+                  .notifications
+                  .firstWhere((element) =>
+                      element.seo_name == widget.slug.toString().split(',')[1])
+                  .id);
+      } catch (e) {
+        print(e);
+      }
     });
     fetchAds();
     controller.addListener(() {

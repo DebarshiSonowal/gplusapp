@@ -4800,10 +4800,23 @@ class ApiProvider {
     }
   }
 
-  Future<ShortVideoResponse> shortVideo(page) async {
-    var data = {
-      'page': page,
-    };
+  Future<ShortVideoResponse> shortVideo(first_video_id,last_video_id,shared_video_id) async {
+    Map<String, dynamic> data = {};
+    if(first_video_id!=null&&first_video_id!=0){
+      data.addAll({
+        "first_video_id":first_video_id,
+      });
+    }
+    if(last_video_id!=null&&last_video_id!=0){
+      data.addAll({
+        "last_video_id":last_video_id,
+      });
+    }
+    if(shared_video_id!=null&&shared_video_id!=0){
+      data.addAll({
+        "shared_video_id":shared_video_id,
+      });
+    }
     BaseOptions option =
     BaseOptions(connectTimeout: 80000, receiveTimeout: 80000, headers: {
       'Content-Type': 'application/json',
@@ -4822,7 +4835,7 @@ class ApiProvider {
       );
       debugPrint("short/videos response: ${response?.data}");
       if (response?.statusCode == 200 || response?.statusCode == 201) {
-        debugPrint("URIL ${response?.data['result']['data']}");
+        // debugPrint("URIL ${response?.data['result']['data']}");
         return ShortVideoResponse.fromJson(response?.data);
       } else {
         debugPrint("short/videos  error: ${response?.data}");

@@ -101,7 +101,8 @@ class VideoReportSection extends StatelessWidget {
                                       DateTime.parse(item.publish_date!)),
                                 );
                                 Navigation.instance.navigate('/videoPlayer',
-                                    args: '${item.youtube_id},${1}');
+                                    args: '${item.youtube_id},${1}'
+                                );
                               } else {
                                 showNotaMember();
                               }

@@ -38,6 +38,7 @@ import '../Model/topick.dart';
 
 class DataProvider extends ChangeNotifier {
   int currentIndex = 0;
+  int? first_video_id, last_video_id;
   Profile? profile;
   AuthorProfile? author;
   List<GrievenceRedresalSend> grievences = [];
@@ -144,7 +145,7 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  setFloatingButton(FloatingButton?  txt) {
+  setFloatingButton(FloatingButton? txt) {
     floating_button = txt;
     notifyListeners();
   }
@@ -406,10 +407,12 @@ class DataProvider extends ChangeNotifier {
     opinions = list;
     notifyListeners();
   }
+
   setSuggestedOpinions(List<Opinion> list) {
     suggestedOpinions = list;
     notifyListeners();
   }
+
   setMoreOpinions(List<Opinion> list) {
     opinions.addAll(list);
     notifyListeners();
@@ -461,7 +464,17 @@ class DataProvider extends ChangeNotifier {
   }
 
   void clearOpinionDetails() {
-    opinion=null;
+    opinion = null;
+    notifyListeners();
+  }
+
+  void setFirstVideoId(int val) {
+    first_video_id = val;
+    notifyListeners();
+  }
+
+  void setLastVideoId(int val) {
+    last_video_id = val;
     notifyListeners();
   }
 

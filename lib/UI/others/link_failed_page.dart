@@ -21,82 +21,6 @@ class LinkFailedPage extends StatefulWidget {
 class _LinkFailedPageState extends State<LinkFailedPage> {
   StreamSubscription? _sub;
 
-  // void sendToRoute(String route, data, String? category) async {
-  //   print("our route ${route}");
-  //   switch (route) {
-  //     case "story":
-  //       // Navigation.instance.navigate('/main');
-  //       print("this route");
-  //       Navigation.instance.navigate('/story', args: '${category},${data}');
-  //       break;
-  //     case "opinion":
-  //       Navigation.instance
-  //           .navigate('/opinionDetails', args: '${data},${category}');
-  //       break;
-  //     default:
-  //       debugPrint("deeplink failed 1 ${route}");
-  //       Navigation.instance.navigate(
-  //         '/link_failed',
-  //         args: ""
-  //       );
-  //       break;
-  //   }
-  // }
-
-  // Future<void> initUniLinksResume() async {
-  //   // ... check initialUri
-  //
-  //   // Attach a listener to the stream
-  //   _sub = uriLinkStream.listen((Uri? uri) {
-  //     if (uri != null) {
-  //       print("deeplink2 ${uri.toString().split("/")}");
-  //       sendToRoute(
-  //           uri.toString().split("/")[4],
-  //           uri.toString().split("/")[5],
-  //           (uri.toString().split("/").length <= 6
-  //               ? ""
-  //               : uri.toString().split("/")[6]));
-  //     } else {
-  //       Navigation.instance.navigate(
-  //         '/link_failed',
-  //       );
-  //     }
-  //     // Use the uri and warn the user, if it is not correct
-  //   }, onError: (err) {
-  //     // Handle exception by warning the user their action did not succeed
-  //     Navigation.instance.navigate(
-  //       '/link_failed',
-  //     );
-  //   });
-  //
-  //   // NOTE: Don't forget to call _sub.cancel() in dispose()
-  // }
-  //
-  // Future<void> initUniLinks() async {
-  //   // Platform messages may fail, so we use a try/catch PlatformException.
-  //   try {
-  //     final initialLink = await getInitialLink();
-  //     if (initialLink != null) {
-  //       print("deeplink1 ${initialLink.split("/")}");
-  //       sendToRoute(
-  //           initialLink.split("/")[4],
-  //           initialLink.split("/")[5],
-  //           (initialLink.split("/").length <= 6
-  //               ? ""
-  //               : initialLink.split("/")[6]));
-  //     } else {
-  //       initUniLinksResume();
-  //     }
-  //     // Parse the link and warn the user, if it is not correct,
-  //     // but keep in mind it could be `null`.
-  //   } on PlatformException {
-  //     // Handle exception by warning the user their action did not succeed
-  //     // return?
-  //     Navigation.instance.navigate(
-  //       '/link_failed',
-  //     );
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -163,15 +87,7 @@ class _LinkFailedPageState extends State<LinkFailedPage> {
 
   void checkForLinks() {
     debugPrint("path ${widget.path}");
-    // if (widget.path.contains("/link")){
-    //   Navigation.instance.goBack();
-    //   // sendToRoute(
-    //   //     widget.path.split("/")[1].trim(),
-    //   //     widget.path.split("/")[2].trim(),
-    //   //     (widget.path.split("/").length <= 3
-    //   //         ? ""
-    //   //         : widget.path.split("/")[3].trim()));
-    // }
+
 
   }
 }

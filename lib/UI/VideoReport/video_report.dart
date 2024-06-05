@@ -284,7 +284,8 @@ class _VideoReportState extends State<VideoReport> {
                                   onTap: () {
                                     // if (data.profile?.is_plan_active ?? false) {
                                     Navigation.instance.navigate('/videoPlayer',
-                                        args: '${item.youtube_id},${2}');
+                                        // args: '${item.youtube_id},${2}'
+                                    );
                                     // } else {
                                     //   Constance.showMembershipPrompt(
                                     //       context, () {});

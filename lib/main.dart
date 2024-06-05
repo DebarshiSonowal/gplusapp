@@ -86,53 +86,7 @@ Future<void> main() async {
   });
 }
 
-// void initDeepLink() async {
-//   FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
-//     debugPrint("URL link ${dynamicLinkData.link.path.split("/")}");
-//     if (Storage.instance.isLoggedIn) {
-//       bool isOpinion = dynamicLinkData.link.path.split("/").length == 4;
-//       sendToRoute(
-//         dynamicLinkData.link.path.split("/")[1].trim(),
-//         isOpinion
-//             ? dynamicLinkData.link.path.split("/")[3].trim()
-//             : dynamicLinkData.link.path.split("/")[2].trim(),
-//         (isOpinion
-//             ? dynamicLinkData.link.path.split("/")[2].trim()
-//             : dynamicLinkData.link.path.split("/")[1].trim()),
-//         Navigation.instance.navigatorKey.currentContext!,
-//       );
-//     }
-//   }).onError((error) {
-//     debugPrint("URL link $error");
-//   });
-// }
 
-// void sendToRoute(
-//     String route, data, String? category, BuildContext context) async {
-//   switch (route) {
-//     case "opinion":
-//       // Navigation.instance.navigate('/main');
-//       //   debugPrint("this route2 ${category},${data}");
-//       if ((Provider.of<DataProvider>(context, listen: false)
-//               .profile
-//               ?.is_plan_active ??
-//           false)) {
-//         Navigation.instance
-//             .navigate('/opinionDetails', args: '$data,$category');
-//       }
-//       break;
-//     default:
-//       // Navigation.instance.navigate('/main');
-//       if ((Provider.of<DataProvider>(context, listen: false)
-//               .profile
-//               ?.is_plan_active ??
-//           false)) {
-//         Navigation.instance
-//             .navigate('/story', args: '$category,$data,home_page');
-//       }
-//       break;
-//   }
-// }
 
 void checkVersion(String version, String buildNumber) async {
   if (Platform.isIOS) {
